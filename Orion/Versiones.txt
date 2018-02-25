@@ -1,0 +1,9 @@
+﻿
+PROYECTO ORIÓN
+==============
+
+
+	Versión 1.0
+	-----------
+
+		Versión inicial del programa.

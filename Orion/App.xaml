@@ -1,0 +1,25 @@
+<!-- =============================================== -->
+<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
+<!--                                                 -->
+<!--  Vea el archivo Licencia.txt para mas detalles  -->
+<!-- =============================================== -->
+<Application x:Class="Orion.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:Orion" StartupUri="Views\MainWindow.xaml" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" d1p1:Ignorable="d" xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Estilos/Colores.xaml">
+        </ResourceDictionary>
+        <ResourceDictionary Source="Estilos/Fondos.xaml">
+        </ResourceDictionary>
+        <ResourceDictionary Source="Estilos/Filas.xaml">
+        </ResourceDictionary>
+        <ResourceDictionary Source="Estilos/Celdas.xaml">
+        </ResourceDictionary>
+        <ResourceDictionary Source="Estilos/OtrosEstilos.xaml">
+        </ResourceDictionary>
+        <ResourceDictionary Source="Estilos/Cabeceras.xaml">
+        </ResourceDictionary>
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>

@@ -1,0 +1,150 @@
+﻿
+PROYECTO ORION - Bases de Datos
+===============================
+
+	Todas las relaciones existentes deben exigir integridad referencial, así como actualizar y eliminar en cascada.
+
+
+	Base de datos de 'Centro' (Cada centro debe tener una base de datos cuyos nombres deben ser: Arrasate - Bilbao - Donosti - Vitoria).
+
+
+		                        Tabla DiasCalendario
+		                        --------------------
+			                        
+			                        Id .................... Autonumeración (Entero Largo)
+			               -------> IdCalendario .......... Número (Entero Largo)
+			               |        Dia ................... Número (Entero)
+			               |        Grafico ............... Número (Entero)
+						   |        Codigo ................ Numero (Entero)
+						   |        ExcesoJornada ......... Numero (Doble)
+						   |        HorasDescuadre ........ Numero (Doble)
+						   |        FacturadoPaqueteria ... Moneda
+						   |        Limpieza .............. Si/No
+						   |        GraficoVinculado ...... Numero (Entero)
+						   |        Notas ................. Texto Largo
+			               |         
+			               |         
+						   | 	Tabla Calendarios
+						   | 	-----------------
+			               |         
+			               |        Id ..................... Autonumeración (Entero Largo)
+		                   -------> IdConductor ............ Número (Entero Largo)
+			               |        Fecha .................. Fecha/Hora
+			               |        HorasDescuadre ......... Número (Doble)
+			               |        ExcesoJornadaCobrada ... Número (Doble)
+			               |        Notas .................. Texto Corto (255)
+			               |        
+			               |        
+		                   |    Tabla Conductores
+		                   |    -----------------
+			               |        
+			               -------> Id ..................... Número (Entero Largo) Requerido/Indexado(sin duplicados)
+			               |        Nombre ................. Texto Corto (255)
+			               |        Apellidos .............. Texto Corto (255)
+			               |        Indefinido ............. Si/No
+			               |        Teléfono ............... Texto Corto (255)
+			               |        Email .................. Texto Corto (255)
+			               |        Acumuladas ............. Número (Doble)
+			               |        Descansos .............. Número (Entero)
+			               |        DescansosNoDisfrutados . Número (Entero)
+			               |        Notas .................. Texto Largo
+			               |        
+			               |        
+		                   |    Tabla Regulaciones
+		                   |    ------------------
+			               |        
+			               |        Id ........... Autonumeración (Entero Largo)
+			               -------> IdConductor .. Número (Entero Largo)
+			                        Codigo ....... Número (Entero)
+			                        Fecha ........ Fecha/Hora
+			                        Horas ........ Número (Doble)
+			                        Descansos .... Número (Entero)
+			                        Motivo ....... Texto Largo
+			                        
+			                        
+		                        Tabla Graficos
+		                        --------------
+			                        
+			         -------------> Id ................ Autonumeración (Entero Largo)
+			         |     -------> IdGrupo ........... Número (Entero Largo)
+			         |     |        NoCalcular......... Sí/No
+			         |     |        Numero ............ Número (Entero)
+			         |     |        Turno ............. Número (Entero)
+			         |     |        DescuadreInicio ... Número (Entero)
+			         |     |        Inicio ............ Número (Doble)
+			         |     |        Final ............. Número (Doble)
+			         |     |        DescuadreFinal .... Número (Entero)
+			         |     |        InicioPartido ..... Número (Doble)
+			         |     |        FinalPartido ...... Número (Doble)
+			         |     |        Valoracion ........ Número (Doble)
+			         |     |        Trabajadas ........ Número (Doble)
+			         |     |        Acumuladas ........ Número (Doble)
+			         |     |        Nocturnas ......... Número (Doble)
+			         |     |        Desayuno .......... Moneda
+			         |     |        Comida ............ Moneda
+			         |     |        Cena .............. Moneda
+			         |     |        PlusCena .......... Moneda
+			         |     |        PlusLimpieza ...... Sí/No
+			         |     |        PlusPaqueteria .... Sí/No
+			         |     |        
+			         |     |        
+		             |     |    Tabla GruposGraficos
+		             |     |    --------------------
+			         |     |        
+			         |     -------> Id ....... Autonumeración (Entero Largo)
+			         |              Validez .. Fecha/Hora
+			         |              Notas .... Texto Largo
+			         |              
+			         |              
+		             |          Tabla Valoraciones
+		             |          ------------------
+			         |              
+			         |              Id ........... Autonumeración (Entero Largo)
+			         -------------> IdGrafico .... Número (Entero Largo)
+			                        Inicio ....... Número (Doble)
+			                        Linea ........ Moneda
+			                        Descripcion .. Texto Corto (255)
+			                        Final ........ Número (Doble)
+			                        Tiempo ....... Número (Doble)
+						
+
+								Tabla Festivos
+								--------------
+
+									Id ...... Autonumeración (Entero Largo)
+									Año ..... Número (Entero)
+									Fecha ... Fecha/Hora
+
+						
+	Base de datos 'Lineas'
+
+
+								Tabla Lineas
+								------------
+
+	                 -------------> Id ........... Autonumeración (Entero Largo)
+	                 |              Nombre ....... Texto Corto (255)
+	                 |              Descripcion .. Texto Corto (255)
+	                 |          
+	                 |          
+	                 |          Tabla Paradas
+	                 |          -------------
+	                 |          
+	                 |              Id ............ Autonumeración (Entero Largo)
+	                 |     -------> IdItinerario .. Número (Entero Largo)
+	                 |     |        Orden ......... Número (Entero)
+	                 |     |        Descripcion ... Texto Corto (255)
+	                 |     |        Tiempo ........ Número (Doble)
+	                 |     |    
+	                 |     |    
+	                 |     |    Tabla Itinerarios
+	                 |     |    -----------------
+	                 |     |    
+	                 |     -------> Id ........... Autonumeración (Entero Largo)
+	                 -------------> IdLinea ...... Número (Entero Largo)
+	                                Nombre ....... Moneda
+	                                Descripcion .. Texto Corto (255)
+	                                TiempoReal ... Número (Entero)
+	                                TiempoPago ... Número (Entero)
+	                            
+	                            

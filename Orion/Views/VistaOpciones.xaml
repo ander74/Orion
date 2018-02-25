@@ -1,0 +1,1059 @@
+﻿<!-- =============================================== -->
+<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
+<!--                                                 -->
+<!--  Vea el archivo Licencia.txt para más detalles  -->
+<!-- =============================================== -->
+<UserControl x:Class="Orion.Views.VistaOpciones"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Orion.Views"
+             xmlns:cnv="clr-namespace:Orion.Convertidores"
+             xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:p="clr-namespace:Orion.Properties"
+             xmlns:pp="clr-namespace:Orion"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1500">
+
+
+    <!-- ==================================================================================================== -->
+    <!-- RECURSOS -->
+    <!-- ==================================================================================================== -->
+    <UserControl.Resources>
+
+        <cnv:ConvertidorHora x:Key="cnvHora"/>
+        <cnv:ConvertidorFecha x:Key="cnvFecha"/>
+        <cnv:ConvertidorDecimal x:Key="cnvDecimal"/>
+        <cnv:ConvertidorNumeroGrafico x:Key="cnvNumGrafico"/>
+        <cnv:ConvertidorColores x:Key="cnvColores"/>
+        <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility"/>
+
+        <Style TargetType="StackPanel" x:Key="EstiloPanelOpciones">
+            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="12,6,12,6"/>
+            <Setter Property="Height" Value="24"/>
+        </Style>
+
+        <Style x:Key="EstiloTextoOpciones" TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Width" Value="180"/>
+            <Setter Property="TextAlignment" Value="Right"/>
+        </Style>
+
+        <Style x:Key="EstiloTextBoxOpciones" TargetType="TextBox">
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="FontSize" Value="14"/>
+        </Style>
+
+        <Style x:Key="EstiloTextoNegrita"  TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="EstiloTextoGraficosDias" TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
+            <Setter Property="Width" Value="140"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="EstiloTextoConvenio" TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="EstiloTextoPluses" TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
+            <Setter Property="Width" Value="160"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="EstiloTextoCarpetas" TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
+            <Setter Property="Width" Value="130"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="EstiloColorIncidencias" TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+
+        <Style x:Key="EstiloTextBoxCarpetas" TargetType="TextBox" BasedOn="{StaticResource EstiloTextBoxOpciones}">
+            <Setter Property="Width" Value="400"/>
+        </Style>
+
+        <Style x:Key="EstiloTextBoxConvenio" TargetType="TextBox" BasedOn="{StaticResource EstiloTextBoxOpciones}">
+            <Setter Property="Width" Value="50"/>
+        </Style>
+
+        <Style x:Key="EstiloColores" TargetType="xceed:ColorPicker">
+            <Setter Property="Width" Value="50"/>
+            <Setter Property="Padding" Value="4"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="ShowDropDownButton" Value="False"/>
+            <Setter Property="AdvancedButtonHeader" Value="Avanzado"/>
+            <Setter Property="StandardButtonHeader" Value="Colores"/>
+            <Setter Property="AvailableColorsHeader" Value="Colores Disponibles"/>
+            <Setter Property="RecentColorsHeader" Value="Colores Recientes"/>
+            <Setter Property="StandardColorsHeader" Value="Colores Estandard"/>
+            <Setter Property="AvailableColorsSortingMode" Value="HueSaturationBrightness"/>
+        </Style>
+
+        <Style x:Key="EstiloGridFestivos" TargetType="DataGrid">
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}"/>
+            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}"/>
+            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}"/>
+        </Style>
+
+
+    </UserControl.Resources>
+
+    <!-- ==================================================================================================== -->
+    <!-- CONTENIDO -->
+    <!-- ==================================================================================================== -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- ==================================================================================================== -->
+        <!-- BARRA DE BOTONES -->
+        <!-- ==================================================================================================== -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="80" Background="{StaticResource DegradadoCeleste0}">
+
+            <!--BOTON GUARDAR-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding cmdGuardarCambios}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Guardar.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarAzul}"/>
+                        <Image Source="Imagenes/GuardarRojo.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarRojo}"/>
+                        <TextBlock Text="Guardar" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!--BOTON GENERALES-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding OpcionesVM.cmdMostrarGenerales}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Herramientas.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Opciones Generales" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--BOTON CONVENIO-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding OpcionesVM.cmdMostrarConvenio}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Calendario.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Opciones Convenio" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--BOTON CONVENIO-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding OpcionesVM.cmdMostrarPorCentro}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Fabrica.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Opciones Por Centro" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!--BOTON CAMBIAR CONTRASEÑA-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding OpcionesVM.cmdCambiarContraseña}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Llave.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Cambiar Contraseña" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+
+        </StackPanel>
+
+
+        <!-- ==================================================================================================== -->
+        <!-- BOTONES AUXILIARES -->
+        <!-- ==================================================================================================== -->
+        <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center">
+
+            <!-- AYUDA -->
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarAyuda}" CommandParameter="Opciones" Margin="1"
+                    HorizontalContentAlignment="Center" IsEnabled="{Binding Source={x:Static p:Settings.Default}, Path=BotonCalculadoraActivo, Mode=TwoWay}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Ayuda.png" Style="{StaticResource EstiloImagenPequeña}"/>
+                        <!--<TextBlock Text="Ayuda" TextWrapping="Wrap" TextAlignment="Center"/>-->
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!-- CALCULADORA -->
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarCalculadora}" Margin="1"
+                    HorizontalContentAlignment="Center">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Calculadora.png" Style="{StaticResource EstiloImagenPequeña}"/>
+                        <!--<TextBlock Text="Calculadora" TextWrapping="Wrap" TextAlignment="Center"/>-->
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+        </StackPanel>
+
+
+        <!-- ==================================================================================================== -->
+        <!-- IMAGEN DE FONDO-->
+        <!-- ==================================================================================================== -->
+        <Image Source="Imagenes\Orion.png" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.1" Grid.Row="1"/>
+
+
+        <!-- ==================================================================================================== -->
+        <!-- BORDE DEL CONTENIDO -->
+        <!-- ==================================================================================================== -->
+        <Border Grid.Row="1" Background="Transparent" BorderBrush="DarkBlue" BorderThickness="0.5"/>
+
+
+        <!-- ==================================================================================================== -->
+        <!-- PANEL DE CONTENIDO GENERAL -->
+        <!-- ==================================================================================================== -->
+        <Grid Grid.Row="1" Margin="6"  Visibility="{Binding OpcionesVM.VisibilidadPanelGenerales}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+
+            <!-- COLUMNA 0 y 1 FILAS 0 y 1-->
+            <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+
+                <!-- OPCIONES INICIALES -->
+                <StackPanel Margin="6">
+
+                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="OPCIONES GENERALES" FontSize="16" FontWeight="Bold"
+                       BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoAzul}"/>
+
+                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
+                            <!-- CENTRO INICIAL -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="28">
+                                <TextBlock Style="{StaticResource EstiloTextoNegrita}" Text="Centro Inicial: " Width="160"/>
+                                <ComboBox FontSize="14" Width="150" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                                          SelectedIndex="{Binding Source={x:Static p:Settings.Default}, Path=CentroInicial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <ComboBox.Items>
+                                        <ComboBoxItem Content="Ninguno"/>
+                                        <ComboBoxItem Content="Bilbao"/>
+                                        <ComboBoxItem Content="Donosti"/>
+                                        <ComboBoxItem Content="Arrasate"/>
+                                        <ComboBoxItem Content="Gasteiz"/>
+                                    </ComboBox.Items>
+                                </ComboBox>
+                            </StackPanel>
+
+                            <!-- PROGRAMAR COPIAS DE SEGURIDAD -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="28">
+                                <TextBlock Style="{StaticResource EstiloTextoNegrita}" Text="Copia Automática: " Width="160"/>
+                                <ComboBox FontSize="14" Width="150" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        SelectedIndex="{Binding Source={x:Static p:Settings.Default}, Path=CopiaAutomatica, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                    <ComboBox.Items>
+                                        <ComboBoxItem Content="Nunca"/>
+                                        <ComboBoxItem Content="Semanal"/>
+                                        <ComboBoxItem Content="Quincenal"/>
+                                        <ComboBoxItem Content="Mensual"/>
+                                    </ComboBox.Items>
+                                </ComboBox>
+                                <Button Style="{StaticResource EstiloBoton}" Height="28" Margin="5,0,0,0" Padding="12,0"
+                                        Content="Hacer Copia" Command="{Binding OpcionesVM.cmdCopiaSeguridadManual}"
+                                        ToolTip="Realiza una copia de seguridad con los datos del programa."/>
+
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- CARPETAS -->
+                <StackPanel Margin="6">
+                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="CARPETAS" FontSize="16" FontWeight="Bold"
+                       BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoCalabaza}"/>
+
+                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
+                            <!-- CARPETA CON LAS BASES DE DATOS -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
+                                <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Bases de Datos: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxCarpetas}" 
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                             Text="{Binding Source={x:Static p:Settings.Default}, Path=CarpetaDatos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
+                            Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="Datos"/>
+                            </StackPanel>
+
+                            <!-- CARPETA CON LOS ARCHIVOS DE AYUDA -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
+                                <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Archivos Ayuda: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxCarpetas}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                             Text="{Binding Source={x:Static p:Settings.Default}, Path=CarpetaAyuda, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
+                            Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="Ayuda"/>
+                            </StackPanel>
+
+                            <!-- CARPETA DE COPIAS DE SEGURIDAD -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
+                                <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Copias Seguridad: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxCarpetas}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"                             Text="{Binding Source={x:Static p:Settings.Default}, Path=CarpetaCopiasSeguridad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
+                            Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="CopiasSeguridad"/>
+                            </StackPanel>
+
+                            <!-- CARPETA DE INFORMES -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
+                                <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Informes PDF: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxCarpetas}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                             Text="{Binding Source={x:Static p:Settings.Default}, Path=CarpetaInformes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
+                            Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="Informes"/>
+                            </StackPanel>
+
+                            <!-- ABRIR ARCHIVOS DESPUÉS DE CREAR -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                <TextBlock Width="130"/>
+                                <CheckBox FontSize="14" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left" Content="Abrir PDFs después de crearlos."
+                                  IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=AbrirPDFs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- OPCIONES DROPBOX -->
+                <StackPanel Margin="6">
+
+                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="OPCIONES DROPBOX" FontSize="16" FontWeight="Bold"
+                       BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoVioleta}"/>
+
+                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,0,0,10">
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
+                            <!-- SINCRONIZAR EN DROPBOX -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="Auto" HorizontalAlignment="Left">
+                                <CheckBox FontSize="14" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left" Content="Sincronizar en Dropbox."
+                                  IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=SincronizarEnDropbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="Auto" HorizontalAlignment="Right">
+                                    <Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="12,6" Command="{Binding OpcionesVM.cmdDropboxAPc}"
+                                    ToolTip="Copia las bases de datos que hay en la carpeta de Dropbox a la carpeta local del ordenador.">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Imagenes/BajarNube.png" Style="{StaticResource EstiloImagenPequeña}" VerticalAlignment="Center"/>
+                                                <TextBlock FontSize="14" Text="Dropbox a PC" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                    <Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="12,6" Command="{Binding OpcionesVM.cmdPcADropbox}"
+                                    ToolTip="Copia las bases de datos que hay en la carpeta local del ordenador a la carpeta de Dropbox.">
+                                        <Button.Content>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="Imagenes/SubirNube.png" Style="{StaticResource EstiloImagenPequeña}" VerticalAlignment="Center"/>
+                                                <TextBlock FontSize="14" Text="PC a Dropbox" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </Button.Content>
+                                    </Button>
+                                </StackPanel>
+                            </StackPanel>
+
+
+                            <!-- CARPETA DE DROPBOX-->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
+                                <TextBlock Style="{StaticResource EstiloTextoOpciones}" Text="Carpeta Dropbox: " Width="130"/>
+                                <TextBox Style="{StaticResource EstiloTextBoxOpciones}" Width="400"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                             Text="{Binding Source={x:Static p:Settings.Default}, Path=CarpetaDropbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
+                            Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="Dropbox"/>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </Border>
+
+                </StackPanel>
+                
+            </StackPanel>
+
+
+            <!-- COLUMNA 2 y 3 FILA 0-->
+            <StackPanel Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="0">
+
+                <!-- ACTUALIZACION AUTOMÁTICA -->
+                <StackPanel Margin="6">
+                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="ACTUALIZACION AUTOMÁTICA" FontSize="16" FontWeight="Bold"
+                       BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoNaranja}"/>
+
+                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
+                            <!-- CARPETA ORIGEN ACTUALIZACIÓN -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30" Margin="12,6,0,0">
+                                <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Width="Auto" Text="Origen Actualización: "/>
+                            </StackPanel>
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30" Margin="12,6,0,6">
+                                <TextBox Style="{StaticResource EstiloTextBoxCarpetas}" 
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                             Text="{Binding Source={x:Static p:Settings.Default}, Path=CarpetaOrigenActualizar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
+                            Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="OrigenActualizar"/>
+                            </StackPanel>
+
+
+                            <!-- ABRIR ARCHIVOS DESPUÉS DE CREAR -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                <CheckBox FontSize="14" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left" Content="Buscar actualizaciones de Orion automáticamente."
+                                  IsChecked="{Binding Source={x:Static p:Settings.Default}, Path=ActualizarPrograma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+                
+            </StackPanel>
+            
+            
+            <!-- COLUMNA 2 FILA 1-->
+            <StackPanel Grid.Column="2" Grid.Row="1">
+
+                <!--  COLORES DE LAS INCIDENCIAS -->
+                <StackPanel Margin="6">
+
+                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="COLORES INCIDENCIAS" FontSize="16" FontWeight="Bold"
+                       BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoVerde}"/>
+
+                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Vacaciones (O-V): "/>
+                                <xceed:ColorPicker Style="{StaticResource EstiloColores}" SelectedColor="{Binding Source={x:Static p:Settings.Default}, 
+                                           Path=ColorOV, Mode=TwoWay, Converter={StaticResource cnvColores}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Descanso (J-D): "/>
+                                <xceed:ColorPicker Style="{StaticResource EstiloColores}" SelectedColor="{Binding Source={x:Static p:Settings.Default}, 
+                                           Path=ColorJD, Mode=TwoWay, Converter={StaticResource cnvColores}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Enfermo (E): "/>
+                                <xceed:ColorPicker Style="{StaticResource EstiloColores}" SelectedColor="{Binding Source={x:Static p:Settings.Default}, 
+                                           Path=ColorE, Mode=TwoWay, Converter={StaticResource cnvColores}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Descanso Suelto (DS): "/>
+                                <xceed:ColorPicker Style="{StaticResource EstiloColores}" SelectedColor="{Binding Source={x:Static p:Settings.Default}, 
+                                           Path=ColorDS, Mode=TwoWay, Converter={StaticResource cnvColores}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Desc. Compensatorio (DC): "/>
+                                <xceed:ColorPicker Style="{StaticResource EstiloColores}" SelectedColor="{Binding Source={x:Static p:Settings.Default}, 
+                                           Path=ColorDC, Mode=TwoWay, Converter={StaticResource cnvColores}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Día por horas (F6): "/>
+                                <xceed:ColorPicker Style="{StaticResource EstiloColores}" SelectedColor="{Binding Source={x:Static p:Settings.Default}, 
+                                           Path=ColorF6, Mode=TwoWay, Converter={StaticResource cnvColores}}"/>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </Border>
+
+                </StackPanel>
+
+            </StackPanel>
+
+
+
+
+        </Grid>
+
+
+
+        <!-- ==================================================================================================== -->
+        <!-- PANEL DE CONTENIDO CONVENIO -->
+        <!-- ==================================================================================================== -->
+        <Grid Grid.Row="1" Margin="6" Visibility="{Binding OpcionesVM.VisibilidadPanelConvenio}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <!-- COLUMNA 0 y 1 -->
+            <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+
+                <!--  OPCIONES DE CONVENIO -->
+                <StackPanel Margin="6">
+
+                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="CONVENIO" FontSize="16" FontWeight="Bold"
+                       BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoMarron}"/>
+
+                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,0,0,10">
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
+                            <!-- COLUMNAS -->
+                            <StackPanel Orientation="Horizontal">
+
+                                <!-- COLUMNA IZQUIERDA -->
+                                <StackPanel Orientation="Vertical">
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Jornada Media: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=JornadaMedia, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Inicio Nocturnas: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=InicioNocturnas, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Final Nocturnas: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=FinalNocturnas, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Hora Desayuno: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=HoraDesayuno, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Porcentaje Desayuno: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=PorcentajeDesayuno, Mode=TwoWay}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Inicio Comida (Continuo): "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=InicioComidaContinuo, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Final Comida (Continuo): "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=FinalComidaContinuo, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Inicio Comida (Partido): "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=InicioComidaPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Final Comida (Partido): "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=FinalComidaPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Inicio Cena: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=InicioCena, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Final Cena: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=FinalCena, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Inicio Plus Cena: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=InicioPlusCena, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Porcentaje Plus Cena: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=PorcentajePlusCena, Mode=TwoWay}"/>
+                                    </StackPanel>
+
+                                </StackPanel>
+
+                                <!-- COLUMNA DERECHA -->
+                                <StackPanel Orientation="Vertical">
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Maximo Horas Cobradas: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=MaxHorasCobradas, Mode=TwoWay}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Días Trabajo anuales: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=TrabajoAnuales, Mode=TwoWay}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Días Descanso anuales: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=DescansosAnuales, Mode=TwoWay}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Días Vacaciones anuales: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=VacacionesAnuales, Mode=TwoWay}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Máximo Trabajo Laborables: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=MaxHorasLaborables, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Máximo Trabajo Sáb y Fest.: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=MaxHorasFinesSemana, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Máx Horas Grafico Partido: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=MaxHorasTotalGraficoPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Máx Particion Graf. Partido: "/>
+                                        <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding Source={x:Static pp:Convenio.Default}, Path=MaxHorasParticionGraficoPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                    </StackPanel>
+
+                                </StackPanel>
+
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+            </StackPanel>
+
+
+            <!-- COLUMNA 2 -->
+            <StackPanel Grid.Column="2">
+
+                <!--  PLUSES -->
+                <StackPanel Margin="6">
+
+                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="DIETAS Y PLUSES" FontSize="16" FontWeight="Bold"
+                       BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoRojo}"/>
+
+                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Importe Dietas: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                                         Text="{Binding Source={x:Static pp:Convenio.Default}, Path=ImporteDietas, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Sábados: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                                         Text="{Binding Source={x:Static pp:Convenio.Default}, Path=ImporteSabados, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Festivos: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                                     Text="{Binding Source={x:Static pp:Convenio.Default}, Path=ImporteFestivos, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Nocturnidad: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                                     Text="{Binding Source={x:Static pp:Convenio.Default}, Path=PlusNocturnidad, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Menor Descanso: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                                     Text="{Binding Source={x:Static pp:Convenio.Default}, Path=DietaMenorDescanso, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Limpieza: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                                     Text="{Binding Source={x:Static pp:Convenio.Default}, Path=PlusLimpieza, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Paquetería: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                                     Text="{Binding Source={x:Static pp:Convenio.Default}, Path=PlusPaqueteria, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Navidad: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                                     Text="{Binding Source={x:Static pp:Convenio.Default}, Path=PlusNavidad, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                            </StackPanel>
+
+                            <Border Height="3" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="0,5"/>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Porcentaje: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                                     Text="{Binding OpcionesVM.PorcentajeIncremento, Converter={StaticResource cnvDecimal}}"/>
+                            </StackPanel>
+
+                            <Button Style="{StaticResource EstiloBoton}" Content="Incrementar Porcentajes" HorizontalAlignment="Center"
+                                    Padding="20,10" Margin="10" FontFamily="Verdana" FontSize="12" Focusable="True"
+                                    Command="{Binding OpcionesVM.cmdIncrementarImportes}"/>
+
+                        </StackPanel>
+
+                    </Border>
+                </StackPanel>
+
+            </StackPanel>
+            
+        </Grid>
+
+
+        
+        <!-- ==================================================================================================== -->
+        <!-- PANEL DE CONTENIDO POR CENTROS -->
+        <!-- ==================================================================================================== -->
+        <Grid Grid.Row="1" Margin="6"  Visibility="{Binding OpcionesVM.VisibilidadPanelPorCentro}">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+
+            <!-- COLUMNA 0 -->
+            <StackPanel Grid.Column="0">
+
+                <!--  NUMEROS DE GRAFICO  -->
+                <StackPanel Margin="6">
+
+                    <!-- TITULO -->
+                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="{StaticResource orDegradadoNaranja}"
+                           FontSize="16" FontWeight="Bold" BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Content="NÚMEROS DE GRAFICO">
+                    </Label>
+
+                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+
+                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
+                                <!-- LUNES A JUEVES -->
+                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Left" Margin="12,6,12,0">
+                                    <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" Width="Auto" Text="Lunes a Jueves: "/>
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="Del  " Margin="30,0,0,0"/>
+                                    <TextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding LunDel}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"/>
+                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="  al  "/>
+                                    <TextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding LunAl}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"/>
+                                </StackPanel>
+
+                                <!-- VIERNES -->
+                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Left" Margin="12,6,12,0">
+                                    <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" Width="Auto" Text="Viernes: "/>
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="Del  " Margin="30,0,0,0"/>
+                                    <TextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding VieDel}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"/>
+                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="  al  "/>
+                                    <TextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding VieAl}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"/>
+                                </StackPanel>
+
+                                <!-- SÁBADOS -->
+                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Left" Margin="12,6,12,0">
+                                    <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" Width="Auto" Text="Sábados: "/>
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="Del  " Margin="30,0,0,0"/>
+                                    <TextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding SabDel}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"/>
+                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="  al  "/>
+                                    <TextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding SabAl}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"/>
+                                </StackPanel>
+
+                                <!-- DOMINGOS Y FESTIVOS -->
+                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Left" Margin="12,6,12,0">
+                                    <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" Width="Auto" Text="Dom. y Festivos: "/>
+                                </StackPanel>
+                                <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="Del  " Margin="30,0,0,0"/>
+                                    <TextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding DomDel}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"/>
+                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="  al  "/>
+                                    <TextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding DomAl}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"/>
+                                </StackPanel>
+                                
+                            </StackPanel>
+                            
+                            <Border Height="1" BorderBrush="DarkGray" BorderThickness="1" Margin="0,5"/>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" Width="Auto" Text="Gráfico Comodín:  "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding Comodin}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"/>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </Border>
+
+                </StackPanel>
+
+            </StackPanel>
+
+
+            <!-- COLUMNA 1 -->
+            <StackPanel Grid.Column="1">
+
+                <!--  PLUSES -->
+                <StackPanel Margin="6">
+
+                    <!-- TITULO -->
+                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="{StaticResource orDegradadoRojo}"
+                           FontSize="16" FontWeight="Bold" BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Content="DIETAS Y PLUSES">
+                    </Label>
+
+                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+
+                            <!-- PLUS LIMPIEZA -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <CheckBox FontSize="14" FontWeight="Bold" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                          Content="Pagar " IsChecked="{Binding PagarLimpiezas, UpdateSourceTrigger=PropertyChanged}"
+                                          ToolTip="Si está activo se ignoran las dietas de limpieza y se pagan las limpiezas indicadas al mes."/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding NumeroLimpiezas}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                                         ToolTip="Si está activo se ignoran las dietas de limpieza y se pagan las limpiezas indicadas al mes."/>
+                                <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" HorizontalAlignment="Left" TextAlignment="Left"
+                                           Text=" limpiezas al mes."
+                                           ToolTip="Si está activo se ignoran las dietas de limpieza y se pagan las limpiezas indicadas al mes."/>
+                            </StackPanel>
+
+                            <Border Height="1" BorderBrush="DarkGray" BorderThickness="1" Margin="0,5"/>
+
+                            <!-- PLUS VIAJE -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
+                                <CheckBox FontSize="14" FontWeight="Bold" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left"
+                                          Content="Pagar Plus Viaje " IsChecked="{Binding PagarPlusViaje, UpdateSourceTrigger=PropertyChanged}"
+                                          ToolTip="Si está activo se paga la cantidad por día trabajado en concepto de Plus Viaje."/>
+                                <TextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding PlusViaje, Converter={StaticResource cnvDecimal}}"
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown"
+                                         ToolTip="Si está activo se paga la cantidad por día trabajado en concepto de Plus Viaje."/>
+                            </StackPanel>
+
+                        </StackPanel>
+
+                    </Border>
+
+                </StackPanel>
+
+            </StackPanel>
+
+
+            <!-- COLUMNA 2 -->
+            <StackPanel Grid.Column="2">
+
+                <!-- FESTIVOS -->
+                <StackPanel Margin="6">
+
+                    <!-- SELECTOR DE AÑO -->
+                    <Grid>
+
+                        <Border BorderBrush="DarkBlue" BorderThickness="1" Background="{StaticResource orDegradadoAzul}"/>
+
+                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="&lt;" Foreground="Blue" FontWeight="Bold" FontSize="20" Margin="6"
+                                Padding="10,5" HorizontalAlignment="Left" Height="Auto" Command="{Binding OpcionesVM.cmdAñoFestivosMenos}"/>
+
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,6">
+                            <TextBlock FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Text="FESTIVOS"/>
+                            <TextBlock FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Text="{Binding OpcionesVM.AñoFestivos}"/>
+                        </StackPanel>
+
+                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="&gt;" Foreground="Blue" FontWeight="Bold" FontSize="20" Margin="6"
+                                Padding="10,5" HorizontalAlignment="Right" Height="Auto" Command="{Binding OpcionesVM.cmdAñoFestivosMas}"/>
+
+                    </Grid>
+
+                    <!-- TABLA DÍAS FESTIVOS -->
+                    <DataGrid x:Name="TablaFestivos" IsReadOnly="False" HeadersVisibility="None" FontSize="12"
+                              AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Extended"
+                              SelectionUnit="Cell" CanUserAddRows="True" CanUserSortColumns="True"
+                              Background="Transparent" Style="{StaticResource EstiloGridFestivos}"
+                              ItemsSource="{Binding OpcionesVM.ListaFestivos}">
+
+                        <DataGrid.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource orAzul2}"/>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                        </DataGrid.Resources>
+
+                        <DataGrid.InputBindings>
+                            <KeyBinding Key="Delete" Command="{Binding OpcionesVM.cmdBorrarCeldasFestivos}"
+                                CommandParameter="{Binding ElementName=TablaFestivos}"/>
+                        </DataGrid.InputBindings>
+
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Días" Width="*" MinWidth="60" FontSize="14" FontFamily="Verdana"
+                                                Binding="{Binding Fecha, Converter={StaticResource cnvFecha}}"/>
+                        </DataGrid.Columns>
+
+                    </DataGrid>
+
+                </StackPanel>
+
+            </StackPanel>
+
+            
+        </Grid>
+
+
+
+    </Grid>
+</UserControl>

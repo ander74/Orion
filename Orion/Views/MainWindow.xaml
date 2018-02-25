@@ -1,0 +1,229 @@
+﻿<!-- =============================================== -->
+<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
+<!--                                                 -->
+<!--  Vea el archivo Licencia.txt para más detalles  -->
+<!-- =============================================== -->
+<Window x:Class="Orion.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Orion"
+        xmlns:views="clr-namespace:Orion.Views"
+        xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:p="clr-namespace:Orion.Properties"
+        xmlns:pp="clr-namespace:Orion"
+        xmlns:cnv="clr-namespace:Orion.Convertidores"
+        mc:Ignorable="d"
+        x:Name="Ventana"
+        WindowStyle="ThreeDBorderWindow"
+        WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        Loaded="Ventana_Loaded"
+        Title="Orion" Width="1024" Height="768">
+
+
+    <!-- ==================================================================================================== -->
+    <!-- RECURSOS -->
+    <!-- ==================================================================================================== -->
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="VisibilityConverter"/>
+        <cnv:ConvertidorVisibilityInverter x:Key="VisibilityInverter"/>
+    </Window.Resources>
+
+
+    <!-- ==================================================================================================== -->
+    <!-- GRID PRINCIPAL DE LA VENTANA-->
+    <!-- ==================================================================================================== -->
+    <Grid>
+
+        <!--DEFINICIONES-->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+
+        <!-- ==================================================================================================== -->
+        <!-- PESTAÑAS -->
+        <!-- ==================================================================================================== -->
+        <TabControl x:Name="Ribbon" Grid.Row="0" FontSize="12" FontFamily="Arial" VerticalAlignment="Stretch"
+                    SelectionChanged="Ribbon_SelectionChanged">
+
+
+            <!-- ==================================================================================================== -->
+            <!-- PESTAÑA GRÁFICOS                                                                                     -->
+            <!-- ==================================================================================================== -->
+            <TabItem x:Name="TabGraficos" Header="Gráficos" Width="150" Height="24" BorderThickness="1" Panel.ZIndex="50"
+                     Style="{StaticResource EstiloPestañas}">
+                <views:VistaGraficos x:Name="PestañaGraficos"/>
+            </TabItem>
+
+
+            <!-- ==================================================================================================== -->
+            <!-- PESTAÑA CONDUCTORES                                                                                       -->
+            <!-- ==================================================================================================== -->
+            <TabItem x:Name="TabConductores" Header="Conductores" Width="150" Height="24"  Panel.ZIndex="45"
+                     Style="{StaticResource EstiloPestañas}">
+                <views:VistaConductores x:Name="PestañaConductores"/>
+            </TabItem>
+
+
+            <!-- ==================================================================================================== -->
+            <!-- PESTAÑA CALENDARIOS                                                                                       -->
+            <!-- ==================================================================================================== -->
+            <TabItem x:Name="TabCalendarios" Header="Calendarios" Width="150" Height="24"  Panel.ZIndex="40"
+                     Style="{StaticResource EstiloPestañas}">
+                <views:VistaCalendarios x:Name="PestañaCalendarios"/>
+            </TabItem>
+
+
+            <!-- ==================================================================================================== -->
+            <!-- PESTAÑA LÍNEAS                                                                                       -->
+            <!-- ==================================================================================================== -->
+            <TabItem x:Name="TabLineas" Header="Líneas" Width="150" Height="24"  Panel.ZIndex="35"
+                     Style="{StaticResource EstiloPestañas}">
+                <views:VistaLineas x:Name="PestañaLineas"/>
+            </TabItem>
+
+
+            <!-- ==================================================================================================== -->
+            <!-- PESTAÑA OPCIONES                                                                                       -->
+            <!-- ==================================================================================================== -->
+            <TabItem x:Name="TabOpciones" Header="Opciones" Width="150" Height="24"  Panel.ZIndex="30"
+                     Style="{StaticResource EstiloPestañas}">
+                <views:VistaOpciones x:Name="PestañaOpciones"/>
+            </TabItem>
+
+
+        </TabControl>
+
+
+        <!-- ==================================================================================================== -->
+        <!-- BOTONES VENTANA -->
+        <!-- ==================================================================================================== -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdPantallaCompleta}" CommandParameter="{Binding ElementName=Ventana}"
+                    Margin="1" Content="P" Foreground="DarkGray" FontWeight="Bold" FontSize="16" Padding="20,1"/>
+        </StackPanel>
+
+        <!-- ==================================================================================================== -->
+        <!-- BARRA DE ESTADO -->
+        <!-- ==================================================================================================== -->
+        <Grid Grid.Row="1" Height="24" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.ColumnSpan="3" Background="{StaticResource DegradadoCeleste1}" Visibility="{Binding BotonGuardarAzul}"/>
+
+            <Border Grid.ColumnSpan="3" Background="LightCoral" Visibility="{Binding BotonGuardarRojo}"/>
+
+            <!-- TEXTO DE ESTADO -->
+            <Label Visibility="{Binding VisibilidadBarraProgreso, Converter={StaticResource VisibilityInverter}}"
+                Grid.Column="0" HorizontalAlignment="Left" VerticalContentAlignment="Center" Padding="0" Margin="5,0,0,3"
+                   FontSize="13" FontFamily="Times New Roman"
+                   Content="{Binding TextoEstado}"/>
+
+            <StackPanel Visibility="{Binding VisibilidadBarraProgreso}" Orientation="Horizontal">
+                <TextBlock FontFamily="Times New Roman" FontSize="13" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0"
+                       Text="{Binding TextoProgreso}"/>
+                <ProgressBar Grid.Column="0" HorizontalAlignment="Left" Margin="3" FontFamily="Times New Roman" FontSize="13"
+                         Width="250" Minimum="0" Maximum="100"
+                         Value="{Binding ValorBarraProgreso, Mode=TwoWay}"/>
+            </StackPanel>
+
+            <!-- TEXTO DE DETALLE -->
+            <Label Grid.Column="1" HorizontalAlignment="Left" VerticalContentAlignment="Center" Padding="0" Margin="5,0,0,3"
+                   FontSize="13" FontFamily="Times New Roman">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding GraficosVM.Detalle}"
+                                Visibility="{Binding ElementName=TabGraficos, Path=IsSelected, Converter={StaticResource VisibilityConverter}}"/>
+                    <TextBlock Text="{Binding ConductoresVM.Detalle}"
+                                Visibility="{Binding ElementName=TabConductores, Path=IsSelected, Converter={StaticResource VisibilityConverter}}"/>
+                    <TextBlock Text="{Binding CalendariosVM.Detalle}"
+                                Visibility="{Binding ElementName=TabCalendarios, Path=IsSelected, Converter={StaticResource VisibilityConverter}}"/>
+                    <TextBlock Text="{Binding LineasVM.Detalle}"
+                                Visibility="{Binding ElementName=TabLineas, Path=IsSelected, Converter={StaticResource VisibilityConverter}}"/>
+                </StackPanel>
+            </Label>
+
+            <!-- CENTRO DE TRABAJO -->
+            <Label Grid.Column="2" HorizontalAlignment="Right" VerticalContentAlignment="Center" Padding="10,0" Margin="0,0,5,3"
+                   FontSize="13" FontFamily="Times New Roman" MouseDown="Label_MouseDown"
+                   Content="{Binding CentroActual}" Style="{StaticResource EstiloEtiquetaPulsable}"/>
+
+        </Grid>
+
+
+        <!-- ==================================================================================================== -->
+        <!-- PANEL DE AYUDA -->
+        <!-- ==================================================================================================== -->
+        <Grid x:Name="PanelAyuda" Grid.Row="0" Height="{Binding TamañoAyuda}" Margin="10,30,10,0"
+              VerticalAlignment="{Binding ValignAyuda}" Visibility="{Binding VisibilidadAyuda}">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.RowSpan="2" Grid.ColumnSpan="2" BorderThickness="2.0" CornerRadius="4" BorderBrush="DarkSlateBlue"
+                    Background="{StaticResource DegradadoCeleste1}" />
+            <Border Grid.RowSpan="2" Grid.ColumnSpan="2" BorderThickness="0.5" CornerRadius="4" BorderBrush="DarkSlateBlue" Margin="5" />
+
+            <StackPanel Grid.Row="0" Grid.Column="0" HorizontalAlignment="Left" Orientation="Horizontal">
+                <Button Margin="10,10,0,0"  Width="28" Height="28" Content="3" FontSize="14" 
+                        FontWeight="Bold" FontFamily="WebDings" VerticalContentAlignment="Center" Style="{StaticResource EstiloBoton}"
+                        Command="{Binding cmdAtrasAyuda}" CommandParameter="{Binding ElementName=NavegadorAyuda}"/>
+                <Button Margin="10,10,0,0"  Width="28" Height="28" Content="4" FontSize="14" 
+                        FontWeight="Bold" FontFamily="WebDings" VerticalContentAlignment="Center" Style="{StaticResource EstiloBoton}"
+                        Command="{Binding cmdAdelanteAyuda}" CommandParameter="{Binding ElementName=NavegadorAyuda}"/>
+                <Button Margin="10,10,0,0"  Width="28" Height="28" Content="P" FontSize="14" 
+                        FontWeight="Bold" FontFamily="Wingdings 3" VerticalContentAlignment="Center" Style="{StaticResource EstiloBoton}"
+                        Command="{Binding cmdActualizarAyuda}" CommandParameter="{Binding ElementName=NavegadorAyuda}"/>
+            </StackPanel>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Margin="10,10,0,0" FontSize="18" FontWeight="Bold" Text="Ayuda de Orión" HorizontalAlignment="Center"/>
+
+            <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                <Button x:Name="BtMaxAyuda" Margin="0,10,10,0"  Width="28" Height="28" Content="5" FontSize="14" 
+                        FontWeight="Bold" FontFamily="WebDings" VerticalContentAlignment="Center" Style="{StaticResource EstiloBoton}"
+                        Command="{Binding cmdMoverAyuda}" CommandParameter="{Binding ElementName=BtMaxAyuda}"/>
+                <Button Margin="0,10,10,0"  Width="28" Height="28" Content="X" Foreground="Red" FontSize="14" FontWeight="Bold"
+                        VerticalContentAlignment="Center" Style="{StaticResource EstiloBoton}" Command="{Binding cmdCerrarAyuda}"
+                        CommandParameter="{Binding ElementName=BtMaxAyuda}"/>
+            </StackPanel>
+
+            <WebBrowser x:Name="NavegadorAyuda" Grid.Row="1" Grid.ColumnSpan="2" Margin="10,6,10,10"
+                        local:WebBrowserUtility.BindableSource="{Binding PaginaAyuda}"/>
+
+        </Grid>
+
+
+        <!-- ==================================================================================================== -->
+        <!-- VENTANA DE PROGRESO -->
+        <!-- ==================================================================================================== -->
+        <Grid Grid.Row="0" Background="LightGray" Opacity="0.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+              Visibility="{Binding VisibilidadProgreso, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+        <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="Auto" Height="150" Background="{StaticResource DegradadoCeleste1}"
+              Visibility="{Binding VisibilidadProgreso, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+
+            <Border Grid.RowSpan="2" Grid.ColumnSpan="2" BorderThickness="2.0" CornerRadius="4" BorderBrush="DarkSlateBlue"
+                    Background="{StaticResource DegradadoCeleste1}" />
+            <Border Grid.RowSpan="2" Grid.ColumnSpan="2" BorderThickness="0.5" CornerRadius="4" BorderBrush="DarkSlateBlue" Margin="5" />
+
+            <TextBlock FontFamily="Verdana" FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="20"
+                       Text="{Binding TextoProgreso}"/>
+
+        </Grid>
+
+
+    </Grid>
+</Window>

@@ -1,0 +1,454 @@
+﻿#region COPYRIGHT
+// ===============================================
+//     Copyright 2017 - Orion 1.0 - A. Herrero    
+// -----------------------------------------------
+//  Vea el archivo Licencia.txt para más detalles 
+// ===============================================
+#endregion
+using Orion.Config;
+using Orion.DataModels;
+using Orion.Models;
+using Orion.Properties;
+using Orion.Views;
+using System;
+using System.Collections.Generic;
+using System.Data.OleDb;
+using System.IO;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
+using System.Windows.Input;
+
+namespace Orion.ViewModels {
+
+	public partial class OpcionesViewModel {
+
+
+		#region CAMBIAR CARPETA DATOS
+		//Comando
+		private ICommand _cmdcambiarcarpeta;
+		public ICommand cmdCambiarCarpeta {
+			get {
+				if (_cmdcambiarcarpeta == null) _cmdcambiarcarpeta = new RelayCommand(p => CambiarCarpeta(p));
+				return _cmdcambiarcarpeta;
+			}
+		}
+
+		// Ejecución del comando
+		private void CambiarCarpeta(object parametro) {
+			string carpeta = parametro as string;
+			if (carpeta == null) return;
+			FolderBrowserDialog dialogo = new FolderBrowserDialog();
+			dialogo.RootFolder = Environment.SpecialFolder.MyComputer;
+			dialogo.ShowNewFolderButton = true;
+			switch (carpeta) {
+				case "Datos":
+					dialogo.Description = "Ubicación Base de Datos";
+					dialogo.SelectedPath = Settings.Default.CarpetaDatos;
+					if (dialogo.ShowDialog() == DialogResult.OK) {
+						Settings.Default.CarpetaDatos = dialogo.SelectedPath;
+						Settings.Default.SincronizarEnDropbox = false;
+					}
+					return;
+				case "Dropbox":
+					dialogo.Description = "Ubicación Carpeta de Dropbox";
+					dialogo.SelectedPath = Settings.Default.CarpetaDropbox;
+					if (dialogo.ShowDialog() == DialogResult.OK) {
+						Settings.Default.CarpetaDropbox = dialogo.SelectedPath;
+						Settings.Default.SincronizarEnDropbox = false;
+					}
+					return;
+				case "Ayuda":
+					dialogo.Description = "Ubicación de la Ayuda";
+					dialogo.SelectedPath = Settings.Default.CarpetaAyuda;
+					if (dialogo.ShowDialog() == DialogResult.OK) Settings.Default.CarpetaAyuda = dialogo.SelectedPath;
+					return;
+				case "Informes":
+					dialogo.Description = "Ubicación Hojas Pijama";
+					dialogo.SelectedPath = Settings.Default.CarpetaInformes;
+					if (dialogo.ShowDialog() == DialogResult.OK) Settings.Default.CarpetaInformes = dialogo.SelectedPath;
+					return;
+				case "CopiasSeguridad":
+					dialogo.Description = "Ubicación Copias de Seguridad";
+					dialogo.SelectedPath = Settings.Default.CarpetaCopiasSeguridad;
+					if (dialogo.ShowDialog() == DialogResult.OK) Settings.Default.CarpetaCopiasSeguridad = dialogo.SelectedPath;
+					return;
+				case "OrigenActualizar":
+					dialogo.Description = "Ubicación Archivos Actualización";
+					dialogo.SelectedPath = Settings.Default.CarpetaOrigenActualizar;
+					if (dialogo.ShowDialog() == DialogResult.OK) Settings.Default.CarpetaOrigenActualizar = dialogo.SelectedPath;
+					return;
+			}
+		}
+		#endregion
+
+
+		#region GUARDAR
+		//Comando
+		private ICommand _cmdguardar;
+		public ICommand cmdGuardar {
+			get {
+				if (_cmdguardar == null) _cmdguardar = new RelayCommand(p => Guardar(), p => PuedeGuardar());
+				return _cmdguardar;
+			}
+		}
+
+		// Puede Ejecutarse
+		// (Esta función es pública por el evento Closing de MainView. Ver más información en dicho evento.)
+		public bool PuedeGuardar() {
+			bool resultado = false;
+			if (HayCambios) resultado = true;
+			return resultado;
+		}
+
+		// Ejecución del comando 
+		// (Esta función es pública por el evento Closing de MainView. Ver más información en dicho evento.)
+		public void Guardar() {
+
+			// Guardamos todo.
+			GuardarTodo();
+		}
+		#endregion
+
+
+		#region DROPBOX A PC
+		//Comando
+		private ICommand _cmddropboxapc;
+		public ICommand cmdDropboxAPc {
+			get {
+				if (_cmddropboxapc == null) _cmddropboxapc = new RelayCommand(p => DropboxAPc());
+				return _cmddropboxapc;
+			}
+		}
+
+		// Ejecución del comando
+		private void DropboxAPc() {
+
+			if (_mensajeProvider.VerMensaje("¡ATENCIÓN!\n\nVas a copiar los datos de Dropbox al ordenador.\n\n¿Desea continuar?",
+									   "Copiar de Dropbox a PC", true) == false) return;
+
+			try {
+				// Hacemos copia de seguridad de los datos de Dropbox.
+				if (!Respaldo.CopiaDatos()) {
+					if (_mensajeProvider.VerMensaje("¡ATENCIÓN!\n\nNo se ha podido hacer una copia de seguridad de los datos.\n\n¿Desea continuar?",
+									   "Copiar de Dropbox a PC", true) == false) return;
+				}
+				// Copiamos la carpeta Datos a Dropbox.
+				Respaldo.DropboxToDatos();
+			} catch (Exception ex) {
+				_mensajeProvider.VerError("OpcionesCommands.DropboxAPc", ex);
+			}
+
+		}
+		#endregion
+
+
+		#region PC A DROPBOX
+		//Comando
+		private ICommand _cmdpcadropbox;
+		public ICommand cmdPcADropbox {
+			get {
+				if (_cmdpcadropbox == null) _cmdpcadropbox = new RelayCommand(p => PcADropbox());
+				return _cmdpcadropbox;
+			}
+		}
+
+		// Ejecución del comando
+		private void PcADropbox() {
+
+			if (_mensajeProvider.VerMensaje("¡ATENCIÓN!\n\nVas a copiar los datos del ordenador a Dropbox.\n\n¿Desea continuar?",
+									   "Copiar de PC a Dropbox", true) == false) return;
+
+			try {
+				// Hacemos copia de seguridad de los datos de Dropbox.
+				if (!Respaldo.CopiaDropbox()) {
+					if (_mensajeProvider.VerMensaje("¡ATENCIÓN!\n\nNo se ha podido hacer una copia de seguridad de Dropbox.\n\n¿Desea continuar?",
+									   "Copiar de PC a Dropbox", true) == false) return;
+				}
+				// Copiamos la carpeta Datos a Dropbox.
+				Respaldo.DatosToDropbox();
+			} catch (Exception ex) {
+				_mensajeProvider.VerError("OpcionesCommands.PcADropbox", ex);
+			}
+
+		}
+		#endregion
+
+
+		#region MOSTRAR GENERALES
+		//Comando
+		private ICommand _cmdmostrargenerales;
+		public ICommand cmdMostrarGenerales {
+			get {
+				if (_cmdmostrargenerales == null) _cmdmostrargenerales = new RelayCommand(p => MostrarGenerales(), p => PuedeMostrarGenerales());
+				return _cmdmostrargenerales;
+			}
+		}
+
+		// Puede ejecutar el comando
+		private bool PuedeMostrarGenerales() {
+			return VisibilidadPanelGenerales == Visibility.Collapsed;
+		}
+
+		// Ejecución del comando 
+		private void MostrarGenerales() {
+
+			CargarFestivos();
+			VisibilidadPanelConvenio = Visibility.Collapsed;
+			VisibilidadPanelPorCentro = Visibility.Collapsed;
+			VisibilidadPanelGenerales = Visibility.Visible;
+		}
+		#endregion
+
+
+		#region MOSTRAR CONVENIO
+		//Comando
+		private ICommand _cmdmostrarconvenio;
+		public ICommand cmdMostrarConvenio {
+			get {
+				if (_cmdmostrarconvenio == null) _cmdmostrarconvenio = new RelayCommand(p => MostrarConvenio(), p => PuedeMostrarConvenio());
+				return _cmdmostrarconvenio;
+			}
+		}
+
+		// Puede ejecutar el comando
+		private bool PuedeMostrarConvenio() {
+			return VisibilidadPanelConvenio == Visibility.Collapsed;
+		}
+
+		// Ejecución del comando 
+		private void MostrarConvenio() {
+
+			VisibilidadPanelGenerales = Visibility.Collapsed;
+			VisibilidadPanelPorCentro = Visibility.Collapsed;
+			VisibilidadPanelConvenio = Visibility.Visible;
+
+		}
+		#endregion
+
+
+		#region MOSTRAR POR CENTRO
+		//Comando
+		private ICommand _cmdmostrarporcentro;
+		public ICommand cmdMostrarPorCentro {
+			get {
+				if (_cmdmostrarporcentro == null) _cmdmostrarporcentro = new RelayCommand(p => MostrarPorCentro(), p => PuedeMostrarPorCentro());
+				return _cmdmostrarporcentro;
+			}
+		}
+
+		// Puede ejecutar el comando
+		private bool PuedeMostrarPorCentro() {
+			return VisibilidadPanelPorCentro == Visibility.Collapsed;
+		}
+
+		// Ejecución del comando 
+		private void MostrarPorCentro() {
+
+			VisibilidadPanelGenerales = Visibility.Collapsed;
+			VisibilidadPanelConvenio = Visibility.Collapsed;
+			VisibilidadPanelPorCentro = Visibility.Visible;
+
+		}
+		#endregion
+
+
+		#region AÑO FESTIVOS MENOS
+		//Comando
+		private ICommand _cmdañofestivosmenos;
+		public ICommand cmdAñoFestivosMenos {
+			get {
+				if (_cmdañofestivosmenos == null) _cmdañofestivosmenos = new RelayCommand(p => AñoFestivosMenos());
+				return _cmdañofestivosmenos;
+			}
+		}
+
+		// Ejecución del comando 
+		private void AñoFestivosMenos() {
+
+			GuardarFestivos();
+			AñoFestivos--;
+			CargarFestivos();
+
+		}
+		#endregion
+
+
+		#region AÑO FESTIVOS MAS
+		//Comando
+		private ICommand _cmdañofestivosmas;
+		public ICommand cmdAñoFestivosMas {
+			get {
+				if (_cmdañofestivosmas == null) _cmdañofestivosmas = new RelayCommand(p => AñoFestivosMas());
+				return _cmdañofestivosmas;
+			}
+		}
+
+		// Ejecución del comando 
+		private void AñoFestivosMas() {
+
+			GuardarFestivos();
+			AñoFestivos++;
+			CargarFestivos();
+
+		}
+		#endregion
+
+
+		#region BORRAR CELDAS FESTIVOS
+		private ICommand _cmdborrarceldasfestivos;
+		public ICommand cmdBorrarCeldasFestivos {
+			get {
+				if (_cmdborrarceldasfestivos == null) _cmdborrarceldasfestivos = new RelayCommand(p => BorrarCeldasFestivos(p));
+				return _cmdborrarceldasfestivos;
+			}
+		}
+
+		private void BorrarCeldasFestivos(object parametro) {
+			if (parametro == null) return;
+			System.Windows.Controls.DataGrid tabla = (System.Windows.Controls.DataGrid)parametro;
+			List<Festivo> lista = new List<Festivo>();
+			foreach (DataGridCellInfo celda in tabla.SelectedCells) {
+				lista.Add((Festivo)celda.Item);
+			}
+			foreach (Festivo f in lista) {
+				_listaborrados.Add(f);
+				_listafestivos.Remove(f);
+				HayCambios = true;
+			}
+			lista.Clear();
+
+		}
+		#endregion
+
+
+		#region COPIA SEGURIDAD MANUAL
+		//Comando
+		private ICommand _cmdcopiaseguridadmanual;
+		public ICommand cmdCopiaSeguridadManual {
+			get {
+				if (_cmdcopiaseguridadmanual == null) _cmdcopiaseguridadmanual = new RelayCommand(p => CopiaSeguridadManual());
+				return _cmdcopiaseguridadmanual;
+			}
+		}
+
+		// Ejecución del comando
+		private void CopiaSeguridadManual() {
+
+			if (App.Global.HayCambios) {
+				if (_mensajeProvider.VerMensaje("¡¡ ATENCIÓN !!\n\nHay cambios sin guardar.\n\n¿Desea guardar los cambios?\n\n" +
+												"(Los cambios no guardados no se reflejarán en la copia de seguridad.)",
+												"NO SE HAN GUARDADO LOS CAMBIOS", true) == true)
+					App.Global.GuardarCambios();
+			}
+
+			Respaldo.CopiaDatos("Manual");
+			Settings.Default.UltimaCopia = DateTime.Now;
+
+		}
+		#endregion
+
+
+		#region CAMBIAR CONTRASEÑA
+		//Comando
+		private ICommand _cmdcambiarcontraseña;
+		public ICommand cmdCambiarContraseña {
+			get {
+				if (_cmdcambiarcontraseña == null) _cmdcambiarcontraseña = new RelayCommand(p => CambiarContraseña());
+				return _cmdcambiarcontraseña;
+			}
+		}
+
+		// Ejecución del comando
+		private void CambiarContraseña() {
+
+			if (App.Global.HayCambios) {
+				if (_mensajeProvider.VerMensaje("¡¡ ATENCIÓN !!\n\nHay cambios sin guardar.\n\n¿Desea guardar los cambios?\n\n",
+												"NO SE HAN GUARDADO LOS CAMBIOS", true) == true)
+					App.Global.GuardarCambios();
+			}
+
+			App.Global.TextoProgreso = "Cambiando Contraseñas ...";
+			App.Global.VisibilidadProgreso = Visibility.Visible;
+
+			try {
+				VentanaCambioContraseña ventana = new VentanaCambioContraseña();
+				if (ventana.ShowDialog() == true) {
+					//Si la contraseña anterior no es la que estaba...
+					if (Utils.CodificaTexto(ventana.PwAnterior.Password) != Settings.Default.ContraseñaDatos) {
+						_mensajeProvider.VerMensaje("La contraseña anterior no es válida", "ERROR");
+					} else {
+						// Guardamos la contraseña nueva, por si acaso.
+						Settings.Default.ContraseñaDatos = Utils.CodificaTexto(ventana.PwNueva.Password);
+						Settings.Default.Save();
+					}
+				}
+			} catch (Exception ex) {
+				Utils.VerError("OpcionesCommands.CambiarContraseña", ex);
+			} finally {
+				App.Global.VisibilidadProgreso = Visibility.Collapsed;
+			}
+		}
+		#endregion
+
+
+		#region INCREMENTAR IMPORTES
+		//Comando
+		private ICommand _cmdincrementarimportes;
+		public ICommand cmdIncrementarImportes {
+			get {
+				if (_cmdincrementarimportes == null) _cmdincrementarimportes = new RelayCommand(p => IncrementarImportes());
+				return _cmdincrementarimportes;
+			}
+		}
+
+		// Ejecución del comando
+		private void IncrementarImportes() {
+
+			if (PorcentajeIncremento == 0m) return;
+
+			decimal multiplicador = 1 + (PorcentajeIncremento / 100);
+
+			StringBuilder mensaje = new StringBuilder();
+			mensaje.Append($"NUEVOS VALORES\n\n");
+			mensaje.Append($"Importe Dietas: {Convenio.Default.ImporteDietas * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Sábados: {Convenio.Default.ImporteSabados * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Festivos: {Convenio.Default.ImporteFestivos * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Nocturnidad: {Convenio.Default.PlusNocturnidad * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Menor Descanso: {Convenio.Default.DietaMenorDescanso * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Limpieza: {Convenio.Default.PlusLimpieza * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Paquetería: {Convenio.Default.PlusPaqueteria * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Navidad: {Convenio.Default.PlusNavidad * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Viaje: {App.Global.PlusViaje * multiplicador:0.00}\n\n");
+			mensaje.Append($"¿Aceptar?");
+
+			if (_mensajeProvider.VerMensaje(mensaje.ToString(), "Incremento de importes", true) == true) {
+				Convenio.Default.ImporteDietas *= multiplicador;
+				Convenio.Default.ImporteSabados *= multiplicador;
+				Convenio.Default.ImporteFestivos *= multiplicador;
+				Convenio.Default.PlusNocturnidad *= multiplicador;
+				Convenio.Default.DietaMenorDescanso *= multiplicador;
+				Convenio.Default.PlusLimpieza *= multiplicador;
+				Convenio.Default.PlusPaqueteria *= multiplicador;
+				Convenio.Default.PlusNavidad *= multiplicador;
+				App.Global.PlusViaje *= multiplicador;
+			}
+
+		}
+		#endregion
+
+
+
+
+
+
+
+
+
+
+
+
+
+	}
+}

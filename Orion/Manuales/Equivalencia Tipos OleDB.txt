@@ -1,0 +1,73 @@
+﻿
+Equivalencia de tipos OleDB para MS Access
+==========================================
+
+
+	EQUIVALENCIAS BÁSICAS
+
+		Texto.......................... String
+		Memo........................... String
+		Hipervínculo................... String
+		Yes/No......................... Boolean
+		Date/Time...................... DateTime
+		Número: Byte................... Byte
+		Número: único.................. Single
+		Número: Entero................. Int16
+		Número:	Entero largo........... Int32
+		Número: Double................. Double
+		Número: Decimal................ Decimal
+		Moneda......................... Decimal
+		Autonumérico (entero largo).... Int32
+		Autonumérico (Id. de réplica).. Guid
+		Número: (Id. de réplica)....... Guid
+		Objeto OLE..................... Byte[]
+		Binario........................ Byte[]
+
+
+
+	TABLA DE EQUIVALENCIAS OFICIAL
+
+	|=======================================================================================================================|
+	| Nombre del		|  Tipo de datos		| 					|  Tipo de.NET			|								|
+	| tipo de acceso	|  de la base de dato	|  Tipo OLE DB		|  Framework			|	Nombre de miembro			|
+	|=======================================================================================================================|
+	|  Texto			|   VarWChar			|   DBTYPE_WSTR		|   System.String		|   OleDbType.VarWChar			|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Memo				|   R LongVarWCha		|   DBTYPE_WSTR		|   System.String		|   OleDbType.LongVarWChar		|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Número: Byte		|   UnsignedTinyInt		|   DBTYPE_UI1		|   System.Byte			|   OleDbType.UnsignedTinyInt	|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Yes/No			|   Valor booleano		|   DBTYPE_BOOL		|   System.Boolean		|   OleDbType.Boolean			|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Date/Time		|   Fecha y hora		|   DBTYPE_DATE		|   System.DateTime		|   OleDbType.Date				|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Moneda			|   Decimal				|   DBTYPE_NUMERIC	|   System.Decimal		|   OleDbType.Numeric			|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Número: Decimal	|   Decimal				|   DBTYPE_NUMERIC	|   System.Decimal		|   OleDbType.Numeric			|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Número: Double	|   Doble				|   DBTYPE_R8		|   System.Double		|   OleDbType.Double			|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Autonumérico		|   GUID				|   DBTYPE_GUID		|   System.Guid			|   OleDbType.Guid				|
+	|  (Id. de réplica)	|						| 					| 						| 								|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Número:			|   GUID				|   DBTYPE_GUID		|   System.Guid			|   OleDbType.Guid				|
+	|  (Id. de réplica)	|						| 					| 						| 								|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Autonumérico		|   Entero				|   DBTYPE_I4		|   System.Int32		|   OleDbType.Integer			|
+	|  (entero largo)	|						| 					| 						| 								|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Número:			|   Entero				|   DBTYPE_I4		|   System.Int32		|   OleDbType.Integer			|
+	|  (Entero largo)	| 						| 					| 						| 								|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Objeto OLE		|   LongVarBinary		|   DBTYPE_BYTES	|   Matriz de elementos	|   OleDbType.LongVarBinary		|
+	|					| 						| 					|   System.Byte			| 								|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Número: único	|   Único				|   DBTYPE_R4		|   System.Single		|   OleDbType.Single			|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Número: entero	|   SmallInt			|   DBTYPE_I2		|   System.Int16		|   OleDbType.SmallInt			|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Binario			|   VarBinary*			|   DBTYPE_BYTES	|   Matriz de elementos	|   OleDbType.Binary			|
+	|					| 						| 					|   System.Byte			| 								|
+	|-----------------------------------------------------------------------------------------------------------------------|
+	|  Hipervínculo		|   VarWChar			|   DBTYPE_WSTR		|   System.String		|   OleDbType.VarWChar			|
+	|=======================================================================================================================|

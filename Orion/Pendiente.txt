@@ -1,0 +1,58 @@
+﻿
+PROYECTO ORION
+==============
+
+
+	Acciones pendientes de implementar
+	----------------------------------
+
+		- Actualizar DataGrids modificados por otros procesos: Actualizar DataGrid Conductores al añadir conductores desconocidos desde Calendarios.
+															   Actualizar DataGrid Calendarios al eliminar un conductor.
+
+
+		- Cambiar las consultas a bases de datos por procedimientos almacenados, utilizando las clases genéricas.
+
+		- Crear el procedimiento almacenado GetIdentidad.
+
+		- Gestionar los conductores desde la tabla y no desde la base de datos, ya que se cargan todos.
+
+		- Los F6 no se descuentan de las horas acumuladas, sino que se descuentan de los DCs.
+
+
+		- Actualizar consultas de Bases de Datos:
+			ActualizarConductor
+			InsertarConductor
+			GetEstadisticas... (las dos que hay).
+			ActualizarCalendario
+			ActualizarDiaCalendario
+			InsertarCalendario
+			InsertarDiaCalendario
+			CambiarFechaDiasCalendario => Ejecutarla para añadir las fechas.
+			GetDiasCalendarioConBloqueos
+
+		- Actualizar Tabla Conductores => Añadir Campo ReduccionJornada - Si/No
+
+		- Cambiar en las tablas Calendarios, DiasCalendario
+			- Cambiar HorasDescuadre por Descuadre y ponerlo como número entero.
+
+		- Añadir en tabla DiasCalendario:
+			- BloquearExcesoJornada - Si/No
+			- BloquearDescuadre - Si/No
+			- DiaFecha - Fecha/Hora
+
+
+
+	Consultas pendientes
+	--------------------
+
+		El pico de horas de un año no se acumula en el pijama mensual.
+
+		En el pijama, los días de menos de 7:20 salen con las horas reales y no como 7:20, que es como debe ser.
+
+		Al tener un exceso de jornada, se añade el tiempo a la hora final y se calculan las horas con todos los parámetros.
+
+		En Arrasate, el 18-02 hay -15 de descuadre.
+
+	----------
+
+		

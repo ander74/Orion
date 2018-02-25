@@ -1,0 +1,23 @@
+﻿
+TRUCOS EXCEL
+============
+
+
+	FORMATO DE HORAS PARA MAS DE 24 HORAS
+
+		Se pone un formato personalizado con las horas (no los minutos) entre corchetes: [hh]:mm
+		De esta manera, se almacenan todas las horas sin pasar a días.
+
+
+
+	GRÁFICOS
+
+		Nombre de la serie : La fecha del grupo de gráficos
+		Valores de la serie : La columna con los datos que queramos mostrar en el gráfico.
+		Etiquetas del eje horizontal: Los títulos de las series (en el caso de los gráficos, mañana, tarde, noche y partido).
+
+		Opciones de las etiquetas:
+
+			Mostrar nombre de categoría y valor.
+			Posición: Extremo externo.
+			Tamaño texto: 20pt.

@@ -1,0 +1,59 @@
+﻿<!-- =============================================== -->
+<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
+<!--                                                 -->
+<!--  Vea el archivo Licencia.txt para más detalles  -->
+<!-- =============================================== -->
+<Window x:Class="Orion.Views.VentanaContraseña"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Orion.Views"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" BorderBrush="DarkBlue" BorderThickness="1"
+        Title="{Binding TextoEstado, StringFormat='{}Orion {0}'}"
+        Height="300" Width="400">
+    
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- VENTANA DE ERROR -->
+        <StackPanel Grid.Row="0" Orientation="Vertical">
+
+            <!-- TÍTULO -->
+            <StackPanel Orientation="Horizontal" Background="ForestGreen" Margin="0,0,0,10" MouseLeftButtonDown="StackPanel_MouseLeftButtonDown">
+                <!--<Image Source="Imagenes/Llave.png" Height="40" Margin="10"/>-->
+                <TextBlock FontSize="24" FontWeight="Bold" Margin="10" Foreground="WhiteSmoke"
+                           Text="Control de acceso."/>
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Stretch">
+
+                <Image Source="Imagenes/Logos/LogoLlaves.png" Height="90" Margin="10"/>
+                
+                <StackPanel Orientation="Vertical">
+                    <!-- CONTRASEÑA DE ACCESO -->
+                    <TextBlock FontSize="16" FontWeight="DemiBold" Margin="10,5,10,10" Text="Introduzca una contraseña"/>
+                    <PasswordBox x:Name="PwContraseña" FontSize="24" Margin="10,0,10,5" BorderThickness="1" BorderBrush="DarkGray" KeyDown="PwContraseña_KeyDown"
+                          Width="250" HorizontalContentAlignment="Center" Padding="5"/>
+
+                    <!-- MENSAJE DE ERROR -->
+                    <TextBlock x:Name="TxtMensajeError" FontSize="16" FontWeight="DemiBold" Foreground="IndianRed" Margin="10,0,10,10" Text=""/>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <!-- BOTÓN DE ACEPTAR -->
+        <Button Grid.Row="1" HorizontalAlignment="Right" Margin="10" Padding="16,8" Content="Aceptar" Width="80" FontSize="12"
+                IsDefault="True" Style="{StaticResource EstiloBoton}" Click="BtAceptar_Click"/>
+
+        <Button Grid.Row="1" HorizontalAlignment="Left" Margin="10" Padding="16,8" Content="Salir" Width="80" FontSize="12"
+                IsCancel="True" Style="{StaticResource EstiloBoton}" Click="BtSalir_Click"/>
+
+    </Grid>
+
+</Window>

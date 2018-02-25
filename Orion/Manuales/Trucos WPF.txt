@@ -1,0 +1,16 @@
+﻿
+TRUCOS WPF
+==========
+
+
+	FORMATO DE CADENAS DE TEXTO
+
+		Para dar formato de cadenas de texto, podemos hacerlo usando el parámetro 'StringFormat'
+
+		Su uso es así:	<TextBlock Text="{Binding Precio, StringFormat='PVP: {0:0.00} €'}" />
+						
+						Entre las comillas simples, podemos escribir el texto y dentro de ellas, entre corchetes va {0:0.00} que significa el primer
+						cero (antes de los :) representa el parámetro a mostrar (en multibinding pueden ser más, aquí siempres es cero) y después de
+						los dos puntos (:) va el formato a usar, que puede ser un código de formato o una cadena de formato (como en este ejemplo).
+
+

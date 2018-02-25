@@ -1,0 +1,2146 @@
+﻿<!-- =============================================== -->
+<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
+<!--                                                 -->
+<!--  Vea el archivo Licencia.txt para más detalles  -->
+<!-- =============================================== -->
+<UserControl x:Class="Orion.Views.VistaCalendarios"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:Orion.Views"
+             xmlns:cnv="clr-namespace:Orion.Convertidores"
+             xmlns:p="clr-namespace:Orion.Properties"
+             xmlns:v="clr-namespace:Orion.Views"
+             xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1200">
+
+    <!-- ==================================================================================================== -->
+    <!-- RECURSOS -->
+    <!-- ==================================================================================================== -->
+    <UserControl.Resources>
+
+        <cnv:ConvertidorPrueba x:Key="cnvPrueba"/>
+
+        <cnv:ConvertidorMinutosToHoraMixta x:Key="cnvMinutosToHoraMixta"/>
+        <cnv:ConvertidorColorDia x:Key="cnvColorDia"/>
+        <cnv:ConvertidorColorDiaPijama x:Key="cnvColorDiaPijama"/>
+        <cnv:ConvertidorColorDiaSinGraficos x:Key="cnvColorDiaSinGraficos"/>
+        <cnv:ConvertidorNegritaDia x:Key="cnvNegritaDia"/>
+        <cnv:ConvertidorDecoracionDia x:Key="cnvDecoracionDia"/>
+        <cnv:ConvertidorHora x:Key="cnvHora"/>
+        <cnv:ConvertidorSuperHora x:Key="cnvSuperHora"/>
+        <cnv:ConvertidorHoraMixta x:Key="cnvHoraMixta"/>
+        <cnv:ConvertidorSuperHoraMixta x:Key="cnvSuperHoraMixta"/>
+        <cnv:ConvertidorDiasF6 x:Key="cnvDiasF6"/>
+        <cnv:ConvertidorFecha x:Key="cnvFecha"/>
+        <cnv:ConvertidorDecimal x:Key="cnvDecimal"/>
+        <cnv:ConvertidorDecimalEuro x:Key="cnvDecimalEuro"/>
+        <cnv:ConvertidorNumeroGrafico x:Key="cnvNumGrafico"/>
+        <cnv:ConvertidorNumeroGraficoCalendario x:Key="cnvNumGraficoCalendario"/>
+        <cnv:ConvertidorNumeroGraficoPijama x:Key="cnvNumGraficoPijama"/>
+        <cnv:ConvertidorRojoSiTrue x:Key="cnvRojoSiTrue"/>
+        <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility"/>
+        <cnv:ConvertidorVisibilityInverter x:Key="cnvVisibilityInverter"/>
+
+        <Style x:Key="EstiloGridCalendarios" TargetType="DataGrid">
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}"/>
+            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasVerde}"/>
+            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasCalendarios}"/>
+        </Style>
+        <Style x:Key="EstiloGridPijama" TargetType="DataGrid">
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}"/>
+            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}"/>
+            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}"/>
+        </Style>
+        <Style x:Key="TextoPijama1" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="TextoPijama2" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Width" Value="135"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="TextBoxPijama" TargetType="TextBox">
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Width" Value="75"/>
+            <Setter Property="Height" Value="24"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        </Style>
+
+
+    </UserControl.Resources>
+
+
+    <!-- ==================================================================================================== -->
+    <!-- CONTENIDO -->
+    <!-- ==================================================================================================== -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- ==================================================================================================== -->
+        <!-- BARRA DE BOTONES CALENDARIOS -->
+        <!-- ==================================================================================================== -->
+        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Height="80" Background="{StaticResource DegradadoCeleste0}"
+                    Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
+
+            <!--BOTON GUARDAR-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding cmdGuardarCambios}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Guardar.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarAzul}"/>
+                        <Image Source="Imagenes/GuardarRojo.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarRojo}"/>
+                        <TextBlock Text="Guardar" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!--BOTON RETROCEDE MES-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdRetrocedeMes}">
+                <Button.Content>
+                    <Image Source="Imagenes/Anterior.png" Style="{StaticResource EstiloImagen}"/>
+                </Button.Content>
+            </Button>
+
+            <!--ETIQUETA MES-->
+            <StackPanel Orientation="Vertical" Margin="6,12,6,6" VerticalAlignment="Center" Width="150">
+                <Label FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center" Content="{Binding CalendariosVM.MesActual}"/>
+                <Label FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center" Content="{Binding CalendariosVM.AñoActual}"/>
+            </StackPanel>
+
+            <!--BOTON AVANZA MES-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdAvanzaMes}">
+                <Button.Content>
+                    <Image Source="Imagenes/Siguiente.png" Style="{StaticResource EstiloImagen}"/>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!--BOTON BORRAR CALENDARIO-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdBorrarCalendario}"
+                    CommandParameter="{Binding ElementName=TablaCalendarios}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/BorrarFila.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Borrar Calendario" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--BOTON DESHACER BORRAR-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdDeshacerBorrar}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/ActualizarTabla.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Deshacer Borrar" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!-- DESPLEGABLE ACCIONES -->
+            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" IsOpen="{Binding CalendariosVM.BtAccionesAbierto, Mode=TwoWay}">
+                <xceed:DropDownButton.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Engranajes.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Name="TxtAcciones" Text="Acciones" FontSize="10" FontFamily="Arial" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </xceed:DropDownButton.Content>
+                <xceed:DropDownButton.DropDownContent>
+                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue">
+                        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
+                            <StackPanel Orientation="Vertical">
+
+                                <!-- BOTON DETECTAR FALLOS -->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
+                                        TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                        Command="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.CalendariosVM.cmdDetectarFallos}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="Imagenes/ConfigurarTabla.png" Style="{StaticResource EstiloImagenPequeña}" Margin="0,0,10,0"/>
+                                            <TextBlock Text="Detectar Fallos" TextWrapping="Wrap" TextAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+
+                                <!-- CAMBIAR JD POR DS -->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
+                                        TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                        Command="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.CalendariosVM.cmdCambiarJDPorDS}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="Imagenes/FlechasCruzadas.png" Style="{StaticResource EstiloImagenPequeña}" Margin="0,0,10,0"/>
+                                            <TextBlock Text="JDs Sueltos a DS" TextWrapping="Wrap" TextAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+
+                                <!--SEPARADOR-->
+                                <TextBlock Height="2" Margin="5,3" Background="LightGray"/>
+
+                                <!--BOTON ACCIONES POR LOTES -->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
+                                        TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                        Command="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.CalendariosVM.cmdAccionesPorLotes}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="Imagenes/Navaja.png" Style="{StaticResource EstiloImagenPequeña}" Margin="0,0,10,0"/>
+                                            <TextBlock Text="Acciones Por Lotes" TextWrapping="Wrap" TextAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+
+
+                            
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </xceed:DropDownButton.DropDownContent>
+            </xceed:DropDownButton>
+            
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!--BOTON COPIAR-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="ApplicationCommands.Copy"
+                    CommandTarget="{Binding ElementName=TablaCalendarios}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Copiar.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Copiar" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--BOTON PEGAR-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdPegarCalendarios}"
+                    CommandParameter="{Binding ElementName=TablaCalendarios}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Pegar.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Pegar" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!-- DESPLEGABLE FILTRAR TABLA -->
+            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" IsOpen="{Binding CalendariosVM.BtFiltrarAbierto, Mode=TwoWay}">
+                <xceed:DropDownButton.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Filtrar.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Name="TxtFiltrar" Text="Filtrar Tabla" FontSize="10" FontFamily="Arial" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </xceed:DropDownButton.Content>
+                <xceed:DropDownButton.DropDownContent>
+                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue">
+                        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
+                            <StackPanel Orientation="Vertical">
+
+                                <!--BOTON CREAR PDF-->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
+                                        Content="Indefinidos" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.CalendariosVM.cmdAplicarFiltro}"
+                                        CommandParameter="Indefinidos" ToolTip="Muestra sólo los conductores indefinidos."/>
+
+                                <!--BOTON PIJAMAS EN  PDF-->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
+                                        Content="Eventuales" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.CalendariosVM.cmdAplicarFiltro}"
+                                        CommandParameter="Eventuales" ToolTip="Muestra sólo los conductores eventuales"/>
+
+                                <!--BOTON CREAR PDF-->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
+                                        Content="Eventuales Parcial" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.CalendariosVM.cmdAplicarFiltro}"
+                                        CommandParameter="EventualesParcial" ToolTip="Muestra sólo los conductores eventuales que no trabajen todo el mes."/>
+
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </xceed:DropDownButton.DropDownContent>
+            </xceed:DropDownButton>
+
+            <!--BOTON QUITAR FILTRO-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdQuitarFiltro}"
+                    CommandParameter="{Binding ElementName=TablaCalendarios}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/QuitarFiltro.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Quitar Filtro" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!--BOTON HOJA PIJAMA-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdAbrirPijama}"
+                    CommandParameter="{Binding ElementName=TablaCalendarios}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/HojaPijama.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Hoja Pijama" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+
+            <!--BOTON RESUMEN AÑO-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdMostrarResumenAño}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/TablaDetalle.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Resumen Anual" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!-- DESPLEGABLE CREAR PDF -->
+            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}">
+                <xceed:DropDownButton.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/GuardarPDF.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Name="TxtCrearPdf" Text="Crear PDF" FontSize="10" FontFamily="Arial" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </xceed:DropDownButton.Content>
+                <xceed:DropDownButton.DropDownContent>
+                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue">
+                        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
+                            <StackPanel Orientation="Vertical">
+
+                                <!--BOTON CREAR PDF-->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
+                                Content="Tabla Calendarios" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM.cmdCalendariosEnPDF}"/>
+
+                                <!--BOTON PIJAMAS EN  PDF-->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
+                                Content="Hojas Pijama" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM.cmdPijamasEnPDF}"
+                                CommandParameter="{Binding ElementName=TablaCalendarios}"/>
+
+                                <!--BOTON CREAR PDF-->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
+                                Content="Fallos de Calendario" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM.cmdCalendariosEnPdfConFallos}"/>
+
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </xceed:DropDownButton.DropDownContent>
+            </xceed:DropDownButton>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+        </StackPanel>
+
+        <!-- ==================================================================================================== -->
+        <!-- BOTONES AUXILIARES -->
+        <!-- ==================================================================================================== -->
+        <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
+
+            <!-- AYUDA -->
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarAyuda}" CommandParameter="Calendarios" Margin="1"
+                    HorizontalContentAlignment="Center">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Ayuda.png" Style="{StaticResource EstiloImagenPequeña}"/>
+                        <!--<TextBlock Text="Ayuda" TextWrapping="Wrap" TextAlignment="Center"/>-->
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!-- CALCULADORA -->
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarCalculadora}" Margin="1"
+                    HorizontalContentAlignment="Center">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Calculadora.png" Style="{StaticResource EstiloImagenPequeña}"/>
+                        <!--<TextBlock Text="Calculadora" TextWrapping="Wrap" TextAlignment="Center"/>-->
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+        </StackPanel>
+
+        <!-- ==================================================================================================== -->
+        <!-- BARRA DE BOTONES PIJAMAS -->
+        <!-- ==================================================================================================== -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="95" Background="{StaticResource DegradadoCeleste0}"
+                    Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}">
+
+            <!--BOTON GUARDAR-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding cmdGuardarCambios}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Guardar.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarAzul}"/>
+                        <Image Source="Imagenes/GuardarRojo.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarRojo}"/>
+                        <TextBlock Text="Guardar" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--BOTON VOLVER-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdCerrarPijama}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Volver.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Volver" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!-- COBRAR Y REGULAR HORAS-->
+            <StackPanel Orientation="Vertical" Margin="3,5" VerticalAlignment="Center">
+                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="10,3" Margin="0,5"
+                            Command="{Binding CalendariosVM.cmdCobrarHoras}" CommandParameter="{Binding ElementName=TablaPijama}"
+                            ToolTip="Inicia el sistema de cobro de horas.">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Imagenes/Cobrar.png" Style="{StaticResource EstiloImagenPequeña}"/>
+                            <TextBlock TextWrapping="Wrap" TextAlignment="Center" Text="Cobrar Horas" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                    </Button.Content>
+                </Button>
+                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="10,3" Margin="0,5"
+                            Command="{Binding CalendariosVM.cmdRegularHoras}" CommandParameter="Mes"
+                            ToolTip="Inicia el sistema para la regulación de las horas acumuladas por DCs.">
+                    <Button.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="Imagenes/Calendario.png" Style="{StaticResource EstiloImagenPequeña}"/>
+                            <TextBlock TextWrapping="Wrap" TextAlignment="Center" Text="Regular Horas" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!--BOTON CREAR PDF-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdCrearPdfPijama}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/GuardarPDF.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Crear PDF" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!-- PENDIENTE -->
+            <TextBlock Style="{StaticResource TextoPijama1}" Text="Año Anter." TextAlignment="Center" FontSize="12" Foreground="DarkGray" Margin="3,5">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-90"/>
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+
+            <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="10">
+
+                <!-- DCs PENDIENTES AÑO ANTERIOR -->
+                <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
+                    <TextBlock Style="{StaticResource TextoPijama1}" Text="DCs Pendientes:  " Margin="0,5" FontSize="13" Width="150" TextAlignment="Right"/>
+                    <TextBlock Style="{StaticResource TextoPijama2}" Margin="0,5" FontSize="14">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0:00} ({1:0.00})">
+                                <Binding Path="CalendariosVM.Pijama.DCsPendientesHastaAñoAnterior"/>
+                                <Binding Path="CalendariosVM.Pijama.DCsGeneradosHastaAñoAnterior"/>
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <StackPanel.ToolTip>
+                        <TextBlock>
+                            Descansos compensatorios pendientes de disfrutar del año anterior,<LineBreak/>
+                            enteros y con el pico de horas restante incluido.
+                        </TextBlock>
+                    </StackPanel.ToolTip>
+                </StackPanel>
+                <!-- ACUMULADAS AÑO ANTERIOR -->
+                <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
+                    <TextBlock Style="{StaticResource TextoPijama1}" Text="Horas Acumuladas:  " Margin="0,5" FontSize="13" Width="150" TextAlignment="Right"/>
+                    <TextBlock Style="{StaticResource TextoPijama2}" Margin="0,5" FontSize="14"
+                               Text="{Binding CalendariosVM.Pijama.AcumuladasHastaAñoAnterior, Converter={StaticResource cnvSuperHoraMixta}}"/>
+                    <StackPanel.ToolTip>
+                        <TextBlock>
+                            Horas acumuladas pendientes del año anterior.
+                        </TextBlock>
+                    </StackPanel.ToolTip>
+                </StackPanel>
+                <!-- DNDs PENDIENTES AÑO ANTERIOR -->
+                <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
+                    <TextBlock Style="{StaticResource TextoPijama1}" Text="DNDs Pendientes:  " Margin="0,5" FontSize="13" Width="150" TextAlignment="Right"/>
+                    <TextBlock Style="{StaticResource TextoPijama2}" Margin="0,5" FontSize="14"
+                           Text="{Binding CalendariosVM.Pijama.DNDsPendientesHastaAñoAnterior, StringFormat=00}"/>
+                    <StackPanel.ToolTip>
+                        <TextBlock>
+                            Descansos no disfrutados pendientes de disfrutar del año anterior.
+                        </TextBlock>
+                    </StackPanel.ToolTip>
+                </StackPanel>
+
+
+            </StackPanel>
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+        </StackPanel>
+
+        <!-- ==================================================================================================== -->
+        <!-- BOTONES AUXILIARES -->
+        <!-- ==================================================================================================== -->
+        <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}">
+
+            <!-- AYUDA -->
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarAyuda}" CommandParameter="Pijama" Margin="1"
+                    HorizontalContentAlignment="Center">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Ayuda.png" Style="{StaticResource EstiloImagenPequeña}"/>
+                        <!--<TextBlock Text="Ayuda" TextWrapping="Wrap" TextAlignment="Center"/>-->
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!-- CALCULADORA -->
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarCalculadora}" Margin="1"
+                    HorizontalContentAlignment="Center" IsEnabled="{Binding Source={x:Static p:Settings.Default}, Path=BotonCalculadoraActivo, Mode=TwoWay}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Calculadora.png" Style="{StaticResource EstiloImagenPequeña}"/>
+                        <!--<TextBlock Text="Calculadora" TextWrapping="Wrap" TextAlignment="Center"/>-->
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+        </StackPanel>
+
+
+
+        <!-- ==================================================================================================== -->
+        <!-- IMAGEN DE FONDO-->
+        <!-- ==================================================================================================== -->
+        <Image Grid.Row="3" Grid.ColumnSpan="2" Source="Imagenes\Orion.png" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.1"/>
+
+        <!-- ==================================================================================================== -->
+        <!-- PANEL DE CONTENIDO -->
+        <!-- ==================================================================================================== -->
+
+        <!-- PANEL ACCIONES POR LOTES -->
+        <Grid Grid.Row="1" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
+
+            <Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3" Padding="3" CornerRadius="4"
+                    Background="{StaticResource DegradadoCeleste2}" Visibility="{Binding CalendariosVM.VisibilidadAccionesLotes}">
+
+                <StackPanel Orientation="Vertical" Visibility="{Binding CalendariosVM.VisibilidadAccionesLotes}" Margin="5">
+
+                    <!-- TITULO -->
+                    <TextBlock FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="DarkBlue" Text="ACCIONES POR LOTES"/>
+
+                    <!-- CONTENIDO PRINCIPAL -->
+                    <StackPanel Orientation="Horizontal" Margin="10" DataContext="{Binding CalendariosVM.AccionesLotesVM}">
+
+                        <!-- GRÁFICO DE APLICACION -->
+                        <StackPanel Orientation="Horizontal" Margin="5,0">
+                            <TextBlock Style="{StaticResource TextoPijama1}"  Text="Aplicar al Gráfico: " Width="Auto"/>
+                            <TextBox Width="70" Style="{StaticResource TextBoxPijama}"
+                                     Text="{Binding Grafico, Converter={StaticResource cnvNumGrafico}}"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                            <ComboBox VerticalAlignment="Center" Padding="6" Margin="5,0" Width="100" Height="24" FontSize="12"
+                                      VerticalContentAlignment="Center"
+                                  SelectedIndex="{Binding Codigo}">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Normal"/>
+                                    <ComboBoxItem Content="Comite CO"/>
+                                    <ComboBoxItem Content="Comite CE"/>
+                                    <ComboBoxItem Content="Trabajo JD"/>
+                                    <ComboBoxItem Content="Todos"/>
+                                </ComboBox.Items>
+                            </ComboBox>
+
+                        </StackPanel>
+
+                        <!-- DIAS DE APLICACION -->
+                        <StackPanel Orientation="Horizontal" Margin="5,0">
+                            <TextBlock Style="{StaticResource TextoPijama1}"  Text="Aplicar a los días: " Width="Auto"/>
+                            <TextBox Style="{StaticResource TextBoxPijama}" Width="40"
+                                     Text="{Binding DelDia, StringFormat=00, UpdateSourceTrigger=PropertyChanged}"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Text="  Al  " Width="Auto"/>
+                            <TextBox  Style="{StaticResource TextBoxPijama}" Width="40"
+                                      Text="{Binding AlDia, StringFormat=00, UpdateSourceTrigger=PropertyChanged}"
+                                      GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                        </StackPanel>
+
+                        <!-- ACCIÓN -->
+                        <StackPanel Orientation="Horizontal" Margin="5,0">
+                            <TextBlock Style="{StaticResource TextoPijama1}"  Text="Acción: " Width="Auto"/>
+                            <ComboBox VerticalAlignment="Center" Padding="3" Width="160" Height="24" FontSize="12"
+                                      VerticalContentAlignment="Center"
+                                  SelectedIndex="{Binding CodigoAccion}">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Exceso Jornada"/>
+                                    <ComboBoxItem Content="Facturado Paquetería"/>
+                                    <ComboBoxItem Content="Limpieza"/>
+                                    <ComboBoxItem Content="Media Limpieza"/>
+                                    <ComboBoxItem Content="Quitar Limpieza"/>
+                                    <ComboBoxItem Content="Cambiar Número"/>
+                                    <ComboBoxItem Content="Borrar Notas"/>
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <!-- VALOR PEDIDO -->
+                        <StackPanel Orientation="Horizontal" Margin="5,0">
+                            <TextBlock Style="{StaticResource TextoPijama1}"  Text="{Binding TextoValorPedido}" Width="Auto"/>
+                            <TextBox Style="{StaticResource TextBoxPijama}" Width="70" Visibility="{Binding VisibilidadHoras}"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+                                     Text="{Binding Horas, Converter={StaticResource cnvHora}}"/>
+                            <TextBox Style="{StaticResource TextBoxPijama}" Width="80" Visibility="{Binding VisibilidadImporte}"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+                                     Text="{Binding Importe, Converter={StaticResource cnvDecimal}}"/>
+                            <TextBox Width="70" Style="{StaticResource TextBoxPijama}" Visibility="{Binding VisibilidadNumero}"
+                                     Text="{Binding NuevoGrafico, Converter={StaticResource cnvNumGrafico}}"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                            <ComboBox VerticalAlignment="Center" Padding="6" Margin="5,0" Width="100" Height="24" FontSize="12"
+                                      VerticalContentAlignment="Center" Visibility="{Binding VisibilidadNumero}"
+                                  SelectedIndex="{Binding NuevoCodigo}">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Normal"/>
+                                    <ComboBoxItem Content="Comite CO"/>
+                                    <ComboBoxItem Content="Comite CE"/>
+                                    <ComboBoxItem Content="Trabajo JD"/>
+                                    <ComboBoxItem Content="No cambiar"/>
+                                </ComboBox.Items>
+                            </ComboBox>
+
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <!-- BOTÓN Y NOTAS-->
+                    <StackPanel Orientation="Horizontal" Margin="10">
+
+                        <!-- BOTÓN APLICAR -->
+                        <Button Style="{StaticResource EstiloBoton}" Content="Aplicar Acción" Padding="15,8" Margin="5,0"
+                            FontSize="12" Command="{Binding CalendariosVM.cmdAplicarAccionLotes}"/>
+
+                        <!-- BOTÓN BORRAR -->
+                        <Button Style="{StaticResource EstiloBoton}" Content="Vaciar" Padding="15,8" Margin="5,0"
+                            FontSize="12" Command="{Binding CalendariosVM.cmdBorrarAccionLotes}"/>
+
+                        <!-- NOTAS -->
+                        <StackPanel Orientation="Horizontal" Margin="20,0,5,0" DataContext="{Binding CalendariosVM.AccionesLotesVM}">
+                            <CheckBox FontFamily="Verdana" FontSize="12" FontWeight="Bold" Margin="10,0" VerticalAlignment="Center"
+                                      VerticalContentAlignment="Center" Content="Sumar Valor" IsChecked="{Binding SumarValor}"/>
+                            <TextBlock Style="{StaticResource TextoPijama1}"  Text="Notas: " Width="Auto" Margin="10,0"/>
+                            <TextBox Style="{StaticResource TextBoxPijama}" Width="500" TextAlignment="Left"
+                                     Text="{Binding Notas, UpdateSourceTrigger=PropertyChanged}"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </StackPanel>
+
+            </Border>
+
+            <!-- BOTÓN CERRAR -->
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="X" Padding="8,5" Margin="5,7"
+                    Visibility="{Binding CalendariosVM.VisibilidadAccionesLotes}"
+                    HorizontalAlignment="Right" VerticalAlignment="Top"
+                    FontSize="14" FontWeight="Bold" Foreground="Red" Command="{Binding CalendariosVM.cmdAccionesPorLotes}"/>
+
+        </Grid>
+
+
+        <!-- PANEL DATOS CALENDARIO -->
+        <Grid Grid.Row="2" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
+            <Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3" Padding="3" CornerRadius="4"
+                    Background="{StaticResource DegradadoCeleste1}" IsEnabled="{Binding CalendariosVM.HayDiaCalendarioSeleccionado}">
+
+                <StackPanel Orientation="Vertical">
+                    <Label FontFamily="Verdana" FontSize="14" FontWeight="Normal" VerticalContentAlignment="Center"
+                           IsEnabled="{Binding CalendariosVM.HayDiaCalendarioSeleccionado}">
+                        <StackPanel Orientation="Horizontal">
+
+                            <!-- CONDUCTOR -->
+                            <TextBlock Margin="4,0" VerticalAlignment="Center" Width="40" FontWeight="Bold"
+                                       Text="{Binding CalendariosVM.CalendarioSeleccionado.IdConductor}"/>
+                            <!-- DÍA -->
+                            <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Día"/>
+                            <TextBlock Margin="4,0" VerticalAlignment="Center" Width="30" FontWeight="Bold"
+                                       Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.Dia, StringFormat='{}{0:00}:'}"/>
+                            <!-- CODIGO -->
+                            <ComboBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="120"
+                                  SelectedIndex="{Binding CalendariosVM.DiaCalendarioSeleccionado.Codigo}">
+                                <ComboBox.Items>
+                                    <ComboBoxItem Content="Normal"/>
+                                    <ComboBoxItem Content="Comite CO"/>
+                                    <ComboBoxItem Content="Comite CE"/>
+                                    <ComboBoxItem Content="Trabajo JD"/>
+                                </ComboBox.Items>
+                            </ComboBox>
+
+                            <!-- EXCESO JORNADA -->
+                            <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Exc. Jornada:"/>
+                            <TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+                                     Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.ExcesoJornada, Converter={StaticResource cnvSuperHora}}">
+                            </TextBox>
+
+                            <!-- PAQUETERÍA-->
+                            <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Fact. Paquetería:"/>
+                            <TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+                                     Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.FacturadoPaqueteria, Converter={StaticResource cnvDecimal}}">
+                            </TextBox>
+
+                            <!-- LIMPIEZA -->
+                            <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Limpieza:"/>
+                            <CheckBox Margin="4,0" VerticalAlignment="Center" IsThreeState="True" 
+                                      IsChecked="{Binding CalendariosVM.DiaCalendarioSeleccionado.Limpieza}"/>
+
+                            <!-- NOTAS -->
+                            <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Notas:"/>
+                            <xceed:MultiLineTextEditor Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50"
+                                                       Content="{Binding CalendariosVM.DiaCalendarioSeleccionado.HayNotas}" 
+                                                       TextWrapping="Wrap"
+                                                       DropDownWidth="400" DropDownHeight="200" Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.Notas}">
+                            </xceed:MultiLineTextEditor>
+
+                            <!-- VÍNCULO -->
+                            <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Vínculo:"/>
+                            <TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+                                     Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.GraficoVinculado, Converter={StaticResource cnvNumGrafico}}">
+                            </TextBox>
+
+                        </StackPanel>
+                    </Label>
+
+                    <!-- FILTRO APLICADO -->
+                    <Label FontFamily="Verdana" FontSize="14" FontWeight="Normal" VerticalContentAlignment="Center"
+                           Visibility="{Binding CalendariosVM.VisibilidadPanelFiltros}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Filtro aplicado:"/>
+                            <TextBlock Margin="4,0" Width="300" VerticalAlignment="Center" Text="{Binding CalendariosVM.TextoFiltros}"/>
+                        </StackPanel>
+                    </Label>
+
+                </StackPanel>
+            </Border>
+        </Grid>
+
+
+        <!-- TABLA CALENDARIOS -->
+        <DataGrid x:Name="TablaCalendarios" ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
+                  
+                  IsReadOnly="False" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HeadersVisibility="Column" FontSize="12"
+                  MouseDoubleClick="TablaCalendarios_MouseDoubleClick"
+                  AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  Background="Transparent" Style="{StaticResource EstiloGridCalendarios}"
+                  CurrentCellChanged="TablaCalendarios_CurrentCellChanged"
+                  Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
+
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+            </DataGrid.Resources>
+
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Delete" Command="{Binding CalendariosVM.cmdBorrarCeldas}"
+                                CommandParameter="{Binding ElementName=TablaCalendarios}"/>
+                <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding CalendariosVM.cmdPegarCalendarios}"
+                                CommandParameter="{Binding ElementName=TablaCalendarios}"/>
+            </DataGrid.InputBindings>
+
+            <!-- COLUMNAS -->
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Conductor" Width="2*" Binding="{Binding IdConductor}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{Binding HayInforme, Converter={StaticResource cnvRojoSiTrue}}"/>
+                            <Setter Property="ToolTip" Value="{Binding Informe}"/>
+                            <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="01" Width="1*" Binding="{Binding ListaDias[0].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[0].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[0].Codigo"/>
+                                        <Binding Path="ListaDias[0].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[0].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[0].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="02" Width="1*" Binding="{Binding ListaDias[1].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[1].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[1].Codigo"/>
+                                        <Binding Path="ListaDias[1].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[1].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[1].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="03" Width="1*" Binding="{Binding ListaDias[2].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[2].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[2].Codigo"/>
+                                        <Binding Path="ListaDias[2].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[2].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[2].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="04" Width="1*" Binding="{Binding ListaDias[3].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[3].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[3].Codigo"/>
+                                        <Binding Path="ListaDias[3].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[3].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[3].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="05" Width="1*" Binding="{Binding ListaDias[4].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[4].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[4].Codigo"/>
+                                        <Binding Path="ListaDias[4].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[4].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[4].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="06" Width="1*" Binding="{Binding ListaDias[5].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[5].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[5].Codigo"/>
+                                        <Binding Path="ListaDias[5].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[5].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[5].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="07" Width="1*" Binding="{Binding ListaDias[6].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[6].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[6].Codigo"/>
+                                        <Binding Path="ListaDias[6].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[6].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[6].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="08"  Width="1*" Binding="{Binding ListaDias[7].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[7].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[7].Codigo"/>
+                                        <Binding Path="ListaDias[7].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[7].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[7].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="09"  Width="1*" Binding="{Binding ListaDias[8].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[8].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[8].Codigo"/>
+                                        <Binding Path="ListaDias[8].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[8].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[8].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="10"  Width="1*" Binding="{Binding ListaDias[9].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[9].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[9].Codigo"/>
+                                        <Binding Path="ListaDias[9].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[9].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[9].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="11"  Width="1*" Binding="{Binding ListaDias[10].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[10].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[10].Codigo"/>
+                                        <Binding Path="ListaDias[10].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[10].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[10].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="12"  Width="1*" Binding="{Binding ListaDias[11].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[11].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[11].Codigo"/>
+                                        <Binding Path="ListaDias[11].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[11].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[11].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="13"  Width="1*" Binding="{Binding ListaDias[12].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[12].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[12].Codigo"/>
+                                        <Binding Path="ListaDias[12].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[12].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[12].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="14"  Width="1*" Binding="{Binding ListaDias[13].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[13].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[13].Codigo"/>
+                                        <Binding Path="ListaDias[13].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[13].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[13].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="15"  Width="1*" Binding="{Binding ListaDias[14].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[14].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[14].Codigo"/>
+                                        <Binding Path="ListaDias[14].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[14].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[14].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="16"  Width="1*" Binding="{Binding ListaDias[15].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[15].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[15].Codigo"/>
+                                        <Binding Path="ListaDias[15].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[15].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[15].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="17"  Width="1*" Binding="{Binding ListaDias[16].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[16].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[16].Codigo"/>
+                                        <Binding Path="ListaDias[16].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[16].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[16].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="18"  Width="1*" Binding="{Binding ListaDias[17].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[17].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[17].Codigo"/>
+                                        <Binding Path="ListaDias[17].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[17].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[17].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="19"  Width="1*" Binding="{Binding ListaDias[18].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[18].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[18].Codigo"/>
+                                        <Binding Path="ListaDias[18].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[18].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[18].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="20"  Width="1*" Binding="{Binding ListaDias[19].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[19].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[19].Codigo"/>
+                                        <Binding Path="ListaDias[19].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[19].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[19].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="21"  Width="1*" Binding="{Binding ListaDias[20].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[20].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[20].Codigo"/>
+                                        <Binding Path="ListaDias[20].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[20].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[20].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="22"  Width="1*" Binding="{Binding ListaDias[21].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[21].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[21].Codigo"/>
+                                        <Binding Path="ListaDias[21].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[21].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[21].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="23"  Width="1*" Binding="{Binding ListaDias[22].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[22].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[22].Codigo"/>
+                                        <Binding Path="ListaDias[22].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[22].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[22].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="24"  Width="1*" Binding="{Binding ListaDias[23].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[23].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[23].Codigo"/>
+                                        <Binding Path="ListaDias[23].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[23].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[23].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="25"  Width="1*" Binding="{Binding ListaDias[24].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[24].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[24].Codigo"/>
+                                        <Binding Path="ListaDias[24].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[24].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[24].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="26"  Width="1*" Binding="{Binding ListaDias[25].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[25].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[25].Codigo"/>
+                                        <Binding Path="ListaDias[25].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[25].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[25].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="27"  Width="1*" Binding="{Binding ListaDias[26].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[26].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[26].Codigo"/>
+                                        <Binding Path="ListaDias[26].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[26].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[26].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="28"  Width="1*" Binding="{Binding ListaDias[27].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[27].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[27].Codigo"/>
+                                        <Binding Path="ListaDias[27].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[27].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[27].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="29"  Width="1*" Binding="{Binding ListaDias[28].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[28].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[28].Codigo"/>
+                                        <Binding Path="ListaDias[28].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[28].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[28].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="30"  Width="1*" Binding="{Binding ListaDias[29].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[29].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[29].Codigo"/>
+                                        <Binding Path="ListaDias[29].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[29].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[29].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="31"  Width="1*" Binding="{Binding ListaDias[30].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ListaDias[30].ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="TextDecorations">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
+                                        <Binding Path="ListaDias[30].Codigo"/>
+                                        <Binding Path="ListaDias[30].HayExtras"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
+                                        <Binding Path="ListaDias[30].ComboGrafico"/>
+                                        <Binding Path="Fecha"/>
+                                        <Binding Path="ListaDias[30].Dia"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+
+
+
+
+            </DataGrid.Columns>
+
+        </DataGrid>
+
+
+        <!-- PANEL CONDUCTOR EN PIJAMA -->
+        <Grid Grid.Row="1" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}">
+
+            <Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3,3,3" Padding="3" CornerRadius="4"
+                    Background="{StaticResource DegradadoCeleste2}"/>
+
+            <TextBlock FontFamily="Verdana" FontSize="20" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Left"
+                       Text="{Binding CalendariosVM.Pijama.TextoTrabajador}" Padding="10" Foreground="DarkBlue" />
+
+            <Label Padding="10" FontFamily="Verdana" FontSize="20" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Right"
+                   VerticalContentAlignment="Center">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Foreground="DarkRed" Text="{Binding CalendariosVM.Pijama.TextoMesActual}" VerticalAlignment="Center"/>
+                    <TextBlock Text="  " VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding CalendariosVM.Pijama.Fecha, StringFormat=yyyy}" VerticalAlignment="Center"/>
+                    <Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="{Binding CalendariosVM.TextoBotonPanelPijama}"
+                            Padding="10,5" Margin="10,0,0,0" VerticalAlignment="Center"
+                            Command="{Binding CalendariosVM.cmdActivarBotonPanelPijama}"/>
+                </StackPanel>
+            </Label>
+
+        </Grid>
+
+
+        <!-- TABLA PIJAMA -->
+        <DataGrid x:Name="TablaPijama" IsReadOnly="True"  Grid.Row="3" Grid.Column="0" HeadersVisibility="Column" FontSize="12"
+                  AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Single"
+                  SelectionUnit="FullRow" Background="Transparent" CanUserSortColumns="False"
+                  Style="{StaticResource EstiloGridPijama}"
+                  Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}"
+                  ItemsSource="{Binding CalendariosVM.Pijama.ListaDias}">
+
+            <DataGrid.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod"/>
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+            </DataGrid.Resources>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Día" Width="0.5*" Binding="{Binding DiaFecha.Day, StringFormat=00}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                            <Setter Property="Foreground" Value="{Binding DiaFecha, Converter={StaticResource cnvColorDiaSinGraficos}}"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Gráfico" Width="*" Binding="{Binding ComboGrafico, Converter={StaticResource cnvNumGraficoPijama}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="{Binding ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
+                            <Setter Property="Foreground">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource cnvColorDiaPijama}">
+                                        <Binding Path="ComboGrafico"/>
+                                        <Binding Path="DiaFecha"/>
+                                        <Binding Path="DiaFecha.Day"/>
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="ToolTip" Value="{Binding TextoInicioFinal}"/>
+                            <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Horas" Width="*"
+                                        Binding="{Binding GraficoTrabajado.Trabajadas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Acumulad." Width="*"
+                                        Binding="{Binding GraficoTrabajado.Acumuladas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Nocturnas" Width="*"
+                                        Binding="{Binding GraficoTrabajado.Nocturnas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Ex.Jornada" Width="*"
+                                        Binding="{Binding ExcesoJornada, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Desayuno" Width="*"
+                                        Binding="{Binding GraficoTrabajado.Desayuno, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Comida" Width="*"
+                                        Binding="{Binding GraficoTrabajado.Comida, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Cena" Width="*"
+                                        Binding="{Binding GraficoTrabajado.Cena, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="PlusCena" Width="*"
+                                        Binding="{Binding GraficoTrabajado.PlusCena, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="TotalDietas" Width="*"
+                                        Binding="{Binding TotalDietas, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Menor Des." Width="*"
+                                        Binding="{Binding PlusMenorDescanso, Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Paquetería" Width="*"
+                                        Binding="{Binding PlusPaqueteria, Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Limpieza" Width="*"
+                                        Binding="{Binding PlusLimpieza, Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Otros" Width="*"
+                                        Binding="{Binding OtrosPluses, Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+
+        <!-- PANEL RESUMEN -->
+        <ScrollViewer  x:Name="PanelResumen" Grid.RowSpan="4" Grid.Column="1" Width="Auto" Background="{StaticResource DegradadoCeleste1}"
+                        Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}"
+                       VerticalScrollBarVisibility="Hidden">
+            <StackPanel Orientation="Vertical" Width="370" ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                        Visibility="{Binding CalendariosVM.VisibilidadPanelPijama}">
+
+                <!-- HORAS -->
+                <Grid HorizontalAlignment="Stretch">
+                    <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Horas Mes Actual"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="HorasMes"
+                        Style="{StaticResource EstiloBotonBarraPequeña}" HorizontalAlignment="Left"/>
+
+                    <Button Margin="5,5,5,5" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="q" FontFamily="WingDings 3"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="Todos"
+                        Style="{StaticResource EstiloBotonBarraPequeña}" HorizontalAlignment="Right"/>
+                </Grid>
+                
+                <!--<TextBlock Text="Horas Mes Actual" Margin="10,10,5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"/>-->
+                <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelHorasMes}">
+                    <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
+
+                    <StackPanel Orientation="Vertical">
+
+                        <!-- TRABAJADAS, ACUMULADAS Y NOCTURNAS -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Trabajadas" Width="120" TextAlignment="Center"/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Acumuladas" Width="120" TextAlignment="Center"/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Nocturnas" Width="120" TextAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
+                                   Text="{Binding CalendariosVM.Pijama.Trabajadas,
+                                   Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
+                                   Text="{Binding CalendariosVM.Pijama.Acumuladas,
+                                   Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
+                                   Text="{Binding CalendariosVM.Pijama.Nocturnas,
+                                   Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"/>
+                        </StackPanel>
+
+                        <Border Height="1" BorderBrush="DarkGray" BorderThickness="1"/>
+
+                        <!-- COBRADAS, EXCESO JORNADA y REGULADAS -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Cobradas" Width="120" TextAlignment="Center"/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Ex.Jornada" Width="120" TextAlignment="Center"/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Otras Horas" Width="120" TextAlignment="Center"
+                                       ToolTip="Horas reguladas que no son horas cobradas ni regulaciones de final de año."/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.HorasCobradas,
+                                       Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.ExcesoJornada,
+                                       Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.OtrasHoras,
+                                       Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
+                                       ToolTip="Horas reguladas que no son horas cobradas ni regulaciones de final de año."/>
+                        </StackPanel>
+
+                    </StackPanel>
+                </Grid>
+
+
+                <!-- DÍAS -->
+                <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Días Mes Actual"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="DiasMes"
+                        Style="{StaticResource EstiloBotonBarraPequeña}"/>
+                <!--<TextBlock Text="Días Mes Actual" Margin="10,10,5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"/>-->
+                
+                <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelDiasMes}">
+                    <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
+
+                    <StackPanel Orientation="Vertical">
+
+                        <!-- TRABAJO Y DESCANSOS -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Trabajo" Width="60" TextAlignment="Center"/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="J-D" Width="60" TextAlignment="Center"
+                                       ToolTip="Descansos ordinarios."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="O-V" Width="60" TextAlignment="Center"
+                                       ToolTip="Días de vacaciones."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="DND" Width="60" TextAlignment="Center"
+                                       ToolTip="Descansos no disfrutados."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Trabajo(JD)" Width="120" TextAlignment="Center"
+                                       ToolTip="Días de trabajo en descanso (J-D)."/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.Trabajo, StringFormat=00}"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.Descanso, StringFormat=00}"
+                                       ToolTip="Descansos ordinarios."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.Vacaciones, StringFormat=00}"
+                                       ToolTip="Días de vacaciones."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DescansosNoDisfrutados, StringFormat=00}"
+                                       ToolTip="Descansos no disfrutados."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.TrabajoEnDescanso, StringFormat=00}"
+                                       ToolTip="Días de trabajo en descanso (J-D)."/>
+                        </StackPanel>
+
+                        <!-- CÓMPUTO NO FIJOS -->
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5"
+                                Visibility="{Binding CalendariosVM.Pijama.NoEsFijo, Converter={StaticResource cnvBoolToVisibility}}">
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center" FontSize="10" Foreground="DarkBlue"
+                                   Text="{Binding CalendariosVM.Pijama.DiasComputoTrabajo, StringFormat='(\{0:00.##})'}"
+                                   ToolTip="Días que debe trabajar."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center" FontSize="10" Foreground="DarkBlue"
+                                   Text="{Binding CalendariosVM.Pijama.DiasComputoDescanso, StringFormat='(\{0:00.##})'}"
+                                   ToolTip="Días que debe descansar."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center" FontSize="10" Foreground="DarkBlue"
+                                   Text="{Binding CalendariosVM.Pijama.DiasComputoVacaciones, StringFormat='(\{0:00.##})'}"
+                                   ToolTip="Días de vacaciones que le corresponden."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="180" TextAlignment="Center" FontSize="10" Foreground="DarkBlue"
+                                   Text="{Binding CalendariosVM.Pijama.TextoComputoEventuales}"/>
+                        </StackPanel>
+
+                        <Border Height="1" BorderBrush="DarkGray" BorderThickness="1"/>
+
+                        <!-- DESCANSOS -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="FN" Width="60" TextAlignment="Center"
+                                   ToolTip="Descansos en fin de semana."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="E" Width="60" TextAlignment="Center"
+                                   ToolTip="Días de enfermedad."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="DS" Width="60" TextAlignment="Center"
+                                   ToolTip="Descansos sueltos."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="DC" Width="60" TextAlignment="Center"
+                                   ToolTip="Descansos compensatorios."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="PER" Width="60" TextAlignment="Center"
+                                   ToolTip="Días de permiso."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="F6" Width="60" TextAlignment="Center"
+                                   ToolTip="Días de libre disposición."/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DescansoEnFinde, StringFormat=00}"
+                                       ToolTip="Descansos en fin de semana."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.Enfermo, StringFormat=00}"
+                                       ToolTip="Días de enfermedad."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DescansoSuelto, StringFormat=00}"
+                                       ToolTip="Descansos sueltos."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DescansoCompensatorio, StringFormat=00}"
+                                       ToolTip="Descansos compensatorios."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.Permiso, StringFormat=00}"
+                                       ToolTip="Días de permiso."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.LibreDisposicionF6, StringFormat=00}"
+                                       ToolTip="Días de libre disposición."/>
+                            <!--ToolTip="{Binding CalendariosVM.Pijama.LibreDisposicionF6, Converter={StaticResource cnvDiasF6}}"/>-->
+                        </StackPanel>
+
+                        <Border Height="1" BorderBrush="DarkGray" BorderThickness="1"/>
+
+                        <!-- COMITÉ EN JD Y EN DC -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center"
+                                Visibility="{Binding CalendariosVM.Pijama.VerComite, Converter={StaticResource cnvBoolToVisibility}}">
+                            <Label  Width="160" HorizontalContentAlignment="Center" Margin="0"
+                                    ToolTip="Total días de comité.">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Style="{StaticResource TextoPijama1}" Text="Días Comité:  " Width="Auto"  FontSize="12"/>
+                                    <TextBlock Style="{StaticResource TextoPijama2}" Width="Auto"
+                                       Text="{Binding CalendariosVM.Pijama.Comite, StringFormat=00}"/>
+                                </StackPanel>
+                            </Label>
+                            <Label  Width="100" HorizontalContentAlignment="Center" Margin="0"
+                                    ToolTip="Del total de días de comité, los realizados en descanso (J-D).">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Style="{StaticResource TextoPijama1}" Text="En JD:  " Width="Auto"  FontSize="12"/>
+                                    <TextBlock Style="{StaticResource TextoPijama2}" Width="Auto"
+                                       Text="{Binding CalendariosVM.Pijama.ComiteEnDescanso, StringFormat=00}"/>
+                                </StackPanel>
+                            </Label>
+                            <Label  Width="100" HorizontalContentAlignment="Center" Margin="0"
+                                    ToolTip="Del total de días de comité, los realizados en descanso compensatorio (DC).">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <TextBlock Style="{StaticResource TextoPijama1}" Text="En DC:  " Width="Auto"  FontSize="12"/>
+                                    <TextBlock Style="{StaticResource TextoPijama2}" Width="Auto"
+                                       Text="{Binding CalendariosVM.Pijama.ComiteEnDC, StringFormat=00}"/>
+                                </StackPanel>
+                            </Label>
+                        </StackPanel>
+
+                        <Border Height="1" BorderBrush="DarkGray" BorderThickness="1"
+                            Visibility="{Binding CalendariosVM.Pijama.VerComite, Converter={StaticResource cnvBoolToVisibility}}"/>
+
+                        <!-- TOTAL DÍAS -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5"
+                                    ToolTip="Total de los días en los que el trabajador está activo.">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Total Días: " Width="Auto"  FontSize="12" Foreground="DarkBlue"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="Auto" FontSize="12" Foreground="DarkBlue">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0:00} de {1:00}">
+                                        <Binding Path="CalendariosVM.Pijama.DiasActivo"/>
+                                        <Binding Path="CalendariosVM.Pijama.DiasMes"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                        </StackPanel>
+
+                    </StackPanel>
+                </Grid>
+
+
+                <!-- FINES DE SEMANA -->
+                <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Fines de Semana Mes Actual"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="FindesMes"
+                        Style="{StaticResource EstiloBotonBarraPequeña}"/>
+                <!--<TextBlock Text="Fines de Semana Mes Actual" Margin="10,10,5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"/>-->
+
+                <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelFindesMes}">
+                    <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
+
+                    <StackPanel Orientation="Vertical">
+                        <!-- FINES DE SEMANA -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="" Width="90" TextAlignment="Center"/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Sábados" Width="90" TextAlignment="Center"/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Domingos" Width="90" TextAlignment="Center"/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Festivos" Width="90" TextAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Descanso" Width="90" TextAlignment="Center"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.SabadosDescansados, StringFormat=00}"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DomingosDescansados, StringFormat=00}"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.FestivosDescansados, StringFormat=00}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Trabajo" Width="90" TextAlignment="Center"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.SabadosTrabajados, StringFormat=00}"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DomingosTrabajados, StringFormat=00}"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.FestivosTrabajados, StringFormat=00}"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Pluses" Width="90" TextAlignment="Center"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.PlusSabados, StringFormat='\{0:0.00 €}'}"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.PlusDomingos, StringFormat='\{0:0.00 €}'}"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.PlusFestivos, StringFormat='\{0:0.00 €}'}"/>
+                        </StackPanel>
+
+                        <Border Height="1" BorderBrush="DarkGray" BorderThickness="1"/>
+
+                        <!-- FINES DE SEMANA COMPLETOS -->
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5"
+                                    ToolTip="Fines de semana completos disfrutados.">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Width="Auto" Text="Fines de Semana Completos: " FontSize="12" Foreground="DarkBlue"/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="Auto" Foreground="DarkBlue" FontSize="12"
+                                Text="{Binding CalendariosVM.Pijama.FindesCompletos,  Converter={StaticResource cnvDecimal}}"/>
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </Grid>
+
+
+                <!-- DIETAS Y PLUSES -->
+                <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Dietas y Pluses Mes Actual"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="DietasMes"
+                        Style="{StaticResource EstiloBotonBarraPequeña}"/>
+
+                <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelDietasMes}">
+                    <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
+
+                    <StackPanel Orientation="Vertical">
+
+                        <!-- DIETAS -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Desayuno" Width="90" TextAlignment="Center"
+                                       ToolTip="Dieta de desayuno, sin aplicar el porcentaje de descuento."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Comida" Width="90" TextAlignment="Center"
+                                       ToolTip="Dieta de comida."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Cena" Width="90" TextAlignment="Center"
+                                       ToolTip="Dieta de cena."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="P.Cena" Width="90" TextAlignment="Center"
+                                       ToolTip="Dieta de plus cena (con el porcentaje ya aplicado)."/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DietaDesayuno, Converter={StaticResource cnvDecimal}}"
+                                       ToolTip="Dieta de desayuno, sin aplicar el porcentaje de descuento."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DietaComida, Converter={StaticResource cnvDecimal}}"
+                                       ToolTip="Dieta de comida."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DietaCena, Converter={StaticResource cnvDecimal}}"
+                                       ToolTip="Dieta de cena."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DietaPlusCena, Converter={StaticResource cnvDecimal}}"
+                                       ToolTip="Dieta de plus cena (con el porcentaje ya aplicado)."/>
+                        </StackPanel>
+
+                        <Border Height="1" BorderBrush="DarkGray" BorderThickness="1"/>
+
+                        <!-- PLUSES -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Menor D." Width="90" TextAlignment="Center"
+                                       ToolTip="Plus por menor descanso."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Limpieza" Width="90" TextAlignment="Center"
+                                       ToolTip="Suma de los pluses de limpieza (fijos y variables)."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Paquet." Width="90" TextAlignment="Center"
+                                       ToolTip="Suma de los pluses de paquetería (fijos y variables)."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Otros" Width="90" TextAlignment="Center"
+                                       ToolTip="Suma de los pluses de nocturnidad , viaje y Navidad."/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.PlusMenorDescanso, Converter={StaticResource cnvDecimalEuro}}"
+                                       ToolTip="Plus por menor descanso."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.PlusLimpieza, Converter={StaticResource cnvDecimalEuro}}"
+                                       ToolTip="Suma de los pluses de limpieza (fijos y variables)."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.PlusPaqueteria, Converter={StaticResource cnvDecimalEuro}}"
+                                       ToolTip="Suma de los pluses de paquetería (fijos y variables)."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.OtrosPluses, Converter={StaticResource cnvDecimalEuro}}"
+                                       ToolTip="{Binding CalendariosVM.Pijama.ToolTipOtrosPluses}"/>
+                        </StackPanel>
+
+                        <Border Height="1" BorderBrush="DarkGray" BorderThickness="1"/>
+
+                        <!-- TOTALES -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Total Findes" Width="120" TextAlignment="Center"
+                                       ToolTip="Suma de todos los pluses de fin de semana y festivos."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Total Dietas" Width="120" TextAlignment="Center"
+                                       ToolTip="Suma de todas las dietas, así como su importe total."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="Total Pluses" Width="120" TextAlignment="Center"
+                                       ToolTip="Suma de todos los pluses (excepto los de fin de semana y festivos)."/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.ImporteTotalFindes, StringFormat='{}{0:0.00 €}'}"
+                                       ToolTip="Suma de todos los pluses de fin de semana y festivos."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
+                                       ToolTip="Suma de todas las dietas, así como su importe total.">
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0} ({1} €)">
+                                        <Binding Path="CalendariosVM.Pijama.TotalDietas" Converter="{StaticResource cnvDecimal}"/>
+                                        <Binding Path="CalendariosVM.Pijama.ImporteTotalDietas" Converter="{StaticResource cnvDecimal}"/>
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.ImporteTotalPluses, StringFormat='{}{0:0.00 €}'}"
+                                       ToolTip="Suma de todos los pluses (excepto los de fin de semana y festivos)."/>
+                        </StackPanel>
+
+                        <Border Height="1" BorderBrush="DarkGray" BorderThickness="1"/>
+
+                        <!-- IMPORTE TOTAL FINDES + DIETAS + PLUSES -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5" HorizontalAlignment="Center"
+                                    ToolTip="Importe total a cobrar por dietas y pluses.">
+                            <TextBlock FontFamily="Verdana" FontSize="13" FontWeight="Bold" Foreground="DarkBlue"
+                                       Text="Importe Total:  "/>
+                            <TextBlock FontFamily="Verdana" FontSize="13" Foreground="DarkBlue"
+                                       Text="{Binding CalendariosVM.Pijama.ImporteTotal, StringFormat='{}{0:0.00} €'}"/>
+
+                        </StackPanel>
+
+                    </StackPanel>
+
+                </Grid>
+
+
+                <!-- RESUMEN HASTA MES ACTUAL -->
+                <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Resumen Hasta Mes Actual"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="ResumenAño"
+                        Style="{StaticResource EstiloBotonBarraPequeña}"/>
+
+                <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelResumenAño}">
+                    <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
+
+                    <StackPanel Orientation="Vertical">
+
+                        <!-- TOTALES -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="DNDs Pend." Width="120" TextAlignment="Center"
+                                       ToolTip="Descansos no disfrutados pendientes de disfrutar."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="DCs Pend." Width="120" TextAlignment="Center"
+                                       ToolTip="Descansos compensatorios pendientes de disfrutar."/>
+                            <TextBlock Style="{StaticResource TextoPijama1}" Text="H.Acumuladas" Width="120" TextAlignment="Center"
+                                       ToolTip="Horas acumuladas generadas en el año en curso."/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <TextBlock Style="{StaticResource TextoPijama2}" FontSize="13" Width="120" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DNDsPendientesHastaMes, StringFormat=00}"
+                                       ToolTip="Descansos no disfrutados pendientes de disfrutar."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" FontSize="13" Width="120" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.DCsPendientesHastaMes, StringFormat=00}"
+                                       ToolTip="Descansos compensatorios pendientes de disfrutar."/>
+                            <TextBlock Style="{StaticResource TextoPijama2}" FontSize="13" Width="120" TextAlignment="Center"
+                                       Text="{Binding CalendariosVM.Pijama.AcumuladasHastaMes, Converter={StaticResource cnvHoraMixta},
+                                              ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
+                                       ToolTip="Horas acumuladas generadas en el año en curso."/>
+                        </StackPanel>
+
+                        <Border Height="1" BorderBrush="DarkGray" BorderThickness="1"/>
+
+                        <!-- DCs GENERADOS -->
+                        <StackPanel Orientation="Horizontal" Margin="0,5" HorizontalAlignment="Center" ToolTipService.ShowDuration="100000">
+                            <TextBlock FontFamily="Verdana" FontSize="13" FontWeight="Bold" Foreground="DarkBlue"
+                                       Text="DCs Generados:  "/>
+                            <TextBlock FontFamily="Verdana" FontSize="13" Foreground="DarkBlue"
+                                       Text="{Binding CalendariosVM.Pijama.DCsGeneradosHastaMes, StringFormat='{}{0:0.00}'}"/>
+                            <StackPanel.ToolTip>
+                                <TextBlock>
+                                    Descansos compensatorios generados a partir de las horas acumuladas actuales <LineBreak/>
+                                    (incluyendo las sobrantes del año anterior) y los descansos compensatorios <LineBreak/>
+                                    pendientes, a disfrutar al año siguiente.
+                                </TextBlock>
+                            </StackPanel.ToolTip>
+                        </StackPanel>
+
+
+                    </StackPanel>
+
+                </Grid>
+            
+        </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.RowSpan="4" Grid.Column="1" BorderBrush="DarkBlue" BorderThickness="0.5" Width="{Binding ElementName=PanelResumen, Path=Width}"
+                    Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}" CornerRadius="4"/>
+
+
+    </Grid>
+
+
+</UserControl>

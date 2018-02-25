@@ -1,0 +1,312 @@
+﻿<!-- =============================================== -->
+<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
+<!--                                                 -->
+<!--  Vea el archivo Licencia.txt para más detalles  -->
+<!-- =============================================== -->
+<UserControl x:Class="Orion.Views.VistaLineas"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:convertidores="clr-namespace:Orion.Convertidores"
+             xmlns:p="clr-namespace:Orion.Properties"
+             xmlns:local="clr-namespace:Orion.Views"
+             mc:Ignorable="d" x:Name="vLineas"
+             d:DesignHeight="400" d:DesignWidth="900">
+
+
+    <!-- ==================================================================================================== -->
+    <!-- RECURSOS -->
+    <!-- ==================================================================================================== -->
+    <UserControl.Resources>
+
+        <convertidores:ConvertidorHora x:Key="cnvHora"/>
+        <convertidores:ConvertidorFecha x:Key="cnvFecha"/>
+        <convertidores:ConvertidorNumeroGrafico x:Key="cnvNumGrafico"/>
+        <convertidores:ConvertidorDecimal x:Key="cnvDecimal"/>
+        <convertidores:ConvertidorItinerario x:Key="cnvItinerario"/>
+        <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility"/>
+
+        <Style x:Key="EstiloGridLineas" TargetType="DataGrid">
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}"/>
+            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}"/>
+            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}"/>
+        </Style>
+        <Style x:Key="EstiloGridItinerarios" TargetType="DataGrid">
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}"/>
+            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasVerde}"/>
+            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}"/>
+        </Style>
+
+    </UserControl.Resources>
+
+
+    <!-- ==================================================================================================== -->
+    <!-- CONTENIDO -->
+    <!-- ==================================================================================================== -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+
+        <!-- ==================================================================================================== -->
+        <!-- BARRA DE BOTONES -->
+        <!-- ==================================================================================================== -->
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="80" Background="{StaticResource DegradadoCeleste0}">
+
+            <!--BOTON GUARDAR-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding cmdGuardarCambios}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Guardar.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarAzul}"/>
+                        <Image Source="Imagenes/GuardarRojo.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarRojo}"/>
+                        <TextBlock Text="Guardar" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!--BOTON BORRAR LÍNEA-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding LineasVM.cmdBorrarLinea}"
+                    CommandParameter="{Binding ElementName=TablaLineas}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/BorrarFila.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Borrar Línea" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--BOTON BORRAR ITINERARIO-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding LineasVM.cmdBorrarItinerario}"
+                    CommandParameter="{Binding ElementName=TablaItinerarios}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/BorrarFila.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Borrar Itinerario" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--BOTON BORRAR PARADA-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding LineasVM.cmdBorrarParada}"
+                    CommandParameter="{Binding ElementName=TablaParadas}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/BorrarFila.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Borrar Parada" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--BOTON DESHACER BORRAR -->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding LineasVM.cmdDeshacerBorrar}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/ActualizarTabla.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Deshacer Borrar" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!--BOTON COPIAR-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="ApplicationCommands.Copy" CommandTarget="{Binding LineasVM.TablaParaCopy}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Copiar.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Copiar" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--BOTON PEGAR-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding LineasVM.cmdPegar}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Pegar.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Pegar" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+        </StackPanel>
+
+        <!-- ==================================================================================================== -->
+        <!-- BOTONES AUXILIARES -->
+        <!-- ==================================================================================================== -->
+        <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center">
+
+            <!-- AYUDA -->
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarAyuda}" CommandParameter="Lineas" Margin="1"
+                    HorizontalContentAlignment="Center">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Ayuda.png" Style="{StaticResource EstiloImagenPequeña}"/>
+                        <!--<TextBlock Text="Ayuda" TextWrapping="Wrap" TextAlignment="Center"/>-->
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!-- CALCULADORA -->
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarCalculadora}" Margin="1"
+                    HorizontalContentAlignment="Center" IsEnabled="{Binding Source={x:Static p:Settings.Default}, Path=BotonCalculadoraActivo, Mode=TwoWay}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Calculadora.png" Style="{StaticResource EstiloImagenPequeña}"/>
+                        <!--<TextBlock Text="Calculadora" TextWrapping="Wrap" TextAlignment="Center"/>-->
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+        </StackPanel>
+
+        <!-- IMAGEN DE FONDO-->
+        <Image Source="Imagenes\Orion.png" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.1" Grid.Row="1"/>
+
+        <!-- ==================================================================================================== -->
+        <!-- PANEL DE CONTENIDO -->
+        <!-- ==================================================================================================== -->
+        <Grid Grid.Row="1" Margin="6" x:Name="Tablas">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="2.5*"/>
+            </Grid.RowDefinitions>
+
+            <!-- ==================================================================================================== -->
+            <!-- TABLA LINEAS -->
+            <!-- ==================================================================================================== -->
+            <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="6,6,6,0"
+                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="LÍNEAS" BorderThickness="0.5" BorderBrush="DarkBlue"
+                           FontSize="16" FontWeight="Bold" Background="{StaticResource orDegradadoGris}"/>
+
+            <DataGrid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Margin="6,0,6,0" ItemsSource="{Binding LineasVM.ListaLineas}"
+                      SelectedItem="{Binding LineasVM.LineaSeleccionada}"
+                      x:Name="TablaLineas" IsReadOnly="False" HeadersVisibility="Column" FontSize="12"
+                      AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Single"
+                      Background="Transparent" SelectionUnit="FullRow" CanUserAddRows="True" CanUserSortColumns="False"
+                      GotFocus="Tabla_GotFocus"
+                      Style="{StaticResource EstiloGridLineas}">
+
+                <DataGrid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                </DataGrid.Resources>
+
+                <DataGrid.InputBindings>
+                    <KeyBinding Key="Delete" Command="{Binding LineasVM.cmdBorrarCeldas}"/>
+                    <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding LineasVM.cmdPegar}"/>
+                </DataGrid.InputBindings>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Línea" Width="1*" MinWidth="60" Binding="{Binding Nombre}"/>
+                    <DataGridTextColumn Header="Descripción" Width="7*" MinWidth="60" Binding="{Binding Descripcion}"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+            
+            <!-- ==================================================================================================== -->
+            <!-- TABLA ITINERARIOS -->
+            <!-- ==================================================================================================== -->
+            <Label Grid.Row="2" Grid.Column="0" Margin="6,6,6,0"
+                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" BorderThickness="0.5" BorderBrush="DarkBlue"
+                           FontSize="16" FontWeight="Bold" Background="{StaticResource orDegradadoGris}">
+                <Label.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="ITINERARIOS DE LA LÍNEA "/>
+                        <TextBlock Text="{Binding LineasVM.LineaSeleccionada.Nombre}"/>
+                    </StackPanel>
+                </Label.Content>
+            </Label>
+
+            <DataGrid Grid.Row="3" Grid.Column="0" Margin="6,0,6,0" ItemsSource="{Binding LineasVM.LineaSeleccionada.ListaItinerarios}"
+                      SelectedItem="{Binding LineasVM.ItinerarioSeleccionado}"
+                    x:Name="TablaItinerarios" IsReadOnly="False" HeadersVisibility="Column" FontSize="12"
+                      AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Single"
+                      Background="Transparent" SelectionUnit="FullRow" CanUserAddRows="True" CanUserSortColumns="False"
+                      GotFocus="Tabla_GotFocus"
+                      Style="{StaticResource EstiloGridItinerarios}">
+
+                <DataGrid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                </DataGrid.Resources>
+
+                <DataGrid.InputBindings>
+                    <KeyBinding Key="Delete" Command="{Binding LineasVM.cmdBorrarCeldas}"/>
+                    <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding LineasVM.cmdPegar}"/>
+                </DataGrid.InputBindings>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Itinerario" Width="2*" MinWidth="60" Binding="{Binding Nombre, Converter={StaticResource cnvItinerario}}"/>
+                    <DataGridTextColumn Header="Descripción" Width="6*" MinWidth="60" Binding="{Binding Descripcion}"/>
+                    <DataGridTextColumn Header="T.Real" Width="1*" MinWidth="60" Binding="{Binding TiempoReal}"/>
+                    <DataGridTextColumn Header="T.Pago" Width="1*" MinWidth="60" Binding="{Binding TiempoPago}"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+
+            <!-- ==================================================================================================== -->
+            <!-- TABLA PARADAS -->
+            <!-- ==================================================================================================== -->
+            <Label Grid.Row="2" Grid.Column="1" Margin="6,6,6,0"
+                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" BorderThickness="0.5" BorderBrush="DarkBlue"
+                           FontSize="16" FontWeight="Bold" Background="{StaticResource orDegradadoGris}">
+                <Label.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="PARADAS DEL ITINERARIO "/>
+                        <TextBlock Text="{Binding LineasVM.ItinerarioSeleccionado.Nombre}"/>
+                    </StackPanel>
+                </Label.Content>
+            </Label>
+
+            <DataGrid Grid.Row="3" Grid.Column="1" Margin="6,0,6,0" ItemsSource="{Binding LineasVM.ItinerarioSeleccionado.ListaParadas}"
+                      SelectedItem="{Binding LineasVM.ParadaSeleccionada}"
+                    x:Name="TablaParadas" IsReadOnly="False" HeadersVisibility="Column" FontSize="12"
+                      AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Single"
+                      Background="Transparent" SelectionUnit="FullRow" CanUserAddRows="True" CanUserSortColumns="False"
+                      GotFocus="Tabla_GotFocus"
+                      Style="{StaticResource EstiloGridItinerarios}">
+
+                <DataGrid.Resources>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod"/>
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                </DataGrid.Resources>
+
+                <DataGrid.InputBindings>
+                    <KeyBinding Key="Delete" Command="{Binding LineasVM.cmdBorrarCeldas}"/>
+                    <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding LineasVM.cmdPegar}"/>
+                </DataGrid.InputBindings>
+
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Orden" Width="1*" MinWidth="60" Binding="{Binding Orden}"/>
+                    <DataGridTextColumn Header="Parada" Width="6*" MinWidth="60" Binding="{Binding Descripcion}"/>
+                    <DataGridTextColumn Header="Tiempo" Width="2*" MinWidth="60" Binding="{Binding Tiempo, Converter={StaticResource cnvHora}}"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+
+
+        </Grid>
+
+
+    </Grid>
+</UserControl>

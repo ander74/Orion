@@ -1,0 +1,98 @@
+﻿<!-- =============================================== -->
+<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
+<!--                                                 -->
+<!--  Vea el archivo Licencia.txt para más detalles  -->
+<!-- =============================================== -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:cnv="clr-namespace:Orion.Convertidores"
+                    xmlns:local="clr-namespace:Orion">
+
+
+
+    <!-- ==================================================================================================== -->
+    <!-- ESTILO FILAS VERDE -->
+    <!-- ==================================================================================================== -->
+    <Style x:Key="EstiloFilasVerde" TargetType="DataGridRow">
+        <Setter Property="Background" Value="{StaticResource GrisMuyClaro}"/>
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="MinHeight" Value="26"/>
+        <!-- Cambiar fondo aquí -->
+        <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="{StaticResource VerdeMuyClaro}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <!-- ==================================================================================================== -->
+    <!-- ESTILO FILAS AZUL -->
+    <!-- ==================================================================================================== -->
+    <Style x:Key="EstiloFilasAzul" TargetType="DataGridRow">
+        <Setter Property="Background" Value="{StaticResource GrisMuyClaro}"/>
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="MinHeight" Value="26"/>
+        <!-- Cambiar fondo aquí -->
+        <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="{StaticResource DegradadoCeleste1}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <!-- ==================================================================================================== -->
+    <!-- ESTILO FILAS PIJAMA -->
+    <!-- ==================================================================================================== -->
+    <Style x:Key="EstiloFilasPijama" TargetType="DataGridRow">
+        <Style.Resources>
+            <cnv:ConvertidorColorDia x:Key="cnvColorDia"/>
+        </Style.Resources>
+        <Setter Property="Background" Value="{StaticResource GrisMuyClaro}"/>
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="MinHeight" Value="26"/>
+        <Setter Property="Foreground">
+            <Setter.Value>
+                <MultiBinding Converter="{StaticResource cnvColorDia}">
+                    <Binding Path="Grafico"/>
+                    <Binding Path="Fecha"/>
+                    <Binding Path="Dia"/>
+                </MultiBinding>
+            </Setter.Value>
+        </Setter>
+        <!-- Estilos condicionales -->
+        <Style.Triggers>
+            <!-- Fondo alterno -->
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="{StaticResource DegradadoCeleste1}"/>
+            </Trigger>
+        </Style.Triggers>
+     
+    </Style>
+
+
+    <!-- ==================================================================================================== -->
+    <!-- ESTILO FILAS REGULACIONES CONDUCTOR -->
+    <!-- ==================================================================================================== -->
+    <Style x:Key="EstiloFilasRegulacionesConductor" TargetType="DataGridRow">
+        <Setter Property="Background" Value="{StaticResource GrisMuyClaro}"/>
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="MinHeight" Value="26"/>
+        <!-- Cambiar fondo aquí -->
+        <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="{StaticResource VerdeMuyClaro}"/>
+            </Trigger>
+            <DataTrigger Binding="{Binding Codigo}" Value="1">
+                <Setter Property="Foreground" Value="Red"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding Codigo}" Value="2">
+                <Setter Property="Foreground" Value="Blue"/>
+            </DataTrigger>
+        </Style.Triggers>
+    </Style>
+
+
+
+</ResourceDictionary>

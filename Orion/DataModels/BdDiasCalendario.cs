@@ -1,0 +1,513 @@
+﻿#region COPYRIGHT
+// ===============================================
+//     Copyright 2017 - Orion 1.0 - A. Herrero    
+// -----------------------------------------------
+//  Vea el archivo Licencia.txt para más detalles 
+// ===============================================
+#endregion
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.OleDb;
+using System.Collections.ObjectModel;
+using Orion.Models;
+using System.Windows;
+using Orion.Config;
+
+namespace Orion.DataModels {
+
+	public static class BdDiasCalendario {
+
+
+		/*================================================================================
+		 * GET DIAS CALENDARIO
+		 *================================================================================*/
+		public static ObservableCollection<DiaCalendario> GetDiasCalendario(int idcalendario, OleDbConnection conexion = null) {
+
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+
+			// Creamos la lista y el comando que extrae los gráficos.
+			ObservableCollection<DiaCalendario> lista = new ObservableCollection<DiaCalendario>();
+
+			using (conexion) {
+
+				//string comandoSQL = "SELECT * FROM DiasCalendario WHERE IdCalendario = ? ORDER BY Dia";
+				string comandoSQL = "GetDiasCalendario";
+
+				// Elementos para la consulta de calendarios y días de calendario.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.CommandType = System.Data.CommandType.StoredProcedure;
+				comando.Parameters.AddWithValue("id", idcalendario);
+				OleDbDataReader lector = null;
+
+				try {
+					conexion.Open();
+					// Extraemos los calendarios.
+					lector = comando.ExecuteReader();
+
+					// Por cada dia extraido...
+					while (lector.Read()) {
+						DiaCalendario dia = new DiaCalendario(lector);
+						// Añadimos el calendario a la lista.
+						lista.Add(dia);
+						dia.Nuevo = false;
+						dia.Modificado = false;
+					}
+					lector.Close();
+				} catch (OleDbException ex) {
+					Utils.VerError("BdDiasCalendarios.GetDiasCalendario(idcalendario)", ex);
+				}
+			}
+			// Devolvemos la lista.
+			return lista;
+		}
+
+
+		/*================================================================================
+		 * GET DIAS CALENDARIO AÑO
+		 *================================================================================*/
+		[Obsolete("Esté método no se usa en ningun sitio.")]
+		public static List<DiaCalendario> GetDiasCalendarioAño(long idConductor, int año) {
+
+			// Creamos la lista y el comando que extrae los gráficos.
+			List<DiaCalendario> lista = new List<DiaCalendario>();
+
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+				//string comandoSQL = "SELECT * " +
+				//					"FROM DiasCalendario " +
+				//					"WHERE IdCalendario IN (SELECT Id " +
+				//					"						FROM Calendarios " +
+				//					"						WHERE IdConductor = ? AND Year(Fecha) = ?)";
+				string comandoSQL = "GetDiasCalendariosAño";
+
+				// Elementos para la consulta de calendarios y días de calendario.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.CommandType = System.Data.CommandType.StoredProcedure;
+				comando.Parameters.AddWithValue("idconductor", idConductor);
+				comando.Parameters.AddWithValue("año", año);
+				OleDbDataReader lector = null;
+
+				try {
+					conexion.Open();
+					// Extraemos los calendarios.
+					lector = comando.ExecuteReader();
+
+					// Por cada dia extraido...
+					while (lector.Read()) {
+						DiaCalendario dia = new DiaCalendario(lector);
+						// Añadimos el calendario a la lista.
+						lista.Add(dia);
+						dia.Nuevo = false;
+						dia.Modificado = false;
+					}
+				} catch (OleDbException ex) {
+					Utils.VerError("BdDiasCalendarios.GetDiasCalendarioAño", ex);
+				}
+			}
+			// Devolvemos la lista.
+			return lista;
+
+		}
+
+
+		/*================================================================================
+		 * GET DIA CALENDARIO
+		 *================================================================================*/
+		public static DiaCalendarioBase GetDiaCalendario(int idConductor, DateTime fecha, OleDbConnection conexion = null) {
+
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+			DiaCalendarioBase resultado = null;
+
+			using (conexion) {
+
+				string comandoSQL = "SELECT * FROM DiasCalendario WHERE IdCalendario IN (SELECT Id " +
+																						"FROM Calendarios " +
+																						"WHERE IdConductor = ?) " +
+									"AND DiaFecha = ?;";
+
+				// Elementos para la consulta de calendarios y días de calendario.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.Parameters.AddWithValue("@IdConductor", idConductor);
+				comando.Parameters.AddWithValue("@Validez", fecha.ToString("yyyy-MM-dd"));
+				OleDbDataReader lector = null;
+				try {
+					conexion.Open();
+					lector = comando.ExecuteReader();
+					if (lector.Read()) resultado =  new DiaCalendarioBase(lector);
+					lector.Close();
+				} catch (OleDbException ex) {
+					Utils.VerError("BdDiasCalendarios.GetDiaCalendario", ex);
+				}
+			}
+			return resultado;
+		}
+
+
+		/*================================================================================
+		* GUARDAR DIAS CALENDARIO
+		*================================================================================*/
+		public static void GuardarDiasCalendario(ObservableCollection<DiaCalendario> lista, OleDbConnection conexion = null) {
+
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+
+			// Si la lista está vacía, salimos.
+			if (lista == null || lista.Count == 0) return;
+
+			using (conexion) {
+
+				//string SQLInsertar = "INSERT INTO DiasCalendario (IdCalendario, Dia, Grafico, Codigo, ExcesoJornada, HorasDescuadre, FacturadoPaqueteria, " +
+				//					 "Limpieza, GraficoVinculado, Notas) " +
+				//					 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+				string SQLInsertar = "InsertarDiaCalendario";
+
+				//string SQLActualizar = "UPDATE DiasCalendario SET IdCalendario=?, Dia=?, Grafico=?, Codigo=?, ExcesoJornada=?, HorasDescuadre=?, " +
+				//					   "FacturadoPaqueteria=?, Limpieza=?, GraficoVinculado=?, Notas=? WHERE Id=?;";
+				string SQLActualizar = "ActualizarDiaCalendario";
+
+				string SQLGetId = "SELECT @@IDENTITY;";
+
+				try {
+					conexion.Open();
+					foreach (DiaCalendario dia in lista) {
+						// Si el día tiene como gráfico cero y no existe, no se evalúa.
+						if (dia.Id == 0 && dia.Grafico == 0) continue;
+						if (dia.Nuevo) {
+							OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
+							comando.CommandType = System.Data.CommandType.StoredProcedure;
+							DiaCalendario.ParseToCommand(comando, dia);
+							comando.ExecuteNonQuery();
+							comando.CommandText = SQLGetId;
+							comando.CommandType = System.Data.CommandType.Text;
+							int iddia = (int)comando.ExecuteScalar();
+							dia.Id = iddia;
+							dia.Nuevo = false;
+							dia.Modificado = false;
+						} else if (dia.Modificado) {
+							OleDbCommand comando = new OleDbCommand(SQLActualizar, conexion);
+							comando.CommandType = System.Data.CommandType.StoredProcedure;
+							DiaCalendario.ParseToCommand(comando, dia);
+							comando.ExecuteNonQuery();
+							dia.Modificado = false;
+						}
+					}
+				} catch (OleDbException ex) {
+					Utils.VerError("BdDiasCalendario.GuardarDiasCalendario", ex);
+				}
+			}
+		}
+
+
+		/*================================================================================
+		 * BORRAR DIAS CALENDARIO
+		 *================================================================================*/
+		[Obsolete("Esté método no se usa en ningun sitio.")]
+		public static void BorrarDiasCalendario(List<DiaCalendario> lista) {
+
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+				//string SQLBorrar = "DELETE FROM DiasCalendario WHERE Id=?";
+				string SQLBorrar = "BorrarDiaCalendario";
+
+				try {
+					conexion.Open();
+					foreach (DiaCalendario dia in lista) {
+						OleDbCommand comando = new OleDbCommand(SQLBorrar, conexion);
+						comando.CommandType = System.Data.CommandType.StoredProcedure;
+						comando.Parameters.AddWithValue("id", dia.Id);
+						comando.ExecuteNonQuery();
+					}
+				} catch (OleDbException ex) {
+					Utils.VerError("BdDiasCalendario.BorrarDiasCalendario", ex);
+				}
+			}
+		}
+
+
+		/*================================================================================
+		 * GET HORAS DESCUADRE HASTA MES
+		 *================================================================================*/
+		public static int GetHorasDescuadreHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
+
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+
+			object resultado = null;
+
+			using (conexion) {
+
+				// Definimos el comando SQL.
+				string comandoSQL = "SELECT Sum(Descuadre) " +
+									"FROM DiasCalendario " +
+									"WHERE BloquearDescuadre = False AND IdCalendario IN (SELECT Id " +
+																		"FROM Calendarios " +
+																		"WHERE IdConductor = ? AND Fecha < ?);";
+
+				// Establecemos la fecha del día 1 del siguiente mes al indicado.
+				DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
+
+				// Creamos el comando y añadimos los parámetros.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.Parameters.AddWithValue("idconductor", idconductor);
+				comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+
+				try {
+					conexion.Open();
+					// Ejecutamos el comando y guardamos el resultado.
+					resultado = comando.ExecuteScalar();
+				} catch (Exception ex) {
+					Utils.VerError("BdCalendarios.GetHorasDescuadreHastaMes", ex);
+				}
+			}
+			// Devolvemos el resultado.
+			if (resultado == DBNull.Value) resultado = 0;
+			return Convert.ToInt32(resultado);
+
+		}
+
+
+		/*================================================================================
+		 * GET HORAS DESCUADRE AÑO
+		 *================================================================================*/
+		[Obsolete("Esté método no se usa en ningun sitio.")]
+		public static int GetHorasDescuadreAño(int año, int idconductor) {
+
+			object resultado = null;
+
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+				// Definimos el comando SQL.
+				string comandoSQL = "SELECT Sum(Descuadre) " +
+									"FROM DiasCalendario " +
+									"WHERE IdCalendario IN (SELECT Id " +
+														   "FROM Calendarios " +
+														   "WHERE IdConductor = ? AND Year(Fecha) = ?);";
+
+				// Creamos el comando y añadimos los parámetros.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.Parameters.AddWithValue("idconductor", idconductor);
+				comando.Parameters.AddWithValue("año", año);
+
+				try {
+					conexion.Open();
+					// Ejecutamos el comando y guardamos el resultado.
+					resultado = comando.ExecuteScalar();
+				} catch (Exception ex) {
+					Utils.VerError("BdCalendarios.GetHorasDescuadreAño", ex);
+				}
+			}
+			// Devolvemos el resultado.
+			if (resultado == DBNull.Value) resultado = 0d;
+			return Convert.ToInt32(resultado);
+
+		}
+
+
+		/*================================================================================
+		 * GET EXCESO JORNADA HASTA MES
+		 *================================================================================*/
+		public static TimeSpan GetExcesoJornadaHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
+
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+
+			object resultado = null;
+
+			using (conexion) {
+
+				// Definimos el comando SQL.
+				string comandoSQL = "SELECT Sum(ExcesoJornada) " +
+									"FROM DiasCalendario " +
+									"WHERE BloquearExcesoJornada <> True AND IdCalendario IN (SELECT Id " +
+																		    "FROM Calendarios " +
+																			"WHERE IdConductor = ? AND Fecha < ?);";
+
+				// Establecemos la fecha del día 1 del siguiente mes al indicado.
+				DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
+
+				// Creamos el comando y añadimos los parámetros.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.Parameters.AddWithValue("idconductor", idconductor);
+				comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+
+				try {
+					conexion.Open();
+					// Ejecutamos el comando y guardamos el resultado.
+					resultado = comando.ExecuteScalar();
+				} catch (Exception ex) {
+					Utils.VerError("BdCalendarios.GetExcesoJornadaHastaMes", ex);
+				}
+			}
+			// Devolvemos el resultado.
+			if (resultado == DBNull.Value) resultado = 0d;
+			return new TimeSpan(Convert.ToInt64(resultado));
+
+		}
+
+
+		/*================================================================================
+		 * GET EXCESO JORNADA AÑO
+		 *================================================================================*/
+		[Obsolete("Esté método no se usa en ningun sitio.")]
+		public static TimeSpan GetExcesoJornadaAño(int año, int idconductor) {
+
+			object resultado = null;
+
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+				// Definimos el comando SQL.
+				string comandoSQL = "SELECT Sum(ExcesoJornada) " +
+									"FROM DiasCalendario " +
+									"WHERE IdCalendario IN (SELECT Id " +
+														   "FROM Calendarios " +
+														   "WHERE IdConductor = ? AND Year(Fecha) = ?);";
+
+				// Creamos el comando y añadimos los parámetros.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.Parameters.AddWithValue("idconductor", idconductor);
+				comando.Parameters.AddWithValue("year", año);
+
+				try {
+					conexion.Open();
+					// Ejecutamos el comando y guardamos el resultado.
+					resultado = comando.ExecuteScalar();
+				} catch (Exception ex) {
+					Utils.VerError("BdCalendarios.GetExcesoJornadaAño", ex);
+				}
+			}
+			// Devolvemos el resultado.
+			long ticks = (resultado == DBNull.Value) ? 0 : Convert.ToInt64(resultado);
+			return new TimeSpan(ticks);
+
+		}
+
+
+		/*================================================================================
+		 * GET DIAS CALENDARIO CON BLOQUEOS
+		 *================================================================================*/
+		public static ObservableCollection<DiaCalendario> GetDiasCalendarioConBloqueos(long idConductor, OleDbConnection conexion = null) {
+
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+
+			// Creamos la lista y el comando que extrae los gráficos.
+			ObservableCollection<DiaCalendario> lista = new ObservableCollection<DiaCalendario>();
+
+			using (conexion) {
+				//string comandoSQL = "SELECT * " +
+				//					"FROM DiasCalendario " +
+				//					"WHERE (ExcesoJornada <> 0 OR Descuadre <> 0) AND IdCalendario IN (SELECT Id " +
+				//					"																	FROM Calendarios " +
+				//					"																	WHERE IdConductor = ?)";
+				string comandoSQL = "GetDiasCalendarioConBloqueos";
+				// Elementos para la consulta de calendarios y días de calendario.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.CommandType = System.Data.CommandType.StoredProcedure;
+				comando.Parameters.AddWithValue("@IdConductor", idConductor);
+				OleDbDataReader lector = null;
+				try {
+					conexion.Open();
+					// Extraemos los calendarios.
+					lector = comando.ExecuteReader();
+					// Por cada dia extraido...
+					while (lector.Read()) {
+						DiaCalendario dia = new DiaCalendario(lector);
+						// Añadimos el calendario a la lista.
+						lista.Add(dia);
+						dia.Nuevo = false;
+						dia.Modificado = false;
+					}
+				} catch (OleDbException ex) {
+					Utils.VerError("BdDiasCalendarios.GetDiasCalendarioConBloqueos", ex);
+				}
+			}
+			// Devolvemos la lista.
+			return lista;
+
+		}
+
+
+		/*================================================================================
+		 * GET EXCESO JORNADA PENDIENTE HASTA MES
+		 *================================================================================*/
+		public static TimeSpan GetExcesoJornadaPendienteHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
+
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+
+			object resultado = null;
+
+			using (conexion) {
+
+				// Definimos el comando SQL.
+				string comandoSQL = "SELECT Sum(ExcesoJornada) " +
+									"FROM DiasCalendario " +
+									"WHERE BloquearExcesoJornada = True AND IdCalendario IN (SELECT Id " +
+																			"FROM Calendarios " +
+																			"WHERE IdConductor = ? AND Fecha < ?);";
+
+				// Establecemos la fecha del día 1 del siguiente mes al indicado.
+				DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
+
+				// Creamos el comando y añadimos los parámetros.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.Parameters.AddWithValue("idconductor", idconductor);
+				comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+
+				try {
+					conexion.Open();
+					// Ejecutamos el comando y guardamos el resultado.
+					resultado = comando.ExecuteScalar();
+				} catch (Exception ex) {
+					Utils.VerError("BdCalendarios.GetExcesoJornadaPendienteHastaMes", ex);
+				}
+			}
+			// Devolvemos el resultado.
+			if (resultado == DBNull.Value) resultado = 0d;
+			return new TimeSpan(Convert.ToInt64(resultado));
+
+		}
+
+
+		/*================================================================================
+		 * GET DESCUADRE PENDIENTE HASTA MES
+		 *================================================================================*/
+		public static int GetDescuadrePendienteHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
+
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+
+			object resultado = null;
+
+			using (conexion) {
+
+				// Definimos el comando SQL.
+				string comandoSQL = "SELECT Sum(Descuadre) " +
+									"FROM DiasCalendario " +
+									"WHERE BloquearDescuadre = True AND IdCalendario IN (SELECT Id " +
+																		"FROM Calendarios " +
+																		"WHERE IdConductor = ? AND Fecha < ?);";
+
+				// Establecemos la fecha del día 1 del siguiente mes al indicado.
+				DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
+
+				// Creamos el comando y añadimos los parámetros.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.Parameters.AddWithValue("idconductor", idconductor);
+				comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+
+				try {
+					conexion.Open();
+					// Ejecutamos el comando y guardamos el resultado.
+					resultado = comando.ExecuteScalar();
+				} catch (Exception ex) {
+					Utils.VerError("BdCalendarios.GetDescuadrePendienteHastaMes", ex);
+				}
+			}
+			// Devolvemos el resultado.
+			if (resultado == DBNull.Value) resultado = 0;
+			return Convert.ToInt32(resultado);
+
+		}
+
+
+
+	}
+}

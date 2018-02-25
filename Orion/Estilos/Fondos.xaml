@@ -1,0 +1,235 @@
+﻿<!-- =============================================== -->
+<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
+<!--                                                 -->
+<!--  Vea el archivo Licencia.txt para más detalles  -->
+<!-- =============================================== -->
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:Orion">
+
+
+    <!-- ==================================================================================================== -->
+    <!-- FONDOS -->
+    <!-- ==================================================================================================== -->
+    <SolidColorBrush x:Key="FondoCeleste1" Color="{StaticResource Celeste1}"/>
+    <SolidColorBrush x:Key="FondoCeleste2" Color="{StaticResource Celeste2}"/>
+    <SolidColorBrush x:Key="FondoCeleste3" Color="{StaticResource Celeste3}"/>
+    <SolidColorBrush x:Key="FondoCeleste4" Color="{StaticResource Celeste4}"/>
+    <SolidColorBrush x:Key="FondoCeleste5" Color="{StaticResource Celeste5}"/>
+    <SolidColorBrush x:Key="FondoCeleste6" Color="{StaticResource Celeste6}"/>
+
+    <!-- ==================================================================================================== -->
+    <!-- DEGRADADOS -->
+    <!-- ==================================================================================================== -->
+    <LinearGradientBrush x:Key="DegradadoCeleste0" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource Celeste1}" />
+        <GradientStop Offset="1" Color="{StaticResource Blanco}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="DegradadoCeleste1" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource Celeste2}" />
+        <GradientStop Offset="1" Color="{StaticResource Celeste1}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="DegradadoCeleste2" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource Celeste3}" />
+        <GradientStop Offset="1" Color="{StaticResource Celeste2}" />
+    </LinearGradientBrush>
+
+
+
+
+
+
+    <!-- ==================================================================================================== -->
+    <!-- DEGRADADOS VERDES-->
+    <!-- ==================================================================================================== -->
+    <LinearGradientBrush x:Key="VerdeMuyClaro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#cefddc" />
+        <GradientStop Offset="0.3" Color="#effffe" />
+        <GradientStop Offset="1" Color="#cefddc" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="VerdeClaro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#9fffbc" />
+        <GradientStop Offset="1" Color="#57df80" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="VerdeMedio" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#57ff73" />
+        <GradientStop Offset="1" Color="#00be1f" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="VerdeOscuro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#4de266" />
+        <GradientStop Offset="1" Color="#028b19" />
+    </LinearGradientBrush>
+
+
+    <!-- ==================================================================================================== -->
+    <!-- DEGRADADOS AZULES-->
+    <!-- ==================================================================================================== -->
+    <LinearGradientBrush x:Key="AzulMedio" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#57ddff" />
+        <GradientStop Offset="1" Color="#0099bf" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AzulOscuro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#4dc5e3" />
+        <GradientStop Offset="1" Color="#01708c" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AzulClaro3" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#d3e5f1" />
+        <GradientStop Offset="1" Color="#7db4dd" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="AzulClaro2" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#6c5f94" />
+        <GradientStop Offset="0.75" Color="#78b3d3" />
+        <GradientStop Offset="1" Color="#bfcdd6" />
+    </LinearGradientBrush>
+
+    <!-- ==================================================================================================== -->
+    <!-- DEGRADADOS ROJOS-->
+    <!-- ==================================================================================================== -->
+    <LinearGradientBrush x:Key="RojoClaro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#ff9f9f" />
+        <GradientStop Offset="1" Color="#de5757" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="RojoMedio" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#ff5757" />
+        <GradientStop Offset="1" Color="#bf0000" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="RojoOscuro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#e34d4d" />
+        <GradientStop Offset="1" Color="#8c0101" />
+    </LinearGradientBrush>
+
+    <!-- ==================================================================================================== -->
+    <!-- DEGRADADOS NARANJAS-->
+    <!-- ==================================================================================================== -->
+    <LinearGradientBrush x:Key="NaranjaClaro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#ffdf9e" />
+        <GradientStop Offset="1" Color="#deb157" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="NaranjaMedio" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#ffc757" />
+        <GradientStop Offset="1" Color="#bf8000" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="NaranjaOscuro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#e3b14d" />
+        <GradientStop Offset="1" Color="#8c5d01" />
+    </LinearGradientBrush>
+
+    <!-- ==================================================================================================== -->
+    <!-- DEGRADADOS ROSAS-->
+    <!-- ==================================================================================================== -->
+    <LinearGradientBrush x:Key="RosaClaro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#fc9eff" />
+        <GradientStop Offset="1" Color="#d957de" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="RosaMedio" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#f957ff" />
+        <GradientStop Offset="1" Color="#b800bf" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="RosaOscuro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#de4de3" />
+        <GradientStop Offset="1" Color="#88018c" />
+    </LinearGradientBrush>
+
+    <!-- ==================================================================================================== -->
+    <!-- DEGRADADOS GRISES-->
+    <!-- ==================================================================================================== -->
+    <LinearGradientBrush x:Key="GrisMuyClaro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#ffffff" />
+        <GradientStop Offset="1" Color="#f2f2f2" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GrisClaro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#e1e1e1" />
+        <GradientStop Offset="1" Color="#d0d0d0" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GrisMedio" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#bfbfbf" />
+        <GradientStop Offset="1" Color="#aeaeae" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="GrisOscuro" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="#9d9d9d" />
+        <GradientStop Offset="1" Color="#8c8c8c" />
+    </LinearGradientBrush>
+
+
+    <!-- ==================================================================================================== -->
+    <!-- DEGRADADOS ORION -->
+    <!-- ==================================================================================================== -->
+    <LinearGradientBrush x:Key="orDegradadoGris" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orGris1}" />
+        <GradientStop Offset="1" Color="{StaticResource orGris2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="orDegradadoAmarillo" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orAmarillo1}" />
+        <GradientStop Offset="1" Color="{StaticResource orAmarillo2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="orDegradadoAzul" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orAzul1}" />
+        <GradientStop Offset="1" Color="{StaticResource orAzul2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="orDegradadoCalabaza" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orCalabaza1}" />
+        <GradientStop Offset="1" Color="{StaticResource orCalabaza2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="orDegradadoCian" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orCian1}" />
+        <GradientStop Offset="1" Color="{StaticResource orCian2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="orDegradadoLima" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orLima1}" />
+        <GradientStop Offset="1" Color="{StaticResource orLima2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="orDegradadoMarron" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orMarron1}" />
+        <GradientStop Offset="1" Color="{StaticResource orMarron2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="orDegradadoNaranja" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orNaranja1}" />
+        <GradientStop Offset="1" Color="{StaticResource orNaranja2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="orDegradadoRojo" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orRojo1}" />
+        <GradientStop Offset="1" Color="{StaticResource orRojo2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="orDegradadoRosa" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orRosa1}" />
+        <GradientStop Offset="1" Color="{StaticResource orRosa2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="orDegradadoVerde" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orVerde1}" />
+        <GradientStop Offset="1" Color="{StaticResource orVerde2}" />
+    </LinearGradientBrush>
+
+    <LinearGradientBrush x:Key="orDegradadoVioleta" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource orVioleta1}" />
+        <GradientStop Offset="1" Color="{StaticResource orVioleta2}" />
+    </LinearGradientBrush>
+
+
+</ResourceDictionary>

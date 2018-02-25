@@ -1,0 +1,46 @@
+﻿
+TRUCOS C#
+=========
+
+
+	TUPLES
+
+		Podemos devolver Tuples cuando queremos devolver varios valores de golpe.
+
+		Su uso es así:	public Tuple<int, string, string> getPersona(){
+							int id = 100;
+							string nombre = "Andrés";
+							string apellidos = "Herrero";
+							return Tuple.Create(id, nombre, apellidos);
+						}
+
+
+
+	OPERADOR 'STRING INTERPOLATION'
+
+		Con este operador podemos crear cadenas de texto compuestas con una sola instrucción.
+
+		Su uso es así:	string nombre = "Andrés";
+						int edad = 43;
+						string texto = $"Me llamo {nombre} y tengo {edad} años.";
+
+
+
+	OPERADOR 'STRING AS VERBATIM'
+
+		Con este operador se ignoran los caracteres de escape y los saltos de línea.
+
+		Su uso es así:	string archivo = "\nuevo\archivo.txt";   --> interpreta \n y \a (o da error) como caracteres de control.
+						string archivo = @"\nuevo\archivo.txt";  --> devuelve la ruta correctamente.
+
+
+
+	MÉTODO ANY DE LINQ PARA COLECCIONES
+
+		Usando Any() podemos evaluar si la colección contiene algún elemento o no.
+
+		Su uso es así:	if (ListaPersonas.Any()){
+							Hacer algo con las personas de la lista.
+						}
+
+

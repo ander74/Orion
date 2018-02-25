@@ -1,0 +1,77 @@
+﻿
+PROYECTO ORION
+==============
+
+
+	FLAGS
+	-----
+
+		VerValores:	
+		
+			Se utiliza con los convertidores.
+					
+			Normal: Se realiza la conversión normal.
+			NoCeros: En caso de números, si es un cero, se representa en blanco.
+			Negativo: En caso de horas, si es negativa se representa correctamente.
+			HoraPlus: Para las horas, se representan más de 24 horas. Por ejemplo 121:45.
+			Otro: Reservado.
+
+
+	CONVERTIDORES
+	-------------
+
+		ColorDia:	
+		
+			Se le pasa un DateTime y devuelve un color que será, negro para días de lunes a viernes, azul para los sábados y rojo para los domingos.
+			No hay conversión inversa.
+
+
+		Decimal:	
+		
+			Se le pasa un decimal y devuelve un string con el número formateado como "0,00".
+			Si se le pasa el flag VerValores.NoCeros y el decimal es un cero, devuelve un string vacío.
+					
+			La conversión inversa devuelve un decimal con el número pasado en un string. El punto decimal del string puede ser tanto un punto
+			como una coma. En caso de pasar un texto no válido (no es un número) devuelve cero.
+
+
+		Fecha:		
+
+			Se le pasa un DateTime y devuelve la fecha en formato "17-01-1974". Si el año de la fecha es 2001, devuelve una cadena vacía, ya que
+			ese año es utilizado para simular una fecha nula.
+					
+			La conversión inversa devuelve un DateTime con la fecha pasada como texto, si es válida. Si no es válida la fecha del string, devuelve
+			un DateTime con fecha "02-01-2001", que al ser año 2001, simula ser nula.
+
+
+		Hora:		
+		
+			Se le pasa un TimeSpan y devuelve un string con la hora formateada en "hh:mm".
+			Si se le pasa el flag VerValores.NoCeros y la hora es cero, se devuelve una cadena vacía.
+			Si se le pasa el flag VerValores.HoraPlus, en el caso de horas mayores de 23:59, se muestran las horas reales (por ejemplo, 121:45).
+			Si se le pasa el flag VerValores.Negativo y la hora es menor que cero, devuelve la hora con el símbolo "-" delante.
+					
+			La conversión inversa convierte la hora pasada en un string en un TimeSpan, si es una hora válida. Si no es válida devuelve null.
+			El separador de horas y minutos puede ser también un punto.
+			Si se le pasa el flag VerValores.HoraPlus, admitirá como hora válida desde 0 hasta 29, de lo contrario sólo admitirá desde 0 a 23.
+
+
+		Itinerario:	
+
+			Se le pasa un decimal y devuelve un string con el número de itinerario en formato 0.xxx.
+			Si se le pasa el flag VerValores.NoCeros y el decimal es cero, se devuelve una cadena vacía.
+			Si el número no tiene decimales (o los decimales son 0), devuelve el número entero. Si no, devuelve el número con los decimales.
+
+			La conversión inversa devuelve un decimal con el número pasado en un string. El punto decimal del string puede ser tanto un punto
+			como una coma. En caso de pasar un texto no válido (no es un número) devuelve cero.
+
+
+		NumeroGrafico:
+
+			Se le pasa un decimal y devuelve un string.
+			Si el número pasado es cero, devuelve una cadena vacía (gráfico vacío).
+			Si el número pasado es positivo, devuelve el número formateado como "0000" y sin decimales.
+			Si el número pasado es negativo (incidencia), devuelve el texto de la incidencia correspondiente al número o una cadena vacía si no existe
+			una incidencia para ese número.
+
+			La conversión inversa devuelve el número de gráfico pasado, o el código de la incidencia si se reconoce la incidencia en el texto.

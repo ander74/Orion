@@ -1,0 +1,647 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{229091D4-CD0F-4325-B5F4-10748D530DF5}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Orion</RootNamespace>
+    <AssemblyName>Orion</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>publicar\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Views\Imagenes\Iconos\OrionIcon_400x400.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release64|AnyCPU'">
+    <OutputPath>bin\Release64\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Config\DBUtils.cs" />
+    <Compile Include="Config\GestionGraficos.cs" />
+    <Compile Include="Convenio.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Convenio.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Convertidores\ConvertidorMinutosToHora.cs" />
+    <Compile Include="Convertidores\ConvertidorMinutosToHoraMixta.cs" />
+    <Compile Include="Convertidores\ConvertidorVisibilityInverter.cs" />
+    <Compile Include="Convertidores\ConvertidorColorDia.cs" />
+    <Compile Include="Convertidores\ConvertidorColorDiaPijama.cs" />
+    <Compile Include="Convertidores\ConvertidorColores.cs" />
+    <Compile Include="Convertidores\ConvertidorDecimalEuro.cs" />
+    <Compile Include="Convertidores\ConvertidorDiasF6.cs" />
+    <Compile Include="Convertidores\ConvertidorNegritaDia.cs" />
+    <Compile Include="Convertidores\ConvertidorDecimal.cs" />
+    <Compile Include="Convertidores\ConvertidorFecha.cs" />
+    <Compile Include="Convertidores\ConvertidorHora.cs" />
+    <Compile Include="Convertidores\ConvertidorHoraMixta.cs" />
+    <Compile Include="Convertidores\ConvertidorItinerario.cs" />
+    <Compile Include="Convertidores\ConvertidorNumeroGrafico.cs" />
+    <Compile Include="Convertidores\ConvertidorNumeroGraficoCalendario.cs" />
+    <Compile Include="Convertidores\ConvertidorNumeroGraficoPijama.cs" />
+    <Compile Include="Convertidores\ConvertidorPrueba.cs" />
+    <Compile Include="Convertidores\ConvertidorRojoSiTrue.cs" />
+    <Compile Include="Convertidores\ConvertidorSuperHora.cs" />
+    <Compile Include="Convertidores\ConvertidorSuperHoraMixta.cs" />
+    <Compile Include="Convertidores\ConvertidorDecoracionDia.cs" />
+    <Compile Include="DataModels\BdCalendarios.cs" />
+    <Compile Include="DataModels\BdConductores.cs" />
+    <Compile Include="DataModels\BdDiasCalendario.cs" />
+    <Compile Include="DataModels\BdFestivos.cs" />
+    <Compile Include="DataModels\BdGruposGraficos.cs" />
+    <Compile Include="DataModels\BdGraficos.cs" />
+    <Compile Include="DataModels\BdItinerarios.cs" />
+    <Compile Include="DataModels\BdLineas.cs" />
+    <Compile Include="DataModels\BdParadas.cs" />
+    <Compile Include="DataModels\BdPijamas.cs" />
+    <Compile Include="DataModels\BdRegulacionConductor.cs" />
+    <Compile Include="DataModels\BdValoracionesGraficos.cs" />
+    <Compile Include="DataModels\ProcSQL.cs" />
+    <Compile Include="DataModels\Respaldo.cs" />
+    <Compile Include="Extensiones.cs" />
+    <Compile Include="Models\DiaCalendario.cs" />
+    <Compile Include="Models\DiaCalendarioBase.cs" />
+    <Compile Include="Models\DiaPijama.cs" />
+    <Compile Include="Models\EstadisticasGraficos.cs" />
+    <Compile Include="Models\Festivo.cs" />
+    <Compile Include="Models\GraficoBase.cs" />
+    <Compile Include="Models\GrupoGraficos.cs" />
+    <Compile Include="Config\Calculos.cs" />
+    <Compile Include="Config\Utils.cs" />
+    <Compile Include="Models\Calendario.cs" />
+    <Compile Include="Models\HojaPijama.cs" />
+    <Compile Include="Models\HorasHojaPijamaHastaMes.cs" />
+    <Compile Include="Models\Indexer.cs" />
+    <Compile Include="Models\Itinerario.cs" />
+    <Compile Include="Models\Linea.cs" />
+    <Compile Include="Models\Parada.cs" />
+    <Compile Include="Models\RegulacionConductor.cs" />
+    <Compile Include="Models\ValoracionGrafico.cs" />
+    <Compile Include="Pijama\BdPijamas.cs" />
+    <Compile Include="Pijama\DiaPijama.cs" />
+    <Compile Include="Pijama\HojaPijama.cs" />
+    <Compile Include="Pijama\ResumenPijama.cs" />
+    <Compile Include="PorCentro.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>PorCentro.settings</DependentUpon>
+    </Compile>
+    <Compile Include="PrintModel\CalendarioPrintModel.cs" />
+    <Compile Include="PrintModel\GraficosPrintModel.cs" />
+    <Compile Include="PrintModel\PijamaPrintModel.cs" />
+    <Compile Include="Soporte\WebBrowserUtility.cs" />
+    <Compile Include="ViewModels\AccionesLotesCalendariosVM.cs" />
+    <Compile Include="ViewModels\AñadirGraficoCommands.cs" />
+    <Compile Include="ViewModels\AñadirGraficoViewModel.cs" />
+    <Compile Include="ViewModels\AñadirValoracionGraficoViewModel.cs" />
+    <Compile Include="ViewModels\CalculadoraCommands.cs" />
+    <Compile Include="ViewModels\CalculadoraViewModel.cs" />
+    <Compile Include="ViewModels\CalendariosCommands.cs" />
+    <Compile Include="ViewModels\CalendariosViewModel.cs" />
+    <Compile Include="ViewModels\ConductoresCommands.cs" />
+    <Compile Include="ViewModels\ConductoresViewModel.cs" />
+    <Compile Include="ViewModels\GlobalCommands.cs" />
+    <Compile Include="ViewModels\GlobalVM.cs" />
+    <Compile Include="ViewModels\GraficosCommands.cs" />
+    <Compile Include="ViewModels\GraficosViewModel.cs" />
+    <Compile Include="ViewModels\LineasCommands.cs" />
+    <Compile Include="ViewModels\LineasViewModel.cs" />
+    <Compile Include="ViewModels\OpcionesCommands.cs" />
+    <Compile Include="ViewModels\OpcionesViewModel.cs" />
+    <Compile Include="ViewModels\ReclamacionesViewModel.cs" />
+    <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ViewModels\VentanaCobrarHorasVM.cs" />
+    <Compile Include="ViewModels\VentanaNuevoGrupoVM.cs" />
+    <Compile Include="ViewModels\VentanaRegularAñoVM.cs" />
+    <Compile Include="Views\MensajeProvider.cs" />
+    <Compile Include="Views\VentanaAñadirGrafico.xaml.cs">
+      <DependentUpon>VentanaAñadirGrafico.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaAñadirValoracionGrafico.xaml.cs">
+      <DependentUpon>VentanaAñadirValoracionGrafico.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaCalculadora.xaml.cs">
+      <DependentUpon>VentanaCalculadora.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaCambioContraseña.xaml.cs">
+      <DependentUpon>VentanaCambioContraseña.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaCentros.xaml.cs">
+      <DependentUpon>VentanaCentros.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaCobrarHoras.xaml.cs">
+      <DependentUpon>VentanaCobrarHoras.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaContraseña.xaml.cs">
+      <DependentUpon>VentanaContraseña.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaError.xaml.cs">
+      <DependentUpon>VentanaError.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaNuevoGrupo.xaml.cs">
+      <DependentUpon>VentanaNuevoGrupo.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaReclamaciones.xaml.cs">
+      <DependentUpon>VentanaReclamaciones.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaRegularAño.xaml.cs">
+      <DependentUpon>VentanaRegularAño.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VistaCalendarios.xaml.cs">
+      <DependentUpon>VistaCalendarios.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VistaConductores.xaml.cs">
+      <DependentUpon>VistaConductores.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VistaGraficos.xaml.cs">
+      <DependentUpon>VistaGraficos.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VistaLineas.xaml.cs">
+      <DependentUpon>VistaLineas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VistaOpciones.xaml.cs">
+      <DependentUpon>VistaOpciones.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaResumenAnual.xaml.cs">
+      <DependentUpon>VentanaResumenAnual.xaml</DependentUpon>
+    </Compile>
+    <Page Include="Estilos\OtrosEstilos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Estilos\Cabeceras.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Estilos\Celdas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Estilos\Colores.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Estilos\Filas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Estilos\Fondos.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Views\MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="Views\VentanaAñadirGrafico.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaAñadirValoracionGrafico.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaCalculadora.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaCambioContraseña.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaCentros.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaCobrarHoras.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaContraseña.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaError.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaNuevoGrupo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaReclamaciones.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaRegularAño.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VistaCalendarios.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VistaConductores.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VistaGraficos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VistaLineas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VistaOpciones.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaResumenAnual.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Models\Conductor.cs" />
+    <Compile Include="Models\Grafico.cs" />
+    <Compile Include="Models\NotifyBase.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Convenio.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Convenio.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Orion.licenseheader" />
+    <None Include="packages.config" />
+    <None Include="PorCentro.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>PorCentro.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Manuales\Trucos WPF.txt" />
+    <Resource Include="Views\Imagenes\AbrirPanelIzquierdo.png" />
+    <Resource Include="Views\Imagenes\Fabrica.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Guardar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Orion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\NuevoGrupo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\BorrarGrupo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Copiar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Pegar.png" />
+    <Resource Include="Views\Imagenes\QuitarFiltro.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\CalcularTabla.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\BorrarFila.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\ActualizarTabla.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\AbrirPanelDerecho.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 y x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Logos\LogoArrasate.png" />
+    <Resource Include="Views\Imagenes\Logos\LogoBilbao.png" />
+    <Resource Include="Views\Imagenes\Logos\LogoDonosti.png" />
+    <Resource Include="Views\Imagenes\Logos\LogoGasteiz.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <COMReference Include="Microsoft.Office.Core">
+      <Guid>{2DF8D04C-5BFA-101B-BDE5-00AA0044DE52}</Guid>
+      <VersionMajor>2</VersionMajor>
+      <VersionMinor>8</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Excel">
+      <Guid>{00020813-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>1</VersionMajor>
+      <VersionMinor>9</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="Microsoft.Office.Interop.Word">
+      <Guid>{00020905-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>8</VersionMajor>
+      <VersionMinor>7</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+    <COMReference Include="VBIDE">
+      <Guid>{0002E157-0000-0000-C000-000000000046}</Guid>
+      <VersionMajor>5</VersionMajor>
+      <VersionMinor>3</VersionMinor>
+      <Lcid>0</Lcid>
+      <WrapperTool>primary</WrapperTool>
+      <Isolated>False</Isolated>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Comparar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\ActualizarConductor.png" />
+    <Resource Include="Views\Imagenes\BorrarConductor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Calendario.png" />
+    <Resource Include="Views\Imagenes\Cobrar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Manuales\Comentarios.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Anterior.png" />
+    <Resource Include="Views\Imagenes\Siguiente.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\HojaPijama.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Cerrar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Volver.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\NuevaFila.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Manuales\Consultas SQL.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Manuales\Ejemplos.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Manuales\Referencia.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Adelante.png" />
+    <Resource Include="Views\Imagenes\Atras.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Licencia.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Pendiente.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Iconos\OrionIcon_400x400.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Ayuda.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Manuales\Bases de Datos.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Calculadora.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\TablaDetalle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Temporal.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Manuales\Codigos.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Manuales\Equivalencia Tipos OleDB.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Manuales\Trucos C-Sharp.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Versiones.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Imprimir.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\GuardarPDF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\TablaPDF.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\BajarNube.png" />
+    <Resource Include="Views\Imagenes\SubirNube.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Actualizar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\ConfigurarTabla.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\VerTabla.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Filtrar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Herramientas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Llave.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Logos\LogoLlaves.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\GuardarRojo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Navaja.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Engranajes.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\table_refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\FlechasCruzadas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\SeleccionarColumna.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Manuales\Procedimientos Almacenados.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\VariasTablas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Manuales\Trucos Excel.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

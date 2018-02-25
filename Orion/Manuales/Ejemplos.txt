@@ -1,0 +1,41 @@
+﻿
+PROYECTO ORION
+==============
+
+
+    EJEMPLO DE CONVERTIDOR CON MULTIPLES FLAGS
+	------------------------------------------
+
+		<DataGridTextColumn Header="Tiempo" Width="1.5*">
+			<DataGridTextColumn.Binding>
+				<Binding Path="Tiempo" Converter="{StaticResource cnvHora}">
+					<Binding.ConverterParameter>
+						<cnv:VerValores>NoCeros</cnv:VerValores>
+					</Binding.ConverterParameter>
+				</Binding>
+			</DataGridTextColumn.Binding>
+		</DataGridTextColumn>
+
+
+
+	COMO PROCESAR ARCHIVOS EXCEL
+	----------------------------
+
+		//Creamos el libro
+		Libro = ExcelApp.Workbooks.Add(@"D:\Carpetas\Documentos\Proyecto Orion\Plantillas Excel\Pijama.xlsx");
+		// Establecemos la hoja.
+		Worksheet Hoja = Libro.Worksheets[1];
+		// Copiamos el rango en el destino
+		Hoja.Range["A1:M34"].Copy(Hoja.Cells[34, 1]);
+		// Rellenamos la hoja
+		LlenarExcelPijama(Hoja, 1);
+		// Añadimos el salto de página.
+		Hoja.HPageBreaks.Add(Hoja.Cells[34, 1]);
+		// Llenamos la siguiente hoja
+		LlenarExcelPijama(Hoja, 34);                            /------ Fila siguiente (Fila inicial + 33)
+		// Establecemos el área de impresion.                   |
+		Hoja.PageSetup.PrintArea = Hoja.Range["A1", Hoja.Cells[34 + 33, 13]].Address;
+		// Exportamos el libro como PDF.
+		Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, ruta);
+		// Abrimos el archivo
+		Process.Start(ruta);

@@ -1,0 +1,135 @@
+﻿<!-- =============================================== -->
+<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
+<!--                                                 -->
+<!--  Vea el archivo Licencia.txt para más detalles  -->
+<!-- =============================================== -->
+<Window x:Class="Orion.Views.VentanaRegularAño"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Orion.Views"
+        xmlns:convertidores="clr-namespace:Orion.Convertidores"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize"
+        Background="{StaticResource DegradadoCeleste1}"
+        Title="Regulación de Año" Height="380" Width="500" x:Name="Ventana">
+
+    <!-- RECURSOS -->
+    <Window.Resources>
+
+        <convertidores:ConvertidorDecimal x:Key="cnvDecimal"/>
+        <convertidores:ConvertidorSuperHora x:Key="cnvSuperHora"/>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- CONDUCTOR -->
+        <Label Grid.Row="0" Grid.ColumnSpan="2" Margin="8" FontSize="24" FontWeight="Bold">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="{Binding IdConductor}"/>
+                <TextBlock Text=" : "/>
+                <TextBlock Text="{Binding ApellidosConductor}"/>
+            </StackPanel>
+        </Label>
+        <Border Grid.Row="0" Grid.ColumnSpan="2" Height="Auto" BorderBrush="Gray" BorderThickness="0.5" VerticalAlignment="Bottom" Margin="5,0"/>
+
+
+        <!-- AÑO A REGULAR -->
+        <StackPanel Grid.Row="1" Grid.Column="0" Grid.RowSpan="4" Margin="16,20,8,8">
+
+            <TextBlock Text="AÑO A REGULAR" Margin="0,0,0,10" FontSize="14" FontWeight="Bold"
+                       HorizontalAlignment="Center"/>
+
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="BtUp" Width="30" Height="32" FontSize="20" FontWeight="Bold"
+                        Command="{Binding cmdAñoAnterior}">
+                    <Button.Content>
+                        <Image Source="Imagenes/Atras.png"/>
+                    </Button.Content>
+                </Button>
+                <TextBox Width="100" Height="32" FontSize="20" Text="{Binding Año}"
+                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                <Button x:Name="BtDn" Width="30" Height="32" FontSize="20" FontWeight="Bold"
+                        Command="{Binding cmdAñoSiguiente}">
+                    <Button.Content>
+                        <Image Source="Imagenes/Adelante.png"/>
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+
+        </StackPanel>
+
+        <!-- HORAS FIJAS -->
+        <StackPanel Grid.Row="1" Grid.Column="1"  Orientation="Vertical" Margin="8">
+
+            <!-- Horas Disponibles -->
+            <Label Margin="4" FontSize="18" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontWeight="DemiBold" Text="Horas disponibles :  "/>
+                    <TextBlock Text="{Binding HorasDisponibles, Converter={StaticResource cnvSuperHora}}"/>
+                </StackPanel>
+            </Label>
+
+            <!-- Horas a regular -->
+            <Label Margin="4" FontSize="18" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontWeight="DemiBold" Text="Horas a regular :  "/>
+                    <TextBlock Text="{Binding HorasARegular, Converter={StaticResource cnvSuperHora}}"/>
+                </StackPanel>
+            </Label>
+
+        </StackPanel>
+
+        <!-- HORAS CALCULADAS -->
+        <StackPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Orientation="Vertical" Margin="8">
+
+            <!-- Descansos Generados -->
+            <Label Margin="4" FontSize="22" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontWeight="DemiBold" Text="Descansos Generados :  "/>
+                    <TextBlock Text="{Binding DescansosGenerados}"/>
+                </StackPanel>
+            </Label>
+
+            <!-- Horas Restantes -->
+            <Label Margin="4" FontSize="22" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock FontWeight="DemiBold" Text="Horas Restantes :  "/>
+                    <TextBlock Text="{Binding HorasRestantes, Converter={StaticResource cnvSuperHora}}"/>
+                </StackPanel>
+            </Label>
+
+        </StackPanel>
+
+        <!-- BOTONES -->
+        <StackPanel Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal" 
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10">
+
+            <!-- CANCELAR -->
+            <Button Style="{StaticResource EstiloBoton}" Margin="5" Width="90" Height="40"
+                    FontSize="12" Content="Cancelar"
+                    Command="{Binding cmdCancelar}" CommandParameter="{Binding ElementName=Ventana}"/>
+
+            <!-- ACEPTAR -->
+            <Button Style="{StaticResource EstiloBoton}" Margin="5" Width="90" Height="40"
+                    FontSize="12" Content="Aceptar" Command="{Binding cmdAceptar}" CommandParameter="{Binding ElementName=Ventana}"/>
+
+        </StackPanel>
+
+
+
+
+    </Grid>
+</Window>

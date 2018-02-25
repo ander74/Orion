@@ -1,0 +1,26 @@
+﻿
+PROYECTO ORION
+==============
+
+	Al final de cada año, las horas acumuladas se convierten en descansos compensatorios a razón de 1 DC por cada 7:20h (jornada media en convenio).
+	Las horas que sobren en el cómputo anterior, se mantienen en el acumulador.
+
+	Para calcular las horas acumuladas que tiene un conductor, se utilizan tres parámetros:
+
+		1-. Las horas que tuviera al iniciar los datos en el programa.
+		2-. Las horas que ha acumulado hasta el mes actual.
+		3-. Las horas cobradas o generadas en las regulaciones.
+
+	Para cobrar las horas hay que tener en cuenta también las horas que ya se han cobrado en el curso del año, ya que hay un límite impuesto en el convenio.
+
+
+	Para calcular los descansos compensatorios que tiene un conductor, se usan tres parámetros:
+		
+		1-. Los descansos que tuviera al iniciar los datos en el programa.
+		2-. Los descansos que ha gastado hasta el mes actual.
+		3-. Los descansos que ha generado en las regulaciones anuales.
+
+
+	En el caso de los días de comite, en el caso de que se den en un día de DC, el día en cuestión no se descuenta de los DCs disfrutados. Si es un descanso,
+	se añade a los días DND para poder disfrutarlo después.
+	

@@ -1,0 +1,15 @@
+﻿extensions: .xaml
+<!-- =========================================================== -->
+<!--     Copyright 2018 - GenericDataModels 1.0 - A. Herrero     -->
+<!--                                                             -->
+<!--        Vea el archivo Licencia.txt para más detalles        -->
+<!-- =========================================================== -->
+extensions: .cs
+#region COPYRIGHT
+// ===========================================================
+//     Copyright 2018 - GenericDataModels 1.0 - A. Herrero    
+// -----------------------------------------------------------
+//        Vea el archivo Licencia.txt para más detalles 
+// ===========================================================
+#endregion
+extensions: 

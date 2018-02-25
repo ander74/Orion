@@ -1,0 +1,31 @@
+﻿
+PROYECTO ORION
+==============
+
+	Códigos de las incidencias en el calendario:
+
+		-1 : O-V - Vacaciones.
+		-2 : J-D - Descanso.
+		-3 :  FN - Similar a J-D pero en fin de semana. No se aplica en todos los centros.
+		-4 :   E - Enfermo.
+		-5 :  DS - Descanso Suelto. Similar a J-D, pero suelto, para cuadrar calendario. Medir en estadisticas.
+		-6 :  DC - Descanso compensatorio.
+		-7 :  F6 - Fiesta por otro dia. Se descuenta la jornada media de las horas.
+		-8 : DND - Descansos no disfrutados.
+		-9 : PER - Permiso.
+
+
+	Códigos de modificación de gráfico (se ponen como decimal):
+		
+		.0 = Grafico normal (No es necesario ponerlo).
+		.1 = Día de comité solicitado por el conductor (Co).
+		.2 = Día de comité solicitado por la empresa (Ce).
+		.3 = Dia de JD que se trabaja (Jd).
+
+
+	Códigos de las regulaciones de conductor: Si ponemos en el campo 'Motivo' uno de los números, se asigna el código sin cambiar el motivo.
+
+		0 = Ninguna regulación.
+		1 = Horas Cobradas
+		2 = Regulación de año.
+

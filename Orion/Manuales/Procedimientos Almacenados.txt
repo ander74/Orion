@@ -1,0 +1,386 @@
+﻿
+
+PROYECTO ORION
+==============
+
+
+	CALENDARIOS
+	-----------
+
+		GetCalendarios
+
+			SELECT Calendarios.*, Conductores.Indefinido
+			FROM Calendarios LEFT JOIN Conductores ON Calendarios.IdConductor = Conductores.Id
+			WHERE Year(Calendarios.Fecha) = @Año AND Month(Calendarios.Fecha) = @Mes
+			ORDER BY Calendarios.IdConductor;
+
+
+		InsertarCalendario
+
+			INSERT INTO Calendarios (IdConductor, Fecha, HorasDescuadre, ExcesoJornadaCobrada, Notas) 
+			VALUES (@IdConductor, @Fecha, @HorasDescuadre, @ExcesoJornadaCobrada, @Notas);
+
+
+		ActualizarCalendario
+
+			UPDATE Calendarios
+			SET IdConductor=@IdConductor, Fecha=@Fecha, HorasDescuadre=@HorasDescuadre, ExcesoJornadaCobrada=@ExcesoJornadaCobrada, 
+				Notas=@Notas WHERE Id=@Id;
+
+
+		BorrarCalendario
+
+			DELETE FROM Calendarios WHERE Id=@Id;
+
+
+		GetCalendariosAño (No Usado)
+
+			SELECT * FROM Calendarios WHERE IdConductor = @IdConductor AND Year(Fecha) = @Año;
+
+
+
+	CONDUCTORES
+	-----------
+
+		GetConductores
+
+			SELECT * FROM Conductores ORDER BY Id;
+
+
+		InsertarConductor
+
+			INSERT INTO Conductores ( Nombre, Apellidos, Indefinido, Telefono, Email, Acumuladas, Descansos, DescansosNoDisfrutados,
+									  PlusDistancia, Notas, Id )
+			VALUES ([@Nombre], [@Apellidos], [@Indefinido], [@Telefono], [@Email], [@Acumuladas], [@Descansos], [@DescansosNoDisfrutados],
+					[@PlusDistancia], [@Notas], [@Id]);
+
+
+		ActualizarConductor
+
+			UPDATE Conductores
+			SET Nombre = [@Nombre], Apellidos = [@Apellidos], Indefinido = [@Indefinido], Telefono = [@Telefono], Email = [@Email],
+				Acumuladas = [@Acumuladas], Descansos = [@Descansos], DescansosNoDisfrutados = [@DescansosNoDisfrutados],
+				PlusDistancia = [@PlusDistancia], Notas = [@Notas]
+			WHERE Id=[@Id];
+
+
+		BorrarConductor
+
+			DELETE * FROM Conductores WHERE Id=[@Id];
+
+
+		ExisteConductor
+
+			SELECT Count(Id) FROM Conductores WHERE Id=[@Id];
+
+
+		InsertarConductorDesconocido
+
+			INSERT INTO Conductores ( Id, Nombre ) VALUES ([@Id], 'Desconocido');
+
+
+		GetConductor
+
+			SELECT * FROM Conductores WHERE Id=[@Id];
+
+
+
+	DIAS CALENDARIO
+	---------------
+
+		GetDiasCalendario
+
+			SELECT * FROM DiasCalendario WHERE IdCalendario = @IdCalendario ORDER BY Dia;
+
+
+		GetDiasCalendarioAño
+
+			SELECT * 
+			FROM DiasCalendario 
+			WHERE IdCalendario IN (SELECT Id 
+								   FROM Calendarios 
+								   WHERE IdConductor = @IdConductor AND Year(Fecha) = @Año);
+
+
+		InsertarDiaCalendario
+
+			INSERT INTO DiasCalendario (IdCalendario, Dia, Grafico, Codigo, ExcesoJornada, HorasDescuadre, FacturadoPaqueteria, 
+										Limpieza, GraficoVinculado, Notas)
+			VALUES (@IdCalendario, @Dia, @Grafico, @Codigo, @ExcesoJornada, @HorasDescuadre, @FacturadoPaqueteria, 
+					@Limpieza, @GraficoVinculado, @Notas);
+
+
+		ActualizarDiaCalendario
+
+			UPDATE DiasCalendario
+			SET IdCalendario=@IdCalendario, Dia=@Dia, Grafico=@Grafico, Codigo=@Codigo, ExcesoJornada=@ExcesoJornada, HorasDescuadre=@HorasDescuadre, 
+				FacturadoPaqueteria=@FacturadoPaqueteria, Limpieza=@Limpieza, GraficoVinculado=@GraficoVinculado, Notas=@Notas 
+			WHERE Id=@Id;
+
+
+		BorrarDiaCalendario
+
+			DELETE FROM DiasCalendario WHERE Id=@Id
+
+
+
+	FESTIVOS
+	--------
+
+		GetFestivos
+
+			SELECT * FROM Festivos ORDER BY Fecha;
+
+
+		GetFestivosPorMes
+
+			SELECT * FROM Festivos WHERE Año=@Año AND Month(Fecha)=@Mes ORDER BY Fecha;
+
+
+		GetFestivosPorAño
+
+			SELECT * FROM Festivos WHERE Año=@Año ORDER BY Fecha;
+
+
+		InsertarFestivo
+
+			INSERT INTO Festivos (Año, Fecha) VALUES (@Año, @Fecha);
+
+
+		ActualizarFestivo
+
+			UPDATE Festivos SET Año=@Año, Fecha=@Fecha WHERE Id=@Id;
+
+
+		BorrarFestivo
+
+			DELETE FROM Festivos WHERE Id=@Id;
+
+
+
+	GRAFICOS
+	--------
+
+		GetGraficos
+
+			SELECT * FROM Graficos WHERE IdGrupo=@IdGrupo ORDER BY Numero;
+
+
+		InsertarGrafico
+
+			INSERT INTO Graficos (IdGrupo, NoCalcular, Numero, Turno, DescuadreInicio, Inicio, Final, DescuadreFinal, InicioPartido,
+								  FinalPartido, Valoracion, Trabajadas, Acumuladas, Nocturnas, Desayuno, Comida, Cena, PlusCena, PlusLimpieza, PlusPaqueteria)
+			VALUES (@IdGrupo, @NoCalcular, @Numero, @Turno, @DescuadreInicio, @Inicio, @Final, @DescuadreFinal, @InicioPartido,
+					@FinalPartido, @Valoracion, @Trabajadas, @Acumuladas, @Nocturnas, @Desayuno, @Comida, @Cena, @PlusCena, @PlusLimpieza, @PlusPaqueteria);
+
+
+		ActualizarGrafico
+
+			UPDATE Graficos
+			SET IdGrupo=@IdGrupo, NoCalcular=@NoCalcular, Numero=@Numero, Turno=@Turno, DescuadreInicio=@DescuadreInicio, Inicio=@Inicio,
+				Final=@Final, DescuadreFinal=@DescuadreFinal, InicioPartido=@InicioPartido, FinalPartido=@FinalPartido, Valoracion=@Valoracion, 
+				Trabajadas=@Trabajadas, Acumuladas=@Acumuladas, Nocturnas=@Nocturnas, Desayuno=@Desayuno, Comida=@Comida, Cena=@Cena, PlusCena=@PlusCena, 
+				PlusLimpieza=@PlusLimpieza, PlusPaqueteria=@ 
+			WHERE Id=@Id;
+
+
+		BorrarGrafico
+
+			DELETE FROM Graficos WHERE Id=@Id;
+
+
+		GetGraficosGrupoPorFecha
+
+			SELECT * FROM Graficos WHERE IdGrupo = (SELECT Id FROM GruposGraficos WHERE Validez = @Validez);
+
+
+
+	GRUPOS GRAFICOS
+	---------------
+
+		GetGrupos
+
+			SELECT * FROM GruposGraficos ORDER BY Validez DESC;
+
+
+		InsertarGrupo
+
+			INSERT INTO GruposGraficos (Validez, Notas) VALUES (@Validez, @Notas);
+
+
+		ActualizarGrupo
+
+			UPDATE GruposGraficos SET Validez=@Validez, Notas=@Notas WHERE Id=@Id;
+
+
+		BorrarGrupo
+
+			DELETE FROM GruposGraficos WHERE Id=@Id;
+
+
+		ExisteGrupo
+
+			SELECT Count(*) FROM GruposGraficos WHERE Validez=@Validez;
+
+
+
+	ITINERARIOS
+	-----------
+
+		GetItinerarios
+
+			SELECT * FROM Itinerarios WHERE IdLinea=@ ORDER BY Nombre;
+
+
+		InsertarItinerario
+
+			INSERT INTO Itinerarios (IdLinea, Nombre, Descripcion, TiempoReal, TiempoPago) 
+			VALUES (@IdLinea, @Nombre, @Descripcion, @TiempoReal, @TiempoPago);
+
+
+		ActualizarItinerario
+
+			UPDATE Itinerarios
+			SET IdLinea=@IdLinea, Nombre=@Nombre, Descripcion=@Descripcion, TiempoReal=@TiempoReal, TiempoPago=@TiempoPago
+			WHERE Id=@Id;
+
+
+		BorrarItinerario
+
+			DELETE FROM Itinerarios WHERE Id=@Id;
+
+
+		GetItinerarioPorNombre
+
+			SELECT * FROM Itinerarios WHERE Nombre = @Nombre;
+
+
+
+	LINEAS
+	------
+
+		GetLineas
+
+			SELECT * FROM Lineas ORDER BY Nombre;
+
+
+		InsertarLinea
+
+			INSERT INTO Lineas (Nombre, Descripcion) VALUES (@Nombre, @Descripcion);
+
+
+		ActualizarLinea
+
+			UPDATE Lineas SET Nombre=@Nombre, Descripcion=@Descripcion WHERE Id=@Id;
+
+
+		BorrarLinea
+
+			DELETE FROM Lineas WHERE Id=@Id;
+
+
+
+	PARADAS
+	-------
+
+		GetParadas
+
+			SELECT * FROM Paradas WHERE IdItinerario=@IdItinerario ORDER BY Orden;
+
+
+		InsertarParada
+
+			INSERT INTO Paradas (IdItinerario, Orden, Descripcion, Tiempo) 
+			VALUES (@IdItinerario, @Orden, @Descripcion, @Tiempo);
+
+
+		ActualizarParada
+
+			UPDATE Paradas 
+			SET IdItinerario=@IdItinerario, Orden=@Orden, Descripcion=@Descripcion, Tiempo=@Tiempo 
+			WHERE Id=@Id;
+
+
+		BorrarParada
+
+			DELETE FROM Paradas WHERE Id=@Id;
+
+
+
+	PIJAMAS
+	-------
+
+		GetDiasPijama
+
+			SELECT * 
+			FROM (SELECT * 
+			      FROM Graficos
+			      WHERE IdGrupo = (SELECT Id 
+			                       FROM GruposGraficos 
+			                       WHERE Validez = (SELECT Max(Validez)
+			                                        FROM GruposGraficos 
+			                                        WHERE Validez <= @Validez)))
+			WHERE Numero = @Numero;
+
+
+
+	REGULACIONES CONDUCTOR
+	----------------------
+
+		GetRegulaciones
+
+			SELECT * FROM Regulaciones WHERE IdConductor=@IdConductor ORDER BY Fecha,Id;
+
+
+		InsertarRegulacion
+
+			INSERT INTO Regulaciones (IdConductor, Codigo, Fecha, Horas, Descansos, Motivo) 
+			VALUES (@IdConductor, @Codigo, @Fecha, @Horas, @Descansos, @Motivo);
+
+
+		ActualizarRegulacion
+
+			UPDATE Regulaciones 
+			SET IdConductor=@IdConductor, Codigo=@Codigo, Fecha=@Fecha, Horas=@Horas, Descansos=@Descansos, Motivo=@Motivo
+			WHERE Id=@Id;
+
+
+		BorrarRegulacion
+
+			DELETE FROM Regulaciones WHERE Id=@Id;
+
+
+
+	VALORACIONES GRAFICOS
+	---------------------
+
+		GetValoraciones
+			
+			SELECT * FROM Valoraciones WHERE IdGrafico=@IdGrafico ORDER BY Inicio, Id;
+
+
+		InsertarValoracion
+
+			INSERT INTO Valoraciones (IdGrafico, Inicio, Linea, Descripcion, Final, Tiempo) 
+			VALUES (@IdGrafico, @Inicio, @Linea, @Descripcion, @Final, @Tiempo);
+
+
+		ActualizarValoracion
+
+			UPDATE Valoraciones 
+			SET IdGrafico=@IdGrafico, Inicio=@Inicio, Linea=@Linea, Descripcion=@Descripcion, Final=@Final, Tiempo=@Tiempo 
+			WHERE Id=@;
+
+
+		BorrarValoracion
+
+			DELETE FROM Valoraciones WHERE Id=@Id;
+
+
+
+	OTROS PROCEDIMIENTOS
+	--------------------
+
+		GetConsultas
+
+			SELECT Name FROM MSysObjects WHERE Type = 5 ORDER BY Name;

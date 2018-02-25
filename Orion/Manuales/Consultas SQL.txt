@@ -1,0 +1,31 @@
+﻿
+PROYECTO ORION
+==============
+
+
+	Consulta SQL para ver los días de DC que tiene un conductor un mes en concreto (en este caso 11/2017 para el conductor 5060).
+
+		SELECT Count(Grafico)
+		FROM DiasCalendario
+		WHERE IdCalendario = (SELECT Id 
+							  FROM Calendarios 
+							  WHERE (Year(Fecha) = 2017 AND Month(Fecha) = 11) AND IdConductor = 5060) AND Grafico = -6;
+
+
+	Consulta SQL para ver los días de DC que tiene un conductor hasta un mes en concreto (en este caso hasta el 10/2017 para el conductor 5060)
+
+		SELECT Count(Grafico)
+		FROM DiasCalendario
+		WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE  (Year(Fecha) < 2017 ) OR (Year(Fecha) = 2017 AND Month(Fecha) <= 10) AND 
+																IdConductor = 5060) AND Grafico = -6;
+
+
+
+	Consulta para actualizar datos en función de datos que hay en otra tabla enlazada.
+		Por ejemplo, vamos a actualizar la fecha de DiasCalendario, usando el mes y año de la tabla Calendarios. Ambas tablas están enlazadas.
+
+		UPDATE (
+				SELECT DiasCalendario.Fecha AS F, DateSerial(Year(Calendarios.Fecha),Month(Calendarios.Fecha),DiasCalendario.Dia) AS FF
+			    FROM Calendarios LEFT JOIN DiasCalendario ON Calendarios.Id = DiasCalendario.IdCalendario
+			   )  AS SubConsulta
+		SET F = FF;

@@ -1,0 +1,93 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Orion" GeneratedClassName="Convenio">
+  <Profiles />
+  <Settings>
+    <Setting Name="JornadaMedia" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">07:20:00</Value>
+    </Setting>
+    <Setting Name="ImporteDietas" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">14.49</Value>
+    </Setting>
+    <Setting Name="InicioNocturnas" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">22:00:00</Value>
+    </Setting>
+    <Setting Name="FinalNocturnas" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">06:00:00</Value>
+    </Setting>
+    <Setting Name="HoraDesayuno" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">06:00:00</Value>
+    </Setting>
+    <Setting Name="PorcentajeDesayuno" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">80</Value>
+    </Setting>
+    <Setting Name="InicioComidaContinuo" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">12:30:00</Value>
+    </Setting>
+    <Setting Name="FinalComidaContinuo" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">15:30:00</Value>
+    </Setting>
+    <Setting Name="InicioComidaPartido" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">11:45:00</Value>
+    </Setting>
+    <Setting Name="FinalComidaPartido" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">15:15:00</Value>
+    </Setting>
+    <Setting Name="InicioCena" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">22:00:00</Value>
+    </Setting>
+    <Setting Name="FinalCena" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">23:00:00</Value>
+    </Setting>
+    <Setting Name="InicioPlusCena" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">00:00:00</Value>
+    </Setting>
+    <Setting Name="PorcentajePlusCena" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">25</Value>
+    </Setting>
+    <Setting Name="MaxHorasCobradas" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">40</Value>
+    </Setting>
+    <Setting Name="TrabajoAnuales" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">225</Value>
+    </Setting>
+    <Setting Name="DescansosAnuales" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">109</Value>
+    </Setting>
+    <Setting Name="VacacionesAnuales" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">31</Value>
+    </Setting>
+    <Setting Name="ImporteFestivos" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">41.12</Value>
+    </Setting>
+    <Setting Name="ImporteSabados" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">5.14</Value>
+    </Setting>
+    <Setting Name="DietaMenorDescanso" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">8.69</Value>
+    </Setting>
+    <Setting Name="PlusLimpieza" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">9.83</Value>
+    </Setting>
+    <Setting Name="PlusPaqueteria" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">7.63</Value>
+    </Setting>
+    <Setting Name="MaxHorasLaborables" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">08:30:00</Value>
+    </Setting>
+    <Setting Name="MaxHorasFinesSemana" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">09:00:00</Value>
+    </Setting>
+    <Setting Name="PlusNocturnidad" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">11</Value>
+    </Setting>
+    <Setting Name="PlusNavidad" Type="System.Decimal" Scope="User">
+      <Value Profile="(Default)">60</Value>
+    </Setting>
+    <Setting Name="MaxHorasTotalGraficoPartido" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">10:00:00</Value>
+    </Setting>
+    <Setting Name="MaxHorasParticionGraficoPartido" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">03:00:00</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
