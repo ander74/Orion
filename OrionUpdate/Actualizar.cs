@@ -62,6 +62,10 @@ namespace OrionUpdate {
 					GenerarError();
 					return;
 				}
+				if (!CopiarArchivoRaiz("System.ValueTuple.dll")) {
+					GenerarError();
+					return;
+				}
 
 				// CONFIGURACION
 				if (!CopiarArchivoRaiz("Orion.exe.config")) {
@@ -95,6 +99,10 @@ namespace OrionUpdate {
 					return;
 				}
 				if (!CopiarArchivoRaiz("Plantillas\\Pijama.xlsx")) {
+					GenerarError();
+					return;
+				}
+				if (!CopiarArchivoRaiz("Plantillas\\Reclamacion.xlsx")) {
 					GenerarError();
 					return;
 				}

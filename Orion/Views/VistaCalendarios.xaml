@@ -465,6 +465,19 @@
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
+            <!--BOTON RECLAMAR -->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdReclamar}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Reclamar.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Reclamar" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
             <!-- PENDIENTE -->
             <TextBlock Style="{StaticResource TextoPijama1}" Text="Año Anter." TextAlignment="Center" FontSize="12" Foreground="DarkGray" Margin="3,5">
                 <TextBlock.LayoutTransform>

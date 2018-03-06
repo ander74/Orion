@@ -34,6 +34,8 @@ namespace Orion.ViewModels {
 		#region CAMPOS PRIVADOS
 		//====================================================================================================
 		private static ConvertidorSuperHoraMixta cnvSuperHoraMixta = new ConvertidorSuperHoraMixta();
+		private static ConvertidorSuperHora cnvSuperHora = new ConvertidorSuperHora();
+		private static ConvertidorNumeroGrafico cnvNumeroGrafico = new ConvertidorNumeroGrafico();
 
 		private ICommand _cmdretrocedemes;
 		private ICommand _cmdavanzames;
@@ -287,6 +289,7 @@ namespace Orion.ViewModels {
 					esnuevo = false;
 				} else {
 					calendario = new Calendario();
+					calendario.Fecha = FechaActual;
 					esnuevo = true;
 				}
 				int columna = columnagrid;
@@ -945,17 +948,236 @@ namespace Orion.ViewModels {
 		#endregion
 
 
+		#region RECLAMAR
+		// Comando
+		private ICommand _cmdreclamar;
+		public ICommand cmdReclamar {
+			get {
+				if (_cmdreclamar == null) _cmdreclamar = new RelayCommand(p => Reclamar(), p => PuedeReclamar());
+				return _cmdreclamar;
+			}
+		}
+
+
+		// Se puede ejecutar el comando
+		private bool PuedeReclamar() {
+			return Pijama != null;
+		}
+
+		// Ejecución del comando
+		private void Reclamar() {
+
+			// Inicializamos la Ventana de reclamaciones y su ViewModel y se lo asignamos.
+			VentanaReclamaciones Ventana = new VentanaReclamaciones();
+			ReclamacionesViewModel ReclamacionVM = new ReclamacionesViewModel();
+			Ventana.DataContext = ReclamacionVM;
+			// Mostramos la ventana y seguimos si se pulsa el botón Aceptar.
+			if (Ventana.ShowDialog() != true) return;
+			// Definimos las varables a utilizar.
+			int contador = 0;
+			var conceptos = new string[17, 4];
+			
+			#region Horas
+			if (ReclamacionVM.TrabajadasChecked) {
+				conceptos[contador, 0] = "Horas Trabajadas";
+				conceptos[contador, 1] = "'" + cnvSuperHora.Convert(ReclamacionVM.Trabajadas, null, null, null);
+				conceptos[contador, 2] = "'" + cnvSuperHora.Convert(Pijama.Trabajadas, null, null, null);
+				conceptos[contador, 3] = "'" + cnvSuperHora.Convert(Pijama.Trabajadas - ReclamacionVM.Trabajadas, null, null, null);
+				contador++;
+			}
+			if (ReclamacionVM.AcumuladasChecked) {
+				conceptos[contador, 0] = "Horas Acumuladas";
+				conceptos[contador, 1] = "'" + cnvSuperHora.Convert(ReclamacionVM.Acumuladas, null, null, null);
+				conceptos[contador, 2] = "'" + cnvSuperHora.Convert(Pijama.Acumuladas, null, null, null);
+				conceptos[contador, 3] = "'" + cnvSuperHora.Convert(Pijama.Acumuladas - ReclamacionVM.Acumuladas, null, null, null);
+				contador++;
+			}
+			if (ReclamacionVM.NocturnasChecked) {
+				conceptos[contador, 0] = "Horas Nocturnas";
+				conceptos[contador, 1] = "'" + cnvSuperHora.Convert(ReclamacionVM.Nocturnas, null, null, null);
+				conceptos[contador, 2] = "'" + cnvSuperHora.Convert(Pijama.Nocturnas, null, null, null);
+				conceptos[contador, 3] = "'" + cnvSuperHora.Convert(Pijama.Nocturnas - ReclamacionVM.Nocturnas, null, null, null);
+				contador++;
+			}
+			if (ReclamacionVM.CobradasChecked) {
+				conceptos[contador, 0] = "Horas Cobradas";
+				conceptos[contador, 1] = "'" + cnvSuperHora.Convert(ReclamacionVM.Cobradas, null, null, null);
+				conceptos[contador, 2] = "'" + cnvSuperHora.Convert(Pijama.HorasCobradas, null, null, null);
+				conceptos[contador, 3] = "'" + cnvSuperHora.Convert(Pijama.HorasCobradas - -ReclamacionVM.Cobradas, null, null, null);
+				contador++;
+			}
+			#endregion
+
+			#region Importes
+			if (ReclamacionVM.DietasChecked) {
+				conceptos[contador, 0] = "Dietas";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Dietas:0.00 €}";
+				conceptos[contador, 2] = $"'{Pijama.TotalDietas:0.00} ({Pijama.ImporteTotalDietas:0.00 €})";
+				conceptos[contador, 3] = $"'{Pijama.ImporteTotalDietas - ReclamacionVM.Dietas:0.00 €}";
+				contador++;
+			}
+			if (ReclamacionVM.SabadosChecked) {
+				conceptos[contador, 0] = "Plus Sábados";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Sabados:0.00 €}";
+				conceptos[contador, 2] = $"'{Pijama.PlusSabados:0.00 €}";
+				conceptos[contador, 3] = $"'{Pijama.PlusSabados - ReclamacionVM.Sabados:0.00 €}";
+				contador++;
+			}
+			if (ReclamacionVM.FestivosChecked) {
+				conceptos[contador, 0] = "Plus Festivos";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Festivos:0.00 €}";
+				conceptos[contador, 2] = $"'{Pijama.PlusFestivos + Pijama.PlusDomingos:0.00 €}";
+				conceptos[contador, 3] = $"'{Pijama.PlusFestivos + Pijama.PlusDomingos - ReclamacionVM.Festivos:0.00 €}";
+				contador++;
+			}
+			if (ReclamacionVM.MenorDescansoChecked) {
+				conceptos[contador, 0] = "Plus Menor Descanso";
+				conceptos[contador, 1] = $"'{ReclamacionVM.MenorDescanso:0.00 €}";
+				conceptos[contador, 2] = $"'{Pijama.PlusMenorDescanso:0.00 €}";
+				conceptos[contador, 3] = $"'{Pijama.PlusMenorDescanso - ReclamacionVM.MenorDescanso:0.00 €}";
+				contador++;
+			}
+			if (ReclamacionVM.LimpiezaChecked) {
+				conceptos[contador, 0] = "Plus Limpieza";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Limpieza:0.00 €}";
+				conceptos[contador, 2] = $"'{Pijama.PlusLimpieza:0.00 €}";
+				conceptos[contador, 3] = $"'{Pijama.PlusLimpieza - ReclamacionVM.Limpieza:0.00 €}";
+				contador++;
+			}
+			if (ReclamacionVM.PaqueteriaChecked) {
+				conceptos[contador, 0] = "Plus Paquetería";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Paqueteria:0.00 €}";
+				conceptos[contador, 2] = $"'{Pijama.PlusPaqueteria:0.00 €}";
+				conceptos[contador, 3] = $"'{Pijama.PlusPaqueteria - ReclamacionVM.Paqueteria:0.00 €}";
+				contador++;
+			}
+			if (ReclamacionVM.NocturnidadChecked) {
+				conceptos[contador, 0] = "Plus Nocturnidad";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Nocturnidad:0.00 €}";
+				conceptos[contador, 2] = $"'{Pijama.PlusNocturnidad:0.00 €}";
+				conceptos[contador, 3] = $"'{Pijama.PlusNocturnidad - ReclamacionVM.Nocturnidad:0.00 €}";
+				contador++;
+			}
+			if (ReclamacionVM.ViajeChecked) {
+				conceptos[contador, 0] = "Plus Viaje";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Viaje:0.00 €}";
+				conceptos[contador, 2] = $"'{Pijama.PlusViaje:0.00 €}";
+				conceptos[contador, 3] = $"'{Pijama.PlusViaje - ReclamacionVM.Viaje:0.00 €}";
+				contador++;
+			}
+			if (ReclamacionVM.NavidadChecked) {
+				conceptos[contador, 0] = "Plus Navidad";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Navidad:0.00 €}";
+				conceptos[contador, 2] = $"'{Pijama.PlusNavidad:0.00 €}";
+				conceptos[contador, 3] = $"'{Pijama.PlusNavidad - ReclamacionVM.Navidad:0.00 €}";
+				contador++;
+			}
+
+			#endregion
+
+			#region Días
+			if (ReclamacionVM.DescansosChecked) {
+				conceptos[contador, 0] = "Descansos ordinarios";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Descansos:00}";
+				conceptos[contador, 2] = $"'{Pijama.Descanso:00}";
+				conceptos[contador, 3] = $"'{Pijama.Descanso - ReclamacionVM.Descansos:00}";
+				contador++;
+			}
+			if (ReclamacionVM.VacacionesChecked) {
+				conceptos[contador, 0] = "Vacaciones";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Vacaciones:00}";
+				conceptos[contador, 2] = $"'{Pijama.Vacaciones:00}";
+				conceptos[contador, 3] = $"'{Pijama.Vacaciones - ReclamacionVM.Vacaciones:00}";
+				contador++;
+			}
+			if (ReclamacionVM.DescansosNoDisfrutadosChecked) {
+				conceptos[contador, 0] = "Descansos no disfrutados";
+				conceptos[contador, 1] = $"'{ReclamacionVM.DescansosNoDisfrutados:00}";
+				conceptos[contador, 2] = $"'{Pijama.DescansosNoDisfrutados:00}";
+				conceptos[contador, 3] = $"'{Pijama.DescansosNoDisfrutados - ReclamacionVM.DescansosNoDisfrutados:00}";
+				contador++;
+			}
+			if (ReclamacionVM.EnfermoChecked) {
+				conceptos[contador, 0] = "Días enfermedad";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Enfermo:00}";
+				conceptos[contador, 2] = $"'{Pijama.Enfermo:00}";
+				conceptos[contador, 3] = $"'{Pijama.Enfermo - ReclamacionVM.Enfermo:00}";
+				contador++;
+			}
+			if (ReclamacionVM.DescansosSueltosChecked) {
+				conceptos[contador, 0] = "Descansos sueltos";
+				conceptos[contador, 1] = $"'{ReclamacionVM.DescansosSueltos:00}";
+				conceptos[contador, 2] = $"'{Pijama.DescansoSuelto:00}";
+				conceptos[contador, 3] = $"'{Pijama.DescansoSuelto - ReclamacionVM.DescansosSueltos:00}";
+				contador++;
+			}
+			if (ReclamacionVM.DescansosCompensatoriosChecked) {
+				conceptos[contador, 0] = "Descansos compensatorios";
+				conceptos[contador, 1] = $"'{ReclamacionVM.DescansosCompensatorios:00}";
+				conceptos[contador, 2] = $"'{Pijama.DescansoCompensatorio:00}";
+				conceptos[contador, 3] = $"'{Pijama.DescansoCompensatorio - ReclamacionVM.DescansosCompensatorios:00}";
+				contador++;
+			}
+			if (ReclamacionVM.PermisoChecked) {
+				conceptos[contador, 0] = "Días de permiso";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Permiso:00}";
+				conceptos[contador, 2] = $"'{Pijama.Permiso:00}";
+				conceptos[contador, 3] = $"'{Pijama.Permiso - ReclamacionVM.Permiso:00}";
+				contador++;
+			}
+			if (ReclamacionVM.LibreDisposicionChecked) {
+				conceptos[contador, 0] = "Días de libre disposición";
+				conceptos[contador, 1] = $"'{ReclamacionVM.LibreDisposicion:00}";
+				conceptos[contador, 2] = $"'{Pijama.LibreDisposicionF6:00}";
+				conceptos[contador, 3] = $"'{Pijama.LibreDisposicionF6 - ReclamacionVM.LibreDisposicion:00}";
+				contador++;
+			}
+			if (ReclamacionVM.ComiteChecked) {
+				conceptos[contador, 0] = "Días de comité";
+				conceptos[contador, 1] = $"'{ReclamacionVM.Comite:00}";
+				conceptos[contador, 2] = $"'{Pijama.Comite:00}";
+				conceptos[contador, 3] = $"'{Pijama.Comite - ReclamacionVM.Comite:00}";
+				contador++;
+			}
+
+
+
+			#endregion
+
+			#region Gráficos
+			foreach(ReclamacionesViewModel.DiaGrafico G in ReclamacionVM.ListaGraficos) {
+				conceptos[contador, 0] = $"'Gráfico ({G.Dia:00}/{Pijama.Fecha.Month:00}/{Pijama.Fecha.Year:0000})";
+				conceptos[contador, 1] = $"'{cnvNumeroGrafico.Convert(G.Grafico, null, null, null)}";
+				conceptos[contador, 2] = $"'{cnvNumeroGrafico.Convert(Pijama.ListaDias[G.Dia-1].Grafico, null, null, null)}";
+				contador++;
+			}
+
+			#endregion
+
+			try {
+				SaveFileDialog dialogo = new SaveFileDialog();
+				string ruta = Path.Combine(Settings.Default.CarpetaInformes, "Reclamaciones");
+				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
+				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
+				dialogo.FileName = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}", Pijama.Fecha, Pijama.Trabajador.Id);
+				dialogo.InitialDirectory = ruta;
+				dialogo.OverwritePrompt = true;
+				dialogo.Title = "Guardar Reclamación";
+				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
+					Task.Run(() => ReclamacionPrintModel.CrearReclamacion(conceptos, Pijama.Fecha, Pijama.Trabajador, 
+																		  dialogo.FileName, ReclamacionVM.FechaReclamacion));
+				}
+			} catch (Exception ex) {
+				_mensajeProvider.VerError("CalendariosCommand.Reclamar", ex);
+			} finally {
+				//App.Global.VisibilidadProgreso = Visibility.Collapsed;
+			}
+
+		}
+		#endregion
 
 
 
 
-
-
-
-
-
-
-
-
-	}
+	}// Fin de la clase.
 }
