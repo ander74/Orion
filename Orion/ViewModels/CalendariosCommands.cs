@@ -1165,7 +1165,7 @@ namespace Orion.ViewModels {
 				dialogo.Title = "Guardar Reclamación";
 				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
 					Task.Run(() => ReclamacionPrintModel.CrearReclamacion(conceptos, Pijama.Fecha, Pijama.Trabajador, 
-																		  dialogo.FileName, ReclamacionVM.FechaReclamacion));
+																		  dialogo.FileName, ReclamacionVM.FechaReclamacion, ReclamacionVM.Notas));
 				}
 			} catch (Exception ex) {
 				_mensajeProvider.VerError("CalendariosCommand.Reclamar", ex);

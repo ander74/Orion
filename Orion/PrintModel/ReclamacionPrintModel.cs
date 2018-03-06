@@ -34,7 +34,7 @@ namespace Orion.PrintModel {
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
 
-		public static void CrearReclamacion(string[,] datos, DateTime fecha, Conductor trabajador, string ruta, DateTime fechaReclamacion) {
+		public static void CrearReclamacion(string[,] datos, DateTime fecha, Conductor trabajador, string ruta, DateTime fechaReclamacion, string notas) {
 
 			// Creamos una aplicacion Excel y la mantenemos oculta.
 			Application ExcelApp = new Application();
@@ -49,10 +49,11 @@ namespace Orion.PrintModel {
 				Worksheet Hoja = Libro.Worksheets[1];
 				// Establecemos el centro, la fecha y el conductor.
 				Hoja.Range["A6"].Value = $"Centro: {App.Global.CentroActual.ToString().ToUpper()}";
-				Hoja.Range["D6"].Value = $"{fecha:MMMM - yyyy}".ToUpper();
-				Hoja.Range["A8"].Value = $"Trabajador: {trabajador.Apellidos} ({trabajador.Id:000})";
-				Hoja.Range["A10"].Value = $"'Fecha: {fechaReclamacion:dd/MM/yyyy}";
+				Hoja.Range["A8"].Value = $"Trabajador/a: {trabajador.Apellidos} ({trabajador.Id:000})";
+				Hoja.Range["A10"].Value = $"{fecha:MMMM - yyyy}".ToUpper();
 				Hoja.Range["D10"].Value = $"'Reclamación Nº: {fechaReclamacion:yyyyMMdd}{trabajador.Id:000}";
+				Hoja.Range["C32"].Value = $"'{fechaReclamacion:dd - MM - yyyy}";
+				Hoja.Range["A32"].Value = notas;
 				// Pegamos los datos
 				Range rango = Hoja.Range["A13:D29"];
 				rango.Value = datos;

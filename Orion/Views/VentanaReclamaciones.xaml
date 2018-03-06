@@ -25,6 +25,7 @@
         <cnv:ConvertidorDecimal x:Key="cnvDecimal"/>
         <cnv:ConvertidorNumeroGrafico x:Key="cnvNumeroGrafico"/>
         <cnv:ConvertidorFecha x:Key="cnvFecha"/>
+        <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility"/>
 
         <!-- ESTILOS -->
         <Style x:Key="EstiloGrid" TargetType="DataGrid">
@@ -334,11 +335,28 @@
 
 
         <!-- ================================================== -->
-        <!-- FECHA DE RECLAMACIÓN -->
+        <!-- NOTAS -->
+        <!-- ================================================== -->
+        <Border Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Left"
+                Background="AliceBlue" BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Margin="5" Height="200" Width="465"
+                Visibility="{Binding VisibilidadNotas, Converter={StaticResource cnvBoolToVisibility}}">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Margin="10,6,3,3" FontSize="14" FontWeight="Bold" Foreground="DarkRed" Text="Notas"/>
+                <TextBox Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                         Margin="10" FontFamily="Verdana" FontSize="12" TextWrapping="Wrap" AcceptsReturn="True" MaxLines="9"
+                         Text="{Binding Notas}"/>
+            </StackPanel>
+        </Border>
+
+
+        <!-- ================================================== -->
+        <!-- BOTÓN NOTAS Y FECHA DE RECLAMACIÓN -->
         <!-- ================================================== -->
         <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="3" Margin="13,3,3,3" VerticalAlignment="Top">
 
-            <TextBlock Margin="3,6,3,3" FontSize="14" FontWeight="Bold" Foreground="DarkRed" Text="Fecha de la reclamación: "
+            <Button Style="{StaticResource EstiloBoton}" FontSize="14" FontWeight="Normal" Command="{Binding cmdMostrarNotas}"
+                    VerticalAlignment="Center" Padding="20,3,20,6" Margin="2" Content="Notas"/>
+            <TextBlock Margin="20,6,3,3" FontSize="14" FontWeight="Bold" Foreground="DarkRed" Text="Fecha de la reclamación: "
                        VerticalAlignment="Center"/>
             <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding FechaReclamacion, Converter={StaticResource cnvFecha}}"
                      VerticalAlignment="Center" Width="125"

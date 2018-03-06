@@ -57,6 +57,26 @@ namespace Orion.ViewModels
 
 
 
+		#region COMANDO MostrarNotas
+
+		// Comando
+		private ICommand _cmdmostrarnotas;
+		public ICommand cmdMostrarNotas {
+			get {
+				if (_cmdmostrarnotas == null) _cmdmostrarnotas = new RelayCommand(p => MostrarNotas());
+				return _cmdmostrarnotas;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void MostrarNotas() {
+			VisibilidadNotas = !VisibilidadNotas;
+		}
+		#endregion
+
+
+
 
 		#endregion
 		// ====================================================================================================
@@ -110,6 +130,31 @@ namespace Orion.ViewModels
 				return i;
 			}
 		}
+
+
+		private string _notas;
+		public string Notas {
+			get { return _notas; }
+			set {
+				if (_notas != value) {
+					_notas = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private bool _visibilidadnotas;
+		public bool VisibilidadNotas {
+			get { return _visibilidadnotas; }
+			set {
+				if (_visibilidadnotas != value) {
+					_visibilidadnotas = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
 
 		#endregion
 		// ====================================================================================================
