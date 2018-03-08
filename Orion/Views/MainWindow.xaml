@@ -160,7 +160,7 @@
         <!-- ==================================================================================================== -->
         <!-- PANEL DE AYUDA -->
         <!-- ==================================================================================================== -->
-        <Grid x:Name="PanelAyuda" Grid.Row="0" Height="{Binding TamañoAyuda}" Margin="10,30,10,0"
+        <Grid Grid.Row="0" Height="{Binding TamañoAyuda}" Margin="10,30,10,0"
               VerticalAlignment="{Binding ValignAyuda}" Visibility="{Binding VisibilidadAyuda}">
 
             <Grid.RowDefinitions>
@@ -210,10 +210,10 @@
         <!-- VENTANA DE PROGRESO -->
         <!-- ==================================================================================================== -->
         <Grid Grid.Row="0" Background="LightGray" Opacity="0.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-              Visibility="{Binding VisibilidadProgreso, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+              Visibility="{Binding VisibilidadProgreso, Mode=TwoWay}"/>
 
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="Auto" Height="150" Background="{StaticResource DegradadoCeleste1}"
-              Visibility="{Binding VisibilidadProgreso, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+              Visibility="{Binding VisibilidadProgreso, Mode=TwoWay}">
 
             <Border Grid.RowSpan="2" Grid.ColumnSpan="2" BorderThickness="2.0" CornerRadius="4" BorderBrush="DarkSlateBlue"
                     Background="{StaticResource DegradadoCeleste1}" />
@@ -226,4 +226,7 @@
 
 
     </Grid>
+    
+    
+    
 </Window>

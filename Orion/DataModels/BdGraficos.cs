@@ -287,7 +287,7 @@ namespace Orion.DataModels {
 					OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
 					Comando.CommandType = System.Data.CommandType.StoredProcedure;
 					OleDbDataReader lector = null;
-					Comando.Parameters.AddWithValue("@JornadaMedia", Convenio.Default.JornadaMedia.Ticks);
+					Comando.Parameters.AddWithValue("@JornadaMedia", App.Global.Convenio.JornadaMedia.Ticks);
 					Comando.Parameters.AddWithValue("@IdGrupo", IdGrupo);
 					conexion.Open();
 					lector = Comando.ExecuteReader();
@@ -325,7 +325,7 @@ namespace Orion.DataModels {
 					OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
 					Comando.CommandType = System.Data.CommandType.StoredProcedure;
 					OleDbDataReader lector = null;
-					Comando.Parameters.AddWithValue("@JornadaMedia", Convenio.Default.JornadaMedia.Ticks);
+					Comando.Parameters.AddWithValue("@JornadaMedia", App.Global.Convenio.JornadaMedia.Ticks);
 					Comando.Parameters.AddWithValue("@Fecha", fecha.ToString("yyyy-MM-dd"));
 					conexion.Open();
 					lector = Comando.ExecuteReader();

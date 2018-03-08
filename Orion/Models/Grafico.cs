@@ -158,7 +158,7 @@ namespace Orion.Models {
 
 		public bool ValoracionDiferente {
 			get {
-				if (Valoracion == Convenio.Default.JornadaMedia && Trabajadas <= Valoracion) return false;
+				if (Valoracion == App.Global.Convenio.JornadaMedia && Trabajadas <= Valoracion) return false;
 				return Valoracion != Trabajadas;
 			}
 		}

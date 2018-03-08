@@ -34,7 +34,7 @@ namespace Orion.Views {
 
 		private void Button_Click(object sender, RoutedEventArgs e) {
 
-			if (Utils.CodificaTexto(PwAnterior.Password) != Settings.Default.ContraseñaDatos) {
+			if (Utils.CodificaTexto(PwAnterior.Password) != App.Global.Configuracion.ContraseñaDatos) {
 				TxtMensajeError.Foreground = Brushes.IndianRed;
 				TxtMensajeError.Text = "Contraseña Anterior no válida.";
 				PwAnterior.Focus();

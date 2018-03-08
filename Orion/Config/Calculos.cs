@@ -33,7 +33,7 @@ namespace Orion.Config {
 				if (partido.TotalSeconds < 0) partido += new TimeSpan(1, 0, 0, 0);
 				// Si el tiempo partido es más de tres horas, le sumamos al total el tiempo que excede.
 				TimeSpan excesoPartido = new TimeSpan(0);
-				if (partido > Convenio.Default.MaxHorasParticionGraficoPartido) excesoPartido = partido - Convenio.Default.MaxHorasParticionGraficoPartido;
+				if (partido > App.Global.Convenio.MaxHorasParticionGraficoPartido) excesoPartido = partido - App.Global.Convenio.MaxHorasParticionGraficoPartido;
 				// Devolvemos el tiempo trabajado.
 				return total - (partido - excesoPartido);
 			}
@@ -41,7 +41,7 @@ namespace Orion.Config {
 
 			/* ACUMULADAS */
 			public static TimeSpan Acumuladas(TimeSpan? trabajadas) {
-				TimeSpan horas = (trabajadas ?? new TimeSpan(0)) - Convenio.Default.JornadaMedia;
+				TimeSpan horas = (trabajadas ?? new TimeSpan(0)) - App.Global.Convenio.JornadaMedia;
 				return horas.TotalSeconds < 0 ? new TimeSpan(0) : horas;
 			}
 
@@ -50,8 +50,8 @@ namespace Orion.Config {
 				// Si inicio o final son nulos, devolvemos cero
 				if (!inicio.HasValue || !final.HasValue) return new TimeSpan(0);
 				// Establecemos el horario nocturno.
-				TimeSpan inicionocturnas = Convenio.Default.InicioNocturnas;
-				TimeSpan finalnocturnas = Convenio.Default.FinalNocturnas;
+				TimeSpan inicionocturnas = App.Global.Convenio.InicioNocturnas;
+				TimeSpan finalnocturnas = App.Global.Convenio.FinalNocturnas;
 				// Inicializamos el resultado
 				TimeSpan resultado = new TimeSpan(0);
 				// Regulamos el servicio.
@@ -75,7 +75,7 @@ namespace Orion.Config {
 			/* DESAYUNO */
 			public static decimal Desayuno(TimeSpan? inicio, int turno) {
 				if (turno != 1 || !inicio.HasValue) return 0m;
-				TimeSpan horadesayuno = Convenio.Default.HoraDesayuno;
+				TimeSpan horadesayuno = App.Global.Convenio.HoraDesayuno;
 				if (inicio < horadesayuno) {
 					TimeSpan tiempo = horadesayuno - inicio.Value;
 					return tiempo.TotalMinutes > 60 ? 1m : tiempo.ToDecimal();
@@ -99,8 +99,8 @@ namespace Orion.Config {
 				// Si iniciopartido o finalpartido son nulos, devolvemos cero.
 				if (!iniciopartido.HasValue || !finalpartido.HasValue) return new TimeSpan(0);
 				// Extraemos el horario de comida para servicios partidos.
-				TimeSpan iniciocomidapartido = Convenio.Default.InicioComidaPartido;
-				TimeSpan finalcomidapartido = Convenio.Default.FinalComidaPartido;
+				TimeSpan iniciocomidapartido = App.Global.Convenio.InicioComidaPartido;
+				TimeSpan finalcomidapartido = App.Global.Convenio.FinalComidaPartido;
 				// Regulamos el servicio.
 				if (finalpartido < iniciopartido) finalpartido = finalpartido.Value.Add(new TimeSpan(1,0,0,0));
 				// Inicializamos el resultado a devolver.
@@ -124,8 +124,8 @@ namespace Orion.Config {
 				// Si inicio o final son nulos, devolvemos cero.
 				if (!inicio.HasValue || !final.HasValue) return 0m;
 				// Inicializamos el horario de comida continuo y el resultado.
-				TimeSpan iniciocomidacontinuo = Convenio.Default.InicioComidaContinuo;
-				TimeSpan finalcomidacontinuo = Convenio.Default.FinalComidaContinuo;
+				TimeSpan iniciocomidacontinuo = App.Global.Convenio.InicioComidaContinuo;
+				TimeSpan finalcomidacontinuo = App.Global.Convenio.FinalComidaContinuo;
 				decimal resultado = 0m;
 				// Si el turno es 1 y el final es mayor que la hora límite...
 				if (turno == 1 && final > finalcomidacontinuo) resultado = 1m;
@@ -151,8 +151,8 @@ namespace Orion.Config {
 				// Si inicio o final son nulos, devolvemos cero.
 				if (!inicio.HasValue || !final.HasValue) return 0m;
 				// Definimos el horario de comidas
-				TimeSpan iniciocomidacontinuo = Convenio.Default.InicioComidaContinuo;
-				TimeSpan finalcomidacontinuo = Convenio.Default.FinalComidaContinuo;
+				TimeSpan iniciocomidacontinuo = App.Global.Convenio.InicioComidaContinuo;
+				TimeSpan finalcomidacontinuo = App.Global.Convenio.FinalComidaContinuo;
 				// Definimos las variables a usar.
 				TimeSpan tiempopartido;
 				decimal resultado = 0m;
@@ -182,8 +182,8 @@ namespace Orion.Config {
 			public static decimal Cena(TimeSpan? inicio, TimeSpan? final, int turno) {
 				if (turno == 3 || !inicio.HasValue || !final.HasValue) return 0m;
 				// Declaramos las propiedades a usar
-				TimeSpan iniciocena = Convenio.Default.InicioCena;
-				TimeSpan finalcena = Convenio.Default.FinalCena;
+				TimeSpan iniciocena = App.Global.Convenio.InicioCena;
+				TimeSpan finalcena = App.Global.Convenio.FinalCena;
 				// Ajustamos el servicio.
 				if (final < inicio) final += new TimeSpan(1,0,0,0);
 				// Ajustamos el horario de cena.
@@ -202,8 +202,8 @@ namespace Orion.Config {
 			public static decimal PlusCena(TimeSpan? inicio, TimeSpan? final, int turno) {
 				if (turno == 3 || !inicio.HasValue || !final.HasValue) return 0m;
 				// Declaramos el InicioPlusCena del convenio y el porcentaje
-				TimeSpan iniciopluscena = Convenio.Default.InicioPlusCena;
-				int porcentajepluscena = Convenio.Default.PorcentajePlusCena;
+				TimeSpan iniciopluscena = App.Global.Convenio.InicioPlusCena;
+				int porcentajepluscena = App.Global.Convenio.PorcentajePlusCena;
 				// Ajustamos el servicio.
 				if (final < inicio) final += new TimeSpan(1,0,0,0);
 				// Ajustamos el InicioPlusCena

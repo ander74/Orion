@@ -5,6 +5,7 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using Newtonsoft.Json;
 using Orion.Config;
 using Orion.DataModels;
 using Orion.Models;
@@ -45,39 +46,39 @@ namespace Orion.ViewModels {
 			switch (carpeta) {
 				case "Datos":
 					dialogo.Description = "Ubicación Base de Datos";
-					dialogo.SelectedPath = Settings.Default.CarpetaDatos;
+					dialogo.SelectedPath = App.Global.Configuracion.CarpetaDatos;
 					if (dialogo.ShowDialog() == DialogResult.OK) {
-						Settings.Default.CarpetaDatos = dialogo.SelectedPath;
-						Settings.Default.SincronizarEnDropbox = false;
+						App.Global.Configuracion.CarpetaDatos = dialogo.SelectedPath;
+						App.Global.Configuracion.SincronizarEnDropbox = false;
 					}
 					return;
 				case "Dropbox":
 					dialogo.Description = "Ubicación Carpeta de Dropbox";
-					dialogo.SelectedPath = Settings.Default.CarpetaDropbox;
+					dialogo.SelectedPath = App.Global.Configuracion.CarpetaDropbox;
 					if (dialogo.ShowDialog() == DialogResult.OK) {
-						Settings.Default.CarpetaDropbox = dialogo.SelectedPath;
-						Settings.Default.SincronizarEnDropbox = false;
+						App.Global.Configuracion.CarpetaDropbox = dialogo.SelectedPath;
+						App.Global.Configuracion.SincronizarEnDropbox = false;
 					}
 					return;
 				case "Ayuda":
 					dialogo.Description = "Ubicación de la Ayuda";
-					dialogo.SelectedPath = Settings.Default.CarpetaAyuda;
-					if (dialogo.ShowDialog() == DialogResult.OK) Settings.Default.CarpetaAyuda = dialogo.SelectedPath;
+					dialogo.SelectedPath = App.Global.Configuracion.CarpetaAyuda;
+					if (dialogo.ShowDialog() == DialogResult.OK) App.Global.Configuracion.CarpetaAyuda = dialogo.SelectedPath;
 					return;
 				case "Informes":
 					dialogo.Description = "Ubicación Hojas Pijama";
-					dialogo.SelectedPath = Settings.Default.CarpetaInformes;
-					if (dialogo.ShowDialog() == DialogResult.OK) Settings.Default.CarpetaInformes = dialogo.SelectedPath;
+					dialogo.SelectedPath = App.Global.Configuracion.CarpetaInformes;
+					if (dialogo.ShowDialog() == DialogResult.OK) App.Global.Configuracion.CarpetaInformes = dialogo.SelectedPath;
 					return;
 				case "CopiasSeguridad":
 					dialogo.Description = "Ubicación Copias de Seguridad";
-					dialogo.SelectedPath = Settings.Default.CarpetaCopiasSeguridad;
-					if (dialogo.ShowDialog() == DialogResult.OK) Settings.Default.CarpetaCopiasSeguridad = dialogo.SelectedPath;
+					dialogo.SelectedPath = App.Global.Configuracion.CarpetaCopiasSeguridad;
+					if (dialogo.ShowDialog() == DialogResult.OK) App.Global.Configuracion.CarpetaCopiasSeguridad = dialogo.SelectedPath;
 					return;
 				case "OrigenActualizar":
 					dialogo.Description = "Ubicación Archivos Actualización";
-					dialogo.SelectedPath = Settings.Default.CarpetaOrigenActualizar;
-					if (dialogo.ShowDialog() == DialogResult.OK) Settings.Default.CarpetaOrigenActualizar = dialogo.SelectedPath;
+					dialogo.SelectedPath = App.Global.Configuracion.CarpetaOrigenActualizar;
+					if (dialogo.ShowDialog() == DialogResult.OK) App.Global.Configuracion.CarpetaOrigenActualizar = dialogo.SelectedPath;
 					return;
 			}
 		}
@@ -344,8 +345,8 @@ namespace Orion.ViewModels {
 			}
 
 			Respaldo.CopiaDatos("Manual");
-			Settings.Default.UltimaCopia = DateTime.Now;
-
+			App.Global.Configuracion.UltimaCopia = DateTime.Now;
+			_mensajeProvider.VerMensaje("Copia de seguridad creada correctamente.", "Copia Seguridad");
 		}
 		#endregion
 
@@ -376,12 +377,12 @@ namespace Orion.ViewModels {
 				VentanaCambioContraseña ventana = new VentanaCambioContraseña();
 				if (ventana.ShowDialog() == true) {
 					//Si la contraseña anterior no es la que estaba...
-					if (Utils.CodificaTexto(ventana.PwAnterior.Password) != Settings.Default.ContraseñaDatos) {
+					if (Utils.CodificaTexto(ventana.PwAnterior.Password) != App.Global.Configuracion.ContraseñaDatos) {
 						_mensajeProvider.VerMensaje("La contraseña anterior no es válida", "ERROR");
 					} else {
 						// Guardamos la contraseña nueva, por si acaso.
-						Settings.Default.ContraseñaDatos = Utils.CodificaTexto(ventana.PwNueva.Password);
-						Settings.Default.Save();
+						App.Global.Configuracion.ContraseñaDatos = Utils.CodificaTexto(ventana.PwNueva.Password);
+						App.Global.Configuracion.Guardar(App.Global.ArchivoOpcionesConfiguracion);
 					}
 				}
 			} catch (Exception ex) {
@@ -412,35 +413,31 @@ namespace Orion.ViewModels {
 
 			StringBuilder mensaje = new StringBuilder();
 			mensaje.Append($"NUEVOS VALORES\n\n");
-			mensaje.Append($"Importe Dietas: {Convenio.Default.ImporteDietas * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Sábados: {Convenio.Default.ImporteSabados * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Festivos: {Convenio.Default.ImporteFestivos * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Nocturnidad: {Convenio.Default.PlusNocturnidad * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Menor Descanso: {Convenio.Default.DietaMenorDescanso * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Limpieza: {Convenio.Default.PlusLimpieza * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Paquetería: {Convenio.Default.PlusPaqueteria * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Navidad: {Convenio.Default.PlusNavidad * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Viaje: {App.Global.PlusViaje * multiplicador:0.00}\n\n");
+			mensaje.Append($"Importe Dietas: {App.Global.Convenio.ImporteDietas * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Sábados: {App.Global.Convenio.ImporteSabados * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Festivos: {App.Global.Convenio.ImporteFestivos * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Nocturnidad: {App.Global.Convenio.PlusNocturnidad * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Menor Descanso: {App.Global.Convenio.DietaMenorDescanso * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Limpieza: {App.Global.Convenio.PlusLimpieza * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Paquetería: {App.Global.Convenio.PlusPaqueteria * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Navidad: {App.Global.Convenio.PlusNavidad * multiplicador:0.00}\n");
+			mensaje.Append($"Importe Plus Viaje: {App.Global.PorCentro.PlusViaje * multiplicador:0.00}\n\n");
 			mensaje.Append($"¿Aceptar?");
 
 			if (_mensajeProvider.VerMensaje(mensaje.ToString(), "Incremento de importes", true) == true) {
-				Convenio.Default.ImporteDietas *= multiplicador;
-				Convenio.Default.ImporteSabados *= multiplicador;
-				Convenio.Default.ImporteFestivos *= multiplicador;
-				Convenio.Default.PlusNocturnidad *= multiplicador;
-				Convenio.Default.DietaMenorDescanso *= multiplicador;
-				Convenio.Default.PlusLimpieza *= multiplicador;
-				Convenio.Default.PlusPaqueteria *= multiplicador;
-				Convenio.Default.PlusNavidad *= multiplicador;
-				App.Global.PlusViaje *= multiplicador;
+				App.Global.Convenio.ImporteDietas *= multiplicador;
+				App.Global.Convenio.ImporteSabados *= multiplicador;
+				App.Global.Convenio.ImporteFestivos *= multiplicador;
+				App.Global.Convenio.PlusNocturnidad *= multiplicador;
+				App.Global.Convenio.DietaMenorDescanso *= multiplicador;
+				App.Global.Convenio.PlusLimpieza *= multiplicador;
+				App.Global.Convenio.PlusPaqueteria *= multiplicador;
+				App.Global.Convenio.PlusNavidad *= multiplicador;
+				App.Global.PorCentro.PlusViaje *= multiplicador;
 			}
 
 		}
 		#endregion
-
-
-
-
 
 
 

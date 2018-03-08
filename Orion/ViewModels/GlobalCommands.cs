@@ -9,6 +9,8 @@ using Orion.Config;
 using Orion.DataModels;
 using Orion.Properties;
 using Orion.Views;
+using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -45,7 +47,7 @@ namespace Orion.ViewModels {
 		// (Esta función es pública por el evento Closing de MainView. Ver más información en dicho evento.)
 		public void GuardarCambios() {
 
-			if ((int)CentroActual != Settings.Default.CentroInicial) {
+			if ((int)CentroActual != App.Global.Configuracion.CentroInicial) {
 				bool? resultado = mensajeProvider.VerMensaje("¡¡ ATENCIÓN !!\n\nEstá apunto de guardar los datos de un centro que no es el suyo.\n\n" +
 															 "¿Desea continuar?\n\nNOTA: Si continúa se podrían dar conflictor en Dropbox.",
 															 "CONFLICTOS POTENCIALES EN DROPBOX",
@@ -61,9 +63,12 @@ namespace Orion.ViewModels {
 			LineasVM.GuardarTodo();
 			OpcionesVM.GuardarTodo();
 			// Guardamos las configuraciones.
-			Settings.Default.Save();
-			Convenio.Default.Save();
-			PorCentro.Default.Save();
+			Configuracion.Guardar(ArchivoOpcionesConfiguracion);
+			Convenio.Guardar(ArchivoOpcionesConvenio);
+			if (_centroactual != Centros.Desconocido) PorCentro.Guardar(ArchivoOpcionesPorCentro);
+			//App.Global.Configuracion.Save();
+			//App.Global.Convenio2.Save();
+			//PorCentro.Default.Save();
 		}
 		#endregion
 
@@ -99,8 +104,8 @@ namespace Orion.ViewModels {
 			}
 
 			// Si se está iniciando y el centro inicial es conocido, se carga ese centro, si no, se pide un centro.
-			//if (iniciando && Settings.Default.CentroInicial != (int)Centros.Desconocido) {
-			//	CentroActual = (Centros)Settings.Default.CentroInicial;
+			//if (iniciando && App.Global.Configuracion.CentroInicial != (int)Centros.Desconocido) {
+			//	CentroActual = (Centros)App.Global.Configuracion.CentroInicial;
 			//} else {
 				VentanaCentros ventana = new VentanaCentros();
 				ventana.ShowDialog();
@@ -140,12 +145,12 @@ namespace Orion.ViewModels {
 			// Definimos el parámetro y lo evaluamos
 			string ayuda = (string)parametro;
 			// Mostramos el panel
-			if (ayuda == "Graficos") PaginaAyuda = Utils.CombinarCarpetas(Settings.Default.CarpetaAyuda, "Graficos.html");
-			if (ayuda == "Conductores") PaginaAyuda = Utils.CombinarCarpetas(Settings.Default.CarpetaAyuda, "Conductores.html");
-			if (ayuda == "Calendarios") PaginaAyuda = Utils.CombinarCarpetas(Settings.Default.CarpetaAyuda, "Calendarios.html");
-			if (ayuda == "Pijama") PaginaAyuda = Utils.CombinarCarpetas(Settings.Default.CarpetaAyuda, "Pijama.html");
-			if (ayuda == "Lineas") PaginaAyuda = Utils.CombinarCarpetas(Settings.Default.CarpetaAyuda, "Lineas.html");
-			if (ayuda == "Opciones") PaginaAyuda = Utils.CombinarCarpetas(Settings.Default.CarpetaAyuda, "Opciones.html");
+			if (ayuda == "Graficos") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Graficos.html");
+			if (ayuda == "Conductores") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Conductores.html");
+			if (ayuda == "Calendarios") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Calendarios.html");
+			if (ayuda == "Pijama") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Pijama.html");
+			if (ayuda == "Lineas") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Lineas.html");
+			if (ayuda == "Opciones") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Opciones.html");
 			VisibilidadAyuda = Visibility.Visible;
 		}
 		#endregion
@@ -287,7 +292,7 @@ namespace Orion.ViewModels {
 			App.Calculadora.DataContext = new CalculadoraViewModel();
 
 			// Desactivamos el botón.
-			Settings.Default.BotonCalculadoraActivo = false;
+			App.Global.Configuracion.BotonCalculadoraActivo = false;
 
 			// Mostramos la calculadora, no modal.
 			App.Calculadora.Show();

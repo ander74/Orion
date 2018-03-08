@@ -120,7 +120,7 @@ namespace Orion.Pijama {
 
 		public decimal TotalDietas {
 			get {
-				return (GraficoTrabajado.Desayuno * Convenio.Default.PorcentajeDesayuno / 100) + GraficoTrabajado.Comida + 
+				return (GraficoTrabajado.Desayuno * App.Global.Convenio.PorcentajeDesayuno / 100) + GraficoTrabajado.Comida + 
 						GraficoTrabajado.Cena + GraficoTrabajado.PlusCena;
 			}
 		}

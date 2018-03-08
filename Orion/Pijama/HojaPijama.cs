@@ -50,33 +50,33 @@ namespace Orion.Pijama {
 					if (App.Global.CalendariosVM.EsFestivo(dia.DiaFecha)) dia.EsFestivo = true;
 					// Si el conductor no tiene reducción de jornada, ajustamos las horas a la jornada media si es necesario.
 					if (dia.Grafico > 0) {
-						if (!Trabajador.ReduccionJornada && dia.GraficoTrabajado.Trabajadas < Convenio.Default.JornadaMedia) {
-							dia.GraficoTrabajado.Trabajadas = Convenio.Default.JornadaMedia;
+						if (!Trabajador.ReduccionJornada && dia.GraficoTrabajado.Trabajadas < App.Global.Convenio.JornadaMedia) {
+							dia.GraficoTrabajado.Trabajadas = App.Global.Convenio.JornadaMedia;
 						}
 					}
 					// Establecemos el Plus de Paquetería
 					if (dia.GraficoTrabajado.PlusPaqueteria) {
-						dia.PlusPaqueteria = Convenio.Default.PlusPaqueteria;
+						dia.PlusPaqueteria = App.Global.Convenio.PlusPaqueteria;
 					} else {
 						dia.PlusPaqueteria = dia.FacturadoPaqueteria * 0.10m;
 					}
 					// Establecemos el Plus de Limpieza
 					if (dia.GraficoTrabajado.PlusLimpieza) {
-						dia.PlusLimpieza = Convenio.Default.PlusLimpieza;
+						dia.PlusLimpieza = App.Global.Convenio.PlusLimpieza;
 					} else {
 						if (dia.Limpieza == null)
-							dia.PlusLimpieza = Convenio.Default.PlusLimpieza / 2m;
+							dia.PlusLimpieza = App.Global.Convenio.PlusLimpieza / 2m;
 						if (dia.Limpieza == true)
-							dia.PlusLimpieza = Convenio.Default.PlusLimpieza;
+							dia.PlusLimpieza = App.Global.Convenio.PlusLimpieza;
 					}
 					// Establecemos el Plus de Nocturnidad
-					if (dia.GraficoTrabajado.Turno == 3) dia.PlusNocturnidad = Convenio.Default.PlusNocturnidad;
+					if (dia.GraficoTrabajado.Turno == 3) dia.PlusNocturnidad = App.Global.Convenio.PlusNocturnidad;
 					// Establcemos el Plus de Navidad
 					if (dia.GraficoTrabajado.Numero > 0 && dia.DiaFecha.Day == 25 && dia.DiaFecha.Month == 12) {
-						dia.PlusNavidad = Convenio.Default.PlusNavidad;
+						dia.PlusNavidad = App.Global.Convenio.PlusNavidad;
 					}
 					if (dia.GraficoTrabajado.Numero > 0 && dia.DiaFecha.Day == 1 && dia.DiaFecha.Month == 1) {
-						dia.PlusNavidad = Convenio.Default.PlusNavidad;
+						dia.PlusNavidad = App.Global.Convenio.PlusNavidad;
 					}
 					
 					// Establecemos el Plus por Menor Descanso, si el tiempo entre el final anterior y el inicio es menor de 12 horas.
@@ -88,11 +88,11 @@ namespace Orion.Pijama {
 						// Si las horas que separan el inicio menos el final anterior son menos de doce...
 						decimal diferenciahoras = (decimal)(inicio - finalAnterior.Value).TotalHours;
 						if (diferenciahoras < 12) {
-							dia.PlusMenorDescanso = (12 - diferenciahoras) * Convenio.Default.DietaMenorDescanso;
+							dia.PlusMenorDescanso = (12 - diferenciahoras) * App.Global.Convenio.DietaMenorDescanso;
 						}
 					}
 					// Si es un día de permiso, se establecen las horas trabajadas en la jornada media.
-					if (dia.Grafico == -9) dia.GraficoTrabajado.Trabajadas = Convenio.Default.JornadaMedia;
+					if (dia.Grafico == -9) dia.GraficoTrabajado.Trabajadas = App.Global.Convenio.JornadaMedia;
 					// Establecemos el final anterior, si existe.
 					if (dia.GraficoTrabajado!= null && dia.GraficoTrabajado.Final.HasValue) {
 						finalAnterior = dia.GraficoTrabajado.Final.Value;
@@ -217,9 +217,9 @@ namespace Orion.Pijama {
 				// EXCESO DE HORAS TRABAJADAS EN LABORABLES Y FESTIVOS
 				if (dia.DiaFecha.DayOfWeek != DayOfWeek.Saturday && dia.DiaFecha.DayOfWeek != DayOfWeek.Sunday) {
 					if (dia.EsFestivo) {
-						if (dia.GraficoTrabajado.Trabajadas > Convenio.Default.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en festivo.\n";
+						if (dia.GraficoTrabajado.Trabajadas > App.Global.Convenio.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en festivo.\n";
 					} else {
-						if (dia.GraficoTrabajado.Trabajadas > Convenio.Default.MaxHorasLaborables) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en laborable.\n";
+						if (dia.GraficoTrabajado.Trabajadas > App.Global.Convenio.MaxHorasLaborables) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en laborable.\n";
 					}
 				}
 
@@ -228,12 +228,12 @@ namespace Orion.Pijama {
 					TimeSpan horafinal;
 					horafinal = dia.GraficoTrabajado.Final.Value;
 					if (horafinal < dia.GraficoTrabajado.Inicio.Value) horafinal = horafinal.Add(new TimeSpan(1, 0, 0, 0));
-					if (horafinal.TotalHours - dia.GraficoTrabajado.Inicio.Value.TotalHours > Convenio.Default.MaxHorasTotalGraficoPartido.TotalHours) {
+					if (horafinal.TotalHours - dia.GraficoTrabajado.Inicio.Value.TotalHours > App.Global.Convenio.MaxHorasTotalGraficoPartido.TotalHours) {
 						resultado += $"Día {dia.Dia:00}: Exceso de horas totales en gráfico partido.\n";
 					}
 					if (dia.GraficoTrabajado.InicioPartido.HasValue && dia.GraficoTrabajado.FinalPartido.HasValue) {
 						if (dia.GraficoTrabajado.FinalPartido.Value.TotalHours - 
-							dia.GraficoTrabajado.InicioPartido.Value.TotalHours > Convenio.Default.MaxHorasParticionGraficoPartido.TotalHours) {
+							dia.GraficoTrabajado.InicioPartido.Value.TotalHours > App.Global.Convenio.MaxHorasParticionGraficoPartido.TotalHours) {
 							resultado += $"Día {dia.Dia:00}: Exceso de tiempo de partición en gráfico partido.\n";
 						}
 					}
@@ -247,7 +247,7 @@ namespace Orion.Pijama {
 					findestrabajados++;
 					sabadotrabajado = true;
 					sabadodescansado = false;
-					if (dia.GraficoTrabajado.Trabajadas > Convenio.Default.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en sábado.\n";
+					if (dia.GraficoTrabajado.Trabajadas > App.Global.Convenio.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en sábado.\n";
 				}
 				// Si un sábado se descansa, se marca como descansado.
 				if (dia.DiaFecha.DayOfWeek == DayOfWeek.Saturday && dia.Grafico <= 0) {
@@ -261,7 +261,7 @@ namespace Orion.Pijama {
 						findestrabajados++;
 					}
 					sabadotrabajado = false;
-					if (dia.GraficoTrabajado.Trabajadas > Convenio.Default.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en domingo.\n";
+					if (dia.GraficoTrabajado.Trabajadas > App.Global.Convenio.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en domingo.\n";
 				}
 				// Si un domingo se descansa...
 				if (dia.DiaFecha.DayOfWeek == DayOfWeek.Sunday && dia.Grafico <= 0) {
@@ -463,7 +463,7 @@ namespace Orion.Pijama {
 				//return Trabajador.Acumuladas +
 				//	   HastaAñoAnterior.HorasAcumuladas +
 				//	   HastaAñoAnterior.HorasReguladas -
-				//	   new TimeSpan(HastaAñoAnterior.DiasLibreDisposicionF6 * Convenio.Default.JornadaMedia.Ticks);
+				//	   new TimeSpan(HastaAñoAnterior.DiasLibreDisposicionF6 * App.Global.Convenio2.JornadaMedia.Ticks);
 				return Trabajador.Acumuladas +
 					   HastaAñoAnterior.HorasAcumuladas +
 					   HastaAñoAnterior.HorasReguladas;
@@ -505,7 +505,7 @@ namespace Orion.Pijama {
 				//return Trabajador.Acumuladas +
 				//	   HastaMesActual.HorasAcumuladas + 
 				//	   HastaMesActual.HorasReguladas -
-				//	   new TimeSpan(HastaMesActual.DiasLibreDisposicionF6 * Convenio.Default.JornadaMedia.Ticks) -
+				//	   new TimeSpan(HastaMesActual.DiasLibreDisposicionF6 * App.Global.Convenio2.JornadaMedia.Ticks) -
 				//	   AcumuladasHastaAñoAnterior;
 				return Trabajador.Acumuladas +
 					   HastaMesActual.HorasAcumuladas +
@@ -547,7 +547,7 @@ namespace Orion.Pijama {
 		public decimal DCsGeneradosHastaAñoAnterior {
 			get {
 				decimal resultado = DCsPendientesHastaAñoAnterior;
-				resultado += (decimal)AcumuladasHastaAñoAnterior.Ticks / Convenio.Default.JornadaMedia.Ticks;
+				resultado += (decimal)AcumuladasHastaAñoAnterior.Ticks / App.Global.Convenio.JornadaMedia.Ticks;
 				return Math.Round(resultado, 2);
 			}
 		}
@@ -559,7 +559,7 @@ namespace Orion.Pijama {
 		public decimal DCsGeneradosHastaMes{
 			get {
 				decimal resultado = DCsPendientesHastaMes;
-				resultado += ((decimal)AcumuladasHastaMes.Ticks + AcumuladasHastaAñoAnterior.Ticks )/ Convenio.Default.JornadaMedia.Ticks;
+				resultado += ((decimal)AcumuladasHastaMes.Ticks + AcumuladasHastaAñoAnterior.Ticks )/ App.Global.Convenio.JornadaMedia.Ticks;
 				return Math.Round(resultado, 2);
 			}
 		}
@@ -879,7 +879,7 @@ namespace Orion.Pijama {
 					return DiasMes - dias;
 				} else {
 					int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-					return Convenio.Default.TrabajoAnuales * (dias - DiasInactivo) / 365m;
+					return App.Global.Convenio.TrabajoAnuales * (dias - DiasInactivo) / 365m;
 				}
 			}
 		}
@@ -896,7 +896,7 @@ namespace Orion.Pijama {
 					return dias;
 				} else {
 					int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-					return Convenio.Default.DescansosAnuales * (dias - DiasInactivo) / 365m;
+					return App.Global.Convenio.DescansosAnuales * (dias - DiasInactivo) / 365m;
 				}
 			}
 		}
@@ -908,7 +908,7 @@ namespace Orion.Pijama {
 		public decimal DiasComputoVacaciones {
 			get {
 				int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-				return Convenio.Default.VacacionesAnuales * (dias - DiasInactivo) / 365m;
+				return App.Global.Convenio.VacacionesAnuales * (dias - DiasInactivo) / 365m;
 			}
 		}
 
@@ -959,7 +959,7 @@ namespace Orion.Pijama {
 		public decimal PlusSabados {
 			get {
 				int sabadosTrabajoNoFestivos = ListaDias.Count(d => (d.Grafico > 0 && !d.EsFestivo) && d.DiaFecha.DayOfWeek == DayOfWeek.Saturday);
-				return sabadosTrabajoNoFestivos * Convenio.Default.ImporteSabados;
+				return sabadosTrabajoNoFestivos * App.Global.Convenio.ImporteSabados;
 			}
 		}
 
@@ -991,7 +991,7 @@ namespace Orion.Pijama {
 		/// </summary>
 		public decimal PlusDomingos {
 			get {
-				return DomingosTrabajados * Convenio.Default.ImporteFestivos;
+				return DomingosTrabajados * App.Global.Convenio.ImporteFestivos;
 			}
 		}
 
@@ -1023,7 +1023,7 @@ namespace Orion.Pijama {
 		/// </summary>
 		public decimal PlusFestivos {
 			get {
-				return FestivosTrabajados * Convenio.Default.ImporteFestivos;
+				return FestivosTrabajados * App.Global.Convenio.ImporteFestivos;
 			}
 		}
 
@@ -1130,7 +1130,7 @@ namespace Orion.Pijama {
 		public decimal TotalDietas {
 			get {
 				if (ListaDias == null) return 0m;
-				return (DietaDesayuno * Convenio.Default.PorcentajeDesayuno / 100) + DietaComida + DietaCena + DietaPlusCena;
+				return (DietaDesayuno * App.Global.Convenio.PorcentajeDesayuno / 100) + DietaComida + DietaCena + DietaPlusCena;
 			}
 		}
 
@@ -1140,7 +1140,7 @@ namespace Orion.Pijama {
 		/// </summary>
 		public decimal ImporteTotalDietas {
 			get {
-				return TotalDietas * Convenio.Default.ImporteDietas;
+				return TotalDietas * App.Global.Convenio.ImporteDietas;
 			}
 		}
 
@@ -1169,11 +1169,11 @@ namespace Orion.Pijama {
 		/// </summary>
 		public decimal PlusLimpieza {
 			get {
-				if (App.Global.PagarLimpiezas == true) {
+				if (App.Global.PorCentro.PagarLimpiezas == true) {
 					if (Trabajador.Indefinido) {
-						return App.Global.NumeroLimpiezas * Convenio.Default.PlusLimpieza;
+						return App.Global.PorCentro.NumeroLimpiezas * App.Global.Convenio.PlusLimpieza;
 					} else {
-						return Trabajo * Convenio.Default.PlusLimpieza;
+						return Trabajo * App.Global.Convenio.PlusLimpieza;
 					}
 				} else {
 					if (ListaDias == null) return 0m;
@@ -1210,7 +1210,7 @@ namespace Orion.Pijama {
 		/// </summary>
 		public decimal PlusViaje {
 			get {
-				if (App.Global.PagarPlusViaje == true) return Trabajo * App.Global.PlusViaje;
+				if (App.Global.PorCentro.PagarPlusViaje == true) return Trabajo * App.Global.PorCentro.PlusViaje;
 				return 0m;
 			}
 		}

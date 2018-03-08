@@ -70,9 +70,9 @@ namespace Orion.ViewModels {
 
 		public void GuardarTodo() {
 			GuardarFestivos();
-			Settings.Default.Save();
-			Convenio.Default.Save();
-			PorCentro.Default.Save();
+			//App.Global.Configuracion.Save();
+			//App.Global.Convenio2.Save();
+			//PorCentro.Default.Save();
 			HayCambios = false;
 		}
 

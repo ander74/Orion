@@ -382,7 +382,7 @@
 
             <!-- CALCULADORA -->
             <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarCalculadora}" Margin="1"
-                    HorizontalContentAlignment="Center">
+                    HorizontalContentAlignment="Center" IsEnabled="{Binding Configuracion.BotonCalculadoraActivo, Mode=TwoWay}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/Calculadora.png" Style="{StaticResource EstiloImagenPequeña}"/>
@@ -554,7 +554,7 @@
 
             <!-- CALCULADORA -->
             <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarCalculadora}" Margin="1"
-                    HorizontalContentAlignment="Center" IsEnabled="{Binding Source={x:Static p:Settings.Default}, Path=BotonCalculadoraActivo, Mode=TwoWay}">
+                    HorizontalContentAlignment="Center" IsEnabled="{Binding Configuracion.BotonCalculadoraActivo, Mode=TwoWay}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/Calculadora.png" Style="{StaticResource EstiloImagenPequeña}"/>

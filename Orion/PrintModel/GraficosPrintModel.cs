@@ -328,7 +328,7 @@ namespace Orion.PrintModel {
 				// Exportamos el libro como PDF.
 				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
 				// SI hay que abrir el PDF, se abre.
-				if (Settings.Default.AbrirPDFs) Process.Start(rutaArchivo);
+				if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaArchivo);
 			} finally {
 				if (Libro != null) Libro.Close(false);
 				if (ExcelApp != null) ExcelApp.Quit();
@@ -402,7 +402,7 @@ namespace Orion.PrintModel {
 				// Exportamos el libro como PDF.
 				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
 				// Si hay que abrir el libro, se abre.
-				if (Settings.Default.AbrirPDFs) Process.Start(rutaArchivo);
+				if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaArchivo);
 			} finally {
 				if (Libro != null) Libro.Close(false);
 				if (ExcelApp != null) ExcelApp.Quit();
@@ -479,7 +479,7 @@ namespace Orion.PrintModel {
 				// Exportamos la hoja como PDF.
 				Hoja.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
 				// Si hay que abrir el libro, se abre.
-				if (Settings.Default.AbrirPDFs) Process.Start(rutaArchivo);
+				if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaArchivo);
 			} finally {
 				if (Libro != null) Libro.Close(false);
 				if (ExcelApp != null) ExcelApp.Quit();
@@ -553,7 +553,7 @@ namespace Orion.PrintModel {
 				// Exportamos el libro como PDF.
 				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
 				// Si hay que abrir el libro, se abre.
-				if (Settings.Default.AbrirPDFs) Process.Start(rutaArchivo);
+				if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaArchivo);
 			} finally {
 				if (Libro != null) Libro.Close(false);
 				if (ExcelApp != null) ExcelApp.Quit();

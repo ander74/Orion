@@ -148,7 +148,7 @@ namespace Orion.Models {
 
 		public decimal TotalDietas {
 			get {
-				return (_desayuno * Convenio.Default.PorcentajeDesayuno / 100m) + Comida + Cena + PlusCena;
+				return (_desayuno * App.Global.Convenio.PorcentajeDesayuno / 100m) + Comida + Cena + PlusCena;
 			}
 		}
 

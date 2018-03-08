@@ -34,7 +34,7 @@ namespace Orion.Views {
 			this.Closing += App.Global.CerrandoVentanaEventHandler;
 
 			// Si hay contraseña de acceso...
-			if (Utils.CodificaTexto("") != Settings.Default.ContraseñaDatos) {
+			if (Utils.CodificaTexto("") != App.Global.Configuracion.ContraseñaDatos) {
 				//Solicitamos la contraseña de acceso a las bases de datos.
 				VentanaContraseña ventana = new VentanaContraseña();
 				ventana.DataContext = App.Global;
@@ -42,18 +42,18 @@ namespace Orion.Views {
 			}
 
 			// Si hay que sincronizar con DropBox, se copian los archivos.
-			if (Settings.Default.SincronizarEnDropbox) Respaldo.SincronizarDropbox();
+			if (App.Global.Configuracion.SincronizarEnDropbox) Respaldo.SincronizarDropbox();
 
 			// Si hay que actualizar el programa, se actualiza.
-			if (Settings.Default.ActualizarPrograma && !string.IsNullOrWhiteSpace(Settings.Default.CarpetaOrigenActualizar)) {
-				string archivoOrigen = Path.Combine(Settings.Default.CarpetaOrigenActualizar, "OrionUpdate.exe");
+			if (App.Global.Configuracion.ActualizarPrograma && !string.IsNullOrWhiteSpace(App.Global.Configuracion.CarpetaOrigenActualizar)) {
+				string archivoOrigen = Path.Combine(App.Global.Configuracion.CarpetaOrigenActualizar, "OrionUpdate.exe");
 				string archivoDestino = Path.Combine(Directory.GetCurrentDirectory(), "OrionUpdate.exe");
 				DateTime origen = File.GetLastWriteTime(archivoOrigen);
 				DateTime destino = File.GetLastWriteTime(archivoDestino);
 				if (origen > destino && File.Exists(archivoOrigen)) {
 					File.Copy(archivoOrigen, archivoDestino, true);
 				}
-				archivoOrigen = Path.Combine(Settings.Default.CarpetaOrigenActualizar, "Orion.exe");
+				archivoOrigen = Path.Combine(App.Global.Configuracion.CarpetaOrigenActualizar, "Orion.exe");
 				archivoDestino = Path.Combine(Directory.GetCurrentDirectory(), "Orion.exe");
 				origen = File.GetLastWriteTime(archivoOrigen);
 				destino = File.GetLastWriteTime(archivoDestino);
@@ -68,7 +68,7 @@ namespace Orion.Views {
 			}
 
 			// Definimos el archivo de base de datos
-			string archivo = Utils.CombinarCarpetas(Settings.Default.CarpetaDatos, "Lineas.accdb");
+			string archivo = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaDatos, "Lineas.accdb");
 			// Si el archivo no existe, pedimos cambiar la carpeta de datos
 			if (!File.Exists(archivo)) {
 				if (MessageBox.Show("La carpeta de datos no está bien definida.\n\n¿Desea elegir otra carpeta?",
@@ -76,41 +76,41 @@ namespace Orion.Views {
 					System.Windows.Forms.FolderBrowserDialog dialogo = new System.Windows.Forms.FolderBrowserDialog();
 					dialogo.Description = "Ubicación Bases de Datos";
 					dialogo.RootFolder = Environment.SpecialFolder.MyComputer;
-					dialogo.SelectedPath = Settings.Default.CarpetaDatos;
+					dialogo.SelectedPath = App.Global.Configuracion.CarpetaDatos;
 					dialogo.ShowNewFolderButton = true;
 					if (dialogo.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-						Settings.Default.CarpetaDatos = dialogo.SelectedPath;
-						Settings.Default.Save();
+						App.Global.Configuracion.CarpetaDatos = dialogo.SelectedPath;
+						App.Global.Configuracion.Guardar(App.Global.ArchivoOpcionesConfiguracion);
 					}
 				} 
 			}
 
 			// Establecemos el DataContext de la ventana.
-			DataContext = App.Global;
+			this.DataContext = App.Global;
 
 			// Activamos el botón de la calculadora.
-			//Settings.Default.BotonCalculadoraActivo = true;
+			//App.Global.Configuracion.BotonCalculadoraActivo = true;
 
 			//Si hay que hacer una copia de seguridad, evaluar si hay que hacerla y si es así, hacerla.
-			if (Settings.Default.CopiaAutomatica > 0 && Settings.Default.UltimaCopia != null) {
-				TimeSpan tiempo = DateTime.Now.Subtract(Settings.Default.UltimaCopia);
-				switch (Settings.Default.CopiaAutomatica) {
+			if (App.Global.Configuracion.CopiaAutomatica > 0 && App.Global.Configuracion.UltimaCopia != null) {
+				TimeSpan tiempo = DateTime.Now.Subtract(App.Global.Configuracion.UltimaCopia);
+				switch (App.Global.Configuracion.CopiaAutomatica) {
 					case 1: // Semanal
 						if (tiempo.TotalDays > 7) {
 							Respaldo.CopiaDatos();
-							Settings.Default.UltimaCopia = DateTime.Now;
+							App.Global.Configuracion.UltimaCopia = DateTime.Now;
 						}
 						break;
 					case 2: // Quincenal
 						if (tiempo.TotalDays > 14) {
 							Respaldo.CopiaDatos();
-							Settings.Default.UltimaCopia = DateTime.Now;
+							App.Global.Configuracion.UltimaCopia = DateTime.Now;
 						}
 						break;
 					case 3: // Mensual
 						if (tiempo.TotalDays > 30) {
 							Respaldo.CopiaDatos();
-							Settings.Default.UltimaCopia = DateTime.Now;
+							App.Global.Configuracion.UltimaCopia = DateTime.Now;
 						}
 						break;
 				}
@@ -123,8 +123,7 @@ namespace Orion.Views {
 		// AL SELECCIONAR UNA PESTAÑA
 		//****************************************************************************************************
 		private void Ribbon_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			PanelAyuda.Visibility = Visibility.Collapsed;
-			
+			App.Global.VisibilidadAyuda = Visibility.Collapsed;
 		}
 
 		//****************************************************************************************************
@@ -169,12 +168,12 @@ namespace Orion.Views {
 		//}
 
 		//// Guardamos las configuraciones.
-		//Settings.Default.Save();
-		//Convenio.Default.Save();
+		//App.Global.Configuracion.Save();
+		//App.Global.Convenio2.Save();
 		//PorCentro.Default.Save();
 
 		//// Si hay que sincronizar con DropBox, se copian los archivos.
-		//if (Settings.Default.SincronizarEnDropbox) Respaldo.SincronizarDropbox();
+		//if (App.Global.Configuracion.SincronizarEnDropbox) Respaldo.SincronizarDropbox();
 
 		//// Intentamos cerrar la calculadora, si existe.
 		//if (App.Calculadora != null) App.Calculadora.Close();

@@ -61,7 +61,7 @@ namespace Orion.DataModels {
 
 						// Establecemos el gráfico a buscar, por si está seleccionado el comodín.
 						int g = dia.Grafico;
-						if (dia.GraficoVinculado != 0 && g == App.Global.Comodin) g = dia.GraficoVinculado;
+						if (dia.GraficoVinculado != 0 && g == App.Global.PorCentro.Comodin) g = dia.GraficoVinculado;
 
 						// Creamos el comando que extrae el gráfico correspondiente.
 						OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
@@ -83,7 +83,7 @@ namespace Orion.DataModels {
 							if (reduccionJornada) {
 								diapijama.Horas = grafico.Trabajadas;
 							} else {
-								diapijama.Horas = grafico.Trabajadas < Convenio.Default.JornadaMedia ? Convenio.Default.JornadaMedia : grafico.Trabajadas;
+								diapijama.Horas = grafico.Trabajadas < App.Global.Convenio.JornadaMedia ? App.Global.Convenio.JornadaMedia : grafico.Trabajadas;
 							}
 							diapijama.Acumuladas = grafico.Acumuladas;
 							diapijama.Nocturnas = grafico.Nocturnas;
@@ -93,27 +93,27 @@ namespace Orion.DataModels {
 							diapijama.PlusCena = grafico?.PlusCena ?? 0m;
 							// Plus Paquetería.
 							if (grafico.PlusPaqueteria) {
-								diapijama.PlusPaqueteria = Convenio.Default.PlusPaqueteria;
+								diapijama.PlusPaqueteria = App.Global.Convenio.PlusPaqueteria;
 							} else {
 								diapijama.PlusPaqueteria = dia.FacturadoPaqueteria * 0.10m; //TODO: Añadir este valor a las opciones.
 							}
 							// Plus Limpieza
 							if (grafico.PlusLimpieza) {
-								diapijama.PlusLimpieza = Convenio.Default.PlusLimpieza;
+								diapijama.PlusLimpieza = App.Global.Convenio.PlusLimpieza;
 							} else {
 								if (dia.Limpieza == null)
-									diapijama.PlusLimpieza = Convenio.Default.PlusLimpieza / 2m; //TODO: Evaluar si se hace así o es un valor fijo.
+									diapijama.PlusLimpieza = App.Global.Convenio.PlusLimpieza / 2m; //TODO: Evaluar si se hace así o es un valor fijo.
 								if (dia.Limpieza == true)
-									diapijama.PlusLimpieza = Convenio.Default.PlusLimpieza;
+									diapijama.PlusLimpieza = App.Global.Convenio.PlusLimpieza;
 							}
 							// Plus Nocturnidad
-							if (grafico.Turno == 3) diapijama.PlusNocturnidad = Convenio.Default.PlusNocturnidad;
+							if (grafico.Turno == 3) diapijama.PlusNocturnidad = App.Global.Convenio.PlusNocturnidad;
 							// Plus Navidad
 							if (grafico.Numero > 0 && diapijama.Fecha.Day == 25 && diapijama.Fecha.Month == 12) {
-								diapijama.PlusNavidad = Convenio.Default.PlusNavidad;
+								diapijama.PlusNavidad = App.Global.Convenio.PlusNavidad;
 							}
 							if (grafico.Numero > 0 && diapijama.Fecha.Day == 1 && diapijama.Fecha.Month == 1) {
-								diapijama.PlusNavidad = Convenio.Default.PlusNavidad;
+								diapijama.PlusNavidad = App.Global.Convenio.PlusNavidad;
 							}
 							// Calculamos la dieta por menor descanso si existe para menos de 12 horas.
 							if (finalAnterior.HasValue && diapijama.Inicio.HasValue) {
@@ -125,7 +125,7 @@ namespace Orion.DataModels {
 								decimal diferenciahoras = (decimal)(inicio - finalAnterior.Value).TotalHours;
 								if (diferenciahoras < 12) {
 									//TODO: Establecer la dieta pijama.
-									diapijama.PlusMenorDescanso = (12 - diferenciahoras) * Convenio.Default.DietaMenorDescanso;
+									diapijama.PlusMenorDescanso = (12 - diferenciahoras) * App.Global.Convenio.DietaMenorDescanso;
 								}
 							}
 
@@ -138,7 +138,7 @@ namespace Orion.DataModels {
 						}
 						lector.Close();
 						// Establecemos las horas si es un permiso.
-						if (dia.Grafico == -9) diapijama.Horas = Convenio.Default.JornadaMedia;
+						if (dia.Grafico == -9) diapijama.Horas = App.Global.Convenio.JornadaMedia;
 
 						// Establecemos el final anterior, si existe.
 						if (diapijama.Final.HasValue) {
@@ -200,7 +200,7 @@ namespace Orion.DataModels {
 						Pijama.DiaPijama diaPijama = new Pijama.DiaPijama(dia);
 						// Establecemos el gráfico a buscar, por si está seleccionado el comodín.
 						int GraficoBusqueda = dia.Grafico;
-						if (dia.GraficoVinculado != 0 && dia.Grafico == App.Global.Comodin) GraficoBusqueda = dia.GraficoVinculado;
+						if (dia.GraficoVinculado != 0 && dia.Grafico == App.Global.PorCentro.Comodin) GraficoBusqueda = dia.GraficoVinculado;
 						// Creamos el comando SQL y añadimos los parámetros
 						OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
 						comando.Parameters.AddWithValue("@Validez", dia.DiaFecha.ToString("yyyy-MM-dd"));

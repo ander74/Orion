@@ -37,8 +37,8 @@ namespace Orion.Views {
 
 		private void Ventana_Closing(object sender, CancelEventArgs e) {
 			// Activamos el botón y guardamos los cambios.
-			Settings.Default.BotonCalculadoraActivo = true;
-			Settings.Default.Save();
+			App.Global.Configuracion.BotonCalculadoraActivo = true;
+			App.Global.Configuracion.Guardar(App.Global.ArchivoOpcionesConfiguracion);
 		}
 	}
 }

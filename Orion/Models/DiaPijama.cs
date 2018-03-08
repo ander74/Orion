@@ -42,7 +42,7 @@ namespace Orion.Models {
 
 		private void CalcularServicio() {
 			TimeSpan trabajadas = Calculos.Horas.Trabajadas(_inicio.Value, _final.Value.Add(ExcesoJornada), _iniciopartido, _finalpartido);
-			if (trabajadas < Convenio.Default.JornadaMedia) trabajadas = Convenio.Default.JornadaMedia;
+			if (trabajadas < App.Global.Convenio.JornadaMedia) trabajadas = App.Global.Convenio.JornadaMedia;
 			TimeSpan acumuladas = Calculos.Horas.Acumuladas(trabajadas);
 			TimeSpan nocturnas = Calculos.Horas.Nocturnas(_inicio.Value, _final.Value.Add(ExcesoJornada), _turno);
 			decimal desayuno = Calculos.Dietas.Desayuno(_inicio.Value, _turno);
@@ -493,7 +493,7 @@ namespace Orion.Models {
 
 		public decimal TotalDietas {
 			get {
-				return (Desayuno * Convenio.Default.PorcentajeDesayuno / 100) + Comida + Cena + PlusCena;
+				return (Desayuno * App.Global.Convenio.PorcentajeDesayuno / 100) + Comida + Cena + PlusCena;
 			}
 		}
 

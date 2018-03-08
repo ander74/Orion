@@ -30,7 +30,7 @@ namespace Orion.Convertidores {
 			if (value == null || !(value is int)) return "";
 			int dias = (int)value;
 			if (dias == 0) return "00";
-			TimeSpan hora = new TimeSpan( dias * Convenio.Default.JornadaMedia.Ticks);
+			TimeSpan hora = new TimeSpan( dias * App.Global.Convenio.JornadaMedia.Ticks);
 			int horas = (int)Math.Truncate(hora.TotalHours);
 			string resultado = dias.ToString("00") + " = -";
 			resultado += horas.ToString("00") + ":" + (hora.Minutes).ToString("00") + " (-" + hora.TotalHours.ToString("0.00") + ")";

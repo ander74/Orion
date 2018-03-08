@@ -40,7 +40,6 @@ namespace Orion.Convertidores {
 			DateTime fecha = new DateTime(f.Year, f.Month, dia);
 
 			// Definimos las variables necesarias
-			ConvertidorColores cnv = new ConvertidorColores();
 			bool esfinde = false;
 
 			// Evaluamos el color a elegir
@@ -59,24 +58,24 @@ namespace Orion.Convertidores {
 			if (!esfinde) {
 				switch (grafico) {
 					case -1:
-						color = new SolidColorBrush((System.Windows.Media.Color)cnv.Convert(Properties.Settings.Default.ColorOV, null, null, null)); break;
+						color = new SolidColorBrush(App.Global.Configuracion.ColorOV); break;
 					case -2: case -3:
-						color = new SolidColorBrush((System.Windows.Media.Color)cnv.Convert(Properties.Settings.Default.ColorJD, null, null, null)); break;
+						color = new SolidColorBrush(App.Global.Configuracion.ColorJD); break;
 					case -4:
-						color = new SolidColorBrush((System.Windows.Media.Color)cnv.Convert(Properties.Settings.Default.ColorE, null, null, null)); break;
+						color = new SolidColorBrush(App.Global.Configuracion.ColorE); break;
 					case -5:
-						color = new SolidColorBrush((System.Windows.Media.Color)cnv.Convert(Properties.Settings.Default.ColorDS, null, null, null)); break;
+						color = new SolidColorBrush(App.Global.Configuracion.ColorDS); break;
 					case -6:
-						color = new SolidColorBrush((System.Windows.Media.Color)cnv.Convert(Properties.Settings.Default.ColorDC, null, null, null)); break;
+						color = new SolidColorBrush(App.Global.Configuracion.ColorDC); break;
 					case -7:
-						color = new SolidColorBrush((System.Windows.Media.Color)cnv.Convert(Properties.Settings.Default.ColorF6, null, null, null)); break;
+						color = new SolidColorBrush(App.Global.Configuracion.ColorF6); break;
 					case -8:
-						color = new SolidColorBrush((System.Windows.Media.Color)cnv.Convert(Properties.Settings.Default.ColorF6, null, null, null)); break;
+						color = new SolidColorBrush(App.Global.Configuracion.ColorF6); break;
 					case -9:
-						color = new SolidColorBrush((System.Windows.Media.Color)cnv.Convert(Properties.Settings.Default.ColorJD, null, null, null)); break;
+						color = new SolidColorBrush(App.Global.Configuracion.ColorJD); break;
 				}
 			}
-			if (codigo == 3) color = new SolidColorBrush((System.Windows.Media.Color)cnv.Convert(Properties.Settings.Default.ColorJD, null, null, null));
+			if (codigo == 3) color = new SolidColorBrush(App.Global.Configuracion.ColorJD);
 
 			// Devolvemos el color.
 			return color;
@@ -97,9 +96,6 @@ namespace Orion.Convertidores {
 			// Establecemos ĺa fecha del día.
 			if (value == null || !(value is DateTime)) return color;
 			DateTime f = (DateTime)value;
-
-			// Definimos las variables necesarias
-			ConvertidorColores cnv = new ConvertidorColores();
 
 			// Evaluamos el color a elegir
 			switch (f.DayOfWeek) {

@@ -98,7 +98,7 @@ namespace Orion.ViewModels
 
 		// Se puede ejecutar
 		private bool SePuedeAceptar(object parametro) {
-			if (HorasDisponibles <= Convenio.Default.JornadaMedia) return false;
+			if (HorasDisponibles <= App.Global.Convenio.JornadaMedia) return false;
 			return true;
 		}
 
@@ -223,14 +223,14 @@ namespace Orion.ViewModels
 
 		public int DescansosGenerados {
 			get {
-				return (int)Math.Truncate(HorasDisponibles.ToDecimal() / Convenio.Default.JornadaMedia.ToDecimal());
+				return (int)Math.Truncate(HorasDisponibles.ToDecimal() / App.Global.Convenio.JornadaMedia.ToDecimal());
 			}
 		}
 
 
 		public TimeSpan HorasARegular {
 			get {
-				return new TimeSpan(DescansosGenerados * Convenio.Default.JornadaMedia.Ticks);
+				return new TimeSpan(DescansosGenerados * App.Global.Convenio.JornadaMedia.Ticks);
 			}
 		}
 

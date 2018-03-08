@@ -41,19 +41,14 @@ namespace Orion.ViewModels {
 		private ICommand _cmdcalculartabla;
 		private ICommand _cmdborrarceldas;
 		private ICommand _cmdborrarceldasvaloracion;
-		private ICommand _cmdactivartablagraficos;
 		private ICommand _cmdfijarpanelgrupos;
 		private ICommand _cmdfijarpanelvaloraciones;
-		private ICommand _cmdseleccionargrupo;
-		private ICommand _cmdseleccionarcelda;
-		private ICommand _cmdseleccionarceldavaloracion;
 		private ICommand _cmdborrargrupo;
 		private ICommand _cmdquitarfiltro;
 		private ICommand _cmdpegargraficos;
 		private ICommand _cmdborrarvaloracion;
 		private ICommand _cmddeshacerborrarvaloraciones;
 		private ICommand _cmdcalcularvaloraciones;
-		private ICommand _cmdeditarcelda;
 		private ICommand _cmdnuevogrupo;
 		private ICommand _cmdcomparargrupo;
 		private ICommand _cmdañadirvaloracion;
@@ -444,26 +439,26 @@ namespace Orion.ViewModels {
 			int al = 0;
 			switch (filtro) {
 				case "LunJue":
-					del = (int)PorCentro.Default[$"LunDel{App.Global.CentroActual.ToString()}"];
-					al = (int)PorCentro.Default[$"LunAl{App.Global.CentroActual.ToString()}"];
+					del = App.Global.PorCentro.LunDel;
+					al = App.Global.PorCentro.LunAl;
 					VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
 					TextoFiltros = "Lunes a Jueves";
 					break;
 				case "Vie":
-					del = (int)PorCentro.Default[$"VieDel{App.Global.CentroActual.ToString()}"];
-					al = (int)PorCentro.Default[$"VieAl{App.Global.CentroActual.ToString()}"];
+					del = App.Global.PorCentro.VieDel;
+					al = App.Global.PorCentro.VieAl;
 					VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
 					TextoFiltros = "Viernes";
 					break;
 				case "Sab":
-					del = (int)PorCentro.Default[$"SabDel{App.Global.CentroActual.ToString()}"];
-					al = (int)PorCentro.Default[$"SabAl{App.Global.CentroActual.ToString()}"];
+					del = App.Global.PorCentro.SabDel;
+					al = App.Global.PorCentro.SabAl;
 					VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
 					TextoFiltros = "Sábados";
 					break;
 				case "Fes":
-					del = (int)PorCentro.Default[$"DomDel{App.Global.CentroActual.ToString()}"];
-					al = (int)PorCentro.Default[$"DomAl{App.Global.CentroActual.ToString()}"];
+					del = App.Global.PorCentro.DomDel;
+					al = App.Global.PorCentro.DomAl;
 					VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
 					TextoFiltros = "Domingos y Festivos";
 					break;
@@ -1013,7 +1008,7 @@ namespace Orion.ViewModels {
 			try {
 				if (ListaGraficos.Count == 0) return;
 				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(Settings.Default.CarpetaInformes, "Graficos");
+				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos");
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
 				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
 				dialogo.FileName = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1}", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
@@ -1025,7 +1020,7 @@ namespace Orion.ViewModels {
 				App.Global.VisibilidadProgreso = Visibility.Visible;
 				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
 					GraficosPrintModel.CrearGraficosEnPdf(VistaGraficos, GrupoSeleccionado.Validez, dialogo.FileName);
-					if (Settings.Default.AbrirPDFs) Process.Start(dialogo.FileName);
+					if (App.Global.Configuracion.AbrirPDFs) Process.Start(dialogo.FileName);
 				}
 			} catch (Exception ex) {
 				_mensajeProvider.VerError("GraficosCommands.GraficosEnPDF", ex);
@@ -1058,7 +1053,7 @@ namespace Orion.ViewModels {
 			try {
 				if (ListaGraficos.Count == 0) return;
 				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(Settings.Default.CarpetaInformes, "Graficos");
+				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos");
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
 				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
 				dialogo.FileName = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1} (Individuales)", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
@@ -1096,7 +1091,7 @@ namespace Orion.ViewModels {
 
 			if (VistaGrupos == null) return;
 
-			if (Settings.Default.SoloAñoActualEnGruposGraficos) {
+			if (App.Global.Configuracion.SoloAñoActualEnGruposGraficos) {
 				VistaGrupos.Filter = (g) => { return (g as GrupoGraficos).Validez.Year == DateTime.Now.Year; };
 			} else {
 				VistaGrupos.Filter = null;
@@ -1126,7 +1121,7 @@ namespace Orion.ViewModels {
 				if (VistaGraficos?.Count == 0) return;
 				SaveFileDialog dialogo = new SaveFileDialog();
 				dialogo.RestoreDirectory = false;
-				string ruta = Path.Combine(Settings.Default.CarpetaInformes, "Graficos");
+				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos");
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
 				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
 				dialogo.FileName = String.Format("Estadisticas Gráficos {0:yyyy}-{0:MM}-{0:dd} - {1}", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
@@ -1171,7 +1166,7 @@ namespace Orion.ViewModels {
 			try {
 				if (VistaGraficos?.Count == 0) return;
 				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(Settings.Default.CarpetaInformes, "Graficos");
+				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos");
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
 				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
 				dialogo.FileName = String.Format("Estadisticas Gráficos - {0}", App.Global.CentroActual.ToString());
@@ -1210,7 +1205,7 @@ namespace Orion.ViewModels {
 		private void EstadisticasGraficosPorCentros() {
 			try {
 				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(Settings.Default.CarpetaInformes, "Graficos");
+				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos");
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
 				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
 				dialogo.FileName = String.Format("Estadisticas Gráficos Por Centros");

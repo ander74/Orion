@@ -67,6 +67,11 @@ namespace OrionUpdate {
 					return;
 				}
 
+				if (!CopiarArchivoRaiz("Newtonsoft.Json.dll")) {
+					GenerarError();
+					return;
+				}
+
 				// CONFIGURACION
 				if (!CopiarArchivoRaiz("Orion.exe.config")) {
 					GenerarError();
@@ -157,7 +162,7 @@ namespace OrionUpdate {
 				File.Copy(archivoOrigen, archivoDestino, true);
 			} catch (Exception ex) {
 				Console.ForegroundColor = ConsoleColor.Red;
-				Console.WriteLine("ERROR");
+				Console.WriteLine($"ERROR => {ex.Message}");
 				return false;
 			}
 			Console.ForegroundColor = ConsoleColor.Green;

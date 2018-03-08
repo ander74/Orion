@@ -157,6 +157,20 @@
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
+            <!--BOTON FORMATEAR NOMBRES-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding ConductoresVM.cmdTextoMinusculas}"
+                    ToolTip="Pone los nombres y apellidos en minúsculas, manteniendo en mayúscula sólo la primera letra.">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/TextoMinusculas.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Formatear Nombres" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
         </StackPanel>
 
         <!-- ==================================================================================================== -->
@@ -166,7 +180,7 @@
 
             <!-- AYUDA -->
             <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarAyuda}" CommandParameter="Conductores" Margin="1"
-                    HorizontalContentAlignment="Center" IsEnabled="{Binding Source={x:Static p:Settings.Default}, Path=BotonCalculadoraActivo, Mode=TwoWay}">
+                    HorizontalContentAlignment="Center">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/Ayuda.png" Style="{StaticResource EstiloImagenPequeña}"/>
@@ -177,7 +191,7 @@
 
             <!-- CALCULADORA -->
             <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarCalculadora}" Margin="1"
-                    HorizontalContentAlignment="Center">
+                    HorizontalContentAlignment="Center"  IsEnabled="{Binding Configuracion.BotonCalculadoraActivo, Mode=TwoWay}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/Calculadora.png" Style="{StaticResource EstiloImagenPequeña}"/>

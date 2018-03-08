@@ -60,7 +60,7 @@ namespace Orion.PrintModel {
 				// Exportamos el libro como PDF.
 				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, ruta);
 				// Si hay que abrir el PDF, se abre.
-				if (Settings.Default.AbrirPDFs) Process.Start(ruta);
+				if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
 			} finally {
 				if (Libro != null) Libro.Close(false);
 				if (ExcelApp != null) ExcelApp.Quit();

@@ -64,7 +64,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Orion.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
@@ -85,23 +91,23 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.DataGrid, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    <Reference Include="Xceed.Wpf.DataGrid, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
     </Reference>
-    <Reference Include="Xceed.Wpf.Toolkit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Extended.Wpf.Toolkit.3.2.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    <Reference Include="Xceed.Wpf.Toolkit, Version=3.3.0.0, Culture=neutral, PublicKeyToken=3e4669d2f30244f4, processorArchitecture=MSIL">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.3.3.0\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -111,17 +117,11 @@
     </ApplicationDefinition>
     <Compile Include="Config\DBUtils.cs" />
     <Compile Include="Config\GestionGraficos.cs" />
-    <Compile Include="Convenio.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>Convenio.settings</DependentUpon>
-    </Compile>
     <Compile Include="Convertidores\ConvertidorMinutosToHora.cs" />
     <Compile Include="Convertidores\ConvertidorMinutosToHoraMixta.cs" />
     <Compile Include="Convertidores\ConvertidorVisibilityInverter.cs" />
     <Compile Include="Convertidores\ConvertidorColorDia.cs" />
     <Compile Include="Convertidores\ConvertidorColorDiaPijama.cs" />
-    <Compile Include="Convertidores\ConvertidorColores.cs" />
     <Compile Include="Convertidores\ConvertidorDecimalEuro.cs" />
     <Compile Include="Convertidores\ConvertidorDiasF6.cs" />
     <Compile Include="Convertidores\ConvertidorNegritaDia.cs" />
@@ -153,6 +153,8 @@
     <Compile Include="DataModels\ProcSQL.cs" />
     <Compile Include="DataModels\Respaldo.cs" />
     <Compile Include="Extensiones.cs" />
+    <Compile Include="Models\OpcionesConfiguracion.cs" />
+    <Compile Include="Models\OpcionesConvenio.cs" />
     <Compile Include="Models\DiaCalendario.cs" />
     <Compile Include="Models\DiaCalendarioBase.cs" />
     <Compile Include="Models\DiaPijama.cs" />
@@ -169,17 +171,13 @@
     <Compile Include="Models\Itinerario.cs" />
     <Compile Include="Models\Linea.cs" />
     <Compile Include="Models\Parada.cs" />
+    <Compile Include="Models\OpcionesPorCentro.cs" />
     <Compile Include="Models\RegulacionConductor.cs" />
     <Compile Include="Models\ValoracionGrafico.cs" />
     <Compile Include="Pijama\BdPijamas.cs" />
     <Compile Include="Pijama\DiaPijama.cs" />
     <Compile Include="Pijama\HojaPijama.cs" />
     <Compile Include="Pijama\ResumenPijama.cs" />
-    <Compile Include="PorCentro.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>PorCentro.settings</DependentUpon>
-    </Compile>
     <Compile Include="PrintModel\CalendarioPrintModel.cs" />
     <Compile Include="PrintModel\GraficosPrintModel.cs" />
     <Compile Include="PrintModel\PijamaPrintModel.cs" />
@@ -386,16 +384,8 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="Convenio.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Convenio.Designer.cs</LastGenOutput>
-    </None>
     <None Include="Orion.licenseheader" />
     <None Include="packages.config" />
-    <None Include="PorCentro.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>PorCentro.Designer.cs</LastGenOutput>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -642,6 +632,13 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Imagenes\Reclamar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\TextoMinusculas.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Exportar.png" />
+    <Resource Include="Views\Imagenes\Importar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -194,9 +194,9 @@ namespace Orion.Models {
 				// EXCESO DE HORAS TRABAJADAS EN LABORABLES Y FESTIVOS
 				if (dia.Fecha.DayOfWeek != DayOfWeek.Saturday && dia.Fecha.DayOfWeek != DayOfWeek.Sunday) {
 					if (ListaFestivos.Count(x => x.Fecha.Ticks == dia.Fecha.Ticks) > 0) {
-						if (dia.Horas > Convenio.Default.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en festivo.\n";
+						if (dia.Horas > App.Global.Convenio.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en festivo.\n";
 					} else {
-						if (dia.Horas > Convenio.Default.MaxHorasLaborables) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en laborable.\n";
+						if (dia.Horas > App.Global.Convenio.MaxHorasLaborables) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en laborable.\n";
 					}
 				}
 
@@ -205,11 +205,11 @@ namespace Orion.Models {
 					TimeSpan horafinal;
 					horafinal = dia.Final.Value;
 					if (horafinal < dia.Inicio.Value) horafinal = horafinal.Add(new TimeSpan(1, 0, 0, 0));
-					if (horafinal.TotalHours - dia.Inicio.Value.TotalHours > Convenio.Default.MaxHorasTotalGraficoPartido.TotalHours) {
+					if (horafinal.TotalHours - dia.Inicio.Value.TotalHours > App.Global.Convenio.MaxHorasTotalGraficoPartido.TotalHours) {
 						resultado += $"Día {dia.Dia:00}: Exceso de horas totales en gráfico partido.\n";
 					}
 					if (dia.InicioPartido.HasValue && dia.FinalPartido.HasValue) {
-						if (dia.FinalPartido.Value.TotalHours - dia.InicioPartido.Value.TotalHours > Convenio.Default.MaxHorasParticionGraficoPartido.TotalHours) {
+						if (dia.FinalPartido.Value.TotalHours - dia.InicioPartido.Value.TotalHours > App.Global.Convenio.MaxHorasParticionGraficoPartido.TotalHours) {
 							resultado += $"Día {dia.Dia:00}: Exceso de tiempo de partición en gráfico partido.\n";
 						}
 					}
@@ -223,7 +223,7 @@ namespace Orion.Models {
 					findestrabajados++;
 					sabadotrabajado = true;
 					sabadodescansado = false;
-					if (dia.Horas > Convenio.Default.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en sábado.\n";
+					if (dia.Horas > App.Global.Convenio.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en sábado.\n";
 				}
 					// Si un sábado se descansa, se marca como descansado.
 					if (dia.Fecha.DayOfWeek == DayOfWeek.Saturday && dia.Grafico <= 0) {
@@ -237,7 +237,7 @@ namespace Orion.Models {
 						findestrabajados++;
 					}
 					sabadotrabajado = false;
-					if (dia.Horas > Convenio.Default.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en domingo.\n";
+					if (dia.Horas > App.Global.Convenio.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en domingo.\n";
 				}
 				// Si un domingo se descansa...
 				if (dia.Fecha.DayOfWeek == DayOfWeek.Sunday && dia.Grafico <= 0) {
@@ -503,7 +503,7 @@ namespace Orion.Models {
 			get {
 				if (Trabajador == null) return new TimeSpan(0);
 				return HastaAñoAnterior.Acumuladas + HastaAñoAnterior.Reguladas + Trabajador.Acumuladas -
-					   (new TimeSpan(Convenio.Default.JornadaMedia.Ticks * HastaAñoAnterior.DiasF6)) - HorasReguladasAño;
+					   (new TimeSpan(App.Global.Convenio.JornadaMedia.Ticks * HastaAñoAnterior.DiasF6)) - HorasReguladasAño;
 			}
 		}
 
@@ -512,7 +512,7 @@ namespace Orion.Models {
 			get {
 				if (Trabajador == null) return new TimeSpan(0);
 				return HastaMesActual.Acumuladas + HastaMesActual.Reguladas + Trabajador.Acumuladas - 
-					   (new TimeSpan(Convenio.Default.JornadaMedia.Ticks * HastaMesActual.DiasF6)) - TotalHorasHastaAñoAnterior;
+					   (new TimeSpan(App.Global.Convenio.JornadaMedia.Ticks * HastaMesActual.DiasF6)) - TotalHorasHastaAñoAnterior;
 			}
 		}
 
@@ -642,9 +642,9 @@ namespace Orion.Models {
 					return String.Format("(Tra. {0:0.00} | Des. {1:0.00} | Vac. {2:0.00})", TotalDias - dias, dias, 0); //TODO: Establecer las vacaciones.
 				} else {
 					int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-					decimal trabajados = Convenio.Default.TrabajoAnuales * (dias - DiasInactivos) / 365m;
-					decimal descansos = Convenio.Default.DescansosAnuales * (dias - DiasInactivos) / 365m;
-					decimal vacaciones = Convenio.Default.VacacionesAnuales * (dias - DiasInactivos) / 365m;
+					decimal trabajados = App.Global.Convenio.TrabajoAnuales * (dias - DiasInactivos) / 365m;
+					decimal descansos = App.Global.Convenio.DescansosAnuales * (dias - DiasInactivos) / 365m;
+					decimal vacaciones = App.Global.Convenio.VacacionesAnuales * (dias - DiasInactivos) / 365m;
 					return String.Format("(Tra. {0:0.00} | Des. {1:0.00} | Vac. {2:0.00})", trabajados, descansos, vacaciones);
 				}
 			}
@@ -659,7 +659,7 @@ namespace Orion.Models {
 					return TotalDias - dias;
 				} else {
 					int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-					return Convenio.Default.TrabajoAnuales * (dias - DiasInactivos) / 365m;
+					return App.Global.Convenio.TrabajoAnuales * (dias - DiasInactivos) / 365m;
 				}
 			}
 		}
@@ -673,7 +673,7 @@ namespace Orion.Models {
 					return dias;
 				} else {
 					int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-					return Convenio.Default.DescansosAnuales * (dias - DiasInactivos) / 365m;
+					return App.Global.Convenio.DescansosAnuales * (dias - DiasInactivos) / 365m;
 				}
 			}
 		}
@@ -687,7 +687,7 @@ namespace Orion.Models {
 				//	return 0; //TODO: Establecer las vacaciones.
 				//} else {
 				int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-				return Convenio.Default.VacacionesAnuales * (dias - DiasInactivos) / 365m;
+				return App.Global.Convenio.VacacionesAnuales * (dias - DiasInactivos) / 365m;
 				//}
 			}
 		}
@@ -919,7 +919,7 @@ namespace Orion.Models {
 		public decimal ImporteSabados {
 			get {
 				int sabadosTrabajoNoFestivos = ListaDias.Count(d => (d.Grafico > 0 && !d.EsFestivo) && d.Fecha.DayOfWeek == DayOfWeek.Saturday);
-				return sabadosTrabajoNoFestivos * Convenio.Default.ImporteSabados;
+				return sabadosTrabajoNoFestivos * App.Global.Convenio.ImporteSabados;
 			}
 		}
 
@@ -934,7 +934,7 @@ namespace Orion.Models {
 
 		public decimal ImporteDomingos {
 			get {
-				return DomingosTrabajados * Convenio.Default.ImporteFestivos;
+				return DomingosTrabajados * App.Global.Convenio.ImporteFestivos;
 			}
 		}
 
@@ -949,7 +949,7 @@ namespace Orion.Models {
 
 		public decimal ImporteFestivos {
 			get {
-				return FestivosTrabajados * Convenio.Default.ImporteFestivos;
+				return FestivosTrabajados * App.Global.Convenio.ImporteFestivos;
 			}
 		}
 
@@ -1017,11 +1017,11 @@ namespace Orion.Models {
 
 		public decimal PlusLimpieza {
 			get {
-				if (App.Global.PagarLimpiezas == true) {
+				if (App.Global.PorCentro.PagarLimpiezas == true) {
 					if (Trabajador.Indefinido) {
-						return App.Global.NumeroLimpiezas * Convenio.Default.PlusLimpieza;
+						return App.Global.PorCentro.NumeroLimpiezas * App.Global.Convenio.PlusLimpieza;
 					} else {
-						return DiasTrabajados * Convenio.Default.PlusLimpieza;
+						return DiasTrabajados * App.Global.Convenio.PlusLimpieza;
 					}
 				} else {
 					if (ListaDias == null) return 0m;
@@ -1033,7 +1033,7 @@ namespace Orion.Models {
 
 		public decimal PlusViaje {
 			get {
-				if (App.Global.PagarPlusViaje == true) return DiasTrabajados * App.Global.PlusViaje;
+				if (App.Global.PorCentro.PagarPlusViaje == true) return DiasTrabajados * App.Global.PorCentro.PlusViaje;
 				return 0m;
 			}
 		}
@@ -1065,14 +1065,14 @@ namespace Orion.Models {
 		public decimal TotalDietas {
 			get {
 				if (ListaDias == null) return 0m;
-				return (DietaDesayuno * Convenio.Default.PorcentajeDesayuno / 100) + DietaComida + DietaCena + DietaPlusCena;
+				return (DietaDesayuno * App.Global.Convenio.PorcentajeDesayuno / 100) + DietaComida + DietaCena + DietaPlusCena;
 			}
 		}
 
 
 		public decimal ImporteDietas {
 			get {
-				return TotalDietas * Convenio.Default.ImporteDietas;
+				return TotalDietas * App.Global.Convenio.ImporteDietas;
 			}
 		}
 

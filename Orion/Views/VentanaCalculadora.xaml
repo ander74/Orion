@@ -14,8 +14,8 @@
         mc:Ignorable="d" x:Name="Ventana" Background="{StaticResource DegradadoCeleste1}"
         WindowStyle="ToolWindow" WindowState="Normal" Topmost="True"
         Closing="Ventana_Closing"
-        Top="{Binding Source={x:Static p:Settings.Default}, Path=TopCalculadora, Mode=TwoWay}"
-        Left="{Binding Source={x:Static p:Settings.Default}, Path=LeftCalculadora, Mode=TwoWay}"
+        Top="{Binding Configuracion.TopCalculadora, Mode=TwoWay}"
+        Left="{Binding Configuracion.LeftCalculadora, Mode=TwoWay}"
         Title="Calculadora de Horas" Height="400" Width="300">
 
     <Window.Resources>

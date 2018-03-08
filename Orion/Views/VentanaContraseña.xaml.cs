@@ -33,7 +33,7 @@ namespace Orion.Views {
 		}
 
 		private void BtAceptar_Click(object sender, RoutedEventArgs e) {
-			if (Utils.CodificaTexto(PwContraseña.Password) != Settings.Default.ContraseñaDatos) {
+			if (Utils.CodificaTexto(PwContraseña.Password) != App.Global.Configuracion.ContraseñaDatos) {
 				TxtMensajeError.Text = "Contraseña incorrecta.";
 				PwContraseña.Focus();
 			} else {

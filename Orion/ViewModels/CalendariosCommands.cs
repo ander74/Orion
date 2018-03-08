@@ -41,13 +41,11 @@ namespace Orion.ViewModels {
 		private ICommand _cmdavanzames;
 		private ICommand _cmdborrarcalendario;
 		private ICommand _cmddeshacerborrar;
-		private ICommand _cmdseleccionarcelda;
 		private ICommand _cmdborrarceldas;
 		private ICommand _cmdquitarfiltro;
 		private ICommand _cmdpegarcalendarios;
 		private ICommand _cmdabrirpijama;
 		private ICommand _cmdcerrarpijama;
-		private ICommand _cmdseleccionartodo;
 		#endregion
 		//====================================================================================================
 
@@ -402,7 +400,7 @@ namespace Orion.ViewModels {
 
 			try {
 				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(Settings.Default.CarpetaInformes, "Hojas Pijama");
+				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Hojas Pijama");
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
 				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
 				dialogo.FileName = String.Format("{0:yyyy}-{0:MM} - {1}.pdf", FechaActual, Pijama.TextoTrabajador).Replace(":", "");
@@ -444,7 +442,7 @@ namespace Orion.ViewModels {
 			try {
 				if (VistaCalendarios.Count == 0) return;
 				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(Settings.Default.CarpetaInformes, "Hojas Pijama");
+				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Hojas Pijama");
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
 				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
 				dialogo.FileName = String.Format("{0:yyyy}-{0:MM}", FechaActual);
@@ -571,7 +569,7 @@ namespace Orion.ViewModels {
 		private bool PuedeRegularHoras() {
 			if (CalendarioSeleccionado == null) return false;
 			if (Pijama == null) return false;
-			if ((Pijama.AcumuladasHastaAñoAnterior) < Convenio.Default.JornadaMedia) return false;
+			if ((Pijama.AcumuladasHastaAñoAnterior) < App.Global.Convenio.JornadaMedia) return false;
 			return true;
 		}
 
@@ -582,8 +580,8 @@ namespace Orion.ViewModels {
 
 			int diasmes = DateTime.DaysInMonth(Pijama.Fecha.Year, Pijama.Fecha.Month);
 			TimeSpan horasdisponibles = Pijama.AcumuladasHastaAñoAnterior;
-			TimeSpan resto = new TimeSpan(horasdisponibles.Ticks % Convenio.Default.JornadaMedia.Ticks);
-			decimal dcs = (horasdisponibles - resto).ToDecimal() / Convenio.Default.JornadaMedia.ToDecimal();
+			TimeSpan resto = new TimeSpan(horasdisponibles.Ticks % App.Global.Convenio.JornadaMedia.Ticks);
+			decimal dcs = (horasdisponibles - resto).ToDecimal() / App.Global.Convenio.JornadaMedia.ToDecimal();
 			string usadas = (string)cnvSuperHoraMixta.Convert(horasdisponibles - resto, null, null, null);
 			string restantes = (string)cnvSuperHoraMixta.Convert(resto, null, null, null);
 			string disponibles = (string)cnvSuperHoraMixta.Convert(horasdisponibles, null, null, null);
@@ -691,7 +689,7 @@ namespace Orion.ViewModels {
 			try {
 				if (VistaCalendarios.Count == 0) return;
 				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(Settings.Default.CarpetaInformes, "Calendarios");
+				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios");
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
 				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
 				dialogo.FileName = String.Format("{0:yyyy}-{0:MM} - {1}", FechaActual, App.Global.CentroActual.ToString());
@@ -736,7 +734,7 @@ namespace Orion.ViewModels {
 			try {
 				if (VistaCalendarios.Count == 0) return;
 				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(Settings.Default.CarpetaInformes, "Calendarios");
+				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios");
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
 				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
 				dialogo.FileName = String.Format("{0:yyyy}-{0:MM} - {1} - Fallos", FechaActual, App.Global.CentroActual.ToString());
@@ -1156,7 +1154,7 @@ namespace Orion.ViewModels {
 
 			try {
 				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(Settings.Default.CarpetaInformes, "Reclamaciones");
+				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Reclamaciones");
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
 				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
 				dialogo.FileName = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}", Pijama.Fecha, Pijama.Trabajador.Id);

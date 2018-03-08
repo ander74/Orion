@@ -10,6 +10,7 @@ using Orion.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -28,14 +29,10 @@ namespace Orion.ViewModels {
 		private ICommand _cmdborrarconductor;
 		private ICommand _cmddeshacerborrar;
 		private ICommand _cmdborrarceldas;
-		private ICommand _cmdactivartablaconductores;
-		private ICommand _cmdseleccionarcelda;
-		private ICommand _cmdseleccionarceldaregulacion;
 		private ICommand _cmdquitarfiltro;
 		private ICommand _cmdpegarconductores;
 		private ICommand _cmdborrarregulacion;
 		private ICommand _cmddeshacerborrarregulaciones;
-		private ICommand _cmddobleclic;
 		private ICommand _cmdactualizarlista;
 		#endregion
 		//====================================================================================================
@@ -438,6 +435,34 @@ namespace Orion.ViewModels {
 		}
 		#endregion
 
+
+		#region TEXTOMINUSCULAS
+
+		// Comando
+		private ICommand _cmdtextominusculas;
+		public ICommand cmdTextoMinusculas {
+			get {
+				if (_cmdtextominusculas == null) _cmdtextominusculas = new RelayCommand(p => TextoMinusculas(), p => PuedeTextoMinusculas());
+				return _cmdtextominusculas;
+			}
+		}
+
+
+		// Se puede ejecutar el comando
+		private bool PuedeTextoMinusculas() {
+			return ListaConductores != null && ListaConductores.Count > 0;
+		}
+
+		// Ejecución del comando
+		private void TextoMinusculas() {
+			foreach (Conductor c in ListaConductores) {
+				string nombre = c.Nombre.ToLower();
+				string apellidos = c.Apellidos.ToLower();
+				c.Nombre = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nombre);
+				c.Apellidos = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(apellidos);
+			}
+		}
+		#endregion
 
 
 
