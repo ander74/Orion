@@ -10,40 +10,49 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Orion.Views"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
         Title="ERROR" Height="440" Width="600">
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
 
-        <!-- VENTANA DE ERROR -->
-        <StackPanel Grid.Row="0" Orientation="Vertical">
-            
-            <!-- TÍTULO -->
-            <StackPanel Orientation="Horizontal" Background="IndianRed" Margin="0,0,0,10">
-                <Image Source="Imagenes/Error.png" Height="40" Margin="10"/>
-                <TextBlock FontSize="24" FontWeight="Bold" Margin="10" Foreground="WhiteSmoke"
+    <Border Background="White" CornerRadius="15" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20">
+
+        <Border.BitmapEffect>
+            <DropShadowBitmapEffect Color="LightGray" Direction="-50" ShadowDepth="10" Softness=".7" />
+        </Border.BitmapEffect>
+
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- VENTANA DE ERROR -->
+            <StackPanel Grid.Row="0" Orientation="Vertical">
+
+                <!-- TÍTULO -->
+                <Border Background="IndianRed" MouseDown="Border_MouseDown" CornerRadius="15,15,0,0">
+                    <StackPanel Orientation="Horizontal" Margin="10">
+                        <Image Source="Imagenes/Error.png" Height="40"/>
+                        <TextBlock FontSize="24" FontWeight="Bold" Margin="15,3,0,0" Foreground="WhiteSmoke"
                            Text="Se ha producido un error."/>
-            </StackPanel>
-            
-            <!-- LOCALIZACIÓN DEL ERROR -->
-            <TextBlock FontSize="16" FontWeight="DemiBold" Margin="10,5,10,10" Text="Localización del error"/>
-            <TextBox x:Name="TbLocalizacion" FontSize="14" Margin="10,0,10,10" BorderThickness="1" BorderBrush="DarkGray" 
-                     IsReadOnly="True" TextWrapping="Wrap" Padding="5" Height="32"/>
-            
-            <!-- DESCRIPCIÓN DEL ERROR -->
-            <TextBlock FontSize="16" FontWeight="DemiBold" Margin="10" Text="Descripción del error"/>
-            <TextBox x:Name="TbDescripcion" FontSize="14" Margin="10,0,10,10" BorderThickness="1" BorderBrush="DarkGray"
-                     IsReadOnly="True" TextWrapping="Wrap" Padding="5" Height="160"/>
-        </StackPanel>
+                    </StackPanel>
+                </Border>
 
-        <!-- BOTÓN DE ACEPTAR -->
-        <Button Grid.Row="1" HorizontalAlignment="Right" Margin="10" Padding="16,8" Content="Aceptar" Width="80" FontSize="12"
+                <!-- LOCALIZACIÓN DEL ERROR -->
+                <TextBlock FontSize="16" FontWeight="DemiBold" Margin="10,5,10,10" Text="Localización del error"/>
+                <TextBox x:Name="TbLocalizacion" FontSize="14" Margin="10,0,10,10" BorderThickness="1" BorderBrush="DarkGray" 
+                     IsReadOnly="True" TextWrapping="Wrap" Padding="5" Height="32"/>
+
+                <!-- DESCRIPCIÓN DEL ERROR -->
+                <TextBlock FontSize="16" FontWeight="DemiBold" Margin="10" Text="Descripción del error"/>
+                <TextBox x:Name="TbDescripcion" FontSize="14" Margin="10,0,10,10" BorderThickness="1" BorderBrush="DarkGray"
+                     IsReadOnly="True" TextWrapping="Wrap" Padding="5" Height="160"/>
+            </StackPanel>
+
+            <!-- BOTÓN DE ACEPTAR -->
+            <Button Grid.Row="1" HorizontalAlignment="Right" Margin="10" Padding="16,8" Content="Aceptar" Width="80" FontSize="12"
                 Style="{StaticResource EstiloBoton}" Click="Button_Click"/>
 
-    </Grid>
-    
+        </Grid>
+    </Border>
 </Window>

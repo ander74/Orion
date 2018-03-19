@@ -7,6 +7,7 @@
 #endregion
 using Orion.DataModels;
 using Orion.Models;
+using Orion.Servicios;
 using Orion.Views;
 using System;
 using System.Collections.Generic;
@@ -38,17 +39,24 @@ namespace Orion.ViewModels {
 		private Visibility _panelvaloracionesvisibilidad = Visibility.Collapsed;
 		private Visibility _visibilidadpanelvalidezgrupo = Visibility.Collapsed;
 		private bool _haycambios = false;
-		private IMensajeProvider _mensajeProvider;
+
+		// Servicios
+		private IMensajes Mensajes;
+		private InformesServicio Informes;
 		#endregion
 
 
 		// ====================================================================================================
 		#region CONSTRUCTORES
 		// ====================================================================================================
-		public GraficosViewModel(IMensajeProvider mensajeProvider) {
-			_mensajeProvider = mensajeProvider;
+		public GraficosViewModel(IMensajes servicioMensajes, InformesServicio servicioInformes) {
+			// Asignamos los servicios
+			Mensajes = servicioMensajes;
+			Informes = servicioInformes;
+			// Añadimos los eventos a las listas.
 			_listagraficos.CollectionChanged += ListaGraficos_CollectionChanged;
 			_listagrupos.CollectionChanged += ListaGrupos_CollectionChanged;
+			// Cargamos los grupos de gráficos.
 			CargarGrupos();
 		}
 		#endregion
@@ -91,7 +99,7 @@ namespace Orion.ViewModels {
 					_valoracionesborradas.Clear();
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("GraficosViewModel.GuardarGraficos", ex);
+				Mensajes.VerError("GraficosViewModel.GuardarGraficos", ex);
 				HayCambios = true;
 			}
 
@@ -105,7 +113,7 @@ namespace Orion.ViewModels {
 					BdGruposGraficos.GuardarGrupos(ListaGrupos);
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("GraficosViewModel.GuardarGrupos", ex);
+				Mensajes.VerError("GraficosViewModel.GuardarGrupos", ex);
 				HayCambios = true;
 			} finally {
 			}

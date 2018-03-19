@@ -11,9 +11,9 @@
         xmlns:local="clr-namespace:Orion.Views"
         xmlns:convertidores="clr-namespace:Orion.Convertidores"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize" Loaded="Ventana_Loaded"
-        Background="{StaticResource DegradadoCeleste1}"
-        Title="Añadir Gráfico" Height="350" Width="700" x:Name="Ventana">
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
+        Loaded="Ventana_Loaded"
+        Title="Añadir Gráfico" Height="400" Width="700" x:Name="Ventana">
 
     <!-- RECURSOS -->
     <Window.Resources>
@@ -22,90 +22,106 @@
 
     </Window.Resources>
 
-    <Grid Margin="6,12,6,6">
+    <Border Background="White" CornerRadius="15" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Border.BitmapEffect>
+            <DropShadowBitmapEffect Color="LightGray" Direction="-50" ShadowDepth="10" Softness=".7" />
+        </Border.BitmapEffect>
 
-        <!-- NÚMERO -->
-        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Vertical" Margin="6">
-            <Label Content="Número" FontSize="16"/>
-            <TextBox x:Name="TbNumero" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ================================================== -->
+            <!-- TÍTULO -->
+            <!-- ================================================== -->
+            <Border Grid.ColumnSpan="5" Background="{StaticResource orDegradadoAzul}" MouseDown="Border_MouseDown" CornerRadius="15,15,0,0">
+                <TextBlock FontFamily="Verdana" FontSize="14" FontWeight="Bold" Margin="10" Text="Añadir Gráfico"/>
+            </Border>
+
+            
+            <!-- NÚMERO -->
+            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Margin="6">
+                <Label Content="Número" FontSize="16"/>
+                <TextBox x:Name="TbNumero" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
                      Text="{Binding Path=Numero}" GotFocus="Tb_GotFocus" KeyDown="Tb_KeyDown"
                      LostKeyboardFocus="TbNumero_LostKeyboardFocus"/>
-        </StackPanel>
+            </StackPanel>
 
-        <!-- TURNO -->
-        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Vertical" Margin="6">
-            <Label Content="Turno" FontSize="16"/>
-            <TextBox x:Name="TbTurno" FontSize="32" HorizontalContentAlignment="Center" Padding="3" 
+            <!-- TURNO -->
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="6">
+                <Label Content="Turno" FontSize="16"/>
+                <TextBox x:Name="TbTurno" FontSize="32" HorizontalContentAlignment="Center" Padding="3" 
                      Text="{Binding Path=Turno}" GotFocus="Tb_GotFocus" KeyDown="Tb_KeyDown"/>
-        </StackPanel>
+            </StackPanel>
 
-        <!-- VALORACIÓN -->
-        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Vertical" Margin="6">
-            <Label Content="Valoración" FontSize="16"/>
-            <TextBox x:Name="TbValoracion" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
+            <!-- VALORACIÓN -->
+            <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Vertical" Margin="6">
+                <Label Content="Valoración" FontSize="16"/>
+                <TextBox x:Name="TbValoracion" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
                      Text="{Binding Path=Valoracion, Converter={StaticResource ConvertidorHora}}" GotFocus="Tb_GotFocus" KeyDown="Tb_KeyDown"/>
-        </StackPanel>
+            </StackPanel>
 
-        <!-- INICIO -->
-        <StackPanel Grid.Row="0" Grid.Column="3" Orientation="Vertical" Margin="6">
-            <Label Content="Inicio" FontSize="16"/>
-            <TextBox x:Name="TbInicio" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
+            <!-- INICIO -->
+            <StackPanel Grid.Row="1" Grid.Column="3" Orientation="Vertical" Margin="6">
+                <Label Content="Inicio" FontSize="16"/>
+                <TextBox x:Name="TbInicio" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
                      Text="{Binding Path=Inicio, Converter={StaticResource ConvertidorHora}}" GotFocus="Tb_GotFocus" KeyDown="Tb_KeyDown"/>
-        </StackPanel>
+            </StackPanel>
 
-        <!-- FINAL -->
-        <StackPanel Grid.Row="0" Grid.Column="4" Orientation="Vertical" Margin="6">
-            <Label Content="Final" FontSize="16"/>
-            <TextBox x:Name="TbFinal" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
+            <!-- FINAL -->
+            <StackPanel Grid.Row="1" Grid.Column="4" Orientation="Vertical" Margin="6">
+                <Label Content="Final" FontSize="16"/>
+                <TextBox x:Name="TbFinal" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
                      Text="{Binding Path=Final, Converter={StaticResource ConvertidorHora}}" GotFocus="Tb_GotFocus" KeyDown="Tb_KeyDown"/>
-        </StackPanel>
+            </StackPanel>
 
-        <!-- INICIO PARTIDO -->
-        <StackPanel x:Name="PanelInicioPartido" Grid.Row="1" Grid.Column="3" Orientation="Vertical" Margin="6" Visibility="{Binding Path=VerPartido}">
-            <Label Content="Inicio Partido" FontSize="16"/>
-            <TextBox x:Name="TbInicioPartido" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
+            <!-- INICIO PARTIDO -->
+            <StackPanel x:Name="PanelInicioPartido" Grid.Row="2" Grid.Column="3" Orientation="Vertical" Margin="6" Visibility="{Binding Path=VerPartido}">
+                <Label Content="Inicio Partido" FontSize="16"/>
+                <TextBox x:Name="TbInicioPartido" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
                      Text="{Binding Path=InicioPartido, Converter={StaticResource ConvertidorHora}}" GotFocus="Tb_GotFocus" KeyDown="Tb_KeyDown"/>
-        </StackPanel>
+            </StackPanel>
 
-        <!-- FINAL PARTIDO -->
-        <StackPanel x:Name="PanelFinalPartido" Grid.Row="1" Grid.Column="4" Orientation="Vertical" Margin="6" Visibility="{Binding Path=VerPartido}">
-            <Label Content="Final Partido" FontSize="16"/>
-            <TextBox x:Name="TbFinalPartido" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
+            <!-- FINAL PARTIDO -->
+            <StackPanel x:Name="PanelFinalPartido" Grid.Row="2" Grid.Column="4" Orientation="Vertical" Margin="6" Visibility="{Binding Path=VerPartido}">
+                <Label Content="Final Partido" FontSize="16"/>
+                <TextBox x:Name="TbFinalPartido" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
                      Text="{Binding Path=FinalPartido, Converter={StaticResource ConvertidorHora}}" GotFocus="Tb_GotFocus" KeyDown="Tb_KeyDown"/>
-        </StackPanel>
+            </StackPanel>
 
-        <!-- OPCIONES -->
-        <StackPanel Grid.Row="1" Grid.ColumnSpan="3" Orientation="Vertical" Margin="18">
-            <CheckBox x:Name="ChIncrementarNumero" Content="Incrementar número" IsChecked="{Binding Path=IncrementarNumeroMarcado}"
+            <!-- OPCIONES -->
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="3" Orientation="Vertical" Margin="18">
+                <CheckBox x:Name="ChIncrementarNumero" Content="Incrementar número" IsChecked="{Binding Path=IncrementarNumeroMarcado}"
                       FontSize="16" Margin="6" Focusable="False"/>
-            <CheckBox x:Name="ChDeducirTurno" Content="Deducir turno" IsChecked="{Binding Path=DeducirTurnoMarcado}"
+                <CheckBox x:Name="ChDeducirTurno" Content="Deducir turno" IsChecked="{Binding Path=DeducirTurnoMarcado}"
                       FontSize="16" Margin="6" Focusable="False"/>
-        </StackPanel>
+            </StackPanel>
 
-        <!-- BOTÓN CANCELAR -->
-        <Button x:Name="BtCancelar" Grid.Row="2" Grid.Column="3" Content="Cancelar" Margin="6" Height="48" FontSize="16" HorizontalAlignment="Stretch"
+            <!-- BOTÓN CANCELAR -->
+            <Button x:Name="BtCancelar" Grid.Row="3" Grid.Column="3" Content="Cancelar" Margin="10" Height="48" FontSize="16" HorizontalAlignment="Stretch"
                 IsCancel="True" Style="{StaticResource EstiloBoton}" Focusable="False"/>
 
-        <!-- BOTÓN ACEPTAR -->
-        <Button x:Name="BtAceptar" Grid.Row="2" Grid.Column="4" Content="Aceptar" Margin="6" Height="48" FontSize="16" HorizontalAlignment="Stretch"
+            <!-- BOTÓN ACEPTAR -->
+            <Button x:Name="BtAceptar" Grid.Row="3" Grid.Column="4" Content="Aceptar" Margin="10" Height="48" FontSize="16" HorizontalAlignment="Stretch"
                 IsDefault="True" Style="{StaticResource EstiloBoton}" Focusable="False"
                 Command="{Binding cmdBotonAceptar}" CommandParameter="{Binding ElementName=Ventana}"/>
 
 
 
-    </Grid>
-    
+        </Grid>
+    </Border>
+
 </Window>

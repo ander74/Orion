@@ -5,6 +5,8 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using Orion.ViewModels;
+using Orion.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +14,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace Orion.Views {
+namespace Orion.Servicios{
 
-	public interface IMensajeProvider {
+	public interface IMensajes {
 
 		bool? VerMensaje(string mensaje, string titulo, bool SiNo = false, bool Cancelar = false);
 
@@ -22,10 +24,11 @@ namespace Orion.Views {
 
 	}
 
-	public class MensajeProvider :IMensajeProvider {
+	public class MensajesServicio :IMensajes {
 
 
 		private VentanaError ventanaError;
+		private VentanaMensajes ventanaMensajes;
 
 
 		/// <summary>
@@ -37,6 +40,24 @@ namespace Orion.Views {
 		/// <returns>Devuelve True si se ha pulsado el botón Si, o Aceptar; False si se ha pulsado en No.</returns>
 		public bool? VerMensaje(string mensaje, string titulo, bool SiNo = false, bool Cancelar = false) {
 
+			VentanaMensajesVM vm = new VentanaMensajesVM() { Titulo = titulo, Mensaje = mensaje };
+			if (SiNo) {
+				vm.TextoBotonSi = "Si";
+				vm.VerBotonNo = true;
+			}
+			if (Cancelar) {
+				vm.VerBotonCancelar = true;
+			}
+			ventanaMensajes = new VentanaMensajes() { DataContext = vm};
+
+			ventanaMensajes.ShowDialog();
+
+			return ventanaMensajes.Resultado;
+		}
+
+
+		public bool? VerMensaje2(string mensaje, string titulo, bool SiNo = false, bool Cancelar = false) {
+
 			MessageBoxButton botones = MessageBoxButton.OK;
 			if (SiNo) {
 				if (Cancelar) {
@@ -45,7 +66,7 @@ namespace Orion.Views {
 					botones = MessageBoxButton.YesNo;
 				}
 			}
-			
+
 			MessageBoxResult resultado = MessageBox.Show(mensaje, titulo, botones, MessageBoxImage.Information);
 			if (resultado == MessageBoxResult.No) return false;
 			if (resultado == MessageBoxResult.Cancel) return null;

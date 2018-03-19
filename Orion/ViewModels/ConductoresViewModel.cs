@@ -18,6 +18,7 @@ using System.Windows;
 using Orion.Views;
 using System.Windows.Data;
 using System.ComponentModel;
+using Orion.Servicios;
 
 namespace Orion.ViewModels {
 
@@ -36,7 +37,7 @@ namespace Orion.ViewModels {
 		private bool _panelregulacionesfijo;
 		private Visibility _panelregulacionesvisibilidad = Visibility.Collapsed;
 		private bool _haycambios = false;
-		private IMensajeProvider _mensajeProvider;
+		private IMensajes mensajes;
 		//private GenericOleDb DatosOleDb;
 		#endregion
 
@@ -44,8 +45,8 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region CONSTRUCTOR
 		// ====================================================================================================
-		public ConductoresViewModel(IMensajeProvider mensajeProvider) {
-			_mensajeProvider = mensajeProvider;
+		public ConductoresViewModel(IMensajes servicioMensajes) {
+			mensajes = servicioMensajes;
 			//DatosOleDb = new GenericOleDb(App.Global.CadenaConexion);
 			//DatosOleDb.ErrorProducido += DatosOleDb_ErrorProducido;
 			_listaconductores.CollectionChanged += ListaConductores_CollectionChanged;
@@ -88,10 +89,10 @@ namespace Orion.ViewModels {
 				}
 				// Si hay conductores con el id cero, avisamos.
 				if (ListaConductores.Count(item => item.Id == 0) > 0) {
-					_mensajeProvider.VerMensaje("Hay conductores no válidos que no han sido guardados.", "ATENCIÓN");
+					mensajes.VerMensaje("Hay conductores no válidos que no han sido guardados.", "ATENCIÓN");
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("ConductoresViewModel.GuardarConductores", ex);
+				mensajes.VerError("ConductoresViewModel.GuardarConductores", ex);
 				HayCambios = true;
 			}
 		}
@@ -138,7 +139,7 @@ namespace Orion.ViewModels {
 
 
 		//private void DatosOleDb_ErrorProducido(object sender, ErrorProducidoEventArgs e) {
-		//	_mensajeProvider.VerError(e.Localizacion, e.Excepcion);
+		//	mensajes.VerError(e.Localizacion, e.Excepcion);
 		//}
 
 		#endregion

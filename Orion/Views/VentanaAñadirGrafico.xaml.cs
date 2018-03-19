@@ -74,5 +74,9 @@ namespace Orion.Views {
 
 
 		}
+
+		private void Border_MouseDown(object sender, MouseButtonEventArgs e) {
+			DragMove();
+		}
 	}
 }

@@ -83,6 +83,19 @@ namespace Orion.Models {
 			}
 		}
 
+
+		private bool _resaltar;
+		public bool Resaltar {
+			get { return _resaltar; }
+			set {
+				if (_resaltar != value) {
+					_resaltar = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
 		#endregion
 
 

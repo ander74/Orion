@@ -38,7 +38,17 @@ namespace Orion.Views {
 		private void Ventana_Closing(object sender, CancelEventArgs e) {
 			// Activamos el botón y guardamos los cambios.
 			App.Global.Configuracion.BotonCalculadoraActivo = true;
+			App.Global.Configuracion.LeftCalculadora = this.Left;
+			App.Global.Configuracion.TopCalculadora = this.Top;
 			App.Global.Configuracion.Guardar(App.Global.ArchivoOpcionesConfiguracion);
+		}
+
+		private void Border_MouseDown(object sender, MouseButtonEventArgs e) {
+			DragMove();
+		}
+
+		private void Button_Click(object sender, RoutedEventArgs e) {
+			this.Close();
 		}
 	}
 }

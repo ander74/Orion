@@ -34,7 +34,7 @@ namespace Orion.Models {
 		}
 
 
-		private int _lunal = 0;
+		private int _lunal = 499;
 		public int LunAl {
 			get { return _lunal; }
 			set {
@@ -46,7 +46,7 @@ namespace Orion.Models {
 		}
 
 
-		private int _viedel = 0;
+		private int _viedel = 500;
 		public int VieDel {
 			get { return _viedel; }
 			set {
@@ -58,7 +58,7 @@ namespace Orion.Models {
 		}
 
 
-		private int _vieal = 0;
+		private int _vieal = 599;
 		public int VieAl {
 			get { return _vieal; }
 			set {
@@ -70,7 +70,7 @@ namespace Orion.Models {
 		}
 
 
-		private int _sabdel = 0;
+		private int _sabdel = 600;
 		public int SabDel {
 			get { return _sabdel; }
 			set {
@@ -82,7 +82,7 @@ namespace Orion.Models {
 		}
 
 
-		private int _sabal = 0;
+		private int _sabal = 699;
 		public int SabAl {
 			get { return _sabal; }
 			set {
@@ -94,7 +94,7 @@ namespace Orion.Models {
 		}
 
 
-		private int _domdel = 0;
+		private int _domdel = 700;
 		public int DomDel {
 			get { return _domdel; }
 			set {
@@ -106,7 +106,7 @@ namespace Orion.Models {
 		}
 
 
-		private int _domal = 0;
+		private int _domal = 799;
 		public int DomAl {
 			get { return _domal; }
 			set {
@@ -118,7 +118,7 @@ namespace Orion.Models {
 		}
 
 
-		private int _comodin = 0;
+		private int _comodin = 999;
 		public int Comodin {
 			get { return _comodin; }
 			set {

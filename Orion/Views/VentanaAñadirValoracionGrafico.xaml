@@ -11,9 +11,9 @@
         xmlns:local="clr-namespace:Orion.Views"
         xmlns:convertidores="clr-namespace:Orion.Convertidores"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize" Loaded="Ventana_Loaded"
-        Background="{StaticResource DegradadoCeleste1}"
-        Title="Añadir Valoración de Gráfico" Height="250" Width="700" x:Name="Ventana">
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
+        Loaded="Ventana_Loaded"
+        Title="Añadir Valoración de Gráfico" Height="290" Width="700" x:Name="Ventana">
 
     <!-- RECURSOS -->
     <Window.Resources>
@@ -23,64 +23,71 @@
 
     </Window.Resources>
 
-    <Grid Margin="6,12,6,6">
+    <Border Background="White" CornerRadius="15" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+        <Border.BitmapEffect>
+            <DropShadowBitmapEffect Color="LightGray" Direction="-50" ShadowDepth="10" Softness=".7" />
+        </Border.BitmapEffect>
 
-        <!-- TÍTULO DE LA VENTANA -->
-        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold">
-            <Label.Content>
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Valoración del gráfico "/>
-                    <TextBlock Text="{Binding NumeroGrafico}"/>
-                </StackPanel>
-            </Label.Content>
-        </Label>
-        
-        <!-- INICIO -->
-        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Margin="6">
-            <Label Content="Inicio" FontSize="16"/>
-            <TextBox x:Name="TbInicio" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- TÍTULO DE LA VENTANA -->
+            <Border Grid.ColumnSpan="4" Background="{StaticResource orDegradadoAzul}" MouseDown="Border_MouseDown" CornerRadius="15,15,0,0">
+                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold">
+                    <Label.Content>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Valoración del gráfico "/>
+                            <TextBlock Text="{Binding NumeroGrafico}"/>
+                        </StackPanel>
+                    </Label.Content>
+                </Label>
+            </Border>
+
+            <!-- INICIO -->
+            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Margin="10">
+                <Label Content="Inicio" FontSize="16"/>
+                <TextBox x:Name="TbInicio" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
                      Text="{Binding Path=Inicio, Converter={StaticResource ConvertidorHora}}" GotFocus="Tb_GotFocus" KeyDown="Tb_KeyDown"/>
-        </StackPanel>
+            </StackPanel>
 
-        <!-- LÍNEA -->
-        <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="6">
-            <Label Content="Línea" FontSize="16"/>
-            <TextBox x:Name="TbLinea" FontSize="32" HorizontalContentAlignment="Center" Padding="3" 
+            <!-- LÍNEA -->
+            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="10">
+                <Label Content="Línea" FontSize="16"/>
+                <TextBox x:Name="TbLinea" FontSize="32" HorizontalContentAlignment="Center" Padding="3" 
                      Text="{Binding Path=Linea, Converter={StaticResource ConvertidorDecimal},
                             ConverterParameter={x:Static convertidores:VerValores.NoCeros}}" GotFocus="Tb_GotFocus" KeyDown="Tb_KeyDown">
-                <TextBox.ToolTip>
-                    <TextBlock>
+                    <TextBox.ToolTip>
+                        <TextBlock>
                         Para añadir un descanso utilice el código -1000 añadiéndole el tiempo de descanso.<LineBreak/>Ejemplo: -1015 (Descanso 15 minutos).
-                    </TextBlock>
-                </TextBox.ToolTip>
-            </TextBox>
-            
-        </StackPanel>
+                        </TextBlock>
+                    </TextBox.ToolTip>
+                </TextBox>
 
-        <!-- BOTÓN CANCELAR -->
-        <Button x:Name="BtCancelar" Grid.Row="3" Grid.Column="2" Content="Cancelar" Margin="6" Height="48" FontSize="16" HorizontalAlignment="Stretch"
+            </StackPanel>
+
+            <!-- BOTÓN CANCELAR -->
+            <Button x:Name="BtCancelar" Grid.Row="2" Grid.Column="2" Content="Cancelar" Margin="10" Height="48" FontSize="16" HorizontalAlignment="Stretch"
                 IsCancel="True" Style="{StaticResource EstiloBoton}" Focusable="False"/>
 
-        <!-- BOTÓN ACEPTAR -->
-        <Button x:Name="BtAceptar" Grid.Row="3" Grid.Column="3" Content="Aceptar" Margin="6" Height="48" FontSize="16" HorizontalAlignment="Stretch"
+            <!-- BOTÓN ACEPTAR -->
+            <Button x:Name="BtAceptar" Grid.Row="2" Grid.Column="3" Content="Aceptar" Margin="10" Height="48" FontSize="16" HorizontalAlignment="Stretch"
                 IsDefault="True" Style="{StaticResource EstiloBoton}" Focusable="False"
                 Command="{Binding cmdBotonAceptar}" CommandParameter="{Binding ElementName=Ventana}"/>
 
 
 
-    </Grid>
-
+        </Grid>
+    </Border>
 </Window>

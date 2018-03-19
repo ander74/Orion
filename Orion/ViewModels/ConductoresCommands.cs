@@ -418,7 +418,7 @@ namespace Orion.ViewModels {
 			mensaje += $"Descansos: {RegulacionSeleccionada.Descansos:00}\n";
 			mensaje += $"Motivo: {RegulacionSeleccionada.Motivo}\n\n";
 			mensaje += "¿Desea continuar?";
-			if (_mensajeProvider.VerMensaje(mensaje, "Añadir Regulacion a Todos", true) == true) {
+			if (mensajes.VerMensaje(mensaje, "Añadir Regulacion a Todos", true) == true) {
 				foreach (Conductor cond in ListaConductores) {
 					if (cond.Id != RegulacionSeleccionada.IdConductor) {
 						RegulacionConductor reg = new RegulacionConductor();

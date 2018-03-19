@@ -34,9 +34,9 @@ namespace Orion.Views
 
 
 		// AL HACER CLICK SOBRE EL ENCABEZADO
-		private void StackPanel_MouseDown(object sender, MouseButtonEventArgs e) {
-			DragMove();
-		}
+		//private void StackPanel_MouseDown(object sender, MouseButtonEventArgs e) {
+		//	DragMove();
+		//}
 
 
 		// AL HACER CLICK EN EL BOTÓN CANCELAR
@@ -87,8 +87,8 @@ namespace Orion.Views
 			if (e.Key == Key.Enter) ((TextBox)sender).MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 		}
 
-
-
-
+		private void Border_MouseDown(object sender, MouseButtonEventArgs e) {
+			DragMove();
+		}
 	}
 }

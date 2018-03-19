@@ -107,21 +107,9 @@ namespace Orion.PrintModel {
 		// ====================================================================================================
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
-		public static void CrearCalendariosEnPdf(ListCollectionView lista, DateTime fecha, string rutaArchivo) {
+		public static async Task CrearCalendariosEnPdf(Workbook Libro, ListCollectionView lista, DateTime fecha) {
 
-			// Creamos una aplicacion Excel
-			Application ExcelApp = null;
-			// Creamos el libro
-			Workbook Libro = null;
-			try {
-				// Mostramos la barra de progreso y le asignamos el texto
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Visible;
-				App.Global.TextoProgreso = "Creando PDF...";
-				App.Global.ValorBarraProgreso = 0;
-				// Creamos la App de excel y la ocultamos la app de Excel
-				ExcelApp = new Application { Visible = false };
-				// Creamos el libro desde la plantilla.
-				Libro = ExcelApp.Workbooks.Add(rutaPlantillaCalendarios);
+			await Task.Run(() => {
 				// Definimos la hoja.
 				Worksheet Hoja = Libro.Worksheets[1];
 				// Título
@@ -152,34 +140,14 @@ namespace Orion.PrintModel {
 
 				// Establecemos el área de impresión.
 				Hoja.PageSetup.PrintArea = Hoja.Range["A1", Hoja.Cells[fila - 1, 32]].Address;
-				// Exportamos el libro como PDF.
-				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
-				// Si hay que abrir el PDF, se abre.
-				if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaArchivo);
-			} finally {
-				if (Libro != null) Libro.Close(false);
-				if (ExcelApp != null) ExcelApp.Quit();
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Collapsed;
-			}
+			});
 
 		}
 
 
-		public static void FallosEnCalendariosEnPdf(ListCollectionView lista, DateTime fecha, string rutaArchivo) {
+		public static async Task FallosEnCalendariosEnPdf(Workbook Libro, ListCollectionView lista, DateTime fecha) {
 
-			// Creamos una aplicacion Excel
-			Application ExcelApp = null;
-			// Creamos el libro
-			Workbook Libro = null;
-			try {
-				// Mostramos la barra de progreso y le asignamos el texto
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Visible;
-				App.Global.TextoProgreso = "Creando PDF...";
-				App.Global.ValorBarraProgreso = 0;
-				// Creamos la App de excel y la ocultamos la app de Excel
-				ExcelApp = new Application { Visible = false };
-				// Creamos el libro desde la plantilla.
-				Libro = ExcelApp.Workbooks.Add(rutaPlantillaFallosCalendarios);
+			await Task.Run(() => {
 				// Definimos la hoja.
 				Worksheet Hoja = Libro.Worksheets[1];
 				// Título
@@ -204,15 +172,7 @@ namespace Orion.PrintModel {
 
 				// Establecemos el área de impresión.
 				Hoja.PageSetup.PrintArea = Hoja.Range["A1", Hoja.Cells[fila - 1, 3]].Address;
-				// Exportamos el libro como PDF.
-				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
-				// Si hay que abrir el PDF, se abre.
-				if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaArchivo);
-			} finally {
-				if (Libro != null) Libro.Close(false);
-				if (ExcelApp != null) ExcelApp.Quit();
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Collapsed;
-			}
+			});
 
 		}
 

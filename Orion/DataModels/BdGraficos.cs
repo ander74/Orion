@@ -36,7 +36,6 @@ namespace Orion.DataModels {
 
 			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
 
-			// Creamos la lista.
 			ObservableCollection<Grafico> lista = new ObservableCollection<Grafico>();
 
 			using (conexion) {

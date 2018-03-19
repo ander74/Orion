@@ -10,10 +10,12 @@ using Orion.Config;
 using Orion.Convertidores;
 using Orion.Models;
 using Orion.Properties;
+using Orion.Servicios;
 using Orion.Views;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Orion.PrintModel {
@@ -224,16 +226,9 @@ namespace Orion.PrintModel {
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
 
-		public static void CrearPijamaEnPdf(Pijama.HojaPijama pijama, string ruta) {
-			// Creamos una aplicacion Excel y la mantenemos oculta.
-			Application ExcelApp = new Application();
-			// Creamos el libro
-			Workbook Libro = null;
+		public static async Task CrearPijamaEnPdf(Workbook Libro, Pijama.HojaPijama pijama) {
 
-			try {
-				ExcelApp.Visible = false;
-				// Creamos el libro desde la plantilla.
-				Libro = ExcelApp.Workbooks.Add(rutaPlantillaPijama);
+			await Task.Run(() => {
 				// Definimos la hoja.
 				Worksheet Hoja = Libro.Worksheets[1];
 				// Definimos la matriz de colores para ponerlos.
@@ -243,6 +238,8 @@ namespace Orion.PrintModel {
 				LlenarExcelPijama(1, pijama, ref datos, ref colores);
 				// Coloreamos la plantilla
 				for (int m = 1; m <= 31; m++) {
+					double valor = m / 31d * 100;
+					App.Global.ValorBarraProgreso = valor;
 					if (colores[m - 1, 0] != null) Hoja.Cells[2 + m, 1].Font.Color = colores[m - 1, 0];
 					if (colores[m - 1, 1] != null) Hoja.Cells[2 + m, 2].Font.Color = colores[m - 1, 1];
 				}
@@ -251,29 +248,13 @@ namespace Orion.PrintModel {
 				rango.Value = datos;
 				// Establecemos el área de impresión.
 				Hoja.PageSetup.PrintArea = rango.Address;
-				// Exportamos el libro como PDF.
-				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, ruta);
-				// Si hay que abrir el PDF, se abre.
-				if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
-			} finally {
-				if (Libro != null) Libro.Close(false);
-				if (ExcelApp != null) ExcelApp.Quit();
-			}
+			});
 		}
 
 
-		public static void CrearTodosPijamasEnPdf(ListCollectionView ListaCalendarios, string rutaArchivo) {
+		public static async Task CrearTodosPijamasEnPdf(Workbook Libro, ListCollectionView ListaCalendarios) {
 
-			Application ExcelApp = new Application();
-			Workbook Libro = null;
-
-			try {
-				// Mostramos la barra de progreso y le asignamos el valor de 1
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Visible;
-				App.Global.TextoProgreso = "Creando PDF...";
-				App.Global.ValorBarraProgreso = 0;
-				ExcelApp.Visible = false;
-				Libro = ExcelApp.Workbooks.Add(rutaPlantillaPijama);
+			await Task.Run(() => {
 				Worksheet Hoja = Libro.Worksheets[1];
 				int fila = 1;
 				string[,] datos = new string[ListaCalendarios.Count * 33, 28];
@@ -285,14 +266,14 @@ namespace Orion.PrintModel {
 					num++;
 					Calendario calendario = obj as Calendario;
 					if (calendario == null) continue;
-					Pijama.HojaPijama hojapijama = new Pijama.HojaPijama(calendario, new MensajeProvider());
+					Pijama.HojaPijama hojapijama = new Pijama.HojaPijama(calendario, new MensajesServicio());
 					if (fila > 1) {
 						Hoja.Range["A1:AB34"].Copy(Hoja.Cells[fila, 1]);
 						Hoja.Range[fila.ToString() + ":" + fila.ToString()].RowHeight = 35;
 						Hoja.Range[(fila + 1).ToString() + ":" + (fila + 33).ToString()].RowHeight = 25;
 					}
 					LlenarExcelPijama(fila, hojapijama, ref datos, ref colores);
-					for (int m=1; m <= 31; m++) {
+					for (int m = 1; m <= 31; m++) {
 						if (colores[m - 1, 0] != null) Hoja.Cells[fila + 1 + m, 1].Font.Color = colores[m - 1, 0];
 						if (colores[m - 1, 1] != null) Hoja.Cells[fila + 1 + m, 2].Font.Color = colores[m - 1, 1];
 					}
@@ -304,15 +285,7 @@ namespace Orion.PrintModel {
 				rango.Value = datos;
 				// Establecemos el área de impresión.
 				Hoja.PageSetup.PrintArea = rango.Address;
-				// Exportamos el libro como PDF.
-				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
-				// Si hay que abrir el PDF, se abre.
-				if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaArchivo);
-			} finally {
-				if (Libro != null) Libro.Close(false);
-				if (ExcelApp != null) ExcelApp.Quit();
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Collapsed;
-			}
+			});
 
 		}
 

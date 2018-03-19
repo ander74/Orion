@@ -10,126 +10,136 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Orion.Views"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize"
-        Background="{StaticResource DegradadoCeleste1}"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
         Title="Orion" Height="500" Width="700" x:Name="Ventana">
-    
-    <Grid>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
 
-        <!-- TÍTULO DE LA VENTANA -->
-        <Label Grid.Row="0" Grid.ColumnSpan="2" Margin="10" Content="NUEVO GRUPO DE GRÁFICOS"
-               FontFamily="Bookman Old Style" FontSize="32" HorizontalAlignment="Center"/>
+    <Border Background="{StaticResource DegradadoCeleste1}" CornerRadius="15" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20">
 
-        
-        <!-- FECHA DE VALIDEZ -->
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="15,10,10,10">
-            
-            <TextBlock Text="Fecha de validez" Margin="0,0,5,0" FontSize="14" FontWeight="Bold"
+        <Border.BitmapEffect>
+            <DropShadowBitmapEffect Color="LightGray" Direction="-50" ShadowDepth="10" Softness=".7" />
+        </Border.BitmapEffect>
+
+
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- TÍTULO DE LA VENTANA -->
+            <Border Grid.ColumnSpan="2" Background="{StaticResource orDegradadoVioleta}" MouseDown="Border_MouseDown" CornerRadius="15,15,0,0" Margin="0,0,0,10">
+                <TextBlock FontFamily="Verdana" FontSize="14" FontWeight="Bold" Margin="10" Text="Nuevo Grupo de Gráficos"/>
+            </Border>
+            <!--<Label Grid.Row="0" Grid.ColumnSpan="2" Margin="10" Content="NUEVO GRUPO DE GRÁFICOS"
+               FontFamily="Bookman Old Style" FontSize="32" HorizontalAlignment="Center"/>-->
+
+
+            <!-- FECHA DE VALIDEZ -->
+            <StackPanel Grid.Row="1" Grid.Column="0" Margin="15,10,10,10">
+
+                <TextBlock Text="Fecha de validez" Margin="0,0,5,0" FontSize="14" FontWeight="Bold"
                        HorizontalAlignment="Center"/>
-            <Calendar DisplayMode="Month" FirstDayOfWeek="Monday" SelectionMode="SingleDate"  Focusable="False" GotMouseCapture="Calendar_GotMouseCapture"
+                <Calendar DisplayMode="Month" FirstDayOfWeek="Monday" SelectionMode="SingleDate"  Focusable="False" GotMouseCapture="Calendar_GotMouseCapture"
                       SelectedDate="{Binding FechaActual, Mode=TwoWay}"/>
 
-        </StackPanel>
+            </StackPanel>
 
 
-        <!-- BOTONES DE OPCIÓN -->
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
+            <!-- BOTONES DE OPCIÓN -->
+            <StackPanel Grid.Row="1" Grid.Column="1" Margin="10">
 
-            <!-- GRUPO NUEVO -->
-            <RadioButton x:Name="rbNuevo" Content="Grupo de gráficos vacío" VerticalContentAlignment="Center" Margin="15,5,0,0"
+                <!-- GRUPO NUEVO -->
+                <RadioButton x:Name="rbNuevo" Content="Grupo de gráficos vacío" VerticalContentAlignment="Center" Margin="15,5,0,0"
                          FontSize="14" FontWeight="Bold" IsChecked="{Binding NuevoMarcado}"/>
 
-            <TextBlock FontSize="12" Margin="40,5,15,0" TextWrapping="Wrap">
+                <TextBlock FontSize="12" Margin="40,5,15,0" TextWrapping="Wrap">
                        Crea un grupo de gráficos vacío con la fecha de validez seleccionada.
-            </TextBlock>
+                </TextBlock>
 
-            <!-- REPETIR GRUPO-->
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="15,10,0,0">
-                <RadioButton x:Name="rbRepetir" Content="Copiar un grupo de gráficos existente" VerticalContentAlignment="Center"
+                <!-- REPETIR GRUPO-->
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center"  Margin="15,10,0,0">
+                    <RadioButton x:Name="rbRepetir" Content="Copiar un grupo de gráficos existente" VerticalContentAlignment="Center"
                              FontSize="14" FontWeight="Bold" IsChecked="{Binding RepetirMarcado}" VerticalAlignment="Center"/>
-                <ComboBox Margin="15,0" Width="120" VerticalAlignment="Bottom" DisplayMemberPath="Validez" ItemStringFormat="dd-MM-yyyy"
+                    <ComboBox Margin="15,0" Width="120" VerticalAlignment="Bottom" DisplayMemberPath="Validez" ItemStringFormat="dd-MM-yyyy"
                           HorizontalContentAlignment="Center"
                           FontSize="14" Background="WhiteSmoke"
                           ItemsSource="{Binding ListaGrupos}" SelectedItem="{Binding GrupoSeleccionado}">
-                </ComboBox>
-            </StackPanel>
-            
-            <TextBlock FontSize="12" Margin="40,5,15,0" TextWrapping="Wrap">
-                       Crea un grupo de gráficos exactamente igual que el grupo de gráficos seleccionado.
-            </TextBlock>
+                    </ComboBox>
+                </StackPanel>
 
-            <!-- CREAR DE WORD-->
-            <RadioButton x:Name="rbWord" Content="Grupo de gráficos desde Microsoft Word" VerticalContentAlignment="Center" Margin="15,10,0,0"
+                <TextBlock FontSize="12" Margin="40,5,15,0" TextWrapping="Wrap">
+                       Crea un grupo de gráficos exactamente igual que el grupo de gráficos seleccionado.
+                </TextBlock>
+
+                <!-- CREAR DE WORD-->
+                <RadioButton x:Name="rbWord" Content="Grupo de gráficos desde Microsoft Word" VerticalContentAlignment="Center" Margin="15,10,0,0"
                          FontSize="14" FontWeight="Bold" IsChecked="{Binding WordMarcado}"/>
 
-            <TextBlock FontSize="12" Margin="40,5,15,0" TextWrapping="Wrap">
+                <TextBlock FontSize="12" Margin="40,5,15,0" TextWrapping="Wrap">
                     Crea un grupo de gráficos desde un archivo de Microsoft Word.
-            </TextBlock>
+                </TextBlock>
 
-            <StackPanel Orientation="Horizontal" Margin="40,10,0,0">
-                <TextBox FontSize="14" Margin="2" Height="25" Width="380" VerticalContentAlignment="Center"
+                <StackPanel Orientation="Horizontal" Margin="40,10,0,0">
+                    <TextBox FontSize="14" Margin="2" Height="25" Width="380" VerticalContentAlignment="Center"
                          Background="White" Text="{Binding ArchivoWord}"
                          IsEnabled="{Binding ElementName=rbWord, Path=IsChecked}"/>
-                <Button Style="{StaticResource EstiloBoton}" Margin="2" Width="30"
+                    <Button Style="{StaticResource EstiloBoton}" Margin="2" Width="30"
                         IsEnabled="{Binding ElementName=rbWord, Path=IsChecked}"
                         Command="{Binding cmdSeleccionarArchivo}"
                         Content="..." Height="25"/>
+                </StackPanel>
+
             </StackPanel>
 
-        </StackPanel>
 
-        
-        <!-- NOTAS -->
-        <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="15,0">
+            <!-- NOTAS -->
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Margin="15,0">
 
-            <TextBlock Text="Notas" Margin="0,0,0,5" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left"/>
+                <TextBlock Text="Notas" Margin="0,0,0,5" FontSize="14" FontWeight="Bold" HorizontalAlignment="Left"/>
 
-            <TextBox FontSize="14" Padding="5" TextWrapping="Wrap" Background="White" Height="90"
+                <TextBox FontSize="14" Padding="5" TextWrapping="Wrap" Background="White" Height="90"
                      Text="{Binding Notas, UpdateSourceTrigger=PropertyChanged}"/>
 
 
-        </StackPanel>
+            </StackPanel>
 
 
-        <!-- BARRA INFERIOR -->
-        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+            <!-- BARRA INFERIOR -->
+            <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
 
-        <!-- BARRA DE PROGRESO-->
-        <ProgressBar Grid.Row="3" Grid.Column="0"  Width="400" Height="18" Margin="15" HorizontalAlignment="Left"
+                <!-- BARRA DE PROGRESO-->
+                <ProgressBar Grid.Row="3" Grid.Column="0"  Width="400" Height="18" Margin="15" HorizontalAlignment="Left"
                      Value="{Binding Progreso, Mode=OneWay}" Minimum="0" Maximum="100"
                      Visibility="Visible"/>
 
-        <!-- BOTONES DE VENTANA -->
-        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <!-- BOTONES DE VENTANA -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
 
-            <!-- CANCELAR -->
-            <Button Style="{StaticResource EstiloBoton}" Margin="5" Width="90" Height="40"
+                    <!-- CANCELAR -->
+                    <Button Style="{StaticResource EstiloBoton}" Margin="5" Width="90" Height="40"
                     FontSize="12" Content="Cancelar"
                     Command="{Binding cmdCancelar}" CommandParameter="{Binding ElementName=Ventana}"/>
 
-            <!-- ACEPTAR -->
-            <Button Style="{StaticResource EstiloBoton}" Margin="5" Width="90" Height="40"
+                    <!-- ACEPTAR -->
+                    <Button Style="{StaticResource EstiloBoton}" Margin="5" Width="90" Height="40"
                     FontSize="12" Content="Aceptar" Command="{Binding cmdAceptar}" CommandParameter="{Binding ElementName=Ventana}"/>
 
-        </StackPanel>
+                </StackPanel>
+
+            </Grid>
 
         </Grid>
-
-    </Grid>
-
+    </Border>
 </Window>

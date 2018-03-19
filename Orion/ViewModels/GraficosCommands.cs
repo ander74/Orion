@@ -5,12 +5,14 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using Microsoft.Office.Interop.Excel;
 using Microsoft.Win32;
 using Orion.Config;
 using Orion.DataModels;
 using Orion.Models;
 using Orion.PrintModel;
 using Orion.Properties;
+using Orion.Servicios;
 using Orion.Views;
 using System;
 using System.Collections.Generic;
@@ -137,7 +139,7 @@ namespace Orion.ViewModels {
 			do {
 				// Instanciamos la ventana y la vinculamos al ViewModel correspondiente.
 				ventana = new VentanaAñadirGrafico();
-				ventana.DataContext = new AñadirGraficoViewModel(_mensajeProvider);
+				ventana.DataContext = new AñadirGraficoViewModel(Mensajes);
 				((AñadirGraficoViewModel)ventana.DataContext).IncrementarNumeroMarcado = incrementar;
 				((AñadirGraficoViewModel)ventana.DataContext).DeducirTurnoMarcado = deducir;
 				((AñadirGraficoViewModel)ventana.DataContext).Numero = ((AñadirGraficoViewModel)ventana.DataContext).IncrementarNumeroMarcado ? numero + 1 : numero;
@@ -360,7 +362,7 @@ namespace Orion.ViewModels {
 
 		// Ejecución del comando
 		private void BorrarGrupo() {
-			bool? resultado = _mensajeProvider.VerMensaje("Va a borrar el grupo " + GrupoSeleccionado.Validez.ToString("dd-MM-yyyy") +
+			bool? resultado = Mensajes.VerMensaje("Va a borrar el grupo " + GrupoSeleccionado.Validez.ToString("dd-MM-yyyy") +
 														 " con " + _listagraficos.Count.ToString() + " gráficos." +
 														 "\n\n¿Desea continuar?", "BORRAR GRUPO",
 														 true);
@@ -369,7 +371,7 @@ namespace Orion.ViewModels {
 			try {
 				BdGruposGraficos.BorrarGrupoPorId(GrupoSeleccionado.Id);
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("GraficosCommands.BorrarGrupo", ex);
+				Mensajes.VerError("GraficosCommands.BorrarGrupo", ex);
 			}
 			CargarGrupos();
 			HayCambios = true;
@@ -712,7 +714,7 @@ namespace Orion.ViewModels {
 
 		// Ejecución del comando
 		private void NuevoGrupo() {
-			VentanaNuevoGrupoVM ventanaVM = new VentanaNuevoGrupoVM(new MensajeProvider()) { FechaActual = DateTime.Now };
+			VentanaNuevoGrupoVM ventanaVM = new VentanaNuevoGrupoVM(new MensajesServicio()) { FechaActual = DateTime.Now };
 			ventanaVM.ListaGrupos = ListaGrupos;
 			if (ListaGrupos.Count > 0) ventanaVM.GrupoSeleccionado = ListaGrupos[ListaGrupos.Count - 1];
 			VentanaNuevoGrupo ventana = new VentanaNuevoGrupo { DataContext = ventanaVM };
@@ -744,7 +746,7 @@ namespace Orion.ViewModels {
 				anteriores = BdGraficos.getGraficos(GrupoComparacionSeleccionado.Id).ToList();
 				if (anteriores.Count == 0) return;
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("GraficosViewModel.CompararGrupo", ex);
+				Mensajes.VerError("GraficosViewModel.CompararGrupo", ex);
 			}
 			
 			foreach (Grafico grafico in ListaGraficos) {
@@ -793,7 +795,7 @@ namespace Orion.ViewModels {
 			do {
 				// Instanciamos la ventana y la vinculamos al ViewModel correspondiente.
 				ventana = new VentanaAñadirValoracionGrafico();
-				AñadirValoracionGraficoViewModel contextoVentana = new AñadirValoracionGraficoViewModel(_mensajeProvider);
+				AñadirValoracionGraficoViewModel contextoVentana = new AñadirValoracionGraficoViewModel(Mensajes);
 				ventana.DataContext = contextoVentana;
 
 				// Asignamos el inicio de la ventana y el número de gráfico
@@ -828,7 +830,7 @@ namespace Orion.ViewModels {
 						try {
 							itinerario = BdItinerarios.GetItinerarioByNombre(Linea);
 						} catch (Exception ex) {
-							_mensajeProvider.VerError("GraficosViewModel.AñadirValoracion", ex);
+							Mensajes.VerError("GraficosViewModel.AñadirValoracion", ex);
 						}
 
 						// Si el itinerario no es nulo (existe)...
@@ -906,7 +908,7 @@ namespace Orion.ViewModels {
 					try {
 						itinerario = BdItinerarios.GetItinerarioByNombre(linea);
 					} catch (Exception ex) {
-						_mensajeProvider.VerError("GraficosViewModel.AñadirValoracion", ex);
+						Mensajes.VerError("GraficosViewModel.AñadirValoracion", ex);
 					}
 
 					// Si el itinerario no es nulo (existe)...
@@ -950,7 +952,7 @@ namespace Orion.ViewModels {
 		private void ModificarFechaGrupo() {
 
 			// Avisamos de que se va a cambiar la fecha, y si contestamos no, salimos.
-			if (_mensajeProvider.VerMensaje("Vas a cambiar la fecha de validez del grupo.\n" +
+			if (Mensajes.VerMensaje("Vas a cambiar la fecha de validez del grupo.\n" +
 									   "Esto puede alterar los calendarios que dependían de la fecha anterior\n\n" +
 									   "¿Desea continuar?", "Cambiar fecha del grupo", true) == false) return;
 
@@ -1004,31 +1006,31 @@ namespace Orion.ViewModels {
 		}
 
 
-		private void GraficosEnPDF() {
+		private async void GraficosEnPDF() {
+			// Creamos el libro a usar.
+			Workbook libro = null;
 			try {
-				if (ListaGraficos.Count == 0) return;
-				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos");
-				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
-				dialogo.FileName = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1}", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
-				if (TextoFiltros != "Ninguno") dialogo.FileName += $" - ({TextoFiltros})";
-				dialogo.InitialDirectory = ruta;
-				dialogo.OverwritePrompt = true;
-				dialogo.Title = "Guardar Gráficos";
-				App.Global.TextoProgreso = "Creando graficos en PDF...";
-				App.Global.VisibilidadProgreso = Visibility.Visible;
-				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
-					GraficosPrintModel.CrearGraficosEnPdf(VistaGraficos, GrupoSeleccionado.Validez, dialogo.FileName);
-					if (App.Global.Configuracion.AbrirPDFs) Process.Start(dialogo.FileName);
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Pedimos el archivo donde guardarlo.
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1}", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
+				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Graficos, nombreArchivo);
+				if (ruta != "") {
+					libro = Informes.GetArchivoExcel(TiposInforme.Graficos);
+					await GraficosPrintModel.CrearGraficosEnPdf(libro, VistaGraficos, GrupoSeleccionado.Validez);
+					Informes.ExportarLibroToPdf(libro, ruta);
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("GraficosCommands.GraficosEnPDF", ex);
+				Mensajes.VerError("GraficosCommands.GraficosEnPDF", ex);
 			} finally {
-				App.Global.VisibilidadProgreso = Visibility.Collapsed;
+				App.Global.FinalizarProgreso();
 			}
 
 		}
+
+
+
 		#endregion
 
 
@@ -1049,28 +1051,25 @@ namespace Orion.ViewModels {
 		}
 
 
-		private void GraficosIndividualesEnPDF() {
+		private async void GraficosIndividualesEnPDF() {
+			// Creamos el libro a usar.
+			Workbook libro = null;
 			try {
-				if (ListaGraficos.Count == 0) return;
-				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos");
-				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
-				dialogo.FileName = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1} (Individuales)", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
-				if (TextoFiltros != "Ninguno") dialogo.FileName += $" - ({TextoFiltros})";
-				dialogo.InitialDirectory = ruta;
-				dialogo.OverwritePrompt = true;
-				dialogo.Title = "Guardar Gráficos Individuales";
-				App.Global.TextoProgreso = "Creando graficos individuales en PDF...";
-				App.Global.VisibilidadProgreso = Visibility.Visible;
-				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
-					Task tarea = new Task(() => GraficosPrintModel.CrearGraficosIndividualesEnPdf(VistaGraficos, GrupoSeleccionado.Validez, dialogo.FileName));
-					tarea.Start();
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Definimos el nombre del archivo a guardar.
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1} (Individuales)", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
+				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.GraficoIndividual, nombreArchivo);
+				if (ruta != "") {
+					libro = Informes.GetArchivoExcel(TiposInforme.GraficoIndividual);
+					await GraficosPrintModel.CrearGraficosIndividualesEnPdf(libro, VistaGraficos, GrupoSeleccionado.Validez);
+					Informes.ExportarLibroToPdf(libro, ruta);
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("GraficosCommands.GraficosEnPDF", ex);
+				Mensajes.VerError("GraficosCommands.GraficosEnPDF", ex);
 			} finally {
-				App.Global.VisibilidadProgreso = Visibility.Collapsed;
+				App.Global.FinalizarProgreso();
 			}
 
 		}
@@ -1116,30 +1115,25 @@ namespace Orion.ViewModels {
 		}
 
 
-		private void EstadisticasGraficos() {
+		private async void EstadisticasGraficos() {
+			// Creamos el libro a usar.
+			Workbook libro = null;
 			try {
-				if (VistaGraficos?.Count == 0) return;
-				SaveFileDialog dialogo = new SaveFileDialog();
-				dialogo.RestoreDirectory = false;
-				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos");
-				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
-				dialogo.FileName = String.Format("Estadisticas Gráficos {0:yyyy}-{0:MM}-{0:dd} - {1}", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
-				if (TextoFiltros != "Ninguno") dialogo.FileName += $" - ({TextoFiltros})";
-				dialogo.InitialDirectory = ruta;
-				dialogo.OverwritePrompt = true;
-				dialogo.Title = "Guardar Estadísticas Gráficos";
-				App.Global.TextoProgreso = "Creando estadísticas de graficos en PDF...";
-				App.Global.VisibilidadProgreso = Visibility.Visible;
-				if (dialogo.ShowDialog() == true) {
-					GraficosPrintModel.CrearEstadisticasGraficosEnPdf(GrupoSeleccionado.Validez, GrupoSeleccionado.Id, dialogo.FileName);
-					//Task tarea = new Task(() => GraficosPrintModel.CrearEstadisticasGraficosEnPdf(GrupoSeleccionado.Validez, GrupoSeleccionado.Id, dialogo.FileName));
-					//tarea.Start();
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Definimos el nombre del archivo a guardar.
+				string nombreArchivo = String.Format("Estadisticas Gráficos {0:yyyy}-{0:MM}-{0:dd} - {1}", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
+				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo);
+				if (ruta != "") {
+					libro = Informes.GetArchivoExcel(TiposInforme.EstadisticasGraficos);
+					await GraficosPrintModel.CrearEstadisticasGraficosEnPdf(libro, GrupoSeleccionado.Validez, GrupoSeleccionado.Id);
+					Informes.ExportarLibroToPdf(libro, ruta);
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("GraficosCommands.EstadisticasGraficos", ex);
+				Mensajes.VerError("GraficosCommands.EstadisticasGraficos", ex);
 			} finally {
-				App.Global.VisibilidadProgreso = Visibility.Collapsed;
+				App.Global.FinalizarProgreso();
 			}
 
 		}
@@ -1162,29 +1156,25 @@ namespace Orion.ViewModels {
 		}
 
 
-		private void EstadisticasGruposGraficos() {
+		private async void EstadisticasGruposGraficos() {
+			// Creamos el libro a usar.
+			Workbook libro = null;
 			try {
-				if (VistaGraficos?.Count == 0) return;
-				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos");
-				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
-				dialogo.FileName = String.Format("Estadisticas Gráficos - {0}", App.Global.CentroActual.ToString());
-				if (TextoFiltros != "Ninguno") dialogo.FileName += $" - ({TextoFiltros})";
-				dialogo.InitialDirectory = ruta;
-				dialogo.OverwritePrompt = true;
-				dialogo.Title = "Guardar Estadísticas Gráficos";
-				App.Global.TextoProgreso = "Creando estadísticas de graficos en PDF...";
-				App.Global.VisibilidadProgreso = Visibility.Visible;
-				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
-					//Action<double> modificaBarra = new Action<double>((valor) => App.Global.ValorBarraProgreso = valor);
-					Task tarea = new Task(() => GraficosPrintModel.CrearEstadisticasGruposGraficosEnPdf(FechaEstadisticas, dialogo.FileName));
-					tarea.Start();
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Definimos el nombre del archivo a guardar.
+				string nombreArchivo = String.Format("Estadisticas Gráficos - {0}", App.Global.CentroActual.ToString());
+				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo);
+				if (ruta != "") {
+					libro = Informes.GetArchivoExcel(TiposInforme.EstadisticasGraficos);
+					await GraficosPrintModel.CrearEstadisticasGruposGraficosEnPdf(libro, FechaEstadisticas);
+					Informes.ExportarHojaToPdf(libro, 1, ruta);
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("GraficosCommands.EstadisticasGruposGraficos", ex);
+				Mensajes.VerError("GraficosCommands.EstadisticasGruposGraficos", ex);
 			} finally {
-				App.Global.VisibilidadProgreso = Visibility.Collapsed;
+				App.Global.FinalizarProgreso();
 			}
 
 		}
@@ -1202,19 +1192,17 @@ namespace Orion.ViewModels {
 		}
 
 
-		private void EstadisticasGraficosPorCentros() {
+		private async void EstadisticasGraficosPorCentros() {
+			// Creamos el libro a usar.
+			Workbook libro = null;
 			try {
-				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos");
-				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
-				dialogo.FileName = String.Format("Estadisticas Gráficos Por Centros");
-				dialogo.InitialDirectory = ruta;
-				dialogo.OverwritePrompt = true;
-				dialogo.Title = "Guardar Estadísticas Gráficos";
-				App.Global.TextoProgreso = "Creando estadísticas de graficos en PDF...";
-				App.Global.VisibilidadProgreso = Visibility.Visible;
-				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Definimos el nombre del archivo a guardar.
+				string nombreArchivo = String.Format("Estadisticas Gráficos Por Centros");
+				string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficosPorCentros, nombreArchivo);
+				if (ruta != "") {
+					libro = Informes.GetArchivoExcel(TiposInforme.EstadisticasGraficosPorCentros);
 					List<EstadisticasGraficos> lista = new List<EstadisticasGraficos>();
 					List<EstadisticasGraficos> listaTemporal;
 					GrupoGraficos grupo = null;
@@ -1255,13 +1243,13 @@ namespace Orion.ViewModels {
 						}
 					}
 					//Action<double> modificaBarra = new Action<double>((valor) => App.Global.ValorBarraProgreso = valor);
-					Task tarea = new Task(() => GraficosPrintModel.CrearEstadisticasGraficosPorCentros(lista, dialogo.FileName));
-					tarea.Start();
+					await GraficosPrintModel.CrearEstadisticasGraficosPorCentros(libro, lista);
+					Informes.ExportarLibroToPdf(libro, ruta);
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("GraficosCommands.EstadisticasGruposGraficos", ex);
+				Mensajes.VerError("GraficosCommands.EstadisticasGruposGraficos", ex);
 			} finally {
-				App.Global.VisibilidadProgreso = Visibility.Collapsed;
+				App.Global.FinalizarProgreso();
 			}
 
 		}

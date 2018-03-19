@@ -11,9 +11,9 @@
         xmlns:local="clr-namespace:Orion.Views"
         xmlns:convertidores="clr-namespace:Orion.Convertidores"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow" ResizeMode="NoResize"
-        Background="{StaticResource DegradadoCeleste1}" Loaded="Ventana_Loaded"
-        Title="Cobro de Horas" Height="350" Width="500" x:Name="Ventana">
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
+        Loaded="Ventana_Loaded"
+        Title="Cobro de Horas" Height="380" Width="500" x:Name="Ventana">
 
     <!-- RECURSOS -->
     <Window.Resources>
@@ -23,68 +23,83 @@
 
     </Window.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Border Background="{StaticResource DegradadoCeleste1}" CornerRadius="15" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20">
 
-        
-        <!-- HORAS -->
-        <StackPanel Grid.Row="0" Orientation="Vertical" Margin="8" VerticalAlignment="Center">
+        <Border.BitmapEffect>
+            <DropShadowBitmapEffect Color="LightGray" Direction="-50" ShadowDepth="10" Softness=".7" />
+        </Border.BitmapEffect>
 
-            <!-- Horas Disponibles -->
-            <Label Margin="4" FontSize="20" VerticalContentAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock FontWeight="DemiBold" Text="Horas disponibles :  "/>
-                    <TextBlock Text="{Binding HorasDisponibles, Converter={StaticResource cnvSuperHora}}"/>
-                </StackPanel>
-            </Label>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-            <!-- Horas Cobradas -->
-            <Label Margin="4" FontSize="20" VerticalContentAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock FontWeight="DemiBold" Text="Horas cobradas :  "/>
-                    <TextBlock Text="{Binding HorasCobradas, Converter={StaticResource cnvSuperHora}}"/>
-                </StackPanel>
-            </Label>
 
-            <!-- Máximo Horas a Cobrar -->
-            <Label Margin="4" FontSize="20" VerticalContentAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock FontWeight="DemiBold" Text="Máximo de horas a cobrar :  "/>
-                    <TextBlock Text="{Binding HorasMaximas, Converter={StaticResource cnvSuperHora}}"/>
-                </StackPanel>
-            </Label>
+            <!-- ================================================== -->
+            <!-- TÍTULO -->
+            <!-- ================================================== -->
+            <Border Grid.Row="0" Background="{StaticResource orDegradadoAzul}" MouseDown="Border_MouseDown" CornerRadius="15,15,0,0">
+                <TextBlock FontFamily="Verdana" FontSize="14" FontWeight="Bold" Margin="10" Text="Cobro de horas"/>
+            </Border>
 
-            <!-- Horas a Cobrar -->
-            <Label Margin="4,25,4,4" FontSize="24" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Horas a cobrar :  "/>
-                    <TextBox x:Name="TbHorasACobrar" Height="36" Width="100" Padding="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
+            <!-- HORAS -->
+            <StackPanel Grid.Row="1" Orientation="Vertical" Margin="8" VerticalAlignment="Center">
+
+                <!-- Horas Disponibles -->
+                <Label Margin="4" FontSize="20" VerticalContentAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="DemiBold" Text="Horas disponibles :  "/>
+                        <TextBlock Text="{Binding HorasDisponibles, Converter={StaticResource cnvSuperHora}}"/>
+                    </StackPanel>
+                </Label>
+
+                <!-- Horas Cobradas -->
+                <Label Margin="4" FontSize="20" VerticalContentAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="DemiBold" Text="Horas cobradas :  "/>
+                        <TextBlock Text="{Binding HorasCobradas, Converter={StaticResource cnvSuperHora}}"/>
+                    </StackPanel>
+                </Label>
+
+                <!-- Máximo Horas a Cobrar -->
+                <Label Margin="4" FontSize="20" VerticalContentAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="DemiBold" Text="Máximo de horas a cobrar :  "/>
+                        <TextBlock Text="{Binding HorasMaximas, Converter={StaticResource cnvSuperHora}}"/>
+                    </StackPanel>
+                </Label>
+
+                <!-- Horas a Cobrar -->
+                <Label Margin="4,25,4,4" FontSize="24" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Horas a cobrar :  "/>
+                        <TextBox x:Name="TbHorasACobrar" Height="36" Width="100" Padding="2" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
                              GotFocus="Tb_GotFocus" Text="{Binding HorasACobrar, Converter={StaticResource cnvSuperHora}}"/>
-                </StackPanel>
-            </Label>
-            
-        </StackPanel>
-       
-        
-        <!-- BOTONES -->
-        <StackPanel Grid.Row="1" Orientation="Horizontal" 
+                    </StackPanel>
+                </Label>
+
+            </StackPanel>
+
+
+            <!-- BOTONES -->
+            <StackPanel Grid.Row="2" Orientation="Horizontal" 
                     VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="10">
 
-            <!-- CANCELAR -->
-            <Button Style="{StaticResource EstiloBoton}" Margin="5" Width="90" Height="40"
+                <!-- CANCELAR -->
+                <Button Style="{StaticResource EstiloBoton}" Margin="5" Width="90" Height="40"
                     FontSize="12" Content="Cancelar" Command="{Binding cmdCancelar}" CommandParameter="{Binding ElementName=Ventana}"/>
 
-            <!-- ACEPTAR -->
-            <Button Style="{StaticResource EstiloBoton}" Margin="5" Width="90" Height="40" Focusable="True"
+                <!-- ACEPTAR -->
+                <Button Style="{StaticResource EstiloBoton}" Margin="5" Width="90" Height="40" Focusable="True"
                     FontSize="12" Content="Aceptar" Command="{Binding cmdAceptar}" CommandParameter="{Binding ElementName=Ventana}"/>
 
-        </StackPanel>
+            </StackPanel>
 
 
 
 
-    </Grid>
+        </Grid>
+    </Border>
 </Window>

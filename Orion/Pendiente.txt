@@ -16,43 +16,31 @@ PROYECTO ORION
 
 		- Gestionar los conductores desde la tabla y no desde la base de datos, ya que se cargan todos.
 
-		- Los F6 no se descuentan de las horas acumuladas, sino que se descuentan de los DCs.
+		- Crear árbol de carpetas de conductores.
+			· Las carpetas con nombre deben ir en modo Título.
+			· Las carpetas se clasifican por centros, por lo que el primer nivel será el centro.
+			· Dentro de cada centro, hay que decidir si se clasifican por conductor o por tipo de informe.
+			· Los gráficos (grupos de ellos) irán en una carpeta.
+			· Las estadísticas de gráficos, irán en una carpeta.
+			· Los calendarios irán en una carpeta.
+			· Los fallos en los calendarios irán en una carpeta en concreto.
+			· Las hojas pijama y las reclamaciones irán en la carpeta del conductor en concreto.
 
+		- Añadir opción que determine si guardar los informes directamente o pedir nombre de archivo.
 
-		- Actualizar consultas de Bases de Datos:
-			ActualizarConductor
-			InsertarConductor
-			GetEstadisticas... (las dos que hay).
-			ActualizarCalendario
-			ActualizarDiaCalendario
-			InsertarCalendario
-			InsertarDiaCalendario
-			CambiarFechaDiasCalendario => Ejecutarla para añadir las fechas.
-			GetDiasCalendarioConBloqueos
+	 ** - Crear un «Servicio» para el manejo de los informes de Excel, en el cuál sólo se abrirá una aplicación de Excel con el primer informe
+		  y se reutilizará con los siguientes, cerrándola al salir de la aplicación. Este «Servicio» tendrá una «Factory» de documentos. Al
+		  «Servicio» le podemos llamar "Informes" y meter en él toda la maquinaria de generación y gestión de los mismos.
 
-		- Actualizar Tabla Conductores => Añadir Campo ReduccionJornada - Si/No
+		- Modificar la calculadora para que el botón cerrar sea un comando.
 
-		- Cambiar en las tablas Calendarios, DiasCalendario
-			- Cambiar HorasDescuadre por Descuadre y ponerlo como número entero.
+	 ** - Al detectar fallos de calendario, las O-V las tiene en cuenta como días trabajados.
 
-		- Añadir en tabla DiasCalendario:
-			- BloquearExcesoJornada - Si/No
-			- BloquearDescuadre - Si/No
-			- DiaFecha - Fecha/Hora
-
+	 ** - Añadir en los calendarios la opción de marcar ciertos días, según tengan un gráfico concreto u otra cosa.
 
 
 	Consultas pendientes
 	--------------------
 
-		El pico de horas de un año no se acumula en el pijama mensual.
-
-		En el pijama, los días de menos de 7:20 salen con las horas reales y no como 7:20, que es como debe ser.
-
-		Al tener un exceso de jornada, se añade el tiempo a la hora final y se calculan las horas con todos los parámetros.
-
-		En Arrasate, el 18-02 hay -15 de descuadre.
-
-	----------
 
 		

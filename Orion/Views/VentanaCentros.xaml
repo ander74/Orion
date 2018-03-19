@@ -10,53 +10,72 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Orion.Views"
         mc:Ignorable="d"
-        Background="{StaticResource DegradadoCeleste0}"
-        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow"
-        Title="Centros de Trabajo" Height="300" Width="250">
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
+        Title="Centros de Trabajo" Height="320" Width="250">
 
-    <!-- VENTANA DE CENTROS -->
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" Margin="10">
+    <Border Background="{StaticResource DegradadoCeleste0}" CornerRadius="15" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20">
 
-        <!-- BILBAO -->
-        <Button Name="Bilbao" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click">
-            <Button.Content>
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="Imagenes\Logos\LogoBilbao.png" Height="32" Margin="0,0,15,0"/>
-                    <TextBlock FontSize="28">Bilbao</TextBlock>
-                </StackPanel>
-            </Button.Content>
-        </Button>
+        <Border.BitmapEffect>
+            <DropShadowBitmapEffect Color="LightGray" Direction="-50" ShadowDepth="10" Softness=".7" />
+        </Border.BitmapEffect>
 
-        <!-- DONOSTI -->
-        <Button Name="Donosti" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click">
-            <Button.Content>
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="Imagenes\Logos\LogoDonosti.png" Height="32" Margin="0,0,15,0"/>
-                    <TextBlock FontSize="28">Donosti</TextBlock>
-                </StackPanel>
-            </Button.Content>
-        </Button>
 
-        <!-- ARRASATE -->
-        <Button Name="Arrasate" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click">
-            <Button.Content>
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="Imagenes\Logos\LogoArrasate.png" Height="32" Margin="0,0,15,0"/>
-                    <TextBlock FontSize="28">Arrasate</TextBlock>
-                </StackPanel>
-            </Button.Content>
-        </Button>
+        <!-- VENTANA DE CENTROS -->
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
 
-        <!-- GASTEIZ -->
-        <Button Name="Vitoria" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click">
-            <Button.Content>
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="Imagenes\Logos\LogoGasteiz.png" Height="32" Margin="0,0,15,0"/>
-                    <TextBlock FontSize="28">Gasteiz</TextBlock>
-                </StackPanel>
-            </Button.Content>
-        </Button>
+            <!-- ================================================== -->
+            <!-- TÍTULO -->
+            <!-- ================================================== -->
+            <Border Background="{StaticResource orDegradadoAzul}" MouseDown="Border_MouseDown" CornerRadius="15,15,0,0">
+                <Grid>
+                    <TextBlock FontFamily="Verdana" FontSize="14" FontWeight="Bold" Margin="10" Text="Centros de Trabajo"/>
+                    <Button Name="Cerrar" Style="{StaticResource EstiloBotonBarraPequeña}" HorizontalAlignment="Right" Padding="6" Click="Boton_Click">
+                        <Image Source="Imagenes/Cerrar.png" Width="16"/>
+                    </Button>
+                </Grid>
+            </Border>
 
-    </StackPanel>
 
+            <!-- BILBAO -->
+            <Button Name="Bilbao" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click" HorizontalAlignment="Center">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Imagenes\Logos\LogoBilbao.png" Height="32" Margin="0,0,15,0"/>
+                        <TextBlock FontSize="28">Bilbao</TextBlock>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!-- DONOSTI -->
+            <Button Name="Donosti" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click" HorizontalAlignment="Center">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Imagenes\Logos\LogoDonosti.png" Height="32" Margin="0,0,15,0"/>
+                        <TextBlock FontSize="28">Donosti</TextBlock>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!-- ARRASATE -->
+            <Button Name="Arrasate" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click" HorizontalAlignment="Center">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Imagenes\Logos\LogoArrasate.png" Height="32" Margin="0,0,15,0"/>
+                        <TextBlock FontSize="28">Arrasate</TextBlock>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!-- GASTEIZ -->
+            <Button Name="Vitoria" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click" HorizontalAlignment="Center">
+                <Button.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Imagenes\Logos\LogoGasteiz.png" Height="32" Margin="0,0,15,0"/>
+                        <TextBlock FontSize="28">Gasteiz</TextBlock>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+        </StackPanel>
+    </Border>
 </Window>

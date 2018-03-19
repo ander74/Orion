@@ -34,7 +34,7 @@ namespace Orion.Models {
 		}
 
 
-		private decimal _importedietas = 14.49m;
+		private decimal _importedietas = 15.14m;
 		public decimal ImporteDietas {
 			get { return _importedietas; }
 			set {
@@ -312,7 +312,7 @@ namespace Orion.Models {
 		#region PLUSES
 		// ====================================================================================================
 
-		private decimal _importefestivos = 41.12m;
+		private decimal _importefestivos = 41.78m;
 		public decimal ImporteFestivos {
 			get { return _importefestivos; }
 			set {
@@ -324,7 +324,7 @@ namespace Orion.Models {
 		}
 
 
-		private decimal _importesabados = 5.14m;
+		private decimal _importesabados = 10.45m;
 		public decimal ImporteSabados {
 			get { return _importesabados; }
 			set {
@@ -336,7 +336,7 @@ namespace Orion.Models {
 		}
 
 
-		private decimal _dietamenordescanso = 8.69m;
+		private decimal _dietamenordescanso = 8.68m;
 		public decimal DietaMenorDescanso {
 			get { return _dietamenordescanso; }
 			set {
@@ -360,7 +360,7 @@ namespace Orion.Models {
 		}
 
 
-		private decimal _pluspaqueteria = 7.63m;
+		private decimal _pluspaqueteria = 7.75m;
 		public decimal PlusPaqueteria {
 			get { return _pluspaqueteria; }
 			set {
@@ -384,7 +384,7 @@ namespace Orion.Models {
 		}
 
 
-		private decimal _plusnavidad = 60m;
+		private decimal _plusnavidad = 160.63m;
 		public decimal PlusNavidad {
 			get { return _plusnavidad; }
 			set {

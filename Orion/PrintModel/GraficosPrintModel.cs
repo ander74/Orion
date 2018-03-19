@@ -34,7 +34,6 @@ namespace Orion.PrintModel {
 		private static ConvertidorDecimal cnvDecimal = new ConvertidorDecimal();
 		private static ConvertidorDiasF6 cnvDiasF6 = new ConvertidorDiasF6();
 		private static ConvertidorColorDia cnvColorDia = new ConvertidorColorDia();
-		//private static ConvertidorColores cnvColores = new ConvertidorColores();
 
 		private static string rutaPlantillaGraficos = Utils.CombinarCarpetas(App.RutaInicial, "/Plantillas/Graficos.xlsx");
 		private static string rutaPlantillaGraficosIndividuales = Utils.CombinarCarpetas(App.RutaInicial, "/Plantillas/GraficoIndividual.xlsx");
@@ -200,26 +199,18 @@ namespace Orion.PrintModel {
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
 
-		public static void CrearGraficosEnPdf(ListCollectionView lista, DateTime fecha, string rutaArchivo) {
+		public static async Task CrearGraficosEnPdf(Workbook libro, ListCollectionView lista, DateTime fecha) {
 
-			// Creamos una aplicacion Excel
-			Application ExcelApp = null;
-			// Creamos el libro
-			Workbook Libro = null;
-			try {
-				// Creamos la App de excel y la ocultamos la app de Excel
-				ExcelApp = new Application { Visible = false };
-				// Creamos el libro desde la plantilla.
-				Libro = ExcelApp.Workbooks.Add(rutaPlantillaGraficos);
-				// Definimos la hoja.
-				Worksheet Hoja = Libro.Worksheets[1];
+			await Task.Run(() => {
+				// Definimos la hoja a usar.
+				Worksheet hoja = libro.Worksheets[1];
 				// Definimos el título y el centro TODO: Pasar al parser...
-				Hoja.Range["A1"].Value = string.Format("{0:dd} - {0:MMMM} - {0:yyyy}", fecha).ToUpper();
-				Hoja.Range["S1"].Value = App.Global.CentroActual.ToString().ToUpper();
+				hoja.Range["A1"].Value = string.Format("{0:dd} - {0:MMMM} - {0:yyyy}", fecha).ToUpper();
+				hoja.Range["S1"].Value = App.Global.CentroActual.ToString().ToUpper();
 				// Llenamos la plantilla con los gráficos.
 				string[,] datos = RangoGraficos(lista);
 				// Creamos el rango que ocupan los gráficos.
-				Range rango = Hoja.Range["A3", Hoja.Cells[lista.Count + 2, 19]];
+				Range rango = hoja.Range["A3", hoja.Cells[lista.Count + 2, 19]];
 				// Rellenamos los bordes de los calendarios.
 				rango.Borders.LineStyle = XlLineStyle.xlContinuous;
 				rango.Borders.Color = XlRgbColor.rgbBlack;
@@ -229,46 +220,35 @@ namespace Orion.PrintModel {
 				rango.Value = datos;
 				// Coloreamos las filas pares.
 				for (int m = 1; m <= lista.Count; m++) {
-					object x = Hoja.Cells[m + 2, 11].Value;
+					// Pasamos el valor de progreso.
+					double valor = Convert.ToDouble(m) / lista.Count * 100;
+					App.Global.ValorBarraProgreso = valor;
+
+					object x = hoja.Cells[m + 2, 11].Value;
 					string n = x?.GetType().Name;
-					if (Hoja.Cells[m + 2, 11].Value != null) {
-						Hoja.Range[Hoja.Cells[m + 2, 9], Hoja.Cells[m + 2, 11]].Font.Color = Color.DeepPink;
+					if (hoja.Cells[m + 2, 11].Value != null) {
+						hoja.Range[hoja.Cells[m + 2, 9], hoja.Cells[m + 2, 11]].Font.Color = Color.DeepPink;
 					}
-					if (m % 2 == 0) Hoja.Range[Hoja.Cells[m + 2, 1], Hoja.Cells[m + 2, 19]].Interior.Color = Color.FromArgb(255, 226, 239, 218);
+					if (m % 2 == 0) hoja.Range[hoja.Cells[m + 2, 1], hoja.Cells[m + 2, 19]].Interior.Color = Color.FromArgb(255, 226, 239, 218);
 				}
 				// Establecemos el área de impresión.
-				Hoja.PageSetup.PrintArea = Hoja.Range["A1", Hoja.Cells[lista.Count + 2, 19]].Address;
-				// Exportamos el libro como PDF.
-				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
-			} finally {
-				if (Libro != null) Libro.Close(false);
-				if (ExcelApp != null) ExcelApp.Quit();
-			}
-
+				hoja.PageSetup.PrintArea = hoja.Range["A1", hoja.Cells[lista.Count + 2, 19]].Address;
+			});
 		}
 
 
-		public static void CrearGraficosIndividualesEnPdf(ListCollectionView lista, DateTime fecha, string rutaArchivo) {
+		public static async Task CrearGraficosIndividualesEnPdf(Workbook libro, ListCollectionView lista, DateTime fecha) {
 
-			// Creamos una aplicacion Excel
-			Application ExcelApp = null;
-			// Creamos el libro
-			Workbook Libro = null;
-			try {
-				// Mostramos la barra de progreso y le asignamos el texto.
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Visible;
-				App.Global.TextoProgreso = "Creando PDF...";
-				// Creamos la App de excel y la ocultamos la app de Excel
-				ExcelApp = new Application { Visible = false };
-				// Creamos el libro desde la plantilla.
-				Libro = ExcelApp.Workbooks.Add(rutaPlantillaGraficosIndividuales);
+			await Task.Run(() => {
+
 				// Definimos la hoja.
-				Worksheet Hoja = Libro.Worksheets[1];
+				Worksheet Hoja = libro.Worksheets[1];
 				// Definimos el número de valoraciones totales a pegar.
 				int valoraciones = 0;
 				// Formateamos cada gráfico en la hoja.
 				int fila = 1;
 				double num = 1;
+
 				foreach (object obj in lista) {
 					double valor = num / lista.Count * 100;
 					App.Global.ValorBarraProgreso = valor;
@@ -317,6 +297,7 @@ namespace Orion.PrintModel {
 					// Líneas totales y parciales
 					fila = fila + 5 + g.ListaValoraciones.Count;
 				}
+
 				// Definimos el array con los datos...
 				string[,] datos = new string[(5 * lista.Count + valoraciones), 5];
 				// Extraemos los datos de la lista de gráficos
@@ -325,49 +306,26 @@ namespace Orion.PrintModel {
 				Hoja.Range["A1", Hoja.Cells[(5 * lista.Count + valoraciones), 5]].Value = datos;
 				// Establecemos el área de impresión.
 				Hoja.PageSetup.PrintArea = Hoja.Range["A1", Hoja.Cells[(5 * (lista.Count - 1) + valoraciones), 5]].Address;
-				// Exportamos el libro como PDF.
-				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
-				// SI hay que abrir el PDF, se abre.
-				if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaArchivo);
-			} finally {
-				if (Libro != null) Libro.Close(false);
-				if (ExcelApp != null) ExcelApp.Quit();
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Collapsed;
-			}
 
-
-
-
+			});
 		}
 
 
-		public static void CrearEstadisticasGraficosEnPdf(DateTime fecha, long idGrupoGrafico, string rutaArchivo) {
+		public static async Task CrearEstadisticasGraficosEnPdf(Workbook libro, DateTime fecha, long idGrupoGrafico) {
 
-			// Creamos una aplicacion Excel
-			Application ExcelApp = null;
-			// Creamos el libro
-			Workbook Libro = null;
-			try {
-				// Mostramos la barra de progreso y le asignamos el valor de 1
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Visible;
-				App.Global.TextoProgreso = "Creando PDF...";
-				// Creamos la App de excel y la ocultamos
-				ExcelApp = new Application { Visible = false };
-				// Creamos el libro desde la plantilla.
-				Libro = ExcelApp.Workbooks.Add(rutaPlantillaEstadisticasGraficos);
+			await Task.Run(() => {
 				// Definimos las hojas.
-				Worksheet Hoja = Libro.Worksheets[1]; // Hoja de datos
-				// Definimos y llenamos la lista de estadisticas.
+				Worksheet Hoja = libro.Worksheets[1]; // Hoja de datos
+													  // Definimos y llenamos la lista de estadisticas.
 				List<EstadisticasGraficos> lista = BdGraficos.GetEstadisticasGrupoGraficos(idGrupoGrafico);
 				// Definimos el título y el centro de la hoja de datos.
 				Hoja.Range["O1"].Value = App.Global.CentroActual.ToString().ToUpper();
 				// Escribimos las estadísticas en la hoja.
 				SetEstadisticasEnHoja(Hoja, lista, fecha, 4);
 
-
 				// Establecemos la gráfica y la serie de la gráfica.
 				//Chart grafica = Hoja2.ChartObjects("Grafico1").Chart;
-				Chart grafica = Libro.Charts[1];
+				Chart grafica = libro.Charts[1];
 				Series serie = grafica.SeriesCollection(1);
 				// Establecemos el título de la serie y su formato.
 				//serie.Name = "Grupo de gráficos => " + fecha.ToString("dd-MMM-yyyy").Replace(".", "");
@@ -398,36 +356,17 @@ namespace Orion.PrintModel {
 
 
 				// Seleccionamos todas las hojas.
-				Libro.Worksheets.Select();
-				// Exportamos el libro como PDF.
-				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
-				// Si hay que abrir el libro, se abre.
-				if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaArchivo);
-			} finally {
-				if (Libro != null) Libro.Close(false);
-				if (ExcelApp != null) ExcelApp.Quit();
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Collapsed;
-			}
+				libro.Worksheets.Select();
+			});
 
 		}
 
 
-		public static void CrearEstadisticasGruposGraficosEnPdf(DateTime fecha, string rutaArchivo) {
+		public static async Task CrearEstadisticasGruposGraficosEnPdf(Workbook libro, DateTime fecha) {
 
-			// Creamos una aplicacion Excel
-			Application ExcelApp = null;
-			// Creamos el libro
-			Workbook Libro = null;
-			try {
-				// Mostramos la barra de progreso y le asignamos el valor de 1
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Visible;
-				App.Global.TextoProgreso = "Creando PDF...";
-				// Creamos la App de excel y la ocultamos
-				ExcelApp = new Application { Visible = false };
-				// Creamos el libro desde la plantilla.
-				Libro = ExcelApp.Workbooks.Add(rutaPlantillaEstadisticasGraficos);
+			await Task.Run(() => {
 				// Definimos la hoja.
-				Worksheet Hoja = Libro.Worksheets[1];
+				Worksheet Hoja = libro.Worksheets[1];
 				// Definimos y llenamos la lista de estadisticas.
 				List<EstadisticasGraficos> lista = BdGraficos.GetEstadisticasGraficosDesdeFecha(fecha);
 				// Definimos el título y el centro
@@ -439,8 +378,10 @@ namespace Orion.PrintModel {
 				double num = 1;
 				DateTime ultimafecha = new DateTime(0);
 				List<EstadisticasGraficos> listatemporal = new List<EstadisticasGraficos>();
+
+
 				// Pasamos centro a centro y lo generamos.
-				foreach(EstadisticasGraficos estadistica in lista) {
+				foreach (EstadisticasGraficos estadistica in lista) {
 					double valor = num / lista.Count * 100;
 					//modificaBarra.Invoke(valor);
 					App.Global.ValorBarraProgreso = valor;
@@ -466,7 +407,7 @@ namespace Orion.PrintModel {
 						listatemporal = new List<EstadisticasGraficos>();
 						listatemporal.Add(estadistica);
 						fila += 8;
-						grupos = grupos == 3 ? 1 : grupos + 1; 
+						grupos = grupos == 3 ? 1 : grupos + 1;
 						ultimafecha = estadistica.Validez;
 					}
 					if (totalgrupos > 0) {
@@ -474,38 +415,22 @@ namespace Orion.PrintModel {
 						SetEstadisticasEnHoja(Hoja, listatemporal, ultimafecha, fila);
 					}
 				}
+
+
 				// Establecemos el rango de impresión.
-				Hoja.PageSetup.PrintArea = Hoja.Range["A1", Hoja.Cells[fila+4, 15]].Address;
-				// Exportamos la hoja como PDF.
-				Hoja.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
-				// Si hay que abrir el libro, se abre.
-				if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaArchivo);
-			} finally {
-				if (Libro != null) Libro.Close(false);
-				if (ExcelApp != null) ExcelApp.Quit();
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Collapsed;
-			}
+				Hoja.PageSetup.PrintArea = Hoja.Range["A1", Hoja.Cells[fila + 4, 15]].Address;
+				// Seleccionamos sólo la primera hoja del libro.
+				libro.Worksheets[1].Select();
+			});
 
 		}
 
 
-		public static void CrearEstadisticasGraficosPorCentros(List<EstadisticasGraficos> lista, string rutaArchivo) {
+		public static async Task CrearEstadisticasGraficosPorCentros(Workbook libro, List<EstadisticasGraficos> lista) {
 
-			// Creamos una aplicacion Excel
-			Application ExcelApp = null;
-			// Creamos el libro
-			Workbook Libro = null;
-			try {
-				// Mostramos la barra de progreso y le asignamos el valor de 1
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Visible;
-				App.Global.TextoProgreso = "Creando PDF...";
-				App.Global.ValorBarraProgreso = 0;
-				// Creamos la App de excel y la ocultamos
-				ExcelApp = new Application { Visible = false };
-				// Creamos el libro desde la plantilla.
-				Libro = ExcelApp.Workbooks.Add(rutaPlantillaEstadisticasGraficosPorCentros);
+			await Task.Run(() => {
 				// Definimos la hoja.
-				Worksheet Hoja = Libro.Worksheets[1];
+				Worksheet Hoja = libro.Worksheets[1];
 				// Definimos la lista temporal que se va a usar.
 				List<EstadisticasGraficos> listaTemporal;
 				// Establecemos las estadisticas de Bilbao.
@@ -542,23 +467,14 @@ namespace Orion.PrintModel {
 				}
 
 				// Establecemos los parámetros de la gráfica.
-				Chart grafica = Libro.Charts[1];
+				Chart grafica = libro.Charts[1];
 				grafica.ChartTitle.Text = "Número de gráficos por turno.";
 				grafica.ChartTitle.Left = (grafica.ChartArea.Width - grafica.ChartTitle.Width) / 2;
 				grafica.ChartArea.RoundedCorners = true;
 
-
 				// Seleccionamos todas las hojas del libro.
-				Libro.Worksheets.Select();
-				// Exportamos el libro como PDF.
-				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, rutaArchivo);
-				// Si hay que abrir el libro, se abre.
-				if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaArchivo);
-			} finally {
-				if (Libro != null) Libro.Close(false);
-				if (ExcelApp != null) ExcelApp.Quit();
-				App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Collapsed;
-			}
+				libro.Worksheets.Select();
+			});
 
 
 		}

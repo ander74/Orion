@@ -6,6 +6,7 @@
 // ===============================================
 #endregion
 using Orion.Models;
+using Orion.Servicios;
 using Orion.Views;
 using System;
 using System.Collections.Generic;
@@ -23,7 +24,7 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
-		private IMensajeProvider _mensajeProvider;
+		private IMensajes mensajes;
 
 		#endregion
 
@@ -31,8 +32,8 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region CONSTRUCTORES
 		// ====================================================================================================
-		public AñadirValoracionGraficoViewModel(IMensajeProvider mensajeProvider) {
-			_mensajeProvider = mensajeProvider;
+		public AñadirValoracionGraficoViewModel(IMensajes mensaje) {
+			mensajes = mensaje;
 		}
 		#endregion
 

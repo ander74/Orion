@@ -46,11 +46,18 @@ namespace Orion.Views {
 				case "Vitoria":
 					Centro = Centros.Vitoria;
 					break;
+				case "Cerrar":
+					break;
 				default:
 					Centro = Centros.Desconocido;
 					break;
 			}
 			this.Close();
 		}
+
+		private void Border_MouseDown(object sender, MouseButtonEventArgs e) {
+			DragMove();
+		}
+
 	}
 }

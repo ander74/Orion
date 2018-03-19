@@ -9,6 +9,7 @@ using Orion.Config;
 using Orion.DataModels;
 using Orion.Models;
 using Orion.Properties;
+using Orion.Servicios;
 using Orion.Views;
 using System;
 using System.ComponentModel;
@@ -30,7 +31,8 @@ namespace Orion.ViewModels {
 		private Centros _centroactual;
 		private string _textoestado = "Version Desconocida";
 		private string _textodetalle;
-		private MensajeProvider mensajeProvider;
+		private MensajesServicio mensajes;
+		private InformesServicio Informes;
 
 		// ViewModels
 		private GraficosViewModel _graficosvm;
@@ -53,17 +55,6 @@ namespace Orion.ViewModels {
 			Configuracion.Cargar(ArchivoOpcionesConfiguracion);
 			Convenio.Cargar(ArchivoOpcionesConvenio);
 
-			// Actualizamos la condiguración si ha cambiado la versión del programa.
-			//if (App.Global.Configuracion.ActualizarSettings) {
-			//	App.Global.Configuracion.Upgrade();
-				//App.Global.Convenio2.Upgrade();
-				//PorCentro.Default.Upgrade();
-				//App.Global.Configuracion.ActualizarSettings = false;
-				//App.Global.Configuracion.Save();
-				//App.Global.Convenio2.Save();
-			//	PorCentro.Default.Save();
-			//}
-
 			// Si las carpetas de configuracion están en blanco, rellenarlas.
 			if (Configuracion.CarpetaDatos == "") Configuracion.CarpetaDatos = Path.Combine(Directory.GetCurrentDirectory(), "Datos");
 			if (Configuracion.CarpetaDropbox == "") Configuracion.CarpetaDropbox = Path.Combine(Directory.GetCurrentDirectory(), "Dropbox");
@@ -71,7 +62,11 @@ namespace Orion.ViewModels {
 			if (Configuracion.CarpetaAyuda == "") Configuracion.CarpetaAyuda = Path.Combine(Directory.GetCurrentDirectory(), "Ayuda");
 			if (Configuracion.CarpetaCopiasSeguridad == "") Configuracion.CarpetaCopiasSeguridad = Path.Combine(Directory.GetCurrentDirectory(), "CopiasSeguridad");
 
-			mensajeProvider = new MensajeProvider();
+			// Creamos los servicios
+			mensajes = new MensajesServicio();
+			Informes = new InformesServicio();
+
+			// Asignamos el centro actual.
 			CentroActual = (Centros)Configuracion.CentroInicial;
 			// Activamos el botón de la calculadora.
 			Configuracion.BotonCalculadoraActivo = true;
@@ -100,6 +95,18 @@ namespace Orion.ViewModels {
 			return cadenaConexion;
 		}
 
+
+		public void IniciarProgreso(string texto = "Trabajando...") {
+			TextoProgreso = texto;
+			ValorBarraProgreso = 0;
+			App.Global.VisibilidadBarraProgreso = Visibility.Visible;
+		}
+
+
+		public void FinalizarProgreso() {
+			App.Global.VisibilidadBarraProgreso = Visibility.Collapsed;
+		}
+
 		#endregion
 		// ====================================================================================================
 
@@ -111,7 +118,7 @@ namespace Orion.ViewModels {
 		public void CerrandoVentanaEventHandler(object sender, CancelEventArgs e) {
 
 			if (PuedeGuardarCambios()) {
-				bool? resultado = mensajeProvider.VerMensaje("¡¡ ATENCIÓN !!\n\nHay cambios sin guardar.\n\n¿Desea guardar los cambios?",
+				bool? resultado = mensajes.VerMensaje("¡¡ ATENCIÓN !!\n\nHay cambios sin guardar.\n\n¿Desea guardar los cambios?",
 															 "NO SE HAN GUARDADO LOS CAMBIOS",true, true);
 
 				switch (resultado) {
@@ -137,6 +144,9 @@ namespace Orion.ViewModels {
 
 			// Intentamos cerrar la calculadora, si existe.
 			if (App.Calculadora != null) App.Calculadora.Close();
+
+			// Apagamos los servicios
+			if (Informes != null) Informes.Dispose();
 
 			// Si hay que actualizar el programa, lanzamos el actualizador.
 			if (App.ActualizarAlSalir) {
@@ -250,18 +260,6 @@ namespace Orion.ViewModels {
 		}
 
 
-		private double _valorbarraprogreso;
-		public double ValorBarraProgreso {
-			get { return _valorbarraprogreso; }
-			set {
-				if (_valorbarraprogreso != value) {
-					_valorbarraprogreso = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
 		public string TextoDetalle {
 			get { return _textodetalle; }
 			set {
@@ -349,6 +347,18 @@ namespace Orion.ViewModels {
 		}
 
 
+		private double _valorbarraprogreso;
+		public double ValorBarraProgreso {
+			get { return _valorbarraprogreso; }
+			set {
+				if (_valorbarraprogreso != value) {
+					_valorbarraprogreso = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
 		private string _textoprogreso;
 		public string TextoProgreso {
 			get { return _textoprogreso; }
@@ -361,13 +371,17 @@ namespace Orion.ViewModels {
 		}
 
 
-		//====================================================================================================
-		// VIEW MODELS
-		//====================================================================================================
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region VIEWMODELS
+		// ====================================================================================================
 
 		public OpcionesViewModel OpcionesVM {
 			get {
-				if (_opcionesvm == null) _opcionesvm = new OpcionesViewModel(mensajeProvider);
+				if (_opcionesvm == null) _opcionesvm = new OpcionesViewModel(mensajes);
 				return _opcionesvm;
 			}
 		}
@@ -375,7 +389,7 @@ namespace Orion.ViewModels {
 
 		public GraficosViewModel GraficosVM {
 			get {
-				if (_graficosvm == null) _graficosvm = new GraficosViewModel(mensajeProvider);
+				if (_graficosvm == null) _graficosvm = new GraficosViewModel(mensajes, Informes);
 				return _graficosvm;
 			}
 		}
@@ -383,7 +397,7 @@ namespace Orion.ViewModels {
 
 		public ConductoresViewModel ConductoresVM {
 			get {
-				if (_conductoresvm == null) _conductoresvm = new ConductoresViewModel(mensajeProvider);
+				if (_conductoresvm == null) _conductoresvm = new ConductoresViewModel(mensajes);
 				return _conductoresvm;
 			}
 		}
@@ -391,7 +405,7 @@ namespace Orion.ViewModels {
 
 		public CalendariosViewModel CalendariosVM {
 			get {
-				if (_calendariosvm == null) _calendariosvm = new CalendariosViewModel(mensajeProvider);
+				if (_calendariosvm == null) _calendariosvm = new CalendariosViewModel(mensajes, Informes);
 				return _calendariosvm;
 			}
 		}
@@ -399,215 +413,10 @@ namespace Orion.ViewModels {
 
 		public LineasViewModel LineasVM {
 			get {
-				if (_lineasvm == null) _lineasvm = new LineasViewModel(mensajeProvider);
+				if (_lineasvm == null) _lineasvm = new LineasViewModel(mensajes);
 				return _lineasvm;
 			}
 		}
-
-
-		#endregion
-		// ====================================================================================================
-
-
-		// ====================================================================================================
-		#region PROPIEDADES POR CENTROS
-		// ====================================================================================================
-
-		//public int LunDel {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return 0;
-		//		return (int)PorCentro.Default[$"LunDel{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((int)PorCentro.Default[$"LunDel{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"LunDel{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public int LunAl {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return 0;
-		//		return (int)PorCentro.Default[$"LunAl{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((int)PorCentro.Default[$"LunAl{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"LunAl{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public int VieDel {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return 0;
-		//		return (int)PorCentro.Default[$"VieDel{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((int)PorCentro.Default[$"VieDel{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"VieDel{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public int VieAl {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return 0;
-		//		return (int)PorCentro.Default[$"VieAl{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((int)PorCentro.Default[$"VieAl{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"VieAl{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public int SabDel {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return 0;
-		//		return (int)PorCentro.Default[$"SabDel{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((int)PorCentro.Default[$"SabDel{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"SabDel{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public int SabAl {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return 0;
-		//		return (int)PorCentro.Default[$"SabAl{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((int)PorCentro.Default[$"SabAl{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"SabAl{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public int DomDel {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return 0;
-		//		return (int)PorCentro.Default[$"DomDel{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((int)PorCentro.Default[$"DomDel{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"DomDel{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public int DomAl {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return 0;
-		//		return (int)PorCentro.Default[$"DomAl{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((int)PorCentro.Default[$"DomAl{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"DomAl{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public int Comodin {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return 0;
-		//		return (int)PorCentro.Default[$"Comodin{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((int)PorCentro.Default[$"Comodin{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"Comodin{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public bool PagarLimpiezas {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return false;
-		//		return (bool)PorCentro.Default[$"PagarLimpiezas{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((bool)PorCentro.Default[$"PagarLimpiezas{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"PagarLimpiezas{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public int NumeroLimpiezas {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return 0;
-		//		return (int)PorCentro.Default[$"NumeroLimpiezas{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((int)PorCentro.Default[$"NumeroLimpiezas{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"NumeroLimpiezas{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public bool PagarPlusViaje {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return false;
-		//		return (bool)PorCentro.Default[$"PagarPlusViaje{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((bool)PorCentro.Default[$"PagarPlusViaje{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"PagarPlusViaje{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//public decimal PlusViaje {
-		//	get {
-		//		if (CentroActual == Centros.Desconocido) return 0m;
-		//		return (decimal)PorCentro.Default[$"PlusViaje{CentroActual.ToString()}"];
-		//	}
-		//	set {
-		//		if ((decimal)PorCentro.Default[$"PlusViaje{CentroActual.ToString()}"] != value) {
-		//			PorCentro.Default[$"PlusViaje{CentroActual.ToString()}"] = value;
-		//			OpcionesVM.HayCambios = true;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
 
 		#endregion
 		// ====================================================================================================

@@ -8,6 +8,7 @@
 using Orion.Config;
 using Orion.DataModels;
 using Orion.Models;
+using Orion.Servicios;
 using Orion.Views;
 using System;
 using System.Collections.ObjectModel;
@@ -23,7 +24,7 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
-		private IMensajeProvider _mensajeProvider;
+		private IMensajes mensajes;
 
 		#endregion
 
@@ -31,8 +32,8 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region CONSTRUCTOR
 		// ====================================================================================================
-		public VentanaNuevoGrupoVM(IMensajeProvider mensajeProvider) {
-			_mensajeProvider = mensajeProvider;
+		public VentanaNuevoGrupoVM(IMensajes servicioMensajes) {
+			mensajes = servicioMensajes;
 		}
 
 		#endregion
@@ -175,7 +176,7 @@ namespace Orion.ViewModels {
 			try {
 				// Si la fecha ya existe, mostramos mensaje
 				if (BdGruposGraficos.ExisteGrupo(FechaActual)) {
-					_mensajeProvider.VerMensaje("Ya existe un grupo con la fecha elegida.", "ERROR");
+					mensajes.VerMensaje("Ya existe un grupo con la fecha elegida.", "ERROR");
 					return;
 				}
 				if (NuevoMarcado) {
@@ -205,7 +206,7 @@ namespace Orion.ViewModels {
 				}
 				if (WordMarcado) {
 					if (String.IsNullOrEmpty(ArchivoWord)) {
-						_mensajeProvider.VerMensaje("No ha seleccionado ningún archivo.", "ERROR");
+						mensajes.VerMensaje("No ha seleccionado ningún archivo.", "ERROR");
 						return;
 					}
 
@@ -217,7 +218,7 @@ namespace Orion.ViewModels {
 				}
 
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("VentanaNuevoGrupoVM.Aceptar", ex);
+				mensajes.VerError("VentanaNuevoGrupoVM.Aceptar", ex);
 			}
 		}
 
@@ -355,7 +356,7 @@ namespace Orion.ViewModels {
 				}
 
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("VentanaNuevoGrupoVM.CrearGrupoDeWord", ex);
+				mensajes.VerError("VentanaNuevoGrupoVM.CrearGrupoDeWord", ex);
 				return;
 			} finally {
 				if (wordDoc != null) wordDoc.Close(false);
@@ -365,7 +366,7 @@ namespace Orion.ViewModels {
 
 
 		private bool VerErrorGrafico(decimal numero, string textoOriginal, string texto) {
-			bool? resultado = _mensajeProvider.VerMensaje($"Se ha producido un error cerca del gráfico {numero.ToString("0000")}\n" +
+			bool? resultado = mensajes.VerMensaje($"Se ha producido un error cerca del gráfico {numero.ToString("0000")}\n" +
 														  "¿Desea continuar procesando?\n\n" + textoOriginal + "\n\n" + texto,
 														  "Error en gráfico",
 														  true);

@@ -11,8 +11,9 @@
         xmlns:local="clr-namespace:Orion.Views"
         xmlns:cnv="clr-namespace:Orion.Convertidores"
         xmlns:p="clr-namespace:Orion.Properties"
-        mc:Ignorable="d" x:Name="Ventana" Background="{StaticResource DegradadoCeleste1}"
-        WindowStyle="ToolWindow" WindowState="Normal" Topmost="True"
+        mc:Ignorable="d" x:Name="Ventana"
+        WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
+        Topmost="True"
         Closing="Ventana_Closing"
         Top="{Binding Configuracion.TopCalculadora, Mode=TwoWay}"
         Left="{Binding Configuracion.LeftCalculadora, Mode=TwoWay}"
@@ -61,135 +62,156 @@
         <KeyBinding Key="Space" Command="{Binding cmdPulsarBoton}" CommandParameter="18"/>
     </Window.InputBindings>
 
-    <Grid Margin="5">
+    <Border Background="{StaticResource DegradadoCeleste1}" CornerRadius="8" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20" Padding="5">
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+        <Border.BitmapEffect>
+            <DropShadowBitmapEffect Color="LightGray" Direction="-50" ShadowDepth="10" Softness=".7" />
+        </Border.BitmapEffect>
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        
-        <!-- PANTALLA -->
-        <Border Grid.Row="0" Grid.ColumnSpan="4" Margin="4" Padding="4,0" BorderBrush="DarkBlue" BorderThickness="0.5" CornerRadius="4"
+        <Grid>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- ================================================== -->
+            <!-- TÍTULO -->
+            <!-- ================================================== -->
+            <Border Grid.ColumnSpan="4" Background="{StaticResource orDegradadoAzul}" MouseDown="Border_MouseDown" CornerRadius="8,8,0,0" Margin="-5,-5,-5,0">
+                <Grid>
+                    <TextBlock FontFamily="Verdana" FontSize="14" FontWeight="Bold" Margin="10" Text="Calculadora" HorizontalAlignment="Left"/>
+                    <Button Style="{StaticResource EstiloBotonBarraPequeña}" HorizontalAlignment="Right" Padding="6" Click="Button_Click">
+                        <!--<Border CornerRadius="0,0,8,0">-->
+                            <Image Source="Imagenes/Cerrar.png" Width="16"/>
+                        <!--</Border>-->
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- PANTALLA -->
+            <Border Grid.Row="1" Grid.ColumnSpan="4" Margin="4" Padding="4,0" BorderBrush="DarkBlue" BorderThickness="0.5" CornerRadius="4"
                 Background="WhiteSmoke">
-            
-            <StackPanel Grid.Row="0" Grid.ColumnSpan="4" Orientation="Vertical" Margin="4">
 
-                <!-- Sección de iconos -->
-                <!--<TextBlock FontSize="10" Foreground="DarkGray" Margin="0" Text="M     +"
+                <StackPanel Grid.Row="0" Grid.ColumnSpan="4" Orientation="Vertical" Margin="4">
+
+                    <!-- Sección de iconos -->
+                    <!--<TextBlock FontSize="10" Foreground="DarkGray" Margin="0" Text="M     +"
                        HorizontalAlignment="Right" VerticalAlignment="Center"/>-->
 
-                <!-- Sección de Horas -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <!-- Operación -->
-                    <TextBlock Grid.Column="0" FontSize="36" Foreground="DarkBlue" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Left"
+                    <!-- Sección de Horas -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- Operación -->
+                        <TextBlock Grid.Column="0" FontSize="36" Foreground="DarkBlue" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Left"
                            Text="{Binding TextoOperacion}"/>
-                    <!-- Horas -->
-                    <TextBlock Grid.Column="1" FontSize="36" Foreground="DarkBlue" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right"
+                        <!-- Horas -->
+                        <TextBlock Grid.Column="1" FontSize="36" Foreground="DarkBlue" Margin="0" VerticalAlignment="Center" HorizontalAlignment="Right"
                            Text="{Binding TextoHora}"/>
-                </Grid>
+                    </Grid>
 
-                <!-- Sección Decimal -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    
-                    <!-- Error -->
-                    <TextBlock Grid.Column="0" FontSize="20" Foreground="Red" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left"
+                    <!-- Sección Decimal -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Error -->
+                        <TextBlock Grid.Column="0" FontSize="20" Foreground="Red" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left"
                            Text="{Binding TextoError}" Opacity="0.5"/>
 
-                    <!-- Hora en decimal-->
-                    <TextBlock Grid.Column="1" FontSize="20" Foreground="CadetBlue" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Right"
+                        <!-- Hora en decimal-->
+                        <TextBlock Grid.Column="1" FontSize="20" Foreground="CadetBlue" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Right"
                        Text="{Binding TextoDecimal}"/>
-                </Grid>
+                    </Grid>
 
-            </StackPanel>
-        </Border>
+                </StackPanel>
+            </Border>
 
-        <!-- FILA BOTONES 1-->
-        <Button Grid.Column="0" Grid.Row="1" Style="{StaticResource EstiloBoton}" Margin="1" Content="C" FontSize="20"
+            <!-- FILA BOTONES 1-->
+            <Button Grid.Column="0" Grid.Row="2" Style="{StaticResource EstiloBoton}" Margin="1" Content="C" FontSize="20"
                 Command="{Binding cmdPulsarBoton}" CommandParameter="17"
                 x:Name="Bt17" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="1" Grid.Row="1" Style="{StaticResource EstiloBoton}" Margin="1" Content="/" FontSize="20"
+            <Button Grid.Column="1" Grid.Row="2" Style="{StaticResource EstiloBoton}" Margin="1" Content="/" FontSize="20"
                 Command="{Binding cmdPulsarBoton}" CommandParameter="14"
                 x:Name="Bt14" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="2" Grid.Row="1" Style="{StaticResource EstiloBoton}" Margin="1" Content="*" FontSize="20" 
+            <Button Grid.Column="2" Grid.Row="2" Style="{StaticResource EstiloBoton}" Margin="1" Content="*" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="13"
                 x:Name="Bt13" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="3" Grid.Row="1" Style="{StaticResource EstiloBoton}" Margin="1" Content="Z" FontSize="20" 
+            <Button Grid.Column="3" Grid.Row="2" Style="{StaticResource EstiloBoton}" Margin="1" Content="Z" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="16"
                 x:Name="Bt16" FontFamily="WingDings 3" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-        <!-- FILA BOTONES 2-->
-        <Button Grid.Column="0" Grid.Row="2" Style="{StaticResource EstiloBoton}" Margin="1" Content="7" FontSize="20" 
+            <!-- FILA BOTONES 2-->
+            <Button Grid.Column="0" Grid.Row="3" Style="{StaticResource EstiloBoton}" Margin="1" Content="7" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="7"
                 x:Name="Bt07" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="1" Grid.Row="2" Style="{StaticResource EstiloBoton}" Margin="1" Content="8" FontSize="20" 
+            <Button Grid.Column="1" Grid.Row="3" Style="{StaticResource EstiloBoton}" Margin="1" Content="8" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="8"
                 x:Name="Bt08" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="2" Grid.Row="2" Style="{StaticResource EstiloBoton}" Margin="1" Content="9" FontSize="20" 
+            <Button Grid.Column="2" Grid.Row="3" Style="{StaticResource EstiloBoton}" Margin="1" Content="9" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="9"
                 x:Name="Bt09" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="3" Grid.Row="2" Style="{StaticResource EstiloBoton}" Margin="1" Content="-" FontSize="20" 
+            <Button Grid.Column="3" Grid.Row="3" Style="{StaticResource EstiloBoton}" Margin="1" Content="-" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="12"
                 x:Name="Bt12" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-        <!-- FILA BOTONES 3-->
-        <Button Grid.Column="0" Grid.Row="3" Style="{StaticResource EstiloBoton}" Margin="1" Content="4" FontSize="20" 
+            <!-- FILA BOTONES 3-->
+            <Button Grid.Column="0" Grid.Row="4" Style="{StaticResource EstiloBoton}" Margin="1" Content="4" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="4"
                 x:Name="Bt04" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="1" Grid.Row="3" Style="{StaticResource EstiloBoton}" Margin="1" Content="5" FontSize="20" 
+            <Button Grid.Column="1" Grid.Row="4" Style="{StaticResource EstiloBoton}" Margin="1" Content="5" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="5"
                 x:Name="Bt05" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="2" Grid.Row="3" Style="{StaticResource EstiloBoton}" Margin="1" Content="6" FontSize="20" 
+            <Button Grid.Column="2" Grid.Row="4" Style="{StaticResource EstiloBoton}" Margin="1" Content="6" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="6"
                 x:Name="Bt06" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="3" Grid.Row="3" Style="{StaticResource EstiloBoton}" Margin="1" Content="+" FontSize="20" 
+            <Button Grid.Column="3" Grid.Row="4" Style="{StaticResource EstiloBoton}" Margin="1" Content="+" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="11"
                 x:Name="Bt11" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-        <!-- FILA BOTONES 4-->
-        <Button Grid.Column="0" Grid.Row="4" Style="{StaticResource EstiloBoton}" Margin="1" Content="1" FontSize="20" 
+            <!-- FILA BOTONES 4-->
+            <Button Grid.Column="0" Grid.Row="5" Style="{StaticResource EstiloBoton}" Margin="1" Content="1" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="1"
                 x:Name="Bt01" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="1" Grid.Row="4" Style="{StaticResource EstiloBoton}" Margin="1" Content="2" FontSize="20" 
+            <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource EstiloBoton}" Margin="1" Content="2" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="2"
                 x:Name="Bt02" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="2" Grid.Row="4" Style="{StaticResource EstiloBoton}" Margin="1" Content="3" FontSize="20" 
+            <Button Grid.Column="2" Grid.Row="5" Style="{StaticResource EstiloBoton}" Margin="1" Content="3" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="3"
                 x:Name="Bt03" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="3" Grid.Row="4" Style="{StaticResource EstiloBoton}" Margin="1" Content="=" FontSize="20" 
+            <Button Grid.Column="3" Grid.Row="5" Style="{StaticResource EstiloBoton}" Margin="1" Content="=" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="10"
                 x:Name="Bt10" Grid.RowSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-        <!-- FILA BOTONES 5-->
-        <Button Grid.Column="0" Grid.Row="5" Style="{StaticResource EstiloBoton}" Margin="1" Content="±" FontSize="20" 
+            <!-- FILA BOTONES 5-->
+            <Button Grid.Column="0" Grid.Row="6" Style="{StaticResource EstiloBoton}" Margin="1" Content="±" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="18"
                 x:Name="Bt18" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="1" Grid.Row="5" Style="{StaticResource EstiloBoton}" Margin="1" Content="0" FontSize="20" 
+            <Button Grid.Column="1" Grid.Row="6" Style="{StaticResource EstiloBoton}" Margin="1" Content="0" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="0"
                 x:Name="Bt00" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Grid.Column="2" Grid.Row="5" Style="{StaticResource EstiloBoton}" Margin="1" Content=":" FontSize="20" 
+            <Button Grid.Column="2" Grid.Row="6" Style="{StaticResource EstiloBoton}" Margin="1" Content=":" FontSize="20" 
                 Command="{Binding cmdPulsarBoton}" CommandParameter="15"
                 x:Name="Bt15" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
-    </Grid>
-    
-    
+        </Grid>
+    </Border>
+
 </Window>

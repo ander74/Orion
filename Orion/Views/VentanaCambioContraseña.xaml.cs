@@ -63,5 +63,9 @@ namespace Orion.Views {
 		private void PwAnterior_KeyDown(object sender, KeyEventArgs e) {
 			TxtMensajeError.Text = "";
 		}
+
+		private void Border_MouseDown(object sender, MouseButtonEventArgs e) {
+			DragMove();
+		}
 	}
 }

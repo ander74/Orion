@@ -25,6 +25,7 @@ using Microsoft.Win32;
 using Orion.PrintModel;
 using Orion.Convertidores;
 using System.Threading.Tasks;
+using Orion.Servicios;
 
 namespace Orion.ViewModels {
 
@@ -338,7 +339,7 @@ namespace Orion.ViewModels {
 		// EJECUCIÓN DEL COMANDO
 		private void AbrirPijama() {
 
-			Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, _mensajeProvider);
+			Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
 			VisibilidadTablaCalendarios = Visibility.Collapsed;
 
 		}
@@ -396,27 +397,25 @@ namespace Orion.ViewModels {
 			}
 		}
 
-		private void CrearPdfPijama() {
+		private async void CrearPdfPijama() {
 
+			// Creamos el libro a usar.
+			Workbook libro = null;
 			try {
-				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Hojas Pijama");
-				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
-				dialogo.FileName = String.Format("{0:yyyy}-{0:MM} - {1}.pdf", FechaActual, Pijama.TextoTrabajador).Replace(":", "");
-				dialogo.InitialDirectory = ruta;
-				dialogo.OverwritePrompt = true;
-				dialogo.Title = "Guardar Hoja Pijama";
-				App.Global.TextoProgreso = "Creando pijama en PDF...";
-				App.Global.VisibilidadProgreso = Visibility.Visible;
-				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
-					//TODO: No se pueden recuperar con Task, por no poder sincronizar los métodos con la Base de Datos.
-					PijamaPrintModel.CrearPijamaEnPdf(Pijama, dialogo.FileName);
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Pedimos el nombre de archivo
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1}.pdf", FechaActual, Pijama.TextoTrabajador).Replace(":", "");
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo);
+				if (ruta != "") {
+					libro = Informes.GetArchivoExcel(TiposInforme.Pijama);
+					await PijamaPrintModel.CrearPijamaEnPdf(libro, Pijama);
+					Informes.ExportarLibroToPdf(libro, ruta);
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("CalendariosCommand.CrearPdfPijama", ex);
+				Mensajes.VerError("CalendariosCommands.CrearPdfPijama", ex);
 			} finally {
-				App.Global.VisibilidadProgreso = Visibility.Collapsed;
+				App.Global.FinalizarProgreso();
 			}
 		}
 		#endregion
@@ -438,28 +437,26 @@ namespace Orion.ViewModels {
 		}
 
 
-		private void PijamasEnPdf() {
+		private async void PijamasEnPdf() {
+
+			// Creamos el libro a usar.
+			Workbook libro = null;
 			try {
-				if (VistaCalendarios.Count == 0) return;
-				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Hojas Pijama");
-				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
-				dialogo.FileName = String.Format("{0:yyyy}-{0:MM}", FechaActual);
-				dialogo.FileName += TextoFiltros == "Ninguno" ? " - Todos" : $" - {TextoFiltros}";
-				dialogo.InitialDirectory = ruta;
-				dialogo.OverwritePrompt = true;
-				dialogo.Title = "Guardar Hojas Pijama";
-				App.Global.TextoProgreso = "Creando piajamas en PDF...";
-				App.Global.VisibilidadProgreso = Visibility.Visible;
-				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
-					//TODO: No se pueden recuperar con Task, por no poder sincronizar los métodos con la Base de Datos.
-					PijamaPrintModel.CrearTodosPijamasEnPdf(VistaCalendarios, dialogo.FileName);
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Pedimos el nombre de archivo
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}", FechaActual);
+				nombreArchivo += TextoFiltros == "Ninguno" ? " - Todos" : $" - {TextoFiltros}";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo);
+				if (ruta != "") {
+					libro = Informes.GetArchivoExcel(TiposInforme.Pijama);
+					await PijamaPrintModel.CrearTodosPijamasEnPdf(libro, VistaCalendarios);
+					Informes.ExportarLibroToPdf(libro, ruta);
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("CalendariosCommand.PijamasEnPDF", ex);
+				Mensajes.VerError("CalendariosCommands.PijamasEnPDF", ex);
 			} finally {
-				App.Global.VisibilidadProgreso = Visibility.Collapsed;
+				App.Global.FinalizarProgreso();
 			}
 
 		}
@@ -511,7 +508,7 @@ namespace Orion.ViewModels {
 						double valor = num / ListaCalendarios.Count * 100;
 						App.Global.ValorBarraProgreso = valor;
 						num++;
-						HojaPijama hoja = new HojaPijama(cal, _mensajeProvider);
+						Pijama.HojaPijama hoja = new Pijama.HojaPijama(cal, Mensajes);
 						cal.Informe = hoja.GetInformeFallos();
 					}
 				} finally {
@@ -550,7 +547,7 @@ namespace Orion.ViewModels {
 					}
 				}
 			}
-			_mensajeProvider.VerMensaje($"Se han cambiado {numero} JDs.", "JDs cambiados a DS");
+			Mensajes.VerMensaje($"Se han cambiado {numero} JDs.", "JDs cambiados a DS");
 		}
 		#endregion
 
@@ -593,7 +590,7 @@ namespace Orion.ViewModels {
 			mensaje += String.Format("Tras la conversión le sobrarán {0} horas.\n\n", restantes);
 			mensaje += "¿Desea continuar?";
 
-			if (_mensajeProvider.VerMensaje(mensaje, titulo, true) == true) {
+			if (Mensajes.VerMensaje(mensaje, titulo, true) == true) {
 
 				RegulacionConductor regulacion = new RegulacionConductor();
 				regulacion.Codigo = 2;
@@ -642,7 +639,7 @@ namespace Orion.ViewModels {
 			int dia = ((Pijama.DiaPijama)tabla.CurrentCell.Item).Dia;
 
 			// Creamos el view-model para la ventana.
-			VentanaCobrarHorasVM contexto = new VentanaCobrarHorasVM(_mensajeProvider);
+			VentanaCobrarHorasVM contexto = new VentanaCobrarHorasVM(Mensajes);
 			// Introducimos las opciones del view-model.
 			if (Pijama != null) {
 				contexto.HorasDisponibles = Pijama.AcumuladasHastaMes;
@@ -661,7 +658,7 @@ namespace Orion.ViewModels {
 					regulacion.Horas = new TimeSpan(contexto.HorasACobrar.Value.Ticks * -1);
 					BdRegulacionConductor.InsertarRegulacion(regulacion);
 				} else {
-					_mensajeProvider.VerMensaje("Debes escribir las horas que quieres cobrar.", "ATENCIÓN");
+					Mensajes.VerMensaje("Debes escribir las horas que quieres cobrar.", "ATENCIÓN");
 				}
 			}
 		}
@@ -685,27 +682,26 @@ namespace Orion.ViewModels {
 		}
 
 
-		private void CalendariosEnPDF() {
+		private async void CalendariosEnPDF() {
+
+			// Creamos el libro a usar.
+			Workbook libro = null;
 			try {
-				if (VistaCalendarios.Count == 0) return;
-				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios");
-				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
-				dialogo.FileName = String.Format("{0:yyyy}-{0:MM} - {1}", FechaActual, App.Global.CentroActual.ToString());
-				if (TextoFiltros != "Ninguno") dialogo.FileName += $" - ({TextoFiltros})";
-				dialogo.InitialDirectory = ruta;
-				dialogo.OverwritePrompt = true;
-				dialogo.Title = "Guardar Calendarios";
-				//App.Global.TextoProgreso = "Creando calendarios en PDF...";
-				//App.Global.VisibilidadProgreso = Visibility.Visible;
-				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
-					Task.Run(() => CalendarioPrintModel.CrearCalendariosEnPdf(VistaCalendarios, FechaActual, dialogo.FileName));
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Pedimos el archivo donde guardarlo.
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1}", FechaActual, App.Global.CentroActual.ToString());
+				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Calendarios, nombreArchivo);
+				if (ruta != "") {
+					libro = Informes.GetArchivoExcel(TiposInforme.Calendarios);
+					await CalendarioPrintModel.CrearCalendariosEnPdf(libro, VistaCalendarios, FechaActual);
+					Informes.ExportarLibroToPdf(libro, ruta);
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("CalendariosCommand.CalendariosEnPDF", ex);
+				Mensajes.VerError("CalendariosCommands.CalendariosEnPDF", ex);
 			} finally {
-				//App.Global.VisibilidadProgreso = Visibility.Collapsed;
+				App.Global.FinalizarProgreso();
 			}
 
 		}
@@ -730,27 +726,25 @@ namespace Orion.ViewModels {
 		}
 
 
-		private void CalendariosEnPdfConFallos() {
+		private async void CalendariosEnPdfConFallos() {
+			// Creamos el libro a usar.
+			Workbook libro = null;
 			try {
-				if (VistaCalendarios.Count == 0) return;
-				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios");
-				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
-				dialogo.FileName = String.Format("{0:yyyy}-{0:MM} - {1} - Fallos", FechaActual, App.Global.CentroActual.ToString());
-				if (TextoFiltros != "Ninguno") dialogo.FileName += $" - ({TextoFiltros})";
-				dialogo.InitialDirectory = ruta;
-				dialogo.OverwritePrompt = true;
-				dialogo.Title = "Guardar Fallos En Calendarios";
-				//App.Global.TextoProgreso = "Creando fallos de calendarios en PDF...";
-				//App.Global.VisibilidadProgreso = Visibility.Visible;
-				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
-					Task.Run(() => CalendarioPrintModel.FallosEnCalendariosEnPdf(VistaCalendarios, FechaActual, dialogo.FileName));
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Pedimos el archivo donde guardarlo.
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1} - Fallos", FechaActual, App.Global.CentroActual.ToString());
+				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.FallosCalendarios, nombreArchivo);
+				if (ruta != "") {
+					libro = Informes.GetArchivoExcel(TiposInforme.FallosCalendarios);
+					await CalendarioPrintModel.FallosEnCalendariosEnPdf(libro, VistaCalendarios, FechaActual);
+					Informes.ExportarLibroToPdf(libro, ruta);
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("CalendariosCommand.CalendariosEnPdfConFallos", ex);
+				Mensajes.VerError("CalendariosCommands.CalendariosEnPDFConFallos", ex);
 			} finally {
-				//App.Global.VisibilidadProgreso = Visibility.Collapsed;
+				App.Global.FinalizarProgreso();
 			}
 
 		}
@@ -800,7 +794,7 @@ namespace Orion.ViewModels {
 
 			// Si hemos elegido aplicar a todos los días, avisar antes de hacerlo.
 			if (AccionesLotesVM.Grafico == -9999) {
-				if (_mensajeProvider.VerMensaje("Va a realizar una acción que afecta a todos los días de los calendarios.\n\n¿Desea continuar?", "ATENCIÓN", true) == false) return;
+				if (Mensajes.VerMensaje("Va a realizar una acción que afecta a todos los días de los calendarios.\n\n¿Desea continuar?", "ATENCIÓN", true) == false) return;
 			}
 
 			foreach (object obj in VistaCalendarios) {
@@ -857,7 +851,40 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region ACCIONES POR LOTES
+		#region MARCAR ACCIONES LOTES
+
+		// Comando
+		private ICommand _cmdmarcaraccioneslotes;
+		public ICommand cmdMarcarAccionesLotes {
+			get {
+				if (_cmdmarcaraccioneslotes == null) _cmdmarcaraccioneslotes = new RelayCommand(p => MarcarAccionesLotes());
+				return _cmdmarcaraccioneslotes;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void MarcarAccionesLotes() {
+
+			foreach (object obj in VistaCalendarios) {
+				Calendario cal = obj as Calendario;
+				if (cal == null) continue;
+				foreach (DiaCalendario dia in cal.ListaDias) {
+					if (dia.Grafico == 0) continue;
+					if (dia.Dia >= AccionesLotesVM.DelDia && dia.Dia <= AccionesLotesVM.AlDia) {
+						if (AccionesLotesVM.Grafico == 0 || dia.Grafico == AccionesLotesVM.Grafico) {
+							if (AccionesLotesVM.Codigo == 4 || (AccionesLotesVM.Codigo == dia.Codigo)) {
+								dia.Resaltar = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		#endregion
+
+
+		#region BORRAR ACCIONES POR LOTES
 		// Comando
 		private ICommand _cmdborraraccionlotes;
 		public ICommand cmdBorrarAccionLotes {
@@ -870,6 +897,13 @@ namespace Orion.ViewModels {
 		private void BorrarAccionLotes() {
 
 			AccionesLotesVM = new AccionesLotesCalendariosVM();
+			foreach (object obj in VistaCalendarios) {
+				Calendario cal = obj as Calendario;
+				if (cal == null) continue;
+				foreach (DiaCalendario dia in cal.ListaDias) {
+					dia.Resaltar = false;
+				}
+			}
 
 		}
 		#endregion
@@ -963,7 +997,7 @@ namespace Orion.ViewModels {
 		}
 
 		// Ejecución del comando
-		private void Reclamar() {
+		private async void Reclamar() {
 
 			// Inicializamos la Ventana de reclamaciones y su ViewModel y se lo asignamos.
 			VentanaReclamaciones Ventana = new VentanaReclamaciones();
@@ -1152,23 +1186,24 @@ namespace Orion.ViewModels {
 
 			#endregion
 
+			// Creamos el libro a usar.
+			Workbook libro = null;
 			try {
-				SaveFileDialog dialogo = new SaveFileDialog();
-				string ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Reclamaciones");
-				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
-				dialogo.FileName = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}", Pijama.Fecha, Pijama.Trabajador.Id);
-				dialogo.InitialDirectory = ruta;
-				dialogo.OverwritePrompt = true;
-				dialogo.Title = "Guardar Reclamación";
-				if (dialogo.ShowDialog((MainWindow)System.Windows.Application.Current.MainWindow) == true) {
-					Task.Run(() => ReclamacionPrintModel.CrearReclamacion(conceptos, Pijama.Fecha, Pijama.Trabajador, 
-																		  dialogo.FileName, ReclamacionVM.FechaReclamacion, ReclamacionVM.Notas));
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Pedimos el archivo donde guardarlo.
+				string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}", Pijama.Fecha, Pijama.Trabajador.Id);
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo);
+				if (ruta != "") {
+					libro = Informes.GetArchivoExcel(TiposInforme.Reclamacion);
+					await ReclamacionPrintModel.CrearReclamacion(libro, conceptos, Pijama.Fecha, Pijama.Trabajador,
+																 ReclamacionVM.FechaReclamacion, ReclamacionVM.Notas);
+					Informes.ExportarLibroToPdf(libro, ruta);
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("CalendariosCommand.Reclamar", ex);
+				Mensajes.VerError("CalendariosCommands.Reclamar", ex);
 			} finally {
-				//App.Global.VisibilidadProgreso = Visibility.Collapsed;
+				App.Global.FinalizarProgreso();
 			}
 
 		}

@@ -8,6 +8,7 @@
 using Orion.Config;
 using Orion.DataModels;
 using Orion.Models;
+using Orion.Servicios;
 using Orion.Views;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace Orion.ViewModels
 		// ====================================================================================================
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
-		private IMensajeProvider _mensajeProvider;
+		private IMensajes mensajes;
 		#endregion
 
 
@@ -36,8 +37,8 @@ namespace Orion.ViewModels
 		#region CONSTRUCTOR
 		// ====================================================================================================
 
-		public VentanaCobrarHorasVM(IMensajeProvider mensajeProvider) {
-			_mensajeProvider = mensajeProvider;
+		public VentanaCobrarHorasVM(IMensajes servicioMensajes) {
+			mensajes = servicioMensajes;
 		}
 
 		#endregion

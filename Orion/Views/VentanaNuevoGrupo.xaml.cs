@@ -38,6 +38,8 @@ namespace Orion.Views {
 			if (e.OriginalSource is CalendarDayButton || e.OriginalSource is CalendarItem) Mouse.Capture(null);
 		}
 
-
+		private void Border_MouseDown(object sender, MouseButtonEventArgs e) {
+			DragMove();
+		}
 	}
 }

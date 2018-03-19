@@ -3,5 +3,40 @@ PROYECTO ORION
 ==============
 
 
+		Así quedarían los métodos de los DataModels si usáramos un servicio de Base de Datos.
+		El problema, es que el DataReader se cierra al cerrar la conexión.
+
+
+		public static ObservableCollection<Calendario> GetCalendarios(int año, int mes) {
+
+			// Creamos la lista y el comando que extrae los gráficos.
+			ObservableCollection<Calendario> lista = new ObservableCollection<Calendario>();
+
+				string comandoSQL = "GetCalendarios";
+
+				// Elementos para la consulta de calendarios y días de calendario.
+				OleDbCommand comando = new OleDbCommand(comandoSQL);
+				comando.Parameters.AddWithValue("año", año);
+				comando.Parameters.AddWithValue("mes", mes);
+				OleDbDataReader lector = BaseDatos.GetLector(comando, true); // True, porque es un procedimiento almacenado, si no, sería false.
+
+				while (lector.Read()) {
+					// Extraemos el calendario y sus días
+					Calendario calendario = new Calendario(lector);
+					calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
+					// Extraemos los datos del conductor.
+					calendario.ConductorIndefinido = DBUtils.FromReaderSiNo(lector, "Indefinido");
+					// Añadimos el calendario a la lista.
+					lista.Add(calendario);
+					calendario.Nuevo = false;
+					calendario.Modificado = false;
+
+				}
+				lector.Close();
+			
+				return lista;
+		}
+
+
 
 	

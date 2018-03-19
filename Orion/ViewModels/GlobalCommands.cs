@@ -48,7 +48,7 @@ namespace Orion.ViewModels {
 		public void GuardarCambios() {
 
 			if ((int)CentroActual != App.Global.Configuracion.CentroInicial) {
-				bool? resultado = mensajeProvider.VerMensaje("¡¡ ATENCIÓN !!\n\nEstá apunto de guardar los datos de un centro que no es el suyo.\n\n" +
+				bool? resultado = mensajes.VerMensaje("¡¡ ATENCIÓN !!\n\nEstá apunto de guardar los datos de un centro que no es el suyo.\n\n" +
 															 "¿Desea continuar?\n\nNOTA: Si continúa se podrían dar conflictor en Dropbox.",
 															 "CONFLICTOS POTENCIALES EN DROPBOX",
 															 true);
@@ -90,7 +90,7 @@ namespace Orion.ViewModels {
 			//if (parametro != null) iniciando = (bool)parametro;
 			// Si hay cambios para guardar, pedimos guardarlos.
 			if (PuedeGuardarCambios()) {
-				bool? resultado = mensajeProvider.VerMensaje("¡¡ ATENCIÓN !!\n\nHay cambios sin guardar.\n\n¿Desea guardar los cambios?",
+				bool? resultado = mensajes.VerMensaje("¡¡ ATENCIÓN !!\n\nHay cambios sin guardar.\n\n¿Desea guardar los cambios?",
 															 "NO SE HAN GUARDADO LOS CAMBIOS",
 															 true, true);
 
@@ -108,6 +108,7 @@ namespace Orion.ViewModels {
 			//	CentroActual = (Centros)App.Global.Configuracion.CentroInicial;
 			//} else {
 				VentanaCentros ventana = new VentanaCentros();
+				ventana.Centro = CentroActual;
 				ventana.ShowDialog();
 				CentroActual = ventana.Centro;
 			//}

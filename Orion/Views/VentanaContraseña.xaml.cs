@@ -52,7 +52,11 @@ namespace Orion.Views {
 			this.Close();
 		}
 
-		private void StackPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+		//private void StackPanel_MouseLeftButtonDown(object sender, MouseButtonEventArgs e) {
+		//	DragMove();
+		//}
+
+		private void Border_MouseDown(object sender, MouseButtonEventArgs e) {
 			DragMove();
 		}
 	}

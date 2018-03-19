@@ -8,6 +8,7 @@
 using Orion.Config;
 using Orion.DataModels;
 using Orion.Models;
+using Orion.Servicios;
 using Orion.Views;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace Orion.ViewModels
 		// ====================================================================================================
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
-		private IMensajeProvider _mensajeProvider;
+		private IMensajes mensajes;
 		#endregion
 
 
@@ -36,8 +37,8 @@ namespace Orion.ViewModels
 		#region CONSTRUCTOR
 		// ====================================================================================================
 
-		public VentanaRegularAñoVM(IMensajeProvider mensajeProvider) {
-			_mensajeProvider = mensajeProvider;
+		public VentanaRegularAñoVM(IMensajes servicioMensajes) {
+			mensajes = servicioMensajes;
 		}
 
 		#endregion
@@ -56,7 +57,7 @@ namespace Orion.ViewModels
 				TimeSpan reguladas = BdCalendarios.GetHorasReguladasHastaMes(Año, 11, IdConductor);
 				HorasDisponibles = HorasConductor + acumuladas + reguladas;
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("VentanaCobrarHorasVM.RefrescarValores", ex);
+				mensajes.VerError("VentanaCobrarHorasVM.RefrescarValores", ex);
 			}
 		}
 

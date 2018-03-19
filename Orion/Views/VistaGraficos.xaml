@@ -13,7 +13,7 @@
              xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:p="clr-namespace:Orion.Properties"
              xmlns:cnv="clr-namespace:Orion.Convertidores"
-             mc:Ignorable="d"
+             mc:Ignorable="d" x:Name="Ventana"
              d:DesignHeight="400" d:DesignWidth="900">
 
     <!-- ==================================================================================================== -->
@@ -339,11 +339,6 @@
                                           Content="No Calcular" Margin="5"
                                           IsChecked="{Binding Configuracion.MostrarGrafNoCalcular, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
-                                <!-- DESCUADRES -->
-                                <!--<CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          Content="Descuadres" Margin="5"
-                                          IsChecked="{Binding Configuracion.MostrarGrafDescuadres, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>-->
-
                                 <!-- TIEMPO PARTIDO -->
                                 <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
                                           Content="Tiempo Partido" Margin="5"
@@ -440,10 +435,11 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-
+            
             <!-- ==================================================================================================== -->
             <!-- TABLA GRAFICOS -->
             <!-- ==================================================================================================== -->
+            <FrameworkElement x:Name="ElementoFalso" Visibility="Collapsed"/>
             <DataGrid x:Name="TablaGraficos" ItemsSource="{Binding GraficosVM.VistaGraficos}"
                       SelectedItem="{Binding GraficosVM.GraficoSeleccionado}"
                       IsReadOnly="False" Grid.Column="1" HeadersVisibility="Column" FontSize="12"
@@ -464,45 +460,36 @@
                     <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding GraficosVM.cmdPegarGraficos}"
                                 CommandParameter="{Binding ElementName=TablaGraficos}"/>
                 </DataGrid.InputBindings>
+                
                 <DataGrid.Columns>
                     <DataGridCheckBoxColumn Width="0.3*" MinWidth="20" IsThreeState="False"
                                             Binding="{Binding NoCalcular, UpdateSourceTrigger=PropertyChanged}"
-                                            Visibility="{Binding Configuracion.MostrarGrafNoCalcular,
+                                            Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafNoCalcular,
                                                         Converter={StaticResource cnvBoolToVisibility}}">
                         <DataGridCheckBoxColumn.Header>
                             <TextBlock Text="#" ToolTip="No Calcular" FontSize="14"/>
                         </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
+                    
                     <DataGridTextColumn Header="Número" Binding="{Binding Numero, Converter={StaticResource cnvNumGrafico}}" 
                                         Width="1*" MinWidth="60"/>
+                    
                     <DataGridTextColumn Header="Turno" Binding="{Binding Turno}" Width="1*" MinWidth="60"/>
-                    <!--<DataGridTextColumn Width="0.5*" MinWidth="30"
-                                        Binding="{Binding DescuadreInicio, StringFormat=00;-00;#}"
-                                        Visibility="{Binding Configuracion.MostrarGrafDescuadres,
-                                                     Converter={StaticResource cnvBoolToVisibility}}">
-                        <DataGridTextColumn.Header>
-                            <TextBlock Text="&lt;&lt;" ToolTip="Minutos de descuadre en el inicio."/>
-                        </DataGridTextColumn.Header>
-                    </DataGridTextColumn>-->
+                    
                     <DataGridTextColumn Header="Inicio" Width="1*" MinWidth="60"
                                     Binding="{Binding Inicio, Converter={StaticResource cnvHora}}"/>
+                    
                     <DataGridTextColumn Header="Final"  Width="1*" MinWidth="60"
                                     Binding="{Binding Final, Converter={StaticResource cnvHora}}"/>
-                    <!--<DataGridTextColumn Width="0.5*" MinWidth="30"
-                                        Binding="{Binding DescuadreFinal, StringFormat=00;-00;#}"
-                                        Visibility="{Binding Configuracion.MostrarGrafDescuadres,
-                                                     Converter={StaticResource cnvBoolToVisibility}}">
-                        <DataGridTextColumn.Header>
-                            <TextBlock Text="&gt;&gt;" ToolTip="Minutos de descuadre en el final."/>
-                        </DataGridTextColumn.Header>
-                    </DataGridTextColumn>-->
+                    
                     <DataGridTextColumn Header="Inicio Partido"  Width="1*" MinWidth="80" x:Name="ColumnaInicioPartido"
                                     Binding="{Binding InicioPartido, Converter={StaticResource cnvHora}}"
-                                        Visibility="{Binding Configuracion.MostrarGrafTiempoPartido,
+                                        Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafTiempoPartido,
                                                      Converter={StaticResource cnvBoolToVisibility}}"/>
+                    
                     <DataGridTextColumn Header="Final Partido"  Width="1*" MinWidth="80" x:Name="ColumnaFinalPartido"
                                     Binding="{Binding FinalPartido, Converter={StaticResource cnvHora}}"
-                                        Visibility="{Binding Configuracion.MostrarGrafTiempoPartido,
+                                        Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafTiempoPartido,
                                                      Converter={StaticResource cnvBoolToVisibility}}"/>
                     
                     <DataGridTextColumn Header="Valoración"  Width="1*" MinWidth="80"
@@ -519,7 +506,7 @@
                     </DataGridTextColumn>
                     
                     <DataGridTextColumn Header="Trabajadas"  Width="1*" MinWidth="80"
-                                        Visibility="{Binding Configuracion.MostrarGrafHoras,
+                                        Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafHoras,
                                                      Converter={StaticResource cnvBoolToVisibility}}"
                                         Binding="{Binding Trabajadas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
                         <DataGridTextColumn.ElementStyle>
@@ -534,36 +521,36 @@
                     </DataGridTextColumn>
                     
                     <DataGridTextColumn Header="Acumuladas"  Width="1*" MinWidth="80"
-                                        Visibility="{Binding Configuracion.MostrarGrafHoras,
+                                        Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafHoras,
                                                      Converter={StaticResource cnvBoolToVisibility}}"
                                     Binding="{Binding Acumuladas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
                     <DataGridTextColumn Header="Nocturnas"  Width="1*" MinWidth="80"
-                                        Visibility="{Binding Configuracion.MostrarGrafHoras,
+                                        Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafHoras,
                                                      Converter={StaticResource cnvBoolToVisibility}}"
                                     Binding="{Binding Nocturnas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
                     <DataGridTextColumn Header="Desayuno"  Width="1*" MinWidth="80"
-                                        Visibility="{Binding Configuracion.MostrarGrafDietas,
+                                        Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafDietas,
                                                      Converter={StaticResource cnvBoolToVisibility}}"
                                     Binding="{Binding Desayuno, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
                     <DataGridTextColumn Header="Comida"  Width="1*" MinWidth="60"
-                                        Visibility="{Binding Configuracion.MostrarGrafDietas,
+                                        Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafDietas,
                                                      Converter={StaticResource cnvBoolToVisibility}}"
                                     Binding="{Binding Comida, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
                     <DataGridTextColumn Header="Cena"  Width="1*" MinWidth="60"
-                                        Visibility="{Binding Configuracion.MostrarGrafDietas,
+                                        Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafDietas,
                                                      Converter={StaticResource cnvBoolToVisibility}}"
                                     Binding="{Binding Cena, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
                     <DataGridTextColumn Header="Plus Cena"  Width="1*" MinWidth="60"
-                                        Visibility="{Binding Configuracion.MostrarGrafDietas,
+                                        Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafDietas,
                                                      Converter={StaticResource cnvBoolToVisibility}}"
                                     Binding="{Binding PlusCena, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
                     <DataGridCheckBoxColumn Header="Limpieza" Width="1*" MinWidth="60" IsThreeState="False"
                                             Binding="{Binding PlusLimpieza, UpdateSourceTrigger=PropertyChanged}"
-                                        Visibility="{Binding Configuracion.MostrarGrafPlusLimpieza,
+                                        Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafPlusLimpieza,
                                                      Converter={StaticResource cnvBoolToVisibility}}"/>
                     <DataGridCheckBoxColumn Header="Paquetería" Width="1*" MinWidth="60" IsThreeState="False"
                                             Binding="{Binding PlusPaqueteria, UpdateSourceTrigger=PropertyChanged}"
-                                        Visibility="{Binding Configuracion.MostrarGrafPlusPaqueteria,
+                                        Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.Configuracion.MostrarGrafPlusPaqueteria,
                                                      Converter={StaticResource cnvBoolToVisibility}}"/>
                 </DataGrid.Columns>
             </DataGrid>

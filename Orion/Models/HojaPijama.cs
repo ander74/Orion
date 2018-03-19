@@ -18,16 +18,18 @@ using System.Diagnostics;
 using Orion.Config;
 using System.Reflection;
 using System.IO;
+using Orion.Servicios;
 
 namespace Orion.Models {
 
+	[Obsolete("Usar la HojaPijama del espacio de nombres Pijama.")]
 	public class HojaPijama: NotifyBase {
 
 
 		// ====================================================================================================
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
-		private IMensajeProvider _mensajeProvider;
+		private IMensajes mensajes;
 		private static ConvertidorNumeroGraficoPijama cnvNumGraficoPijama = new ConvertidorNumeroGraficoPijama();
 		private static ConvertidorHora cnvHora = new ConvertidorHora();
 		private static ConvertidorSuperHoraMixta cnvSuperHoraMixta = new ConvertidorSuperHoraMixta();
@@ -40,8 +42,8 @@ namespace Orion.Models {
 		// ====================================================================================================
 		#region CONSTRUCTOR
 		// ====================================================================================================
-		public HojaPijama(Calendario calendario, IMensajeProvider mensajeProvider) {
-			_mensajeProvider = mensajeProvider;
+		public HojaPijama(Calendario calendario, IMensajes _mensajes) {
+			mensajes = _mensajes;
 			CalendarioPijama = calendario;//Obsoleto. No se utiliza.
 			// Definimos la fecha.
 			Fecha = calendario.Fecha;
@@ -85,7 +87,7 @@ namespace Orion.Models {
 
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("HojaPijama.Constructor", ex);
+				mensajes.VerError("HojaPijama.Constructor", ex);
 			}
 
 		}

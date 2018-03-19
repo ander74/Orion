@@ -126,19 +126,19 @@ namespace Orion.ViewModels {
 		// Ejecución del comando
 		private void DropboxAPc() {
 
-			if (_mensajeProvider.VerMensaje("¡ATENCIÓN!\n\nVas a copiar los datos de Dropbox al ordenador.\n\n¿Desea continuar?",
+			if (mensajes.VerMensaje("¡ATENCIÓN!\n\nVas a copiar los datos de Dropbox al ordenador.\n\n¿Desea continuar?",
 									   "Copiar de Dropbox a PC", true) == false) return;
 
 			try {
 				// Hacemos copia de seguridad de los datos de Dropbox.
 				if (!Respaldo.CopiaDatos()) {
-					if (_mensajeProvider.VerMensaje("¡ATENCIÓN!\n\nNo se ha podido hacer una copia de seguridad de los datos.\n\n¿Desea continuar?",
+					if (mensajes.VerMensaje("¡ATENCIÓN!\n\nNo se ha podido hacer una copia de seguridad de los datos.\n\n¿Desea continuar?",
 									   "Copiar de Dropbox a PC", true) == false) return;
 				}
 				// Copiamos la carpeta Datos a Dropbox.
 				Respaldo.DropboxToDatos();
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("OpcionesCommands.DropboxAPc", ex);
+				mensajes.VerError("OpcionesCommands.DropboxAPc", ex);
 			}
 
 		}
@@ -158,19 +158,19 @@ namespace Orion.ViewModels {
 		// Ejecución del comando
 		private void PcADropbox() {
 
-			if (_mensajeProvider.VerMensaje("¡ATENCIÓN!\n\nVas a copiar los datos del ordenador a Dropbox.\n\n¿Desea continuar?",
+			if (mensajes.VerMensaje("¡ATENCIÓN!\n\nVas a copiar los datos del ordenador a Dropbox.\n\n¿Desea continuar?",
 									   "Copiar de PC a Dropbox", true) == false) return;
 
 			try {
 				// Hacemos copia de seguridad de los datos de Dropbox.
 				if (!Respaldo.CopiaDropbox()) {
-					if (_mensajeProvider.VerMensaje("¡ATENCIÓN!\n\nNo se ha podido hacer una copia de seguridad de Dropbox.\n\n¿Desea continuar?",
+					if (mensajes.VerMensaje("¡ATENCIÓN!\n\nNo se ha podido hacer una copia de seguridad de Dropbox.\n\n¿Desea continuar?",
 									   "Copiar de PC a Dropbox", true) == false) return;
 				}
 				// Copiamos la carpeta Datos a Dropbox.
 				Respaldo.DatosToDropbox();
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("OpcionesCommands.PcADropbox", ex);
+				mensajes.VerError("OpcionesCommands.PcADropbox", ex);
 			}
 
 		}
@@ -338,7 +338,7 @@ namespace Orion.ViewModels {
 		private void CopiaSeguridadManual() {
 
 			if (App.Global.HayCambios) {
-				if (_mensajeProvider.VerMensaje("¡¡ ATENCIÓN !!\n\nHay cambios sin guardar.\n\n¿Desea guardar los cambios?\n\n" +
+				if (mensajes.VerMensaje("¡¡ ATENCIÓN !!\n\nHay cambios sin guardar.\n\n¿Desea guardar los cambios?\n\n" +
 												"(Los cambios no guardados no se reflejarán en la copia de seguridad.)",
 												"NO SE HAN GUARDADO LOS CAMBIOS", true) == true)
 					App.Global.GuardarCambios();
@@ -346,7 +346,7 @@ namespace Orion.ViewModels {
 
 			Respaldo.CopiaDatos("Manual");
 			App.Global.Configuracion.UltimaCopia = DateTime.Now;
-			_mensajeProvider.VerMensaje("Copia de seguridad creada correctamente.", "Copia Seguridad");
+			mensajes.VerMensaje("Copia de seguridad creada correctamente.", "Copia Seguridad");
 		}
 		#endregion
 
@@ -365,7 +365,7 @@ namespace Orion.ViewModels {
 		private void CambiarContraseña() {
 
 			if (App.Global.HayCambios) {
-				if (_mensajeProvider.VerMensaje("¡¡ ATENCIÓN !!\n\nHay cambios sin guardar.\n\n¿Desea guardar los cambios?\n\n",
+				if (mensajes.VerMensaje("¡¡ ATENCIÓN !!\n\nHay cambios sin guardar.\n\n¿Desea guardar los cambios?\n\n",
 												"NO SE HAN GUARDADO LOS CAMBIOS", true) == true)
 					App.Global.GuardarCambios();
 			}
@@ -378,7 +378,7 @@ namespace Orion.ViewModels {
 				if (ventana.ShowDialog() == true) {
 					//Si la contraseña anterior no es la que estaba...
 					if (Utils.CodificaTexto(ventana.PwAnterior.Password) != App.Global.Configuracion.ContraseñaDatos) {
-						_mensajeProvider.VerMensaje("La contraseña anterior no es válida", "ERROR");
+						mensajes.VerMensaje("La contraseña anterior no es válida", "ERROR");
 					} else {
 						// Guardamos la contraseña nueva, por si acaso.
 						App.Global.Configuracion.ContraseñaDatos = Utils.CodificaTexto(ventana.PwNueva.Password);
@@ -424,7 +424,7 @@ namespace Orion.ViewModels {
 			mensaje.Append($"Importe Plus Viaje: {App.Global.PorCentro.PlusViaje * multiplicador:0.00}\n\n");
 			mensaje.Append($"¿Aceptar?");
 
-			if (_mensajeProvider.VerMensaje(mensaje.ToString(), "Incremento de importes", true) == true) {
+			if (mensajes.VerMensaje(mensaje.ToString(), "Incremento de importes", true) == true) {
 				App.Global.Convenio.ImporteDietas *= multiplicador;
 				App.Global.Convenio.ImporteSabados *= multiplicador;
 				App.Global.Convenio.ImporteFestivos *= multiplicador;

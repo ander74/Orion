@@ -14,6 +14,7 @@ using Orion.Views;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Orion.PrintModel {
@@ -34,17 +35,9 @@ namespace Orion.PrintModel {
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
 
-		public static void CrearReclamacion(string[,] datos, DateTime fecha, Conductor trabajador, string ruta, DateTime fechaReclamacion, string notas) {
+		public static async Task CrearReclamacion(Workbook Libro, string[,] datos, DateTime fecha, Conductor trabajador, DateTime fechaReclamacion, string notas) {
 
-			// Creamos una aplicacion Excel y la mantenemos oculta.
-			Application ExcelApp = new Application();
-			// Creamos el libro
-			Workbook Libro = null;
-
-			try {
-				ExcelApp.Visible = false;
-				// Creamos el libro desde la plantilla.
-				Libro = ExcelApp.Workbooks.Add(rutaPlantillaReclamacion);
+			await Task.Run(() => {
 				// Definimos la hoja.
 				Worksheet Hoja = Libro.Worksheets[1];
 				// Establecemos el centro, la fecha y el conductor.
@@ -57,14 +50,7 @@ namespace Orion.PrintModel {
 				// Pegamos los datos
 				Range rango = Hoja.Range["A13:D29"];
 				rango.Value = datos;
-				// Exportamos el libro como PDF.
-				Libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, ruta);
-				// Si hay que abrir el PDF, se abre.
-				if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
-			} finally {
-				if (Libro != null) Libro.Close(false);
-				if (ExcelApp != null) ExcelApp.Quit();
-			}
+			});
 
 
 

@@ -182,6 +182,7 @@
     <Compile Include="PrintModel\GraficosPrintModel.cs" />
     <Compile Include="PrintModel\PijamaPrintModel.cs" />
     <Compile Include="PrintModel\ReclamacionPrintModel.cs" />
+    <Compile Include="Servicios\InformesServicio.cs" />
     <Compile Include="Soporte\WebBrowserUtility.cs" />
     <Compile Include="ViewModels\AccionesLotesCalendariosVM.cs" />
     <Compile Include="ViewModels\AñadirGraficoCommands.cs" />
@@ -204,9 +205,10 @@
     <Compile Include="ViewModels\ReclamacionesViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\VentanaCobrarHorasVM.cs" />
+    <Compile Include="ViewModels\VentanaMensajesVM.cs" />
     <Compile Include="ViewModels\VentanaNuevoGrupoVM.cs" />
     <Compile Include="ViewModels\VentanaRegularAñoVM.cs" />
-    <Compile Include="Views\MensajeProvider.cs" />
+    <Compile Include="Servicios\MensajesServicio.cs" />
     <Compile Include="Views\VentanaAñadirGrafico.xaml.cs">
       <DependentUpon>VentanaAñadirGrafico.xaml</DependentUpon>
     </Compile>
@@ -230,6 +232,9 @@
     </Compile>
     <Compile Include="Views\VentanaError.xaml.cs">
       <DependentUpon>VentanaError.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaMensajes.xaml.cs">
+      <DependentUpon>VentanaMensajes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VentanaNuevoGrupo.xaml.cs">
       <DependentUpon>VentanaNuevoGrupo.xaml</DependentUpon>
@@ -323,6 +328,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\VentanaError.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaMensajes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -639,6 +648,9 @@
   <ItemGroup>
     <Resource Include="Views\Imagenes\Exportar.png" />
     <Resource Include="Views\Imagenes\Importar.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Iconos\Informacion.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

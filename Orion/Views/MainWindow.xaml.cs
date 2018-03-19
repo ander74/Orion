@@ -19,7 +19,6 @@ namespace Orion.Views {
 
 	public partial class MainWindow : Window {
 
-
 		//****************************************************************************************************
 		// CONSTRUCTOR DE LA VENTANA PRINCIPAL
 		//****************************************************************************************************
@@ -123,7 +122,9 @@ namespace Orion.Views {
 		// AL SELECCIONAR UNA PESTAÑA
 		//****************************************************************************************************
 		private void Ribbon_SelectionChanged(object sender, SelectionChangedEventArgs e) {
-			App.Global.VisibilidadAyuda = Visibility.Collapsed;
+			if (e.Source is TabControl) {
+				App.Global.VisibilidadAyuda = Visibility.Collapsed;
+			}
 		}
 
 		//****************************************************************************************************
@@ -141,44 +142,6 @@ namespace Orion.Views {
 			((GlobalVM)DataContext).cmdCambiarCentro.Execute(null);
 		}
 
-
-		//****************************************************************************************************
-		// AL CERRARSE LA APLICACIÓN
-		// =========================
-		//
-		// Esta función viola el patrón MVVM, pero dado lo complejo que es pasar los argumentos del evento
-		// a un comando MVVM, he preferido mantener esta función.
-		//
-		//****************************************************************************************************
-		//private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e) {
-
-		//if (App.Global.PuedeGuardarCambios()) {
-		//	MessageBoxResult resultado = MessageBox.Show("¡¡ ATENCIÓN !!\n\nHay cambios sin guardar.\n\n¿Desea guardar los cambios?",
-		//												 "NO SE HAN GUARDADO LOS CAMBIOS",
-		//												 MessageBoxButton.YesNoCancel, MessageBoxImage.Exclamation);
-
-		//	switch (resultado) {
-		//		case MessageBoxResult.Cancel:
-		//			e.Cancel = true;
-		//			break;
-		//		case MessageBoxResult.Yes:
-		//			App.Global.GuardarCambios();
-		//			break;
-		//	}
-		//}
-
-		//// Guardamos las configuraciones.
-		//App.Global.Configuracion.Save();
-		//App.Global.Convenio2.Save();
-		//PorCentro.Default.Save();
-
-		//// Si hay que sincronizar con DropBox, se copian los archivos.
-		//if (App.Global.Configuracion.SincronizarEnDropbox) Respaldo.SincronizarDropbox();
-
-		//// Intentamos cerrar la calculadora, si existe.
-		//if (App.Calculadora != null) App.Calculadora.Close();
-
-		//}
 
 
 

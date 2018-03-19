@@ -20,6 +20,7 @@ using Orion.Views;
 using System.Windows.Data;
 using System.ComponentModel;
 using System.Windows.Input;
+using Orion.Servicios;
 
 namespace Orion.ViewModels {
 
@@ -29,17 +30,22 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
-		private IMensajeProvider _mensajeProvider;
 		private List<Calendario> _listaborrados = new List<Calendario>();
 		private List<Festivo> _listafestivos = new List<Festivo>();
+
+		// SERVICIOS
+		private IMensajes Mensajes;
+		private InformesServicio Informes;
+
 		#endregion
 
 
 		// ====================================================================================================
 		#region CONSTRUCTORES
 		// ====================================================================================================
-		public CalendariosViewModel(IMensajeProvider mensajeProvider) {
-			_mensajeProvider = mensajeProvider;
+		public CalendariosViewModel(IMensajes servicioMensajes, InformesServicio servicioInformes) {
+			Mensajes = servicioMensajes;
+			Informes = servicioInformes;
 			_listacalendarios = new ObservableCollection<Calendario>();
 			_listacalendarios.CollectionChanged += ListaCalendarios_CollectionChanged;
 			FechaActual = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -90,7 +96,7 @@ namespace Orion.ViewModels {
 					_listaborrados.Clear();
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("CalendariosViewModel.GuardarCalendarios", ex);
+				Mensajes.VerError("CalendariosViewModel.GuardarCalendarios", ex);
 				HayCambios = true;
 			}
 

@@ -18,6 +18,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Orion.Views;
 using Orion.Properties;
+using Orion.Servicios;
 
 namespace Orion.ViewModels {
 
@@ -27,7 +28,7 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
-		private IMensajeProvider _mensajeProvider;
+		private IMensajes mensajes;
 		private List<Festivo> _listaborrados = new List<Festivo>();
 		#endregion
 
@@ -35,8 +36,8 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region CONSTRUCTORES
 		// ====================================================================================================
-		public OpcionesViewModel(IMensajeProvider mensajeProvider) {
-			_mensajeProvider = mensajeProvider;
+		public OpcionesViewModel(IMensajes servicioMensajes) {
+			mensajes = servicioMensajes;
 			_listafestivos.CollectionChanged += ListaFestivos_CollectionChanged;
 			AñoFestivos = DateTime.Now.Year;
 			CargarFestivos();

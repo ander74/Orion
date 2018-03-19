@@ -18,6 +18,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Orion.Views;
 using System.ComponentModel;
+using Orion.Servicios;
 
 namespace Orion.ViewModels {
 
@@ -31,7 +32,7 @@ namespace Orion.ViewModels {
 		private List<Linea> _listalineasborradas = new List<Linea>();
 		private List<Itinerario> _listaitinerariosborrados = new List<Itinerario>();
 		private List<Parada> _listaparadasborradas = new List<Parada>();
-		private IMensajeProvider _mensajeProvider;
+		private IMensajes mensajes;
 
 		#endregion
 
@@ -39,8 +40,8 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region CONSTRUCTORES
 		// ====================================================================================================
-		public LineasViewModel(IMensajeProvider mensajeProvider) {
-			_mensajeProvider = mensajeProvider;
+		public LineasViewModel(IMensajes servicioMensajes) {
+			mensajes = servicioMensajes;
 			_listalineas.CollectionChanged += ListaLineas_CollectionChanged;
 			CargarLineas();
 		}
@@ -62,7 +63,7 @@ namespace Orion.ViewModels {
 					l.PropertyChanged += PropiedadCambiadaEventHandler;
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("LineasViewModel.CargarLineas", ex);
+				mensajes.VerError("LineasViewModel.CargarLineas", ex);
 			}
 			PropiedadCambiada(nameof(Detalle));
 		}
@@ -79,7 +80,7 @@ namespace Orion.ViewModels {
 					_listalineasborradas.Clear();
 				}
 			} catch (Exception ex) {
-				_mensajeProvider.VerError("LineasViewModel.GuardarLineas", ex);
+				mensajes.VerError("LineasViewModel.GuardarLineas", ex);
 				HayCambios = true;
 			}
 		}

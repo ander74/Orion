@@ -223,7 +223,7 @@ namespace Orion.Models {
 		}
 
 
-		private string _carpetainformes = "Informes";
+		private string _carpetainformes = "";
 		public string CarpetaInformes {
 			get { return _carpetainformes; }
 			set {

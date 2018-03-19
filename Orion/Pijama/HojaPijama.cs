@@ -7,6 +7,7 @@
 #endregion
 using Orion.DataModels;
 using Orion.Models;
+using Orion.Servicios;
 using Orion.Views;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,8 @@ namespace Orion.Pijama {
 		#region CONSTRUCTOR
 		// ====================================================================================================
 
-		public HojaPijama(Calendario calendario, IMensajeProvider mensajeProvider) {
-			MensajeProvider = mensajeProvider;
+		public HojaPijama(Calendario calendario, IMensajes mensajes) {
+			Mensajes = mensajes;
 
 			try {
 				// Establecemos la fecha del pijama.
@@ -119,7 +120,7 @@ namespace Orion.Pijama {
 				HastaAñoAnterior = BdPijamas.GetResumenHastaMes(fechaanterior.Year, fechaanterior.Month, Trabajador.Id);
 
 			} catch (Exception ex) {
-				MensajeProvider.VerError("HojaPijama.Constructor", ex);
+				Mensajes.VerError("HojaPijama.Constructor", ex);
 			}
 
 			// Llamamos a todas las opciones del pijama, para que se reescriban.
@@ -212,7 +213,8 @@ namespace Orion.Pijama {
 					findestrabajados = 0;
 				}
 
-
+				// RESET DIAS TRABAJADOS
+				if (dia.Grafico < 0) diastrabajados = 0;
 
 				// EXCESO DE HORAS TRABAJADAS EN LABORABLES Y FESTIVOS
 				if (dia.DiaFecha.DayOfWeek != DayOfWeek.Saturday && dia.DiaFecha.DayOfWeek != DayOfWeek.Sunday) {
@@ -297,8 +299,8 @@ namespace Orion.Pijama {
 		/// <summary>
 		/// Proovedor de mensajes.
 		/// </summary>
-		private IMensajeProvider _mensajeprovider;
-		public IMensajeProvider MensajeProvider {
+		private IMensajes _mensajeprovider;
+		public IMensajes Mensajes {
 			get { return _mensajeprovider; }
 			set {
 				if (_mensajeprovider != value) {

@@ -10,49 +10,57 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Orion.Views"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
         Title="Control de Acceso" Height="450" Width="400">
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <Border Background="White" CornerRadius="10" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20">
 
-        <!-- VENTANA DE ERROR -->
-        <StackPanel Grid.Row="0" Orientation="Vertical">
+        <Border.BitmapEffect>
+            <DropShadowBitmapEffect Color="LightGray" Direction="-50" ShadowDepth="10" Softness=".7" />
+        </Border.BitmapEffect>
 
-            <!-- TÍTULO -->
-            <StackPanel Orientation="Horizontal" Background="DarkGoldenrod" Margin="0,0,0,10">
-                <Image Source="Imagenes/Llave.png" Height="40" Margin="10"/>
-                <TextBlock FontSize="24" FontWeight="Bold" Margin="10" Foreground="WhiteSmoke"
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- VENTANA DE ERROR -->
+            <StackPanel Grid.Row="0" Orientation="Vertical">
+
+                <!-- TÍTULO -->
+                <Border Background="DarkGoldenrod" MouseDown="Border_MouseDown" CornerRadius="10,10,0,0" Margin="0,0,0,10">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Imagenes/Llave.png" Height="40" Margin="10"/>
+                        <TextBlock FontSize="24" FontWeight="Bold" Margin="10" Foreground="WhiteSmoke"
                            Text="Cambiar Contraseña."/>
+                    </StackPanel>
+                </Border>
+
+                <!-- CONTRASEÑA ANTERIOR -->
+                <TextBlock FontSize="16" FontWeight="DemiBold" Margin="10,5,10,10" Text="Contraseña Anterior"/>
+                <PasswordBox x:Name="PwAnterior" FontSize="24" Margin="10,0,10,5" BorderThickness="1" BorderBrush="DarkGray" KeyDown="PwAnterior_KeyDown"
+                         HorizontalContentAlignment="Center" Padding="5"/>
+
+                <!-- NUEVA CONTRASEÑA -->
+                <TextBlock FontSize="16" FontWeight="DemiBold" Margin="10,5,10,10" Text="Nueva Contraseña"/>
+                <PasswordBox x:Name="PwNueva" FontSize="24" Margin="10,0,10,5" BorderThickness="1" BorderBrush="DarkGray" KeyUp="PwNueva_KeyUp"
+                         HorizontalContentAlignment="Center" Padding="5"/>
+
+                <!-- NUEVA CONTRASEÑA 2 -->
+                <TextBlock FontSize="16" FontWeight="DemiBold" Margin="10,5,10,10" Text="Repetir Nueva Contraseña"/>
+                <PasswordBox x:Name="PwNueva2" FontSize="24" Margin="10,0,10,5" BorderThickness="1" BorderBrush="DarkGray" KeyUp="PwNueva_KeyUp"
+                         HorizontalContentAlignment="Center" Padding="5"/>
+
+                <!-- MENSAJE DE ERROR -->
+                <TextBlock x:Name="TxtMensajeError" FontSize="16" FontWeight="DemiBold" Foreground="IndianRed" Margin="10,0,10,10" Text=""/>
+
             </StackPanel>
 
-            <!-- CONTRASEÑA ANTERIOR -->
-            <TextBlock FontSize="16" FontWeight="DemiBold" Margin="10,5,10,10" Text="Contraseña Anterior"/>
-            <PasswordBox x:Name="PwAnterior" FontSize="24" Margin="10,0,10,5" BorderThickness="1" BorderBrush="DarkGray" KeyDown="PwAnterior_KeyDown"
-                         HorizontalContentAlignment="Center" Padding="5"/>
-
-            <!-- NUEVA CONTRASEÑA -->
-            <TextBlock FontSize="16" FontWeight="DemiBold" Margin="10,5,10,10" Text="Nueva Contraseña"/>
-            <PasswordBox x:Name="PwNueva" FontSize="24" Margin="10,0,10,5" BorderThickness="1" BorderBrush="DarkGray" KeyUp="PwNueva_KeyUp"
-                         HorizontalContentAlignment="Center" Padding="5"/>
-
-            <!-- NUEVA CONTRASEÑA 2 -->
-            <TextBlock FontSize="16" FontWeight="DemiBold" Margin="10,5,10,10" Text="Repetir Nueva Contraseña"/>
-            <PasswordBox x:Name="PwNueva2" FontSize="24" Margin="10,0,10,5" BorderThickness="1" BorderBrush="DarkGray" KeyUp="PwNueva_KeyUp"
-                         HorizontalContentAlignment="Center" Padding="5"/>
-
-            <!-- MENSAJE DE ERROR -->
-            <TextBlock x:Name="TxtMensajeError" FontSize="16" FontWeight="DemiBold" Foreground="IndianRed" Margin="10,0,10,10" Text=""/>
-
-        </StackPanel>
-
-        <!-- BOTÓN DE ACEPTAR -->
-        <Button Grid.Row="1" HorizontalAlignment="Right" Margin="10" Padding="16,8" Content="Aceptar" Width="80" FontSize="12"
+            <!-- BOTÓN DE ACEPTAR -->
+            <Button Grid.Row="1" HorizontalAlignment="Right" Margin="10" Padding="16,8" Content="Aceptar" Width="80" FontSize="12"
                 IsDefault="True" Style="{StaticResource EstiloBoton}" Click="Button_Click"/>
 
-    </Grid>
-
+        </Grid>
+    </Border>
 </Window>
