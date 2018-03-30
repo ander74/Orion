@@ -181,9 +181,19 @@
                 </Button.Content>
             </Button>
 
-
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
+            <!--BOTON ACERCA DE-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding OpcionesVM.cmdAcercaDe}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Informacion.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Text="Acerca De" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
 
 
         </StackPanel>
@@ -349,6 +359,13 @@
                              Text="{Binding Configuracion.CarpetaInformes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                                 <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
                             Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="Informes"/>
+                            </StackPanel>
+
+                            <!-- CREAR INFORMES DIRECTAMENTE -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                <TextBlock Width="130"/>
+                                <CheckBox FontSize="14" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left" Content="Crear informes sin pedir nombre de archivo."
+                                  IsChecked="{Binding Configuracion.CrearInformesDirectamente, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                             </StackPanel>
 
                             <!-- ABRIR ARCHIVOS DESPUÉS DE CREAR -->

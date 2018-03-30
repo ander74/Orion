@@ -72,6 +72,11 @@ namespace OrionUpdate {
 					return;
 				}
 
+				if (!CopiarArchivoRaiz("itextsharp.dll")) {
+					GenerarError();
+					return;
+				}
+
 				// CONFIGURACION
 				if (!CopiarArchivoRaiz("Orion.exe.config")) {
 					GenerarError();
@@ -107,7 +112,11 @@ namespace OrionUpdate {
 					GenerarError();
 					return;
 				}
-				if (!CopiarArchivoRaiz("Plantillas\\Reclamacion.xlsx")) {
+				if (!CopiarArchivoRaiz("Plantillas\\Reclamacion.xlsx")) {//TODO: Eliminar este archivo cuando esté correcta la reclamación PDF
+					GenerarError();
+					return;
+				}
+				if (!CopiarArchivoRaiz("Plantillas\\Reclamacion.pdf")) {
 					GenerarError();
 					return;
 				}

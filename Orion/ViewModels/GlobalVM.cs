@@ -71,6 +71,7 @@ namespace Orion.ViewModels {
 			// Activamos el botón de la calculadora.
 			Configuracion.BotonCalculadoraActivo = true;
 
+
 		}
 
 		#endregion

@@ -48,29 +48,11 @@ namespace Orion.Servicios{
 			if (Cancelar) {
 				vm.VerBotonCancelar = true;
 			}
-			ventanaMensajes = new VentanaMensajes() { DataContext = vm};
+			ventanaMensajes = new VentanaMensajes() { DataContext = vm, ShowInTaskbar= false };
 
 			ventanaMensajes.ShowDialog();
 
 			return ventanaMensajes.Resultado;
-		}
-
-
-		public bool? VerMensaje2(string mensaje, string titulo, bool SiNo = false, bool Cancelar = false) {
-
-			MessageBoxButton botones = MessageBoxButton.OK;
-			if (SiNo) {
-				if (Cancelar) {
-					botones = MessageBoxButton.YesNoCancel;
-				} else {
-					botones = MessageBoxButton.YesNo;
-				}
-			}
-
-			MessageBoxResult resultado = MessageBox.Show(mensaje, titulo, botones, MessageBoxImage.Information);
-			if (resultado == MessageBoxResult.No) return false;
-			if (resultado == MessageBoxResult.Cancel) return null;
-			return true;
 		}
 
 

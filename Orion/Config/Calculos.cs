@@ -78,6 +78,7 @@ namespace Orion.Config {
 				TimeSpan horadesayuno = App.Global.Convenio.HoraDesayuno;
 				if (inicio < horadesayuno) {
 					TimeSpan tiempo = horadesayuno - inicio.Value;
+					decimal x = tiempo.ToDecimal();
 					return tiempo.TotalMinutes > 60 ? 1m : tiempo.ToDecimal();
 				} else {
 					return 0m;

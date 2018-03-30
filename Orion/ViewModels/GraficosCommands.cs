@@ -1013,13 +1013,13 @@ namespace Orion.ViewModels {
 				// Activamos la barra de progreso.
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Pedimos el archivo donde guardarlo.
-				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1}", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1}.pdf", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
 				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
-				string ruta = Informes.GetRutaArchivo(TiposInforme.Graficos, nombreArchivo);
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Graficos, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
 					libro = Informes.GetArchivoExcel(TiposInforme.Graficos);
 					await GraficosPrintModel.CrearGraficosEnPdf(libro, VistaGraficos, GrupoSeleccionado.Validez);
-					Informes.ExportarLibroToPdf(libro, ruta);
+					Informes.ExportarLibroToPdf(libro, ruta, App.Global.Configuracion.AbrirPDFs);
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("GraficosCommands.GraficosEnPDF", ex);
@@ -1058,13 +1058,13 @@ namespace Orion.ViewModels {
 				// Activamos la barra de progreso.
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Definimos el nombre del archivo a guardar.
-				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1} (Individuales)", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1} (Individuales).pdf", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
 				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
-				string ruta = Informes.GetRutaArchivo(TiposInforme.GraficoIndividual, nombreArchivo);
+				string ruta = Informes.GetRutaArchivo(TiposInforme.GraficoIndividual, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
 					libro = Informes.GetArchivoExcel(TiposInforme.GraficoIndividual);
 					await GraficosPrintModel.CrearGraficosIndividualesEnPdf(libro, VistaGraficos, GrupoSeleccionado.Validez);
-					Informes.ExportarLibroToPdf(libro, ruta);
+					Informes.ExportarLibroToPdf(libro, ruta, App.Global.Configuracion.AbrirPDFs);
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("GraficosCommands.GraficosEnPDF", ex);
@@ -1122,13 +1122,13 @@ namespace Orion.ViewModels {
 				// Activamos la barra de progreso.
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Definimos el nombre del archivo a guardar.
-				string nombreArchivo = String.Format("Estadisticas Gráficos {0:yyyy}-{0:MM}-{0:dd} - {1}", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
+				string nombreArchivo = String.Format("Estadisticas Gráficos {0:yyyy}-{0:MM}-{0:dd} - {1}.pdf", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
 				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
-				string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo);
+				string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
 					libro = Informes.GetArchivoExcel(TiposInforme.EstadisticasGraficos);
 					await GraficosPrintModel.CrearEstadisticasGraficosEnPdf(libro, GrupoSeleccionado.Validez, GrupoSeleccionado.Id);
-					Informes.ExportarLibroToPdf(libro, ruta);
+					Informes.ExportarLibroToPdf(libro, ruta, App.Global.Configuracion.AbrirPDFs);
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("GraficosCommands.EstadisticasGraficos", ex);
@@ -1163,9 +1163,9 @@ namespace Orion.ViewModels {
 				// Activamos la barra de progreso.
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Definimos el nombre del archivo a guardar.
-				string nombreArchivo = String.Format("Estadisticas Gráficos - {0}", App.Global.CentroActual.ToString());
+				string nombreArchivo = String.Format("Estadisticas Gráficos - {0}.pdf", App.Global.CentroActual.ToString());
 				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
-				string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo);
+				string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
 					libro = Informes.GetArchivoExcel(TiposInforme.EstadisticasGraficos);
 					await GraficosPrintModel.CrearEstadisticasGruposGraficosEnPdf(libro, FechaEstadisticas);
@@ -1199,8 +1199,8 @@ namespace Orion.ViewModels {
 				// Activamos la barra de progreso.
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Definimos el nombre del archivo a guardar.
-				string nombreArchivo = String.Format("Estadisticas Gráficos Por Centros");
-				string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficosPorCentros, nombreArchivo);
+				string nombreArchivo = String.Format("Estadisticas Gráficos Por Centros.pdf");
+				string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficosPorCentros, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
 					libro = Informes.GetArchivoExcel(TiposInforme.EstadisticasGraficosPorCentros);
 					List<EstadisticasGraficos> lista = new List<EstadisticasGraficos>();
@@ -1244,7 +1244,7 @@ namespace Orion.ViewModels {
 					}
 					//Action<double> modificaBarra = new Action<double>((valor) => App.Global.ValorBarraProgreso = valor);
 					await GraficosPrintModel.CrearEstadisticasGraficosPorCentros(libro, lista);
-					Informes.ExportarLibroToPdf(libro, ruta);
+					Informes.ExportarLibroToPdf(libro, ruta, App.Global.Configuracion.AbrirPDFs);
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("GraficosCommands.EstadisticasGruposGraficos", ex);

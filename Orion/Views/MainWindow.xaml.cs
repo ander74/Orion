@@ -25,6 +25,19 @@ namespace Orion.Views {
 		public MainWindow() {
 			InitializeComponent();
 
+			// Solicitamos aceptar la licencia si no se ha aceptado nunca.
+			if (!App.Global.Configuracion.LicenciaAceptada) {
+				VentanaAcercaDeVM vm = new VentanaAcercaDeVM() { MostrarAceptarLicencia = true };
+				VentanaAcercaDe ventanalicencia = new VentanaAcercaDe() { DataContext = vm };
+				ventanalicencia.ShowDialog();
+				if (vm.AceptarLicencia == false) {
+					MessageBox.Show("Debe Aceptar la licencia", "Atención");
+					this.Close();
+				} else {
+					App.Global.Configuracion.LicenciaAceptada = true;
+				}
+			}
+
 			// Establecemos la versión del ensamblado.
 			Version ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
 			App.Global.TextoEstado = $"Versión {ver.Major}.{ver.Minor}.{ver.Build}";

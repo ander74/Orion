@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -439,6 +440,28 @@ namespace Orion.ViewModels {
 		}
 		#endregion
 
+
+
+		#region ACERCA DE
+
+		// Comando
+		private ICommand _cmdacercade;
+		public ICommand cmdAcercaDe {
+			get {
+				if (_cmdacercade == null) _cmdacercade = new RelayCommand(p => AcercaDe());
+				return _cmdacercade;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void AcercaDe() {
+
+			VentanaAcercaDe ventana = new VentanaAcercaDe() { DataContext = new VentanaAcercaDeVM() };
+			ventana.ShowDialog();
+
+		}
+		#endregion
 
 
 

@@ -415,6 +415,18 @@ namespace Orion.ViewModels {
 		}
 
 
+		private bool _btcrearpdfabierto;
+		public bool BtCrearPdfAbierto {
+			get { return _btcrearpdfabierto; }
+			set {
+				if (_btcrearpdfabierto != value) {
+					_btcrearpdfabierto = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
 		private string _textofiltros = "Ninguno";
 		public string TextoFiltros {
 			get { return _textofiltros; }

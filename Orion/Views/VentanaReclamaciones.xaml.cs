@@ -90,5 +90,10 @@ namespace Orion.Views
 		private void Border_MouseDown(object sender, MouseButtonEventArgs e) {
 			DragMove();
 		}
+
+		// Al cambiar la visibilidad del TextBox Notas
+		private void TbNotas_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e) {
+			if (TbNotas.Visibility == Visibility.Visible) TbNotas.Focus();
+		}
 	}
 }

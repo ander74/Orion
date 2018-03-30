@@ -32,14 +32,15 @@ namespace Orion.Pijama {
 												  "WHERE Numero = ?";
 
 
-		private static string comandoDiasCalendario = "SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha " +
+		private static string comandoDiasCalendario = "SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha, " +
+													  "DiasCalendario.ExcesoJornada " +
 													  "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios.Id " +
 													  "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha < ? AND IdConductor = ?) " +
 													  "      AND Grafico > 0 " +
 													  "ORDER BY Calendarios.Fecha, DiasCalendario.Dia;";
 
 
-		private static string comandoAcumuladas = "SELECT Acumuladas " +
+		private static string comandoAcumuladas = "SELECT * " + 
 												  "FROM (SELECT * FROM Graficos WHERE IdGrupo = (SELECT Id " +
 												  "										         FROM GruposGraficos " +
 												  "												 WHERE Validez = (SELECT Max(Validez) " +
@@ -158,7 +159,7 @@ namespace Orion.Pijama {
 					//----------------------------------------------------------------------------------------------------
 					// HORAS ACUMULADAS
 					//----------------------------------------------------------------------------------------------------
-					OleDbCommand comando = new OleDbCommand(comandoDiasCalendario, conexion);
+					OleDbCommand comando = new OleDbCommand(comandoDiasCalendario, conexion); 
 					comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
 					comando.Parameters.AddWithValue("idconductor", idconductor);
 					OleDbDataReader lector = comando.ExecuteReader();
@@ -168,6 +169,7 @@ namespace Orion.Pijama {
 						int d = (lector["Dia"] is DBNull) ? 0 : (Int16)lector["Dia"];
 						int g = (lector["Grafico"] is DBNull) ? 0 : (Int16)lector["Grafico"];
 						int v = (lector["GraficoVinculado"] is DBNull) ? 0 : (Int16)lector["GraficoVinculado"];
+						TimeSpan ej = Utils.ReaderToHoraSinNulo(lector, "ExcesoJornada");
 						if (v != 0 && g == App.Global.PorCentro.Comodin) g = v;
 						DateTime f = (lector["Fecha"] is DBNull) ? new DateTime(0) : (DateTime)lector["Fecha"];
 						if (d > DateTime.DaysInMonth(f.Year, f.Month)) continue;
@@ -175,12 +177,16 @@ namespace Orion.Pijama {
 						OleDbCommand comando2 = new OleDbCommand(comandoAcumuladas, conexion);
 						comando2.Parameters.AddWithValue("validez", fechadia.ToString("yyyy-MM-dd"));
 						comando2.Parameters.AddWithValue("numero", g);
-						objeto = comando2.ExecuteScalar();
-						long t = 0;
-						if (objeto != null) {
-							t = objeto == DBNull.Value ? 0 : Convert.ToInt64(objeto); ;
+						OleDbDataReader lector2 = comando2.ExecuteReader();
+
+						GraficoBase grafico = null;
+						if (lector2.Read()) {
+							grafico = new GraficoBase(lector2);
+							if (ej != TimeSpan.Zero) {
+								if (grafico != null) grafico.Final += ej;
+							}
+							resultado.HorasAcumuladas += grafico.Acumuladas;
 						}
-						resultado.HorasAcumuladas += new TimeSpan(t);
 					}
 					lector.Close();
 					//----------------------------------------------------------------------------------------------------

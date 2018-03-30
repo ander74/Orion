@@ -324,7 +324,7 @@
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
             <!-- DESPLEGABLE CREAR PDF -->
-            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}">
+            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}"  IsOpen="{Binding CalendariosVM.BtCrearPdfAbierto, Mode=TwoWay}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/GuardarPDF.png" Style="{StaticResource EstiloImagen}"/>
@@ -341,11 +341,15 @@
                                 Content="Tabla Calendarios" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
                                 Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM.cmdCalendariosEnPDF}"/>
 
-                                <!--BOTON PIJAMAS EN  PDF-->
+                                <!--BOTON PIJAMAS JUNTOS EN  PDF-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
-                                Content="Hojas Pijama" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM.cmdPijamasEnPDF}"
-                                CommandParameter="{Binding ElementName=TablaCalendarios}"/>
+                                Content="Hojas Pijama Juntas" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM.cmdPijamasEnPDF}"/>
+
+                                <!--BOTON PIJAMAS POR SEPARADO EN  PDF-->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
+                                Content="Hojas Pijama Por Separado" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM.cmdPijamasSeparadosEnPdf}"/>
 
                                 <!--BOTON CREAR PDF-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
@@ -466,11 +470,11 @@
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
             <!--BOTON RECLAMAR -->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdReclamar}">
+            <Button Style="{StaticResource EstiloBotonBarra}" Width="Auto" Command="{Binding CalendariosVM.cmdReclamacion}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/Reclamar.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Reclamar" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <TextBlock TextWrapping="Wrap" TextAlignment="Center">Generar<LineBreak/>Reclamación</TextBlock>
                     </StackPanel>
                 </Button.Content>
             </Button>
@@ -1912,7 +1916,7 @@
                   SelectionUnit="FullRow" Background="Transparent" CanUserSortColumns="False"
                   Style="{StaticResource EstiloGridPijama}"
                   Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}"
-                  ItemsSource="{Binding CalendariosVM.Pijama.ListaDias}">
+                  ItemsSource="{Binding CalendariosVM.Pijama.ListaDias}" SelectedItem="{Binding CalendariosVM.Pijama.DiaSeleccionado}">
 
             <DataGrid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod"/>
@@ -1946,32 +1950,84 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Horas" Width="*"
-                                        Binding="{Binding GraficoTrabajado.Trabajadas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="Acumulad." Width="*"
-                                        Binding="{Binding GraficoTrabajado.Acumuladas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="Nocturnas" Width="*"
-                                        Binding="{Binding GraficoTrabajado.Nocturnas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="Ex.Jornada" Width="*"
-                                        Binding="{Binding ExcesoJornada, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="Desayuno" Width="*"
-                                        Binding="{Binding GraficoTrabajado.Desayuno, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="Comida" Width="*"
-                                        Binding="{Binding GraficoTrabajado.Comida, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="Cena" Width="*"
-                                        Binding="{Binding GraficoTrabajado.Cena, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="PlusCena" Width="*"
-                                        Binding="{Binding GraficoTrabajado.PlusCena, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="TotalDietas" Width="*"
-                                        Binding="{Binding TotalDietas, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="Menor Des." Width="*"
-                                        Binding="{Binding PlusMenorDescanso, Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="Paquetería" Width="*"
-                                        Binding="{Binding PlusPaqueteria, Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="Limpieza" Width="*"
-                                        Binding="{Binding PlusLimpieza, Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Header="Otros" Width="*"
-                                        Binding="{Binding OtrosPluses, Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Horas" Width="*" Binding="{Binding GraficoTrabajado.Trabajadas, 
+                                    Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Acumulad." Width="*" Binding="{Binding GraficoTrabajado.Acumuladas, 
+                                    Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Nocturnas" Width="*" Binding="{Binding GraficoTrabajado.Nocturnas, 
+                                    Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Ex.Jornada" Width="*" Binding="{Binding ExcesoJornada, 
+                                    Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Width="*" Binding="{Binding GraficoTrabajado.Desayuno, Converter={StaticResource cnvDecimal}, 
+                                    ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+                    <DataGridTextColumn.Header>
+                        <TextBlock Text="Desayuno" ToolTip="El importe incluye el porcentaje aplicado."/>
+                    </DataGridTextColumn.Header>
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="ToolTip" Value="{Binding ImporteDesayuno, Converter={StaticResource cnvDecimalEuro}}"/>
+                            <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Comida" Width="*" Binding="{Binding GraficoTrabajado.Comida, 
+                                    Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="ToolTip" Value="{Binding ImporteComida, Converter={StaticResource cnvDecimalEuro}}"/>
+                            <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Cena" Width="*" Binding="{Binding GraficoTrabajado.Cena, 
+                                    Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="ToolTip" Value="{Binding ImporteCena, Converter={StaticResource cnvDecimalEuro}}"/>
+                            <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="PlusCena" Width="*" Binding="{Binding GraficoTrabajado.PlusCena, 
+                                    Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="ToolTip" Value="{Binding ImportePlusCena, Converter={StaticResource cnvDecimalEuro}}"/>
+                            <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="TotalDietas" Width="*" Binding="{Binding TotalDietas,
+                                    Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="ToolTip" Value="{Binding ImporteTotalDietas, Converter={StaticResource cnvDecimalEuro}}"/>
+                            <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Menor Des." Width="*" Binding="{Binding PlusMenorDescanso, 
+                                    Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="ToolTip" Value="{Binding TiempoMenorDescanso}"/>
+                            <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Paquetería" Width="*" Binding="{Binding PlusPaqueteria, 
+                                    Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="ToolTip" Value="{Binding FacturadoPaqueteria, Converter={StaticResource cnvDecimalEuro}}"/>
+                            <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+                <DataGridTextColumn Header="Limpieza" Width="*" Binding="{Binding PlusLimpieza, 
+                                    Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                <DataGridTextColumn Header="Otros" Width="*" Binding="{Binding OtrosPluses,
+                                    Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
             </DataGrid.Columns>
         </DataGrid>
 
@@ -2236,11 +2292,11 @@
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <TextBlock Style="{StaticResource TextoPijama1}" Text="Pluses" Width="90" TextAlignment="Center"/>
                             <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
-                                       Text="{Binding CalendariosVM.Pijama.PlusSabados, StringFormat='\{0:0.00 €}'}"/>
+                                       Text="{Binding CalendariosVM.Pijama.PlusSabados,  Converter={StaticResource cnvDecimalEuro}}"/>
                             <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
-                                       Text="{Binding CalendariosVM.Pijama.PlusDomingos, StringFormat='\{0:0.00 €}'}"/>
+                                       Text="{Binding CalendariosVM.Pijama.PlusDomingos,  Converter={StaticResource cnvDecimalEuro}}"/>
                             <TextBlock Style="{StaticResource TextoPijama2}" Width="90" TextAlignment="Center"
-                                       Text="{Binding CalendariosVM.Pijama.PlusFestivos, StringFormat='\{0:0.00 €}'}"/>
+                                       Text="{Binding CalendariosVM.Pijama.PlusFestivos,  Converter={StaticResource cnvDecimalEuro}}"/>
                         </StackPanel>
 
                         <Border Height="1" BorderBrush="DarkGray" BorderThickness="1"/>
@@ -2338,7 +2394,7 @@
 
                         <StackPanel Orientation="Horizontal" Margin="0,0,0,5">
                             <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
-                                       Text="{Binding CalendariosVM.Pijama.ImporteTotalFindes, StringFormat='{}{0:0.00 €}'}"
+                                       Text="{Binding CalendariosVM.Pijama.ImporteTotalFindes,  Converter={StaticResource cnvDecimalEuro}}"
                                        ToolTip="Suma de todos los pluses de fin de semana y festivos."/>
                             <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
                                        ToolTip="Suma de todas las dietas, así como su importe total.">
@@ -2350,7 +2406,7 @@
                                 </TextBlock.Text>
                             </TextBlock>
                             <TextBlock Style="{StaticResource TextoPijama2}" Width="120" TextAlignment="Center"
-                                       Text="{Binding CalendariosVM.Pijama.ImporteTotalPluses, StringFormat='{}{0:0.00 €}'}"
+                                       Text="{Binding CalendariosVM.Pijama.ImporteTotalPluses,  Converter={StaticResource cnvDecimalEuro}}"
                                        ToolTip="Suma de todos los pluses (excepto los de fin de semana y festivos)."/>
                         </StackPanel>
 
@@ -2362,7 +2418,7 @@
                             <TextBlock FontFamily="Verdana" FontSize="13" FontWeight="Bold" Foreground="DarkBlue"
                                        Text="Importe Total:  "/>
                             <TextBlock FontFamily="Verdana" FontSize="13" Foreground="DarkBlue"
-                                       Text="{Binding CalendariosVM.Pijama.ImporteTotal, StringFormat='{}{0:0.00} €'}"/>
+                                       Text="{Binding CalendariosVM.Pijama.ImporteTotal, Converter={StaticResource cnvDecimalEuro}}"/>
 
                         </StackPanel>
 
@@ -2411,7 +2467,7 @@
                             <TextBlock FontFamily="Verdana" FontSize="13" FontWeight="Bold" Foreground="DarkBlue"
                                        Text="DCs Generados:  "/>
                             <TextBlock FontFamily="Verdana" FontSize="13" Foreground="DarkBlue"
-                                       Text="{Binding CalendariosVM.Pijama.DCsGeneradosHastaMes, StringFormat='{}{0:0.00}'}"/>
+                                       Text="{Binding CalendariosVM.Pijama.DCsGeneradosHastaMes,  Converter={StaticResource cnvDecimal}}"/>
                             <StackPanel.ToolTip>
                                 <TextBlock>
                                     Descansos compensatorios generados a partir de las horas acumuladas actuales <LineBreak/>

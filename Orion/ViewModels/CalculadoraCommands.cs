@@ -238,6 +238,28 @@ namespace Orion.ViewModels {
 		#endregion
 
 
+		#region CERRAR VENTANA
+
+		// Comando
+		private ICommand _cerrarventana;
+		public ICommand cmdCerrarVentana {
+			get {
+				if (_cerrarventana == null) _cerrarventana = new RelayCommand(p => CerrarVentana());
+				return _cerrarventana;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void CerrarVentana() {
+			App.Global.Configuracion.BotonCalculadoraActivo = true;
+			App.Global.Configuracion.LeftCalculadora = Izquierda;
+			App.Global.Configuracion.TopCalculadora = Arriba;
+			SolicitarCierreVentana();
+
+		}
+		#endregion
+
 
 	}
 }

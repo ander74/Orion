@@ -290,14 +290,17 @@ namespace Orion.ViewModels {
 
 			// Creamos la ventana calculadora
 			App.Calculadora = new VentanaCalculadora();
-			App.Calculadora.DataContext = new CalculadoraViewModel();
-
+			// Creamos el ViewModel de la calculadora y asignamos la ubicacion.
+			CalculadoraViewModel CalculadoraVM = new CalculadoraViewModel { Izquierda = Configuracion.LeftCalculadora, Arriba = Configuracion.TopCalculadora };
+			// Asignamos el ViewModel
+			App.Calculadora.DataContext = CalculadoraVM;
+			// Asignamos el delegado de cierre de ventana.
+			CalculadoraVM.SolicitarCierreVentana = App.Calculadora.Close;
 			// Desactivamos el botón.
-			App.Global.Configuracion.BotonCalculadoraActivo = false;
-
+			Configuracion.BotonCalculadoraActivo = false;
 			// Mostramos la calculadora, no modal.
 			App.Calculadora.Show();
-
+			
 		}
 		#endregion
 

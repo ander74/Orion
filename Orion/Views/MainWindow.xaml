@@ -95,6 +95,16 @@
             </TabItem>
 
 
+            <!-- ==================================================================================================== -->
+            <!-- PESTAÑA PROGRAMADOR                                                                                       -->
+            <!-- ==================================================================================================== -->
+            <TabItem x:Name="TabProgramador" Header="Programador" Width="150" Height="24"  Panel.ZIndex="30"
+                     Style="{StaticResource EstiloPestañas}">
+                <!--<views:VistaOpciones x:Name="PestañaProgramador"/>-->
+                <TextBlock Margin="20" FontSize="14" Foreground="DarkGray" Text="Esta pestaña está deshabilitada por seguridad."/>
+            </TabItem>
+
+
         </TabControl>
 
 

@@ -15,6 +15,10 @@ using System.Threading.Tasks;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.Win32;
 using Orion.Config;
+using iTextSharp.text.pdf;
+using iTextSharp;
+using iTextSharp.text;
+using Orion.Models;
 
 namespace Orion.Servicios {
 
@@ -38,14 +42,15 @@ namespace Orion.Servicios {
 
 
 		// ====================================================================================================
-		#region MÉTODOS PÚBLICOS
+		#region MÉTODOS PÚBLICOS EXCEL
 		// ====================================================================================================
 
 		/// <summary>
 		/// Muestra un cuadro de diálogo pidiendo la ruta para un archivo y devuelve la ruta.
 		/// </summary>
-		public string GetRutaArchivo(TiposInforme tipo, string nombreArchivo) {
+		public string GetRutaArchivo(TiposInforme tipo, string nombreArchivo, bool crearInformeDirectamente, string rutaConductor = "") {
 			string resultado = "";
+			string rutaparcial = "";
 			string ruta = "";
 			switch (tipo) {
 				case TiposInforme.Graficos:
@@ -63,22 +68,30 @@ namespace Orion.Servicios {
 					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Estadisticas Graficos");
 					break;
 				case TiposInforme.Pijama:
-					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Hojas Pijama");
+					rutaparcial = "Hojas Pijama";
+					if (rutaConductor != "") rutaparcial = "Conductores\\" + rutaConductor + "\\Hojas Pijama";
+					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, rutaparcial);
 					break;
 				case TiposInforme.Reclamacion:
-					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Reclamaciones");
+					rutaparcial = "Reclamaciones";
+					if (rutaConductor != "") rutaparcial = "Conductores\\" + rutaConductor + "\\Reclamaciones";
+					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, rutaparcial);
 					break;
 			}
 			if (ruta != "") {
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-				SaveFileDialog dialogo = new SaveFileDialog();
-				dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
-				dialogo.FileName = nombreArchivo;
-				dialogo.InitialDirectory = ruta;
-				dialogo.OverwritePrompt = true;
-				dialogo.Title = "Guardar Informe";
-				if (dialogo.ShowDialog() == true) {
-					resultado = dialogo.FileName;
+				if (crearInformeDirectamente) {
+					resultado = Path.Combine(ruta, nombreArchivo);
+				} else {
+					SaveFileDialog dialogo = new SaveFileDialog();
+					dialogo.Filter = "Archivos PDF|*.pdf|Todos los archivos|*.*";
+					dialogo.FileName = nombreArchivo;
+					dialogo.InitialDirectory = ruta;
+					dialogo.OverwritePrompt = true;
+					dialogo.Title = "Guardar Informe";
+					if (dialogo.ShowDialog() == true) {
+						resultado = dialogo.FileName;
+					}
 				}
 			}
 			return resultado;
@@ -106,10 +119,10 @@ namespace Orion.Servicios {
 		/// <summary>
 		/// Exporta a PDF el libro pasado en la ruta pasada, y lo cierra.
 		/// </summary>
-		public void ExportarLibroToPdf(Workbook libro, string ruta) {
+		public void ExportarLibroToPdf(Workbook libro, string ruta, bool abrirPDF) {
 			try {
 				libro.ExportAsFixedFormat(XlFixedFormatType.xlTypePDF, ruta);
-				if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+				if (abrirPDF) Process.Start(ruta);
 			} finally {
 				libro.Close(false);
 			}
@@ -144,7 +157,120 @@ namespace Orion.Servicios {
 
 
 		// ====================================================================================================
-		#region PROPIEDADES
+		#region MÉTODOS PÚBLICOS PDF
+		// ====================================================================================================
+
+		/// <summary>
+		/// Este es un método de práctica.
+		/// </summary>
+		public void CrearPDF() {
+
+			// Así se crea o se abre un documento.
+			FileStream fs = new FileStream("MiPdf.pdf", FileMode.Create); // Creamos el FileStream del documento a crear o abrir.
+			Document doc = new Document(PageSize.A4, 25, 25, 25, 25); // Creamos un documento.
+			PdfWriter pdf = PdfWriter.GetInstance(doc, fs); // Creamos una nueva instancia del escritor de PDF pasando el documento y el FileStream.
+
+			pdf.SetEncryption(PdfWriter.ENCRYPTION_AES_128, "ander74", "ander74", PdfWriter.AllowPrinting);
+			// Para trabajar con el documento, se abre y se trabaja con el mismo y no el writer.
+			doc.Open();
+			// Se pueden añadir metadatos.
+			
+			doc.AddAuthor("A. Herrero");
+			doc.AddTitle("Mi primer documento PDF");
+			doc.AddSubject("Este es un documento de prueba.");
+			// Se crea un párrafo.
+			Paragraph parrafo = new Paragraph("Hola Mundo\n\nEste es el primer PDF que creo con clave.");
+			// Añadimos el párrafo al documento.
+			doc.Add(parrafo);
+			// Cerramos el documento, el escritor y el FileStream (en este orden).
+			doc.Close();
+			pdf.Close();
+			fs.Close(); // Tambien podemos poner el FileStream en un using y así que se cierre automáticamente.
+
+
+			
+
+
+		}
+
+
+		public void RellenarPDF() {
+
+			// Creamos el lector del documento.
+			PdfReader reader = new PdfReader("Plantillas\\Reclamacion.pdf");
+			// Creamos el 'modificador' del documento.
+			FileStream fs = new FileStream("MiPdf.pdf", FileMode.Create); // Creamos el FileStream del documento a crear.
+			PdfStamper stamper = new PdfStamper(reader, fs);
+			
+			// Extraemos los campos del documento.
+			AcroFields campos = stamper.AcroFields;
+
+			// Asignamos los campos
+			campos.SetField("Centro", "Bilbao");
+			campos.SetField("Trabajador", "J.A. Cisneros (450)");
+			campos.SetField("FechaCabecera", "MARZO - 2018");
+			campos.SetField("NumeroReclamacion", "Nº Reclamación: 20180328450");
+			campos.SetField("FechaFirma", "28 - 03 - 2018");
+			campos.SetField("Notas", "Estas son notas de ejemplo.\n\nAquí va otra línea.");
+
+
+			// Hacemos que ya no se puedan rellenar los campos.
+			//stamper.FormFlattening = true;
+
+			// Cerramos los elementos abiertos
+			stamper.Close();
+			fs.Close();
+			reader.Close();
+
+
+
+
+		}
+
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region MÉTODOS PÚBLICOS RECLAMACIONES
+		// ====================================================================================================
+
+		public void GenerarReclamación(Centros centro, Conductor conductor, DateTime fecha, string ruta) {
+
+			// Creamos el lector del documento.
+			string rutaPlantilla = Utils.CombinarCarpetas(App.RutaInicial, $"/Plantillas/Reclamacion.pdf");
+			PdfReader reader = new PdfReader(rutaPlantilla);
+			// Creamos el 'modificador' del documento.
+			FileStream fs = new FileStream(ruta, FileMode.Create);
+			PdfStamper stamper = new PdfStamper(reader, fs);
+
+			// Extraemos los campos del documento.
+			AcroFields campos = stamper.AcroFields;
+
+			// Asignamos los campos
+			campos.SetField("Centro", centro.ToString().ToUpper());
+			campos.SetField("Trabajador", $"{conductor.Apellidos}, {conductor.Nombre} ({conductor.Id:000})");
+			campos.SetField("FechaCabecera", $"{fecha:MMMM - yyyy}".ToUpper());
+			campos.SetField("NumeroReclamacion", $"Nº Reclamación: {fecha:yyyyMM}{conductor.Id:000}/01");
+			campos.SetField("FechaFirma", $"{DateTime.Today:dd - MM - yyyy}");
+
+			// Cerramos los elementos abiertos
+			stamper.Close();
+			fs.Close();
+			reader.Close();
+
+
+		}
+
+
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region PROPIEDADES EXCEL
 		// ====================================================================================================
 
 

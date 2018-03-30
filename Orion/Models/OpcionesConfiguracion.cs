@@ -23,6 +23,32 @@ namespace Orion.Models {
 		#region GENERALES
 		// ====================================================================================================
 
+
+
+		private bool _licenciaaceptada = false;
+		public bool LicenciaAceptada {
+			get { return _licenciaaceptada; }
+			set {
+				if (_licenciaaceptada != value) {
+					_licenciaaceptada = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private bool _crearinformesdirectamente = true;
+		public bool CrearInformesDirectamente {
+			get { return _crearinformesdirectamente; }
+			set {
+				if (_crearinformesdirectamente != value) {
+					_crearinformesdirectamente = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
 		private bool _abrirpdfs = true;
 		public bool AbrirPDFs {
 			get { return _abrirpdfs; }

@@ -49,6 +49,10 @@ namespace Orion.Pijama {
 				foreach (DiaPijama dia in ListaDias) {
 					// Establecemos si es festivo.
 					if (App.Global.CalendariosVM.EsFestivo(dia.DiaFecha)) dia.EsFestivo = true;
+					// Ajustamos la jornada en función del exceso de jornada.
+					if (dia.ExcesoJornada != TimeSpan.Zero) {
+						if (dia.GraficoTrabajado != null) dia.GraficoTrabajado.Final += dia.ExcesoJornada;
+					}
 					// Si el conductor no tiene reducción de jornada, ajustamos las horas a la jornada media si es necesario.
 					if (dia.Grafico > 0) {
 						if (!Trabajador.ReduccionJornada && dia.GraficoTrabajado.Trabajadas < App.Global.Convenio.JornadaMedia) {
@@ -84,11 +88,16 @@ namespace Orion.Pijama {
 					if (finalAnterior.HasValue && dia.GraficoTrabajado.Inicio.HasValue) {
 						// Añadimos uno al inicio de hoy.
 						TimeSpan inicio = dia.GraficoTrabajado.Inicio.Value.Add(new TimeSpan(1, 0, 0, 0));
+						// Si el turno es 3 (Noche) y empieza más tarde de las 00:00h, se añade uno más
+						if (dia.GraficoTrabajado.Turno == 3 && inicio.Hours < 3) inicio = inicio.Add(new TimeSpan(1, 0, 0, 0)); 
 						// Si el final anterior es mayor que el inicio, añadimos otro día al inicio.
 						if (inicio < finalAnterior.Value) inicio = inicio.Add(new TimeSpan(1, 0, 0, 0));
 						// Si las horas que separan el inicio menos el final anterior son menos de doce...
 						decimal diferenciahoras = (decimal)(inicio - finalAnterior.Value).TotalHours;
+						TimeSpan df = new TimeSpan(0,12,0,0) - (inicio - finalAnterior.Value);
 						if (diferenciahoras < 12) {
+							//dia.TiempoMenorDescanso = (12 - diferenciahoras);
+							dia.TiempoMenorDescanso = $"{df.ToTexto()} ({df.ToDecimal():0.00})";
 							dia.PlusMenorDescanso = (12 - diferenciahoras) * App.Global.Convenio.DietaMenorDescanso;
 						}
 					}
@@ -355,6 +364,18 @@ namespace Orion.Pijama {
 			set {
 				if (_listadias != value) {
 					_listadias = value;
+				}
+			}
+		}
+
+
+		private DiaPijama _diaseleccionado;
+		public DiaPijama DiaSeleccionado {
+			get { return _diaseleccionado; }
+			set {
+				if (_diaseleccionado != value) {
+					_diaseleccionado = value;
+					PropiedadCambiada();
 				}
 			}
 		}
@@ -1142,7 +1163,7 @@ namespace Orion.Pijama {
 		/// </summary>
 		public decimal ImporteTotalDietas {
 			get {
-				return TotalDietas * App.Global.Convenio.ImporteDietas;
+				return Math.Round(TotalDietas, 2) * App.Global.Convenio.ImporteDietas;
 			}
 		}
 

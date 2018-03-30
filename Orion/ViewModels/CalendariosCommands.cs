@@ -406,11 +406,11 @@ namespace Orion.ViewModels {
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Pedimos el nombre de archivo
 				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1}.pdf", FechaActual, Pijama.TextoTrabajador).Replace(":", "");
-				string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo);
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, Pijama.TextoTrabajador.Replace(":"," -"));
 				if (ruta != "") {
 					libro = Informes.GetArchivoExcel(TiposInforme.Pijama);
 					await PijamaPrintModel.CrearPijamaEnPdf(libro, Pijama);
-					Informes.ExportarLibroToPdf(libro, ruta);
+					Informes.ExportarLibroToPdf(libro, ruta, App.Global.Configuracion.AbrirPDFs);
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("CalendariosCommands.CrearPdfPijama", ex);
@@ -447,11 +447,12 @@ namespace Orion.ViewModels {
 				// Pedimos el nombre de archivo
 				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}", FechaActual);
 				nombreArchivo += TextoFiltros == "Ninguno" ? " - Todos" : $" - {TextoFiltros}";
-				string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo);
+				nombreArchivo += ".pdf";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
 					libro = Informes.GetArchivoExcel(TiposInforme.Pijama);
 					await PijamaPrintModel.CrearTodosPijamasEnPdf(libro, VistaCalendarios);
-					Informes.ExportarLibroToPdf(libro, ruta);
+					Informes.ExportarLibroToPdf(libro, ruta, App.Global.Configuracion.AbrirPDFs);
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("CalendariosCommands.PijamasEnPDF", ex);
@@ -463,8 +464,60 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region  RESUMEN AÑO
+		#region PIJAMAS SEPARADOS EN PDF
+
 		// Comando
+		private ICommand _cmdpijamasseparadosenpdf;
+		public ICommand cmdPijamasSeparadosEnPdf {
+			get {
+				if (_cmdpijamasseparadosenpdf == null) _cmdpijamasseparadosenpdf = new RelayCommand(p => PijamasSeparadosEnPdf(), p => PuedePijamasSeparadosEnPdf());
+				return _cmdpijamasseparadosenpdf;
+			}
+		}
+
+
+		// Se puede ejecutar el comando
+		private bool PuedePijamasSeparadosEnPdf() {
+			if (VistaCalendarios == null) return false;
+			return VistaCalendarios.Count > 0;
+		}
+
+		// Ejecución del comando
+		private async void PijamasSeparadosEnPdf() {
+
+			// Creamos el libro a usar.
+			Workbook libro = null;
+
+			try {
+				// Recorremos todos los calendarios
+				foreach (object obj in VistaCalendarios) {
+					Calendario cal = obj as Calendario;
+					if (cal == null) continue;
+					App.Global.IniciarProgreso($"Creando {cal.IdConductor:000}...");
+					Pijama.HojaPijama hojapijama = new Pijama.HojaPijama(cal, new MensajesServicio());
+					hojapijama.Fecha = FechaActual;
+					// Creamos la ruta de archivo
+					string nombreArchivo = String.Format($"{FechaActual:yyyy}-{FechaActual:MM} - {hojapijama.TextoTrabajador.Replace(":", "")}.pdf");
+					string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo, true, hojapijama.TextoTrabajador.Replace(":", " -"));
+					if (ruta != "") {
+						libro = Informes.GetArchivoExcel(TiposInforme.Pijama);
+						await PijamaPrintModel.CrearPijamaEnPdf(libro, hojapijama);
+						Informes.ExportarLibroToPdf(libro, ruta, false);
+					}
+				}
+			} catch (Exception ex) {
+				Mensajes.VerError("CalendariosCommands.PijamasSeparadosEnPdf", ex);
+			} finally {
+				App.Global.FinalizarProgreso();
+				BtCrearPdfAbierto = false;
+			}
+		}
+
+		#endregion
+
+
+		#region  RESUMEN AÑO
+			// Comando
 		private ICommand _cmdmostrarresumenaño;
 		public ICommand cmdMostrarResumenAño {
 			get {
@@ -692,11 +745,12 @@ namespace Orion.ViewModels {
 				// Pedimos el archivo donde guardarlo.
 				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1}", FechaActual, App.Global.CentroActual.ToString());
 				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
-				string ruta = Informes.GetRutaArchivo(TiposInforme.Calendarios, nombreArchivo);
+				nombreArchivo += ".pdf";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Calendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
 					libro = Informes.GetArchivoExcel(TiposInforme.Calendarios);
 					await CalendarioPrintModel.CrearCalendariosEnPdf(libro, VistaCalendarios, FechaActual);
-					Informes.ExportarLibroToPdf(libro, ruta);
+					Informes.ExportarLibroToPdf(libro, ruta, App.Global.Configuracion.AbrirPDFs);
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("CalendariosCommands.CalendariosEnPDF", ex);
@@ -735,11 +789,12 @@ namespace Orion.ViewModels {
 				// Pedimos el archivo donde guardarlo.
 				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1} - Fallos", FechaActual, App.Global.CentroActual.ToString());
 				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
-				string ruta = Informes.GetRutaArchivo(TiposInforme.FallosCalendarios, nombreArchivo);
+				nombreArchivo += ".pdf";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.FallosCalendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
 					libro = Informes.GetArchivoExcel(TiposInforme.FallosCalendarios);
 					await CalendarioPrintModel.FallosEnCalendariosEnPdf(libro, VistaCalendarios, FechaActual);
-					Informes.ExportarLibroToPdf(libro, ruta);
+					Informes.ExportarLibroToPdf(libro, ruta, App.Global.Configuracion.AbrirPDFs);
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("CalendariosCommands.CalendariosEnPDFConFallos", ex);
@@ -1192,16 +1247,57 @@ namespace Orion.ViewModels {
 				// Activamos la barra de progreso.
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Pedimos el archivo donde guardarlo.
-				string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}", Pijama.Fecha, Pijama.Trabajador.Id);
-				string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo);
+				string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}.pdf", Pijama.Fecha, Pijama.Trabajador.Id);
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, Pijama.TextoTrabajador.Replace(":", " -"));
 				if (ruta != "") {
 					libro = Informes.GetArchivoExcel(TiposInforme.Reclamacion);
 					await ReclamacionPrintModel.CrearReclamacion(libro, conceptos, Pijama.Fecha, Pijama.Trabajador,
 																 ReclamacionVM.FechaReclamacion, ReclamacionVM.Notas);
-					Informes.ExportarLibroToPdf(libro, ruta);
+					Informes.ExportarLibroToPdf(libro, ruta, App.Global.Configuracion.AbrirPDFs);
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("CalendariosCommands.Reclamar", ex);
+			} finally {
+				App.Global.FinalizarProgreso();
+			}
+
+		}
+		#endregion
+
+
+
+		#region RECLAMACIÓN
+
+		// Comando
+		private ICommand _cmdreclamacion;
+		public ICommand cmdReclamacion {
+			get {
+				if (_cmdreclamacion == null) _cmdreclamacion = new RelayCommand(p => Reclamacion(), p => PuedeReclamacion());
+				return _cmdreclamacion;
+			}
+		}
+
+
+		// Se puede ejecutar el comando
+		private bool PuedeReclamacion() {
+			return (Pijama != null);
+		}
+
+		// Ejecución del comando
+		private void Reclamacion() {
+
+			try {
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Pedimos el archivo donde guardarlo.
+				string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}.pdf", Pijama.Fecha, Pijama.Trabajador.Id);
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, Pijama.TextoTrabajador.Replace(":", " -"));
+				if (ruta != "") {
+					Informes.GenerarReclamación(App.Global.CentroActual, Pijama.Trabajador, Pijama.Fecha, ruta);
+					if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+				}
+			} catch (Exception ex) {
+				Mensajes.VerError("CalendariosCommands.Reclamacion", ex);
 			} finally {
 				App.Global.FinalizarProgreso();
 			}

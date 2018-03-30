@@ -32,20 +32,25 @@ namespace Orion.Views {
 		}
 
 
-		private void Button_Click(object sender, RoutedEventArgs e) {
+		private void BtAceptar_Click(object sender, RoutedEventArgs e) {
 
 			if (Utils.CodificaTexto(PwAnterior.Password) != App.Global.Configuracion.ContraseñaDatos) {
 				TxtMensajeError.Foreground = Brushes.IndianRed;
 				TxtMensajeError.Text = "Contraseña Anterior no válida.";
 				PwAnterior.Focus();
-			}
-			else if (PwNueva.Password != PwNueva2.Password) {
+			} else if (PwNueva.Password != PwNueva2.Password) {
 				PwNueva.Focus();
 			} else {
 				this.DialogResult = true;
 				this.Close();
 			}
+		}
 
+
+		private void BtCancelar_Click(object sender, RoutedEventArgs e) {
+
+			this.DialogResult = false;
+			this.Close();
 		}
 
 

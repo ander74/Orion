@@ -68,6 +68,9 @@
     <StartupObject>Orion.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -204,11 +207,15 @@
     <Compile Include="ViewModels\OpcionesViewModel.cs" />
     <Compile Include="ViewModels\ReclamacionesViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ViewModels\VentanaAcercaDeVM.cs" />
     <Compile Include="ViewModels\VentanaCobrarHorasVM.cs" />
     <Compile Include="ViewModels\VentanaMensajesVM.cs" />
     <Compile Include="ViewModels\VentanaNuevoGrupoVM.cs" />
     <Compile Include="ViewModels\VentanaRegularAñoVM.cs" />
     <Compile Include="Servicios\MensajesServicio.cs" />
+    <Compile Include="Views\VentanaAcercaDe.xaml.cs">
+      <DependentUpon>VentanaAcercaDe.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\VentanaAñadirGrafico.xaml.cs">
       <DependentUpon>VentanaAñadirGrafico.xaml</DependentUpon>
     </Compile>
@@ -299,6 +306,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\VentanaAcercaDe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\VentanaAñadirGrafico.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -543,7 +554,7 @@
     <Resource Include="Views\Imagenes\Atras.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Licencia.txt" />
+    <EmbeddedResource Include="Licencia.txt" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Pendiente.txt" />
@@ -651,6 +662,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Views\Imagenes\Iconos\Informacion.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\Informacion.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

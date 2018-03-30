@@ -58,9 +58,14 @@
             </StackPanel>
 
             <!-- BOTÓN DE ACEPTAR -->
-            <Button Grid.Row="1" HorizontalAlignment="Right" Margin="10" Padding="16,8" Content="Aceptar" Width="80" FontSize="12"
-                IsDefault="True" Style="{StaticResource EstiloBoton}" Click="Button_Click"/>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button HorizontalAlignment="Right" Margin="10" Padding="16,8" Content="Cancelar" Width="80" FontSize="12"
+                        IsDefault="True" Style="{StaticResource EstiloBoton}" Click="BtCancelar_Click"/>
 
+                <Button HorizontalAlignment="Right" Margin="10" Padding="16,8" Content="Aceptar" Width="80" FontSize="12"
+                        IsDefault="True" Style="{StaticResource EstiloBoton}" Click="BtAceptar_Click"/>
+                
+            </StackPanel>
         </Grid>
     </Border>
 </Window>

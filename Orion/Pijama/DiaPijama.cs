@@ -87,6 +87,18 @@ namespace Orion.Pijama {
 		}
 
 
+		private string _tiempomenordescanso;
+		public string TiempoMenorDescanso {
+			get { return _tiempomenordescanso; }
+			set {
+				if (_tiempomenordescanso != value) {
+					_tiempomenordescanso = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
 		private decimal _plusnocturnidad;
 		public decimal PlusNocturnidad {
 			get { return _plusnocturnidad; }
@@ -152,6 +164,45 @@ namespace Orion.Pijama {
 		}
 
 
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region PROPIEDADES DE DIETAS
+		// ====================================================================================================
+
+
+		public decimal ImporteDesayuno {
+			get {
+				return (GraficoTrabajado.Desayuno * App.Global.Convenio.PorcentajeDesayuno / 100) * App.Global.Convenio.ImporteDietas;
+			}
+		}
+
+		public decimal ImporteComida {
+			get {
+				return GraficoTrabajado.Comida * App.Global.Convenio.ImporteDietas;
+			}
+		}
+
+		public decimal ImporteCena {
+			get {
+				return GraficoTrabajado.Cena * App.Global.Convenio.ImporteDietas;
+			}
+		}
+
+		public decimal ImportePlusCena {
+			get {
+				return GraficoTrabajado.PlusCena * App.Global.Convenio.ImporteDietas;
+			}
+		}
+
+		public decimal ImporteTotalDietas {
+			get {
+				return TotalDietas * App.Global.Convenio.ImporteDietas;
+			}
+		}
 
 		#endregion
 		// ====================================================================================================

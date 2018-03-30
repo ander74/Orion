@@ -14,17 +14,23 @@
         mc:Ignorable="d" x:Name="Ventana"
         WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
         Topmost="True"
-        Closing="Ventana_Closing"
-        Top="{Binding Configuracion.TopCalculadora, Mode=TwoWay}"
-        Left="{Binding Configuracion.LeftCalculadora, Mode=TwoWay}"
+        Top="{Binding Arriba, Mode=TwoWay}"
+        Left="{Binding Izquierda, Mode=TwoWay}"
         Title="Calculadora de Horas" Height="400" Width="300">
 
+    <!--················································································-->
+    <!-- RECURSOS -->
+    <!--················································································-->
     <Window.Resources>
 
         <cnv:ConvertidorSuperHora x:Key="cnvSuperHora"/>
 
     </Window.Resources>
 
+
+    <!--················································································-->
+    <!-- ASIGNACIÓN DE TECLAS -->
+    <!--················································································-->
     <Window.InputBindings>
         <KeyBinding Key="NumPad0" Command="{Binding cmdPulsarBoton}" CommandParameter="0"/>
         <KeyBinding Key="NumPad1" Command="{Binding cmdPulsarBoton}" CommandParameter="1"/>
@@ -62,6 +68,10 @@
         <KeyBinding Key="Space" Command="{Binding cmdPulsarBoton}" CommandParameter="18"/>
     </Window.InputBindings>
 
+
+    <!--················································································-->
+    <!--  CONTENIDO DE LA VENTANA -->
+    <!--················································································-->
     <Border Background="{StaticResource DegradadoCeleste1}" CornerRadius="8" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20" Padding="5">
 
         <Border.BitmapEffect>
@@ -90,13 +100,11 @@
             <!-- ================================================== -->
             <!-- TÍTULO -->
             <!-- ================================================== -->
-            <Border Grid.ColumnSpan="4" Background="{StaticResource orDegradadoAzul}" MouseDown="Border_MouseDown" CornerRadius="8,8,0,0" Margin="-5,-5,-5,0">
+            <Border Grid.ColumnSpan="4" Background="{StaticResource orDegradadoVioleta}" MouseDown="Border_MouseDown" CornerRadius="8,8,0,0" Margin="-5,-5,-5,0">
                 <Grid>
                     <TextBlock FontFamily="Verdana" FontSize="14" FontWeight="Bold" Margin="10" Text="Calculadora" HorizontalAlignment="Left"/>
-                    <Button Style="{StaticResource EstiloBotonBarraPequeña}" HorizontalAlignment="Right" Padding="6" Click="Button_Click">
-                        <!--<Border CornerRadius="0,0,8,0">-->
+                    <Button Style="{StaticResource EstiloBotonBarraPequeña}" HorizontalAlignment="Right" Padding="6" Command="{Binding cmdCerrarVentana}">
                             <Image Source="Imagenes/Cerrar.png" Width="16"/>
-                        <!--</Border>-->
                     </Button>
                 </Grid>
             </Border>

@@ -351,8 +351,9 @@
                 Visibility="{Binding VisibilidadNotas, Converter={StaticResource cnvBoolToVisibility}}">
                 <StackPanel Orientation="Vertical">
                     <TextBlock Margin="10,6,3,3" FontSize="14" FontWeight="Bold" Foreground="DarkRed" Text="Notas"/>
-                    <TextBox Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                         Margin="10" FontFamily="Verdana" FontSize="12" TextWrapping="Wrap" AcceptsReturn="True" MaxLines="9"
+                    <TextBox x:Name="TbNotas" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                         Margin="10" FontFamily="Verdana" FontSize="12" TextWrapping="Wrap" AcceptsReturn="True" MaxLines="9" TabIndex="0"
+                             IsVisibleChanged="TbNotas_IsVisibleChanged"
                          Text="{Binding Notas}"/>
                 </StackPanel>
             </Border>
@@ -378,9 +379,9 @@
             <!-- ================================================== -->
             <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="3" Margin="10" HorizontalAlignment="Right">
                 <Button Style="{StaticResource EstiloBoton}" FontFamily="Arial" FontSize="14" Padding="20,10" Content="Cancelar"
-                    Click="Cancelar_Click"/>
+                        Focusable="True" Click="Cancelar_Click"/>
                 <Button Style="{StaticResource EstiloBoton}" FontFamily="Arial" FontSize="14" Padding="20,10" Content="Aceptar"
-                    Click="Aceptar_Click"/>
+                        Focusable="True" Click="Aceptar_Click"/>
             </StackPanel>
 
 

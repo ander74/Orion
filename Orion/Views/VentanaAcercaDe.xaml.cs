@@ -5,12 +5,8 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Orion.Convertidores;
-using Orion.Models;
-using Orion.Properties;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,20 +21,19 @@ using System.Windows.Shapes;
 
 namespace Orion.Views {
 	/// <summary>
-	/// Lógica de interacción para VentanaCalculadora.xaml
+	/// Lógica de interacción para VentanaAcercaDe.xaml
 	/// </summary>
-	public partial class VentanaCalculadora :Window {
-
-
-		public VentanaCalculadora() {
+	public partial class VentanaAcercaDe :Window {
+		public VentanaAcercaDe() {
 			InitializeComponent();
-
 		}
 
-		// ARRASTRAR LA VENTANA
 		private void Border_MouseDown(object sender, MouseButtonEventArgs e) {
 			DragMove();
 		}
 
+		private void Button_Click(object sender, RoutedEventArgs e) {
+			this.Close();
+		}
 	}
 }

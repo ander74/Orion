@@ -61,7 +61,7 @@ namespace Orion.ViewModels {
 					break;
 			}
 		}
-	
+
 
 
 		#endregion
@@ -72,12 +72,39 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 
 
+
 		#endregion
 
 
 		// ====================================================================================================
 		#region PROPIEDADES
 		// ====================================================================================================
+
+		public Action SolicitarCierreVentana { get; set; }
+
+
+		private double _izquierda;
+		public double Izquierda {
+			get { return _izquierda; }
+			set {
+				if (_izquierda != value) {
+					_izquierda = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private double _arriba;
+		public double Arriba {
+			get { return _arriba; }
+			set {
+				if (_arriba != value) {
+					_arriba = value;
+					PropiedadCambiada();
+				}
+			}
+		}
 
 
 		private TimeSpan _horaalmacen = new TimeSpan(0);
