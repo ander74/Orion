@@ -69,12 +69,12 @@ namespace Orion.Servicios {
 					break;
 				case TiposInforme.Pijama:
 					rutaparcial = "Hojas Pijama";
-					if (rutaConductor != "") rutaparcial = "Conductores\\" + rutaConductor + "\\Hojas Pijama";
+					if (rutaConductor.Trim() != "") rutaparcial = "Conductores\\" + rutaConductor.Trim() + "\\Hojas Pijama";
 					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, rutaparcial);
 					break;
 				case TiposInforme.Reclamacion:
 					rutaparcial = "Reclamaciones";
-					if (rutaConductor != "") rutaparcial = "Conductores\\" + rutaConductor + "\\Reclamaciones";
+					if (rutaConductor.Trim() != "") rutaparcial = "Conductores\\" + rutaConductor.Trim() + "\\Reclamaciones";
 					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, rutaparcial);
 					break;
 			}
@@ -152,12 +152,23 @@ namespace Orion.Servicios {
 			}
 		}
 
+
 		#endregion
 		// ====================================================================================================
 
 
 		// ====================================================================================================
-		#region MÉTODOS PÚBLICOS PDF
+		#region MÉTODOS PÚBLICOS PDF (ITEXT 7)
+		// ====================================================================================================
+
+		
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region MÉTODOS PÚBLICOS PDF DE PRUEBA
 		// ====================================================================================================
 
 		/// <summary>
@@ -170,25 +181,21 @@ namespace Orion.Servicios {
 			Document doc = new Document(PageSize.A4, 25, 25, 25, 25); // Creamos un documento.
 			PdfWriter pdf = PdfWriter.GetInstance(doc, fs); // Creamos una nueva instancia del escritor de PDF pasando el documento y el FileStream.
 
-			pdf.SetEncryption(PdfWriter.ENCRYPTION_AES_128, "ander74", "ander74", PdfWriter.AllowPrinting);
-			// Para trabajar con el documento, se abre y se trabaja con el mismo y no el writer.
-			doc.Open();
-			// Se pueden añadir metadatos.
+			//pdf.SetEncryption(PdfWriter.ENCRYPTION_AES_128, "ander74", "ander74", PdfWriter.AllowPrinting);
+
+			Document d2 = LlenarDocumentoPDF();
+
+			PdfDocument d = new PdfDocument();
 			
-			doc.AddAuthor("A. Herrero");
-			doc.AddTitle("Mi primer documento PDF");
-			doc.AddSubject("Este es un documento de prueba.");
-			// Se crea un párrafo.
-			Paragraph parrafo = new Paragraph("Hola Mundo\n\nEste es el primer PDF que creo con clave.");
-			// Añadimos el párrafo al documento.
-			doc.Add(parrafo);
-			// Cerramos el documento, el escritor y el FileStream (en este orden).
-			doc.Close();
+		
+			
+
+
 			pdf.Close();
-			fs.Close(); // Tambien podemos poner el FileStream en un using y así que se cierre automáticamente.
+			//fs.Close(); // El filestream no es necesario cerrarlo, ya que se cierra automáticamente al cerrar el documento.
 
 
-			
+
 
 
 		}
@@ -226,6 +233,116 @@ namespace Orion.Servicios {
 
 
 		}
+
+
+		public Document LlenarDocumentoPDF() {
+
+
+			Document doc = new Document(PageSize.A4, 25, 25, 25, 25); // Creamos un documento.
+																	  // Para trabajar con el documento, se abre y se trabaja con el mismo y no el writer.
+			doc.Open();
+			// Se pueden añadir metadatos.
+			doc.AddAuthor("A. Herrero");
+			doc.AddTitle("Mi primer documento PDF");
+			doc.AddSubject("Este es un documento de prueba.");
+
+			PdfPTable inicial = new PdfPTable(new float[] { 60, 5, 40 });
+			inicial.WidthPercentage = 100;
+
+			// Creamos una tabla para ver si podemos reutilizar las celdas.
+			PdfPTable tabla = new PdfPTable(3);
+			tabla.WidthPercentage = 60;
+			tabla.HorizontalAlignment = Element.ALIGN_LEFT;
+			tabla.SetWidths(new int[] { 1, 1, 3 });
+			tabla.HeaderRows = 1; // Determinamos las filas que son encabezado, para que se repitan en las páginas nuevas.
+
+			// Establecemos la fuente de los encabezados y las celdas.
+			iTextSharp.text.Font fuenteEncabezados = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10, iTextSharp.text.Font.NORMAL, BaseColor.BLUE);
+			iTextSharp.text.Font fuenteCeldas = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.NORMAL);
+
+			// Creamos las tres celdas de la fila
+			PdfPCell celdaEncabezado = new PdfPCell();
+			celdaEncabezado.Colspan = 1;
+			celdaEncabezado.Padding = 5;
+			celdaEncabezado.BackgroundColor = BaseColor.ORANGE;
+			celdaEncabezado.HorizontalAlignment = Element.ALIGN_CENTER;
+			celdaEncabezado.VerticalAlignment = Element.ALIGN_MIDDLE;
+
+			PdfPCell celdaNormal = new PdfPCell();
+			celdaNormal.Colspan = 1;
+			celdaNormal.Padding = 5;
+			celdaNormal.BackgroundColor = BaseColor.WHITE;
+			celdaNormal.HorizontalAlignment = Element.ALIGN_CENTER;
+			celdaNormal.VerticalAlignment = Element.ALIGN_MIDDLE;
+
+			celdaEncabezado.Phrase = new Phrase("ID", fuenteEncabezados);
+			tabla.AddCell(celdaEncabezado);
+			celdaEncabezado.Phrase = new Phrase("NOMBRE", fuenteEncabezados);
+			tabla.AddCell(celdaEncabezado);
+			celdaEncabezado.Phrase = new Phrase("APELLIDOS", fuenteEncabezados);
+			tabla.AddCell(celdaEncabezado);
+
+
+			celdaNormal.Phrase = new Phrase("5060", fuenteCeldas);
+			tabla.AddCell(celdaNormal);
+			celdaNormal.Phrase = new Phrase("Andrés", fuenteCeldas);
+			tabla.AddCell(celdaNormal);
+			celdaNormal.Phrase = new Phrase("Herrero Módenes", fuenteCeldas);
+			tabla.AddCell(celdaNormal);
+
+			celdaNormal.Phrase = new Phrase("4935", fuenteCeldas);
+			//celdaNormal.Rowspan = 3;
+			tabla.AddCell(celdaNormal);
+			celdaNormal.Phrase = new Phrase("Joseba", fuenteCeldas);
+			celdaNormal.Rowspan = 1;
+			tabla.AddCell(celdaNormal);
+			celdaNormal.Phrase = new Phrase("Moyano Reyero.\n\nAsignamos más texto para ver si se hace wrapping automáticamente y podemos trabajar con los fallos de calendario y ahorrar al máximo el uso de excel.", fuenteCeldas);
+			celdaNormal.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
+			tabla.AddCell(celdaNormal);
+			celdaNormal.HorizontalAlignment = Element.ALIGN_CENTER;
+
+			celdaNormal.Phrase = new Phrase("5060", fuenteCeldas);
+			tabla.AddCell(celdaNormal);
+			celdaNormal.Phrase = new Phrase("Andrés", fuenteCeldas);
+			celdaNormal.Colspan = 2;
+			//tabla.AddCell(celdaNormal);
+			celdaNormal.Phrase = new Phrase("Herrero Módenes", fuenteCeldas);
+			tabla.AddCell(celdaNormal);
+
+			//for (int m = 1; m < 60; m++) {
+			//	celdaNormal.Phrase = new Phrase("5069", fuenteCeldas);
+			//	tabla.AddCell(celdaNormal);
+			//	celdaNormal.Phrase = new Phrase("Txus", fuenteCeldas);
+			//	tabla.AddCell(celdaNormal);
+			//	celdaNormal.Phrase = new Phrase("Alberto González", fuenteCeldas);
+			//	tabla.AddCell(celdaNormal);
+			//}
+
+			PdfPCell c1 = new PdfPCell(tabla);
+			c1.BorderWidth = 0;
+
+
+			// Se crea un párrafo.
+			Paragraph parrafo = new Paragraph("Hola Mundo\n\nEste es el primer PDF que creo con clave.\n\n");
+			// Añadimos el párrafo al documento.
+			PdfPCell c2 = new PdfPCell(parrafo);
+			c2.BorderWidth = 0;
+
+			inicial.AddCell(c1);
+			inicial.AddCell(new PdfPCell() { BorderWidth = 0 });
+			inicial.AddCell(c2);
+
+			doc.Add(inicial);
+
+
+			// Cerramos el documento, el escritor y el FileStream (en este orden).
+			doc.Close();
+
+			return doc;
+
+		}
+
+
 
 
 		#endregion

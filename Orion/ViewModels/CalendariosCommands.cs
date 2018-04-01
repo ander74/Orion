@@ -405,7 +405,7 @@ namespace Orion.ViewModels {
 				// Activamos la barra de progreso.
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Pedimos el nombre de archivo
-				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1}.pdf", FechaActual, Pijama.TextoTrabajador).Replace(":", "");
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1}.pdf", FechaActual, Pijama.TextoTrabajador.Trim()).Replace(":", "");
 				string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, Pijama.TextoTrabajador.Replace(":"," -"));
 				if (ruta != "") {
 					libro = Informes.GetArchivoExcel(TiposInforme.Pijama);
