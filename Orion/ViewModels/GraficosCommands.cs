@@ -1006,7 +1006,7 @@ namespace Orion.ViewModels {
 		}
 
 
-		private async void GraficosEnPDF() {
+		private async void GraficosEnPDF2() {
 			// Creamos el libro a usar.
 			Workbook libro = null;
 			try {
@@ -1029,6 +1029,31 @@ namespace Orion.ViewModels {
 
 		}
 
+
+		private async void GraficosEnPDF() {
+			try {
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Pedimos el archivo donde guardarlo.
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1}.pdf", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
+				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Graficos, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
+				if (ruta != "") {
+					iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
+					doc.GetPdfDocument().GetDocumentInfo().SetTitle("Gráficos");
+					doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{GrupoSeleccionado.Validez.ToString("dd-MMMM-yyyy").ToUpper()}");
+					doc.SetMargins(25, 25, 25, 25);
+					await GraficosPrintModel.CrearGraficosEnPdf_7(doc, VistaGraficos, GrupoSeleccionado.Validez);
+					doc.Close();
+					if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+				}
+			} catch (Exception ex) {
+				Mensajes.VerError("GraficosCommands.GraficosEnPDF", ex);
+			} finally {
+				App.Global.FinalizarProgreso();
+			}
+
+		}
 
 
 		#endregion

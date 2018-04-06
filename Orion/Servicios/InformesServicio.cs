@@ -19,6 +19,7 @@ using iTextSharp.text.pdf;
 using iTextSharp;
 using iTextSharp.text;
 using Orion.Models;
+using Orion.PrintModel;
 
 namespace Orion.Servicios {
 
@@ -42,7 +43,7 @@ namespace Orion.Servicios {
 
 
 		// ====================================================================================================
-		#region MÉTODOS PÚBLICOS EXCEL
+		#region MÉTODOS PÚBLICOS COMUNES
 		// ====================================================================================================
 
 		/// <summary>
@@ -96,6 +97,16 @@ namespace Orion.Servicios {
 			}
 			return resultado;
 		}
+
+
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region MÉTODOS PÚBLICOS EXCEL
+		// ====================================================================================================
 
 		/// <summary>
 		/// Devuelve un archivo de Excel en blanco o con la plantilla indicada.
@@ -161,7 +172,63 @@ namespace Orion.Servicios {
 		#region MÉTODOS PÚBLICOS PDF (ITEXT 7)
 		// ====================================================================================================
 
+		/// <summary>
+		/// Devuelve un documento PDF nuevo en formato A4 en la ruta que se pasa como argumento.
+		/// </summary>
+		/// <param name="ruta">Ruta completa (nombre de archivo incluido) en la que se guardará el documento PDF.</param>
+		/// <param name="apaisado">Si es true, el documento estará en apaisado. Por defecto es false.</param>
+		/// <returns>El documento PDF listo para trabajar en él.</returns>
+		public iText.Layout.Document GetNuevoPdf(string ruta, bool apaisado = false) {
+
+			// Se crea el Writer con la ruta pasada.
+			iText.Kernel.Pdf.PdfWriter writer = new iText.Kernel.Pdf.PdfWriter(ruta);
+			// Se crea el PDF que se guardará usando el writer.
+			iText.Kernel.Pdf.PdfDocument docPDF = new iText.Kernel.Pdf.PdfDocument(writer);
+			// Añadimos los datos de Metadata
+			docPDF.GetDocumentInfo().SetAuthor("Orion - AnderSoft - A.Herrero");
+			docPDF.GetDocumentInfo().SetCreator("Orion 1.0");
+			// Creamos el tamaño de página y le asignamos la rotaciñon si debe ser apaisado.
+			iText.Kernel.Geom.PageSize tamañoPagina;
+			if (apaisado) {
+				tamañoPagina = iText.Kernel.Geom.PageSize.A4.Rotate();
+			} else {
+				tamañoPagina = iText.Kernel.Geom.PageSize.A4;
+			}
+			// Se crea el documento con el que se trabajará.
+			iText.Layout.Document documento = new iText.Layout.Document(docPDF, tamañoPagina);
+			return documento;
+		}
 		
+
+		/// <summary>
+		/// Devuelve un PDF que se guardará en la ruta indicada, a partir de la plantilla necesaria para el tipo de informe indicado.
+		/// </summary>
+		/// <param name="ruta">Ruta completa (nombre de archivo incluido) en la que se guardará el PDF.</param>
+		/// <param name="tipo">Tipo de informe que se va a generar.</param>
+		/// <returns>El PDF listo para editar sus elementos.</returns>
+		public iText.Kernel.Pdf.PdfDocument GetPdfDesdePlantilla(string ruta, TiposInforme tipo = TiposInforme.Ninguno) {
+
+			// Definimos el pdf que se va a devolver.
+			iText.Kernel.Pdf.PdfDocument docPdf = null;
+			// Si hay un tipo de informe creamos el pdf.
+			if (tipo != TiposInforme.Ninguno) {
+				// Definimos la plantilla
+				string plantilla = Utils.CombinarCarpetas(App.RutaInicial, $"/Plantillas/{tipo}.pdf");
+				// Se crea el Reader con la plantilla necesaria.
+				iText.Kernel.Pdf.PdfReader reader = new iText.Kernel.Pdf.PdfReader(plantilla);
+				// Se crea el Writer con la ruta pasada.
+				iText.Kernel.Pdf.PdfWriter writer = new iText.Kernel.Pdf.PdfWriter(ruta);
+				// Creamos el documento, usando el reader y el writer anteriores.
+				docPdf = new iText.Kernel.Pdf.PdfDocument(reader, writer);
+				// Añadimos los datos de Metadata
+				docPdf.GetDocumentInfo().SetAuthor("Orion - AnderSoft - A.Herrero");
+				docPdf.GetDocumentInfo().SetCreator("Orion 1.0");
+
+			}
+			// Devolvemos el documento.
+			return docPdf;
+		}
+
 
 		#endregion
 		// ====================================================================================================
@@ -174,7 +241,7 @@ namespace Orion.Servicios {
 		/// <summary>
 		/// Este es un método de práctica.
 		/// </summary>
-		public void CrearPDF() {
+		public void CrearPDF(HojaPijama pijama) {
 
 			// Así se crea o se abre un documento.
 			FileStream fs = new FileStream("MiPdf.pdf", FileMode.Create); // Creamos el FileStream del documento a crear o abrir.
@@ -183,7 +250,7 @@ namespace Orion.Servicios {
 
 			//pdf.SetEncryption(PdfWriter.ENCRYPTION_AES_128, "ander74", "ander74", PdfWriter.AllowPrinting);
 
-			Document d2 = LlenarDocumentoPDF();
+			//Document d2 = LlenarDocumentoPDF();
 
 			PdfDocument d = new PdfDocument();
 			

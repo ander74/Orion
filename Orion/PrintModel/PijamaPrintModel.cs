@@ -5,6 +5,14 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using iText.IO.Image;
+using iText.Kernel.Colors;
+using iText.Kernel.Font;
+using iText.Kernel.Geom;
+using iText.Layout;
+using iText.Layout.Borders;
+using iText.Layout.Element;
+using iText.Layout.Properties;
 using Microsoft.Office.Interop.Excel;
 using Orion.Config;
 using Orion.Convertidores;
@@ -13,10 +21,13 @@ using Orion.Properties;
 using Orion.Servicios;
 using Orion.Views;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace Orion.PrintModel {
 
@@ -45,7 +56,7 @@ namespace Orion.PrintModel {
 		#region MÉTODOS PRIVADOS
 		// ====================================================================================================
 
-		private static void LlenarExcelPijama(int fila, Pijama.HojaPijama pijama, ref string[,] datos, ref Color[,] colores) {
+		private static void LlenarExcelPijama(int fila, Pijama.HojaPijama pijama, ref string[,] datos, ref System.Drawing.Color[,] colores) {
 
 			// Conductor y Mes
 			datos[fila - 1, 0] = pijama.TextoTrabajador;
@@ -90,8 +101,8 @@ namespace Orion.PrintModel {
 				object[] valores2 = new object[] { dia.ComboGrafico, pijama.Fecha, dia.Dia };
 				System.Windows.Media.Color c1 = ((System.Windows.Media.SolidColorBrush)cnvColorDiaSinGraficos.Convert(dia.DiaFecha, null, null, null)).Color;
 				System.Windows.Media.Color c2 = ((System.Windows.Media.SolidColorBrush)cnvColorDiaPijama.Convert(valores2, null, null, null)).Color;
-				colores[dia.Dia - 1, 0] = Color.FromArgb(255, c1.R, c1.G, c1.B);
-				colores[dia.Dia - 1, 1] = Color.FromArgb(255, c2.R, c2.G, c2.B);
+				colores[dia.Dia - 1, 0] = System.Drawing.Color.FromArgb(255, c1.R, c1.G, c1.B);
+				colores[dia.Dia - 1, 1] = System.Drawing.Color.FromArgb(255, c2.R, c2.G, c2.B);
 
 			}
 
@@ -223,6 +234,326 @@ namespace Orion.PrintModel {
 
 
 		// ====================================================================================================
+		#region MÉTODOS PRIVADOS (ITEXT 7)
+		// ====================================================================================================
+
+		private static Table GetTablaPijama(IEnumerable dias) {
+			
+			// Fuente a utilizar en la tabla.
+			PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+			// Estilo de la tabla.
+			iText.Layout.Style estiloTabla = new iText.Layout.Style();
+			estiloTabla.SetTextAlignment(TextAlignment.CENTER)
+					   .SetMargins(0, 0, 0, 0)
+					   .SetPaddings(0, 0, 0, 0)
+					   .SetWidth(UnitValue.CreatePercentValue(100))
+					   .SetFont(arial)
+					   .SetFontSize(7);
+			// Estilo de las celdas de encabezado.
+			iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+			estiloEncabezados.SetBackgroundColor(new DeviceRgb(102,153,255))
+							 .SetBold();
+			// Estilo de las celdas de dia.
+			iText.Layout.Style estiloDia = new iText.Layout.Style();
+			estiloDia.SetBorderLeft(new SolidBorder(1))
+					 .SetBorderRight(new SolidBorder(1))
+					 .SetBold();
+			// Creamos la tabla que tendrá la Hoja Pijama.
+			float[] columnas = new float[] { 4f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f };
+			Table tabla = new Table(UnitValue.CreatePercentArray(columnas));
+			// Asignamos el estilo a la tabla.
+			tabla.AddStyle(estiloTabla);
+			// Añadimos las celdas de encabezado.
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Día")).AddStyle(estiloEncabezados).SetBorder(new SolidBorder(1)));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Gráfico")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Horas")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Acumuladas")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Nocturnas")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Ex.Jornada")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Desayuno")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Comida")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Cena")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Plus Cena")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Total Dietas")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Menor Des.")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Paquetería")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Limpieza")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Otros")).AddStyle(estiloEncabezados));
+			// Añadimos las celdas de cada día de la lista.
+			foreach (Pijama.DiaPijama dia in dias) {
+				if (dia.Dia > DateTime.DaysInMonth(dia.DiaFecha.Year, dia.DiaFecha.Month)) continue;
+				// Establecemos el color de fondo de las filas
+				iText.Layout.Style estiloCeldas = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
+				if (dia.Dia % 2 == 0) estiloCeldas.SetBackgroundColor(new DeviceRgb(204, 236, 255));
+				// Deducimos los colores de la primera y segunda columnas.
+				System.Windows.Media.Color c1 = Colors.Black;
+				System.Windows.Media.Color c2 = Colors.Black;
+				if (dia.Grafico != 0) {
+					object[] valores2 = new object[] { dia.ComboGrafico, dia.DiaFecha, dia.Dia };
+					c1 = ((System.Windows.Media.SolidColorBrush)cnvColorDiaSinGraficos.Convert(dia.DiaFecha, null, null, null)).Color;
+					c2 = ((System.Windows.Media.SolidColorBrush)cnvColorDiaPijama.Convert(valores2, null, null, null)).Color;
+				}
+				// Insertamos cada celda.
+				tabla.AddCell(new Cell().Add(new Paragraph(dia.Dia.ToString("00")).SetFontColor(new DeviceRgb(c1.R, c1.G, c1.B))).AddStyle(estiloDia).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvNumGraficoPijama.Convert(dia.ComboGrafico, null, null, null)).SetFontColor(new DeviceRgb(c2.R, c2.G, c2.B))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(dia.GraficoTrabajado.Trabajadas, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(dia.GraficoTrabajado.Acumuladas, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(dia.GraficoTrabajado.Nocturnas, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(dia.ExcesoJornada, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.Desayuno, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.Comida, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.Cena, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.PlusCena, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.TotalDietas, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.PlusMenorDescanso, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.PlusPaqueteria, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.PlusLimpieza, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.OtrosPluses, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+			}
+			// Añadimos el borde a la tabla y al encabezado
+			tabla.SetBorder(new SolidBorder(1));
+			tabla.GetHeader().SetBorder(new SolidBorder(1));
+			// Devolvemos la tabla.
+			return tabla;
+		}
+
+
+		private static Cell GetResumenPijama(Pijama.HojaPijama pijama) {
+
+			// Definimos la celda a devolver.
+			Cell celda = new Cell();
+			// Fuente a utilizar en la tabla.
+			PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+			// Estilo Tabla
+			iText.Layout.Style estiloTabla = new iText.Layout.Style().SetTextAlignment(TextAlignment.CENTER)
+																	 .SetMargins(0, 0, 2, 0)
+																	 .SetPaddings(1.5f, 0, 1.5f, 0)
+																	 .SetBorder(new SolidBorder(1))
+																	 .SetFont(arial)
+																	 .SetWidth(UnitValue.CreatePercentValue(100))
+																	 .SetFontSize(7);
+			// Estilo Seccion
+			iText.Layout.Style estiloSeccion = new iText.Layout.Style().SetTextAlignment(TextAlignment.LEFT)
+																	   .SetFontColor(new DeviceRgb(192,0,0))
+																	   .SetMargin(0)
+																	   .SetBold()
+																	   .SetFont(arial)
+																	   .SetFontSize(9);
+			// Estilo Encabezado
+			iText.Layout.Style estiloEncabezado = new iText.Layout.Style().SetBackgroundColor(new DeviceRgb(153,204,255))
+																		  .SetBold();
+			// Estilo Resumen
+			iText.Layout.Style estiloResumen = new iText.Layout.Style().SetBackgroundColor(new DeviceRgb(204,236,255))
+																	   .SetPaddings(1.5f, 0, 1.5f, 0)
+																	   .SetFont(arial)
+																	   .SetFontSize(8);
+			// Estilo Eventuales
+			iText.Layout.Style estiloEventuales = new iText.Layout.Style().SetMargins(0, 0, 0, 0)
+																		  .SetFontColor(new DeviceRgb(0, 112, 192));
+			// Definimos la tabla y párrafo a usar.
+			Table tabla;
+			Paragraph parrafo;
+			// SECCION HORAS MES ACTUAL
+			celda.Add(new Paragraph("Horas Mes Actual").AddStyle(estiloSeccion));
+			tabla = new Table(UnitValue.CreatePercentArray(new float[] { 33.3333f, 33.3333f, 33.3333f }));
+			tabla.AddStyle(estiloTabla);
+			tabla.AddCell(new Cell().Add(new Paragraph("Trabajadas")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Acumuladas")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Nocturnas")).AddStyle(estiloEncabezado));
+			tabla.AddCell((string)cnvSuperHoraMixta.Convert(pijama.Trabajadas, null, null, null));
+			tabla.AddCell((string)cnvSuperHoraMixta.Convert(pijama.Acumuladas, null, null, null));
+			tabla.AddCell((string)cnvSuperHoraMixta.Convert(pijama.Nocturnas, null, null, null));
+			tabla.AddCell(new Cell().Add(new Paragraph("Cobradas")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Ex. Jornada")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Otras Horas")).AddStyle(estiloEncabezado));
+			tabla.AddCell((string)cnvSuperHoraMixta.Convert(pijama.HorasCobradas, null, null, null));
+			tabla.AddCell((string)cnvSuperHoraMixta.Convert(pijama.ExcesoJornada, null, null, null));
+			tabla.AddCell((string)cnvSuperHoraMixta.Convert(pijama.OtrasHoras, null, null, null));
+			celda.Add(tabla);
+			//SECCION DÍAS MES ACTUAL
+			celda.Add(new Paragraph("Días Mes Actual").AddStyle(estiloSeccion));
+			tabla = new Table(UnitValue.CreatePercentArray(new float[] { 16.6666f, 16.6666f, 16.6666f, 16.6666f, 16.6666f, 16.6666f }));
+			tabla.AddStyle(estiloTabla);
+			tabla.AddCell(new Cell().Add(new Paragraph("Trabajo")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("J-D")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("O-V")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("DND")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell(1,2).Add(new Paragraph("Trabajo (JD)")).AddStyle(estiloEncabezado));
+			tabla.AddCell(pijama.Trabajo.ToString("00"));
+			tabla.AddCell(pijama.Descanso.ToString("00"));
+			tabla.AddCell(pijama.Vacaciones.ToString("00"));
+			tabla.AddCell(pijama.DescansosNoDisfrutados.ToString("00"));
+			tabla.AddCell(new Cell(1, 2).Add(new Paragraph(pijama.TrabajoEnDescanso.ToString("00"))));
+			if (pijama.NoEsFijo) {
+				tabla.AddCell(new Cell().Add(new Paragraph(pijama.DiasComputoTrabajo.ToString("00.##"))).AddStyle(estiloEventuales));
+				tabla.AddCell(new Cell().Add(new Paragraph(pijama.DiasComputoDescanso.ToString("00.##"))).AddStyle(estiloEventuales));
+				tabla.AddCell(new Cell().Add(new Paragraph(pijama.DiasComputoVacaciones.ToString("00.##"))).AddStyle(estiloEventuales));
+				tabla.AddCell(new Cell(1, 3).Add(new Paragraph(pijama.TextoComputoEventuales)).AddStyle(estiloEventuales));
+			}
+			tabla.AddCell(new Cell().Add(new Paragraph("FN")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("E")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("DS")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("DC")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("PER")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("F6")).AddStyle(estiloEncabezado));
+			tabla.AddCell(pijama.DescansoEnFinde.ToString("00"));
+			tabla.AddCell(pijama.Enfermo.ToString("00"));
+			tabla.AddCell(pijama.DescansoSuelto.ToString("00"));
+			tabla.AddCell(pijama.DescansoCompensatorio.ToString("00"));
+			tabla.AddCell(pijama.Permiso.ToString("00"));
+			tabla.AddCell(pijama.LibreDisposicionF6.ToString("00"));
+			if (pijama.VerComite) {
+				tabla.AddCell(new Cell(1, 2).Add(new Paragraph("Días Comité: " + pijama.Comite.ToString("00"))));
+				tabla.AddCell(new Cell(1, 2).Add(new Paragraph("En JD: " + pijama.ComiteEnDescanso.ToString("00"))));
+				tabla.AddCell(new Cell(1, 2).Add(new Paragraph("En DC: " + pijama.ComiteEnDC.ToString("00"))));
+			}
+			parrafo = new Paragraph();
+			parrafo.Add(new Text("Total días: ").SetBold());
+			parrafo.Add(new Text($"{pijama.DiasActivo:00} de {pijama.DiasMes:00}"));
+			tabla.AddCell(new Cell(1, 6).Add(parrafo).AddStyle(estiloResumen));
+			celda.Add(tabla);
+			//SECCION FINES DE SEMANA MES ACTUAL
+			celda.Add(new Paragraph("Fines de Semana Mes Actual").AddStyle(estiloSeccion));
+			tabla = new Table(UnitValue.CreatePercentArray(new float[] { 25, 25, 25, 25 }));
+			tabla.AddStyle(estiloTabla);
+			tabla.AddCell(new Cell().Add(new Paragraph("")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Sábados")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Domingos")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Festivos")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Descanso")).AddStyle(estiloEncabezado));
+			tabla.AddCell(pijama.SabadosDescansados.ToString("00"));
+			tabla.AddCell(pijama.DomingosDescansados.ToString("00"));
+			tabla.AddCell(pijama.FestivosDescansados.ToString("00"));
+			tabla.AddCell(new Cell().Add(new Paragraph("Trabajo")).AddStyle(estiloEncabezado));
+			tabla.AddCell(pijama.SabadosTrabajados.ToString("00"));
+			tabla.AddCell(pijama.DomingosTrabajados.ToString("00"));
+			tabla.AddCell(pijama.FestivosTrabajados.ToString("00"));
+			tabla.AddCell(new Cell().Add(new Paragraph("Pluses")).AddStyle(estiloEncabezado));
+			tabla.AddCell(pijama.PlusSabados.ToString("0.00 €"));
+			tabla.AddCell(pijama.PlusDomingos.ToString("0.00 €"));
+			tabla.AddCell(pijama.PlusFestivos.ToString("0.00 €"));
+			parrafo = new Paragraph();
+			parrafo.Add(new Text("Fines de Semana Completos: ").SetBold());
+			parrafo.Add(new Text($"{pijama.FindesCompletos:0.00}"));
+			tabla.AddCell(new Cell(1, 4).Add(parrafo).AddStyle(estiloResumen));
+			celda.Add(tabla);
+			//SECCION DIETAS Y PLUSES MES ACTUAL
+			celda.Add(new Paragraph("Dietas y Pluses Mes Actual").AddStyle(estiloSeccion));
+			tabla = new Table(UnitValue.CreatePercentArray(new float[] { 25, 25, 25, 25 }));
+			tabla.AddStyle(estiloTabla);
+			tabla.AddCell(new Cell().Add(new Paragraph("Desayuno")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Comida")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Cena")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("P. Cena")).AddStyle(estiloEncabezado));
+			tabla.AddCell(pijama.DietaDesayuno.ToString("0.00"));
+			tabla.AddCell(pijama.DietaComida.ToString("0.00"));
+			tabla.AddCell(pijama.DietaCena.ToString("0.00"));
+			tabla.AddCell(pijama.DietaPlusCena.ToString("0.00"));
+			tabla.AddCell(new Cell().Add(new Paragraph("Menor D.")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Limpieza")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Paquet.")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Otros")).AddStyle(estiloEncabezado));
+			tabla.AddCell(pijama.PlusMenorDescanso.ToString("0.00 €"));
+			tabla.AddCell(pijama.PlusLimpieza.ToString("0.00 €"));
+			tabla.AddCell(pijama.PlusPaqueteria.ToString("0.00 €"));
+			tabla.AddCell(pijama.OtrosPluses.ToString("0.00 €"));
+			tabla.SetBorderBottom(new SolidBorder(0));
+			celda.Add(tabla);
+			tabla = new Table(UnitValue.CreatePercentArray(new float[] { 33.3333f, 33.3333f, 33.3333f }));
+			tabla.AddStyle(estiloTabla).SetMarginTop(-3);
+			tabla.AddCell(new Cell().Add(new Paragraph("Total Findes")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Total Dietas")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("Total Pluses")).AddStyle(estiloEncabezado));
+			tabla.AddCell(pijama.ImporteTotalFindes.ToString("0.00 €"));
+			tabla.AddCell($"{pijama.TotalDietas:0.00} ({pijama.ImporteTotalDietas:0.00 €})");
+			tabla.AddCell(pijama.ImporteTotalPluses.ToString("0.00 €"));
+			parrafo = new Paragraph();
+			parrafo.Add(new Text("Importe Total: ").SetBold());
+			parrafo.Add(new Text($"{pijama.ImporteTotal:0.00 €}"));
+			tabla.AddCell(new Cell(1, 3).Add(parrafo).AddStyle(estiloResumen));
+			tabla.SetBorderTop(new SolidBorder(0));
+			celda.Add(tabla);
+			//SECCION RESUMEN HASTA MES ACTUAL
+			celda.Add(new Paragraph("Resumen Hasta Mes Actual").AddStyle(estiloSeccion));
+			tabla = new Table(UnitValue.CreatePercentArray(new float[] { 33.3333f, 33.3333f, 33.3333f }));
+			tabla.AddStyle(estiloTabla);
+			tabla.AddCell(new Cell().Add(new Paragraph("DNDs Pendientes")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("DCs Pendientes")).AddStyle(estiloEncabezado));
+			tabla.AddCell(new Cell().Add(new Paragraph("H. Acumuladas")).AddStyle(estiloEncabezado));
+			tabla.AddCell(pijama.DNDsPendientesHastaMes.ToString("00"));
+			tabla.AddCell(pijama.DCsPendientesHastaMes.ToString("00"));
+			tabla.AddCell((string)cnvSuperHoraMixta.Convert(pijama.AcumuladasHastaMes, null, null, null));
+			parrafo = new Paragraph();
+			parrafo.Add(new Text("DCs Generados: ").SetBold());
+			parrafo.Add(new Text($"{pijama.DCsGeneradosHastaMes:0.00}"));
+			tabla.AddCell(new Cell(1, 3).Add(parrafo).AddStyle(estiloResumen));
+			celda.Add(tabla);
+			// Devolvemos la celda.
+			return celda;
+
+		}
+
+
+		private static Table GetHojaPijama(Pijama.HojaPijama pijama) {
+
+			// Fuente a utilizar en la tabla.
+			PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+			// Estilo de la tabla.
+			iText.Layout.Style estiloTabla = new iText.Layout.Style();
+			estiloTabla.SetWidth(UnitValue.CreatePercentValue(100))
+					   .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+					   .SetFont(arial)
+					   .SetMargin(0)
+					   .SetPadding(0);
+			iText.Layout.Style estiloCelda = new iText.Layout.Style();
+			estiloCelda.SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+					   .SetMargin(0)
+					   .SetPadding(0)
+					   .SetFont(arial)
+					   .SetFontSize(16);
+			// Creamos la tabla
+			Table tabla = new Table(UnitValue.CreatePercentArray(new float[] { 50, 25, 25 }));
+			tabla.AddStyle(estiloTabla);
+
+			Cell celda;
+			// Añadimos al trabajador
+			celda = new Cell();
+			celda.Add(new Paragraph(pijama.TextoTrabajador).SetMargin(0));
+			celda.AddStyle(estiloCelda);
+			celda.SetPaddings(0, 0, 0, 2);
+			celda.SetTextAlignment(TextAlignment.LEFT);
+			tabla.AddCell(celda);
+			// Añadimos la fecha
+			celda = new Cell();
+			celda.Add(new Paragraph(pijama.TextoMesActual).SetMargin(0));
+			celda.AddStyle(estiloCelda);
+			celda.SetPaddings(0, 10, 0, 0);
+			celda.SetTextAlignment(TextAlignment.RIGHT);
+			tabla.AddCell(celda);
+			// Añadimos una celda vacía
+			celda = new Cell();
+			celda.AddStyle(estiloCelda);
+			tabla.AddCell(celda);
+			// Añadimos la tabla
+			celda = new Cell(1, 2);
+			celda.AddStyle(estiloCelda);
+			celda.SetPaddings(0, 8, 0, 0);
+			celda.Add(GetTablaPijama(pijama.ListaDias));
+			tabla.AddCell(celda);
+			// Añadimos el resumen
+			celda = GetResumenPijama(pijama);
+			celda.AddStyle(estiloCelda);
+			tabla.AddCell(celda);
+			// Devolvemos la tabla
+			return tabla;
+		}
+
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
 
@@ -233,7 +564,7 @@ namespace Orion.PrintModel {
 				Worksheet Hoja = Libro.Worksheets[1];
 				// Definimos la matriz de colores para ponerlos.
 				string[,] datos = new string[33, 28];
-				Color[,] colores = new Color[31, 2];
+				System.Drawing.Color[,] colores = new System.Drawing.Color[31, 2];
 				// Llenamos la hoja con los datos
 				LlenarExcelPijama(1, pijama, ref datos, ref colores);
 				// Coloreamos la plantilla
@@ -258,7 +589,7 @@ namespace Orion.PrintModel {
 				Worksheet Hoja = Libro.Worksheets[1];
 				int fila = 1;
 				string[,] datos = new string[ListaCalendarios.Count * 33, 28];
-				Color[,] colores = new Color[31, 2];
+				System.Drawing.Color[,] colores = new System.Drawing.Color[31, 2];
 				double num = 1;
 				foreach (Object obj in ListaCalendarios) {
 					double valor = num / ListaCalendarios.Count * 100;
@@ -289,11 +620,81 @@ namespace Orion.PrintModel {
 
 		}
 
+
 		#endregion
 
 
-		
+		// ====================================================================================================
+		#region MÉTODOS PÚBLICOS PDF (ITEXT 7)
+		// ====================================================================================================
 
+		public static async Task CrearPijamaEnPdf_7(Document doc, Pijama.HojaPijama pijama) {
 
+			await Task.Run(() => {
+				// Añadimos la tabla al documento
+				doc.Add(GetHojaPijama(pijama));
+			});
 		}
+
+
+		[Obsolete("Este método funciona, pero es mucho menos eficiente que el que está.")]
+		public static async Task CrearTodosPijamasEnPdf_72(Document doc, ListCollectionView listaCalendarios) {
+
+			await Task.Run(() => {
+				double num = 1;
+				foreach (Object obj in listaCalendarios) {
+					double valor = num / listaCalendarios.Count * 100;
+					App.Global.ValorBarraProgreso = valor;
+					Calendario calendario = obj as Calendario;
+					if (calendario == null) continue;
+					Pijama.HojaPijama hojapijama = new Pijama.HojaPijama(calendario, new MensajesServicio());
+					if (num > 1) doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+					num++;
+					doc.Add(GetHojaPijama(hojapijama));
+					hojapijama = null;
+				}
+			});
+		}
+
+
+		public static async Task CrearTodosPijamasEnPdf_7(Document doc, ListCollectionView listaCalendarios) {
+
+			await Task.Run(() => {
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Recopilando...");
+				double num = 1;
+				List<Pijama.HojaPijama> Lista = new List<Pijama.HojaPijama>();
+				foreach (Object obj in listaCalendarios) {
+					double valor = num / listaCalendarios.Count * 100;
+					App.Global.ValorBarraProgreso = valor;
+					Calendario calendario = obj as Calendario;
+					if (calendario == null) continue;
+					Pijama.HojaPijama hojapijama = new Pijama.HojaPijama(calendario, new MensajesServicio());
+					Lista.Add(hojapijama);
+					num++;
+				}
+				num = 1;
+				App.Global.IniciarProgreso("Creando PDF...");
+				foreach(Pijama.HojaPijama pijama in Lista) {
+					double valor = num / Lista.Count * 100;
+					App.Global.ValorBarraProgreso = valor;
+					if (num > 1) doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+					num++;
+					doc.Add(GetHojaPijama(pijama));
+				}
+			});
+		}
+
+
+
+
+
+
+		#endregion
+		// ====================================================================================================
+
+
+
+
+	}
 }

@@ -31,6 +31,9 @@ namespace Orion.ViewModels {
 					TextoLicencia = lector.ReadToEnd();
 				}
 
+				using (StreamReader lector = new StreamReader(ensamblado.GetManifestResourceStream("Orion.LicenciaIText.txt"))) {
+					TextoIText = lector.ReadToEnd();
+				}
 			} catch (Exception ex) {
 				TextoLicencia = "Error al extraer la licencia.\n\n" + ex.Message;
 			}
@@ -57,6 +60,19 @@ namespace Orion.ViewModels {
 				}
 			}
 		}
+
+
+		private string _textoitext;
+		public string TextoIText {
+			get { return _textoitext; }
+			set {
+				if (_textoitext != value) {
+					_textoitext = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
 
 
 		private bool _aceptarlicencia;

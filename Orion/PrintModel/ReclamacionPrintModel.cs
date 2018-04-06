@@ -5,6 +5,11 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using iText.Forms;
+using iText.Forms.Fields;
+using iText.IO.Font.Constants;
+using iText.Kernel.Font;
+using iText.Kernel.Pdf;
 using Microsoft.Office.Interop.Excel;
 using Orion.Config;
 using Orion.Convertidores;
@@ -12,6 +17,7 @@ using Orion.Models;
 using Orion.Properties;
 using Orion.Views;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Threading.Tasks;
@@ -35,6 +41,7 @@ namespace Orion.PrintModel {
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
 
+		[Obsolete("Este método usa Excel y ya no es necesario. Usar GenerarReclamación")]
 		public static async Task CrearReclamacion(Workbook Libro, string[,] datos, DateTime fecha, Conductor trabajador, DateTime fechaReclamacion, string notas) {
 
 			await Task.Run(() => {
@@ -54,6 +61,31 @@ namespace Orion.PrintModel {
 
 
 
+		}
+
+
+		public static async Task GenerarReclamacion(Centros centro, Conductor conductor, DateTime fecha, PdfDocument docPdf) {
+
+			await Task.Run(() => {
+
+				// Extraemos los campos del formulario que contiene el PDF.
+				PdfAcroForm formulario = PdfAcroForm.GetAcroForm(docPdf, true);
+				IDictionary<String, PdfFormField> campos = formulario.GetFormFields();
+				// Creamos la fuente a usar.
+				PdfFont fuente = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+				// Definimos el campo a usar en Try.
+				PdfFormField campo;
+				// Centro
+				if (campos.TryGetValue("Centro", out campo)) campo.SetValue(centro.ToString().ToUpper(), fuente, 16);
+				// Trabajador
+				if (campos.TryGetValue("Trabajador", out campo)) campo.SetValue($"{conductor.Apellidos}, {conductor.Nombre} ({conductor.Id:000})", fuente, 16);
+				// FechaCabecera
+				if (campos.TryGetValue("FechaCabecera", out campo)) campo.SetValue($"{fecha:MMMM - yyyy}".ToUpper(), fuente, 16);
+				// NumeroReclamacion
+				if (campos.TryGetValue("NumeroReclamacion", out campo)) campo.SetValue($"Nº Reclamación: {fecha:yyyyMM}{conductor.Id:000}/01", fuente, 12);
+				// FechaFirma
+				if (campos.TryGetValue("FechaFirma", out campo)) campo.SetValue($"{DateTime.Today:dd - MM - yyyy}", fuente, 16);
+			});
 		}
 
 		#endregion

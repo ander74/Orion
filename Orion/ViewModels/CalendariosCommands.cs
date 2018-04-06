@@ -26,6 +26,7 @@ using Orion.PrintModel;
 using Orion.Convertidores;
 using System.Threading.Tasks;
 using Orion.Servicios;
+using iText.Kernel.Pdf;
 
 namespace Orion.ViewModels {
 
@@ -397,7 +398,7 @@ namespace Orion.ViewModels {
 			}
 		}
 
-		private async void CrearPdfPijama() {
+		private async void CrearPdfPijama2() {
 
 			// Creamos el libro a usar.
 			Workbook libro = null;
@@ -418,6 +419,33 @@ namespace Orion.ViewModels {
 				App.Global.FinalizarProgreso();
 			}
 		}
+
+		private async void CrearPdfPijama() {
+
+			// Creamos el libro a usar.
+			try {
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Pedimos el nombre de archivo
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1}.pdf", FechaActual, Pijama.TextoTrabajador.Trim()).Replace(":", "");
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, Pijama.TextoTrabajador.Replace(":", " -"));
+				if (ruta != "") {
+					iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
+					doc.GetPdfDocument().GetDocumentInfo().SetTitle("Hoja Pijama");
+					doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{Pijama.Trabajador.Id} - {Pijama.Fecha.ToString("MMMM-yyyy").ToUpper()}");
+					doc.SetMargins(25, 25, 25, 25);
+					await PijamaPrintModel.CrearPijamaEnPdf_7(doc, Pijama);
+					doc.Close();
+					if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+				}
+			} catch (Exception ex) {
+				Mensajes.VerError("CalendariosCommands.CrearPdfPijama", ex);
+			} finally {
+				App.Global.FinalizarProgreso();
+			}
+		}
+
+
 		#endregion
 
 
@@ -437,7 +465,7 @@ namespace Orion.ViewModels {
 		}
 
 
-		private async void PijamasEnPdf() {
+		private async void PijamasEnPdf2() {
 
 			// Creamos el libro a usar.
 			Workbook libro = null;
@@ -461,6 +489,33 @@ namespace Orion.ViewModels {
 			}
 
 		}
+
+		private async void PijamasEnPdf() {
+
+			BtCrearPdfAbierto = false;
+			try {
+				// Pedimos el nombre de archivo
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}", FechaActual);
+				nombreArchivo += TextoFiltros == "Ninguno" ? " - Todos" : $" - {TextoFiltros}";
+				nombreArchivo += ".pdf";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
+				if (ruta != "") {
+					iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
+					doc.GetPdfDocument().GetDocumentInfo().SetTitle("Hojas Pijama");
+					doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
+					doc.SetMargins(25, 25, 25, 25);
+					await PijamaPrintModel.CrearTodosPijamasEnPdf_7(doc, VistaCalendarios);
+					doc.Close();
+					if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+				}
+			} catch (Exception ex) {
+				Mensajes.VerError("CalendariosCommands.PijamasEnPDF", ex);
+			} finally {
+				App.Global.FinalizarProgreso();
+			}
+
+		}
+
 		#endregion
 
 
@@ -483,7 +538,8 @@ namespace Orion.ViewModels {
 		}
 
 		// Ejecución del comando
-		private async void PijamasSeparadosEnPdf() {
+		[Obsolete("Este método utiliza Excel, algo que queremos erradicar.")]
+		private async void PijamasSeparadosEnPdf2() {
 
 			// Creamos el libro a usar.
 			Workbook libro = null;
@@ -513,11 +569,59 @@ namespace Orion.ViewModels {
 			}
 		}
 
+
+		private async void PijamasSeparadosEnPdf() {
+
+			List<Pijama.HojaPijama> listaPijamas = new List<Pijama.HojaPijama>();
+			BtCrearPdfAbierto = false;
+			try {
+				double num = 1;
+				await Task.Run(() => {
+					App.Global.IniciarProgreso($"Recopilando...");
+					// Recorremos todos los calendarios
+					foreach (object obj in VistaCalendarios) {
+						double valor = num / VistaCalendarios.Count * 100;
+						App.Global.ValorBarraProgreso = valor;
+						num++;
+						Calendario cal = obj as Calendario;
+						if (cal == null) continue;
+						Pijama.HojaPijama hojapijama = new Pijama.HojaPijama(cal, new MensajesServicio());
+						hojapijama.Fecha = FechaActual;
+						listaPijamas.Add(hojapijama);
+					}
+				});
+				App.Global.IniciarProgreso($"Creando PDFs...");
+				num = 1;
+				foreach (Pijama.HojaPijama hojaPijama in listaPijamas) {
+					double valor = num / listaPijamas.Count * 100;
+					App.Global.ValorBarraProgreso = valor;
+					num++;
+					// Creamos la ruta de archivo
+					string nombreArchivo = String.Format($"{FechaActual:yyyy}-{FechaActual:MM} - {hojaPijama.TextoTrabajador.Replace(":", "")}.pdf");
+					string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo, true, hojaPijama.TextoTrabajador.Replace(":", " -"));
+					if (ruta != "") {
+						iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
+						doc.GetPdfDocument().GetDocumentInfo().SetTitle("Hoja Pijama");
+						doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{hojaPijama.Trabajador.Id} - {hojaPijama.Fecha.ToString("MMMM-yyyy").ToUpper()}");
+						doc.SetMargins(25, 25, 25, 25);
+						await PijamaPrintModel.CrearPijamaEnPdf_7(doc, hojaPijama);
+						doc.Close();
+					}
+				}
+			} catch (Exception ex) {
+				Mensajes.VerError("CalendariosCommands.PijamasSeparadosEnPdf", ex);
+			} finally {
+				App.Global.FinalizarProgreso();
+				BtCrearPdfAbierto = false;
+			}
+		}
+
+
 		#endregion
 
 
 		#region  RESUMEN AÑO
-			// Comando
+		// Comando
 		private ICommand _cmdmostrarresumenaño;
 		public ICommand cmdMostrarResumenAño {
 			get {
@@ -554,8 +658,7 @@ namespace Orion.ViewModels {
 			Task.Run(() => {
 				try {
 					// Mostramos la barra de progreso y le asignamos el texto
-					App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Visible;
-					App.Global.TextoProgreso = "Buscando errores...";
+					App.Global.IniciarProgreso("Buscando errores...");
 					double num = 1;
 					foreach (Calendario cal in ListaCalendarios) {
 						double valor = num / ListaCalendarios.Count * 100;
@@ -565,9 +668,10 @@ namespace Orion.ViewModels {
 						cal.Informe = hoja.GetInformeFallos();
 					}
 				} finally {
-					App.Global.VisibilidadBarraProgreso = System.Windows.Visibility.Collapsed;
+					App.Global.FinalizarProgreso();
 				}
 			});
+
 
 		}
 
@@ -735,8 +839,9 @@ namespace Orion.ViewModels {
 		}
 
 
-		private async void CalendariosEnPDF() {
+		private async void CalendariosEnPDF2() {
 
+			BtCrearPdfAbierto = false;
 			// Creamos el libro a usar.
 			Workbook libro = null;
 			try {
@@ -759,6 +864,35 @@ namespace Orion.ViewModels {
 			}
 
 		}
+
+		private async void CalendariosEnPDF() {
+
+			BtCrearPdfAbierto = false;
+			try {
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Pedimos el archivo donde guardarlo.
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1}", FechaActual, App.Global.CentroActual.ToString());
+				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				nombreArchivo += ".pdf";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.Calendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
+				if (ruta != "") {
+					iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
+					doc.GetPdfDocument().GetDocumentInfo().SetTitle("Calendarios");
+					doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
+					doc.SetMargins(25, 25, 25, 25);
+					await CalendarioPrintModel.CrearCalendariosEnPdf_7(doc, VistaCalendarios, FechaActual);
+					doc.Close();
+					if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+				}
+			} catch (Exception ex) {
+				Mensajes.VerError("CalendariosCommands.CalendariosEnPDF", ex);
+			} finally {
+				App.Global.FinalizarProgreso();
+			}
+
+		}
+
 		#endregion
 
 
@@ -780,7 +914,9 @@ namespace Orion.ViewModels {
 		}
 
 
-		private async void CalendariosEnPdfConFallos() {
+		private async void CalendariosEnPdfConFallos2() {
+
+			BtCrearPdfAbierto = false;
 			// Creamos el libro a usar.
 			Workbook libro = null;
 			try {
@@ -803,6 +939,36 @@ namespace Orion.ViewModels {
 			}
 
 		}
+
+
+		private async void CalendariosEnPdfConFallos() {
+
+			BtCrearPdfAbierto = false;
+			try {
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Pedimos el archivo donde guardarlo.
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1} - Fallos", FechaActual, App.Global.CentroActual.ToString());
+				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				nombreArchivo += ".pdf";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.FallosCalendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
+				if (ruta != "") {
+					iText.Layout.Document doc = Informes.GetNuevoPdf(ruta);
+					doc.GetPdfDocument().GetDocumentInfo().SetTitle("Fallos de Calendario");
+					doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
+					doc.SetMargins(25, 25, 25, 25);
+					await CalendarioPrintModel.FallosEnCalendariosEnPdf_7(doc, VistaCalendarios, FechaActual);
+					doc.Close();
+					if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+				}
+			} catch (Exception ex) {
+				Mensajes.VerError("CalendariosCommands.CalendariosEnPDFConFallos", ex);
+			} finally {
+				App.Global.FinalizarProgreso();
+			}
+
+		}
+
 		#endregion
 
 
@@ -1265,7 +1431,6 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-
 		#region RECLAMACIÓN
 
 		// Comando
@@ -1284,7 +1449,7 @@ namespace Orion.ViewModels {
 		}
 
 		// Ejecución del comando
-		private void Reclamacion() {
+		private async void Reclamacion() {
 
 			try {
 				// Activamos la barra de progreso.
@@ -1293,7 +1458,12 @@ namespace Orion.ViewModels {
 				string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}.pdf", Pijama.Fecha, Pijama.Trabajador.Id);
 				string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, Pijama.TextoTrabajador.Replace(":", " -"));
 				if (ruta != "") {
-					Informes.GenerarReclamación(App.Global.CentroActual, Pijama.Trabajador, Pijama.Fecha, ruta);
+					//Informes.GenerarReclamación(App.Global.CentroActual, Pijama.Trabajador, Pijama.Fecha, ruta);
+					PdfDocument docPdf = Informes.GetPdfDesdePlantilla(ruta, TiposInforme.Reclamacion);
+					docPdf.GetDocumentInfo().SetTitle("Reclamación de Hoja Pijama");
+					docPdf.GetDocumentInfo().SetSubject($"{Pijama.Trabajador.Id} - {Pijama.Fecha.ToString("MMMM-yyyy").ToUpper()}");
+					await ReclamacionPrintModel.GenerarReclamacion(App.Global.CentroActual, Pijama.Trabajador, Pijama.Fecha, docPdf);
+					docPdf.Close();
 					if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
 				}
 			} catch (Exception ex) {

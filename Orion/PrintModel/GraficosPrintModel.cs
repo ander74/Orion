@@ -5,20 +5,25 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using iText.IO.Image;
+using iText.Kernel.Colors;
+using iText.Kernel.Font;
+using iText.Kernel.Geom;
+using iText.Layout;
+using iText.Layout.Borders;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+using Microsoft.Office.Interop.Excel;
 using Orion.Config;
 using Orion.Convertidores;
+using Orion.DataModels;
 using Orion.Models;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Office.Interop.Excel;
 using System.Drawing;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
-using Orion.DataModels;
-using Orion.Properties;
-using System.Diagnostics;
 
 namespace Orion.PrintModel {
 
@@ -196,6 +201,131 @@ namespace Orion.PrintModel {
 
 
 		// ====================================================================================================
+		#region MÉTODOS PRIVADOS (ITEXT 7)
+		// ====================================================================================================
+
+		private static Table GetTablaGraficos(ListCollectionView listaGraficos, DateTime fecha) {
+			// Fuente a utilizar en la tabla.
+			PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+			// Estilo de la tabla.
+			iText.Layout.Style estiloTabla = new iText.Layout.Style();
+			estiloTabla.SetTextAlignment(TextAlignment.CENTER)
+					   .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+					   .SetMargins(0, 0, 0, 0)
+					   .SetPaddings(0, 0, 0, 0)
+					   .SetWidth(UnitValue.CreatePercentValue(100))
+					   .SetFont(arial)
+					   .SetFontSize(8);
+			// Estilo titulos
+			iText.Layout.Style estiloTitulos = new iText.Layout.Style();
+			estiloTitulos.SetBold()
+						 .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+						 .SetFontSize(14);
+			// Estilo de las celdas de encabezado.
+			iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+			estiloEncabezados.SetBackgroundColor(new DeviceRgb(112, 173, 71))
+							 .SetBold()
+							 .SetFontSize(8);
+			// Estilo de las celdas de izq.
+			iText.Layout.Style estiloIzq = new iText.Layout.Style();
+			estiloIzq.SetBorderLeft(new SolidBorder(1));
+			// Estilo de las celdas de med.
+			iText.Layout.Style estiloMed = new iText.Layout.Style();
+			estiloMed.SetBorderTop(new SolidBorder(1))
+					 .SetBorderBottom(new SolidBorder(1));
+			// Estilo de las celdas de der.
+			iText.Layout.Style estiloDer = new iText.Layout.Style();
+			estiloDer.SetBorderRight(new SolidBorder(1));
+			// Creamos la tabla
+			float[] ancho = new float[] { 3, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3 };
+			Table tabla = new Table(UnitValue.CreatePercentArray(ancho));
+			// Asignamos el estilo a la tabla.
+			tabla.AddStyle(estiloTabla);
+			
+			// Insertamos los títulos.
+			tabla.AddHeaderCell(new Cell(1, 9).Add(new Paragraph($"{fecha:dd - MMMM - yyyy}".ToUpper())).AddStyle(estiloTitulos)
+														.SetTextAlignment(TextAlignment.LEFT));
+			tabla.AddHeaderCell(new Cell(1, 8).Add(new Paragraph(App.Global.CentroActual.ToString().ToUpper())).AddStyle(estiloTitulos)
+														.SetTextAlignment(TextAlignment.RIGHT));
+			// Añadimos las celdas de encabezado.
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Número")).AddStyle(estiloEncabezados).AddStyle(estiloIzq).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Turno")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Inicio")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Final")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Ini. Partido")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Fin. Partido")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Valoracion")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Trabajadas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Dif.")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Acumuladas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Nocturnas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Desayuno")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Comida")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Plus Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Limpieza")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Paquetería")).AddStyle(estiloEncabezados).AddStyle(estiloDer).AddStyle(estiloMed));
+			// Añadimos las celdas con los calendarios.
+			int indice = 1;
+			foreach (Object obj in listaGraficos) {
+				Grafico g = obj as Grafico;
+				if (g == null) continue;
+				// Estilo Fondo Alternativo
+				iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
+				if (indice % 2 == 0) estiloFondo.SetBackgroundColor(new DeviceRgb(226, 239, 218));
+				indice++;
+				// Estilo Valoracion Diferente
+				iText.Layout.Style estiloValDif = new iText.Layout.Style();
+				if (g.DiferenciaValoracion.Ticks != 0) estiloValDif.SetFontColor(new DeviceRgb(255, 20, 147));
+				// Escribimos el grafico.
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvNumGrafico.Convert(g.Numero, null, null, null)}"))
+										.AddStyle(estiloIzq).AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{g.Turno.ToString("0")}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Inicio, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Final, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.InicioPartido, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.FinalPartido, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Valoracion, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo).AddStyle(estiloValDif));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Trabajadas, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo).AddStyle(estiloValDif));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.DiferenciaValoracion, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo).AddStyle(estiloValDif));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Acumuladas, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Nocturnas, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.Desayuno, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.Comida, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.Cena, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.PlusCena, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(g.PlusLimpieza ? "X" : "")}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(g.PlusPaqueteria ? "X" : "")}"))
+										.AddStyle(estiloDer).AddStyle(estiloFondo));
+			}
+			// Ponemos los bordes de la tabla.
+			tabla.SetBorderBottom(new SolidBorder(1));
+			// Devolvemos la tabla.
+			return tabla;
+		}
+
+
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
 
@@ -227,9 +357,9 @@ namespace Orion.PrintModel {
 					object x = hoja.Cells[m + 2, 11].Value;
 					string n = x?.GetType().Name;
 					if (hoja.Cells[m + 2, 11].Value != null) {
-						hoja.Range[hoja.Cells[m + 2, 9], hoja.Cells[m + 2, 11]].Font.Color = Color.DeepPink;
+						hoja.Range[hoja.Cells[m + 2, 9], hoja.Cells[m + 2, 11]].Font.Color = System.Drawing.Color.DeepPink;
 					}
-					if (m % 2 == 0) hoja.Range[hoja.Cells[m + 2, 1], hoja.Cells[m + 2, 19]].Interior.Color = Color.FromArgb(255, 226, 239, 218);
+					if (m % 2 == 0) hoja.Range[hoja.Cells[m + 2, 1], hoja.Cells[m + 2, 19]].Interior.Color = System.Drawing.Color.FromArgb(255, 226, 239, 218);
 				}
 				// Establecemos el área de impresión.
 				hoja.PageSetup.PrintArea = hoja.Range["A1", hoja.Cells[lista.Count + 2, 19]].Address;
@@ -276,7 +406,7 @@ namespace Orion.PrintModel {
 					Hoja.Cells[fila + 4 + g.ListaValoraciones.Count, 1].HorizontalAlignment = XlHAlign.xlHAlignLeft;
 					Hoja.Cells[fila + 4 + g.ListaValoraciones.Count, 5].HorizontalAlignment = XlHAlign.xlHAlignRight;
 					// Colores
-					Hoja.Range[Hoja.Cells[fila + 3, 1], Hoja.Cells[fila + 3, 5]].Interior.Color = Color.FromArgb(255, 112, 173, 71);
+					Hoja.Range[Hoja.Cells[fila + 3, 1], Hoja.Cells[fila + 3, 5]].Interior.Color = System.Drawing.Color.FromArgb(255, 112, 173, 71);
 					// Bordes.
 					Hoja.Range[Hoja.Cells[fila + 3, 1], Hoja.Cells[fila + 3 + g.ListaValoraciones.Count, 5]].Borders.LineStyle = XlLineStyle.xlContinuous;
 					Hoja.Range[Hoja.Cells[fila + 3, 1], Hoja.Cells[fila + 3 + g.ListaValoraciones.Count, 5]].Borders.Color = XlRgbColor.rgbBlack;
@@ -288,7 +418,7 @@ namespace Orion.PrintModel {
 
 					// Colores de las líneas pares de las valoraciones
 					for (int i = 0; i < g.ListaValoraciones.Count; i++) {
-						if (i % 2 != 0) Hoja.Range[Hoja.Cells[fila + i + 4, 1], Hoja.Cells[fila + i + 4, 5]].Interior.Color = Color.FromArgb(255, 226, 239, 218);
+						if (i % 2 != 0) Hoja.Range[Hoja.Cells[fila + i + 4, 1], Hoja.Cells[fila + i + 4, 5]].Interior.Color = System.Drawing.Color.FromArgb(255, 226, 239, 218);
 					}
 
 					// Saltos de página
@@ -481,6 +611,21 @@ namespace Orion.PrintModel {
 
 		#endregion
 
+
+		// ====================================================================================================
+		#region MÉTODOS PÚBLICOS (ITEXT 7)
+		// ====================================================================================================
+
+		public static async Task CrearGraficosEnPdf_7(Document doc, ListCollectionView lista, DateTime fecha) {
+
+			await Task.Run(() => {
+				doc.Add(GetTablaGraficos(lista, fecha));
+			});
+		}
+
+
+		#endregion
+		// ====================================================================================================
 
 
 	}

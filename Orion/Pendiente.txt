@@ -65,7 +65,5 @@ PROYECTO ORION
 	Consultas pendientes
 	--------------------
 
-		- En Arrasate, 17 de Marzo del 395, la dieta por menor descanso. Comprobar las horas del gráfico en cuestión (podría ser nocturno).
-		  Está corregido, pero consultar.
 
 		

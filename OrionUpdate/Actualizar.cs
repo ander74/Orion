@@ -72,7 +72,49 @@ namespace OrionUpdate {
 					return;
 				}
 
+				//TODO: Eliminar.
 				if (!CopiarArchivoRaiz("itextsharp.dll")) {
+					GenerarError();
+					return;
+				}
+				// Las siguientes son para iText7
+				if (!CopiarArchivoRaiz("BouncyCastle.Crypto.dll")) {
+					GenerarError();
+					return;
+				}
+				if (!CopiarArchivoRaiz("Common.Logging.Core.dll")) {
+					GenerarError();
+					return;
+				}
+				if (!CopiarArchivoRaiz("Common.Logging.dll")) {
+					GenerarError();
+					return;
+				}
+				if (!CopiarArchivoRaiz("itext.barcodes.dll")) {
+					GenerarError();
+					return;
+				}
+				if (!CopiarArchivoRaiz("itext.forms.dll")) {
+					GenerarError();
+					return;
+				}
+				if (!CopiarArchivoRaiz("itext.io.dll")) {
+					GenerarError();
+					return;
+				}
+				if (!CopiarArchivoRaiz("itext.kernel.dll")) {
+					GenerarError();
+					return;
+				}
+				if (!CopiarArchivoRaiz("itext.layout.dll")) {
+					GenerarError();
+					return;
+				}
+				if (!CopiarArchivoRaiz("itext.pdfa.dll")) {
+					GenerarError();
+					return;
+				}
+				if (!CopiarArchivoRaiz("itext.sign.dll")) {
 					GenerarError();
 					return;
 				}

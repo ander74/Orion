@@ -109,6 +109,15 @@ namespace Orion.ViewModels {
 			CargarConductores();
 			HayCambios = false;
 		}
+
+
+		public Conductor GetConductor(int idconductor) {
+
+			Conductor resultado = ListaConductores.First(c => c.Id == idconductor);
+			return resultado;
+
+		}
+
 		#endregion
 
 

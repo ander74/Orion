@@ -28,6 +28,9 @@ namespace Orion.Pijama {
 		public HojaPijama(Calendario calendario, IMensajes mensajes) {
 			Mensajes = mensajes;
 
+			// Creamos el servicio de base de datos especial. TODO: En prueba.
+			//BdEspecial ServicioBD = new BdEspecial();
+
 			try {
 				// Establecemos la fecha del pijama.
 				Fecha = calendario.Fecha;
@@ -83,7 +86,6 @@ namespace Orion.Pijama {
 					if (dia.GraficoTrabajado.Numero > 0 && dia.DiaFecha.Day == 1 && dia.DiaFecha.Month == 1) {
 						dia.PlusNavidad = App.Global.Convenio.PlusNavidad;
 					}
-					
 					// Establecemos el Plus por Menor Descanso, si el tiempo entre el final anterior y el inicio es menor de 12 horas.
 					if (finalAnterior.HasValue && dia.GraficoTrabajado.Inicio.HasValue) {
 						// Añadimos uno al inicio de hoy.
