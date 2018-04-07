@@ -7,6 +7,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -84,6 +85,79 @@ namespace Orion {
 			if (!hora.HasValue) return 0m;
 			return Decimal.Round((decimal)(hora.Value.TotalHours), 4);
 		}
+
+
+		// ====================================================================================================
+		#region MÉTODOS DE EXTENSION PARA OLEDBDATAREADER
+		// ====================================================================================================
+
+		public static TimeSpan ToTimeSpan(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return TimeSpan.Zero;
+			return TimeSpan.FromTicks((long)(double)lector[campo]);
+		}
+
+		public static TimeSpan? ToTimeSpanNulable(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return null;
+			return TimeSpan.FromTicks((long)(double)lector[campo]);
+		}
+
+		public static string ToString(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return "";
+			return (string)lector[campo];
+		}
+
+		public static bool ToBoolean(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return false;
+			return (bool)lector[campo];
+		}
+
+		public static DateTime ToDateTime(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return new DateTime(0);
+			return (DateTime)lector[campo];
+		}
+
+		public static DateTime? ToDateTimeNulable(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return null;
+			return (DateTime)lector[campo];
+		}
+
+		public static byte ToByte(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return 0;
+			return (byte)lector[campo];
+		}
+
+		public static Single ToSingle(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return 0;
+			return (Single)lector[campo];
+		}
+
+		public static Int16 ToInt16(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return 0;
+			return (Int16)lector[campo];
+		}
+
+		public static Int32 ToInt32(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return 0;
+			return (Int32)lector[campo];
+		}
+
+		public static double ToDouble(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return 0;
+			return (double)lector[campo];
+		}
+
+		public static decimal ToDecimal(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return 0;
+			return (decimal)lector[campo];
+		}
+
+
+
+
+
+		#endregion
+		// ====================================================================================================
+
 
 	}
 }
