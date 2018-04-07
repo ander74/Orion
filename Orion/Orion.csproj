@@ -148,7 +148,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Config\DBUtils.cs" />
     <Compile Include="Config\GestionGraficos.cs" />
     <Compile Include="Convertidores\ConvertidorMinutosToHora.cs" />
     <Compile Include="Convertidores\ConvertidorMinutosToHoraMixta.cs" />

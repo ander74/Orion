@@ -46,19 +46,19 @@ namespace Orion.Models {
 			switch (header) {
 				case "Línea": Nombre = 0m; break;
 				case "Descripción": Descripcion = ""; break;
-				case "T.Real": TiempoReal = 0; break;//TODO: Comprobar el título.
-				case "T.Pago": TiempoPago = 0; break;//TODO: Comprobar el título y si existe.
+				case "T.Real": TiempoReal = 0; break;
+				case "T.Pago": TiempoPago = 0; break;
 			}
 		}
 
 
 		public void FromReader(OleDbDataReader lector) {
-			_id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
-			_idlinea = DBUtils.FromReaderEnteroLargo(lector, "IdLinea");//(lector["IdLinea"] is DBNull) ? 0 : (Int32)lector["IdLinea"];
-			_nombre = DBUtils.FromReaderDecimal(lector, "Nombre");//(lector["Nombre"] is DBNull) ? 0m : (decimal)lector["Nombre"];
-			_descripcion = DBUtils.FromReaderTexto(lector, "Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
-			_tiemporeal = DBUtils.FromReaderEntero(lector, "TiempoReal");//(lector["TiempoReal"] is DBNull) ? 0 : (Int16)lector["TiempoReal"];
-			_tiempopago = DBUtils.FromReaderEntero(lector, "TiempoPago");//(lector["TiempoPago"] is DBNull) ? 0 : (Int16)lector["TiempoPago"];
+			_id = lector.ToInt32("Id");
+			_idlinea = lector.ToInt32("IdLinea");
+			_nombre = lector.ToDecimal("Nombre");
+			_descripcion = lector.ToString("Descripcion");
+			_tiemporeal = lector.ToInt16("TiempoReal");
+			_tiempopago = lector.ToInt16("TiempoPago");
 		}
 
 		#endregion
@@ -76,12 +76,12 @@ namespace Orion.Models {
 		// ====================================================================================================
 
 		public static void ParseFromReader(OleDbDataReader lector, Itinerario itinerario) {
-			itinerario.Id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
-			itinerario.IdLinea = DBUtils.FromReaderEnteroLargo(lector, "IdLinea");//(lector["IdLinea"] is DBNull) ? 0 : (Int32)lector["IdLinea"];
-			itinerario.Nombre = DBUtils.FromReaderDecimal(lector, "Nombre");//(lector["Nombre"] is DBNull) ? 0m : (decimal)lector["Nombre"];
-			itinerario.Descripcion = DBUtils.FromReaderTexto(lector, "Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
-			itinerario.TiempoReal = DBUtils.FromReaderEntero(lector, "TiempoReal");//(lector["TiempoReal"] is DBNull) ? 0 : (Int16)lector["TiempoReal"];
-			itinerario.TiempoPago = DBUtils.FromReaderEntero(lector, "TiempoPago");//(lector["TiempoPago"] is DBNull) ? 0 : (Int16)lector["TiempoPago"];
+			itinerario.Id = lector.ToInt32("Id");
+			itinerario.IdLinea = lector.ToInt32("IdLinea");
+			itinerario.Nombre = lector.ToDecimal("Nombre");
+			itinerario.Descripcion = lector.ToString("Descripcion");
+			itinerario.TiempoReal = lector.ToInt16("TiempoReal");
+			itinerario.TiempoPago = lector.ToInt16("TiempoPago");
 		}
 
 

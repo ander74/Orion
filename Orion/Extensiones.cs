@@ -95,66 +95,148 @@ namespace Orion {
 		// ====================================================================================================
 
 
-
 		// ====================================================================================================
 		#region MÉTODOS DE EXTENSION PARA OLEDBDATAREADER
 		// ====================================================================================================
 
+		/// <summary>
+		/// Extrae un campo de tipo TimeSpan del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un TimeSpan con el valor almacenado en el campo.</returns>
 		public static TimeSpan ToTimeSpan(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return TimeSpan.Zero;
 			return TimeSpan.FromTicks((long)(double)lector[campo]);
 		}
 
+
+		/// <summary>
+		/// Extrae un campo de tipo TimeSpan? del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un TimeSpan? con el valor almacenado en el campo.</returns>
 		public static TimeSpan? ToTimeSpanNulable(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return null;
 			return TimeSpan.FromTicks((long)(double)lector[campo]);
 		}
 
+
+		/// <summary>
+		/// Extrae un campo de tipo String del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un String con el valor almacenado en el campo.</returns>
 		public static string ToString(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return "";
 			return (string)lector[campo];
 		}
 
-		public static bool ToBoolean(this OleDbDataReader lector, string campo) {
+
+		/// <summary>
+		/// Extrae un campo de tipo Bool del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un Bool con el valor almacenado en el campo.</returns>
+		public static bool ToBool(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return false;
 			return (bool)lector[campo];
 		}
 
+
+		/// <summary>
+		/// Extrae un campo de tipo DateTime del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un DateTime con el valor almacenado en el campo.</returns>
 		public static DateTime ToDateTime(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return new DateTime(0);
 			return (DateTime)lector[campo];
 		}
 
+
+		/// <summary>
+		/// Extrae un campo de tipo DateTime? del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un DateTime? con el valor almacenado en el campo.</returns>
 		public static DateTime? ToDateTimeNulable(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return null;
 			return (DateTime)lector[campo];
 		}
 
+
+		/// <summary>
+		/// Extrae un campo de tipo Byte del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un Byte con el valor almacenado en el campo.</returns>
 		public static byte ToByte(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return 0;
 			return (byte)lector[campo];
 		}
 
+
+		/// <summary>
+		/// Extrae un campo de tipo Single del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un Single con el valor almacenado en el campo.</returns>
 		public static Single ToSingle(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return 0;
 			return (Single)lector[campo];
 		}
 
+
+		/// <summary>
+		/// Extrae un campo de tipo Int16 del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un Int16 con el valor almacenado en el campo.</returns>
 		public static Int16 ToInt16(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return 0;
 			return (Int16)lector[campo];
 		}
 
+
+		/// <summary>
+		/// Extrae un campo de tipo Int32(int) del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un Int32(int) con el valor almacenado en el campo.</returns>
 		public static Int32 ToInt32(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return 0;
 			return (Int32)lector[campo];
 		}
 
+
+		/// <summary>
+		/// Extrae un campo de tipo Double del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un Double con el valor almacenado en el campo.</returns>
 		public static double ToDouble(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return 0;
 			return (double)lector[campo];
 		}
 
+
+		/// <summary>
+		/// Extrae un campo de tipo Decimal del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un Decimal con el valor almacenado en el campo.</returns>
 		public static decimal ToDecimal(this OleDbDataReader lector, string campo) {
 			if (lector == null || lector[campo] is DBNull) return 0;
 			return (decimal)lector[campo];

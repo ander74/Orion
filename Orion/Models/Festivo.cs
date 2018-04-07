@@ -36,9 +36,9 @@ namespace Orion.Models {
 		#region MÉTODOS PRIVADOS
 		// ====================================================================================================
 		private void FromReader(OleDbDataReader lector) {
-			_id = DBUtils.FromReaderEnteroLargo(lector, "Id");
-			_año = DBUtils.FromReaderEntero(lector, "Año");
-			_fecha = DBUtils.FromReaderFechaHora(lector, "Fecha");
+			_id = lector.ToInt32("Id");
+			_año = lector.ToInt16("Año");
+			_fecha = lector.ToDateTime("Fecha");
 		}
 
 		#endregion
@@ -64,9 +64,9 @@ namespace Orion.Models {
 		// ====================================================================================================
 
 		public static void ParseFromReader(OleDbDataReader lector, Festivo festivo) {
-			festivo.Id = DBUtils.FromReaderEnteroLargo(lector, "Id");
-			festivo.Año = DBUtils.FromReaderEntero(lector, "Año");
-			festivo.Fecha = DBUtils.FromReaderFechaHora(lector, "Fecha");
+			festivo.Id = lector.ToInt32("Id");
+			festivo.Año = lector.ToInt16("Año");
+			festivo.Fecha = lector.ToDateTime("Fecha");
 		}
 
 

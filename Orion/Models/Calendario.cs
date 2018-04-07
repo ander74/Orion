@@ -48,10 +48,10 @@ namespace Orion.Models {
 		#region MÉTODOS PRIVADOS
 		// ====================================================================================================
 		private void FromReader(OleDbDataReader lector) {
-			_id = DBUtils.FromReaderEnteroLargo(lector, "Id");
-			_idconductor = DBUtils.FromReaderEnteroLargo(lector, "IdConductor");
-			_fecha = DBUtils.FromReaderFechaHora(lector, "Fecha");
-			_notas = DBUtils.FromReaderTexto(lector, "Notas");
+			_id = lector.ToInt32("Id");
+			_idconductor = lector.ToInt32("IdConductor");
+			_fecha = lector.ToDateTime("Fecha");
+			_notas = lector.ToString("Notas");
 		}
 
 		#endregion
@@ -80,21 +80,11 @@ namespace Orion.Models {
 		// ====================================================================================================
 
 		public static void ParseFromReader(OleDbDataReader lector, Calendario calendario) {
-			calendario.Id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (int)lector["Id"];
-			calendario.IdConductor = DBUtils.FromReaderEnteroLargo(lector, "IdConductor");//(lector["IdConductor"] is DBNull) ? 0 : (int)lector["IdConductor"];
-			calendario.Fecha = DBUtils.FromReaderFechaHora(lector, "Fecha");//(lector["Fecha"] is DBNull) ? new DateTime(0) : (DateTime)lector["Fecha"];
-			calendario.Notas = DBUtils.FromReaderTexto(lector, "Notas");//(lector["Notas"] is DBNull) ? "" : (string)lector["Notas"];
+			calendario.Id = lector.ToInt32("Id");
+			calendario.IdConductor = lector.ToInt32("IdConductor");
+			calendario.Fecha = lector.ToDateTime("Fecha");
+			calendario.Notas = lector.ToString("Notas");
 		}
-
-
-		//public static void ParseToCommand(OleDbCommand Comando, Calendario calendario) {
-		//	Comando.Parameters.AddWithValue("idconductor", calendario.IdConductor);
-		//	Comando.Parameters.AddWithValue("fecha", calendario.Fecha.ToString("yyyy-MM-dd"));
-		//	Comando.Parameters.AddWithValue("horasdescuadre", calendario.HorasDescuadre.Ticks);
-		//	Comando.Parameters.AddWithValue("excesojornadacobrada", calendario.ExcesoJornadaCobrada.Ticks);
-		//	Comando.Parameters.AddWithValue("notas", calendario.Notas);
-		//	Comando.Parameters.AddWithValue("id", calendario.Id);
-		//}
 
 
 		public static void ParseToCommand(OleDbCommand Comando, Calendario calendario) {

@@ -169,7 +169,7 @@ namespace Orion.Pijama {
 						int d = (lector["Dia"] is DBNull) ? 0 : (Int16)lector["Dia"];
 						int g = (lector["Grafico"] is DBNull) ? 0 : (Int16)lector["Grafico"];
 						int v = (lector["GraficoVinculado"] is DBNull) ? 0 : (Int16)lector["GraficoVinculado"];
-						TimeSpan ej = Utils.ReaderToHoraSinNulo(lector, "ExcesoJornada");
+						TimeSpan ej = lector.ToTimeSpan("ExcesoJornada");
 						if (v != 0 && g == App.Global.PorCentro.Comodin) g = v;
 						DateTime f = (lector["Fecha"] is DBNull) ? new DateTime(0) : (DateTime)lector["Fecha"];
 						if (d > DateTime.DaysInMonth(f.Year, f.Month)) continue;

@@ -52,9 +52,9 @@ namespace Orion.Models {
 
 
 		public void FromReader(OleDbDataReader lector) {
-			_id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
-			_nombre = DBUtils.FromReaderTexto(lector, "Nombre");//(lector["Nombre"] is DBNull) ? "" : (string)lector["Nombre"];
-			_descripcion = DBUtils.FromReaderTexto(lector, "Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
+			_id = lector.ToInt32("Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
+			_nombre = lector.ToString("Nombre");//(lector["Nombre"] is DBNull) ? "" : (string)lector["Nombre"];
+			_descripcion = lector.ToString("Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
 		}
 
 
@@ -73,9 +73,9 @@ namespace Orion.Models {
 		// ====================================================================================================
 
 		public static void ParseFromReader(OleDbDataReader lector, Linea linea) {
-			linea.Id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
-			linea.Nombre = DBUtils.FromReaderTexto(lector, "Nombre");//(lector["Nombre"] is DBNull) ? "" : (string)lector["Nombre"];
-			linea.Descripcion = DBUtils.FromReaderTexto(lector, "Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
+			linea.Id = lector.ToInt32("Id");
+			linea.Nombre = lector.ToString("Nombre");
+			linea.Descripcion = lector.ToString("Descripcion");
 		}
 
 

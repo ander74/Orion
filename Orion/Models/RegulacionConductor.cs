@@ -57,13 +57,13 @@ namespace Orion.Models {
 		#region MÉTODOS PRIVADOS
 		// ====================================================================================================
 		private void FromReader(OleDbDataReader lector) {
-			_id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (int)lector["Id"];
-			_idconductor = DBUtils.FromReaderEnteroLargo(lector, "IdConductor");//(lector["IdConductor"] is DBNull) ? 0 : (int)lector["IdConductor"];
-			_codigo = DBUtils.FromReaderEntero(lector, "Codigo");//(lector["Codigo"] is DBNull) ? 0 : (Int16)lector["Codigo"];
+			_id = lector.ToInt32("Id");//(lector["Id"] is DBNull) ? 0 : (int)lector["Id"];
+			_idconductor = lector.ToInt32("IdConductor");//(lector["IdConductor"] is DBNull) ? 0 : (int)lector["IdConductor"];
+			_codigo = lector.ToInt16("Codigo");//(lector["Codigo"] is DBNull) ? 0 : (Int16)lector["Codigo"];
 			_fecha = (lector["Fecha"] is DBNull) ? new DateTime(2001, 1, 2) : (DateTime)lector["Fecha"];
-			_horas = Utils.ReaderToHoraSinNulo(lector, "Horas");
-			_descansos = DBUtils.FromReaderEntero(lector, "Descansos");//(lector["Descansos"] is DBNull) ? 0 : (Int16)lector["Descansos"];
-			_motivo = DBUtils.FromReaderTexto(lector, "Motivo");//(lector["Motivo"] is DBNull) ? "" : (string)lector["Motivo"];
+			_horas = lector.ToTimeSpan("Horas");
+			_descansos = lector.ToInt16("Descansos");//(lector["Descansos"] is DBNull) ? 0 : (Int16)lector["Descansos"];
+			_motivo = lector.ToString("Motivo");//(lector["Motivo"] is DBNull) ? "" : (string)lector["Motivo"];
 		}
 
 		#endregion
@@ -97,13 +97,13 @@ namespace Orion.Models {
 		#region MÉTODOS ESTÁTICOS
 		// ====================================================================================================
 		public static void ParseFromReader(OleDbDataReader lector, RegulacionConductor regulacion) {
-			regulacion.Id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (int)lector["Id"];
-			regulacion.IdConductor = DBUtils.FromReaderEnteroLargo(lector, "IdConductor");//(lector["IdConductor"] is DBNull) ? 0 : (int)lector["IdConductor"];
-			regulacion.Codigo = DBUtils.FromReaderEntero(lector, "Codigo");//(lector["Codigo"] is DBNull) ? 0 : (int)lector["Codigo"];
+			regulacion.Id = lector.ToInt32("Id");
+			regulacion.IdConductor = lector.ToInt32("IdConductor");
+			regulacion.Codigo = lector.ToInt16("Codigo");
 			regulacion.Fecha = (lector["Fecha"] is DBNull) ? new DateTime(2001, 1, 2) : (DateTime)lector["Fecha"];
-			regulacion.Horas = Utils.ReaderToHoraSinNulo(lector, "Horas");
-			regulacion.Descansos = DBUtils.FromReaderEntero(lector, "Descansos");//(lector["Descansos"] is DBNull) ? 0 : (int)lector["Descansos"];
-			regulacion.Motivo = DBUtils.FromReaderTexto(lector, "Motivo");//(lector["Motivo"] is DBNull) ? "" : (string)lector["Motivo"];
+			regulacion.Horas = lector.ToTimeSpan("Horas");
+			regulacion.Descansos = lector.ToInt16("Descansos");
+			regulacion.Motivo = lector.ToString("Motivo");
 		}
 
 

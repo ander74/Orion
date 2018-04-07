@@ -38,19 +38,19 @@ namespace Orion.Models {
 		// ====================================================================================================
 
 		public void FromReader(OleDbDataReader lector) {
-			_validez = DBUtils.FromReaderFechaHora(lector, "xValidez");
-			_turno = DBUtils.FromReaderEntero(lector, "xTurno");
-			_numerograficos = DBUtils.FromReaderEnteroLargo(lector, "xNumero");
-			_valoracion = Utils.ReaderToHora(lector, "xValoracion").Value;
-			_trabajadas = Utils.ReaderToHora(lector, "xTrabajadas").Value;
-			_acumuladas = Utils.ReaderToHora(lector, "xAcumuladas").Value;
-			_nocturnas = Utils.ReaderToHora(lector, "xNocturnas").Value;
-			_desayuno = DBUtils.FromReaderDecimal(lector, "xDesayuno");
-			_comida = DBUtils.FromReaderDecimal(lector, "xComida");
-			_cena = DBUtils.FromReaderDecimal(lector, "xCena");
-			_pluscena = DBUtils.FromReaderDecimal(lector, "xPlusCena");
-			_limpieza = (int)DBUtils.FromReaderDoble(lector, "xLimpieza");
-			_paqueteria =(int)DBUtils.FromReaderDoble(lector, "xPaqueteria");
+			_validez = lector.ToDateTime("xValidez");
+			_turno = lector.ToInt16("xTurno");
+			_numerograficos = lector.ToInt32("xNumero");
+			_valoracion = lector.ToTimeSpanNulable("xValoracion").Value;
+			_trabajadas = lector.ToTimeSpanNulable("xTrabajadas").Value;
+			_acumuladas = lector.ToTimeSpanNulable("xAcumuladas").Value;
+			_nocturnas = lector.ToTimeSpanNulable("xNocturnas").Value;
+			_desayuno = lector.ToDecimal("xDesayuno");
+			_comida = lector.ToDecimal("xComida");
+			_cena = lector.ToDecimal("xCena");
+			_pluscena = lector.ToDecimal("xPlusCena");
+			_limpieza = (int)lector.ToDouble("xLimpieza");
+			_paqueteria =(int)lector.ToDouble("xPaqueteria");
 		}
 
 

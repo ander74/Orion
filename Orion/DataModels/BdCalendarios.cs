@@ -54,7 +54,7 @@ namespace Orion.DataModels {
 						Calendario calendario = new Calendario(lector);
 						calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
 						// Extraemos los datos del conductor.
-						calendario.ConductorIndefinido = DBUtils.FromReaderSiNo(lector, "Indefinido");
+						calendario.ConductorIndefinido = lector.ToBool("Indefinido");
 						// Añadimos el calendario a la lista.
 						lista.Add(calendario);
 						calendario.Nuevo = false;

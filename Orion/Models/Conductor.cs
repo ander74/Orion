@@ -47,18 +47,18 @@ namespace Orion.Models {
 		#region MÉTODOS PRIVADOS
 		// ====================================================================================================
 		private void FromReader(OleDbDataReader lector) {
-			_id = DBUtils.FromReaderEnteroLargo(lector, "Id");
-			_nombre = DBUtils.FromReaderTexto(lector, "Nombre");
-			_apellidos = DBUtils.FromReaderTexto(lector, "Apellidos");
-			_indefinido = DBUtils.FromReaderSiNo(lector, "Indefinido");
-			_telefono = DBUtils.FromReaderTexto(lector, "Telefono");
-			_email = DBUtils.FromReaderTexto(lector, "Email");
-			_acumuladas = Utils.ReaderToHoraSinNulo(lector, "Acumuladas");
-			_descansos = DBUtils.FromReaderEntero(lector, "Descansos");
-			_descansosnodisfrutados = DBUtils.FromReaderEntero(lector, "DescansosNoDisfrutados");
-			_plusdistancia = DBUtils.FromReaderDecimal(lector, "PlusDistancia");
-			_reduccionjornada = DBUtils.FromReaderSiNo(lector, "ReduccionJornada");
-			_notas = DBUtils.FromReaderTexto(lector, "Notas");
+			_id = lector.ToInt32("Id");
+			_nombre = lector.ToString("Nombre");
+			_apellidos = lector.ToString("Apellidos");
+			_indefinido = lector.ToBool("Indefinido");
+			_telefono = lector.ToString("Telefono");
+			_email = lector.ToString("Email");
+			_acumuladas = lector.ToTimeSpan("Acumuladas");
+			_descansos = lector.ToInt16("Descansos");
+			_descansosnodisfrutados = lector.ToInt16("DescansosNoDisfrutados");
+			_plusdistancia = lector.ToDecimal("PlusDistancia");
+			_reduccionjornada = lector.ToBool("ReduccionJornada");
+			_notas = lector.ToString("Notas");
 		}
 		#endregion
 
@@ -89,17 +89,17 @@ namespace Orion.Models {
 		/// </summary>
 		/// <param name="lector"></param>
 		public void SetDataFromReader(OleDbDataReader lector) {
-			_id = DBUtils.FromReaderEnteroLargo(lector, "Id");
-			_nombre = DBUtils.FromReaderTexto(lector, "Nombre");
-			_apellidos = DBUtils.FromReaderTexto(lector, "Apellidos");
-			_indefinido = DBUtils.FromReaderSiNo(lector, "Indefinido");
-			_telefono = DBUtils.FromReaderTexto(lector, "Telefono");
-			_email = DBUtils.FromReaderTexto(lector, "Email");
-			_acumuladas = Utils.ReaderToHoraSinNulo(lector, "Acumuladas");
-			_descansos = DBUtils.FromReaderEntero(lector, "Descansos");
-			_descansosnodisfrutados = DBUtils.FromReaderEntero(lector, "DescansosNoDisfrutados");
-			_plusdistancia = DBUtils.FromReaderDecimal(lector, "PlusDistancia");
-			_notas = DBUtils.FromReaderTexto(lector, "Notas");
+			_id = lector.ToInt32("Id");
+			_nombre = lector.ToString("Nombre");
+			_apellidos = lector.ToString("Apellidos");
+			_indefinido = lector.ToBool("Indefinido");
+			_telefono = lector.ToString("Telefono");
+			_email = lector.ToString("Email");
+			_acumuladas = lector.ToTimeSpan("Acumuladas");
+			_descansos = lector.ToInt16("Descansos");
+			_descansosnodisfrutados = lector.ToInt16("DescansosNoDisfrutados");
+			_plusdistancia = lector.ToDecimal("PlusDistancia");
+			_notas = lector.ToString("Notas");
 		}
 
 		public void GetDataToCommand(ref OleDbCommand comando) {
@@ -127,34 +127,20 @@ namespace Orion.Models {
 		// ====================================================================================================
 
 		public static void ParseFromReader(OleDbDataReader lector, Conductor conductor) {
-			conductor.Id = DBUtils.FromReaderEnteroLargo(lector, "Id");
-			conductor.Nombre = DBUtils.FromReaderTexto(lector, "Nombre");
-			conductor.Apellidos = DBUtils.FromReaderTexto(lector, "Apellidos");
-			conductor.Indefinido = DBUtils.FromReaderSiNo(lector, "Indefinido");
-			conductor.Telefono = DBUtils.FromReaderTexto(lector, "Telefono");
-			conductor.Email = DBUtils.FromReaderTexto(lector, "Email");
-			conductor.Acumuladas = Utils.ReaderToHoraSinNulo(lector, "Acumuladas");
-			conductor.Descansos = DBUtils.FromReaderEntero(lector, "Descansos");
-			conductor.DescansosNoDisfrutados = DBUtils.FromReaderEntero(lector, "DescansosNoDisfrutados");
-			conductor.PlusDistancia = DBUtils.FromReaderDecimal(lector, "PlusDistancia");
-			conductor.ReduccionJornada = DBUtils.FromReaderSiNo(lector, "ReduccionJornada");
-			conductor.Notas = DBUtils.FromReaderTexto(lector, "Notas");
+			conductor.Id = lector.ToInt32("Id");
+			conductor.Nombre = lector.ToString("Nombre");
+			conductor.Apellidos = lector.ToString("Apellidos");
+			conductor.Indefinido = lector.ToBool("Indefinido");
+			conductor.Telefono = lector.ToString("Telefono");
+			conductor.Email = lector.ToString("Email");
+			conductor.Acumuladas = lector.ToTimeSpan("Acumuladas");
+			conductor.Descansos = lector.ToInt16("Descansos");
+			conductor.DescansosNoDisfrutados = lector.ToInt16("DescansosNoDisfrutados");
+			conductor.PlusDistancia = lector.ToDecimal("PlusDistancia");
+			conductor.ReduccionJornada = lector.ToBool("ReduccionJornada");
+			conductor.Notas = lector.ToString("Notas");
 		}
 
-		//public static void ParseToCommand(OleDbCommand Comando, Conductor conductor) {
-		//	Comando.Parameters.AddWithValue("id1", conductor.Id);
-		//	Comando.Parameters.AddWithValue("nombre", conductor.Nombre);
-		//	Comando.Parameters.AddWithValue("apellidos", conductor.Apellidos);
-		//	Comando.Parameters.AddWithValue("indefinido", conductor.Indefinido);
-		//	Comando.Parameters.AddWithValue("telefono", conductor.Telefono);
-		//	Comando.Parameters.AddWithValue("email", conductor.Email);
-		//	Comando.Parameters.AddWithValue("acumuladas", conductor.Acumuladas.Ticks);
-		//	Comando.Parameters.AddWithValue("descansos", conductor.Descansos);
-		//	Comando.Parameters.AddWithValue("descansosnodisfrutados", conductor.DescansosNoDisfrutados);
-		//	Comando.Parameters.AddWithValue("plusdistancia", conductor.PlusDistancia.ToString("0.0000"));
-		//	Comando.Parameters.AddWithValue("notas", conductor.Notas);
-		//	Comando.Parameters.AddWithValue("id2", conductor.Id);
-		//}
 
 		public static void ParseToCommand(OleDbCommand Comando, Conductor conductor) {
 			Comando.Parameters.AddWithValue("@Nombre", conductor.Nombre);

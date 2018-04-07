@@ -102,25 +102,25 @@ namespace Orion.Models {
 		#region MÉTODOS ESTÁTICOS
 		// ====================================================================================================
 		public static void ParseFromReader(OleDbDataReader lector, GraficoBase grafico) {
-			grafico.Id = DBUtils.FromReaderEnteroLargo(lector, "Id");
-			grafico.IdGrupo = DBUtils.FromReaderEnteroLargo(lector, "IdGrupo");
-			grafico.NoCalcular = DBUtils.FromReaderSiNo(lector, "NoCalcular");
-			grafico.Numero = DBUtils.FromReaderEntero(lector, "Numero");
-			grafico.Turno = DBUtils.FromReaderEntero(lector, "Turno");
-			grafico.Inicio = Utils.ReaderToHora(lector, "Inicio");
-			grafico.Final = Utils.ReaderToHora(lector, "Final");
-			grafico.InicioPartido = Utils.ReaderToHora(lector, "InicioPartido");
-			grafico.FinalPartido = Utils.ReaderToHora(lector, "FinalPartido");
-			grafico.Valoracion = Utils.ReaderToHoraSinNulo(lector, "Valoracion");
-			grafico.Trabajadas = Utils.ReaderToHoraSinNulo(lector, "Trabajadas");
-			grafico.Acumuladas = Utils.ReaderToHoraSinNulo(lector, "Acumuladas");
-			grafico.Nocturnas = Utils.ReaderToHoraSinNulo(lector, "Nocturnas");
-			grafico.Desayuno = DBUtils.FromReaderDecimal(lector, "Desayuno");
-			grafico.Comida = DBUtils.FromReaderDecimal(lector, "Comida");
-			grafico.Cena = DBUtils.FromReaderDecimal(lector, "Cena");
-			grafico.PlusCena = DBUtils.FromReaderDecimal(lector, "PlusCena");
-			grafico.PlusLimpieza = DBUtils.FromReaderSiNo(lector, "PlusLimpieza");
-			grafico.PlusPaqueteria = DBUtils.FromReaderSiNo(lector, "PlusPaqueteria");
+			grafico.Id = lector.ToInt32("Id");
+			grafico.IdGrupo = lector.ToInt32("IdGrupo");
+			grafico.NoCalcular = lector.ToBool("NoCalcular");
+			grafico.Numero = lector.ToInt16("Numero");
+			grafico.Turno = lector.ToInt16("Turno");
+			grafico.Inicio = lector.ToTimeSpanNulable("Inicio");
+			grafico.Final = lector.ToTimeSpanNulable("Final");
+			grafico.InicioPartido = lector.ToTimeSpanNulable("InicioPartido");
+			grafico.FinalPartido = lector.ToTimeSpanNulable("FinalPartido");
+			grafico.Valoracion = lector.ToTimeSpan("Valoracion");
+			grafico.Trabajadas = lector.ToTimeSpan("Trabajadas");
+			grafico.Acumuladas = lector.ToTimeSpan("Acumuladas");
+			grafico.Nocturnas = lector.ToTimeSpan("Nocturnas");
+			grafico.Desayuno = lector.ToDecimal("Desayuno");
+			grafico.Comida = lector.ToDecimal("Comida");
+			grafico.Cena = lector.ToDecimal("Cena");
+			grafico.PlusCena = lector.ToDecimal("PlusCena");
+			grafico.PlusLimpieza = lector.ToBool("PlusLimpieza");
+			grafico.PlusPaqueteria = lector.ToBool("PlusPaqueteria");
 		}
 
 

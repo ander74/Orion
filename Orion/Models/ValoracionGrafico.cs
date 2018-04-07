@@ -63,13 +63,13 @@ namespace Orion.Models {
 		#region MÉTODOS PRIVADOS
 		// ====================================================================================================
 		private void FromReader(OleDbDataReader lector) {
-			_id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
-			_idgrafico = DBUtils.FromReaderEnteroLargo(lector, "IdGrafico");//(lector["IdGrafico"] is DBNull) ? 0 : (Int32)lector["IdGrafico"];
-			_inicio = Utils.ReaderToHora(lector, "Inicio");
-			_linea = DBUtils.FromReaderDecimal(lector, "Linea");//(lector["Linea"] is DBNull) ? 0 : (decimal)lector["Linea"];
-			_descripcion = DBUtils.FromReaderTexto(lector, "Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
-			_final = Utils.ReaderToHora(lector, "Final");
-			_tiempo = Utils.ReaderToHoraSinNulo(lector, "Tiempo");
+			_id = lector.ToInt32("Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
+			_idgrafico = lector.ToInt32("IdGrafico");//(lector["IdGrafico"] is DBNull) ? 0 : (Int32)lector["IdGrafico"];
+			_inicio = lector.ToTimeSpanNulable("Inicio");
+			_linea = lector.ToDecimal("Linea");//(lector["Linea"] is DBNull) ? 0 : (decimal)lector["Linea"];
+			_descripcion = lector.ToString("Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
+			_final = lector.ToTimeSpanNulable("Final");
+			_tiempo = lector.ToTimeSpan("Tiempo");
 		}
 		#endregion
 
@@ -123,13 +123,13 @@ namespace Orion.Models {
 		#region MÉTODOS ESTÁTICOS
 		// ====================================================================================================
 		public static void ParseFromReader(OleDbDataReader lector, ValoracionGrafico valoracion) {
-			valoracion.Id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
-			valoracion.IdGrafico = DBUtils.FromReaderEnteroLargo(lector, "IdGrafico");//(lector["IdGrafico"] is DBNull) ? 0 : (Int32)lector["IdGrafico"];
-			valoracion.Inicio = Utils.ReaderToHora(lector, "Inicio");
-			valoracion.Linea = DBUtils.FromReaderDecimal(lector, "Linea");//(lector["Linea"] is DBNull) ? 0 : (decimal)lector["Linea"];
-			valoracion.Descripcion = DBUtils.FromReaderTexto(lector, "Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
-			valoracion.Final = Utils.ReaderToHora(lector, "Final");
-			valoracion.Tiempo = Utils.ReaderToHoraSinNulo(lector, "Tiempo");
+			valoracion.Id = lector.ToInt32("Id");
+			valoracion.IdGrafico = lector.ToInt32("IdGrafico");
+			valoracion.Inicio = lector.ToTimeSpanNulable("Inicio");
+			valoracion.Linea = lector.ToDecimal("Linea");
+			valoracion.Descripcion = lector.ToString("Descripcion");
+			valoracion.Final = lector.ToTimeSpanNulable("Final");
+			valoracion.Tiempo = lector.ToTimeSpan("Tiempo");
 		}
 
 		public static void ParseToCommand(OleDbCommand Comando, ValoracionGrafico valoracion) {

@@ -23,24 +23,6 @@ namespace Orion.Config {
 
 
 		/// <summary>
-		/// Convierte un número devuelto por una base datos en una hora.
-		/// </summary>
-		/// <param name="lector">Puntero al registro de la base de datos.</param>
-		/// <param name="campo">Campo que contiene la hora en formato número (ticks).</param>
-		/// <returns></returns>
-		public static TimeSpan? ReaderToHora(OleDbDataReader lector, string campo) {
-			if (lector == null || lector[campo] is DBNull) return null;
-			return TimeSpan.FromTicks((long)(double)lector[campo]);
-		}
-
-
-		public static TimeSpan ReaderToHoraSinNulo(OleDbDataReader lector, string campo) {
-			if (lector == null || lector[campo] is DBNull) return new TimeSpan(0);
-			return TimeSpan.FromTicks((long)(double)lector[campo]);
-		}
-
-
-		/// <summary>
 		/// Lee el texto almacenado en el portapapeles y lo introduce en una lista de arrays de cadenas.
 		/// De esta manera, se crea una tabla de valores de texto en la que la lista tiene las filas y el
 		/// Array tiene las columnas.

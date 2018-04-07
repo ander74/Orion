@@ -49,11 +49,11 @@ namespace Orion.Models {
 
 
 		public void FromReader(OleDbDataReader lector) {
-			_id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
-			_iditinerario = DBUtils.FromReaderEnteroLargo(lector, "IdItinerario");//(lector["IdItinerario"] is DBNull) ? 0 : (Int32)lector["IdItinerario"];
-			_orden = DBUtils.FromReaderEntero(lector, "Orden");//(lector["Orden"] is DBNull) ? 0 : (Int16)lector["Orden"];
-			_descripcion = DBUtils.FromReaderTexto(lector, "Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
-			_tiempo = Utils.ReaderToHoraSinNulo(lector, "Tiempo");
+			_id = lector.ToInt32("Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
+			_iditinerario = lector.ToInt32("IdItinerario");//(lector["IdItinerario"] is DBNull) ? 0 : (Int32)lector["IdItinerario"];
+			_orden = lector.ToInt16("Orden");//(lector["Orden"] is DBNull) ? 0 : (Int16)lector["Orden"];
+			_descripcion = lector.ToString("Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
+			_tiempo = lector.ToTimeSpan("Tiempo");
 		}
 
 		#endregion
@@ -71,11 +71,11 @@ namespace Orion.Models {
 		// ====================================================================================================
 
 		public static void ParseFromReader(OleDbDataReader lector, Parada parada) {
-			parada.Id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
-			parada.IdItinerario = DBUtils.FromReaderEnteroLargo(lector, "IdIntinerario");//(lector["IdItinerario"] is DBNull) ? 0 : (Int32)lector["IdItinerario"];
-			parada.Orden = DBUtils.FromReaderEntero(lector, "Orden");//(lector["Orden"] is DBNull) ? 0 : (Int16)lector["Orden"];
-			parada.Descripcion = DBUtils.FromReaderTexto(lector, "Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
-			parada.Tiempo = Utils.ReaderToHoraSinNulo(lector, "Tiempo");
+			parada.Id = lector.ToInt32("Id");
+			parada.IdItinerario = lector.ToInt32("IdIntinerario");
+			parada.Orden = lector.ToInt16("Orden");
+			parada.Descripcion = lector.ToString("Descripcion");
+			parada.Tiempo = lector.ToTimeSpan("Tiempo");
 		}
 
 

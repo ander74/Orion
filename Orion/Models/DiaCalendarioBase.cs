@@ -52,17 +52,17 @@ namespace Orion.Models {
 		// ====================================================================================================
 
 		public static void ParseFromReader(OleDbDataReader lector, DiaCalendarioBase diacalendario) {
-			diacalendario.Id = DBUtils.FromReaderEnteroLargo(lector, "Id");
-			diacalendario.IdCalendario = DBUtils.FromReaderEnteroLargo(lector, "IdCalendario");
-			diacalendario.Dia = DBUtils.FromReaderEntero(lector, "Dia");
-			diacalendario.DiaFecha = DBUtils.FromReaderFechaHora(lector, "DiaFecha");
-			diacalendario.Grafico = DBUtils.FromReaderEntero(lector, "Grafico");
-			diacalendario.Codigo = DBUtils.FromReaderEntero(lector, "Codigo");
-			diacalendario.ExcesoJornada = Utils.ReaderToHoraSinNulo(lector, "ExcesoJornada");
-			diacalendario.FacturadoPaqueteria = DBUtils.FromReaderDecimal(lector, "FacturadoPaqueteria");
+			diacalendario.Id = lector.ToInt32("Id");
+			diacalendario.IdCalendario = lector.ToInt32("IdCalendario");
+			diacalendario.Dia = lector.ToInt16("Dia");
+			diacalendario.DiaFecha = lector.ToDateTime("DiaFecha");
+			diacalendario.Grafico = lector.ToInt16("Grafico");
+			diacalendario.Codigo = lector.ToInt16("Codigo");
+			diacalendario.ExcesoJornada = lector.ToTimeSpan("ExcesoJornada");
+			diacalendario.FacturadoPaqueteria = lector.ToDecimal("FacturadoPaqueteria");
 			diacalendario.Limpieza = lector["Limpieza"] is DBNull ? null : (bool?)lector["Limpieza"];
-			diacalendario.GraficoVinculado = DBUtils.FromReaderEntero(lector, "GraficoVinculado");
-			diacalendario.Notas = DBUtils.FromReaderTexto(lector, "Notas");
+			diacalendario.GraficoVinculado = lector.ToInt16("GraficoVinculado");
+			diacalendario.Notas = lector.ToString("Notas");
 		}
 
 

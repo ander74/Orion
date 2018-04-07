@@ -41,9 +41,9 @@ namespace Orion.Models {
 		#region MÉTODOS PRIVADOS
 		// ====================================================================================================
 		private void FromReader(OleDbDataReader lector) {
-			_id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
-			_validez = DBUtils.FromReaderFechaHora(lector, "Validez");//(lector["Validez"] is DBNull) ? new DateTime(2001,1,2) : (DateTime)lector["Validez"];
-			_notas = DBUtils.FromReaderTexto(lector, "Notas");//(lector["Notas"] is DBNull) ? "" : (string)lector["Notas"];
+			_id = lector.ToInt32("Id");
+			_validez = lector.ToDateTime("Validez");
+			_notas = lector.ToString("Notas");
 		}
 		#endregion
 
@@ -59,9 +59,9 @@ namespace Orion.Models {
 		// ====================================================================================================
 
 		public static void ParseFromReader(OleDbDataReader lector, GrupoGraficos grupo) {
-			grupo.Id = DBUtils.FromReaderEnteroLargo(lector, "Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
-			grupo.Validez = DBUtils.FromReaderFechaHora(lector, "Validez");//(lector["Validez"] is DBNull) ? new DateTime(0) : (DateTime)lector["Validez"];
-			grupo.Notas = DBUtils.FromReaderTexto(lector, "Notas");//(lector["Notas"] is DBNull) ? "" : (string)lector["Notas"];
+			grupo.Id = lector.ToInt32("Id");
+			grupo.Validez = lector.ToDateTime("Validez");
+			grupo.Notas = lector.ToString("Notas");
 		}
 
 
