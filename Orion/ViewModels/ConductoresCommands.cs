@@ -106,8 +106,13 @@ namespace Orion.ViewModels {
 			if (tabla == null || tabla.CurrentCell == null) return;
 			List<Conductor> lista = new List<Conductor>();
 			DataGridCellInfo celda = tabla.CurrentCell;
+			Conductor conductor = celda.Item as Conductor;
+			if (conductor == null) return;
+			if (mensajes.VerMensaje($"Vas a borrar al conductor:\n\n{conductor.Id:000}: {conductor.Apellidos}\n\n" +
+									$"Esto hará que se borren todos sus calendarios.\n\n" +
+									$"¿Deseas continuar?", "ATENCIÓN", true) == false) return;
 			if (celda.Column.Header.ToString() == "Número" && celda.Item.GetType().Name == "Conductor") {
-				lista.Add((Conductor)celda.Item);
+				lista.Add(conductor);
 			}
 			
 			foreach (Conductor c in lista) {
@@ -116,6 +121,7 @@ namespace Orion.ViewModels {
 				HayCambios = true;
 			}
 			lista.Clear();
+			App.Global.CalendariosVM.BorrarCalendariosPorConductor(conductor.Id);
 		}
 		#endregion
 
@@ -142,6 +148,7 @@ namespace Orion.ViewModels {
 					conductor.Nuevo = false;
 				}
 				HayCambios = true;
+				App.Global.CalendariosVM.DeshacerBorrarPorConductor(conductor.Id);
 			}
 			_listaborrados.Clear();
 		}
@@ -464,6 +471,34 @@ namespace Orion.ViewModels {
 		}
 		#endregion
 
+
+		#region CAMBIAR MODO SELECCION
+
+		// Comando
+		private ICommand _cmdcambiarmodoseleccion;
+		public ICommand cmdCambiarModoSeleccion {
+			get {
+				if (_cmdcambiarmodoseleccion == null) _cmdcambiarmodoseleccion = new RelayCommand(p => CambiarModoSeleccion());
+				return _cmdcambiarmodoseleccion;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void CambiarModoSeleccion() {
+
+			if (VisibilidadBotonSeleccionFila == Visibility.Visible) {
+				VisibilidadBotonSeleccionFila = Visibility.Collapsed;
+				VisibilidadBotonSeleccionCelda = Visibility.Visible;
+				ModoSeleccion = DataGridSelectionUnit.FullRow;
+			} else {
+				VisibilidadBotonSeleccionCelda = Visibility.Collapsed;
+				VisibilidadBotonSeleccionFila = Visibility.Visible;
+				ModoSeleccion = DataGridSelectionUnit.Cell;
+			}
+
+		}
+		#endregion
 
 
 

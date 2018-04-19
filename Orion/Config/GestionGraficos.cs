@@ -195,9 +195,6 @@ namespace Orion.Config {
 				}
 			}
 
-			
-
-
 			// Evaluamos el tipo que se ha detectado.
 			switch (resultado) {
 				case TipoValoracion.Completo:

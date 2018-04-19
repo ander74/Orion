@@ -30,6 +30,10 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -185,6 +189,7 @@
     <Compile Include="DataModels\ProcSQL.cs" />
     <Compile Include="DataModels\Respaldo.cs" />
     <Compile Include="Extensiones.cs" />
+    <Compile Include="Models\EstadisticaCalendario.cs" />
     <Compile Include="Models\OpcionesConfiguracion.cs" />
     <Compile Include="Models\OpcionesConvenio.cs" />
     <Compile Include="Models\DiaCalendario.cs" />
@@ -212,9 +217,11 @@
     <Compile Include="Pijama\ResumenPijama.cs" />
     <Compile Include="PrintModel\CalendarioPrintModel.cs" />
     <Compile Include="PrintModel\GraficosPrintModel.cs" />
+    <Compile Include="PrintModel\PdfTools.cs" />
     <Compile Include="PrintModel\PijamaPrintModel.cs" />
     <Compile Include="PrintModel\ReclamacionPrintModel.cs" />
     <Compile Include="Servicios\InformesServicio.cs" />
+    <Compile Include="Servicios\PdfServicio.cs" />
     <Compile Include="Soporte\WebBrowserUtility.cs" />
     <Compile Include="ViewModels\AccionesLotesCalendariosVM.cs" />
     <Compile Include="ViewModels\AñadirGraficoCommands.cs" />
@@ -226,6 +233,8 @@
     <Compile Include="ViewModels\CalendariosViewModel.cs" />
     <Compile Include="ViewModels\ConductoresCommands.cs" />
     <Compile Include="ViewModels\ConductoresViewModel.cs" />
+    <Compile Include="ViewModels\EstadisticasCommands.cs" />
+    <Compile Include="ViewModels\EstadisticasViewModel.cs" />
     <Compile Include="ViewModels\GlobalCommands.cs" />
     <Compile Include="ViewModels\GlobalVM.cs" />
     <Compile Include="ViewModels\GraficosCommands.cs" />
@@ -286,6 +295,9 @@
     </Compile>
     <Compile Include="Views\VistaConductores.xaml.cs">
       <DependentUpon>VistaConductores.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VistaEstadisticas.xaml.cs">
+      <DependentUpon>VistaEstadisticas.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VistaGraficos.xaml.cs">
       <DependentUpon>VistaGraficos.xaml</DependentUpon>
@@ -392,6 +404,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\VistaConductores.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VistaEstadisticas.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -697,6 +713,10 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="LicenciaIText.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\SeleccionCelda.png" />
+    <Resource Include="Views\Imagenes\SeleccionFila.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

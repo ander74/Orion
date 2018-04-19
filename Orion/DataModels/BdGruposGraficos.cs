@@ -104,28 +104,6 @@ namespace Orion.DataModels {
 
 
 		/*================================================================================
-		 * BORRAR GRUPOS
-		 *================================================================================*/
-		[Obsolete("Esté método no se usa en ningun sitio.")]
-		public static void BorrarGrupo(List<GrupoGraficos> lista) {
-
-			string SQLBorrar = "DELETE FROM GruposGraficos WHERE Id=?";
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-				try {
-					foreach (GrupoGraficos grupo in lista) {
-						OleDbCommand comando = new OleDbCommand(SQLBorrar, conexion);
-						comando.Parameters.AddWithValue("id", grupo.Id);
-						comando.ExecuteNonQuery();
-					}
-				} catch (Exception ex){
-					Utils.VerError("BdGruposGraficos.BorrarGrupo", ex);
-				}
-			}
-		}
-
-
-		/*================================================================================
 		 * BORRAR GRUPO POR ID
 		 *================================================================================*/
 		public static void BorrarGrupoPorId(long idgrupo, OleDbConnection conexion = null) {

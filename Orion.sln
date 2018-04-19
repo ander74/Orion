@@ -41,4 +41,19 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF0754CB-8A73-4799-B3D4-2E6FB3F090FB}
 	EndGlobalSection
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 4
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://ander-orion.visualstudio.com/
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = GenericDataModels\\GenericDataModels.csproj
+		SccProjectName1 = GenericDataModels
+		SccLocalPath1 = GenericDataModels
+		SccProjectUniqueName2 = Orion\\Orion.csproj
+		SccProjectName2 = Orion
+		SccLocalPath2 = Orion
+		SccProjectUniqueName3 = OrionUpdate\\OrionUpdate.csproj
+		SccProjectName3 = OrionUpdate
+		SccLocalPath3 = OrionUpdate
+	EndGlobalSection
 EndGlobal

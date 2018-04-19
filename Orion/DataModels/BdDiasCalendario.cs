@@ -66,54 +66,6 @@ namespace Orion.DataModels {
 
 
 		/*================================================================================
-		 * GET DIAS CALENDARIO AÑO
-		 *================================================================================*/
-		[Obsolete("Esté método no se usa en ningun sitio.")]
-		public static List<DiaCalendario> GetDiasCalendarioAño(long idConductor, int año) {
-
-			// Creamos la lista y el comando que extrae los gráficos.
-			List<DiaCalendario> lista = new List<DiaCalendario>();
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-
-				//string comandoSQL = "SELECT * " +
-				//					"FROM DiasCalendario " +
-				//					"WHERE IdCalendario IN (SELECT Id " +
-				//					"						FROM Calendarios " +
-				//					"						WHERE IdConductor = ? AND Year(Fecha) = ?)";
-				string comandoSQL = "GetDiasCalendariosAño";
-
-				// Elementos para la consulta de calendarios y días de calendario.
-				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-				comando.CommandType = System.Data.CommandType.StoredProcedure;
-				comando.Parameters.AddWithValue("idconductor", idConductor);
-				comando.Parameters.AddWithValue("año", año);
-				OleDbDataReader lector = null;
-
-				try {
-					conexion.Open();
-					// Extraemos los calendarios.
-					lector = comando.ExecuteReader();
-
-					// Por cada dia extraido...
-					while (lector.Read()) {
-						DiaCalendario dia = new DiaCalendario(lector);
-						// Añadimos el calendario a la lista.
-						lista.Add(dia);
-						dia.Nuevo = false;
-						dia.Modificado = false;
-					}
-				} catch (OleDbException ex) {
-					Utils.VerError("BdDiasCalendarios.GetDiasCalendarioAño", ex);
-				}
-			}
-			// Devolvemos la lista.
-			return lista;
-
-		}
-
-
-		/*================================================================================
 		 * GET DIA CALENDARIO
 		 *================================================================================*/
 		public static DiaCalendarioBase GetDiaCalendario(int idConductor, DateTime fecha, OleDbConnection conexion = null) {
@@ -201,32 +153,6 @@ namespace Orion.DataModels {
 
 
 		/*================================================================================
-		 * BORRAR DIAS CALENDARIO
-		 *================================================================================*/
-		[Obsolete("Esté método no se usa en ningun sitio.")]
-		public static void BorrarDiasCalendario(List<DiaCalendario> lista) {
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-
-				//string SQLBorrar = "DELETE FROM DiasCalendario WHERE Id=?";
-				string SQLBorrar = "BorrarDiaCalendario";
-
-				try {
-					conexion.Open();
-					foreach (DiaCalendario dia in lista) {
-						OleDbCommand comando = new OleDbCommand(SQLBorrar, conexion);
-						comando.CommandType = System.Data.CommandType.StoredProcedure;
-						comando.Parameters.AddWithValue("id", dia.Id);
-						comando.ExecuteNonQuery();
-					}
-				} catch (OleDbException ex) {
-					Utils.VerError("BdDiasCalendario.BorrarDiasCalendario", ex);
-				}
-			}
-		}
-
-
-		/*================================================================================
 		 * GET HORAS DESCUADRE HASTA MES
 		 *================================================================================*/
 		public static int GetHorasDescuadreHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
@@ -262,43 +188,6 @@ namespace Orion.DataModels {
 			}
 			// Devolvemos el resultado.
 			if (resultado == DBNull.Value) resultado = 0;
-			return Convert.ToInt32(resultado);
-
-		}
-
-
-		/*================================================================================
-		 * GET HORAS DESCUADRE AÑO
-		 *================================================================================*/
-		[Obsolete("Esté método no se usa en ningun sitio.")]
-		public static int GetHorasDescuadreAño(int año, int idconductor) {
-
-			object resultado = null;
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-
-				// Definimos el comando SQL.
-				string comandoSQL = "SELECT Sum(Descuadre) " +
-									"FROM DiasCalendario " +
-									"WHERE IdCalendario IN (SELECT Id " +
-														   "FROM Calendarios " +
-														   "WHERE IdConductor = ? AND Year(Fecha) = ?);";
-
-				// Creamos el comando y añadimos los parámetros.
-				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-				comando.Parameters.AddWithValue("idconductor", idconductor);
-				comando.Parameters.AddWithValue("año", año);
-
-				try {
-					conexion.Open();
-					// Ejecutamos el comando y guardamos el resultado.
-					resultado = comando.ExecuteScalar();
-				} catch (Exception ex) {
-					Utils.VerError("BdCalendarios.GetHorasDescuadreAño", ex);
-				}
-			}
-			// Devolvemos el resultado.
-			if (resultado == DBNull.Value) resultado = 0d;
 			return Convert.ToInt32(resultado);
 
 		}
@@ -341,43 +230,6 @@ namespace Orion.DataModels {
 			// Devolvemos el resultado.
 			if (resultado == DBNull.Value) resultado = 0d;
 			return new TimeSpan(Convert.ToInt64(resultado));
-
-		}
-
-
-		/*================================================================================
-		 * GET EXCESO JORNADA AÑO
-		 *================================================================================*/
-		[Obsolete("Esté método no se usa en ningun sitio.")]
-		public static TimeSpan GetExcesoJornadaAño(int año, int idconductor) {
-
-			object resultado = null;
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-
-				// Definimos el comando SQL.
-				string comandoSQL = "SELECT Sum(ExcesoJornada) " +
-									"FROM DiasCalendario " +
-									"WHERE IdCalendario IN (SELECT Id " +
-														   "FROM Calendarios " +
-														   "WHERE IdConductor = ? AND Year(Fecha) = ?);";
-
-				// Creamos el comando y añadimos los parámetros.
-				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-				comando.Parameters.AddWithValue("idconductor", idconductor);
-				comando.Parameters.AddWithValue("year", año);
-
-				try {
-					conexion.Open();
-					// Ejecutamos el comando y guardamos el resultado.
-					resultado = comando.ExecuteScalar();
-				} catch (Exception ex) {
-					Utils.VerError("BdCalendarios.GetExcesoJornadaAño", ex);
-				}
-			}
-			// Devolvemos el resultado.
-			long ticks = (resultado == DBNull.Value) ? 0 : Convert.ToInt64(resultado);
-			return new TimeSpan(ticks);
 
 		}
 

@@ -23,7 +23,7 @@ using System.Windows.Controls;
 
 namespace Orion.ViewModels {
 
-	public partial class GlobalVM: NotifyBase{
+	public partial class GlobalVM: NotifyBase, IDisposable{
 
 		// ====================================================================================================
 		#region  CAMPOS PRIVADOS
@@ -40,6 +40,7 @@ namespace Orion.ViewModels {
 		private CalendariosViewModel _calendariosvm;
 		private LineasViewModel _lineasvm;
 		private OpcionesViewModel _opcionesvm;
+        private EstadisticasViewModel _estadisticasvm;
 
 
 		#endregion
@@ -108,6 +109,18 @@ namespace Orion.ViewModels {
 			App.Global.VisibilidadBarraProgreso = Visibility.Collapsed;
 		}
 
+
+		public void Dispose() {
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing) {
+			if (disposing) Informes.Dispose();
+		}
+
+
+
 		#endregion
 		// ====================================================================================================
 
@@ -154,8 +167,6 @@ namespace Orion.ViewModels {
 				Process.Start(@"OrionUpdate.exe", $"\"{Configuracion.CarpetaOrigenActualizar}\"");
 			}
 		}
-
-
 
 		#endregion
 		// ====================================================================================================
@@ -419,16 +430,25 @@ namespace Orion.ViewModels {
 			}
 		}
 
-		#endregion
-		// ====================================================================================================
+
+        public EstadisticasViewModel EstadisticasVM {
+            get {
+                if (_estadisticasvm == null) _estadisticasvm = new EstadisticasViewModel(mensajes, Informes);
+                return _estadisticasvm;
+            }
+        }
 
 
-		// ====================================================================================================
-		#region OPCIONES
-		// ====================================================================================================
+        #endregion
+        // ====================================================================================================
 
 
-		public string ArchivoOpcionesConfiguracion {
+        // ====================================================================================================
+        #region OPCIONES
+        // ====================================================================================================
+
+
+        public string ArchivoOpcionesConfiguracion {
 			get {
 				return "Config.json";
 			}

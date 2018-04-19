@@ -403,7 +403,113 @@
     </Style>
 
 
+    <!-- ==================================================================================================== -->
+    <!-- ESTILO BOTON DESPLEGABLE BARRA PEQUEÑA -->
+    <!-- ==================================================================================================== -->
+    <Style TargetType="xceed:DropDownButton" x:Key="EstiloBotonDesplegableBarraPequeña">
 
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="Margin" Value="2.5"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="HorizontalAlignment" Value="Left" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type xceed:DropDownButton}">
+                    <Grid x:Name="MainGrid" SnapsToDevicePixels="True">
+                        <ToggleButton x:Name="PART_DropDownButton" FontSize="10"
+                                Grid.Column="0"
+                                Background="Transparent"
+                                IsChecked="{Binding IsOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}"
+                                IsHitTestVisible="{Binding IsOpen, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource InverseBoolConverter}}">
+                            <ToggleButton.Template>
+                                <ControlTemplate TargetType="ToggleButton">
+                                    <ContentPresenter />
+                                    <ControlTemplate.Triggers>
+                                        <Trigger Property="IsEnabled" Value="False">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+                                </ControlTemplate>
+                            </ToggleButton.Template>
+                            <Grid>
+                                <xceed:ButtonChrome x:Name="ToggleButtonChrome"
+                                             Background="{TemplateBinding Background}"
+                                             Foreground="{TemplateBinding Foreground}"
+                                             BorderThickness="{TemplateBinding BorderThickness}"
+                                             BorderBrush="{TemplateBinding BorderBrush}"
+                                             CornerRadius="5"
+                                             RenderChecked="{TemplateBinding IsOpen}"
+                                             RenderEnabled="{TemplateBinding IsEnabled}"
+                                             RenderPressed="{Binding IsPressed, ElementName=PART_DropDownButton}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <ContentPresenter Margin="{TemplateBinding Padding}"
+                                                Content="{TemplateBinding Content}"
+                                                ContentTemplate="{TemplateBinding ContentTemplate}"
+                                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                RecognizesAccessKey="true"/>
+                                    </Grid>
+                                </xceed:ButtonChrome>
+                            </Grid>
+                        </ToggleButton>
+
+                        <Popup x:Name="PART_Popup"
+                         HorizontalOffset="1"
+                         VerticalOffset="1"
+                         AllowsTransparency="True"
+                         StaysOpen="False"
+                         Placement="Bottom"
+                         Focusable="False"
+                         IsOpen="{Binding IsChecked, ElementName=PART_DropDownButton}"
+                         ToolTip="{x:Static sys:String.Empty}">
+                            <Popup.Resources>
+                                <Style TargetType="ToolTip">
+                                    <Style.Triggers>
+                                        <Trigger Property="Content" Value="{x:Static sys:String.Empty}">
+                                            <Setter Property="Visibility" Value="Collapsed" />
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Popup.Resources>
+                            <Border BorderThickness="1"
+                             Background="{DynamicResource PopupBackground}"
+                             BorderBrush="{DynamicResource WindowBorderActive}"
+                             MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                <ScrollViewer x:Name="DropDownScrollViewer" VerticalScrollBarVisibility="Auto">
+                                    <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding DropDownContent}" />
+                                </ScrollViewer>
+                            </Border>
+                        </Popup>
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter Property="Foreground" Value="{DynamicResource ItemTextDisabled}" />
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource orDegradadoNaranja}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Foreground" Value="{StaticResource GrisMedio}"/>
+                <Setter Property="Background" Value="Transparent"/>
+            </Trigger>
+
+        </Style.Triggers>
+
+    </Style>
 
 
 </ResourceDictionary>

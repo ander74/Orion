@@ -16,6 +16,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Data;
 
 namespace Orion.ViewModels {
@@ -132,6 +133,25 @@ namespace Orion.ViewModels {
 			GrupoSeleccionado = null;
 			GraficoSeleccionado = null;
 			HayCambios = false;
+		}
+
+
+		public bool ColumnaVisible(int numeroColumna) {
+			switch (numeroColumna) {
+				case 0: return App.Global.Configuracion.MostrarGrafNoCalcular;
+				case 5: return App.Global.Configuracion.MostrarGrafTiempoPartido;
+				case 6: return App.Global.Configuracion.MostrarGrafTiempoPartido;
+				case 8: return App.Global.Configuracion.MostrarGrafHoras;
+				case 9: return App.Global.Configuracion.MostrarGrafHoras;
+				case 10: return App.Global.Configuracion.MostrarGrafHoras;
+				case 11: return App.Global.Configuracion.MostrarGrafDietas;
+				case 12: return App.Global.Configuracion.MostrarGrafDietas;
+				case 13: return App.Global.Configuracion.MostrarGrafDietas;
+				case 14: return App.Global.Configuracion.MostrarGrafDietas;
+				case 15: return App.Global.Configuracion.MostrarGrafPlusLimpieza;
+				case 16: return App.Global.Configuracion.MostrarGrafPlusPaqueteria;
+			}
+			return true;
 		}
 
 		#endregion
@@ -268,6 +288,18 @@ namespace Orion.ViewModels {
 			set {
 				if (_btcompararabierto != value) {
 					_btcompararabierto = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private bool _btaccionesabierto;
+		public bool BtAccionesAbierto {
+			get { return _btaccionesabierto; }
+			set {
+				if (_btaccionesabierto != value) {
+					_btaccionesabierto = value;
 					PropiedadCambiada();
 				}
 			}
@@ -456,6 +488,69 @@ namespace Orion.ViewModels {
 				return texto;
 			}
 		}
+
+
+		private int _columnaactual = -1;
+		public int ColumnaActual {
+			get { return _columnaactual; }
+			set {
+				if (_columnaactual != value) {
+					_columnaactual = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private int _filaactual = -1;
+		public int FilaActual {
+			get { return _filaactual; }
+			set {
+				if (_filaactual != value) {
+					_filaactual = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		// MODO DE SELECCIÓN DEL GRID
+
+		private Visibility _visibilidadbotonseleccionfila = Visibility.Collapsed;
+		public Visibility VisibilidadBotonSeleccionFila {
+			get { return _visibilidadbotonseleccionfila; }
+			set {
+				if (_visibilidadbotonseleccionfila != value) {
+					_visibilidadbotonseleccionfila = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private Visibility _visibilidadbotonseleccioncelda = Visibility.Visible;
+		public Visibility VisibilidadBotonSeleccionCelda {
+			get { return _visibilidadbotonseleccioncelda; }
+			set {
+				if (_visibilidadbotonseleccioncelda != value) {
+					_visibilidadbotonseleccioncelda = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private DataGridSelectionUnit _modoseleccion = DataGridSelectionUnit.FullRow;
+		public DataGridSelectionUnit ModoSeleccion {
+			get { return _modoseleccion; }
+			set {
+				if (_modoseleccion != value) {
+					_modoseleccion = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
 		#endregion
 
 

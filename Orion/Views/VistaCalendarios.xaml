@@ -171,30 +171,40 @@
                     </StackPanel>
                 </xceed:DropDownButton.Content>
                 <xceed:DropDownButton.DropDownContent>
-                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue">
-                        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
-                            <StackPanel Orientation="Vertical">
+                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue"
+                            DataContext="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.CalendariosVM}">
+                        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3" Padding="5">
+                            <StackPanel Orientation="Horizontal">
 
                                 <!-- BOTON DETECTAR FALLOS -->
-                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
-                                        TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.CalendariosVM.cmdDetectarFallos}">
+                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64"
+                                        Command="{Binding cmdDetectarFallos}">
                                     <Button.Content>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="Imagenes/ConfigurarTabla.png" Style="{StaticResource EstiloImagenPequeña}" Margin="0,0,10,0"/>
-                                            <TextBlock Text="Detectar Fallos" TextWrapping="Wrap" TextAlignment="Center"/>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="Imagenes/ConfigurarTabla.png" Style="{StaticResource EstiloImagen}"/>
+                                            <TextBlock Text="Detectar Fallos" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
 
                                 <!-- CAMBIAR JD POR DS -->
-                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
-                                        TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.CalendariosVM.cmdCambiarJDPorDS}">
+                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64"
+                                        Command="{Binding cmdCambiarJDPorDS}">
                                     <Button.Content>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="Imagenes/FlechasCruzadas.png" Style="{StaticResource EstiloImagenPequeña}" Margin="0,0,10,0"/>
-                                            <TextBlock Text="JDs Sueltos a DS" TextWrapping="Wrap" TextAlignment="Center"/>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="Imagenes/FlechasCruzadas.png" Style="{StaticResource EstiloImagen}"/>
+                                            <TextBlock Text="JDs Sueltos a DS" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+
+                                <!--BOTON ACCIONES POR LOTES -->
+                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64"
+                                        Command="{Binding cmdAccionesPorLotes}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="Imagenes/Navaja.png" Style="{StaticResource EstiloImagen}"/>
+                                            <TextBlock Text="Acciones Por Lotes" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
@@ -202,20 +212,28 @@
                                 <!--SEPARADOR-->
                                 <TextBlock Height="2" Margin="5,3" Background="LightGray"/>
 
-                                <!--BOTON ACCIONES POR LOTES -->
-                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
-                                        TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.CalendariosVM.cmdAccionesPorLotes}">
+                                <!--BOTON SELECCIÓN FILA -->
+                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64" Visibility="{Binding VisibilidadBotonSeleccionFila}"
+                                        Command="{Binding cmdCambiarModoSeleccion}">
                                     <Button.Content>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="Imagenes/Navaja.png" Style="{StaticResource EstiloImagenPequeña}" Margin="0,0,10,0"/>
-                                            <TextBlock Text="Acciones Por Lotes" TextWrapping="Wrap" TextAlignment="Center"/>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="Imagenes/SeleccionFila.png" Style="{StaticResource EstiloImagen}"/>
+                                            <TextBlock Text="Seleccionar Filas" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
                                         </StackPanel>
                                     </Button.Content>
                                 </Button>
 
+                                <!--BOTON SELECCIÓN CELDA -->
+                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64" Visibility="{Binding VisibilidadBotonSeleccionCelda}"
+                                        Command="{Binding cmdCambiarModoSeleccion}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="Imagenes/SeleccionCelda.png" Style="{StaticResource EstiloImagen}"/>
+                                            <TextBlock Text="Seleccionar Celdas" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
 
-                            
                             </StackPanel>
                         </Border>
                     </Border>
@@ -256,26 +274,27 @@
                     </StackPanel>
                 </xceed:DropDownButton.Content>
                 <xceed:DropDownButton.DropDownContent>
-                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue">
+                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue"
+                            DataContext="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.CalendariosVM}">
                         <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
                             <StackPanel Orientation="Vertical">
 
                                 <!--BOTON CREAR PDF-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
                                         Content="Indefinidos" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.CalendariosVM.cmdAplicarFiltro}"
+                                        Command="{Binding cmdAplicarFiltro}"
                                         CommandParameter="Indefinidos" ToolTip="Muestra sólo los conductores indefinidos."/>
 
                                 <!--BOTON PIJAMAS EN  PDF-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
                                         Content="Eventuales" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.CalendariosVM.cmdAplicarFiltro}"
+                                        Command="{Binding cmdAplicarFiltro}"
                                         CommandParameter="Eventuales" ToolTip="Muestra sólo los conductores eventuales"/>
 
                                 <!--BOTON CREAR PDF-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                         Content="Eventuales Parcial" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.CalendariosVM.cmdAplicarFiltro}"
+                                        Command="{Binding cmdAplicarFiltro}"
                                         CommandParameter="EventualesParcial" ToolTip="Muestra sólo los conductores eventuales que no trabajen todo el mes."/>
 
                             </StackPanel>
@@ -332,29 +351,35 @@
                     </StackPanel>
                 </xceed:DropDownButton.Content>
                 <xceed:DropDownButton.DropDownContent>
-                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue">
+                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue"
+                            DataContext="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM}">
                         <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
                             <StackPanel Orientation="Vertical">
 
                                 <!--BOTON CREAR PDF-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
                                 Content="Tabla Calendarios" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM.cmdCalendariosEnPDF}"/>
+                                Command="{Binding cmdCalendariosEnPDF}"/>
 
                                 <!--BOTON PIJAMAS JUNTOS EN  PDF-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
                                 Content="Hojas Pijama Juntas" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM.cmdPijamasEnPDF}"/>
+                                Command="{Binding cmdPijamasEnPDF}"/>
 
                                 <!--BOTON PIJAMAS POR SEPARADO EN  PDF-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
                                 Content="Hojas Pijama Por Separado" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM.cmdPijamasSeparadosEnPdf}"/>
+                                Command="{Binding cmdPijamasSeparadosEnPdf}"/>
 
-                                <!--BOTON CREAR PDF-->
+                                <!--BOTON FALLOS DE CALENDARIO-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                 Content="Fallos de Calendario" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.CalendariosVM.cmdCalendariosEnPdfConFallos}"/>
+                                Command="{Binding cmdCalendariosEnPdfConFallos}"/>
+
+                                <!--BOTON ESTADÍSTICAS-->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
+                                Content="Estadísticas" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                Command="{Binding cmdPdfEstadisticas}"/>
 
                             </StackPanel>
                         </Border>
@@ -793,10 +818,10 @@
         <DataGrid x:Name="TablaCalendarios" ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
                   IsReadOnly="False" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HeadersVisibility="Column" FontSize="12"
                   MouseDoubleClick="TablaCalendarios_MouseDoubleClick"
-                  AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Single"
-                  SelectionUnit="FullRow"
+                  AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Extended"
+                  SelectionUnit="{Binding CalendariosVM.ModoSeleccion}"
                   Background="Transparent" Style="{StaticResource EstiloGridCalendarios}"
-                  CurrentCellChanged="TablaCalendarios_CurrentCellChanged"
+                  CurrentCellChanged="TablaCalendarios_CurrentCellChanged" LoadingRow="TablaCalendarios_LoadingRow"
                   Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
 
             <DataGrid.Resources>
@@ -1951,7 +1976,14 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Horas" Width="*" Binding="{Binding GraficoTrabajado.Trabajadas, 
-                                    Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                                    Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="ToolTip" Value="{Binding TrabajadasReales, Converter={StaticResource cnvHora}}"/>
+                            <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
                 <DataGridTextColumn Header="Acumulad." Width="*" Binding="{Binding GraficoTrabajado.Acumuladas, 
                                     Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
                 <DataGridTextColumn Header="Nocturnas" Width="*" Binding="{Binding GraficoTrabajado.Nocturnas, 

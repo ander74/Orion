@@ -51,6 +51,19 @@ namespace Orion.Pijama {
 		}
 
 
+        private TimeSpan _trabajadasreales;
+        public TimeSpan TrabajadasReales {
+            get { return _trabajadasreales; }
+            set {
+                if (_trabajadasreales != value)
+                {
+                    _trabajadasreales = value;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
 		private decimal _pluslimpieza;
 		public decimal PlusLimpieza {
 			get { return _pluslimpieza; }

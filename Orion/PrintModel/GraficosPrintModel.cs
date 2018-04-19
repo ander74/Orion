@@ -18,6 +18,7 @@ using Orion.Config;
 using Orion.Convertidores;
 using Orion.DataModels;
 using Orion.Models;
+using Orion.Servicios;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -242,13 +243,13 @@ namespace Orion.PrintModel {
 			// Asignamos el estilo a la tabla.
 			tabla.AddStyle(estiloTabla);
 			
-			// Insertamos los títulos.
-			tabla.AddHeaderCell(new Cell(1, 9).Add(new Paragraph($"{fecha:dd - MMMM - yyyy}".ToUpper())).AddStyle(estiloTitulos)
-														.SetTextAlignment(TextAlignment.LEFT));
-			tabla.AddHeaderCell(new Cell(1, 8).Add(new Paragraph(App.Global.CentroActual.ToString().ToUpper())).AddStyle(estiloTitulos)
-														.SetTextAlignment(TextAlignment.RIGHT));
-			// Añadimos las celdas de encabezado.
-			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Número")).AddStyle(estiloEncabezados).AddStyle(estiloIzq).AddStyle(estiloMed));
+            string textoEncabezado = $"GRÁFICOS\n{fecha:dd - MMMM - yyyy} ({App.Global.CentroActual})".ToUpper();
+            Table tablaEncabezado = InformesServicio.GetTablaEncabezadoSindicato(textoEncabezado);
+
+            tabla.AddHeaderCell(new Cell(1, 17).Add(tablaEncabezado).AddStyle(estiloTitulos));
+
+            // Añadimos las celdas de encabezado.
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Número")).AddStyle(estiloEncabezados).AddStyle(estiloIzq).AddStyle(estiloMed));
 			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Turno")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
 			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Inicio")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
 			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Final")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
@@ -319,6 +320,63 @@ namespace Orion.PrintModel {
 			return tabla;
 		}
 
+
+		private static Table GetGraficoIndividual(Grafico grafico) {
+
+			// Fuente a utilizar en la tabla.
+			PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+			// Estilo de la tabla.
+			iText.Layout.Style estiloTabla = new iText.Layout.Style();
+			estiloTabla.SetTextAlignment(TextAlignment.CENTER)
+					   .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+					   .SetMargins(0, 0, 0, 0)
+					   .SetPaddings(0, 0, 0, 0)
+					   .SetWidth(UnitValue.CreatePercentValue(100))
+					   .SetFont(arial)
+					   .SetFontSize(8);
+			// Estilo de las celdas de encabezado.
+			iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+			estiloEncabezados.SetBackgroundColor(new DeviceRgb(112, 173, 71))
+							 .SetBold()
+							 .SetFontSize(8);
+			// Creamos la tabla
+			float[] ancho = new float[] { 10, 10, 60, 10, 10 };
+			Table tabla = new Table(UnitValue.CreatePercentArray(ancho));
+			// Asignamos el estilo a la tabla.
+			tabla.AddStyle(estiloTabla);
+			// Añadimos las celdas de encabezado.
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Inicio")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Línea")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Descripción")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Final")).AddStyle(estiloEncabezados));
+			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Tiempo")).AddStyle(estiloEncabezados));
+			// Añadimos los datos del gráfico
+			int indice = 1;
+			foreach (var valoracion in grafico.ListaValoraciones) {
+				// Estilo Fondo Alternativo
+				iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
+				if (indice % 2 == 0) estiloFondo.SetBackgroundColor(new DeviceRgb(226, 239, 218));
+				indice++;
+				// Escribimos el grafico.
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(valoracion.Inicio, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(valoracion.Linea == 0 ? "" : valoracion.Linea.ToString())}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{valoracion.Descripcion}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(valoracion.Final, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+				tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(valoracion.Tiempo, null, VerValores.NoCeros, null)}"))
+										.AddStyle(estiloFondo));
+
+			}
+			// Ponemos los bordes de la tabla.
+			tabla.GetHeader().SetBorder(new SolidBorder(1));
+			tabla.SetBorder(new SolidBorder(1));
+			// Devolvemos la tabla.
+			return tabla;
+
+		}
 
 
 		#endregion
@@ -620,6 +678,68 @@ namespace Orion.PrintModel {
 
 			await Task.Run(() => {
 				doc.Add(GetTablaGraficos(lista, fecha));
+			});
+		}
+
+
+		public static async Task CrearGraficosIndividualesEnPdf_7(Document doc, ListCollectionView lista, DateTime fecha) {
+
+			await Task.Run(() => {
+
+				int indice = 1;
+				double num = 1;
+				foreach (object obj in lista) {
+					double valor = num / lista.Count * 100;
+					App.Global.ValorBarraProgreso = valor;
+					num++;
+					Grafico g = obj as Grafico;
+					if (g == null) continue;
+					if (indice > 1) doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                    // Creamos la tabla de título
+                    //Table tablaTitulo = PdfTools.GetTablaTitulo($"{fecha:dd - MMMM - yyyy}".ToUpper(), App.Global.CentroActual.ToString().ToUpper());
+                    string textoTitulo = $"{fecha:dd - MMMM - yyyy}\n{App.Global.CentroActual}".ToUpper();
+                    iText.Layout.Style estiloTitulo = new iText.Layout.Style();
+                    estiloTitulo.SetFontSize(12).SetBold();
+                    estiloTitulo.SetMargins(0, 0, 6, 0);
+                    estiloTitulo.SetPadding(0);
+                    estiloTitulo.SetWidth(UnitValue.CreatePercentValue(100));
+                    estiloTitulo.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+                    Table tablaTitulo = InformesServicio.GetTablaEncabezadoSindicato(textoTitulo, estiloTitulo);
+					// TODO: Creamos la tabla de informacion
+					string textoGrafico = "Gráfico: " + (string)cnvNumGrafico.Convert(g.Numero, null, null, null) + "   Turno: " + g.Turno.ToString("0");
+					string textoValoracion = "Valoración: " + (string)cnvHora.Convert(g.Valoracion, null, VerValores.NoCeros, null);
+					Table tablaInformacion = PdfTools.GetTablaTitulo(textoGrafico, textoValoracion);
+					tablaInformacion.SetWidth(UnitValue.CreatePercentValue(100));
+					tablaInformacion.SetFontSize(9).SetBold();
+					// Creamos la tabla de valoraciones
+					Table tablaValoraciones = GetGraficoIndividual(g);
+					// TODO: Creamos la tabla de valores
+					string textoValores = "";
+					if (g.Desayuno > 0) textoValores += String.Format("Desayuno: {0:0.00}  ", g.Desayuno);
+					if (g.Comida > 0) textoValores += String.Format("Comida: {0:0.00}  ", g.Comida);
+					if (g.Cena > 0) textoValores += String.Format("Cena: {0:0.00}  ", g.Cena);
+					if (g.PlusCena > 0) textoValores += String.Format("Plus Cena: {0:0.00}  ", g.PlusCena);
+					if (g.PlusLimpieza) textoValores += "Limp.  ";
+					if (g.PlusPaqueteria) textoValores += "Paqu.  ";
+					string textoHoras = $"Trab: {(string)cnvHora.Convert(g.Trabajadas, null, null, null)}  " +
+										$"Acum: {(string)cnvHora.Convert(g.Acumuladas, null, null, null)}  " +
+										$"Noct: {(string)cnvHora.Convert(g.Nocturnas, null, null, null)}";
+					Table tablaValores = PdfTools.GetTablaTitulo(textoValores, textoHoras);
+					tablaValores.SetWidth(UnitValue.CreatePercentValue(100));
+					tablaValores.SetFontSize(9).SetBold();
+
+					// Añadimos las tablas al documento
+					doc.Add(tablaTitulo);
+					doc.Add(tablaInformacion);
+					doc.Add(tablaValoraciones);
+					doc.Add(tablaValores);
+					indice++;
+				}
+
+
+				
+				
+
 			});
 		}
 

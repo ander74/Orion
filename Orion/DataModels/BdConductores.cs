@@ -28,7 +28,6 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GET CONDUCTORES
 		*================================================================================*/
-		[Obsolete("Usar el método genérico en lugar de este.")]
 		public static ObservableCollection<Conductor> GetConductores(OleDbConnection conexion = null) {
 
 			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);

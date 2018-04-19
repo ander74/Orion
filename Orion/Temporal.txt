@@ -2,7 +2,9 @@
 PROYECTO ORION
 ==============
 
+    Finalmente, lo colgamos desde VS.
 
-
+	Desde
+    
 
 	

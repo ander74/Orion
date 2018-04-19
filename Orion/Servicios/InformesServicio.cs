@@ -15,11 +15,16 @@ using System.Threading.Tasks;
 using Microsoft.Office.Interop.Excel;
 using Microsoft.Win32;
 using Orion.Config;
-using iTextSharp.text.pdf;
-using iTextSharp;
-using iTextSharp.text;
 using Orion.Models;
 using Orion.PrintModel;
+using iText.Layout.Element;
+using iText.Kernel.Font;
+using iText.Layout.Properties;
+using iText.IO.Image;
+using iText.Kernel.Pdf;
+using iText.Layout.Renderer;
+using iText.Forms.Fields;
+using iText.Forms;
 
 namespace Orion.Servicios {
 
@@ -35,42 +40,45 @@ namespace Orion.Servicios {
 		Calendarios,
 		FallosCalendarios,
 		Reclamacion,
-		Pijama
+		Pijama,
+        EstadisticasCalendarios
 	}
 
 
 	public class InformesServicio: IDisposable {
 
 
-		// ====================================================================================================
-		#region MÉTODOS PÚBLICOS COMUNES
-		// ====================================================================================================
+        // ====================================================================================================
+        #region MÉTODOS PÚBLICOS COMUNES
+        // ====================================================================================================
 
-		/// <summary>
-		/// Muestra un cuadro de diálogo pidiendo la ruta para un archivo y devuelve la ruta.
-		/// </summary>
-		public string GetRutaArchivo(TiposInforme tipo, string nombreArchivo, bool crearInformeDirectamente, string rutaConductor = "") {
+        /// <summary>
+        /// Muestra un cuadro de diálogo pidiendo la ruta para un archivo y devuelve la ruta.
+        /// </summary>
+        public string GetRutaArchivo(TiposInforme tipo, string nombreArchivo, bool crearInformeDirectamente, string rutaConductor = "") {
 			string resultado = "";
 			string rutaparcial = "";
 			string ruta = "";
 			switch (tipo) {
 				case TiposInforme.Graficos:
+					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos\\Tablas");
+					break;
 				case TiposInforme.GraficoIndividual:
-					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos");
+					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos\\Individuales");
 					break;
 				case TiposInforme.Calendarios:
-					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios");
+					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios\\Tablas");
 					break;
 				case TiposInforme.FallosCalendarios:
-					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios");
+					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios\\Fallos");
 					break;
 				case TiposInforme.EstadisticasGraficos:
 				case TiposInforme.EstadisticasGraficosPorCentros:
-					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Estadisticas Graficos");
+					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos\\Estadisticas");
 					break;
 				case TiposInforme.Pijama:
-					rutaparcial = "Hojas Pijama";
-					if (rutaConductor.Trim() != "") rutaparcial = "Conductores\\" + rutaConductor.Trim() + "\\Hojas Pijama";
+					rutaparcial = "Calendarios\\Pijamas";
+					if (rutaConductor.Trim() != "") rutaparcial = "Conductores\\" + rutaConductor.Trim() + "\\Pijamas";
 					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, rutaparcial);
 					break;
 				case TiposInforme.Reclamacion:
@@ -78,8 +86,11 @@ namespace Orion.Servicios {
 					if (rutaConductor.Trim() != "") rutaparcial = "Conductores\\" + rutaConductor.Trim() + "\\Reclamaciones";
 					ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, rutaparcial);
 					break;
-			}
-			if (ruta != "") {
+                case TiposInforme.EstadisticasCalendarios:
+                    ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios\\Estadisticas");
+                    break;
+            }
+            if (ruta != "") {
 				if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
 				if (crearInformeDirectamente) {
 					resultado = Path.Combine(ruta, nombreArchivo);
@@ -157,12 +168,18 @@ namespace Orion.Servicios {
 		/// Cierra la instancia de Excel usada para crear los informes SIN guardar los cambios que haya y SIN avisar de ello.
 		/// </summary>
 		public void Dispose() {
-			if (_excelapp != null) {
-				_excelapp.DisplayAlerts = false;
-				_excelapp.Quit();
-			}
+			Dispose(true);
+			GC.SuppressFinalize(this);
 		}
 
+		protected virtual void Dispose(bool disposing) {
+			if (disposing) {
+				if (_excelapp != null) {
+					_excelapp.DisplayAlerts = false;
+					_excelapp.Quit();
+				}
+			}
+		}
 
 		#endregion
 		// ====================================================================================================
@@ -198,7 +215,35 @@ namespace Orion.Servicios {
 			iText.Layout.Document documento = new iText.Layout.Document(docPDF, tamañoPagina);
 			return documento;
 		}
-		
+
+
+		/// <summary>
+		/// Devuelve un documento PDF nuevo en formato A5 en la ruta que se pasa como argumento.
+		/// </summary>
+		/// <param name="ruta">Ruta completa (nombre de archivo incluido) en la que se guardará el documento PDF.</param>
+		/// <param name="apaisado">Si es true, el documento estará en apaisado. Por defecto es false.</param>
+		/// <returns>El documento PDF listo para trabajar en él.</returns>
+		public iText.Layout.Document GetNuevoPdfA5(string ruta, bool apaisado = false) {
+
+			// Se crea el Writer con la ruta pasada.
+			iText.Kernel.Pdf.PdfWriter writer = new iText.Kernel.Pdf.PdfWriter(ruta);
+			// Se crea el PDF que se guardará usando el writer.
+			iText.Kernel.Pdf.PdfDocument docPDF = new iText.Kernel.Pdf.PdfDocument(writer);
+			// Añadimos los datos de Metadata
+			docPDF.GetDocumentInfo().SetAuthor("Orion - AnderSoft - A.Herrero");
+			docPDF.GetDocumentInfo().SetCreator("Orion 1.0");
+			// Creamos el tamaño de página y le asignamos la rotaciñon si debe ser apaisado.
+			iText.Kernel.Geom.PageSize tamañoPagina;
+			if (apaisado) {
+				tamañoPagina = iText.Kernel.Geom.PageSize.A5.Rotate();
+			} else {
+				tamañoPagina = iText.Kernel.Geom.PageSize.A5;
+			}
+			// Se crea el documento con el que se trabajará.
+			iText.Layout.Document documento = new iText.Layout.Document(docPDF, tamañoPagina);
+			return documento;
+		}
+
 
 		/// <summary>
 		/// Devuelve un PDF que se guardará en la ruta indicada, a partir de la plantilla necesaria para el tipo de informe indicado.
@@ -235,188 +280,6 @@ namespace Orion.Servicios {
 
 
 		// ====================================================================================================
-		#region MÉTODOS PÚBLICOS PDF DE PRUEBA
-		// ====================================================================================================
-
-		/// <summary>
-		/// Este es un método de práctica.
-		/// </summary>
-		public void CrearPDF(HojaPijama pijama) {
-
-			// Así se crea o se abre un documento.
-			FileStream fs = new FileStream("MiPdf.pdf", FileMode.Create); // Creamos el FileStream del documento a crear o abrir.
-			Document doc = new Document(PageSize.A4, 25, 25, 25, 25); // Creamos un documento.
-			PdfWriter pdf = PdfWriter.GetInstance(doc, fs); // Creamos una nueva instancia del escritor de PDF pasando el documento y el FileStream.
-
-			//pdf.SetEncryption(PdfWriter.ENCRYPTION_AES_128, "ander74", "ander74", PdfWriter.AllowPrinting);
-
-			//Document d2 = LlenarDocumentoPDF();
-
-			PdfDocument d = new PdfDocument();
-			
-		
-			
-
-
-			pdf.Close();
-			//fs.Close(); // El filestream no es necesario cerrarlo, ya que se cierra automáticamente al cerrar el documento.
-
-
-
-
-
-		}
-
-
-		public void RellenarPDF() {
-
-			// Creamos el lector del documento.
-			PdfReader reader = new PdfReader("Plantillas\\Reclamacion.pdf");
-			// Creamos el 'modificador' del documento.
-			FileStream fs = new FileStream("MiPdf.pdf", FileMode.Create); // Creamos el FileStream del documento a crear.
-			PdfStamper stamper = new PdfStamper(reader, fs);
-			
-			// Extraemos los campos del documento.
-			AcroFields campos = stamper.AcroFields;
-
-			// Asignamos los campos
-			campos.SetField("Centro", "Bilbao");
-			campos.SetField("Trabajador", "J.A. Cisneros (450)");
-			campos.SetField("FechaCabecera", "MARZO - 2018");
-			campos.SetField("NumeroReclamacion", "Nº Reclamación: 20180328450");
-			campos.SetField("FechaFirma", "28 - 03 - 2018");
-			campos.SetField("Notas", "Estas son notas de ejemplo.\n\nAquí va otra línea.");
-
-
-			// Hacemos que ya no se puedan rellenar los campos.
-			//stamper.FormFlattening = true;
-
-			// Cerramos los elementos abiertos
-			stamper.Close();
-			fs.Close();
-			reader.Close();
-
-
-
-
-		}
-
-
-		public Document LlenarDocumentoPDF() {
-
-
-			Document doc = new Document(PageSize.A4, 25, 25, 25, 25); // Creamos un documento.
-																	  // Para trabajar con el documento, se abre y se trabaja con el mismo y no el writer.
-			doc.Open();
-			// Se pueden añadir metadatos.
-			doc.AddAuthor("A. Herrero");
-			doc.AddTitle("Mi primer documento PDF");
-			doc.AddSubject("Este es un documento de prueba.");
-
-			PdfPTable inicial = new PdfPTable(new float[] { 60, 5, 40 });
-			inicial.WidthPercentage = 100;
-
-			// Creamos una tabla para ver si podemos reutilizar las celdas.
-			PdfPTable tabla = new PdfPTable(3);
-			tabla.WidthPercentage = 60;
-			tabla.HorizontalAlignment = Element.ALIGN_LEFT;
-			tabla.SetWidths(new int[] { 1, 1, 3 });
-			tabla.HeaderRows = 1; // Determinamos las filas que son encabezado, para que se repitan en las páginas nuevas.
-
-			// Establecemos la fuente de los encabezados y las celdas.
-			iTextSharp.text.Font fuenteEncabezados = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 10, iTextSharp.text.Font.NORMAL, BaseColor.BLUE);
-			iTextSharp.text.Font fuenteCeldas = FontFactory.GetFont(FontFactory.HELVETICA, 10, iTextSharp.text.Font.NORMAL);
-
-			// Creamos las tres celdas de la fila
-			PdfPCell celdaEncabezado = new PdfPCell();
-			celdaEncabezado.Colspan = 1;
-			celdaEncabezado.Padding = 5;
-			celdaEncabezado.BackgroundColor = BaseColor.ORANGE;
-			celdaEncabezado.HorizontalAlignment = Element.ALIGN_CENTER;
-			celdaEncabezado.VerticalAlignment = Element.ALIGN_MIDDLE;
-
-			PdfPCell celdaNormal = new PdfPCell();
-			celdaNormal.Colspan = 1;
-			celdaNormal.Padding = 5;
-			celdaNormal.BackgroundColor = BaseColor.WHITE;
-			celdaNormal.HorizontalAlignment = Element.ALIGN_CENTER;
-			celdaNormal.VerticalAlignment = Element.ALIGN_MIDDLE;
-
-			celdaEncabezado.Phrase = new Phrase("ID", fuenteEncabezados);
-			tabla.AddCell(celdaEncabezado);
-			celdaEncabezado.Phrase = new Phrase("NOMBRE", fuenteEncabezados);
-			tabla.AddCell(celdaEncabezado);
-			celdaEncabezado.Phrase = new Phrase("APELLIDOS", fuenteEncabezados);
-			tabla.AddCell(celdaEncabezado);
-
-
-			celdaNormal.Phrase = new Phrase("5060", fuenteCeldas);
-			tabla.AddCell(celdaNormal);
-			celdaNormal.Phrase = new Phrase("Andrés", fuenteCeldas);
-			tabla.AddCell(celdaNormal);
-			celdaNormal.Phrase = new Phrase("Herrero Módenes", fuenteCeldas);
-			tabla.AddCell(celdaNormal);
-
-			celdaNormal.Phrase = new Phrase("4935", fuenteCeldas);
-			//celdaNormal.Rowspan = 3;
-			tabla.AddCell(celdaNormal);
-			celdaNormal.Phrase = new Phrase("Joseba", fuenteCeldas);
-			celdaNormal.Rowspan = 1;
-			tabla.AddCell(celdaNormal);
-			celdaNormal.Phrase = new Phrase("Moyano Reyero.\n\nAsignamos más texto para ver si se hace wrapping automáticamente y podemos trabajar con los fallos de calendario y ahorrar al máximo el uso de excel.", fuenteCeldas);
-			celdaNormal.HorizontalAlignment = Element.ALIGN_JUSTIFIED;
-			tabla.AddCell(celdaNormal);
-			celdaNormal.HorizontalAlignment = Element.ALIGN_CENTER;
-
-			celdaNormal.Phrase = new Phrase("5060", fuenteCeldas);
-			tabla.AddCell(celdaNormal);
-			celdaNormal.Phrase = new Phrase("Andrés", fuenteCeldas);
-			celdaNormal.Colspan = 2;
-			//tabla.AddCell(celdaNormal);
-			celdaNormal.Phrase = new Phrase("Herrero Módenes", fuenteCeldas);
-			tabla.AddCell(celdaNormal);
-
-			//for (int m = 1; m < 60; m++) {
-			//	celdaNormal.Phrase = new Phrase("5069", fuenteCeldas);
-			//	tabla.AddCell(celdaNormal);
-			//	celdaNormal.Phrase = new Phrase("Txus", fuenteCeldas);
-			//	tabla.AddCell(celdaNormal);
-			//	celdaNormal.Phrase = new Phrase("Alberto González", fuenteCeldas);
-			//	tabla.AddCell(celdaNormal);
-			//}
-
-			PdfPCell c1 = new PdfPCell(tabla);
-			c1.BorderWidth = 0;
-
-
-			// Se crea un párrafo.
-			Paragraph parrafo = new Paragraph("Hola Mundo\n\nEste es el primer PDF que creo con clave.\n\n");
-			// Añadimos el párrafo al documento.
-			PdfPCell c2 = new PdfPCell(parrafo);
-			c2.BorderWidth = 0;
-
-			inicial.AddCell(c1);
-			inicial.AddCell(new PdfPCell() { BorderWidth = 0 });
-			inicial.AddCell(c2);
-
-			doc.Add(inicial);
-
-
-			// Cerramos el documento, el escritor y el FileStream (en este orden).
-			doc.Close();
-
-			return doc;
-
-		}
-
-
-
-
-		#endregion
-		// ====================================================================================================
-
-
-		// ====================================================================================================
 		#region MÉTODOS PÚBLICOS RECLAMACIONES
 		// ====================================================================================================
 
@@ -424,13 +287,13 @@ namespace Orion.Servicios {
 
 			// Creamos el lector del documento.
 			string rutaPlantilla = Utils.CombinarCarpetas(App.RutaInicial, $"/Plantillas/Reclamacion.pdf");
-			PdfReader reader = new PdfReader(rutaPlantilla);
+            iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader(rutaPlantilla);
 			// Creamos el 'modificador' del documento.
 			FileStream fs = new FileStream(ruta, FileMode.Create);
-			PdfStamper stamper = new PdfStamper(reader, fs);
+			iTextSharp.text.pdf.PdfStamper stamper = new iTextSharp.text.pdf.PdfStamper(reader, fs);
 
-			// Extraemos los campos del documento.
-			AcroFields campos = stamper.AcroFields;
+            // Extraemos los campos del documento.
+            iTextSharp.text.pdf.AcroFields campos = stamper.AcroFields;
 
 			// Asignamos los campos
 			campos.SetField("Centro", centro.ToString().ToUpper());
@@ -438,7 +301,7 @@ namespace Orion.Servicios {
 			campos.SetField("FechaCabecera", $"{fecha:MMMM - yyyy}".ToUpper());
 			campos.SetField("NumeroReclamacion", $"Nº Reclamación: {fecha:yyyyMM}{conductor.Id:000}/01");
 			campos.SetField("FechaFirma", $"{DateTime.Today:dd - MM - yyyy}");
-
+            
 			// Cerramos los elementos abiertos
 			stamper.Close();
 			fs.Close();
@@ -449,16 +312,104 @@ namespace Orion.Servicios {
 
 
 
-		#endregion
-		// ====================================================================================================
+        #endregion
+        // ====================================================================================================
 
 
-		// ====================================================================================================
-		#region PROPIEDADES EXCEL
-		// ====================================================================================================
+        // ====================================================================================================
+        #region MÉTODOS ESTÁTICOS PDF
+        // ====================================================================================================
+
+        /// <summary>
+        /// Devuelve una imagen con el logo del sindicato.
+        /// </summary>
+        public static Image GetLogoSindicato() {
+            Image imagen = null;
+            string ruta = App.Global.Configuracion.RutaLogoSindicato;
+            if (File.Exists(ruta)) {
+                string x = Path.GetExtension(ruta).ToLower();
+                switch (Path.GetExtension(ruta).ToLower()) {
+                    case ".jpg":
+                        imagen = new Image(ImageDataFactory.CreateJpeg(new Uri(ruta)));
+                        break;
+                    case ".png":
+                        imagen = new Image(ImageDataFactory.CreatePng(new Uri(ruta)));
+                        break;
+                }
+            }
+            return imagen;
+        }
+
+        /// <summary>
+        /// Devuelve una imagen con la marca de agua.
+        /// </summary>
+        public static Image GetMarcaDeAgua()
+        {
+            Image imagen = null;
+            string ruta = App.Global.Configuracion.RutaMarcaAgua;
+            if (File.Exists(ruta)) {
+                string x = Path.GetExtension(ruta).ToLower();
+                switch (Path.GetExtension(ruta).ToLower()) {
+                    case ".jpg":
+                        imagen = new Image(ImageDataFactory.CreateJpeg(new Uri(ruta)));
+                        break;
+                    case ".png":
+                        imagen = new Image(ImageDataFactory.CreatePng(new Uri(ruta)));
+                        break;
+                }
+            }
+            return imagen;
+        }
 
 
-		private Application _excelapp;
+
+        /// <summary>
+        /// Devuelve una Tabla (iText7) con un texto a la izquierda y el logo del sindicato a la derecha
+        /// </summary>
+        public static Table GetTablaEncabezadoSindicato(string texto, iText.Layout.Style estilo = null)
+        {
+
+            // Si el estilo no se ha definido, definimos un estilo estandar.
+            if (estilo == null) {
+                estilo = new iText.Layout.Style();
+                estilo.SetFontSize(14);
+                estilo.SetMargin(0);
+                estilo.SetPadding(0);
+                estilo.SetWidth(UnitValue.CreatePercentValue(100));
+                estilo.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+                estilo.SetVerticalAlignment(VerticalAlignment.MIDDLE);
+            }
+            // Creamos la tabla y le aplicamos el estilo.
+            Table tabla = new Table(UnitValue.CreatePercentArray(new float[] { 70, 30 }));
+            tabla.AddStyle(estilo);
+            // Creamos el párrafo de la izquierda y lo añadimos a la tabla
+            Paragraph parrafo = new Paragraph(texto).SetFixedLeading(16);
+            tabla.AddCell(new Cell().Add(parrafo)
+                                    .SetTextAlignment(TextAlignment.LEFT)
+                                    .SetBorder(iText.Layout.Borders.Border.NO_BORDER));
+            // Añadimos el logo del sindicato a la derecha.
+            Image imagen = GetLogoSindicato();
+            if (imagen != null) {
+                imagen.SetHeight(35);
+                imagen.SetHorizontalAlignment(HorizontalAlignment.RIGHT);
+                tabla.AddCell(new Cell().Add(imagen)
+                                        .SetTextAlignment(TextAlignment.RIGHT)
+                                        .SetBorder(iText.Layout.Borders.Border.NO_BORDER));
+            }
+            // Devolvemos la tabla.
+            return tabla;
+        }
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region PROPIEDADES EXCEL
+        // ====================================================================================================
+
+
+        private Application _excelapp;
 		public Application ExcelApp {
 			get {
 				if (_excelapp == null) _excelapp = new Application { Visible = false };
@@ -468,11 +419,20 @@ namespace Orion.Servicios {
 
 
 
-		#endregion
-		// ====================================================================================================
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region CLASES DE APOYO PARA PDF
+        // ====================================================================================================
 
 
 
+        #endregion
+        // ====================================================================================================
 
-	}
+
+
+    }
 }

@@ -196,41 +196,6 @@ namespace Orion.DataModels {
 
 
 		/*================================================================================
-		 * GET GRÁFICOS GRUPO ANTERIOR
-		 *================================================================================*/
-		 [Obsolete("Esté método no se usa en ningun sitio.")]
-		public static ObservableCollection<Grafico> getGraficosGrupoAnterior(DateTime fecha) {
-
-			// Creamos la lista y el comando que extrae los gráficos.
-			ObservableCollection<Grafico> lista = new ObservableCollection<Grafico>();
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-				string comandoSQL = "SELECT * FROM Graficos WHERE IdGrupo = " +
-								"(SELECT Id FROM GruposGraficos WHERE Validez = " +
-								"(SELECT Max(Validez) FROM GruposGraficos WHERE Validez<?))";
-				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-				comando.Parameters.AddWithValue("validez", fecha.ToString("yyyy-MM-dd"));
-				OleDbDataReader lector = null;
-				try {
-					conexion.Open();
-					lector = comando.ExecuteReader();
-
-					while (lector.Read()) {
-						Grafico grafico = new Grafico(lector);
-						lista.Add(grafico);
-						grafico.Nuevo = false;
-						grafico.Modificado = false;
-					}
-					lector.Close();
-				} catch (Exception ex) {
-					Utils.VerError("BdGraficos.getGraficosGrupoAnterior", ex);
-				}
-			}
-			return lista;
-		}
-
-
-		/*================================================================================
 		 * GET GRÁFICOS GRUPO POR FECHA
 		 *================================================================================*/
 		public static ObservableCollection<Grafico> getGraficosGrupoPorFecha(DateTime fecha, OleDbConnection conexion = null) {

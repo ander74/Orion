@@ -249,6 +249,7 @@ namespace Orion.ViewModels {
 				grafico.Recalcular();
 				HayCambios = true;
 			}
+			BtAccionesAbierto = false;
 		}
 		#endregion
 
@@ -478,12 +479,13 @@ namespace Orion.ViewModels {
 		#region PEGAR GRAFICOS
 		public ICommand cmdPegarGraficos {
 			get {
-				if (_cmdpegargraficos == null) _cmdpegargraficos = new RelayCommand(p => PegarGraficos(p), p => PuedePegarGraficos(p));
+				if (_cmdpegargraficos == null) _cmdpegargraficos = new RelayCommand(p => PegarGraficos(), p => PuedePegarGraficos());
 				return _cmdpegargraficos;
 			}
 		}
 
-		private bool PuedePegarGraficos(object parametro) {
+		[Obsolete("Este método está optimizado en el siguiente.")]
+		private bool PuedePegarGraficos2(object parametro) {
 			DataGrid tabla = parametro as DataGrid;
 			if (tabla == null) return false;
 			bool resultado = true;
@@ -494,7 +496,14 @@ namespace Orion.ViewModels {
 			return resultado && tabla.CurrentCell != null & Clipboard.ContainsText();
 		}
 
-		private void PegarGraficos(object parametro) {
+		// NUEVO MÉTODO QUE NO NECESITA EVALUAR
+		private bool PuedePegarGraficos() {
+			if (ColumnaActual == -1) return false;
+			return true;
+		}
+
+		[Obsolete("Este método está optimizado en el siguiente.")]
+		private void PegarGraficos2(object parametro) {
 			// Convertimos el parámetro pasado.
 			DataGrid grid = parametro as DataGrid;
 			if (grid == null) return;
@@ -532,6 +541,7 @@ namespace Orion.ViewModels {
 					}
 					decimal d;
 					int i;
+					TimeSpan? h;
 					switch (columna) {
 						case 0: // No Calcular.
 							grafico.NoCalcular = false;
@@ -558,16 +568,20 @@ namespace Orion.ViewModels {
 							grafico.FinalPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
 							break;
 						case 7: // Valoracion.
-							grafico.Valoracion = (TimeSpan)cnvHora.ConvertBack(texto, null, null, null);
+							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							grafico.Valoracion = h != null ? h.Value : TimeSpan.Zero;
 							break;
 						case 8: // Trabajadas.
-							grafico.Trabajadas = (TimeSpan)cnvHora.ConvertBack(texto, null, null, null);
+							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							grafico.Trabajadas = h != null ? h.Value : TimeSpan.Zero;
 							break;
 						case 9: // Acumuladas.
-							grafico.Acumuladas = (TimeSpan)cnvHora.ConvertBack(texto, null, null, null);
+							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							grafico.Acumuladas = h != null ? h.Value : TimeSpan.Zero;
 							break;
 						case 10: // Nocturnas.
-							grafico.Nocturnas = (TimeSpan)cnvHora.ConvertBack(texto, null, null, null);
+							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							grafico.Nocturnas = h != null ? h.Value : TimeSpan.Zero;
 							break;
 						case 11: // Desayuno.
 							grafico.Desayuno = decimal.TryParse(texto, out d) ? d : 0;
@@ -605,6 +619,121 @@ namespace Orion.ViewModels {
 			}
 			//Propiedades.DatosModificados = true;
 		}
+
+		// NUEVO MÉTODO PEGAR CON VIEWMODEL Y SIN DEPENDENCIA DEL GRID
+		private void PegarGraficos() {
+			// Parseamos los datos del portapapeles y definimos las variables.
+			List<string[]> portapapeles = Utils.parseClipboard();
+			bool esnuevo;
+			// Si no hay datos, salimos.
+			if (portapapeles == null) return;
+			// Establecemos la fila donde se empieza a pegar.
+			int filagrid = FilaActual;
+			if (filagrid == -1) filagrid = VistaGraficos.Count - 1;
+			// Creamos un objeto ConvertidorHora
+			Convertidores.ConvertidorHora cnvHora = new Convertidores.ConvertidorHora();
+			// Iteramos por las filas del portapapeles.
+			foreach (string[] fila in portapapeles) {
+				// Creamos un objeto Grafico o reutilizamos el existente.
+				Grafico grafico;
+				if (filagrid < VistaGraficos.Count - 1) { 
+					grafico = VistaGraficos.GetItemAt(filagrid) as Grafico;
+					esnuevo = false;
+				} else {
+					grafico = new Grafico();
+					esnuevo = true;
+				}
+				// Establecemos la columna inicial en la que se va a pegar.
+				int columna = ColumnaActual;
+				// Iteramos por cada campo de la fila del portapapeles
+				foreach (string texto in fila) {
+					if (columna >= 17) continue;
+					while (!ColumnaVisible(columna)) {
+						columna++;
+					}
+					// Evaluamos la columna actual y parseamos el valor del portapapeles a su valor.
+					decimal d;
+					int i;
+					TimeSpan? h;
+					switch (columna) {
+						case 0: // No Calcular.
+							grafico.NoCalcular = false;
+							if (int.TryParse(texto, out i)) {
+								grafico.NoCalcular = (i != 0);
+							} else if (texto.ToLower() != "false") grafico.NoCalcular = true;
+							break;
+						case 1: // Numero.
+							grafico.Numero = Int32.TryParse(texto, out i) ? i : 0;
+							break;
+						case 2: // Turno.
+							grafico.Turno = int.TryParse(texto, out i) ? i : 1;
+							break;
+						case 3: // Inicio.
+							grafico.Inicio = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							break;
+						case 4: // Final.
+							grafico.Final = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							break;
+						case 5: // InicioPartido.
+							grafico.InicioPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							break;
+						case 6: // FinalPartido.
+							grafico.FinalPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							break;
+						case 7: // Valoracion.
+							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							grafico.Valoracion = h != null ? h.Value : TimeSpan.Zero;
+							break;
+						case 8: // Trabajadas.
+							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							grafico.Trabajadas = h != null ? h.Value : TimeSpan.Zero;
+							break;
+						case 9: // Acumuladas.
+							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							grafico.Acumuladas = h != null ? h.Value : TimeSpan.Zero;
+							break;
+						case 10: // Nocturnas.
+							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+							grafico.Nocturnas = h != null ? h.Value : TimeSpan.Zero;
+							break;
+						case 11: // Desayuno.
+							grafico.Desayuno = decimal.TryParse(texto, out d) ? d : 0;
+							break;
+						case 12: // Comida.
+							grafico.Comida = decimal.TryParse(texto, out d) ? d : 0;
+							break;
+						case 13: // Cena.
+							grafico.Cena = decimal.TryParse(texto, out d) ? d : 0;
+							break;
+						case 14: // PlusCena.
+							grafico.PlusCena = decimal.TryParse(texto, out d) ? d : 0;
+							break;
+						case 15: // PlusLimpieza.
+							grafico.PlusLimpieza = false;
+							if (int.TryParse(texto, out i)) {
+								grafico.PlusLimpieza = (i != 0);
+							} else if (texto.ToLower() != "false") grafico.PlusLimpieza = true;
+							break;
+						case 16: // PlusPaqueteria.
+							grafico.PlusPaqueteria = false;
+							if (int.TryParse(texto, out i)) {
+								grafico.PlusPaqueteria = (i != 0);
+							} else if (texto.ToLower() != "false") grafico.PlusPaqueteria = true;
+							break;
+					}
+					columna++;
+				}
+				// Si el elemento es nuevo, se añade a la vista.
+				if (esnuevo) {
+					VistaGraficos.AddNewItem(grafico);
+				}
+				filagrid++;
+				HayCambios = true;
+				PropiedadCambiada(nameof(Detalle));
+			}
+		}
+
+
 
 		#endregion
 
@@ -1076,7 +1205,7 @@ namespace Orion.ViewModels {
 		}
 
 
-		private async void GraficosIndividualesEnPDF() {
+		private async void GraficosIndividualesEnPDF2() {
 			// Creamos el libro a usar.
 			Workbook libro = null;
 			try {
@@ -1098,6 +1227,34 @@ namespace Orion.ViewModels {
 			}
 
 		}
+
+
+		private async void GraficosIndividualesEnPDF() {
+
+			try {
+				// Activamos la barra de progreso.
+				App.Global.IniciarProgreso("Creando PDF...");
+				// Definimos el nombre del archivo a guardar.
+				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1} (Individuales).pdf", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
+				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				string ruta = Informes.GetRutaArchivo(TiposInforme.GraficoIndividual, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
+				if (ruta != "") {
+					iText.Layout.Document doc = Informes.GetNuevoPdfA5(ruta);
+					doc.GetPdfDocument().GetDocumentInfo().SetTitle("Gráficos Individuales");
+					doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{GrupoSeleccionado.Validez.ToString("dd-MMMM-yyyy").ToUpper()}");
+					doc.SetMargins(25, 25, 25, 25);
+					await GraficosPrintModel.CrearGraficosIndividualesEnPdf_7(doc, VistaGraficos, GrupoSeleccionado.Validez);
+					doc.Close();
+					if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+				}
+			} catch (Exception ex) {
+				Mensajes.VerError("GraficosCommands.GraficosEnPDF", ex);
+			} finally {
+				App.Global.FinalizarProgreso();
+			}
+
+		}
+
 		#endregion
 
 
@@ -1280,6 +1437,34 @@ namespace Orion.ViewModels {
 		}
 		#endregion
 
+
+		#region CAMBIAR MODO SELECCION
+
+		// Comando
+		private ICommand _cmdcambiarmodoseleccion;
+		public ICommand cmdCambiarModoSeleccion {
+			get {
+				if (_cmdcambiarmodoseleccion == null) _cmdcambiarmodoseleccion = new RelayCommand(p => CambiarModoSeleccion());
+				return _cmdcambiarmodoseleccion;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void CambiarModoSeleccion() {
+
+			if (VisibilidadBotonSeleccionFila == Visibility.Visible) {
+				VisibilidadBotonSeleccionFila = Visibility.Collapsed;
+				VisibilidadBotonSeleccionCelda = Visibility.Visible;
+				ModoSeleccion = DataGridSelectionUnit.FullRow;
+			} else {
+				VisibilidadBotonSeleccionCelda = Visibility.Collapsed;
+				VisibilidadBotonSeleccionFila = Visibility.Visible;
+				ModoSeleccion = DataGridSelectionUnit.Cell;
+			}
+
+		}
+		#endregion
 
 
 

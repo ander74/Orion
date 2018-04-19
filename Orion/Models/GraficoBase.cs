@@ -58,6 +58,7 @@ namespace Orion.Models {
 		private void CalcularServicio() {
 			if (NoCalcular) return;
 			TimeSpan trabajadas = Calculos.Horas.Trabajadas(_inicio.Value, _final.Value, _iniciopartido, _finalpartido);
+            TimeSpan partido = Calculos.Horas.TiempoPartido(_iniciopartido, _finalpartido);
 			TimeSpan acumuladas = Calculos.Horas.Acumuladas(trabajadas);
 			TimeSpan nocturnas = Calculos.Horas.Nocturnas(_inicio.Value, _final.Value, _turno);
 			decimal desayuno = Calculos.Dietas.Desayuno(_inicio.Value, _turno);
@@ -65,8 +66,9 @@ namespace Orion.Models {
 			decimal cena = Calculos.Dietas.Cena(_inicio.Value, _final.Value, _turno);
 			decimal pluscena = Calculos.Dietas.PlusCena(_inicio.Value, _final.Value, _turno);
 			bool notificar = false;
-			if (_trabajadas != trabajadas) { _trabajadas = trabajadas; notificar = true; }
-			if (_acumuladas != acumuladas) { _acumuladas = acumuladas; notificar = true; }
+			if (_trabajadas != trabajadas) { _trabajadas = trabajadas; _trabajadasreales = trabajadas; notificar = true; }
+            if (_tiempopartido != partido) { _tiempopartido = partido; notificar = true; }
+            if (_acumuladas != acumuladas) { _acumuladas = acumuladas; notificar = true; }
 			if (_nocturnas != nocturnas) { _nocturnas = nocturnas; notificar = true; }
 			if (_desayuno != desayuno) { _desayuno = desayuno; notificar = true; }
 			if (_comida != comida) { _comida = comida; notificar = true; }
@@ -273,6 +275,18 @@ namespace Orion.Models {
 		}
 
 
+        private TimeSpan _tiempopartido;
+        public TimeSpan TiempoPartido {
+            get { return _tiempopartido; }
+            set {
+                if (_tiempopartido != value) {
+                    _tiempopartido = value;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
 		private TimeSpan _valoracion;
 		public TimeSpan Valoracion {
 			get { return _valoracion; }
@@ -297,6 +311,18 @@ namespace Orion.Models {
 				}
 			}
 		}
+
+
+        private TimeSpan _trabajadasreales;
+        public TimeSpan TrabajadasReales {
+            get { return _trabajadasreales; }
+            set {
+                if (_trabajadasreales != value) {
+                    _trabajadasreales = value;
+                    PropiedadCambiada();
+                }
+            }
+        }
 
 
 		private TimeSpan _acumuladas;

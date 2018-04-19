@@ -472,7 +472,44 @@
                         </StackPanel>
                     </Border>
                 </StackPanel>
-                
+
+                <!-- LOGOS Y MARCAS DE AGUA -->
+                <StackPanel Margin="6">
+                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="LOGOS Y MARCAS DE AGUA" FontSize="16" FontWeight="Bold"
+                       BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoRojo}"/>
+
+                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
+
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+
+                            <!-- RUTA LOGO SINDICATO -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
+                                <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Logo Sindicato: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxCarpetas}" 
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown" 
+                                         Text="{Binding Configuracion.RutaLogoSindicato, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
+                            Content="..." Command="{Binding OpcionesVM.cmdRutaLogos}" CommandParameter="Logo"/>
+                            </StackPanel>
+
+                            <!-- RUTA MARCA DE AGUA -->
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
+                                <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Marca de Agua: "/>
+                                <TextBox Style="{StaticResource EstiloTextBoxCarpetas}" 
+                                         PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                         KeyDown="TextBox_KeyDown" 
+                                         Text="{Binding Configuracion.RutaMarcaAgua, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
+                            Content="..." Command="{Binding OpcionesVM.cmdRutaLogos}" CommandParameter="MarcaAgua"/>
+                            </StackPanel>
+
+
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
             </StackPanel>
             
             

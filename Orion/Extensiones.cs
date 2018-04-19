@@ -52,6 +52,20 @@ namespace Orion {
 			return horas.ToString("00") + ":" + hora.Minutes.ToString("00");
 		}
 
+
+        /// <summary>
+        /// Devuelve una hora en formato texto (hh:mm) admitiendo valores negativos.
+        /// </summary>
+        /// <param name="hora">Hora que se desea devolver.</param>
+        /// <returns>Hora en formato hh:mm</returns>
+        public static string ToTextoNegativo(this TimeSpan hora) {
+            int horas = (int)Math.Truncate(hora.TotalHours);
+            int minutos = hora.Minutes;
+            if (minutos < 0) minutos *= -1;
+            return horas.ToString("00") + ":" + minutos.ToString("00");
+        }
+
+
 		/// <summary>
 		/// Devuelve el valor decimal de las horas de un timespan redondeado a cuatro decimales.
 		/// </summary>
@@ -60,6 +74,7 @@ namespace Orion {
 		public static decimal ToDecimal(this TimeSpan hora) {
 			return Decimal.Round((decimal)(hora.TotalHours), 4);
 		}
+
 
 		/// <summary>
 		/// Devuelve la hora en formato texto (hh:mm).
@@ -80,6 +95,7 @@ namespace Orion {
 			}
 			return horas.ToString("00") + ":" + hora.Value.Minutes.ToString("00");
 		}
+
 
 		/// <summary>
 		/// Devuelve el valor decimal de las horas de un timespan redondeado a cuatro decimales.
@@ -241,9 +257,6 @@ namespace Orion {
 			if (lector == null || lector[campo] is DBNull) return 0;
 			return (decimal)lector[campo];
 		}
-
-
-
 
 
 		#endregion

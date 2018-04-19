@@ -139,27 +139,5 @@ namespace Orion.DataModels {
 		}
 
 
-		/*================================================================================
-		 * BORRAR LÍNEA POR ID
-		 *================================================================================*/
-		[Obsolete("Esté método no se usa en ningun sitio.")]
-		public static void BorrarLineaPorId(long idlinea) {
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas)) {
-
-				string SQLBorrar = "DELETE FROM Lineas WHERE Id=?";
-
-				OleDbCommand comando = new OleDbCommand(SQLBorrar, conexion);
-				comando.Parameters.AddWithValue("id", idlinea);
-
-				try {
-					conexion.Open();
-					comando.ExecuteNonQuery();
-				} catch (Exception ex) {
-					Utils.VerError("BdLineas.BorrarLineaPorId", ex);
-				}
-			}
-		}
-
 	}
 }

@@ -58,20 +58,23 @@ namespace Orion.Views {
 
 		// AL CAMBIAR LA CELDA ACTUAL DE LA TABLA CALENDARIOS
 		private void TablaCalendarios_CurrentCellChanged(object sender, EventArgs e) {
-			//if (TablaCalendarios?.CurrentCell == null) return;
+			if (TablaCalendarios?.CurrentCell.Column == null) return;
 			CalendariosViewModel VM = ((GlobalVM)this.DataContext).CalendariosVM;
-			int columna = -1;
-			if (TablaCalendarios?.CurrentCell.Column != null) columna = TablaCalendarios.CurrentCell.Column.DisplayIndex;
-			if (columna >= 0) VM.CalendarioSeleccionado = TablaCalendarios.CurrentCell.Item as Calendario;
-			if (columna <= 0) {
-				TablaCalendarios.SelectionMode = DataGridSelectionMode.Extended;
-				if (columna == 0) VM.DiaCalendarioSeleccionado = null;
+			VM.ColumnaActual = TablaCalendarios.CurrentCell.Column.DisplayIndex;
+			VM.FilaActual = TablaCalendarios.Items.IndexOf(TablaCalendarios.CurrentCell.Item);
+			if (VM.ColumnaActual >= 0) VM.CalendarioSeleccionado = TablaCalendarios.CurrentCell.Item as Calendario;
+			if (VM.ColumnaActual <= 0) {
+				if (VM.ColumnaActual == 0) VM.DiaCalendarioSeleccionado = null;
 			} else {
-				TablaCalendarios.SelectionMode = DataGridSelectionMode.Single;
-				VM.DiaCalendarioSeleccionado = VM.CalendarioSeleccionado?.ListaDias[columna - 1];
+				VM.DiaCalendarioSeleccionado = VM.CalendarioSeleccionado?.ListaDias[VM.ColumnaActual - 1];
 			}
 			
 		}
 
+		private void TablaCalendarios_LoadingRow(object sender, DataGridRowEventArgs e) {
+			if (TablaCalendarios?.CurrentCell.Column == null) return;
+			((GlobalVM)this.DataContext).CalendariosVM.ColumnaActual = TablaCalendarios.CurrentCell.Column.DisplayIndex;
+			((GlobalVM)this.DataContext).CalendariosVM.FilaActual = TablaCalendarios.Items.IndexOf(TablaCalendarios.CurrentCell.Item);
+		}
 	}
 }

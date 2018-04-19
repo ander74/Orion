@@ -5,33 +5,32 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using iText.IO.Image;
+using iText.Forms;
+using iText.Forms.Fields;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
-using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using iText.Layout.Renderer;
 using Microsoft.Office.Interop.Excel;
 using Orion.Config;
 using Orion.Convertidores;
 using Orion.Models;
-using Orion.Properties;
-using Orion.Views;
+using Orion.Servicios;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace Orion.PrintModel {
+namespace Orion.PrintModel
+{
 
-	public static class CalendarioPrintModel {
+    public static class CalendarioPrintModel {
 
 
 		// ====================================================================================================
@@ -39,8 +38,10 @@ namespace Orion.PrintModel {
 		// ====================================================================================================
 		private static ConvertidorNumeroGrafico cnvNumGrafico = new ConvertidorNumeroGrafico();
 		private static ConvertidorHora cnvHora = new ConvertidorHora();
-		private static ConvertidorSuperHoraMixta cnvSuperHoraMixta = new ConvertidorSuperHoraMixta();
-		private static ConvertidorDecimal cnvDecimal = new ConvertidorDecimal();
+		private static ConvertidorSuperHora cnvSuperHora = new ConvertidorSuperHora();
+        private static ConvertidorSuperHoraMixta cnvSuperHoraMixta = new ConvertidorSuperHoraMixta();
+        private static ConvertidorDecimal cnvDecimal = new ConvertidorDecimal();
+        private static ConvertidorDecimalEuro cnvDecimalEuro = new ConvertidorDecimalEuro();
 		private static ConvertidorDiasF6 cnvDiasF6 = new ConvertidorDiasF6();
 		private static ConvertidorColorDia cnvColorDia = new ConvertidorColorDia();
 		//private static ConvertidorColores cnvColores = new ConvertidorColores();
@@ -162,38 +163,37 @@ namespace Orion.PrintModel {
 			iText.Layout.Style estiloDia = new iText.Layout.Style();
 			estiloDia.SetBorderTop(new SolidBorder(1))
 					 .SetBorderBottom(new SolidBorder(1));
-			// Definimos los parámetros de la tabla en función de los días del mes.
-			float[] ancho = null;
-			(int izq, int der) titulos = (0, 0);
+
+            // Creamos la tabla con el encabezado con el logo UGT.
+            string textoEncabezado = $"CALENDARIOS\n{fecha:MMMM - yyyy} ({App.Global.CentroActual.ToString()})".ToUpper();
+            Table tablaEncabezado = InformesServicio.GetTablaEncabezadoSindicato(textoEncabezado);
+
+            // Definimos los parámetros de la tabla en función de los días del mes.
+            float[] ancho = null;
 			int diasMes = DateTime.DaysInMonth(fecha.Year, fecha.Month);
 			switch (diasMes) {
 				case 28:
 					ancho = Anchos28;
-					titulos = (15, 14);
 					break;
 				case 29:
 					ancho = Anchos29;
-					titulos = (15, 15);
 					break;
 				case 30:
 					ancho = Anchos30;
-					titulos = (16, 15);
 					break;
 				case 31:
 					ancho = Anchos31;
-					titulos = (16, 16);
 					break;
 			}
 			// Creamos la tabla
 			Table tabla = new Table(UnitValue.CreatePercentArray(ancho));
 			// Asignamos el estilo a la tabla.
 			tabla.AddStyle(estiloTabla);
-			// Insertamos los títulos.
-			tabla.AddHeaderCell(new Cell(1, titulos.izq).Add(new Paragraph($"{fecha:MMMM - yyyy}".ToUpper())).AddStyle(estiloTitulos)
-														.SetTextAlignment(TextAlignment.LEFT));
-			tabla.AddHeaderCell(new Cell(1, titulos.der).Add(new Paragraph(App.Global.CentroActual.ToString().ToUpper())).AddStyle(estiloTitulos)
-														.SetTextAlignment(TextAlignment.RIGHT));
-			// Añadimos las celdas de encabezado.
+
+            // Insertamos los títulos.
+            tabla.AddHeaderCell(new Cell(1, diasMes + 1).Add(tablaEncabezado).AddStyle(estiloTitulos));
+			
+            // Añadimos las celdas de encabezado.
 			tabla.AddHeaderCell(new Cell().Add(new Paragraph("Conductor")).AddStyle(estiloEncabezados).AddStyle(estiloConductor).AddStyle(estiloDia));
 			for (int i = 1; i <= diasMes; i++) {
 				// Definimos el estilo para la última celda.
@@ -264,21 +264,12 @@ namespace Orion.PrintModel {
 						.SetPadding(5)
 						.SetKeepTogether(true);
 
-			// Creamos la tabla de encabezado 1
-			Table tablaEncabezado = new Table(UnitValue.CreatePercentArray(new float[] { 50, 50 }));
-			tablaEncabezado.SetFont(arial);
-			tablaEncabezado.SetFontSize(20);
-			tablaEncabezado.SetMargin(0);
-			tablaEncabezado.SetPadding(0);
-			tablaEncabezado.SetWidth(UnitValue.CreatePercentValue(100));
-			tablaEncabezado.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
-			tablaEncabezado.AddCell(new Cell().Add(new Paragraph($"{fecha:MMMM - yyyy}".ToUpper()))
-														.SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetTextAlignment(TextAlignment.LEFT));
-			tablaEncabezado.AddCell(new Cell().Add(new Paragraph(App.Global.CentroActual.ToString().ToUpper()))
-														.SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetTextAlignment(TextAlignment.RIGHT));
+            // Creamos la tabla con el encabezado con el logo UGT.
+            string textoEncabezado = $"ERRORES EN CALENDARIOS\n{fecha:MMMM - yyyy} ({App.Global.CentroActual.ToString()})".ToUpper();
+            Table tablaEncabezado = InformesServicio.GetTablaEncabezadoSindicato(textoEncabezado);
 
-			// Creamos la tabla que tendrá la Hoja Pijama.
-			float[] columnas = new float[] { 11.5044f, 88.4956f };
+            // Creamos la tabla que tendrá los fallos del calendario.
+            float[] columnas = new float[] { 11.5044f, 88.4956f };
 			Table tabla = new Table(UnitValue.CreatePercentArray(columnas));
 			// Asignamos el estilo a la tabla.
 			tabla.AddStyle(estiloTabla);
@@ -306,14 +297,295 @@ namespace Orion.PrintModel {
 		}
 
 
-		#endregion
-		// ====================================================================================================
+        private static Table GetTablaEstadisticasCalendarios(List<EstadisticaCalendario> lista, DateTime fecha, bool segundaQuincena = false) {
+
+            // Fuente a utilizar en la tabla.
+            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            // Estilo de la tabla.
+            iText.Layout.Style estiloTabla = new iText.Layout.Style();
+            estiloTabla.SetTextAlignment(TextAlignment.CENTER)
+                       .SetMargins(0, 0, 0, 0)
+                       .SetPaddings(0, 0, 0, 0)
+                       .SetWidth(UnitValue.CreatePercentValue(100))
+                       .SetFont(arial)
+                       .SetFontSize(8);
+            // Estilo encabezados 1
+            iText.Layout.Style estiloEncabezados1 = new iText.Layout.Style();
+            estiloEncabezados1.SetBold()
+                              .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                              .SetFontSize(8);
+            // Estilo de las celdas de encabezado 2.
+            iText.Layout.Style estiloEncabezados2 = new iText.Layout.Style();
+            estiloEncabezados2.SetBackgroundColor(new DeviceRgb(255, 153, 102))
+                             .SetBold()
+                             .SetFontSize(9);
+            // Estilo de fondo 2
+            iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(new DeviceRgb(252, 228, 214));
+            // Estilo Sábados
+            iText.Layout.Style estiloSabados = new iText.Layout.Style().SetFontColor(new DeviceRgb(0, 0, 255));
+            // Estilo Festivos
+            iText.Layout.Style estiloFestivos = new iText.Layout.Style().SetFontColor(new DeviceRgb(255, 0, 0));
+
+            // Creamos la tabla con el encabezado con el logo UGT.
+            string textoEncabezado = $"ESTADÍSTICAS DE CALENDARIOS\n{fecha:MMMM - yyyy} ({App.Global.CentroActual.ToString()})".ToUpper();
+            Table tablaEncabezado = InformesServicio.GetTablaEncabezadoSindicato(textoEncabezado);
+
+            // Creamos la tabla que tendrá las estadísticas.
+            float[] anchos14 = new float[] { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            float[] anchos15 = new float[] { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            float[] anchos16 = new float[] { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            // Definimos el número de días de la tabla.
+            int diasMes = DateTime.DaysInMonth(fecha.Year, fecha.Month);
+            int dias = 0;
+            switch(diasMes) {
+                case 28: dias = 14; break;
+                case 29: dias = segundaQuincena ? 14 : 15; break;
+                case 30: dias = 15; break;
+                case 31: dias = segundaQuincena ? 16 : 15; break;
+            }
+            Table tabla = null;
+            switch (dias) {
+                case 14: tabla = new Table(UnitValue.CreatePercentArray(anchos14)); break;
+                case 15: tabla = new Table(UnitValue.CreatePercentArray(anchos15)); break;
+                case 16: tabla = new Table(UnitValue.CreatePercentArray(anchos16)); break;
+            }
+            // Asignamos el estilo a la tabla.
+            tabla.AddStyle(estiloTabla);
+            // Añadimos el encabezado inicial.
+            tabla.AddHeaderCell(new Cell(1, dias + 1).Add(tablaEncabezado).AddStyle(estiloEncabezados1));
+            // Añadimos las celdas de encabezado.
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("CONCEPTOS")).AddStyle(estiloEncabezados2));
+            for (int d = 1; d <= dias; d++) {
+                int dd = segundaQuincena ? diasMes - dias + d : d;
+                DateTime f = new DateTime(fecha.Year, fecha.Month, dd);
+                iText.Layout.Style estiloDia = null;
+                if (f.DayOfWeek == DayOfWeek.Saturday) {
+                    estiloDia = estiloSabados;
+                } else if (f.DayOfWeek == DayOfWeek.Sunday || App.Global.CalendariosVM.EsFestivo(f)) {
+                    estiloDia = estiloFestivos;
+                } else {
+                    estiloDia = new iText.Layout.Style().SetFontColor(new DeviceRgb(0, 0, 0));
+                }
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph($"{dd:00}")).AddStyle(estiloEncabezados2).AddStyle(estiloDia));
+            }
+            // Turnos 1
+            tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 1").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = lista[i].Turno1 == 0 ? "" : $"{lista[i].Turno1:00}";
+                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+            }
+            // Turnos 2
+            tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 2").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = lista[i].Turno2 == 0 ? "" : $"{lista[i].Turno2:00}";
+                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+            }
+            // Turnos 3
+            tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 3").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = lista[i].Turno3 == 0 ? "" : $"{lista[i].Turno3:00}";
+                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+            }
+            // Turnos 4
+            tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 4").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = lista[i].Turno4 == 0 ? "" : $"{lista[i].Turno4:00}";
+                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+            }
+            // Jornadas Trabajadas
+            tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas trabajadas").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = lista[i].TotalJornadas == 0 ? "" : $"{lista[i].TotalJornadas:00}";
+                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+            }
+            // Jornadas menores de 7:20
+            tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas menores de {App.Global.Convenio.JornadaMedia.ToTexto()}").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = lista[i].JornadasMenoresMedia == 0 ? "" : $"{lista[i].JornadasMenoresMedia:00}";
+                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+            }
+            // Jornadas mayores o iguales de 7:20
+            tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas mayores de {App.Global.Convenio.JornadaMedia.ToTexto()}").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = lista[i].JornadasMayoresMedia == 0 ? "" : $"{lista[i].JornadasMayoresMedia:00}";
+                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+            }
+            // Horas trabajadas
+            tabla.AddCell(new Cell().Add(new Paragraph($"Horas trabajadas").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvSuperHora.Convert(lista[i].Trabajadas, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Media de horas trabajadas
+            tabla.AddCell(new Cell().Add(new Paragraph($"Media de horas trabajadas").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvSuperHora.Convert(lista[i].MediaTrabajadas, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Tiempo partido no computable
+            tabla.AddCell(new Cell().Add(new Paragraph($"Tiempo partido no computable").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvSuperHora.Convert(lista[i].TiempoPartido, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Horas Negativas
+            tabla.AddCell(new Cell().Add(new Paragraph($"Horas negativas").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvSuperHora.Convert(lista[i].HorasNegativas, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Horas Acumuladas
+            tabla.AddCell(new Cell().Add(new Paragraph($"Horas Acumuladas").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvSuperHora.Convert(lista[i].Acumuladas, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Acumuladas - Negativas
+            tabla.AddCell(new Cell().Add(new Paragraph($"Diferencia Acumuladas - Negativas").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvSuperHora.Convert(lista[i].Acumuladas - lista[i].HorasNegativas, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Horas Nocturnas
+            tabla.AddCell(new Cell().Add(new Paragraph($"Horas Nocturnas").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvSuperHora.Convert(lista[i].Nocturnas, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Desayuno
+            tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Desayuno").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimal.Convert(lista[i].Desayuno, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Importe Desayuno
+            tabla.AddCell(new Cell().Add(new Paragraph($"Importe Desayuno").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimalEuro.Convert(lista[i].ImporteDesayuno, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Comida
+            tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Comida").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimal.Convert(lista[i].Comida, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Importe Comida
+            tabla.AddCell(new Cell().Add(new Paragraph($"Importe Comida").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimalEuro.Convert(lista[i].ImporteComida, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Cena
+            tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Cena").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimal.Convert(lista[i].Cena, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Importe Cena
+            tabla.AddCell(new Cell().Add(new Paragraph($"Importe Cena").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimalEuro.Convert(lista[i].ImporteCena, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Plus Cena
+            tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Plus Cena").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimal.Convert(lista[i].PlusCena, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Importe Plus Cena
+            tabla.AddCell(new Cell().Add(new Paragraph($"Importe Plus Cena").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimalEuro.Convert(lista[i].ImportePlusCena, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Plus Nocturnidad
+            tabla.AddCell(new Cell().Add(new Paragraph($"Plus Nocturnidad").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusNocturnidad, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Plus Menor Descanso
+            tabla.AddCell(new Cell().Add(new Paragraph($"Plus Menor Descnaso").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusMenorDescanso, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Plus Limpieza
+            tabla.AddCell(new Cell().Add(new Paragraph($"Plus Limpieza").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusLimipeza, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Plus Paqueteria
+            tabla.AddCell(new Cell().Add(new Paragraph($"Plus Paqueteria").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusPaqueteria, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
+            // Plus Navidad
+            tabla.AddCell(new Cell().Add(new Paragraph($"Plus Navidad").SetBold()));
+            for (int d = 1; d <= dias; d++) {
+                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
+                string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusNavidad, null, VerValores.NoCeros, null);
+                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+            }
 
 
-		// ====================================================================================================
-		#region MÉTODOS PÚBLICOS
-		// ====================================================================================================
-		public static async Task CrearCalendariosEnPdf(Workbook Libro, ListCollectionView lista, DateTime fecha) {
+            // Ponemos el fondo de las filas alternas.
+            for (int fila = 0; fila < tabla.GetNumberOfRows(); fila++) {
+                for (int col = 0; col < tabla.GetNumberOfColumns(); col++) {
+                    if (col > 0) {
+                        int dia = (segundaQuincena ? diasMes - dias + col : col);
+                        DateTime f = new DateTime(fecha.Year, fecha.Month, dia);
+                        if (f.DayOfWeek == DayOfWeek.Saturday) tabla.GetCell(fila, col).AddStyle(estiloSabados);
+                        if (f.DayOfWeek == DayOfWeek.Sunday || App.Global.CalendariosVM.EsFestivo(f)) tabla.GetCell(fila, col).AddStyle(estiloFestivos);
+                    }
+                    if (fila % 2 != 0) {
+                        tabla.GetCell(fila, col).AddStyle(estiloFondo);
+                    }
+                }
+            }
+
+
+            return tabla;
+        }
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region MÉTODOS PÚBLICOS
+        // ====================================================================================================
+        public static async Task CrearCalendariosEnPdf(Workbook Libro, ListCollectionView lista, DateTime fecha) {
 
 			await Task.Run(() => {
 				// Definimos la hoja.
@@ -389,6 +661,9 @@ namespace Orion.PrintModel {
 		#region MÉTODOS PÚBLICOS (ITEXT 7)
 		// ====================================================================================================
 
+        /// <summary>
+        /// Crea un PDF con la tabla de calendarios
+        /// </summary>
 		public static async Task CrearCalendariosEnPdf_7(Document doc, ListCollectionView listaCalendarios, DateTime fecha) {
 
 			await Task.Run(() => {
@@ -398,6 +673,9 @@ namespace Orion.PrintModel {
 		}
 
 
+        /// <summary>
+        /// Crea un PDF con una tabla y los fallos de todos los calendarios.
+        /// </summary>
 		public static async Task FallosEnCalendariosEnPdf_7(Document doc, ListCollectionView listaCalendarios, DateTime fecha) {
 
 			await Task.Run(() => {
@@ -406,9 +684,28 @@ namespace Orion.PrintModel {
 			});
 		}
 
-		#endregion
-		// ====================================================================================================
+
+        /// <summary>
+        /// Crea un PDF con las estadísticas de los calendarios.
+        /// </summary>
+        public static async Task EstadisticasCalendariosEnPdf(Document doc, List<EstadisticaCalendario> listaEstadisticas, DateTime fecha) {
+
+            await Task.Run(() => {
+
+                doc.Add(GetTablaEstadisticasCalendarios(listaEstadisticas, fecha));
+                doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                doc.Add(GetTablaEstadisticasCalendarios(listaEstadisticas, fecha, true));
+                doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+            });
+
+        }
 
 
-	}
+
+
+    #endregion
+    // ====================================================================================================
+
+
+}
 	}

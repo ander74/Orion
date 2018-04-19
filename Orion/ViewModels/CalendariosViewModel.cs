@@ -103,6 +103,46 @@ namespace Orion.ViewModels {
 		}
 
 
+		/// <summary>
+		/// Elimina los calendarios de los conductores borrados, pero no los elimina definitivamente hasta que se guarde.
+		/// </summary>
+		public void BorrarCalendariosPorConductor(int idConductor) {
+			List<Calendario> lista = new List<Calendario>();
+			foreach (Calendario c in ListaCalendarios.Where(c => c.IdConductor == idConductor)) {
+				lista.Add(c);
+			}
+			foreach (Calendario c in lista) {
+				_listaborrados.Add(c);
+				ListaCalendarios.Remove(c);
+				HayCambios = true;
+			}
+
+		}
+
+
+		/// <summary>
+		/// Deshace el borrado de los calendarios que se borrarron con el método BorrarCalendariosPorConductor.
+		/// </summary>
+		public void DeshacerBorrarPorConductor(int idConductor) {
+			if (_listaborrados == null) return;
+			List<Calendario> lista = new List<Calendario>();
+			foreach (Calendario c in _listaborrados.Where(c => c.IdConductor == idConductor)) {
+				lista.Add(c);
+			}
+			foreach (Calendario calendario in lista) {
+				if (calendario.Nuevo) {
+					_listacalendarios.Add(calendario);
+				} else {
+					_listacalendarios.Add(calendario);
+					calendario.Nuevo = false;
+				}
+				_listaborrados.Remove(calendario);
+				HayCambios = true;
+			}
+
+		}
+
+
 		public void GuardarTodo() {
 			GuardarCalendarios();
 			HayCambios = false;
@@ -231,6 +271,8 @@ namespace Orion.ViewModels {
 				if (_fechaactual != value) {
 					_fechaactual = value;
 					if (HayCambios) GuardarCalendarios();
+					// Por el momento, la siguiente instrucción se ignora. Atender a buenas prácticas al borrar conductores.
+					//if (App.Global.ConductoresVM.HayCambios) App.Global.ConductoresVM.GuardarConductores();
 					CargarFestivos();
 					CargarCalendarios();
 					PropiedadCambiada();
@@ -469,6 +511,65 @@ namespace Orion.ViewModels {
 			set {
 				if (_accioneslotesvm != value) {
 					_accioneslotesvm = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private Visibility _visibilidadbotonseleccionfila = Visibility.Collapsed;
+		public Visibility VisibilidadBotonSeleccionFila {
+			get { return _visibilidadbotonseleccionfila; }
+			set {
+				if (_visibilidadbotonseleccionfila != value) {
+					_visibilidadbotonseleccionfila = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private Visibility _visibilidadbotonseleccioncelda = Visibility.Visible;
+		public Visibility VisibilidadBotonSeleccionCelda {
+			get { return _visibilidadbotonseleccioncelda; }
+			set {
+				if (_visibilidadbotonseleccioncelda != value) {
+					_visibilidadbotonseleccioncelda = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private DataGridSelectionUnit _modoseleccion = DataGridSelectionUnit.FullRow;
+		public DataGridSelectionUnit ModoSeleccion {
+			get { return _modoseleccion; }
+			set {
+				if (_modoseleccion != value) {
+					_modoseleccion = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+		private int _columnaactual = -1;
+		public int ColumnaActual {
+			get { return _columnaactual; }
+			set {
+				if (_columnaactual != value) {
+					_columnaactual = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private int _filaactual = -1;
+		public int FilaActual {
+			get { return _filaactual; }
+			set {
+				if (_filaactual != value) {
+					_filaactual = value;
 					PropiedadCambiada();
 				}
 			}

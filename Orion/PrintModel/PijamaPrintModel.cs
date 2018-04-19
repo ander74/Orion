@@ -5,10 +5,14 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using iText.Forms;
+using iText.Forms.Fields;
 using iText.IO.Image;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
 using iText.Kernel.Geom;
+using iText.Kernel.Pdf;
+using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
 using iText.Layout.Borders;
 using iText.Layout.Element;
@@ -522,6 +526,7 @@ namespace Orion.PrintModel {
 			celda.AddStyle(estiloCelda);
 			celda.SetPaddings(0, 0, 0, 2);
 			celda.SetTextAlignment(TextAlignment.LEFT);
+            celda.SetVerticalAlignment(VerticalAlignment.BOTTOM);
 			tabla.AddCell(celda);
 			// Añadimos la fecha
 			celda = new Cell();
@@ -529,11 +534,12 @@ namespace Orion.PrintModel {
 			celda.AddStyle(estiloCelda);
 			celda.SetPaddings(0, 10, 0, 0);
 			celda.SetTextAlignment(TextAlignment.RIGHT);
-			tabla.AddCell(celda);
-			// Añadimos una celda vacía
+            celda.SetVerticalAlignment(VerticalAlignment.BOTTOM);
+            tabla.AddCell(celda);
+			// Añadimos el logo del sindicato
 			celda = new Cell();
 			celda.AddStyle(estiloCelda);
-			tabla.AddCell(celda);
+            tabla.AddCell(celda);
 			// Añadimos la tabla
 			celda = new Cell(1, 2);
 			celda.AddStyle(estiloCelda);
@@ -631,8 +637,18 @@ namespace Orion.PrintModel {
 		public static async Task CrearPijamaEnPdf_7(Document doc, Pijama.HojaPijama pijama) {
 
 			await Task.Run(() => {
-				// Añadimos la tabla al documento
-				doc.Add(GetHojaPijama(pijama));
+
+                float anchoHoja = PageSize.A4.Rotate().GetWidth();
+                float altoHoja = PageSize.A4.Rotate().GetHeight();
+                iText.Layout.Element.Image imagen = InformesServicio.GetLogoSindicato();
+                imagen.ScaleToFit(anchoHoja / 5, 30);
+                float ancho = imagen.GetImageScaledWidth();
+                float alto = imagen.GetImageScaledHeight();
+                imagen.SetFixedPosition(anchoHoja - 25 - ancho, altoHoja - 25 - alto);
+                
+                // Añadimos la tabla al documento
+                doc.Add(GetHojaPijama(pijama));
+                doc.Add(imagen);
 			});
 		}
 
@@ -673,7 +689,16 @@ namespace Orion.PrintModel {
 					Lista.Add(hojapijama);
 					num++;
 				}
-				num = 1;
+                // Definimos el logo del sindicato.
+                float anchoHoja = PageSize.A4.Rotate().GetWidth();
+                float altoHoja = PageSize.A4.Rotate().GetHeight();
+                iText.Layout.Element.Image imagen = InformesServicio.GetLogoSindicato();
+                imagen.ScaleToFit(anchoHoja / 5, 30);
+                float ancho = imagen.GetImageScaledWidth();
+                float alto = imagen.GetImageScaledHeight();
+                imagen.SetFixedPosition(anchoHoja - 25 - ancho, altoHoja - 25 - alto);
+                // Creamos una hoja por cada pijama.
+                num = 1;
 				App.Global.IniciarProgreso("Creando PDF...");
 				foreach(Pijama.HojaPijama pijama in Lista) {
 					double valor = num / Lista.Count * 100;
@@ -681,11 +706,186 @@ namespace Orion.PrintModel {
 					if (num > 1) doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 					num++;
 					doc.Add(GetHojaPijama(pijama));
+                    doc.Add(imagen);
 				}
 			});
 		}
 
 
+        public static async Task CrearReclamacionEnPdf(Document doc, DateTime fecha, Conductor conductor) {
+
+            await Task.Run(() => {
+
+                // Iniciamos la creación del PDF.
+                App.Global.IniciarProgreso("Creando PDF...");
+                float anchoHoja = PageSize.A4.GetWidth();
+                float altoHoja = PageSize.A4.GetHeight();
+                PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+                doc.SetFont(arial);
+                doc.SetFontSize(12);
+                PdfAcroForm form = PdfAcroForm.GetAcroForm(doc.GetPdfDocument(), true);
+
+                // Añadimos el texto inicial
+                Paragraph parrafo = new Paragraph();
+                parrafo.SetFontSize(26).SetBold();
+                parrafo.SetMarginTop(4);
+                parrafo.SetFixedLeading(27);
+                parrafo.Add("RECLAMACIÓN\nDE CONCEPTOS");
+                doc.Add(parrafo);
+
+                // Añadimos el centro de trabajo y el conductor
+                parrafo = new Paragraph();
+                parrafo.SetFontSize(16);
+                parrafo.SetMarginTop(12);
+                parrafo.Add(new Text($"Centro: ").SetBold());
+                parrafo.Add($"{App.Global.CentroActual.ToString().ToUpper()}");
+                parrafo.Add("\n");
+                parrafo.Add(new Text($"Trabajador/a: ").SetBold());
+                parrafo.Add($"{conductor.Apellidos}, {conductor.Nombre} ({conductor.Id:000})");
+                doc.Add(parrafo);
+
+                // ==================================================
+                // TABLA
+                // ==================================================
+                // Estilos
+                iText.Layout.Style estiloCabecera = new iText.Layout.Style();
+                estiloCabecera.SetFontSize(11).SetBold();
+                estiloCabecera.SetTextAlignment(TextAlignment.CENTER);
+                estiloCabecera.SetBackgroundColor(new DeviceRgb(255, 80, 80));
+                estiloCabecera.SetBorder(new SolidBorder(1));
+                iText.Layout.Style estiloBordes = new iText.Layout.Style();
+                estiloBordes.SetBorderLeft(new SolidBorder(1));
+                estiloBordes.SetBorderRight(new SolidBorder(1));
+                // Creación de tabla
+                Table tabla = new Table(UnitValue.CreatePercentArray(new float[] { 3, 1, 1, 1 }));
+                tabla.SetWidth(UnitValue.CreatePercentValue(100));
+                tabla.SetFontSize(10);
+                tabla.SetMargins(40, 0, 0, 0);
+                tabla.SetPadding(0);
+                // Añadimos los encabezados.
+                Cell celda = new Cell().AddStyle(estiloCabecera);
+                celda.Add(new Paragraph("CONCEPTOS A RECLAMAR"));
+                tabla.AddHeaderCell(celda);
+                celda = new Cell().AddStyle(estiloCabecera);
+                celda.Add(new Paragraph("En PIJAMA"));
+                tabla.AddHeaderCell(celda);
+                celda = new Cell().AddStyle(estiloCabecera);
+                celda.Add(new Paragraph("REAL"));
+                tabla.AddHeaderCell(celda);
+                celda = new Cell().AddStyle(estiloCabecera);
+                celda.Add(new Paragraph("DIFERENCIA"));
+                tabla.AddHeaderCell(celda);
+                // Añadimos las filas.
+                for (int f = 1; f <= 17; f++) {
+                    for (int c = 1; c <= 4; c++) {
+                        App.Global.ValorBarraProgreso = 5.8;
+                        celda = new Cell();
+                        if (f % 2 == 0) celda.SetBackgroundColor(new DeviceRgb(221, 221, 221));
+                        celda.SetHeight(16);
+                        celda.AddStyle(estiloBordes);
+                        celda.SetNextRenderer(new PdfServicio.TextFieldRenderer(celda, $"Fila{f:00}Columna{c}", 2, 10, PdfFormField.ALIGN_CENTER));
+                        tabla.AddCell(celda);
+                    }
+                }
+                // Dibujamos los bordes de la tabla.
+                tabla.SetBorder(new SolidBorder(1));
+                // Añadimos la tabla al documento.
+                doc.Add(tabla);
+
+                // Añadimos el logo del sindicato.
+                iText.Layout.Element.Image logoSindicato = InformesServicio.GetLogoSindicato();
+                logoSindicato.ScaleToFit(anchoHoja / 3, 75);
+                logoSindicato.SetFixedPosition(anchoHoja - 40 - logoSindicato.GetImageScaledWidth(), altoHoja - 40 - logoSindicato.GetImageScaledHeight());
+                doc.Add(logoSindicato);
+
+                // Añadimos la fecha
+                parrafo = new Paragraph($"{fecha:MMMM yyyy}".ToUpper());
+                parrafo.SetFontSize(14);
+                parrafo.SetFixedPosition(50, 640, (anchoHoja - 80) / 2);
+                doc.Add(parrafo);
+
+                // Añadimos el número de reclamación
+                iText.Kernel.Geom.Rectangle cuadroNumReclamacion = new iText.Kernel.Geom.Rectangle(40 + ((anchoHoja - 80) / 2), 642, ((anchoHoja - 80) / 2) - 10, 20);
+                string numReclamacion = $"Nº Reclamación: {fecha:yyyyMM}{conductor.Id:000}/01";
+                PdfTextFormField campoNumReclamacion = PdfFormField.CreateText(doc.GetPdfDocument(), cuadroNumReclamacion, "NumeroReclamacion", numReclamacion);
+                campoNumReclamacion.SetJustification(PdfFormField.ALIGN_RIGHT);
+                campoNumReclamacion.SetVisibility(PdfFormField.VISIBLE);
+                campoNumReclamacion.SetFontSize(14);
+                form.AddField(campoNumReclamacion);
+
+                // Añadimos el título de las notas.
+                parrafo = new Paragraph($"NOTAS");
+                parrafo.SetFontSize(12).SetBold();
+                parrafo.SetFixedPosition(40, 225, (anchoHoja - 80) / 3);
+                doc.Add(parrafo);
+
+                // Añadimos el campo para las notas.
+                iText.Kernel.Geom.Rectangle cuadroNotas = new iText.Kernel.Geom.Rectangle(45, 55, ((anchoHoja - 80) / 3) * 2 - 20, 160);
+                PdfTextFormField campoNotas = PdfFormField.CreateText(doc.GetPdfDocument(), cuadroNotas, "Notas", "", arial, 12);
+                campoNotas.SetJustification(PdfFormField.ALIGN_LEFT);
+                campoNotas.SetVisibility(PdfFormField.VISIBLE);
+                campoNotas.SetMultiline(true);
+                form.AddField(campoNotas);
+
+                // Añadimos el título de la fecha.
+                parrafo = new Paragraph($"FECHA");
+                parrafo.SetFontSize(12).SetBold();
+                parrafo.SetFixedPosition(((anchoHoja - 80) / 3 ) * 2 + 40, 225, (anchoHoja - 80) / 3);
+                doc.Add(parrafo);
+
+                // Añadimos el campo para la fecha.
+                iText.Kernel.Geom.Rectangle cuadroFecha = new iText.Kernel.Geom.Rectangle(((anchoHoja - 80) / 3) * 2 + 45, 190, ((anchoHoja - 80) / 3) - 10, 25);
+                string fechaFinal = $"{DateTime.Now:dd - MM - yyyy}";
+                PdfTextFormField campoFecha = PdfFormField.CreateText(doc.GetPdfDocument(), cuadroFecha, "FechaFinal", fechaFinal, arial, 16);
+                campoFecha.SetJustification(PdfFormField.ALIGN_CENTER);
+                campoFecha.SetVisibility(PdfFormField.VISIBLE);
+                form.AddField(campoFecha);
+
+                // Añadimos el título de la firma.
+                parrafo = new Paragraph($"El Trabajador/a");
+                parrafo.SetFontSize(12).SetBold();
+                parrafo.SetFixedPosition(((anchoHoja - 80) / 3) * 2 + 40, 150, (anchoHoja - 80) / 3);
+                doc.Add(parrafo);
+
+                // Añadimos la marca de agua.
+                iText.Layout.Element.Image marcaAgua = InformesServicio.GetMarcaDeAgua();
+                marcaAgua.ScaleToFit((anchoHoja / 3) * 2, 800);
+                marcaAgua.SetOpacity(0.05f);
+                marcaAgua.SetFixedPosition((anchoHoja / 2) - (marcaAgua.GetImageScaledWidth() / 2), ((altoHoja) / 2) -( marcaAgua.GetImageScaledHeight() / 2));
+                doc.Add(marcaAgua);
+
+                // ==================================================
+                // ACCIONES EN EL LIENZO
+                // ==================================================
+
+                PdfCanvas lienzo = new PdfCanvas(doc.GetPdfDocument().GetFirstPage());
+
+                // Fecha y Número de reclamación
+                lienzo.SetStrokeColor(ColorConstants.BLACK);
+                lienzo.SetLineWidth(1);
+                lienzo.RoundRectangle(40, 640, anchoHoja - 80, 24, 5);
+                lienzo.Stroke();
+
+                // Notas
+                lienzo.SetStrokeColor(ColorConstants.BLACK);
+                lienzo.SetLineWidth(1);
+                lienzo.RoundRectangle(40, 50, ((anchoHoja - 80) / 3) * 2 - 10, 170, 5);
+                lienzo.Stroke();
+
+                // Fecha Final
+                lienzo.SetStrokeColor(ColorConstants.BLACK);
+                lienzo.SetLineWidth(1);
+                lienzo.RoundRectangle(((anchoHoja - 80) / 3) * 2 + 40, 185, (anchoHoja - 80) / 3, 35, 5);
+                lienzo.Stroke();
+
+                // Firma
+                lienzo.SetStrokeColor(ColorConstants.BLACK);
+                lienzo.SetLineWidth(1);
+                lienzo.RoundRectangle(((anchoHoja - 80) / 3) * 2 + 40, 50, (anchoHoja - 80) / 3, 95, 5);
+                lienzo.Stroke();
+            });
+
+        }
 
 
 

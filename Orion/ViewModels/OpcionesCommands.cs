@@ -81,8 +81,8 @@ namespace Orion.ViewModels {
 					dialogo.SelectedPath = App.Global.Configuracion.CarpetaOrigenActualizar;
 					if (dialogo.ShowDialog() == DialogResult.OK) App.Global.Configuracion.CarpetaOrigenActualizar = dialogo.SelectedPath;
 					return;
-			}
-		}
+            }
+        }
 		#endregion
 
 
@@ -441,7 +441,6 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-
 		#region ACERCA DE
 
 		// Comando
@@ -461,7 +460,56 @@ namespace Orion.ViewModels {
 			ventana.ShowDialog();
 
 		}
-		#endregion
+        #endregion
+
+
+        #region RUTA LOGOS
+
+        // Comando
+        private ICommand _cmdrutalogos;
+        public ICommand cmdRutaLogos {
+            get {
+                if (_cmdrutalogos == null) _cmdrutalogos = new RelayCommand(p => RutaLogos(p));
+                return _cmdrutalogos;
+            }
+        }
+
+        // Ejecución del comando
+        private void RutaLogos(object parametro) {
+
+            string texto = parametro as string;
+            if (texto == null) return;
+
+            string ruta = App.RutaInicial;
+            OpenFileDialog dialogo = new OpenFileDialog();
+            dialogo.Filter = "Archivos Imagen|*.jpg;*.png|Todos los archivos|*.*";
+            switch (texto) {
+                case "Logo":
+                    if (!string.IsNullOrWhiteSpace(App.Global.Configuracion.RutaLogoSindicato)) ruta = Path.GetDirectoryName(App.Global.Configuracion.RutaLogoSindicato);
+                    dialogo.Title = "Logo del Sindicato";
+                    dialogo.FileName = Path.GetFileName(App.Global.Configuracion.RutaLogoSindicato);
+                    break;
+                case "MarcaAgua":
+                    if (!string.IsNullOrWhiteSpace(App.Global.Configuracion.RutaMarcaAgua)) ruta = Path.GetDirectoryName(App.Global.Configuracion.RutaMarcaAgua);
+                    dialogo.Title = "Marca de Agua";
+                    dialogo.FileName = Path.GetFileName(App.Global.Configuracion.RutaMarcaAgua);
+                    break;
+            }
+            dialogo.InitialDirectory = ruta;
+            if (dialogo.ShowDialog() == DialogResult.OK) {
+                switch (texto) {
+                    case "Logo":
+                        App.Global.Configuracion.RutaLogoSindicato = dialogo.FileName;
+                        break;
+                    case "MarcaAgua":
+                        App.Global.Configuracion.RutaMarcaAgua = dialogo.FileName;
+                        break;
+                }
+            }
+
+
+        }
+        #endregion
 
 
 
@@ -469,6 +517,5 @@ namespace Orion.ViewModels {
 
 
 
-
-	}
+    }
 }

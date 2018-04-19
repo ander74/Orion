@@ -25,44 +25,6 @@ namespace Orion.DataModels {
 
 
 		/*================================================================================
-		* GET FESTIVOS
-		*================================================================================*/
-		[Obsolete("Esté método no se usa en ningun sitio.")]
-		public static ObservableCollection<Festivo> GetFestivos() {
-
-			// Creamos la lista y el comando que extrae las líneas.
-			ObservableCollection<Festivo> lista = new ObservableCollection<Festivo>();
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-
-				//string comandoSQL = "SELECT * FROM Festivos ORDER BY Fecha;";
-				string comandoSQL = "GetFestivos";
-
-				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-				comando.CommandType = System.Data.CommandType.StoredProcedure;
-				OleDbDataReader lector = null;
-
-				try {
-					conexion.Open();
-
-					lector = comando.ExecuteReader();
-
-					while (lector.Read()) {
-						Festivo festivo = new Festivo(lector);
-						lista.Add(festivo);
-						festivo.Nuevo = false;
-						festivo.Modificado = false;
-					}
-					lector.Close();
-				} catch (Exception ex) {
-					Utils.VerError("BdFestivos.GetFestivos", ex);
-				}
-			}
-			return lista;
-		}
-
-
-		/*================================================================================
 		* GET FESTIVOS POR MES
 		*================================================================================*/
 		public static ObservableCollection<Festivo> GetFestivosPorMes(int año, int mes, OleDbConnection conexion = null) {
@@ -214,30 +176,6 @@ namespace Orion.DataModels {
 			}
 		}
 
-
-		/*================================================================================
-		 * BORRAR FESTIVOS POR ID
-		 *================================================================================*/
-		[Obsolete("Esté método no se usa en ningun sitio.")]
-		public static void BorrarFestivoPorId(long idFestivo) {
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-
-				//string SQLBorrar = "DELETE FROM Festivos WHERE Id=?";
-				string SQLBorrar = "BorrarFestivo";
-
-				OleDbCommand comando = new OleDbCommand(SQLBorrar, conexion);
-				comando.CommandType = System.Data.CommandType.StoredProcedure;
-				comando.Parameters.AddWithValue("id", idFestivo);
-
-				try {
-					conexion.Open();
-					comando.ExecuteNonQuery();
-				} catch (Exception ex) {
-					Utils.VerError("BdFestivos.BorrarFestivoPorId", ex);
-				}
-			}
-		}
 
 	}
 }

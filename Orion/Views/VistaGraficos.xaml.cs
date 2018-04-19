@@ -7,20 +7,10 @@
 #endregion
 using Orion.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace Orion.Views {
 	/// <summary>
@@ -42,7 +32,7 @@ namespace Orion.Views {
 			GraficosViewModel VM = ((GlobalVM)this.DataContext).GraficosVM;
 			if (!VM.PanelGruposFijo) PanelGrupos.Visibility = Visibility.Collapsed;
 			if (!VM.PanelValoracionesFijo) PanelValoraciones.Visibility = Visibility.Collapsed;
-
+			
 		}
 
 		// Al terminar de editar una fila de la tabla valoraciones
@@ -60,14 +50,16 @@ namespace Orion.Views {
 
 		// La celda actual ha cambiado.
 		private void TablaGraficos_CurrentCellChanged(object sender, EventArgs e) {
-			if (TablaGraficos.CurrentCell == null || TablaGraficos.CurrentCell.Column == null) return;
-			if (TablaGraficos.CurrentCell.Column.Header.ToString() == "Número") {
-				TablaGraficos.SelectionMode = DataGridSelectionMode.Extended;
-			} else {
-				TablaGraficos.SelectionMode = DataGridSelectionMode.Single;
-			}
-
+			if (TablaGraficos?.CurrentCell.Column == null) return;
+			((GlobalVM)this.DataContext).GraficosVM.ColumnaActual = TablaGraficos.CurrentCell.Column.DisplayIndex;
+			((GlobalVM)this.DataContext).GraficosVM.FilaActual = TablaGraficos.Items.IndexOf(TablaGraficos.CurrentCell.Item);
 		}
 
+		private void TablaGraficos_LoadingRow(object sender, DataGridRowEventArgs e) {
+			if (TablaGraficos?.CurrentCell.Column == null) return;
+			((GlobalVM)this.DataContext).GraficosVM.ColumnaActual = TablaGraficos.CurrentCell.Column.DisplayIndex;
+			((GlobalVM)this.DataContext).GraficosVM.FilaActual = TablaGraficos.Items.IndexOf(TablaGraficos.CurrentCell.Item);
+
+		}
 	}
 }

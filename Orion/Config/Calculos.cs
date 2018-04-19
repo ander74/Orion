@@ -39,8 +39,22 @@ namespace Orion.Config {
 			}
 
 
-			/* ACUMULADAS */
-			public static TimeSpan Acumuladas(TimeSpan? trabajadas) {
+            /* PARTIDO */
+            public static TimeSpan TiempoPartido(TimeSpan? iniciopartido, TimeSpan? finalpartido)
+            {
+                // calculamos el tiempo partido.
+                TimeSpan partido = (finalpartido ?? new TimeSpan(0)) - (iniciopartido ?? new TimeSpan(0));
+                // regulamos el tiempo partido
+                if (partido.TotalSeconds < 0) partido += new TimeSpan(1, 0, 0, 0);
+                // Si el tiempo partido es más del máximo, lo dejamos en el máximo
+                if (partido > App.Global.Convenio.MaxHorasParticionGraficoPartido) partido = App.Global.Convenio.MaxHorasParticionGraficoPartido;
+                // Devolvemos el tiempo trabajado.
+                return partido;
+            }
+
+
+            /* ACUMULADAS */
+            public static TimeSpan Acumuladas(TimeSpan? trabajadas) {
 				TimeSpan horas = (trabajadas ?? new TimeSpan(0)) - App.Global.Convenio.JornadaMedia;
 				return horas.TotalSeconds < 0 ? new TimeSpan(0) : horas;
 			}

@@ -100,8 +100,11 @@ namespace Orion.DataModels {
 					// Recorremos todos los calendarios.
 					foreach (Calendario calendario in lista) {
 						if (calendario.Nuevo) {
-							if (!BdConductores.ExisteConductor(calendario.IdConductor)) {
-								BdConductores.InsertarConductorDesconocido(calendario.IdConductor);
+							//if (!BdConductores.ExisteConductor(calendario.IdConductor)) {
+							//	BdConductores.InsertarConductorDesconocido(calendario.IdConductor);
+							//}
+							if (!App.Global.ConductoresVM.ExisteConductor(calendario.IdConductor)) {
+								App.Global.ConductoresVM.CrearConductorDesconocido(calendario.IdConductor);
 							}
 							OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
 							comando.CommandType = System.Data.CommandType.StoredProcedure;
@@ -162,102 +165,6 @@ namespace Orion.DataModels {
 
 
 		/*================================================================================
-		 * GET CALENDARIOS AÑO
-		 *================================================================================*/
-		[Obsolete("Esté método no se usa en ningun sitio.")]
-		public static List<Calendario> GetCalendariosAño(long idConductor, int año) {
-
-			// Creamos la lista y el comando que extrae los gráficos.
-			List<Calendario> lista = new List<Calendario>();
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-
-				// Creamos el comando SQL.
-				string comandoSQL = "SELECT * FROM Calendarios WHERE IdConductor = ? AND Year(Fecha) = ?;";
-
-				// Elementos para la consulta de calendarios y días de calendario.
-				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-				comando.Parameters.AddWithValue("idconductor", idConductor);
-				comando.Parameters.AddWithValue("año", año);
-				OleDbDataReader lector = null;
-
-				try {
-					// Extraemos los calendarios.
-					conexion.Open();
-					lector = comando.ExecuteReader();
-
-					// Por cada calendario extraido...
-					while (lector.Read()) {
-						// Extraemos el calendario y sus días
-						Calendario calendario = new Calendario(lector);
-						calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
-						// Añadimos el calendario a la lista.
-						lista.Add(calendario);
-						calendario.Nuevo = false;
-						calendario.Modificado = false;
-
-					}
-					lector.Close();
-				} catch (Exception ex) {
-					Utils.VerError("BdCalendarios.GetCalendariosAño", ex);
-				}
-			}
-			// Devolvemos la lista.
-			return lista;
-		}
-
-
-
-
-
-
-		/*================================================================================
-		* GET DC EN CALENDARIO
-		*================================================================================*/
-		/// <summary>
-		/// Devuelve el número de descansos compensatorios (cód. -6) que se han disfrutado
-		/// hasta la fecha indicada.
-		/// </summary>
-		/// <param name="idconductor">Id del conductor que se va a consultar.</param>
-		/// <param name="año">Año límite a mirar.</param>
-		/// <param name="mes">Mes límite a mirar.</param>
-		/// <returns>Número de descansos compensatorios disfrutados.</returns>
-		[Obsolete("Esté método no se usa en ningun sitio.")]
-		public static int GetDcEnCalendario(int idconductor, int año, int mes) {
-
-			int resultado = 0;
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-
-				// Definimos el comando SQL.
-				string comandoSQL = "SELECT Count(DiasCalendario.Grafico) " +
-								"FROM Calendarios INNER JOIN DiasCalendario " +
-								"ON Calendarios.Id = DiasCalendario.IdCalendario " +
-								"WHERE Calendarios.IdConductor = ? AND " +
-								"      DiasCalendario.Grafico = -6 AND " +
-								"      (Year(Calendarios.Fecha) <= ? AND Month(Calendarios.Fecha) <= ?)";
-
-				// Creamos el comando que extrae el gráfico correspondiente.
-				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-				comando.Parameters.AddWithValue("idconductor", idconductor);
-				comando.Parameters.AddWithValue("año", año);
-				comando.Parameters.AddWithValue("mes", mes);
-
-				try {
-					conexion.Open();
-					// Ejecutamos el comando y extraemos el gráfico.
-					resultado = (int)comando.ExecuteScalar();
-				} catch (Exception ex) {
-					Utils.VerError("BdCalendarios.GetDcEnCalendario", ex);
-				}
-			}
-			// Devolvemos el resultado.
-			return resultado;
-
-		}
-
-
-		/*================================================================================
 		 * GET DESCANSOS REGULADOS HASTA MES
 		 *================================================================================*/
 		public static int GetDescansosReguladosHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
@@ -290,39 +197,6 @@ namespace Orion.DataModels {
 			}
 			// Devolvemos el resultado.
 			return resultado == DBNull.Value ? 0 : Convert.ToInt32(resultado);
-
-		}
-
-
-		/*================================================================================
-		 * GET DESCANSOS REGULADOS MES
-		 *================================================================================*/
-		[Obsolete("Esté método no se usa en ningun sitio.")]
-		public static int GetDescansosReguladosMes(int año, int mes, int idconductor) {
-
-			object resultado = null;
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-
-				// Definimos el comando SQL.
-				string comandoSQL = "SELECT Sum(Descansos) FROM Regulaciones WHERE IdConductor = ? AND Year(Fecha) = ? AND Month(Fecha) = ? AND Codigo = 0;";
-
-				// Creamos el comando y añadimos los parámetros.
-				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-				comando.Parameters.AddWithValue("idconductor", idconductor);
-				comando.Parameters.AddWithValue("año", año);
-				comando.Parameters.AddWithValue("mes", mes);
-
-				try {
-					conexion.Open();
-					// Ejecutamos el comando y guardamos el resultado.
-					resultado = comando.ExecuteScalar();
-				} catch (Exception ex) {
-					Utils.VerError("BdCalendarios.GetDescansosReguladosMes", ex);
-				}
-			}
-			// Devolvemos el resultado.
-			return resultado == DBNull.Value ? 0 : (int)(double)resultado;
 
 		}
 

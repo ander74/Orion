@@ -136,62 +136,151 @@
                 </Button.Content>
             </Button>
 
-            <!--BOTON CALCULAR TABLA-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdCalcularTabla}"
-                    CommandParameter="{Binding ElementName=TablaGraficos}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/CalcularTabla.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Calcular Tabla" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-
-            <!-- DESPLEGABLE CREAR PDF -->
-            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" Focusable="False" IsTabStop="False">
+            <!-- DESPLEGABLE ACCIONES -->
+            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" IsOpen="{Binding GraficosVM.BtAccionesAbierto, Mode=TwoWay}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/GuardarPDF.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Name="TxtCrearPdf" Text="Crear PDF" FontSize="10" FontFamily="Arial" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <Image Source="Imagenes/Engranajes.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Name="TxtAcciones" Text="Acciones" FontSize="10" FontFamily="Arial" TextWrapping="Wrap" TextAlignment="Center"/>
                     </StackPanel>
                 </xceed:DropDownButton.Content>
                 <xceed:DropDownButton.DropDownContent>
-                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue">
-                        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
-                            <StackPanel Orientation="Vertical">
+                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue"
+                            DataContext="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.GraficosVM}">
+                        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3" Padding="5">
+                            <StackPanel Orientation="Horizontal">
 
-                                <!--BOTON TABLA GRÁFICO -->
-                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
-                                Content="Tabla Gráficos" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdGraficosEnPdf}"/>
+                                <!-- BOTON CALCULAR TABLA -->
+                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64"
+                                        Command="{Binding cmdCalcularTabla}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="Imagenes/CalcularTabla.png" Style="{StaticResource EstiloImagen}"/>
+                                            <TextBlock Text="Calcular Tabla" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
 
-                                <!--BOTON GRÁFICOS INDIVIDUALES -->
-                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
-                                Content="Gráficos Individuales" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdGraficosIndividualesEnPdf}"/>
+                                <!-- DESPLEGABLE COMPARAR GRUPO -->
+                                <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" VerticalContentAlignment="Center"
+                                                       Height="80" Width="64"
+                                                      IsOpen="{Binding BtCompararAbierto, Mode=TwoWay}">
+                                    <xceed:DropDownButton.Content>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="Imagenes/Comparar.png" Style="{StaticResource EstiloImagen}"/>
+                                            <TextBlock Text="Comparar Grupo" FontSize="10" FontFamily="Arial" TextWrapping="Wrap"
+                                                       TextAlignment="Center"/>
+                                        </StackPanel>
+                                    </xceed:DropDownButton.Content>
+                                    <xceed:DropDownButton.DropDownContent>
+                                        <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue"
+                                                DataContext="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.GraficosVM}">
+                                            <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
+                                                <StackPanel Orientation="Vertical">
 
-                                <!--BOTON ESTADÍSTICAS GRÁFICOS -->
-                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
-                                Content="Estadísticas" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdEstadisticasGraficos}"/>
+                                                    <TextBlock Margin="6,6,6,3" FontWeight="DemiBold" Text="Comparar con..." HorizontalAlignment="Left"/>
 
-                                <!--BOTON ESTADÍSTICAS GRUPOS -->
-                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
-                                        Content="Estadísticas Grupos" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdEstadisticasGruposGraficos}"/>
-
-                                <!-- SELECCIÓN FECHA ESTADÍSTICAS GRUPOS -->
-                                <DatePicker x:Name="FechaEstadisticas" FirstDayOfWeek="Monday" HorizontalContentAlignment="Center"
-                                            Margin="16,3" FontFamily="Verdana" FontSize="14" SelectedDateFormat="Short" Width="150"
-                                            SelectedDate="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.FechaEstadisticas}"/>
+                                                    <ComboBox Margin="6,3,6,3" Width="120" VerticalAlignment="Bottom" DisplayMemberPath="Validez" ItemStringFormat="dd-MM-yyyy"
+                                                          HorizontalContentAlignment="Center"
+                                                          FontSize="14" Background="WhiteSmoke"
+                                                          ItemsSource="{Binding ListaGrupos}"
+                                                          SelectedItem="{Binding GrupoComparacionSeleccionado}"/>
 
 
-                                <Border BorderBrush="DarkGray" BorderThickness="0.5" Margin="0,5,0,0"/>
+                                                    <!--BOTÓN COMPARAR -->
+                                                    <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10"
+                                                        Content="Comparar" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                                        Command="{Binding cmdCompararGrupo}"
+                                                        ToolTip="Compara el grupo de gráficos actual con el grupo de gráficos seleccionado."/>
 
-                                <!--BOTON ESTADÍSTICAS POR CENTROS -->
-                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
-                                        Content="Estadísticas Centros" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdEstadisticasGraficosPorCentros}"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </Border>
+                                    </xceed:DropDownButton.DropDownContent>
+                                </xceed:DropDownButton>
+
+                                <!--SEPARADOR-->
+                                <TextBlock Height="2" Margin="5,3" Background="LightGray"/>
+
+                                <!-- DESPLEGABLE COLUMNAS -->
+                                <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" Height="80" Width="64"
+                                                      IsOpen="{Binding GraficosVM.BtColumnasAbierto, Mode=TwoWay}">
+                                    <xceed:DropDownButton.Content>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="Imagenes/SeleccionarColumna.png" Style="{StaticResource EstiloImagen}"/>
+                                            <TextBlock Text="Mostrar Columnas" FontSize="10" FontFamily="Arial" TextWrapping="Wrap"
+                                                       VerticalAlignment="Center" TextAlignment="Center"/>
+                                        </StackPanel>
+                                    </xceed:DropDownButton.Content>
+                                    <xceed:DropDownButton.DropDownContent>
+                                        <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue"
+                                                DataContext="{Binding Source={x:Reference TxtAcciones}, Path=DataContext}">
+                                            <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
+                                                <StackPanel Orientation="Vertical">
+
+                                                    <!-- NO CALCULAR -->
+                                                    <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                                                          Content="No Calcular" Margin="5"
+                                                          IsChecked="{Binding Configuracion.MostrarGrafNoCalcular, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                                    <!-- TIEMPO PARTIDO -->
+                                                    <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                                                          Content="Tiempo Partido" Margin="5"
+                                                          IsChecked="{Binding Configuracion.MostrarGrafTiempoPartido, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                                    <!-- HORAS -->
+                                                    <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                                                          Content="Horas" Margin="5"
+                                                          IsChecked="{Binding Configuracion.MostrarGrafHoras, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                                    <!-- DIETAS -->
+                                                    <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                                                          Content="Dietas" Margin="5"
+                                                          IsChecked="{Binding Configuracion.MostrarGrafDietas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                                    <!-- PLUS LIMPIEZA -->
+                                                    <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                                                          Content="Plus Limpieza" Margin="5"
+                                                          IsChecked="{Binding Configuracion.MostrarGrafPlusLimpieza, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+                                                    <!-- PLUS PAQUETERIA -->
+                                                    <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                                                          Content="Plus Paquetería" Margin="5"
+                                                          IsChecked="{Binding Configuracion.MostrarGrafPlusPaqueteria, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+                                                </StackPanel>
+                                            </Border>
+                                        </Border>
+                                    </xceed:DropDownButton.DropDownContent>
+                                </xceed:DropDownButton>
+
+                                <!--SEPARADOR-->
+                                <TextBlock Height="2" Margin="5,3" Background="LightGray"/>
+
+                                <!--BOTON SELECCIÓN FILA -->
+                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64" Visibility="{Binding VisibilidadBotonSeleccionFila}"
+                                        Command="{Binding cmdCambiarModoSeleccion}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="Imagenes/SeleccionFila.png" Style="{StaticResource EstiloImagen}"/>
+                                            <TextBlock Text="Seleccionar Filas" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+
+                                <!--BOTON SELECCIÓN CELDA -->
+                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64" Visibility="{Binding VisibilidadBotonSeleccionCelda}"
+                                        Command="{Binding cmdCambiarModoSeleccion}">
+                                    <Button.Content>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="Imagenes/SeleccionCelda.png" Style="{StaticResource EstiloImagen}"/>
+                                            <TextBlock Text="Seleccionar Celdas" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </Button.Content>
+                                </Button>
+
+
 
                             </StackPanel>
                         </Border>
@@ -199,42 +288,10 @@
                 </xceed:DropDownButton.DropDownContent>
             </xceed:DropDownButton>
 
-            <!-- DESPLEGABLE COMPARAR GRUPO -->
-            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" IsOpen="{Binding GraficosVM.BtCompararAbierto, Mode=TwoWay}">
-                <xceed:DropDownButton.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Comparar.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Name="txtcomparar" Text="Comparar Grupo" FontSize="10" FontFamily="Arial" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </xceed:DropDownButton.Content>
-                <xceed:DropDownButton.DropDownContent>
-                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue">
-                        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
-                            <StackPanel Orientation="Vertical">
-
-                                <TextBlock Margin="6,6,6,3" FontWeight="DemiBold" Text="Comparar con..." HorizontalAlignment="Left"/>
-
-                                <ComboBox Margin="6,3,6,3" Width="120" VerticalAlignment="Bottom" DisplayMemberPath="Validez" ItemStringFormat="dd-MM-yyyy"
-                                          HorizontalContentAlignment="Center"
-                                          FontSize="14" Background="WhiteSmoke"
-                                          ItemsSource="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.ListaGrupos}"
-                                          SelectedItem="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.GrupoComparacionSeleccionado}"/>
-
-
-                                <!--BOTÓN COMPARAR -->
-                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10"
-                                        Content="Comparar" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.cmdCompararGrupo}"
-                                        ToolTip="Compara el grupo de gráficos actual con el grupo de gráficos seleccionado."/>
-
-                            </StackPanel>
-                        </Border>
-                    </Border>
-                </xceed:DropDownButton.DropDownContent>
-            </xceed:DropDownButton>
 
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
 
             <!--BOTON COPIAR-->
             <Button Style="{StaticResource EstiloBotonBarra}" Command="ApplicationCommands.Copy"
@@ -248,8 +305,7 @@
             </Button>
 
             <!--BOTON PEGAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdPegarGraficos}"
-                    CommandParameter="{Binding ElementName=TablaGraficos}">
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdPegarGraficos}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/Pegar.png" Style="{StaticResource EstiloImagen}"/>
@@ -321,12 +377,12 @@
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
-            <!-- DESPLEGABLE COLUMNAS -->
-            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" IsOpen="{Binding GraficosVM.BtColumnasAbierto, Mode=TwoWay}">
+            <!-- DESPLEGABLE CREAR PDF -->
+            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" Focusable="False" IsTabStop="False">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/SeleccionarColumna.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Columnas" FontSize="10" FontFamily="Arial" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <Image Source="Imagenes/GuardarPDF.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Name="TxtCrearPdf" Text="Crear PDF" FontSize="10" FontFamily="Arial" TextWrapping="Wrap" TextAlignment="Center"/>
                     </StackPanel>
                 </xceed:DropDownButton.Content>
                 <xceed:DropDownButton.DropDownContent>
@@ -334,36 +390,38 @@
                         <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
                             <StackPanel Orientation="Vertical">
 
-                                <!-- NO CALCULAR -->
-                                <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          Content="No Calcular" Margin="5"
-                                          IsChecked="{Binding Configuracion.MostrarGrafNoCalcular, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <!--BOTON TABLA GRÁFICO -->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
+                                Content="Tabla Gráficos" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdGraficosEnPdf}"/>
 
-                                <!-- TIEMPO PARTIDO -->
-                                <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          Content="Tiempo Partido" Margin="5"
-                                          IsChecked="{Binding Configuracion.MostrarGrafTiempoPartido, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <!--BOTON GRÁFICOS INDIVIDUALES -->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
+                                Content="Gráficos Individuales" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdGraficosIndividualesEnPdf}"/>
 
-                                <!-- HORAS -->
-                                <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          Content="Horas" Margin="5"
-                                          IsChecked="{Binding Configuracion.MostrarGrafHoras, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <!--BOTON ESTADÍSTICAS GRÁFICOS -->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
+                                Content="Estadísticas" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdEstadisticasGraficos}"/>
 
-                                <!-- DIETAS -->
-                                <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          Content="Dietas" Margin="5"
-                                          IsChecked="{Binding Configuracion.MostrarGrafDietas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <!--BOTON ESTADÍSTICAS GRUPOS -->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
+                                        Content="Estadísticas Grupos" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                        Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdEstadisticasGruposGraficos}"/>
 
-                                <!-- PLUS LIMPIEZA -->
-                                <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          Content="Plus Limpieza" Margin="5"
-                                          IsChecked="{Binding Configuracion.MostrarGrafPlusLimpieza, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <!-- SELECCIÓN FECHA ESTADÍSTICAS GRUPOS -->
+                                <DatePicker x:Name="FechaEstadisticas" FirstDayOfWeek="Monday" HorizontalContentAlignment="Center"
+                                            Margin="16,3" FontFamily="Verdana" FontSize="14" SelectedDateFormat="Short" Width="150"
+                                            SelectedDate="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.FechaEstadisticas}"/>
 
-                                <!-- PLUS PAQUETERIA -->
-                                <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          Content="Plus Paquetería" Margin="5"
-                                          IsChecked="{Binding Configuracion.MostrarGrafPlusPaqueteria, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
 
+                                <Border BorderBrush="DarkGray" BorderThickness="0.5" Margin="0,5,0,0"/>
+
+                                <!--BOTON ESTADÍSTICAS POR CENTROS -->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
+                                        Content="Estadísticas Centros" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                        Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdEstadisticasGraficosPorCentros}"/>
 
                             </StackPanel>
                         </Border>
@@ -371,7 +429,7 @@
                 </xceed:DropDownButton.DropDownContent>
             </xceed:DropDownButton>
 
-
+            
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
@@ -443,9 +501,10 @@
             <DataGrid x:Name="TablaGraficos" ItemsSource="{Binding GraficosVM.VistaGraficos}"
                       SelectedItem="{Binding GraficosVM.GraficoSeleccionado}"
                       IsReadOnly="False" Grid.Column="1" HeadersVisibility="Column" FontSize="12"
-                      AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Single"
-                      SelectionUnit="FullRow" CanUserAddRows="{Binding GraficosVM.HayGrupo}"
-                      GotFocus="TablaGraficos_GotFocus" CurrentCellChanged="TablaGraficos_CurrentCellChanged"
+                      AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False"
+                      SelectionUnit="{Binding GraficosVM.ModoSeleccion}"  
+                      SelectionMode="Extended" CanUserAddRows="{Binding GraficosVM.HayGrupo}"
+                      GotFocus="TablaGraficos_GotFocus" CurrentCellChanged="TablaGraficos_CurrentCellChanged" LoadingRow="TablaGraficos_LoadingRow"
                       Background="Transparent" Style="{StaticResource EstiloGridGraficos}">
 
                 <DataGrid.Resources>

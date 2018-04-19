@@ -52,8 +52,10 @@ namespace Orion.Pijama {
 				foreach (DiaPijama dia in ListaDias) {
 					// Establecemos si es festivo.
 					if (App.Global.CalendariosVM.EsFestivo(dia.DiaFecha)) dia.EsFestivo = true;
-					// Ajustamos la jornada en función del exceso de jornada.
-					if (dia.ExcesoJornada != TimeSpan.Zero) {
+                    // Establecemos las horas trabajadas reales.
+                    dia.TrabajadasReales = dia.GraficoTrabajado.Trabajadas; //TODO: Evaluar si las establecemos antes o después de añadir el exceso de jornada.
+                    // Ajustamos la jornada en función del exceso de jornada.
+                    if (dia.ExcesoJornada != TimeSpan.Zero) {
 						if (dia.GraficoTrabajado != null) dia.GraficoTrabajado.Final += dia.ExcesoJornada;
 					}
 					// Si el conductor no tiene reducción de jornada, ajustamos las horas a la jornada media si es necesario.

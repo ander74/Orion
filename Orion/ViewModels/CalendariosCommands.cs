@@ -27,6 +27,7 @@ using Orion.Convertidores;
 using System.Threading.Tasks;
 using Orion.Servicios;
 using iText.Kernel.Pdf;
+using iText.Layout.Element;
 
 namespace Orion.ViewModels {
 
@@ -249,12 +250,12 @@ namespace Orion.ViewModels {
 		#region PEGAR CALENDARIOS
 		public ICommand cmdPegarCalendarios {
 			get {
-				if (_cmdpegarcalendarios == null) _cmdpegarcalendarios = new RelayCommand(p => PegarCalendarios(p), p => PuedePegarCalendarios(p));
+				if (_cmdpegarcalendarios == null) _cmdpegarcalendarios = new RelayCommand(p => PegarCalendarios(), p => PuedePegarCalendarios());
 				return _cmdpegarcalendarios;
 			}
 		}
 
-		private bool PuedePegarCalendarios(object parametro) {
+		private bool PuedePegarCalendarios2(object parametro) {
 			DataGrid tabla = parametro as DataGrid;
 			if (tabla == null) return false;
 			bool resultado = true;
@@ -266,7 +267,13 @@ namespace Orion.ViewModels {
 			return resultado && tabla.CurrentCell != null & Clipboard.ContainsText();
 		}
 
-		private void PegarCalendarios(object parametro) {
+		private bool PuedePegarCalendarios() {
+			if (ColumnaActual == -1) return false;
+			return true;
+		}
+
+
+		private void PegarCalendarios2(object parametro) {
 			// Convertimos el parámetro pasado.
 			DataGrid grid = parametro as DataGrid;
 			if (grid == null || grid.CurrentCell == null) return;
@@ -278,14 +285,15 @@ namespace Orion.ViewModels {
 			// Si no hay datos, salimos.
 			if (portapapeles == null) return;
 			// Establecemos la columna donde se empieza a pegar.
-			columnagrid = grid.Columns.IndexOf(grid.CurrentCell.Column);
-			filagrid = grid.Items.IndexOf(grid.CurrentCell.Item);
+			columnagrid = grid.Columns.IndexOf(grid.CurrentCell.Column);// Puede sustituirse por: columnagrid = grid.CurrentCell.Column.DisplayIndex;
+			filagrid = grid.Items.IndexOf(grid.CurrentCell.Item);// Puede sustituirse por: filagrid = VistaCalendarios.IndexOf(CalendarioSeleccionado); Si esto da -1, significa que es nuevo, o sea igual a VistaCalendarios.Count - 1.
 			// Iteramos por las filas del portapapeles.
 			foreach (string[] fila in portapapeles) {
 				// Creamos un objeto Calendario o reutilizamos el existente.
 				Calendario calendario;
-				if (filagrid < ListaCalendarios.Count) {
-					calendario = ListaCalendarios[filagrid];
+				if (filagrid < VistaCalendarios.Count -1) { // Cambio ListaCalendarios.Count por VistaCalendarios.Count-1
+					//calendario = ListaCalendarios[filagrid];
+					calendario = VistaCalendarios.GetItemAt(filagrid) as Calendario;//NUEVO
 					esnuevo = false;
 				} else {
 					calendario = new Calendario();
@@ -295,7 +303,11 @@ namespace Orion.ViewModels {
 				int columna = columnagrid;
 
 				foreach (string texto in fila) {
-					while (grid.Columns[columna].Visibility == Visibility.Collapsed) {
+					if (columna >= grid.Columns.Count) continue; //El número de columnas es fijo, esten ocultas o no, así que se puede poner su literal.
+					while (grid.Columns[columna].Visibility == Visibility.Collapsed) {// Esto sólo se tiene en cuenta si en el grid se pueden o no ocultar las columnas.
+																					  // Si ponemos en el ViewModel una funcion que averigüe si el número de columna está o no oculto
+																					  // podemos eliminar esta dependencia del Grid. Para ello, buscamos en las propiedades que las ocultan.
+																					  // La función en Graficos ViewModel es ColumnaVisible(int numero).
 						columna++;
 					}
 					switch (columna) {
@@ -312,7 +324,61 @@ namespace Orion.ViewModels {
 					columna++;
 				}
 				if (esnuevo) {
-					ListaCalendarios.Add(calendario);
+					//ListaCalendarios.Add(calendario);
+					VistaCalendarios.AddNewItem(calendario);//NUEVO
+				}
+				filagrid++;
+				HayCambios = true;
+			}
+		}
+
+		private void PegarCalendarios() {
+			// Parseamos los datos del portapapeles y definimos las variables.
+			List<string[]> portapapeles = Utils.parseClipboard();
+			bool esnuevo;
+			// Si no hay datos, salimos.
+			if (portapapeles == null) return;
+			// Establecemos la fila donde se empieza a pegar.
+			int filagrid = FilaActual;
+			if (filagrid == -1) filagrid = VistaCalendarios.Count - 1;
+			// Iteramos por las filas del portapapeles.
+			foreach (string[] fila in portapapeles) {
+				// Creamos un objeto Calendario o reutilizamos el existente.
+				Calendario calendario;
+				if (filagrid < VistaCalendarios.Count - 1) { 
+					calendario = VistaCalendarios.GetItemAt(filagrid) as Calendario;
+					esnuevo = false;
+				} else {
+					calendario = new Calendario();
+					calendario.Fecha = FechaActual;
+					esnuevo = true;
+				}
+				// Establecemos la columna inicial en la que se va a pegar.
+				int columna = ColumnaActual;
+				// Iteramos por cada campo de la fila del portapapeles
+				foreach (string texto in fila) {
+					if (columna >= 32) continue;
+					// No Hay columnas ocultas, así que ignoramos lo siguiente.
+					//while (!ColumnaVisible(columna)) {
+					//	columna++;
+					//}
+					// Evaluamos la columna actual y parseamos el valor del portapapeles a su valor.
+					switch (columna) {
+						case 0: // Conductor.
+							calendario.IdConductor = int.TryParse(texto, out int i) ? i : 0;
+							break;
+						default: // Dia x.
+							ConvertidorNumeroGraficoCalendario convertidor = new ConvertidorNumeroGraficoCalendario();
+							Tuple<int, int> combografico = (Tuple<int, int>)convertidor.ConvertBack(texto, null, null, null);
+							calendario.ListaDias[columna - 1].Grafico = combografico.Item1;
+							calendario.ListaDias[columna - 1].Codigo = combografico.Item2;
+							break;
+					}
+					columna++;
+				}
+				// Si el elemento es nuevo, se añade a la vista.
+				if (esnuevo) {
+					VistaCalendarios.AddNewItem(calendario);
 				}
 				filagrid++;
 				HayCambios = true;
@@ -957,9 +1023,9 @@ namespace Orion.ViewModels {
 					doc.GetPdfDocument().GetDocumentInfo().SetTitle("Fallos de Calendario");
 					doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
 					doc.SetMargins(25, 25, 25, 25);
-					await CalendarioPrintModel.FallosEnCalendariosEnPdf_7(doc, VistaCalendarios, FechaActual);
-					doc.Close();
-					if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+                    await CalendarioPrintModel.FallosEnCalendariosEnPdf_7(doc, VistaCalendarios, FechaActual);
+                    doc.Close();
+                    if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("CalendariosCommands.CalendariosEnPDFConFallos", ex);
@@ -1449,7 +1515,7 @@ namespace Orion.ViewModels {
 		}
 
 		// Ejecución del comando
-		private async void Reclamacion() {
+		private async void Reclamacion2() {
 
 			try {
 				// Activamos la barra de progreso.
@@ -1473,10 +1539,197 @@ namespace Orion.ViewModels {
 			}
 
 		}
-		#endregion
+
+
+        private async void Reclamacion()
+        {
+
+            try {
+                // Activamos la barra de progreso.
+                App.Global.IniciarProgreso("Creando PDF...");
+                // Pedimos el archivo donde guardarlo.
+                string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}.pdf", Pijama.Fecha, Pijama.Trabajador.Id);
+                string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, Pijama.TextoTrabajador.Replace(":", " -"));
+                if (ruta != "") {
+                    iText.Layout.Document doc = Informes.GetNuevoPdf(ruta);
+                    doc.GetPdfDocument().GetDocumentInfo().SetTitle("Reclamación");
+                    doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
+                    doc.SetMargins(40, 40, 40, 40);
+                    await PijamaPrintModel.CrearReclamacionEnPdf(doc, Pijama.Fecha, Pijama.Trabajador);
+                    doc.Close();
+                    if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+                }
+            } catch (Exception ex) {
+                Mensajes.VerError("CalendariosCommands.Reclamacion", ex);
+            } finally {
+                App.Global.FinalizarProgreso();
+            }
+
+        }
+
+
+        #endregion
+
+
+        #region CAMBIAR MODO SELECCION
+
+        // Comando
+        private ICommand _cmdcambiarmodoseleccion;
+		public ICommand cmdCambiarModoSeleccion {
+			get {
+				if (_cmdcambiarmodoseleccion == null) _cmdcambiarmodoseleccion = new RelayCommand(p => CambiarModoSeleccion());
+				return _cmdcambiarmodoseleccion;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void CambiarModoSeleccion() {
+
+			if (VisibilidadBotonSeleccionFila == Visibility.Visible) {
+				VisibilidadBotonSeleccionFila = Visibility.Collapsed;
+				VisibilidadBotonSeleccionCelda = Visibility.Visible;
+				ModoSeleccion = DataGridSelectionUnit.FullRow;
+			} else {
+				VisibilidadBotonSeleccionCelda = Visibility.Collapsed;
+				VisibilidadBotonSeleccionFila = Visibility.Visible;
+				ModoSeleccion = DataGridSelectionUnit.Cell;
+			}
+
+		}
+        #endregion
+
+
+
+        #region PDF ESTADÍSTICAS
+
+        // Comando
+        private ICommand _cmdpdfestadisticas;
+        public ICommand cmdPdfEstadisticas {
+            get {
+                if (_cmdpdfestadisticas == null) _cmdpdfestadisticas = new RelayCommand(p => PdfEsatdisticas(), p => PuedePdfEsatdisticas());
+                return _cmdpdfestadisticas;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedePdfEsatdisticas() {
+            return true;
+        }
+
+        // Ejecución del comando
+        private async void PdfEsatdisticas() {
+
+            //List<Pijama.HojaPijama> listaPijamas = new List<Pijama.HojaPijama>();
+            List<EstadisticaCalendario> listaEstadisticas = new List<EstadisticaCalendario>();
+
+            BtCrearPdfAbierto = false;
+            try {
+                double num = 1;
+                App.Global.IniciarProgreso($"Recopilando...");
+
+                await Task.Run(() => {
+                    // Llenamos la lista de estadísticas
+                    for (int dia = 1; dia <= DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month); dia++) {
+                        EstadisticaCalendario e = new EstadisticaCalendario() { Dia = dia };
+                        listaEstadisticas.Add(e);
+                    }
+                    // Recorremos todos los calendarios
+                    foreach (object obj in VistaCalendarios) {
+                        double valor = num / VistaCalendarios.Count * 100;
+                        App.Global.ValorBarraProgreso = valor;
+                        num++;
+                        Calendario cal = obj as Calendario;
+                        if (cal == null) continue;
+                        Pijama.HojaPijama hojapijama = new Pijama.HojaPijama(cal, new MensajesServicio());
+                        // Añadimos los datos del pijama a las estadisticas.
+                        for (int dia = 0; dia < DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month); dia++) {
+                            // Cogemos el día de la lista.
+                            Pijama.DiaPijama dp = hojapijama.ListaDias[dia];
+                            EstadisticaCalendario estadistica = listaEstadisticas[dia];
+                            // Si es un día activo
+                            if (dp.Grafico != 0) estadistica.TotalDias += 1;
+                            // Si se ha trabajado y no hemos tenido día de comite
+                            if (dp.Grafico > 0 && dp.Codigo != 1 && dp.Codigo != 2) {
+                                estadistica.TotalJornadas += 1;
+                                switch (dp.GraficoTrabajado.Turno) {
+                                    case 1: estadistica.Turno1 += 1; break;
+                                    case 2: estadistica.Turno2 += 1; break;
+                                    case 3: estadistica.Turno3 += 1; break;
+                                    case 4: estadistica.Turno4 += 1; break;
+                                }
+                                // Horas
+                                estadistica.Trabajadas += dp.GraficoTrabajado.TrabajadasReales; //TODO: Verificar si son reales o ajustadas a 7:20
+                                estadistica.Acumuladas += dp.GraficoTrabajado.Acumuladas;
+                                estadistica.Nocturnas += dp.GraficoTrabajado.Nocturnas;
+                                //TODO: Añadir dato: 
+                                estadistica.TiempoPartido += dp.GraficoTrabajado.TiempoPartido;
+                                // Si es menor de 7:20 se añade a menores, si no, a mayores.
+                                if (estadistica.Trabajadas < App.Global.Convenio.JornadaMedia) {
+                                    estadistica.JornadasMenoresMedia += 1;
+                                    estadistica.HorasNegativas += App.Global.Convenio.JornadaMedia - estadistica.Trabajadas;
+                                } else {
+                                    estadistica.JornadasMayoresMedia += 1;
+                                }
+                            }
+                            // Dietas
+                            estadistica.Desayuno += Math.Round(dp.GraficoTrabajado.Desayuno, 2);
+                            estadistica.Comida += Math.Round(dp.GraficoTrabajado.Comida, 2);
+                            estadistica.Cena += Math.Round(dp.GraficoTrabajado.Cena, 2);
+                            estadistica.PlusCena += Math.Round(dp.GraficoTrabajado.PlusCena, 2);
+                            estadistica.ImporteDesayuno += Math.Round((dp.GraficoTrabajado.Desayuno * App.Global.Convenio.PorcentajeDesayuno / 100) * App.Global.Convenio.ImporteDietas, 2);
+                            estadistica.ImporteComida += Math.Round(dp.GraficoTrabajado.Comida * App.Global.Convenio.ImporteDietas, 2);
+                            estadistica.ImporteCena += Math.Round(dp.GraficoTrabajado.Cena * App.Global.Convenio.ImporteDietas, 2);
+                            estadistica.ImportePlusCena += Math.Round(dp.GraficoTrabajado.PlusCena * App.Global.Convenio.ImporteDietas, 2);
+                            // Pluses
+                            estadistica.PlusMenorDescanso += Math.Round(dp.PlusMenorDescanso, 2);
+                            estadistica.PlusNocturnidad += Math.Round(dp.PlusNocturnidad, 2);
+                            estadistica.PlusNavidad += Math.Round(dp.PlusNavidad, 2);
+                            estadistica.PlusLimipeza += Math.Round(dp.PlusLimpieza, 2);
+                            estadistica.PlusPaqueteria += Math.Round(dp.PlusPaqueteria, 2);
+
+                        }
+                    }
+                    // Establecemos los globales
+                    foreach (EstadisticaCalendario estadistica in listaEstadisticas) {
+                        if (estadistica.TotalJornadas != 0) {
+                            estadistica.MediaTrabajadas = new TimeSpan(estadistica.Trabajadas.Ticks / estadistica.TotalJornadas);
+                        }
+                    }
+
+                });
+                // Activamos la barra de progreso.
+                App.Global.IniciarProgreso("Creando PDF...");
+                // Pedimos el archivo donde guardarlo.
+                string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1} - Estadisticas Calendarios", FechaActual, App.Global.CentroActual.ToString());
+                if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+                nombreArchivo += ".pdf";
+                //TODO: Cambiar tipo de informe.
+                string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasCalendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
+                if (ruta != "")
+                {
+                    iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
+                    doc.GetPdfDocument().GetDocumentInfo().SetTitle("Estadísticas de Calendario");
+                    doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
+                    doc.SetMargins(25, 25, 25, 25);
+                    await CalendarioPrintModel.EstadisticasCalendariosEnPdf(doc, listaEstadisticas, FechaActual);
+                    doc.Close();
+                    if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+                }
+            } catch (Exception ex) {
+                Mensajes.VerError("CalendariosCommands.PdfEstadisticas", ex);
+            } finally {
+                App.Global.FinalizarProgreso();
+                BtCrearPdfAbierto = false;
+            }
+
+        }
+        #endregion
 
 
 
 
-	}// Fin de la clase.
+
+    }// Fin de la clase.
 }

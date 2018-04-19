@@ -198,7 +198,7 @@ namespace Orion.Models {
 
 
 		// ====================================================================================================
-		#region CARPETAS
+		#region CARPETAS Y ARCHIVOS
 		// ====================================================================================================
 
 		private string _carpetaayuda = "";
@@ -271,6 +271,32 @@ namespace Orion.Models {
 				}
 			}
 		}
+
+
+        private string _rutaLogoSindicato = "";
+        public string RutaLogoSindicato {
+            get { return _rutaLogoSindicato; }
+            set {
+                if (_rutaLogoSindicato != value) {
+                    _rutaLogoSindicato = value;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
+        private string _rutamarcaagua = "";
+        public string RutaMarcaAgua {
+            get { return _rutamarcaagua; }
+            set {
+                if (_rutamarcaagua != value) {
+                    _rutamarcaagua = value;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
 
 
 

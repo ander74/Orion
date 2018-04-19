@@ -42,6 +42,7 @@ namespace Orion.Config {
 			return lista;
 		}
 
+
 		/// <summary>
 		/// Convierte una hora en texto con formato "hh:mm" en un TimeSpan dado.
 		/// </summary>
@@ -50,7 +51,7 @@ namespace Orion.Config {
 		/// <param name="esPlus">Si es true, permite poner horas entre 0 y 29. Si es false, solo permite horas entre 0 y 23.</param>
 		/// <returns>TimeSpan pasado con la hora que hay en el texto si es una hora válida o el TimeSpan pasado tal cual.</returns>
 		public static bool ParseHora(string texto, out TimeSpan hora, bool esPlus = false) {
-			texto = texto.Replace(".", ":");
+			texto = texto.Replace(".", ":").Replace(",",":");
 			if (esPlus) {
 				texto = texto.Replace("24:", "1.00:");
 				texto = texto.Replace("25:", "1.01:");
