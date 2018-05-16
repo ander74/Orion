@@ -12,24 +12,31 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Instalacion (x32)|Any CPU = Instalacion (x32)|Any CPU
 		Release|Any CPU = Release|Any CPU
 		Release64|Any CPU = Release64|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{229091D4-CD0F-4325-B5F4-10748D530DF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{229091D4-CD0F-4325-B5F4-10748D530DF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{229091D4-CD0F-4325-B5F4-10748D530DF5}.Instalacion (x32)|Any CPU.ActiveCfg = Instalacion (x32)|Any CPU
+		{229091D4-CD0F-4325-B5F4-10748D530DF5}.Instalacion (x32)|Any CPU.Build.0 = Instalacion (x32)|Any CPU
 		{229091D4-CD0F-4325-B5F4-10748D530DF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{229091D4-CD0F-4325-B5F4-10748D530DF5}.Release|Any CPU.Build.0 = Release|Any CPU
 		{229091D4-CD0F-4325-B5F4-10748D530DF5}.Release64|Any CPU.ActiveCfg = Release64|Any CPU
 		{229091D4-CD0F-4325-B5F4-10748D530DF5}.Release64|Any CPU.Build.0 = Release64|Any CPU
 		{6D6FFD13-0CBA-4097-967F-89182703EB11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D6FFD13-0CBA-4097-967F-89182703EB11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6D6FFD13-0CBA-4097-967F-89182703EB11}.Instalacion (x32)|Any CPU.ActiveCfg = Instalacion (x32)|Any CPU
+		{6D6FFD13-0CBA-4097-967F-89182703EB11}.Instalacion (x32)|Any CPU.Build.0 = Instalacion (x32)|Any CPU
 		{6D6FFD13-0CBA-4097-967F-89182703EB11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D6FFD13-0CBA-4097-967F-89182703EB11}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6D6FFD13-0CBA-4097-967F-89182703EB11}.Release64|Any CPU.ActiveCfg = Release|Any CPU
 		{6D6FFD13-0CBA-4097-967F-89182703EB11}.Release64|Any CPU.Build.0 = Release|Any CPU
 		{969848AD-BCF1-4F05-9F64-400C57EC9C0B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{969848AD-BCF1-4F05-9F64-400C57EC9C0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{969848AD-BCF1-4F05-9F64-400C57EC9C0B}.Instalacion (x32)|Any CPU.ActiveCfg = Instalacion (x32)|Any CPU
+		{969848AD-BCF1-4F05-9F64-400C57EC9C0B}.Instalacion (x32)|Any CPU.Build.0 = Instalacion (x32)|Any CPU
 		{969848AD-BCF1-4F05-9F64-400C57EC9C0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{969848AD-BCF1-4F05-9F64-400C57EC9C0B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{969848AD-BCF1-4F05-9F64-400C57EC9C0B}.Release64|Any CPU.ActiveCfg = Release|Any CPU
@@ -40,20 +47,5 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {CF0754CB-8A73-4799-B3D4-2E6FB3F090FB}
-	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = https://ander-orion.visualstudio.com/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = GenericDataModels\\GenericDataModels.csproj
-		SccProjectName1 = GenericDataModels
-		SccLocalPath1 = GenericDataModels
-		SccProjectUniqueName2 = Orion\\Orion.csproj
-		SccProjectName2 = Orion
-		SccLocalPath2 = Orion
-		SccProjectUniqueName3 = OrionUpdate\\OrionUpdate.csproj
-		SccProjectName3 = OrionUpdate
-		SccLocalPath3 = OrionUpdate
 	EndGlobalSection
 EndGlobal

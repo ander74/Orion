@@ -118,9 +118,19 @@ namespace OrionUpdate {
 					GenerarError();
 					return;
 				}
+                // Las siguientes son para Live Charts
+                if (!CopiarArchivoRaiz("LiveCharts.dll")) {
+                    GenerarError();
+                    return;
+                }
+                if (!CopiarArchivoRaiz("LiveCharts.Wpf.dll")) {
+                    GenerarError();
+                    return;
+                }
 
-				// CONFIGURACION
-				if (!CopiarArchivoRaiz("Orion.exe.config")) {
+
+                // CONFIGURACION
+                if (!CopiarArchivoRaiz("Orion.exe.config")) {
 					GenerarError();
 					return;
 				}

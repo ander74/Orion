@@ -1,7 +1,7 @@
 ﻿<!-- =============================================== -->
 <!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
 <!--                                                 -->
-<!--  Vea el archivo Licencia.txt para más detalles  -->
+<!--  Vea el archivo Licencia.txt para mas detalles  -->
 <!-- =============================================== -->
 <Window x:Class="Orion.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -53,7 +53,7 @@
             <!-- ==================================================================================================== -->
             <!-- PESTAÑA GRÁFICOS                                                                                     -->
             <!-- ==================================================================================================== -->
-            <TabItem x:Name="TabGraficos" Header="Gráficos" Width="150" Height="24" BorderThickness="1" Panel.ZIndex="50"
+            <TabItem x:Name="TabGraficos" Header="Gráficos" Width="150" Height="24" Panel.ZIndex="50"
                      Style="{StaticResource EstiloPestañas}">
                 <views:VistaGraficos x:Name="PestañaGraficos"/>
             </TabItem>
@@ -98,7 +98,7 @@
             <!-- ==================================================================================================== -->
             <!-- PESTAÑA ESTADÍSTICAS                                                                                       -->
             <!-- ==================================================================================================== -->
-            <TabItem x:Name="TabEstadisticas" Header="Estadísticas" Width="150" Height="24"  Panel.ZIndex="30"
+            <TabItem x:Name="TabEstadisticas" Header="Estadísticas" Width="150" Height="24"  Panel.ZIndex="25"
                      Style="{StaticResource EstiloPestañas}">
                 <views:VistaEstadisticas x:Name="PestañaEstadisticas"/>
             </TabItem>
@@ -112,7 +112,7 @@
         <!-- ==================================================================================================== -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdPantallaCompleta}" CommandParameter="{Binding ElementName=Ventana}"
-                    Margin="1" Content="P" Foreground="DarkGray" FontWeight="Bold" FontSize="16" Padding="20,1"/>
+                    Margin="0" Content="P" Foreground="DarkGray" FontWeight="Bold" FontSize="16" Padding="20,1"/>
         </StackPanel>
 
         <!-- ==================================================================================================== -->

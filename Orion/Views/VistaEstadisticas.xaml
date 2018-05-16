@@ -1,7 +1,7 @@
 ﻿<!-- =============================================== -->
 <!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
 <!--                                                 -->
-<!--  Vea el archivo Licencia.txt para más detalles  -->
+<!--  Vea el archivo Licencia.txt para mas detalles  -->
 <!-- =============================================== -->
 <UserControl x:Class="Orion.Views.VistaEstadisticas"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -22,6 +22,16 @@
         
         <!-- CONVERTIDORES -->
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility"/>
+        
+        <!-- ESTILOS -->
+        <Style TargetType="TextBlock" x:Key="EstiloTextoGrupoGraficos">
+            <Setter Property="Width" Value="65"/>
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="TextAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+        </Style>
 
     </UserControl.Resources>
 
@@ -31,96 +41,123 @@
     <!-- ==================================================================================================== -->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="6*"/>
+        </Grid.ColumnDefinitions>
 
+        <StackPanel Orientation="Vertical" Background="{StaticResource FondoCeleste1}">
 
-        <!-- ==================================================================================================== -->
-        <!-- BARRA DE BOTONES -->
-        <!-- ==================================================================================================== -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="80" Background="{StaticResource DegradadoCeleste0}">
-
-            <!--BOTON GUARDAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding cmdGuardarCambios}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Guardar.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarAzul}"/>
-                        <Image Source="Imagenes/GuardarRojo.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarRojo}"/>
-                        <TextBlock Text="Guardar" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-
-            <!--SEPARADOR-->
-            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
-
+            
             <!-- BOTÓN GRÁFICOS -->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding EstadisticasVM.cmdEstadisticasGraficos}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/TablaDetalle.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Gráficos" TextWrapping="Wrap" TextAlignment="Center"/>
+            <ToggleButton IsChecked="{Binding EstadisticasVM.BtGraficosActivo}"
+                          Style="{StaticResource EstiloBotonControlEstadisticas}" Command="{Binding EstadisticasVM.cmdEstadisticasGraficos}">
+                <ToggleButton.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Imagenes/TablaDetalle.png" Style="{StaticResource EstiloImagenControlEstadisticas}"/>
+                        <TextBlock Style="{StaticResource EstiloTextoControlEstadisticas}" Text="Gráficos"/>
                     </StackPanel>
-                </Button.Content>
-            </Button>
+                </ToggleButton.Content>
+            </ToggleButton>
+            <Grid Margin="5,5,6,5"  Visibility="{Binding EstadisticasVM.BtGraficosActivo, Converter={StaticResource cnvBoolToVisibility}}">
+                <Border Margin="0,-10,0,0" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5" BorderBrush="{StaticResource AzulOscuro}"/>
+
+                <!-- PANEL DE GRÁFICOS -->
+                <StackPanel Orientation="Vertical">
+
+                    <CheckBox Margin="10,5" Content="Sólo Año Actual" IsChecked="{Binding EstadisticasVM.TableroGraficosVM.MostrarSoloAñoActual}"/>
+                    
+                    <!-- GRUPOS ARRASATE -->
+                    <StackPanel Orientation="Horizontal" Margin="10,5">
+                        <TextBlock Style="{StaticResource EstiloTextoGrupoGraficos}" Text="ARRASATE"/>
+                        <ComboBox Width="90" FontSize="12" ItemStringFormat="dd-MM-yyyy" SelectedIndex="0" DisplayMemberPath="Validez"
+                                  ItemsSource="{Binding EstadisticasVM.TableroGraficosVM.GruposArrasate}" SelectedItem="{Binding EstadisticasVM.TableroGraficosVM.GrupoSeleccionadoArrasate}"/>
+                    </StackPanel>
+                    <!-- GRUPOS BILBAO -->
+                    <StackPanel Orientation="Horizontal" Margin="10,5">
+                        <TextBlock Style="{StaticResource EstiloTextoGrupoGraficos}" Text="BILBAO"/>
+                        <ComboBox Width="90" FontSize="12" ItemStringFormat="dd-MM-yyyy" SelectedIndex="0" DisplayMemberPath="Validez"
+                                  ItemsSource="{Binding EstadisticasVM.TableroGraficosVM.GruposBilbao}" SelectedItem="{Binding EstadisticasVM.TableroGraficosVM.GrupoSeleccionadoBilbao}"/>
+                    </StackPanel>
+                    <!-- GRUPOS DONOSTI -->
+                    <StackPanel Orientation="Horizontal" Margin="10,5">
+                        <TextBlock Style="{StaticResource EstiloTextoGrupoGraficos}" Text="DONOSTI"/>
+                        <ComboBox Width="90" FontSize="12" ItemStringFormat="dd-MM-yyyy" SelectedIndex="0" DisplayMemberPath="Validez"
+                                  ItemsSource="{Binding EstadisticasVM.TableroGraficosVM.GruposDonosti}" SelectedItem="{Binding EstadisticasVM.TableroGraficosVM.GrupoSeleccionadoDonosti}"/>
+                    </StackPanel>
+                    <!-- GRUPOS VITORIA -->
+                    <StackPanel Orientation="Horizontal" Margin="10,5">
+                        <TextBlock Style="{StaticResource EstiloTextoGrupoGraficos}" Text="GASTEIZ"/>
+                        <ComboBox Width="90" FontSize="12" ItemStringFormat="dd-MM-yyyy" SelectedIndex="0" DisplayMemberPath="Validez"
+                                  ItemsSource="{Binding EstadisticasVM.TableroGraficosVM.GruposVitoria}" SelectedItem="{Binding EstadisticasVM.TableroGraficosVM.GrupoSeleccionadoVitoria}"/>
+                    </StackPanel>
+
+                </StackPanel>
+            </Grid>
+
+            
+            <!-- BOTÓN CALENDARIOS -->
+            <ToggleButton IsChecked="{Binding EstadisticasVM.BtCalendariosActivo}"
+                          Style="{StaticResource EstiloBotonControlEstadisticas}" Command="{Binding EstadisticasVM.cmdEstadisticasGraficos}">
+                <ToggleButton.Content>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Imagenes/TablaDetalle.png" Style="{StaticResource EstiloImagenControlEstadisticas}"/>
+                        <TextBlock Style="{StaticResource EstiloTextoControlEstadisticas}" Text="Calendarios"/>
+                    </StackPanel>
+                </ToggleButton.Content>
+            </ToggleButton>
+
+            <Grid Margin="5,5,6,5"  Visibility="{Binding EstadisticasVM.BtCalendariosActivo, Converter={StaticResource cnvBoolToVisibility}}">
+                <Border Margin="0,-10,0,0" BorderThickness="1,0,1,1" CornerRadius="0,0,5,5" BorderBrush="{StaticResource AzulOscuro}"/>
+
+                <!-- PANEL DE CALENDARIOS -->
+                <StackPanel Orientation="Vertical" Visibility="{Binding EstadisticasVM.BtCalendariosActivo, Converter={StaticResource cnvBoolToVisibility}}">
+
+                    <!-- BOTÓN NÚMERO JORNADAS -->
+                    <Button Style="{StaticResource EstiloBotonOpcionEstadisticas}" Command="{Binding EstadisticasVM.cmdEstadisticasGraficos}">
+                        <Button.Content>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Style="{StaticResource EstiloTextoControlEstadisticas}" Text="Número Jornadas"/>
+                            </StackPanel>
+                        </Button.Content>
+                    </Button>
+
+                </StackPanel>
+            </Grid>
 
 
 
         </StackPanel>
 
-        <!-- ==================================================================================================== -->
-        <!-- BOTONES AUXILIARES -->
-        <!-- ==================================================================================================== -->
-        <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center">
-
-            <!-- AYUDA -->
-            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarAyuda}" CommandParameter="Conductores" Margin="1"
-                    HorizontalContentAlignment="Center">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Ayuda.png" Style="{StaticResource EstiloImagenPequeña}"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-
-            <!-- CALCULADORA -->
-            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarCalculadora}" Margin="1"
-                    HorizontalContentAlignment="Center"  IsEnabled="{Binding Configuracion.BotonCalculadoraActivo, Mode=TwoWay}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Calculadora.png" Style="{StaticResource EstiloImagenPequeña}"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-
-        </StackPanel>
-
-
-        <!-- IMAGEN DE FONDO-->
-        <Image Source="Imagenes\Orion.png" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.1" Grid.Row="1"/>
-
-        <!-- BORDE DEL CONTENIDO -->
-        <Border Grid.Row="1" Background="Transparent" BorderBrush="Gray" BorderThickness="0.5"/>
-
-        <!-- ==================================================================================================== -->
-        <!-- CONTENIDO PRINCIPAL -->
-        <!-- ==================================================================================================== -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-
-            <TextBlock FontFamily="Verdana" FontSize="18" FontStyle="Italic" Margin="20" Text="No hay nada que mostrar" Foreground="Gray"
-                       Visibility="{Binding EstadisticasVM.VerNadaQueMostrar, Converter={StaticResource cnvBoolToVisibility}}"/>
-
-
-
-        </Grid>
         
+        <!-- ==================================================================================================== -->
+        <!-- SEPARADOR -->
+        <!-- ==================================================================================================== -->
+        <Border Margin="0,-3,0,-3" BorderThickness="0,0,1,0" BorderBrush="SlateBlue"/>
+
         
+        <!-- ==================================================================================================== -->
+        <!-- GRUPOS DE TABLEROS -->
+        <!-- ==================================================================================================== -->
+        
+        <!-- Tablero Inicial Vacío-->
+        <TextBlock Grid.Row="0" Grid.Column="1" FontFamily="Verdana" FontSize="24" FontStyle="Italic" Foreground="Gray"
+                   Margin="15" Text="Sin Datos que mostrar."/>
+
+        <!-- Tablero Gráficos -->
+        <local:TableroEstadisticasGraficos Grid.Row="0" Grid.Column="1" DataContext="{Binding EstadisticasVM.TableroGraficosVM}"  Background="White"
+                                           Visibility="{Binding VerTablero, Converter={StaticResource cnvBoolToVisibility}}"/>
+
+
     </Grid>
+    
+    
+    
+    
+    
+    
+
+
 </UserControl>

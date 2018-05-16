@@ -1,7 +1,7 @@
 ﻿<!-- =============================================== -->
 <!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
 <!--                                                 -->
-<!--  Vea el archivo Licencia.txt para más detalles  -->
+<!--  Vea el archivo Licencia.txt para mas detalles  -->
 <!-- =============================================== -->
 <UserControl x:Class="Orion.Views.VistaConductores"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"

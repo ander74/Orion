@@ -695,7 +695,6 @@ namespace Orion.PrintModel
                 doc.Add(GetTablaEstadisticasCalendarios(listaEstadisticas, fecha));
                 doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                 doc.Add(GetTablaEstadisticasCalendarios(listaEstadisticas, fecha, true));
-                doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
             });
 
         }

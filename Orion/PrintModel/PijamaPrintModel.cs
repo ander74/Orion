@@ -641,14 +641,15 @@ namespace Orion.PrintModel {
                 float anchoHoja = PageSize.A4.Rotate().GetWidth();
                 float altoHoja = PageSize.A4.Rotate().GetHeight();
                 iText.Layout.Element.Image imagen = InformesServicio.GetLogoSindicato();
-                imagen.ScaleToFit(anchoHoja / 5, 30);
-                float ancho = imagen.GetImageScaledWidth();
-                float alto = imagen.GetImageScaledHeight();
-                imagen.SetFixedPosition(anchoHoja - 25 - ancho, altoHoja - 25 - alto);
-                
+                if (imagen != null) {
+                    imagen.ScaleToFit(anchoHoja / 5, 30);
+                    float ancho = imagen.GetImageScaledWidth();
+                    float alto = imagen.GetImageScaledHeight();
+                    imagen.SetFixedPosition(anchoHoja - 25 - ancho, altoHoja - 25 - alto);
+                    doc.Add(imagen);
+                }
                 // Añadimos la tabla al documento
                 doc.Add(GetHojaPijama(pijama));
-                doc.Add(imagen);
 			});
 		}
 
@@ -693,10 +694,12 @@ namespace Orion.PrintModel {
                 float anchoHoja = PageSize.A4.Rotate().GetWidth();
                 float altoHoja = PageSize.A4.Rotate().GetHeight();
                 iText.Layout.Element.Image imagen = InformesServicio.GetLogoSindicato();
-                imagen.ScaleToFit(anchoHoja / 5, 30);
-                float ancho = imagen.GetImageScaledWidth();
-                float alto = imagen.GetImageScaledHeight();
-                imagen.SetFixedPosition(anchoHoja - 25 - ancho, altoHoja - 25 - alto);
+                if (imagen != null) {
+                    imagen.ScaleToFit(anchoHoja / 5, 30);
+                    float ancho = imagen.GetImageScaledWidth();
+                    float alto = imagen.GetImageScaledHeight();
+                    imagen.SetFixedPosition(anchoHoja - 25 - ancho, altoHoja - 25 - alto);
+                }
                 // Creamos una hoja por cada pijama.
                 num = 1;
 				App.Global.IniciarProgreso("Creando PDF...");
@@ -706,7 +709,7 @@ namespace Orion.PrintModel {
 					if (num > 1) doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
 					num++;
 					doc.Add(GetHojaPijama(pijama));
-                    doc.Add(imagen);
+                    if (imagen != null) doc.Add(imagen);
 				}
 			});
 		}
@@ -794,9 +797,11 @@ namespace Orion.PrintModel {
 
                 // Añadimos el logo del sindicato.
                 iText.Layout.Element.Image logoSindicato = InformesServicio.GetLogoSindicato();
-                logoSindicato.ScaleToFit(anchoHoja / 3, 75);
-                logoSindicato.SetFixedPosition(anchoHoja - 40 - logoSindicato.GetImageScaledWidth(), altoHoja - 40 - logoSindicato.GetImageScaledHeight());
-                doc.Add(logoSindicato);
+                if (logoSindicato != null) {
+                    logoSindicato.ScaleToFit(anchoHoja / 3, 75);
+                    logoSindicato.SetFixedPosition(anchoHoja - 40 - logoSindicato.GetImageScaledWidth(), altoHoja - 40 - logoSindicato.GetImageScaledHeight());
+                    doc.Add(logoSindicato);
+                }
 
                 // Añadimos la fecha
                 parrafo = new Paragraph($"{fecha:MMMM yyyy}".ToUpper());
@@ -849,10 +854,12 @@ namespace Orion.PrintModel {
 
                 // Añadimos la marca de agua.
                 iText.Layout.Element.Image marcaAgua = InformesServicio.GetMarcaDeAgua();
-                marcaAgua.ScaleToFit((anchoHoja / 3) * 2, 800);
-                marcaAgua.SetOpacity(0.05f);
-                marcaAgua.SetFixedPosition((anchoHoja / 2) - (marcaAgua.GetImageScaledWidth() / 2), ((altoHoja) / 2) -( marcaAgua.GetImageScaledHeight() / 2));
-                doc.Add(marcaAgua);
+                if (marcaAgua != null) {
+                    marcaAgua.ScaleToFit((anchoHoja / 3) * 2, 800);
+                    marcaAgua.SetOpacity(0.05f);
+                    marcaAgua.SetFixedPosition((anchoHoja / 2) - (marcaAgua.GetImageScaledWidth() / 2), ((altoHoja) / 2) - (marcaAgua.GetImageScaledHeight() / 2));
+                    doc.Add(marcaAgua);
+                }
 
                 // ==================================================
                 // ACCIONES EN EL LIENZO

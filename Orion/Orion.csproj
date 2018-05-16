@@ -71,6 +71,16 @@
   <PropertyGroup>
     <StartupObject>Orion.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Instalacion %28x32%29|AnyCPU'">
+    <OutputPath>C:\Orion\Archivos Instalacion\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.1.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
       <HintPath>..\packages\Portable.BouncyCastle.1.8.1.3\lib\net40\BouncyCastle.Crypto.dll</HintPath>
@@ -104,6 +114,12 @@
     </Reference>
     <Reference Include="itextsharp, Version=5.5.13.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\iTextSharp.5.5.13\lib\itextsharp.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.0.9.7\lib\net45\LiveCharts.dll</HintPath>
+    </Reference>
+    <Reference Include="LiveCharts.Wpf, Version=0.9.7.0, Culture=neutral, PublicKeyToken=0bc1f845d1ebb8df, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiveCharts.Wpf.0.9.7\lib\net45\LiveCharts.Wpf.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -177,6 +193,7 @@
     <Compile Include="DataModels\BdCalendarios.cs" />
     <Compile Include="DataModels\BdConductores.cs" />
     <Compile Include="DataModels\BdDiasCalendario.cs" />
+    <Compile Include="DataModels\BdEstadisticas.cs" />
     <Compile Include="DataModels\BdFestivos.cs" />
     <Compile Include="DataModels\BdGruposGraficos.cs" />
     <Compile Include="DataModels\BdGraficos.cs" />
@@ -190,6 +207,7 @@
     <Compile Include="DataModels\Respaldo.cs" />
     <Compile Include="Extensiones.cs" />
     <Compile Include="Models\EstadisticaCalendario.cs" />
+    <Compile Include="Models\EstadisticaGrupoGraficos.cs" />
     <Compile Include="Models\OpcionesConfiguracion.cs" />
     <Compile Include="Models\OpcionesConvenio.cs" />
     <Compile Include="Models\DiaCalendario.cs" />
@@ -245,12 +263,16 @@
     <Compile Include="ViewModels\OpcionesViewModel.cs" />
     <Compile Include="ViewModels\ReclamacionesViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ViewModels\TableroGraficosViewModel.cs" />
     <Compile Include="ViewModels\VentanaAcercaDeVM.cs" />
     <Compile Include="ViewModels\VentanaCobrarHorasVM.cs" />
     <Compile Include="ViewModels\VentanaMensajesVM.cs" />
     <Compile Include="ViewModels\VentanaNuevoGrupoVM.cs" />
     <Compile Include="ViewModels\VentanaRegularAñoVM.cs" />
     <Compile Include="Servicios\MensajesServicio.cs" />
+    <Compile Include="Views\TableroEstadisticasGraficos.xaml.cs">
+      <DependentUpon>TableroEstadisticasGraficos.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\VentanaAcercaDe.xaml.cs">
       <DependentUpon>VentanaAcercaDe.xaml</DependentUpon>
     </Compile>
@@ -347,6 +369,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\TableroEstadisticasGraficos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\VentanaAcercaDe.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -717,6 +743,9 @@
   <ItemGroup>
     <Resource Include="Views\Imagenes\SeleccionCelda.png" />
     <Resource Include="Views\Imagenes\SeleccionFila.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Manuales\DateTime y TimeSpan.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

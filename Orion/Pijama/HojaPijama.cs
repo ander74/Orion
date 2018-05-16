@@ -900,16 +900,20 @@ namespace Orion.Pijama {
 		/// </summary>
 		public decimal DiasComputoTrabajo {
 			get {
-				if (DiasInactivo == 0) {
-					int dias = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
-					dias += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
-					return DiasMes - dias;
-				} else {
-					int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-					return App.Global.Convenio.TrabajoAnuales * (dias - DiasInactivo) / 365m;
-				}
-			}
-		}
+				//if (DiasInactivo == 0) {
+				//	int dias = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
+				//	dias += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
+				//	return DiasMes - dias;
+				//} else {
+				//	int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
+				//	return App.Global.Convenio.TrabajoAnuales * (dias - DiasInactivo) / 365m;
+				//}
+                decimal findes = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
+                findes += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
+                decimal dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
+                return DiasActivo - (findes * (dias - DiasInactivo) / dias);
+            }
+        }
 
 
 		/// <summary>
@@ -917,14 +921,18 @@ namespace Orion.Pijama {
 		/// </summary>
 		public decimal DiasComputoDescanso {
 			get {
-				if (DiasInactivo == 0) {
-					int dias = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
-					dias += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
-					return dias;
-				} else {
-					int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-					return App.Global.Convenio.DescansosAnuales * (dias - DiasInactivo) / 365m;
-				}
+				//if (DiasInactivo == 0) {
+				//	int dias = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
+				//	dias += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
+				//	return dias;
+				//} else {
+                    //int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
+                    //return App.Global.Convenio.DescansosAnuales * (dias - DiasInactivo) / 365m;
+                    decimal findes = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
+                    findes += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
+                    decimal dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
+                    return findes * (dias - DiasInactivo) / dias;
+				//}
 			}
 		}
 
