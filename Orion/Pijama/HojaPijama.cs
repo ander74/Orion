@@ -99,7 +99,7 @@ namespace Orion.Pijama {
 						// Si las horas que separan el inicio menos el final anterior son menos de doce...
 						decimal diferenciahoras = (decimal)(inicio - finalAnterior.Value).TotalHours;
 						TimeSpan df = new TimeSpan(0,12,0,0) - (inicio - finalAnterior.Value);
-						if (diferenciahoras < 12) {
+						if (diferenciahoras < 12 && diferenciahoras >= 9) {
 							//dia.TiempoMenorDescanso = (12 - diferenciahoras);
 							dia.TiempoMenorDescanso = $"{df.ToTexto()} ({df.ToDecimal():0.00})";
 							dia.PlusMenorDescanso = (12 - diferenciahoras) * App.Global.Convenio.DietaMenorDescanso;
@@ -163,6 +163,8 @@ namespace Orion.Pijama {
 			bool sabadotrabajado = false;   // Indica si el último sábado se ha trabajado.
 			bool sabadodescansado = false;  // Indica si el último sábado se ha descansado.
 
+            TimeSpan? finalAnterior = TimeSpan.Zero; // Indica la hora final del servicio anterior.
+
 			// Evaluamos los días.
 			foreach (DiaPijama dia in ListaDias) {
 
@@ -181,7 +183,6 @@ namespace Orion.Pijama {
 					}
 					// Si hay más de seis días trabajados, se añade un fallo.
 					if (diastrabajados > 6) resultado += String.Format("Día {0:00}: Más de seis días de trabajo.\n", primerdiatrabajo);
-
 					// Reiniciamos los descansos y los días inactivos.
 					diasdescansados = 0;
 					diasinactivos = 0;
@@ -291,7 +292,25 @@ namespace Orion.Pijama {
 				if (dia.DiaFecha.DayOfWeek == DayOfWeek.Sunday && findestrabajados > 2)
 					resultado += String.Format("Día {0:00}: Más de dos fines de semana trabajados seguidos.\n", dia.Dia);
 
-			}
+                // COMPROBAR QUE HAY MENOS DE 9 HORAS ENTRE SERVICIOS.
+                if (dia.Grafico > 0) {
+                    if (finalAnterior.HasValue && dia.GraficoTrabajado.Inicio.HasValue) {
+                        // Añadimos uno al inicio de hoy.
+                        TimeSpan inicio = dia.GraficoTrabajado.Inicio.Value.Add(new TimeSpan(1, 0, 0, 0));
+                        // Si el turno es 3 (Noche) y empieza más tarde de las 00:00h, se añade uno más
+                        if (dia.GraficoTrabajado.Turno == 3 && inicio.Hours < 3) inicio = inicio.Add(new TimeSpan(1, 0, 0, 0));
+                        // Si el final anterior es mayor que el inicio, añadimos otro día al inicio.
+                        if (inicio < finalAnterior.Value) inicio = inicio.Add(new TimeSpan(1, 0, 0, 0));
+                        // Si las horas que separan el inicio menos el final anterior son menos de doce...
+                        decimal diferenciahoras = (decimal)(inicio - finalAnterior.Value).TotalHours;
+                        if (diferenciahoras < 9) resultado += String.Format("Día {0:00}: Menos de nueve horas entre jornadas.\n", dia.Dia);
+                    }
+                    finalAnterior = dia.GraficoTrabajado.Final;
+                } else {
+                    finalAnterior = null;
+                }
+
+            }
 
 			return resultado;
 		}

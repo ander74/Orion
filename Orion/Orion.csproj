@@ -206,8 +206,11 @@
     <Compile Include="DataModels\ProcSQL.cs" />
     <Compile Include="DataModels\Respaldo.cs" />
     <Compile Include="Extensiones.cs" />
+    <Compile Include="Models\DescansosPorDia.cs" />
     <Compile Include="Models\EstadisticaCalendario.cs" />
     <Compile Include="Models\EstadisticaGrupoGraficos.cs" />
+    <Compile Include="Models\GraficoFecha.cs" />
+    <Compile Include="Models\GraficosPorDia.cs" />
     <Compile Include="Models\OpcionesConfiguracion.cs" />
     <Compile Include="Models\OpcionesConvenio.cs" />
     <Compile Include="Models\DiaCalendario.cs" />

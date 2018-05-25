@@ -15,6 +15,7 @@ using System.Collections.ObjectModel;
 using Orion.Models;
 using System.Windows;
 using Orion.Config;
+using System.Diagnostics;
 
 namespace Orion.DataModels {
 
@@ -44,11 +45,11 @@ namespace Orion.DataModels {
 				OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
 				OleDbDataReader lector = null;
 				Comando.Parameters.AddWithValue("idgrupo", IdGrupo);
-
+                
 				try {
 
-					// Ejecutamos el comando y extraemos los gráficos del lector a la lista.
-					conexion.Open();
+                    // Ejecutamos el comando y extraemos los gráficos del lector a la lista.
+                    conexion.Open();
 					lector = Comando.ExecuteReader();
 
 					while (lector.Read()) {
@@ -60,8 +61,8 @@ namespace Orion.DataModels {
 					}
 					lector.Close();
 				} catch (Exception ex) {
-					Utils.VerError("BdGraficos.getGraficos", ex);
-				}
+                    Utils.VerError("BdGraficos.getGraficos", ex);
+                }
 			}
 			return lista;
 

@@ -72,11 +72,6 @@ namespace OrionUpdate {
 					return;
 				}
 
-				//TODO: Eliminar.
-				if (!CopiarArchivoRaiz("itextsharp.dll")) {
-					GenerarError();
-					return;
-				}
 				// Las siguientes son para iText7
 				if (!CopiarArchivoRaiz("BouncyCastle.Crypto.dll")) {
 					GenerarError();

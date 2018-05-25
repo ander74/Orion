@@ -381,6 +381,11 @@
                                 Content="Estadísticas" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
                                 Command="{Binding cmdPdfEstadisticas}"/>
 
+                                <!--BOTON ESTADÍSTICAS-->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
+                                Content="Estadísticas Mes" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                Command="{Binding cmdPdfEstadisticasMes}"/>
+
                             </StackPanel>
                         </Border>
                     </Border>

@@ -98,7 +98,7 @@
             <!-- ==================================================================================================== -->
             <!-- PESTAÑA ESTADÍSTICAS                                                                                       -->
             <!-- ==================================================================================================== -->
-            <TabItem x:Name="TabEstadisticas" Header="Estadísticas" Width="150" Height="24"  Panel.ZIndex="25"
+            <TabItem x:Name="TabEstadisticas" Header="Estadísticas" Width="150" Height="24"  Panel.ZIndex="25" Visibility="Collapsed"
                      Style="{StaticResource EstiloPestañas}">
                 <views:VistaEstadisticas x:Name="PestañaEstadisticas"/>
             </TabItem>

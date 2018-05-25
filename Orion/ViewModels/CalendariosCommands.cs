@@ -1524,13 +1524,16 @@ namespace Orion.ViewModels {
 				string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}.pdf", Pijama.Fecha, Pijama.Trabajador.Id);
 				string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, Pijama.TextoTrabajador.Replace(":", " -"));
 				if (ruta != "") {
-					//Informes.GenerarReclamación(App.Global.CentroActual, Pijama.Trabajador, Pijama.Fecha, ruta);
-					PdfDocument docPdf = Informes.GetPdfDesdePlantilla(ruta, TiposInforme.Reclamacion);
-					docPdf.GetDocumentInfo().SetTitle("Reclamación de Hoja Pijama");
-					docPdf.GetDocumentInfo().SetSubject($"{Pijama.Trabajador.Id} - {Pijama.Fecha.ToString("MMMM-yyyy").ToUpper()}");
-					await ReclamacionPrintModel.GenerarReclamacion(App.Global.CentroActual, Pijama.Trabajador, Pijama.Fecha, docPdf);
-					docPdf.Close();
-					if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+                    if (File.Exists(ruta)) {
+                        Process.Start(ruta);
+                    } else {
+                        PdfDocument docPdf = Informes.GetPdfDesdePlantilla(ruta, TiposInforme.Reclamacion);
+                        docPdf.GetDocumentInfo().SetTitle("Reclamación de Hoja Pijama");
+                        docPdf.GetDocumentInfo().SetSubject($"{Pijama.Trabajador.Id} - {Pijama.Fecha.ToString("MMMM-yyyy").ToUpper()}");
+                        await ReclamacionPrintModel.GenerarReclamacion(App.Global.CentroActual, Pijama.Trabajador, Pijama.Fecha, docPdf);
+                        docPdf.Close();
+                        if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+                    }
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("CalendariosCommands.Reclamacion", ex);
@@ -1551,13 +1554,17 @@ namespace Orion.ViewModels {
                 string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}.pdf", Pijama.Fecha, Pijama.Trabajador.Id);
                 string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, Pijama.TextoTrabajador.Replace(":", " -"));
                 if (ruta != "") {
-                    iText.Layout.Document doc = Informes.GetNuevoPdf(ruta);
-                    doc.GetPdfDocument().GetDocumentInfo().SetTitle("Reclamación");
-                    doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
-                    doc.SetMargins(40, 40, 40, 40);
-                    await PijamaPrintModel.CrearReclamacionEnPdf(doc, Pijama.Fecha, Pijama.Trabajador);
-                    doc.Close();
-                    if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+                    if (File.Exists(ruta)) {
+                        Process.Start(ruta);
+                    } else {
+                        iText.Layout.Document doc = Informes.GetNuevoPdf(ruta);
+                        doc.GetPdfDocument().GetDocumentInfo().SetTitle("Reclamación");
+                        doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
+                        doc.SetMargins(40, 40, 40, 40);
+                        await PijamaPrintModel.CrearReclamacionEnPdf(doc, Pijama.Fecha, Pijama.Trabajador);
+                        doc.Close();
+                        Process.Start(ruta);
+                    }
                 }
             } catch (Exception ex) {
                 Mensajes.VerError("CalendariosCommands.Reclamacion", ex);
@@ -1598,7 +1605,6 @@ namespace Orion.ViewModels {
 
 		}
         #endregion
-
 
 
         #region PDF ESTADÍSTICAS
@@ -1727,6 +1733,70 @@ namespace Orion.ViewModels {
         }
         #endregion
 
+
+        #region PDF ESTADÍSTICAS MES
+
+        // Comando
+        private ICommand _cmdpdfestadisticasmes;
+        public ICommand cmdPdfEstadisticasMes {
+            get {
+                if (_cmdpdfestadisticasmes == null) _cmdpdfestadisticasmes = new RelayCommand(p => PdfEstadisticasMes(), p => PuedePdfEstadisticasMes());
+                return _cmdpdfestadisticasmes;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedePdfEstadisticasMes() {
+            return ListaCalendarios.Count > 0;
+        }
+
+        // Ejecución del comando
+        private async void PdfEstadisticasMes() {
+
+            BtCrearPdfAbierto = false;
+            try {
+                // Creamos las listas que se van a usar.
+                List<GraficoFecha> listaGraficos = null;
+                List<GraficosPorDia> listaNumeros = null;
+                List<DescansosPorDia> listaDescansos = null;
+                // Llenamos las listas
+                App.Global.IniciarProgreso("Recopilando...");
+                await Task.Run(() => {
+                    App.Global.ValorBarraProgreso = 33;
+                    listaGraficos = BdEstadisticas.GetGraficosFromDiaCalendario(FechaActual);
+                    App.Global.ValorBarraProgreso = 66;
+                    listaNumeros = BdEstadisticas.GetGraficosByDia(FechaActual);
+                    App.Global.ValorBarraProgreso = 95;
+                    listaDescansos = BdEstadisticas.GetDescansosByDia(FechaActual);
+                });
+
+                // Activamos la barra de progreso.
+                App.Global.IniciarProgreso("Creando PDF...");
+                // Pedimos el archivo donde guardarlo.
+                string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1} - Estadisticas Mes", FechaActual, App.Global.CentroActual.ToString());
+                if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+                nombreArchivo += ".pdf";
+                string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasCalendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
+                if (ruta != "") {
+                    iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
+                    doc.GetPdfDocument().GetDocumentInfo().SetTitle("Estadísticas Mes");
+                    doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
+                    doc.SetMargins(25, 25, 25, 25);
+                    await CalendarioPrintModel.EstadisticasMesEnPdf(doc, listaGraficos, listaNumeros, listaDescansos);
+                    doc.Close();
+                    if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+                }
+            } catch (Exception ex) {
+                Mensajes.VerError("CalendariosCommands.EstadisticasMes", ex);
+            } finally {
+                App.Global.FinalizarProgreso();
+                BtCrearPdfAbierto = false;
+            }
+
+
+        }
+        #endregion
 
 
 

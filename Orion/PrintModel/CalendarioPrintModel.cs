@@ -9,6 +9,7 @@ using iText.Forms;
 using iText.Forms.Fields;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
+using iText.Kernel.Geom;
 using iText.Kernel.Pdf;
 using iText.Kernel.Pdf.Canvas;
 using iText.Layout;
@@ -578,6 +579,337 @@ namespace Orion.PrintModel
             return tabla;
         }
 
+
+        private static Table GetTablaEstadisticasMes2(List<GraficoFecha> listaGraficos, List<GraficosPorDia> listaNumeros, List<DescansosPorDia> listaDescansos) {
+
+            // Fuente a utilizar en la tabla.
+            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            // Estilo de la tabla.
+            iText.Layout.Style estiloTabla = new iText.Layout.Style();
+            estiloTabla.SetTextAlignment(TextAlignment.CENTER)
+                       .SetMargins(0, 0, 0, 0)
+                       .SetPaddings(0, 0, 0, 0)
+                       .SetWidth(UnitValue.CreatePercentValue(100))
+                       .SetKeepTogether(true)
+                       .SetFont(arial)
+                       .SetFontSize(9);
+            // Estilo titulos
+            iText.Layout.Style estiloTitulos = new iText.Layout.Style();
+            estiloTitulos.SetBold()
+                         .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                         .SetFontSize(14);
+            // Estilo de las celdas de encabezado.
+            iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+            estiloEncabezados.SetBackgroundColor(new DeviceRgb(102, 153, 255))
+                             .SetBorderBottom(new SolidBorder(1))
+                             .SetBorderTop(new SolidBorder(1))
+                             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+                             .SetBold();
+            // Estilo de las celdas de total.
+            iText.Layout.Style estiloTotales = new iText.Layout.Style();
+            estiloTotales.SetBackgroundColor(new DeviceRgb(102, 153, 255))
+                         .SetBorderBottom(new SolidBorder(1))
+                         .SetBorderTop(new SolidBorder(1))
+                         .SetFontSize(12)
+                         .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+                         .SetBold();
+            // Estilo de las celdas de dia.
+            iText.Layout.Style estiloDia = new iText.Layout.Style();
+            estiloDia.SetBorder(new SolidBorder(1))
+                     .SetFontSize(14)
+                     .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+                     .SetKeepTogether(true)
+                     .SetBold();
+            // Estilo de las celdas del final.
+            iText.Layout.Style estiloCeldaFinal = new iText.Layout.Style();
+            estiloCeldaFinal.SetHorizontalAlignment(HorizontalAlignment.LEFT)
+                            .SetBorderBottom(new SolidBorder(1))
+                            .SetBorderRight(new SolidBorder(1))
+                            .SetKeepTogether(true)
+                            .SetTextAlignment(TextAlignment.LEFT);
+            // Estilo de las celdas del final.
+            iText.Layout.Style estiloCeldaDerecha = new iText.Layout.Style().SetBorderRight(new SolidBorder(1));
+            // Creamos la tabla que tendrá la Hoja Pijama.
+            float[] columnas = new float[] { 10, 18, 18, 18, 18, 18 };
+            Table tabla = new Table(UnitValue.CreatePercentArray(columnas));
+
+            // Asignamos el estilo a la tabla.
+            tabla.AddStyle(estiloTabla);
+            // Añadimos el encabezado y el logo
+            string textoEncabezado = $"ESTADÍSTICAS\n{listaGraficos[0].Fecha:MMMM - yyyy} ({App.Global.CentroActual.ToString()})".ToUpper();
+            Table tablaTitulos = InformesServicio.GetTablaEncabezadoSindicato(textoEncabezado);
+            tabla.AddHeaderCell(new Cell(1, 6).Add(tablaTitulos).AddStyle(estiloTitulos));
+
+            // Añadimos las celdas de encabezado.
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Día")).AddStyle(estiloEncabezados).SetBorder(new SolidBorder(1)));
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Trabajadas")).AddStyle(estiloEncabezados));
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Descansos")).AddStyle(estiloEncabezados));
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Gr.Totales")).AddStyle(estiloEncabezados));
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Gr.Asignad.")).AddStyle(estiloEncabezados));
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Gr.No Asig.")).AddStyle(estiloEncabezados).AddStyle(estiloCeldaDerecha));
+            // Añadimos las celdas de cada día de la lista.
+            int diasMes = DateTime.DaysInMonth(listaGraficos[0].Fecha.Year, listaGraficos[0].Fecha.Month);
+            long totalTrabajadas = 0;
+            int totalDescansos = 0;
+            int totalGraficosTotales = 0;
+            int totalGraficosAsignados = 0;
+            for (int dia = 1; dia <= diasMes; dia++) {
+                List<GraficoFecha> graficos = listaGraficos.Where(g => g.Dia == dia && g.Numero > 0).ToList();
+                if (graficos == null) continue;
+                GraficosPorDia numeros = listaNumeros.FirstOrDefault(n => n.Dia == dia);
+                // Establecemos el color de fondo de las filas
+                iText.Layout.Style estiloCeldas = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
+                if (dia % 2 == 0) estiloCeldas.SetBackgroundColor(new DeviceRgb(204, 236, 255));
+                // Establecemos el estilo para el fin de semana
+                iText.Layout.Style estiloFindes = new iText.Layout.Style().SetFontColor(ColorConstants.BLACK);
+                if (graficos.Count > 0) {
+                    if (graficos[0].Fecha.DayOfWeek == DayOfWeek.Saturday) estiloFindes.SetFontColor(ColorConstants.BLUE);
+                    if (graficos[0].Fecha.DayOfWeek == DayOfWeek.Sunday) estiloFindes.SetFontColor(ColorConstants.RED);
+                    if (App.Global.CalendariosVM.EsFestivo(graficos[0].Fecha)) estiloFindes.SetFontColor(ColorConstants.RED);
+                }
+                // DÍA.
+                tabla.AddCell(new Cell(2, 1).Add(new Paragraph($"{dia:00}")).AddStyle(estiloDia).AddStyle(estiloFindes).AddStyle(estiloCeldas));
+                // TRABAJADAS
+                long trabajadas = graficos.Sum(g => g.Trabajadas.Ticks);
+                totalTrabajadas += trabajadas;
+                tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(new TimeSpan(trabajadas), null, VerValores.HoraPlus, null))).AddStyle(estiloCeldas));
+                // DESCANSOS
+                DescansosPorDia descansos = listaDescansos.FirstOrDefault(n => n.Dia == dia);
+                totalDescansos += descansos.Descansos;
+                tabla.AddCell(new Cell().Add(new Paragraph($"{descansos.Descansos:00}")).AddStyle(estiloCeldas));
+                // GRÁFICOS TOTALES
+                int graficosTotales = numeros.Lista.Count;
+                totalGraficosTotales += graficosTotales;
+                tabla.AddCell(new Cell().Add(new Paragraph($"{graficosTotales:00}")).AddStyle(estiloCeldas));
+                // GRÁFICOS ASIGNADOS
+                int graficosAsignados = graficos.Count(g => g.Numero > 0);
+                totalGraficosAsignados += graficosAsignados;
+                tabla.AddCell(new Cell().Add(new Paragraph($"{graficosAsignados:00}")).AddStyle(estiloCeldas));
+                // GRÁFICOS NO ASIGNADOS
+                tabla.AddCell(new Cell().Add(new Paragraph($"{graficosTotales - graficosAsignados:00}")).AddStyle(estiloCeldas).AddStyle(estiloCeldaDerecha));
+                // NÚMEROS DE GRÁFICOS NO ASIGNADOS
+                List<int> noAsignados = numeros.Lista.Except(graficos.Select(g => g.Numero)).ToList();
+                string graficosSinAsignar = "";
+                foreach (int i in noAsignados) {
+                    if (graficosSinAsignar.Length > 0) graficosSinAsignar += ", ";
+                    graficosSinAsignar += $"{i:0000}";
+                }
+                Paragraph textoNoAsignados = new Paragraph();
+                textoNoAsignados.Add(new Text("Graficos No Asignados: ").SetBold());
+                textoNoAsignados.Add(graficosSinAsignar);
+                tabla.AddCell(new Cell(1, 5).Add(textoNoAsignados).AddStyle(estiloCeldaFinal).AddStyle(estiloCeldas));
+            }
+            // TOTALES.
+            tabla.AddCell(new Cell().Add(new Paragraph("TOTAL")).AddStyle(estiloDia).AddStyle(estiloEncabezados));
+            tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(new TimeSpan(totalTrabajadas), null, VerValores.HoraPlus, null))).AddStyle(estiloTotales));
+            tabla.AddCell(new Cell().Add(new Paragraph($"{totalDescansos:00}")).AddStyle(estiloTotales));
+            tabla.AddCell(new Cell().Add(new Paragraph($"{totalGraficosTotales:00}")).AddStyle(estiloTotales));
+            tabla.AddCell(new Cell().Add(new Paragraph($"{totalGraficosAsignados:00}")).AddStyle(estiloTotales));
+            tabla.AddCell(new Cell().Add(new Paragraph($"{totalGraficosTotales - totalGraficosAsignados:00}")).AddStyle(estiloTotales));
+
+            return tabla;
+        }
+
+
+        private static Table GetTablaEstadisticasMes(List<GraficoFecha> listaGraficos, List<GraficosPorDia> listaNumeros, List<DescansosPorDia> listaDescansos) {
+
+            // Fuente a utilizar en la tabla.
+            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            // Estilo de la tabla.
+            iText.Layout.Style estiloTabla = new iText.Layout.Style();
+            estiloTabla.SetTextAlignment(TextAlignment.CENTER)
+                       .SetMargins(0, 0, 0, 0)
+                       .SetPaddings(0, 0, 0, 0)
+                       .SetWidth(UnitValue.CreatePercentValue(100))
+                       .SetKeepTogether(true)
+                       .SetFont(arial)
+                       .SetFontSize(7);
+            // Estilo titulos
+            iText.Layout.Style estiloTitulos = new iText.Layout.Style();
+            estiloTitulos.SetBold()
+                         .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                         .SetFontSize(14);
+            // Estilo de las celdas de encabezado.
+            iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+            estiloEncabezados.SetBackgroundColor(new DeviceRgb(102, 153, 255))
+                             .SetBorderBottom(new SolidBorder(1))
+                             .SetBorderTop(new SolidBorder(1))
+                             .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+                             .SetBold();
+            // Estilo de las celdas de encabezado.
+            iText.Layout.Style estiloEncabezadoFilas = new iText.Layout.Style();
+            estiloEncabezadoFilas.SetBackgroundColor(new DeviceRgb(102, 153, 255))
+                                 .SetBorderLeft(new SolidBorder(1))
+                                 .SetBorderRight(new SolidBorder(1))
+                                 .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+                                 .SetBold();
+            // Estilo de las celdas de encabezado total.
+            iText.Layout.Style estiloTotalesEncabezado = new iText.Layout.Style();
+            estiloTotalesEncabezado.SetBackgroundColor(new DeviceRgb(102, 153, 255))
+                                   .SetBorder(new SolidBorder(1))
+                                   .SetFontSize(9)
+                                   .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+                                   .SetBold();
+            // Estilo de las celdas de total.
+            iText.Layout.Style estiloTotales = new iText.Layout.Style();
+            estiloTotales.SetBorder(new SolidBorder(1))
+                         .SetFontSize(9)
+                         .SetVerticalAlignment(VerticalAlignment.MIDDLE);
+            // Estilo de las celdas de dia.
+            iText.Layout.Style estiloDia = new iText.Layout.Style();
+            estiloDia.SetBorder(new SolidBorder(1))
+                     .SetFontSize(14)
+                     .SetVerticalAlignment(VerticalAlignment.MIDDLE)
+                     .SetKeepTogether(true)
+                     .SetBold();
+            // Estilo de las celdas del final.
+            iText.Layout.Style estiloCeldaFinal = new iText.Layout.Style();
+            estiloCeldaFinal.SetHorizontalAlignment(HorizontalAlignment.LEFT)
+                            .SetBorderBottom(new SolidBorder(1))
+                            .SetBorderRight(new SolidBorder(1))
+                            .SetKeepTogether(true)
+                            .SetTextAlignment(TextAlignment.LEFT);
+            // Estilo de las celdas del final.
+            iText.Layout.Style estiloCeldaDerecha = new iText.Layout.Style().SetBorderRight(new SolidBorder(1));
+            // Variables a usar.
+            int diasMes = DateTime.DaysInMonth(listaGraficos[0].Fecha.Year, listaGraficos[0].Fecha.Month);
+            long totalTrabajadas = 0;
+            int totalDescansos = 0;
+            int totalGraficosTotales = 0;
+            int totalGraficosAsignados = 0;
+
+
+            // Creamos la tabla que tendrá la Hoja Pijama.
+            float[] columnas = null;
+            switch (diasMes) {
+                case 28:
+                    columnas = new float[] { 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+                    break;
+                case 29:
+                    columnas = new float[] { 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+                    break;
+                case 30:
+                    columnas = new float[] { 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+                    break;
+                case 31:
+                    columnas = new float[] { 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+                    break;
+            }
+            Table tabla = new Table(UnitValue.CreatePercentArray(columnas));
+
+            // Asignamos el estilo a la tabla.
+            tabla.AddStyle(estiloTabla);
+            // Añadimos el encabezado y el logo
+            string textoEncabezado = $"ESTADÍSTICAS\n{listaGraficos[0].Fecha:MMMM - yyyy} ({App.Global.CentroActual.ToString()})".ToUpper();
+            Table tablaTitulos = InformesServicio.GetTablaEncabezadoSindicato(textoEncabezado);
+            tabla.AddHeaderCell(new Cell(1, diasMes+1).Add(tablaTitulos).AddStyle(estiloTitulos));
+
+            // Añadimos las celdas de encabezado.
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("")).AddStyle(estiloEncabezados).SetBorder(new SolidBorder(1)));
+            for (int dia = 1; dia <= diasMes; dia++) {
+                // Establecemos el estilo para el fin de semana
+                DateTime fechaFindes = new DateTime(listaGraficos[0].Fecha.Year, listaGraficos[0].Fecha.Month, dia);
+                iText.Layout.Style estiloFindes = new iText.Layout.Style().SetFontColor(ColorConstants.BLACK);
+                if (fechaFindes.DayOfWeek == DayOfWeek.Saturday) estiloFindes.SetFontColor(ColorConstants.BLUE);
+                if (fechaFindes.DayOfWeek == DayOfWeek.Sunday) estiloFindes.SetFontColor(ColorConstants.RED);
+                if (App.Global.CalendariosVM.EsFestivo(fechaFindes)) estiloFindes.SetFontColor(ColorConstants.RED);
+                Cell celda = new Cell().Add(new Paragraph($"{dia:00}")).AddStyle(estiloEncabezados).AddStyle(estiloFindes);
+                if (dia == diasMes) celda.SetBorderRight(new SolidBorder(1));
+                tabla.AddHeaderCell(celda);
+            }
+
+            // Definimos un array de textos que se van a añadir después a la tabla.
+            string[,] celdas = new string[6, diasMes + 1];
+
+            // Añadimos las celdas de encabezado para las filas
+            celdas[0, 0] = "Gráficos\nNo Asig.";
+            celdas[1, 0] = "Trabajadas";
+            celdas[2, 0] = "Descansos";
+            celdas[3, 0] = "Graf.Tot.";
+            celdas[4, 0] = "Asignados";
+            celdas[5, 0] = "No Asig.";
+
+            // Creamos todas las celdas.
+            for (int dia = 1; dia <= diasMes; dia++) {
+
+                // Variables temporales
+                List<GraficoFecha> graficos = listaGraficos.Where(g => g.Dia == dia && g.Numero > 0).ToList();
+                if (graficos == null) continue;
+                GraficosPorDia numeros = listaNumeros.FirstOrDefault(n => n.Dia == dia);
+
+                // GRÁFICOS NO ASIGNADOS
+                List<int> noAsignados = numeros.Lista.Except(graficos.Select(g => g.Numero)).ToList();
+                string graficosSinAsignar = "";
+                foreach (int i in noAsignados) {
+                    if (graficosSinAsignar.Length == 0) graficosSinAsignar += "\n";
+                    graficosSinAsignar += $"{i:0000}\n";
+                }
+                celdas[0, dia] = graficosSinAsignar + "\n";
+
+                // TRABAJADAS
+                long trabajadas = graficos.Sum(g => g.Trabajadas.Ticks);
+                totalTrabajadas += trabajadas;
+                celdas[1, dia] = (string)cnvHora.Convert(new TimeSpan(trabajadas), null, VerValores.HoraPlus, null);
+
+                // DESCANSOS
+                DescansosPorDia descansos = listaDescansos.FirstOrDefault(n => n.Dia == dia);
+                totalDescansos += descansos.Descansos;
+                celdas[2, dia] = $"{descansos.Descansos:00}";
+
+                // GRÁFICOS TOTALES
+                int graficosTotales = numeros.Lista.Count;
+                totalGraficosTotales += graficosTotales;
+                celdas[3, dia] = $"{graficosTotales:00}";
+
+                // GRÁFICOS ASIGNADOS
+                int graficosAsignados = graficos.Count(g => g.Numero > 0);
+                totalGraficosAsignados += graficosAsignados;
+                celdas[4, dia] = $"{graficosAsignados:00}";
+
+                // GRÁFICOS NO ASIGNADOS
+                celdas[5, dia] = $"{graficosTotales - graficosAsignados:00}";
+
+            }
+
+            // AÑADIMOS LAS CELDAS A LA TABLA
+            for (int fila = 0; fila < 6; fila++) {
+                for (int dia = 0; dia <= diasMes; dia++) {
+                    Cell celda = new Cell().Add(new Paragraph(celdas[fila, dia]));
+                    if (fila % 2 == 0 && dia > 0) celda.SetBackgroundColor(new DeviceRgb(204, 236, 255));
+                    if (dia == 0) celda.AddStyle(estiloEncabezadoFilas);
+                    if (dia == diasMes) celda.AddStyle(estiloCeldaDerecha);
+                    if (fila == 0 || fila == 5) celda.SetBorderBottom(new SolidBorder(1));
+                    tabla.AddCell(celda);
+                }
+            }
+
+            // AÑADIMOS UNA FILA VACÍA
+            tabla.AddCell(new Cell(1, diasMes + 1).Add(new Paragraph("\n\n")).SetBorder(iText.Layout.Borders.Border.NO_BORDER));
+
+            // AÑADIMOS LAS CABECERAS DE LOS TOTALES
+            tabla.AddCell(new Cell(1, 3).Add(new Paragraph("Total Trabajadas")).AddStyle(estiloTotalesEncabezado));
+            tabla.AddCell(new Cell(1, 4).Add(new Paragraph("Total Descansos")).AddStyle(estiloTotalesEncabezado));
+            tabla.AddCell(new Cell(1, 4).Add(new Paragraph("Total Gráficos")).AddStyle(estiloTotalesEncabezado));
+            tabla.AddCell(new Cell(1, 4).Add(new Paragraph("Total Asignados")).AddStyle(estiloTotalesEncabezado));
+            tabla.AddCell(new Cell(1, 4).Add(new Paragraph("Total No Asignados")).AddStyle(estiloTotalesEncabezado));
+            tabla.AddCell(new Cell(1, diasMes + 1 - 15).Add(new Paragraph()).SetBorder(iText.Layout.Borders.Border.NO_BORDER));
+
+            // AÑADIMOS LOS TOTALES
+            tabla.AddCell(new Cell(1, 3).Add(new Paragraph((string)cnvHora.Convert(new TimeSpan(totalTrabajadas), null, VerValores.HoraPlus, null))).AddStyle(estiloTotales));
+            tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalDescansos:00}")).AddStyle(estiloTotales));
+            tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalGraficosTotales:00}")).AddStyle(estiloTotales));
+            tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalGraficosAsignados:00}")).AddStyle(estiloTotales));
+            tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalGraficosTotales - totalGraficosAsignados:00}")).AddStyle(estiloTotales));
+            tabla.AddCell(new Cell(1, diasMes + 1 - 15).Add(new Paragraph()).SetBorder(iText.Layout.Borders.Border.NO_BORDER));
+
+
+            return tabla;
+        }
+
+
+
+
+
         #endregion
         // ====================================================================================================
 
@@ -667,9 +999,11 @@ namespace Orion.PrintModel
 		public static async Task CrearCalendariosEnPdf_7(Document doc, ListCollectionView listaCalendarios, DateTime fecha) {
 
 			await Task.Run(() => {
-				// Añadimos los fallos al documento.
+                try { 
 				doc.Add(GetTablaCalendarios(listaCalendarios, fecha));
-			});
+                } catch (Exception ex) {
+                }
+            });
 		}
 
 
@@ -679,9 +1013,11 @@ namespace Orion.PrintModel
 		public static async Task FallosEnCalendariosEnPdf_7(Document doc, ListCollectionView listaCalendarios, DateTime fecha) {
 
 			await Task.Run(() => {
-				// Añadimos los fallos al documento.
+                try { 
 				doc.Add(GetTablaFallosCalendario(listaCalendarios, fecha));
-			});
+                } catch (Exception ex) {
+                }
+            });
 		}
 
 
@@ -691,14 +1027,33 @@ namespace Orion.PrintModel
         public static async Task EstadisticasCalendariosEnPdf(Document doc, List<EstadisticaCalendario> listaEstadisticas, DateTime fecha) {
 
             await Task.Run(() => {
-
-                doc.Add(GetTablaEstadisticasCalendarios(listaEstadisticas, fecha));
-                doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
-                doc.Add(GetTablaEstadisticasCalendarios(listaEstadisticas, fecha, true));
+                try {
+                    doc.Add(GetTablaEstadisticasCalendarios(listaEstadisticas, fecha));
+                    doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                    doc.Add(GetTablaEstadisticasCalendarios(listaEstadisticas, fecha, true));
+                }catch (Exception ex) {
+                }
             });
 
         }
 
+
+        /// <summary>
+        /// Crea un PDF con las estadísticas del mes actual en los calendarios.
+        /// </summary>
+        public static async Task EstadisticasMesEnPdf(Document doc, List<GraficoFecha> listaGraficos, List<GraficosPorDia> listaNumeros, List<DescansosPorDia> listaDescansos) {
+
+            await Task.Run(() => {
+
+                try {
+                    doc.Add(GetTablaEstadisticasMes(listaGraficos, listaNumeros, listaDescansos));
+                } catch (Exception ex) {
+
+                }
+
+            });
+
+        }
 
 
 
