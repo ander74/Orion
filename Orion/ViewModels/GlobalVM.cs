@@ -84,22 +84,42 @@ namespace Orion.ViewModels {
         #region MÉTODOS PÚBLICOS
         // ====================================================================================================
 
+        //      public string GetCadenaConexion(Centros centro) {
+        //	// Si no se ha establecido el centro, devolvemos null.
+        //	if (centro == Centros.Desconocido) return null;
+        //	// Definimos el archivo de base de datos
+        //	string archivo = Utils.CombinarCarpetas(Configuracion.CarpetaDatos, centro.ToString() + ".accdb");
+        //	// Si no existe el archivo, devolvemos null
+        //	if (!File.Exists(archivo)) return null;
+        //	// Establecemos la cadena de conexión
+        //	string cadenaConexion = "Provider=Microsoft.ACE.OLEDB.12.0;Persist Security Info=False;";
+        //	cadenaConexion += "Data Source=" + archivo + ";";
+        //	// Devolvemos la cadena de conexión.
+        //	return cadenaConexion;
+        //}
+
+
         public string GetCadenaConexion(Centros centro) {
-			// Si no se ha establecido el centro, devolvemos null.
-			if (centro == Centros.Desconocido) return null;
-			// Definimos el archivo de base de datos
-			string archivo = Utils.CombinarCarpetas(Configuracion.CarpetaDatos, centro.ToString() + ".accdb");
-			// Si no existe el archivo, devolvemos null
-			if (!File.Exists(archivo)) return null;
-			// Establecemos la cadena de conexión
-			string cadenaConexion = "Provider=Microsoft.ACE.OLEDB.12.0;Persist Security Info=False;";
-			cadenaConexion += "Data Source=" + archivo + ";";
-			// Devolvemos la cadena de conexión.
-			return cadenaConexion;
-		}
+            // Si no se ha establecido el centro, devolvemos null.
+            if (centro == Centros.Desconocido) return null;
+            // Definimos el archivo de base de datos
+            string archivo = Utils.CombinarCarpetas(Configuracion.CarpetaDatos, centro.ToString() + ".accdb");
+            // Si no existe el archivo, devolvemos null
+            if (!File.Exists(archivo)) return null;
+            // Establecemos la cadena de conexión
+            OleDbConnectionStringBuilder cadenaConexionB = new OleDbConnectionStringBuilder {
+                DataSource = archivo,
+                Provider = "Microsoft.ACE.OLEDB.12.0",
+                PersistSecurityInfo = false
+            };
+            string cadenaConexion = cadenaConexionB.ToString();
+
+            // Devolvemos la cadena de conexión.
+            return cadenaConexion;
+        }
 
 
-		public void IniciarProgreso(string texto = "Trabajando...") {
+        public void IniciarProgreso(string texto = "Trabajando...") {
 			TextoProgreso = texto;
 			ValorBarraProgreso = 0;
 			App.Global.VisibilidadBarraProgreso = Visibility.Visible;
