@@ -116,15 +116,15 @@ namespace Orion.ViewModels {
 					EsOperacion = false;
 					EsResultado = false;
 					TextoOperacion = "";
-					HoraResultado = new TimeSpan(0);
-					HoraAlmacen = new TimeSpan(0);
+					HoraResultado = TimeSpan.Zero;
+					HoraAlmacen = TimeSpan.Zero;
 				}
 			}
 
 			// Si es la tecla '+' ...
 			if (codigo == 11) {
 				if (EsOperacion) {
-					if (TextoOperacion == "+") Operar(HoraAlmacen); else HoraAlmacen = new TimeSpan(0);
+					if (TextoOperacion == "+") Operar(HoraAlmacen); else HoraAlmacen = TimeSpan.Zero;
 				} else if (EsResultado) {
 
 				} else {
@@ -148,7 +148,7 @@ namespace Orion.ViewModels {
 			// Si es la tecla '-' ...
 			if (codigo == 12) {
 				if (EsOperacion) {
-					if (TextoOperacion == "-") Operar(HoraAlmacen); else HoraAlmacen = new TimeSpan(0);
+					if (TextoOperacion == "-") Operar(HoraAlmacen); else HoraAlmacen = TimeSpan.Zero;
 				} else if (EsResultado) {
 
 				} else {
@@ -171,7 +171,7 @@ namespace Orion.ViewModels {
 			// Si es la tecla '*' ...
 			if (codigo == 13) {
 				if (EsOperacion) {
-					if (TextoOperacion == "*") Operar(HoraAlmacen); else HoraAlmacen = new TimeSpan(0);
+					if (TextoOperacion == "*") Operar(HoraAlmacen); else HoraAlmacen = TimeSpan.Zero;
 				} else if (EsResultado) {
 
 				} else {
@@ -194,7 +194,7 @@ namespace Orion.ViewModels {
 			// Si es la tecla '/' ...
 			if (codigo == 14) {
 				if (EsOperacion) {
-					if (TextoOperacion == "/") Operar(HoraAlmacen); else HoraAlmacen = new TimeSpan(0);
+					if (TextoOperacion == "/") Operar(HoraAlmacen); else HoraAlmacen = TimeSpan.Zero;
 				} else if (EsResultado) {
 
 				} else {
@@ -229,7 +229,7 @@ namespace Orion.ViewModels {
 				}
 				TextoEntrada = (string)cnvSuperHora.Convert(HoraResultado, null, null, null);
 				TextoOperacion = "=";
-				HoraAlmacen = new TimeSpan(0);
+				HoraAlmacen = TimeSpan.Zero;
 				EsOperacion = false;
 				EsResultado = true;
 

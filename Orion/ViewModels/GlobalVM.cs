@@ -66,7 +66,7 @@ namespace Orion.ViewModels {
 			// Creamos los servicios
 			mensajes = new MensajesServicio();
 			Informes = new InformesServicio();
-
+			
 			// Asignamos el centro actual.
 			CentroActual = (Centros)Configuracion.CentroInicial;
 			// Activamos el botón de la calculadora.
@@ -364,6 +364,7 @@ namespace Orion.ViewModels {
 				}
 			}
 		}
+
 
 
 		//====================================================================================================

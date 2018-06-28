@@ -610,7 +610,7 @@ namespace Orion.DataModels {
 			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
 
 			// Inicializamos las horas acumuladas.
-			TimeSpan acumuladas = new TimeSpan(0);
+			TimeSpan acumuladas = TimeSpan.Zero;
 
 			using (conexion) {
 

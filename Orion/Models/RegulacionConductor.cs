@@ -44,7 +44,7 @@ namespace Orion.Models {
 		public void BorrarValorPorHeader(string header) {
 			switch (header) {
 				case "Fecha": Fecha = new DateTime(2001,1,2); break;
-				case "Horas": Horas = new TimeSpan(0); break;
+				case "Horas": Horas = TimeSpan.Zero; break;
 				case "Descansos": Descansos = 0; break;
 				case "Motivo": Motivo = ""; break;
 			}

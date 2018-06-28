@@ -435,35 +435,6 @@
 
         </StackPanel>
 
-        <!-- ==================================================================================================== -->
-        <!-- BOTONES AUXILIARES -->
-        <!-- ==================================================================================================== -->
-        <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center">
-
-            <!-- AYUDA -->
-            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarAyuda}" CommandParameter="Graficos" Margin="1"
-                    HorizontalContentAlignment="Center">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Ayuda.png" Style="{StaticResource EstiloImagenPequeña}"/>
-                        <!--<TextBlock Text="Ayuda" TextWrapping="Wrap" TextAlignment="Center"/>-->
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-
-            <!-- CALCULADORA -->
-            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarCalculadora}" Margin="1"
-                    HorizontalContentAlignment="Center" IsEnabled="{Binding Configuracion.BotonCalculadoraActivo, Mode=TwoWay}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Calculadora.png" Style="{StaticResource EstiloImagenPequeña}"/>
-                        <!--<TextBlock Text="Calculadora" TextWrapping="Wrap" TextAlignment="Center"/>-->
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-
-        </StackPanel>
-
         <!-- IMAGEN DE FONDO-->
         <Image Source="Imagenes\Orion.png" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.1" Grid.Row="2"/>
 

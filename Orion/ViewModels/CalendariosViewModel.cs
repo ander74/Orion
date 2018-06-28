@@ -298,7 +298,7 @@ namespace Orion.ViewModels {
 
 		public TimeSpan ExcesoJornada {
 			get {
-				if (_calendarioseleccionado == null) return new TimeSpan(0);
+				if (_calendarioseleccionado == null) return TimeSpan.Zero;
 				return new TimeSpan (_calendarioseleccionado.ListaDias.Sum(Ld => Ld.ExcesoJornada.Ticks));
 			}
 		}

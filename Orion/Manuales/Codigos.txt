@@ -4,15 +4,17 @@ PROYECTO ORION
 
 	Códigos de las incidencias en el calendario:
 
-		-1 : O-V - Vacaciones.
-		-2 : J-D - Descanso.
-		-3 :  FN - Similar a J-D pero en fin de semana. No se aplica en todos los centros.
-		-4 :   E - Enfermo.
-		-5 :  DS - Descanso Suelto. Similar a J-D, pero suelto, para cuadrar calendario. Medir en estadisticas.
-		-6 :  DC - Descanso compensatorio.
-		-7 :  F6 - Fiesta por otro dia. Se descuenta la jornada media de las horas.
-		-8 : DND - Descansos no disfrutados.
-		-9 : PER - Permiso.
+		 -1 :    O-V - Vacaciones.
+		 -2 :    J-D - Descanso.
+		 -3 :     FN - Similar a J-D pero en fin de semana. No se aplica en todos los centros.
+		 -4 :      E - Enfermo.
+		 -5 :     DS - Descanso Suelto. Similar a J-D, pero suelto, para cuadrar calendario. Medir en estadisticas.
+		 -6 :     DC - Descanso compensatorio.
+		 -7 :     F6 - Fiesta por otro dia. Se descuenta la jornada media de las horas.
+		 -8 :    DND - Descansos no disfrutados.
+		 -9 :    PER - Permiso.
+		-10 : E-(JD) - Enfermo en J-D.
+		-11 : E-(FN) - Enfermo en FN.
 
 
 	Códigos de modificación de gráfico (se ponen como decimal):

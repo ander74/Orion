@@ -366,7 +366,7 @@ namespace Orion.Models {
 
 		public TimeSpan ExcesoJornada {
 			get {
-				if (ListaDias == null) return new TimeSpan(0);
+				if (ListaDias == null) return TimeSpan.Zero;
 				return new TimeSpan(ListaDias.Where(x => !x.BloquearExcesoJornada).Sum(x => (x.ExcesoJornada.Ticks)));
 			}
 		}
@@ -443,7 +443,7 @@ namespace Orion.Models {
 
 		public TimeSpan HorasTrabajadas {
 			get {
-				if (ListaDias == null) return new TimeSpan(0);
+				if (ListaDias == null) return TimeSpan.Zero;
 				return new TimeSpan(ListaDias.Sum(x => (x.Horas.Ticks)));
 			}
 		}
@@ -451,7 +451,7 @@ namespace Orion.Models {
 
 		public TimeSpan HorasAcumuladas {
 			get {
-				if (ListaDias == null) return new TimeSpan(0);
+				if (ListaDias == null) return TimeSpan.Zero;
 				return new TimeSpan(ListaDias.Sum(x => (x.Acumuladas.Ticks)));
 			}
 		}
@@ -459,7 +459,7 @@ namespace Orion.Models {
 
 		public TimeSpan HorasNocturnas {
 			get {
-				if (ListaDias == null) return new TimeSpan(0);
+				if (ListaDias == null) return TimeSpan.Zero;
 				return new TimeSpan(ListaDias.Sum(x => (x.Nocturnas.Ticks)));
 			}
 		}
@@ -503,7 +503,7 @@ namespace Orion.Models {
 
 		public TimeSpan TotalHorasHastaAñoAnterior {
 			get {
-				if (Trabajador == null) return new TimeSpan(0);
+				if (Trabajador == null) return TimeSpan.Zero;
 				return HastaAñoAnterior.Acumuladas + HastaAñoAnterior.Reguladas + Trabajador.Acumuladas -
 					   (new TimeSpan(App.Global.Convenio.JornadaMedia.Ticks * HastaAñoAnterior.DiasF6)) - HorasReguladasAño;
 			}
@@ -512,7 +512,7 @@ namespace Orion.Models {
 
 		public TimeSpan TotalHorasAcumuladas {
 			get {
-				if (Trabajador == null) return new TimeSpan(0);
+				if (Trabajador == null) return TimeSpan.Zero;
 				return HastaMesActual.Acumuladas + HastaMesActual.Reguladas + Trabajador.Acumuladas - 
 					   (new TimeSpan(App.Global.Convenio.JornadaMedia.Ticks * HastaMesActual.DiasF6)) - TotalHorasHastaAñoAnterior;
 			}
@@ -521,7 +521,7 @@ namespace Orion.Models {
 
 		public TimeSpan TotalHorasAñoActual {
 			get {
-				if (Trabajador == null) return new TimeSpan(0);
+				if (Trabajador == null) return TimeSpan.Zero;
 				return TotalHorasAcumuladas - TotalHorasHastaAñoAnterior;
 			}
 		}
@@ -529,7 +529,7 @@ namespace Orion.Models {
 
 		//public TimeSpan ExcesoJornadaPendiente {
 		//	get {
-		//		if (Trabajador == null) return new TimeSpan(0);
+		//		if (Trabajador == null) return TimeSpan.Zero;
 		//		return HastaMesActual.ExcesoJornadaPendiente;
 		//	}
 		//}

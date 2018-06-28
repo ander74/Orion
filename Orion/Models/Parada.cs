@@ -43,7 +43,7 @@ namespace Orion.Models {
 			switch (header) {
 				case "Orden": Orden = 0; break;
 				case "Descripcion": Descripcion = ""; break;
-				case "Tiempo": Tiempo = new TimeSpan(0); break;
+				case "Tiempo": Tiempo = TimeSpan.Zero; break;
 			}
 		}
 

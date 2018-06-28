@@ -44,7 +44,7 @@ namespace Orion.Models {
 				case "Linea": Linea = 0; break;
 				case "Descripcion": Descripcion = ""; break;
 				case "Final": Final = null; break;
-				case "Tiempo": Tiempo = new TimeSpan(0); break;
+				case "Tiempo": Tiempo = TimeSpan.Zero; break;
 			}
 		}
 
@@ -53,7 +53,7 @@ namespace Orion.Models {
 			if (!Inicio.HasValue || !Final.HasValue) return;
 			if (Inicio.Value.Ticks > Extensiones.HoraMáxima || Final.Value.Ticks > Extensiones.HoraMáxima) return;
 			TimeSpan t = Final.Value - Inicio.Value;
-			if (t.Ticks < 0 || t.Ticks > Extensiones.HoraMáxima) t = new TimeSpan(0);
+			if (t.Ticks < 0 || t.Ticks > Extensiones.HoraMáxima) t = TimeSpan.Zero;
 			Tiempo = t;
 		}
 		#endregion

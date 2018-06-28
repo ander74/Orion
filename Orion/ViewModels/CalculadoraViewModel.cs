@@ -51,7 +51,7 @@ namespace Orion.ViewModels {
 					break;
 				case "/":
 					if (ts.Hours == 0) {
-						HoraResultado = new TimeSpan(0);
+						HoraResultado = TimeSpan.Zero;
 					} else {
 						HoraResultado = new TimeSpan(HoraResultado.Ticks / Convert.ToInt64(ts.TotalHours));
 					}
@@ -107,7 +107,7 @@ namespace Orion.ViewModels {
 		}
 
 
-		private TimeSpan _horaalmacen = new TimeSpan(0);
+		private TimeSpan _horaalmacen = TimeSpan.Zero;
 		public TimeSpan HoraAlmacen {
 			get { return _horaalmacen; }
 			set {
@@ -120,7 +120,7 @@ namespace Orion.ViewModels {
 
 
 
-		private TimeSpan _horaresultado = new TimeSpan(0);
+		private TimeSpan _horaresultado = TimeSpan.Zero;
 		public TimeSpan HoraResultado {
 			get { return _horaresultado; }
 			set {

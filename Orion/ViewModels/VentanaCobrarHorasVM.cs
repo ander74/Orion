@@ -134,7 +134,7 @@ namespace Orion.ViewModels
 		public TimeSpan HorasMaximas {
 			get {
 				TimeSpan maxconvenio = new TimeSpan(App.Global.Convenio.MaxHorasCobradas,0,0);
-				if (HorasDisponibles <= new TimeSpan(0) || HorasCobradas >= maxconvenio) return new TimeSpan(0);
+				if (HorasDisponibles <= TimeSpan.Zero || HorasCobradas >= maxconvenio) return TimeSpan.Zero;
 				if ((maxconvenio - HorasCobradas) > HorasDisponibles) {
 					return HorasDisponibles;
 				} else {

@@ -613,9 +613,10 @@ namespace Orion.PrintModel {
                                  .SetBold();
             // Estilo de las celdas de encabezado total.
             iText.Layout.Style estiloTotalesEncabezado = new iText.Layout.Style();
-            estiloTotalesEncabezado.SetBackgroundColor(new DeviceRgb(102, 153, 255))
+            estiloTotalesEncabezado.SetBackgroundColor(new DeviceRgb(192, 0, 0))
+                                   .SetFontColor(ColorConstants.WHITE)
                                    .SetBorder(new SolidBorder(1))
-                                   .SetFontSize(9)
+                                   .SetFontSize(10)
                                    .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                                    .SetBold();
             // Estilo de las celdas de total.

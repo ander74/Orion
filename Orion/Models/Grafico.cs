@@ -51,10 +51,10 @@ namespace Orion.Models {
 				case "Final": Final = null; break;
 				case "Inicio Partido": InicioPartido = null; break;
 				case "Final Partido": FinalPartido = null; break;
-				case "Valoración": Valoracion = new TimeSpan(0); break;
-				case "Trabajadas": Trabajadas = new TimeSpan(0); break;
-				case "Acumuladas": Acumuladas = new TimeSpan(0); break;
-				case "Nocturnas": Nocturnas = new TimeSpan(0); break;
+				case "Valoración": Valoracion = TimeSpan.Zero; break;
+				case "Trabajadas": Trabajadas = TimeSpan.Zero; break;
+				case "Acumuladas": Acumuladas = TimeSpan.Zero; break;
+				case "Nocturnas": Nocturnas = TimeSpan.Zero; break;
 				case "Desayuno": Desayuno = 0; break;
 				case "Comida": Comida = 0; break;
 				case "Cena": Cena = 0; break;

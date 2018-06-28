@@ -74,7 +74,7 @@ namespace Orion.Models {
 				case "Fijo": Indefinido = false; break;
 				case "Teléfono": Telefono = ""; break;
 				case "Email": Email = ""; break;
-				case "Horas": Acumuladas = new TimeSpan(0); break;
+				case "Horas": Acumuladas = TimeSpan.Zero; break;
 				case "DCs": Descansos = 0; break;
 				case "DNDs": DescansosNoDisfrutados = 0; break;
 				case "Plus Distancia": PlusDistancia = 0m; break;

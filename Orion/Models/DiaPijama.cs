@@ -195,7 +195,7 @@ namespace Orion.Models {
 
 		public TimeSpan AñadirAFinal {
 			get {
-				TimeSpan resultado = new TimeSpan(0);
+				TimeSpan resultado = TimeSpan.Zero;
 				if (!BloquearExcesoJornada) resultado = resultado.Add(ExcesoJornada);
 				if (!BloquearDescuadre) resultado = resultado.Add(new TimeSpan(0, Descuadre, 0));
 				return resultado;

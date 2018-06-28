@@ -53,7 +53,7 @@ namespace Orion.Convertidores {
 					color = new SolidColorBrush(App.Global.Configuracion.ColorOV); break;
 				case -2:
 					color = new SolidColorBrush(App.Global.Configuracion.ColorJD); break;
-				case -4:
+				case -4: case -10: case -11:
 					color = new SolidColorBrush(App.Global.Configuracion.ColorE); break;
 				case -5:
 					color = new SolidColorBrush(App.Global.Configuracion.ColorDS); break;

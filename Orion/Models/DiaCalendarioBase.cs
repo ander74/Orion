@@ -143,7 +143,13 @@ namespace Orion.Models {
 			get { return _grafico; }
 			set {
 				if (_grafico != value) {
-					_grafico = value;
+					if (value == -4 && _grafico == -2) {
+						_grafico = -10;
+					} else if (value == -4 && _grafico == -3) {
+						_grafico = -11;
+					} else { 
+						_grafico = value;
+					}
 					Modificado = true;
 					PropiedadCambiada();
 					PropiedadCambiada(nameof(ComboGrafico));

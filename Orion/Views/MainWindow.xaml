@@ -111,6 +111,21 @@
         <!-- BOTONES VENTANA -->
         <!-- ==================================================================================================== -->
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarCalculadora}"
+                    IsEnabled="{Binding Configuracion.BotonCalculadoraActivo, Mode=TwoWay}"
+                    Margin="0" Foreground="DarkGray" FontWeight="Bold" FontSize="16" Padding="20,1">
+                <Button.Content>
+                    <Image Source="Imagenes/Calculadora.png" Style="{StaticResource EstiloImagenPequeña}" Height="14"
+                           VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Button.Content>
+            </Button>
+            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarAyuda}" CommandParameter="{Binding ElementName=Ribbon, Path=SelectedItem.Header}"
+                    Margin="0" Foreground="DarkGray" FontWeight="Bold" FontSize="16" Padding="20,1">
+                <Button.Content>
+                    <Image Source="Imagenes/Ayuda.png" Style="{StaticResource EstiloImagenPequeña}" Height="14"
+                           VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Button.Content>
+            </Button>
             <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdPantallaCompleta}" CommandParameter="{Binding ElementName=Ventana}"
                     Margin="0" Content="P" Foreground="DarkGray" FontWeight="Bold" FontSize="16" Padding="20,1"/>
         </StackPanel>

@@ -40,7 +40,7 @@ namespace Orion.Pijama {
 				if (Trabajador == null) return;
 				// Extraemos la lista de los días pijama.
 				ListaDias = BdPijamas.GetDiasPijama(calendario.ListaDias);
-				// Definimos el final anterior y lo establecemos al día anterior al primer día del mes.
+				// Definimos el final anterior y lo establecemos al día anterior del primer día del mes.
 				TimeSpan? finalAnterior = null;
 				DateTime fecha = new DateTime(calendario.Fecha.Year, calendario.Fecha.Month, 1).AddDays(-1);
 				DiaCalendarioBase diaAnterior = BdDiasCalendario.GetDiaCalendario(calendario.IdConductor, fecha);
@@ -135,7 +135,6 @@ namespace Orion.Pijama {
 			} catch (Exception ex) {
 				Mensajes.VerError("HojaPijama.Constructor", ex);
 			}
-
 			// Llamamos a todas las opciones del pijama, para que se reescriban.
 			PropiedadCambiada("");
 
@@ -182,9 +181,10 @@ namespace Orion.Pijama {
 
 					}
 					// Si hay más de seis días trabajados, se añade un fallo.
-					if (diastrabajados > 6) resultado += String.Format("Día {0:00}: Más de seis días de trabajo.\n", primerdiatrabajo);
-					// Reiniciamos los descansos y los días inactivos.
-					diasdescansados = 0;
+					//if (diastrabajados > 6) resultado += String.Format("Día {0:00}: Más de seis días de trabajo.\n", primerdiatrabajo);
+                    if (diastrabajados > 6) resultado += String.Format("Día {0:00}: Más de seis días de trabajo.\n", dia.Dia);
+                    // Reiniciamos los descansos y los días inactivos.
+                    diasdescansados = 0;
 					diasinactivos = 0;
 				}
 
@@ -745,7 +745,7 @@ namespace Orion.Pijama {
 		public int Descanso {
 			get {
 				if (ListaDias == null) return 0;
-				return ListaDias.Count(d => d.Grafico == -2 && !(d.Codigo == 1 || d.Codigo == 2));
+				return ListaDias.Count(d => (d.Grafico == -2 || d.Grafico == -10) && !(d.Codigo == 1 || d.Codigo == 2));
 			}
 		}
 
@@ -789,7 +789,7 @@ namespace Orion.Pijama {
 		public int DescansoEnFinde {
 			get {
 				if (ListaDias == null) return 0;
-				return ListaDias.Count(d => d.Grafico == -3 && !(d.Codigo == 1 || d.Codigo == 2));
+				return ListaDias.Count(d => (d.Grafico == -3 || d.Grafico == -11) && !(d.Codigo == 1 || d.Codigo == 2));
 			}
 		}
 
@@ -800,7 +800,7 @@ namespace Orion.Pijama {
 		public int Enfermo {
 			get {
 				if (ListaDias == null) return 0;
-				return ListaDias.Count(d => d.Grafico == -4);
+				return ListaDias.Count(d => d.Grafico == -4 || d.Grafico == -10 || d.Grafico == -11);
 			}
 		}
 
@@ -991,7 +991,7 @@ namespace Orion.Pijama {
 		public int SabadosDescansados {
 			get {
 				if (ListaDias == null) return 0;
-				return ListaDias.Count(d => (d.Grafico == -2 || d.Grafico == -3) && d.DiaFecha.DayOfWeek == DayOfWeek.Saturday);
+				return ListaDias.Count(d => (d.Grafico == -2 || d.Grafico == -3 || d.Grafico == -10 || d.Grafico == -11) && d.DiaFecha.DayOfWeek == DayOfWeek.Saturday);
 			}
 		}
 
@@ -1024,7 +1024,7 @@ namespace Orion.Pijama {
 		public int DomingosDescansados {
 			get {
 				if (ListaDias == null) return 0;
-				return ListaDias.Count(d => (d.Grafico == -2 || d.Grafico == -3) && d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
+				return ListaDias.Count(d => (d.Grafico == -2 || d.Grafico == -3 || d.Grafico == -10 || d.Grafico == -11) && d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
 			}
 		}
 
@@ -1056,7 +1056,7 @@ namespace Orion.Pijama {
 		public int FestivosDescansados {
 			get {
 				if (ListaDias == null) return 0;
-				return ListaDias.Count(d => (d.Grafico == -2 || d.Grafico == -3) && d.EsFestivo);
+				return ListaDias.Count(d => (d.Grafico == -2 || d.Grafico == -3 || d.Grafico == -10 || d.Grafico == -11) && d.EsFestivo);
 			}
 		}
 
@@ -1092,11 +1092,11 @@ namespace Orion.Pijama {
 				foreach (DiaPijama dia in ListaDias) {
 					switch (dia.DiaFecha.DayOfWeek) {
 						case DayOfWeek.Saturday:
-							if (dia.Grafico == -2 || dia.Grafico == -3) sabado = true;
+							if (dia.Grafico == -2 || dia.Grafico == -3 || dia.Grafico == -10 || dia.Grafico == -11) sabado = true;
 							break;
 						case DayOfWeek.Sunday:
 							if (sabado) {
-								if (dia.Grafico == -2 || dia.Grafico == -3) findes += 1m;
+								if (dia.Grafico == -2 || dia.Grafico == -3 || dia.Grafico == -10 || dia.Grafico == -11) findes += 1m;
 								sabado = false;
 							}
 							break;
@@ -1104,11 +1104,12 @@ namespace Orion.Pijama {
 				}
 				// Si el día 1 es domingo y descanso, se marca medio finde.
 				if (ListaDias[0].DiaFecha.DayOfWeek == DayOfWeek.Sunday) {
-					if (ListaDias[0].Grafico == -2 || ListaDias[0].Grafico == -3) findes += 0.5m;
+					if (ListaDias[0].Grafico == -2 || ListaDias[0].Grafico == -3 || ListaDias[0].Grafico == -10 || ListaDias[0].Grafico == -11) findes += 0.5m;
 				}
 				// Si el último día es sábado y descanso, se marca medio finde.
 				if (ListaDias[ListaDias.Count - 1].DiaFecha.DayOfWeek == DayOfWeek.Saturday) {
-					if (ListaDias[ListaDias.Count - 1].Grafico == -2 || ListaDias[ListaDias.Count - 1].Grafico == -3) findes += 0.5m;
+					if (ListaDias[ListaDias.Count - 1].Grafico == -2 || ListaDias[ListaDias.Count - 1].Grafico == -3 ||
+						ListaDias[ListaDias.Count - 1].Grafico == -10 || ListaDias[ListaDias.Count - 1].Grafico == -11) findes += 0.5m;
 				}
 				return findes;
 			}

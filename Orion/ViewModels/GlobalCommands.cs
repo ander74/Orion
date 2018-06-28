@@ -146,11 +146,12 @@ namespace Orion.ViewModels {
 			// Definimos el parámetro y lo evaluamos
 			string ayuda = (string)parametro;
 			// Mostramos el panel
-			if (ayuda == "Graficos") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Graficos.html");
+			PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Index.html");
+			if (ayuda == "Gráficos") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Graficos.html");
 			if (ayuda == "Conductores") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Conductores.html");
 			if (ayuda == "Calendarios") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Calendarios.html");
 			if (ayuda == "Pijama") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Pijama.html");
-			if (ayuda == "Lineas") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Lineas.html");
+			if (ayuda == "Líneas") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Lineas.html");
 			if (ayuda == "Opciones") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Opciones.html");
 			VisibilidadAyuda = Visibility.Visible;
 		}

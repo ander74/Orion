@@ -24,15 +24,15 @@ namespace Orion.Config {
 			/* TRABAJADAS */
 			public static TimeSpan Trabajadas(TimeSpan? inicio, TimeSpan? final, TimeSpan? iniciopartido, TimeSpan? finalpartido) {
 				// Calculamos el tiempo total.
-				TimeSpan total = (final ?? new TimeSpan(0)) - (inicio ?? new TimeSpan(0));
+				TimeSpan total = (final ?? TimeSpan.Zero) - (inicio ?? TimeSpan.Zero);// Se puede sustituir TimeSpan.Zero por TimeSpan.Zero
 				// Regulamos el tiempo total.
 				if (total.TotalSeconds < 0) total += new TimeSpan(1, 0, 0, 0);
 				// calculamos el tiempo partido.
-				TimeSpan partido = (finalpartido ?? new TimeSpan(0)) - (iniciopartido ?? new TimeSpan(0));
+				TimeSpan partido = (finalpartido ?? TimeSpan.Zero) - (iniciopartido ?? TimeSpan.Zero);
 				// regulamos el tiempo partido
 				if (partido.TotalSeconds < 0) partido += new TimeSpan(1, 0, 0, 0);
 				// Si el tiempo partido es más de tres horas, le sumamos al total el tiempo que excede.
-				TimeSpan excesoPartido = new TimeSpan(0);
+				TimeSpan excesoPartido = TimeSpan.Zero;
 				if (partido > App.Global.Convenio.MaxHorasParticionGraficoPartido) excesoPartido = partido - App.Global.Convenio.MaxHorasParticionGraficoPartido;
 				// Devolvemos el tiempo trabajado.
 				return total - (partido - excesoPartido);
@@ -43,7 +43,7 @@ namespace Orion.Config {
             public static TimeSpan TiempoPartido(TimeSpan? iniciopartido, TimeSpan? finalpartido)
             {
                 // calculamos el tiempo partido.
-                TimeSpan partido = (finalpartido ?? new TimeSpan(0)) - (iniciopartido ?? new TimeSpan(0));
+                TimeSpan partido = (finalpartido ?? TimeSpan.Zero) - (iniciopartido ?? TimeSpan.Zero);
                 // regulamos el tiempo partido
                 if (partido.TotalSeconds < 0) partido += new TimeSpan(1, 0, 0, 0);
                 // Si el tiempo partido es más del máximo, lo dejamos en el máximo
@@ -55,19 +55,19 @@ namespace Orion.Config {
 
             /* ACUMULADAS */
             public static TimeSpan Acumuladas(TimeSpan? trabajadas) {
-				TimeSpan horas = (trabajadas ?? new TimeSpan(0)) - App.Global.Convenio.JornadaMedia;
-				return horas.TotalSeconds < 0 ? new TimeSpan(0) : horas;
+				TimeSpan horas = (trabajadas ?? TimeSpan.Zero) - App.Global.Convenio.JornadaMedia;
+				return horas.TotalSeconds < 0 ? TimeSpan.Zero : horas;
 			}
 
 			/* NOCTURNAS */
 			public static TimeSpan Nocturnas(TimeSpan? inicio, TimeSpan? final, int turno) {
 				// Si inicio o final son nulos, devolvemos cero
-				if (!inicio.HasValue || !final.HasValue) return new TimeSpan(0);
+				if (!inicio.HasValue || !final.HasValue) return TimeSpan.Zero;
 				// Establecemos el horario nocturno.
 				TimeSpan inicionocturnas = App.Global.Convenio.InicioNocturnas;
 				TimeSpan finalnocturnas = App.Global.Convenio.FinalNocturnas;
 				// Inicializamos el resultado
-				TimeSpan resultado = new TimeSpan(0);
+				TimeSpan resultado = TimeSpan.Zero;
 				// Regulamos el servicio.
 				if (final < inicio) final += new TimeSpan(1,0,0,0);
 				// Si el turno no es 3...
@@ -112,14 +112,14 @@ namespace Orion.Config {
 
 			private static TimeSpan TiempoPartidoComida(TimeSpan? iniciopartido, TimeSpan? finalpartido) {
 				// Si iniciopartido o finalpartido son nulos, devolvemos cero.
-				if (!iniciopartido.HasValue || !finalpartido.HasValue) return new TimeSpan(0);
+				if (!iniciopartido.HasValue || !finalpartido.HasValue) return TimeSpan.Zero;
 				// Extraemos el horario de comida para servicios partidos.
 				TimeSpan iniciocomidapartido = App.Global.Convenio.InicioComidaPartido;
 				TimeSpan finalcomidapartido = App.Global.Convenio.FinalComidaPartido;
 				// Regulamos el servicio.
 				if (finalpartido < iniciopartido) finalpartido = finalpartido.Value.Add(new TimeSpan(1,0,0,0));
 				// Inicializamos el resultado a devolver.
-				TimeSpan resultado = new TimeSpan(0);
+				TimeSpan resultado = TimeSpan.Zero;
 				// Recorremos minuto a minuto comprobando si pertenece al horario de comida.
 				for (int m = (int)iniciopartido.Value.TotalMinutes; m < finalpartido.Value.TotalMinutes; m++) {
 					if (m >= iniciocomidapartido.TotalMinutes && m < finalcomidapartido.TotalMinutes) resultado= resultado.Add(new TimeSpan(0,1,0));
