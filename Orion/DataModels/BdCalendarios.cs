@@ -72,6 +72,57 @@ namespace Orion.DataModels {
 
 
 		/*================================================================================
+		 * GET CALENDARIOS CONDUCTOR
+		 *================================================================================*/
+		public static List<Calendario> GetCalendariosConductor(int año, int matricula, OleDbConnection conexion = null) {
+
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+
+			// Creamos la lista y el comando que extrae los gráficos.
+			List<Calendario> lista = new List<Calendario>();
+
+			using (conexion) {
+
+				// Creamos el comando SQL.
+				string comandoSQL = "SELECT Calendarios.*, Conductores.Indefinido " +
+									"FROM Calendarios LEFT JOIN Conductores ON Calendarios.IdConductor = Conductores.Id " +
+									"WHERE Year(Calendarios.Fecha) = ? AND Calendarios.IdConductor = ? " +
+									"ORDER BY Calendarios.Fecha;";
+
+				// Elementos para la consulta de calendarios y días de calendario.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.Parameters.AddWithValue("año", año);
+				comando.Parameters.AddWithValue("matricula", matricula);
+				OleDbDataReader lector = null;
+
+				try {
+					// Extraemos los calendarios.
+					conexion.Open();
+					lector = comando.ExecuteReader();
+
+					// Por cada calendario extraido...
+					while (lector.Read()) {
+						// Extraemos el calendario y sus días
+						Calendario calendario = new Calendario(lector);
+						calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
+						// Extraemos los datos del conductor.
+						calendario.ConductorIndefinido = lector.ToBool("Indefinido");
+						// Añadimos el calendario a la lista.
+						lista.Add(calendario);
+						calendario.Nuevo = false;
+						calendario.Modificado = false;
+					}
+					lector.Close();
+				} catch (Exception ex) {
+					Utils.VerError("BdCalendarios.GetCalendariosConductor", ex);
+				}
+			}
+			// Devolvemos la lista.
+			return lista;
+		}
+
+
+		/*================================================================================
  		 * GUARDAR CALENDARIOS
 		 *================================================================================*/
 		public static void GuardarCalendarios(ObservableCollection<Calendario> lista, OleDbConnection conexion = null) {

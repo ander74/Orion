@@ -702,6 +702,19 @@ namespace Orion.ViewModels {
 
 		private void MostrarResumenAño() {
 
+			//TODO: Meter esto en un Task.
+			// Cargamos los calendarios del año del conductor.
+			List<Calendario> listaCalendarios = BdCalendarios.GetCalendariosConductor(FechaActual.Year, CalendarioSeleccionado.IdConductor);
+			// Creamos el diccionario que contendrá las hojas pijama.
+			Dictionary<int, Pijama.HojaPijama> pijamasAño = new Dictionary<int, Pijama.HojaPijama>();
+			// Cargamos las hojas pijama disponibles.
+			foreach(Calendario cal in listaCalendarios) {
+				pijamasAño.Add(cal.Fecha.Month, new Pijama.HojaPijama(cal, Mensajes));
+			}
+			//TODO: Crear la ventana y un viewmodel que contendrá la tabla con los datos de cada calendario, al que se pasará la lista de
+			//      calendarios o ya veremos el qué.
+			
+
 
 		}
 		#endregion

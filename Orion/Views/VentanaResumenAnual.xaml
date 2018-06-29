@@ -12,7 +12,8 @@
         xmlns:cnv="clr-namespace:Orion.Convertidores"
         xmlns:p="clr-namespace:Orion.Properties"
         xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
-        Background="{StaticResource DegradadoCeleste1}" WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen"
+        Background="{StaticResource DegradadoCeleste1}"
+		WindowStyle="ToolWindow" WindowStartupLocation="CenterScreen" WindowState="Maximized"
         SizeToContent="WidthAndHeight" mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600">
 
     <!-- ==================================================================================================== -->
