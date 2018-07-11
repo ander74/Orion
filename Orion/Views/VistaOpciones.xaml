@@ -697,14 +697,22 @@
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Días Trabajo anuales: "/>
+                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Jornada anual en horas: "/>
                                         <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
                                                  PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
                                                  KeyDown="TextBox_KeyDown"
-                                             Text="{Binding TrabajoAnuales, Mode=TwoWay}"/>
+                                             Text="{Binding HorasAnuales, Mode=TwoWay}"/>
                                     </StackPanel>
 
-                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+									<StackPanel Style="{StaticResource EstiloPanelOpciones}">
+										<TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Días Trabajo anuales: "/>
+										<TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding TrabajoAnuales, Mode=TwoWay}"/>
+									</StackPanel>
+
+									<StackPanel Style="{StaticResource EstiloPanelOpciones}">
                                         <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Días Descanso anuales: "/>
                                         <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
                                                  PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
@@ -720,7 +728,15 @@
                                              Text="{Binding VacacionesAnuales, Mode=TwoWay}"/>
                                     </StackPanel>
 
-                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+									<StackPanel Style="{StaticResource EstiloPanelOpciones}">
+										<TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Fines de Semana Completos: "/>
+										<TextBox Style="{StaticResource EstiloTextBoxConvenio}"
+                                                 PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                                                 KeyDown="TextBox_KeyDown"
+                                             Text="{Binding FindesCompletosAnuales, Mode=TwoWay}"/>
+									</StackPanel>
+
+									<StackPanel Style="{StaticResource EstiloPanelOpciones}">
                                         <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Máximo Trabajo Laborables: "/>
                                         <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
                                                  PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"
@@ -728,7 +744,7 @@
                                              Text="{Binding MaxHorasLaborables, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
                                     </StackPanel>
 
-                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+									<StackPanel Style="{StaticResource EstiloPanelOpciones}">
                                         <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Máximo Trabajo Sáb y Fest.: "/>
                                         <TextBox Style="{StaticResource EstiloTextBoxConvenio}"
                                                  PreviewMouseDown="TextBox_PreviewMouseDown" GotKeyboardFocus="TextBox_GotKeyboardFocus"

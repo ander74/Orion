@@ -230,6 +230,7 @@
     <Compile Include="Models\EstadisticaGrupoGraficos.cs" />
     <Compile Include="Models\GraficoFecha.cs" />
     <Compile Include="Models\GraficosPorDia.cs" />
+    <Compile Include="Models\ItemResumenAnual.cs" />
     <Compile Include="Models\OpcionesConfiguracion.cs" />
     <Compile Include="Models\OpcionesConvenio.cs" />
     <Compile Include="Models\DiaCalendario.cs" />
@@ -285,6 +286,8 @@
     <Compile Include="ViewModels\OpcionesViewModel.cs" />
     <Compile Include="ViewModels\ReclamacionesViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
+    <Compile Include="ViewModels\ResumenAnualCommands.cs" />
+    <Compile Include="ViewModels\ResumenAnualViewModel.cs" />
     <Compile Include="ViewModels\TableroGraficosViewModel.cs" />
     <Compile Include="ViewModels\VentanaAcercaDeVM.cs" />
     <Compile Include="ViewModels\VentanaCobrarHorasVM.cs" />
@@ -354,6 +357,9 @@
     </Compile>
     <Compile Include="Views\VentanaResumenAnual.xaml.cs">
       <DependentUpon>VentanaResumenAnual.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VistaResumenAnual.xaml.cs">
+      <DependentUpon>VistaResumenAnual.xaml</DependentUpon>
     </Compile>
     <Page Include="Estilos\OtrosEstilos.xaml">
       <SubType>Designer</SubType>
@@ -472,6 +478,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\VentanaResumenAnual.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VistaResumenAnual.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

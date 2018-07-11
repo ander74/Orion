@@ -631,4 +631,91 @@
     </Style>
 
 
+	<!-- ==================================================================================================== -->
+	<!-- ESTILO BOTÓN COMBO BOX -->
+	<!-- ==================================================================================================== -->
+	<Style TargetType="ToggleButton" x:Key="EstiloBotonComboBox">
+		<Setter Property="Background" Value="{StaticResource DegradadoCeleste2}"/>
+		<Setter Property="Padding" Value="5,8"/>
+		<Setter Property="FontFamily" Value="Verdana"/>
+		<Setter Property="FontSize" Value="16"/>
+		<Setter Property="Focusable" Value="False"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ToggleButton">
+					<Grid>
+						<Border CornerRadius="5" Background="{TemplateBinding Background}" 
+                                BorderBrush="Transparent" BorderThickness="{TemplateBinding BorderThickness}" >
+							<ContentPresenter x:Name="contentPresenter" 
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                              Content="{TemplateBinding Content}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+						</Border>
+						<Path Name="Arrow" Width="10" Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
+							  VerticalAlignment="Center" HorizontalAlignment="Right" Margin="4"
+							  Fill="{StaticResource AzulOscuro}" />
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Style.Triggers>
+			<Trigger Property="IsChecked" Value="True">
+				<Setter Property="Background" Value="{StaticResource orDegradadoAzul}"/>
+			</Trigger>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter Property="Background" Value="{StaticResource orDegradadoNaranja}"/>
+			</Trigger>
+			<Trigger Property="IsPressed" Value="True">
+				<Setter Property="Background" Value="{StaticResource orDegradadoMarron}"/>
+			</Trigger>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="{StaticResource orDegradadoGris}"/>
+			</Trigger>
+		</Style.Triggers>
+	</Style>
+
+
+	<!-- ==================================================================================================== -->
+	<!-- ESTILO COMBO BOX -->
+	<!-- ==================================================================================================== -->
+	<Style TargetType="ComboBox" x:Key="EstiloComboBox">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ComboBox">
+					<Grid>
+						<ToggleButton x:Name="ToggleButton" Focusable="false" ClickMode="Press"
+									  Style="{StaticResource EstiloBotonComboBox}"
+									  IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
+						<ContentPresenter x:Name="ContentSite" IsHitTestVisible="False" Content="{TemplateBinding SelectionBoxItem}"
+										  ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+										  ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+										  Margin="3,3,23,3" VerticalAlignment="Stretch" HorizontalAlignment="Left"/>
+						<TextBox x:Name="PART_EditableTextBox" Style="{x:Null}" HorizontalAlignment="Left"
+								 VerticalAlignment="Bottom" Margin="3,3,23,3" Focusable="True" Background="Transparent" Visibility="Hidden"
+								 IsReadOnly="{TemplateBinding IsReadOnly}" />
+						<Popup x:Name="Popup" Placement="Bottom" IsOpen="{TemplateBinding IsDropDownOpen}" MinHeight="100"
+							   AllowsTransparency="True" Focusable="False" PopupAnimation="Slide">
+							<Grid x:Name="DropDown" SnapsToDevicePixels="True" MinWidth="{TemplateBinding ActualWidth}"
+								  MaxHeight="{TemplateBinding MaxDropDownHeight}">
+								<Border x:Name="DropDownBorder" BorderThickness="1" CornerRadius="4"
+										BorderBrush="LightGray" Background="WhiteSmoke">
+								</Border>
+								<ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+									<!--<StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>-->
+									<ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained"/>
+								</ScrollViewer>
+							</Grid>
+						</Popup>
+					</Grid>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+
+
 </ResourceDictionary>

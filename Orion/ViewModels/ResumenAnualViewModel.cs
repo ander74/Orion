@@ -1,0 +1,525 @@
+﻿#region COPYRIGHT
+// ===============================================
+//     Copyright 2017 - Orion 1.0 - A. Herrero    
+// -----------------------------------------------
+//  Vea el archivo Licencia.txt para más detalles 
+// ===============================================
+#endregion
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Orion.DataModels;
+using Orion.Models;
+using Orion.Servicios;
+
+namespace Orion.ViewModels {
+
+	public partial class ResumenAnualViewModel : NotifyBase {
+
+
+		// ====================================================================================================
+		#region CAMPOS PRIVADOS
+		// ====================================================================================================
+
+		private IMensajes mensajes;
+		private InformesServicio informes;
+
+		private Dictionary<int, Pijama.HojaPijama> pijamasAño;
+
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region CONSTRUCTOR
+		// ====================================================================================================
+
+		public ResumenAnualViewModel(IMensajes servicioMensajes, InformesServicio servicioInformes) {
+			this.mensajes = servicioMensajes;
+			this.informes = servicioInformes;
+			// Llenamos la lista de conductores.
+			ListaConductores = App.Global.ConductoresVM.ListaConductores;
+			AñoActual = DateTime.Now.Year;
+
+			// Creamos el formato de las etiquetas de las horas trabajadas
+			FormatoTrabajadas = valor => {
+				decimal total = App.Global.Convenio.HorasAnuales;
+				decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+				return $"{valor:0.00}\n {porcentaje:0.00} %".Replace(".", ",");
+			};
+
+			// Creamos el formato de las etiquetas de los dias trabajados
+			FormatoDiasTrabajo = valor => {
+				decimal total = App.Global.Convenio.TrabajoAnuales;
+				decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+				return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
+			};
+
+			// Creamos el formato de las etiquetas de los dias descansados
+			FormatoDiasDescanso = valor => {
+				decimal total = App.Global.Convenio.DescansosAnuales;
+				decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+				return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
+			};
+
+			// Creamos el formato de las etiquetas de los dias de vacaciones
+			FormatoDiasVacaciones = valor => {
+				decimal total = App.Global.Convenio.VacacionesAnuales;
+				decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+				return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
+			};
+
+			// Creamos el formato de las etiquetas de los fines de semana
+			FormatoTotalFindes = valor => {
+				decimal total = App.Global.Convenio.FindesCompletosAnuales;
+				decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+				return $"{valor:0.00}\n {porcentaje:0.00} %".Replace(".", ",");
+			};
+
+		}
+
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region MÉTODOS PÚBLICOS
+		// ====================================================================================================
+
+		public void Reiniciar() {
+			ConductorActual = null;
+			ListaConductores = App.Global.ConductoresVM.ListaConductores;
+		}
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region MÉTODOS PRIVADOS
+		// ====================================================================================================
+
+		private async void CargarDatos() {
+
+			// Si no existe el conductor activo, salimos.
+			if (ConductorActual == null) return;
+
+			// Iniciamos la recepción de los pijamas del conductor.
+			try {
+				// Desactivamos los botones.
+				BotonesActivos = false;
+				// Iniciamos la barra de progreso.
+				App.Global.IniciarProgreso("Recopilando datos...");
+				// Solicitamos los pijamas
+				pijamasAño = await GetPijamas(AñoActual, ConductorActual.Id);
+				// Si la lista de pijamas está vacía, salimos.
+				if (pijamasAño.Count > 0) {
+					LlenarListaResumen();
+					//TODO: Llenar los datos actuales.
+				}
+
+			} catch (Exception ex) {
+				mensajes.VerError("ResumenAnualViewModel.CargarDatos", ex);
+			} finally {
+				BotonesActivos = true;
+				App.Global.FinalizarProgreso();
+			}
+
+
+		}
+
+
+		private async Task<Dictionary<int, Pijama.HojaPijama>> GetPijamas(int año, int idConductor) {
+
+			return await Task.Run(() => {
+				// Cargamos los calendarios del año del conductor.
+				List<Calendario> listaCalendarios = BdCalendarios.GetCalendariosConductor(año, idConductor);
+				// Creamos el diccionario que contendrá las hojas pijama.
+				Dictionary<int, Pijama.HojaPijama> pijamasAño = new Dictionary<int, Pijama.HojaPijama>();
+				// Iniciamos el valor para la barra de progreso.
+				double num = 1;
+				// Cargamos las hojas pijama disponibles.
+				foreach (Calendario cal in listaCalendarios) {
+					// Incrementamos la barra de progreso.
+					App.Global.ValorBarraProgreso = num / listaCalendarios.Count * 100;
+					// Añadimos el pijama a la lista.
+					pijamasAño.Add(cal.Fecha.Month, new Pijama.HojaPijama(cal, mensajes));
+					// Incrementamos el valor de la barra de progreso.
+					num++;
+				}
+				return pijamasAño;
+			});
+		}
+
+
+		private void LlenarListaResumen() {
+			// Reiniciamos la lista y los valores totales.
+			ListaResumen = new List<ItemResumenAnual>();
+			TotalTrabajadas = 0;
+			TotalDiasTrabajo = 0;
+			TotalDiasDescanso = 0;
+			TotalDiasVacaciones = 0;
+			TotalFindes = 0;
+			DNDsPendientes = 0;
+			DCsPendientes = 0;
+			AcumuladasPendientes = TimeSpan.Zero;
+			DCsGenerados = 0;
+
+			// Definimos los items a usar.
+			ItemResumenAnual Trabajadas = new ItemResumenAnual("Horas Trabajadas");
+			ItemResumenAnual Acumuladas = new ItemResumenAnual("Horas Acumuladas");
+			ItemResumenAnual Nocturnas = new ItemResumenAnual("Horas Nocturnas");
+			ItemResumenAnual Cobradas = new ItemResumenAnual("Horas Cobradas");
+			ItemResumenAnual ExcesoJornada = new ItemResumenAnual("Excesos de Jornada");
+			ItemResumenAnual OtrasHoras = new ItemResumenAnual("Otras Horas");
+			ItemResumenAnual DiasTrabajo = new ItemResumenAnual("Dias Trabajados");
+			ItemResumenAnual DiasJD = new ItemResumenAnual("Días Descansados (JD)");
+			ItemResumenAnual DiasOV = new ItemResumenAnual("Días Vacaciones");
+			ItemResumenAnual DiasDND = new ItemResumenAnual("Descansos No Disfrutados");
+			ItemResumenAnual DiasTrabajoJD = new ItemResumenAnual("Días Trabajados en JD");
+			ItemResumenAnual DiasFN = new ItemResumenAnual("Descansos en Fin de Semana");
+			ItemResumenAnual DiasE = new ItemResumenAnual("Días Enfermo");
+			ItemResumenAnual DiasDS = new ItemResumenAnual("Descansos Sueltos");
+			ItemResumenAnual DiasDC = new ItemResumenAnual("Descansos Compensatorios");
+			ItemResumenAnual DiasPER = new ItemResumenAnual("Días de Permiso");
+			ItemResumenAnual DiasF6 = new ItemResumenAnual("Días Libre Disposición (F6)");
+			ItemResumenAnual DiasComite = new ItemResumenAnual("Días de Comité");
+			ItemResumenAnual DiasComiteJD = new ItemResumenAnual("Días de Comité en JD");
+			ItemResumenAnual DiasComiteDC = new ItemResumenAnual("Días de Comité en DC");
+			ItemResumenAnual SabadosTrabajados = new ItemResumenAnual("Sábados Trabajados");
+			ItemResumenAnual SabadosDescansados = new ItemResumenAnual("Sábados Descansados");
+			ItemResumenAnual DomingosTrabajados = new ItemResumenAnual("Domingos Trabajados");
+			ItemResumenAnual DomingosDescansados = new ItemResumenAnual("Domingos Descansados");
+			ItemResumenAnual FestivosTrabajados = new ItemResumenAnual("Festivos Trabajados");
+			ItemResumenAnual FestivosDescansados = new ItemResumenAnual("Festivos Descansados");
+			ItemResumenAnual FindesCompletos = new ItemResumenAnual("Fines de Semana Completos");
+			for (int mes = 1; mes < 13; mes++) {
+				// Si la lista de pijamas no tiene el mes, continuamos.
+				if (!pijamasAño.ContainsKey(mes)) continue;
+				// HORAS
+				Trabajadas.SetDato(mes, pijamasAño[mes].Trabajadas);
+				TotalTrabajadas += pijamasAño[mes].Trabajadas.ToDecimal();
+				Acumuladas.SetDato(mes, pijamasAño[mes].Acumuladas);
+				Nocturnas.SetDato(mes, pijamasAño[mes].Nocturnas);
+				Cobradas.SetDato(mes, pijamasAño[mes].HorasCobradas);
+				ExcesoJornada.SetDato(mes, pijamasAño[mes].ExcesoJornada);
+				OtrasHoras.SetDato(mes, pijamasAño[mes].OtrasHoras);
+				// DÍAS
+				DiasTrabajo.SetDato(mes, pijamasAño[mes].Trabajo);
+				TotalDiasTrabajo += pijamasAño[mes].Trabajo;
+				DiasJD.SetDato(mes, pijamasAño[mes].Descanso);
+				TotalDiasDescanso += pijamasAño[mes].Descanso;
+				DiasOV.SetDato(mes, pijamasAño[mes].Vacaciones);
+				TotalDiasVacaciones += pijamasAño[mes].Vacaciones;
+				DiasDND.SetDato(mes, pijamasAño[mes].DescansosNoDisfrutados);
+				DiasTrabajoJD.SetDato(mes, pijamasAño[mes].TrabajoEnDescanso);
+				DiasFN.SetDato(mes, pijamasAño[mes].DescansoEnFinde);
+				TotalDiasDescanso += pijamasAño[mes].DescansoEnFinde;
+				DiasE.SetDato(mes, pijamasAño[mes].Enfermo);
+				DiasDS.SetDato(mes, pijamasAño[mes].DescansoSuelto);
+				DiasDC.SetDato(mes, pijamasAño[mes].DescansoCompensatorio);
+				DiasPER.SetDato(mes, pijamasAño[mes].Permiso);
+				DiasF6.SetDato(mes, pijamasAño[mes].LibreDisposicionF6);
+				// COMITÉ
+				DiasComite.SetDato(mes, pijamasAño[mes].Comite);
+				DiasComiteJD.SetDato(mes, pijamasAño[mes].ComiteEnDescanso);
+				DiasComiteDC.SetDato(mes, pijamasAño[mes].ComiteEnDC);
+				// FINES DE SEMANA
+				SabadosTrabajados.SetDato(mes, pijamasAño[mes].SabadosTrabajados);
+				SabadosDescansados.SetDato(mes, pijamasAño[mes].SabadosDescansados);
+				DomingosTrabajados.SetDato(mes, pijamasAño[mes].DomingosTrabajados);
+				DomingosDescansados.SetDato(mes, pijamasAño[mes].DomingosDescansados);
+				FestivosTrabajados.SetDato(mes, pijamasAño[mes].FestivosTrabajados);
+				FestivosDescansados.SetDato(mes, pijamasAño[mes].FestivosDescansados);
+				FindesCompletos.SetDato(mes, pijamasAño[mes].FindesCompletos);
+				TotalFindes += pijamasAño[mes].FindesCompletos;
+				// RESUMEN HASTA MES ACTUAL
+				DNDsPendientes = pijamasAño[mes].DNDsPendientesHastaMes;
+				DCsPendientes = pijamasAño[mes].DCsPendientesHastaMes;
+				AcumuladasPendientes = pijamasAño[mes].AcumuladasHastaMes;
+				DCsGenerados = pijamasAño[mes].DCsGeneradosHastaMes;
+			}
+			// Añadimos los items a la lista.
+			ListaResumen.Add(Trabajadas);
+			ListaResumen.Add(Acumuladas);
+			ListaResumen.Add(Nocturnas);
+			ListaResumen.Add(Cobradas);
+			ListaResumen.Add(ExcesoJornada);
+			ListaResumen.Add(OtrasHoras);
+			ListaResumen.Add(DiasTrabajo);
+			ListaResumen.Add(DiasJD);
+			ListaResumen.Add(DiasOV);
+			ListaResumen.Add(DiasDND);
+			ListaResumen.Add(DiasTrabajoJD);
+			ListaResumen.Add(DiasFN);
+			ListaResumen.Add(DiasE);
+			ListaResumen.Add(DiasDS);
+			ListaResumen.Add(DiasDC);
+			ListaResumen.Add(DiasPER);
+			ListaResumen.Add(DiasF6);
+			ListaResumen.Add(DiasComite);
+			ListaResumen.Add(DiasComiteJD);
+			ListaResumen.Add(DiasComiteDC);
+			ListaResumen.Add(SabadosTrabajados);
+			ListaResumen.Add(SabadosDescansados);
+			ListaResumen.Add(DomingosTrabajados);
+			ListaResumen.Add(DomingosDescansados);
+			ListaResumen.Add(FestivosTrabajados);
+			ListaResumen.Add(FestivosDescansados);
+			ListaResumen.Add(FindesCompletos);
+		}
+
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region PROPIEDADES
+		// ====================================================================================================
+
+
+		private ObservableCollection<Conductor> listaConductores;
+		public ObservableCollection<Conductor> ListaConductores {
+			get { return listaConductores; }
+			set {
+				if (listaConductores != value) {
+					listaConductores = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private Conductor conductorActual;
+		public Conductor ConductorActual {
+			get { return conductorActual; }
+			set {
+				if (conductorActual != value) {
+					conductorActual = value;
+					CargarDatos();
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private int añoActual;
+		public int AñoActual {
+			get { return añoActual; }
+			set {
+				if (añoActual != value) {
+					añoActual = value;
+					CargarDatos();
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private List<ItemResumenAnual> listaResumen;
+		public List<ItemResumenAnual> ListaResumen {
+			get { return listaResumen; }
+			set {
+				if (listaResumen != value) {
+					listaResumen = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private bool botonesActivos = true;
+		public bool BotonesActivos {
+			get { return botonesActivos; }
+			set {
+				if (botonesActivos != value) {
+					botonesActivos = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+
+		private decimal totalTrabajadas;
+		public decimal TotalTrabajadas {
+			get { return totalTrabajadas; }
+			set {
+				if (totalTrabajadas != value) {
+					totalTrabajadas = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private int totalDiasTrabajo;
+		public int TotalDiasTrabajo {
+			get { return totalDiasTrabajo; }
+			set {
+				if (totalDiasTrabajo != value) {
+					totalDiasTrabajo = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private int totalDiasDescanso;
+		public int TotalDiasDescanso {
+			get { return totalDiasDescanso; }
+			set {
+				if (totalDiasDescanso != value) {
+					totalDiasDescanso = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private int totalDiasVacaciones;
+		public int TotalDiasVacaciones {
+			get { return totalDiasVacaciones; }
+			set {
+				if (totalDiasVacaciones != value) {
+					totalDiasVacaciones = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private decimal totalFindes;
+		public decimal TotalFindes {
+			get { return totalFindes; }
+			set {
+				if (totalFindes != value) {
+					totalFindes = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private Func<double, string> _formatotrabajadas;
+		public Func<double, string> FormatoTrabajadas {
+			get { return _formatotrabajadas; }
+			set {
+				if (_formatotrabajadas != value) {
+					_formatotrabajadas = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private Func<double, string> _formatodiastrabajo;
+		public Func<double, string> FormatoDiasTrabajo {
+			get { return _formatodiastrabajo; }
+			set {
+				if (_formatodiastrabajo != value) {
+					_formatodiastrabajo = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private Func<double, string> _formatodiasdescanso;
+		public Func<double, string> FormatoDiasDescanso {
+			get { return _formatodiasdescanso; }
+			set {
+				if (_formatodiasdescanso != value) {
+					_formatodiasdescanso = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+		private Func<double, string> _formatodiasvacaciones;
+		public Func<double, string> FormatoDiasVacaciones {
+			get { return _formatodiasvacaciones; }
+			set {
+				if (_formatodiasvacaciones != value) {
+					_formatodiasvacaciones = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private Func<double, string> _formatototalfindes;
+		public Func<double, string> FormatoTotalFindes {
+			get { return _formatototalfindes; }
+			set {
+				if (_formatototalfindes != value) {
+					_formatototalfindes = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private int dcspendientes;
+		public int DCsPendientes {
+			get { return dcspendientes; }
+			set {
+				if (dcspendientes != value) {
+					dcspendientes = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private int dndspendientes;
+		public int DNDsPendientes {
+			get { return dndspendientes; }
+			set {
+				if (dndspendientes != value) {
+					dndspendientes = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private TimeSpan acumuladaspendientes;
+		public TimeSpan AcumuladasPendientes {
+			get { return acumuladaspendientes; }
+			set {
+				if (acumuladaspendientes != value) {
+					acumuladaspendientes = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private decimal dcsgenerados;
+		public decimal DCsGenerados {
+			get { return dcsgenerados; }
+			set {
+				if (dcsgenerados != value) {
+					dcsgenerados = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+
+		#endregion
+		// ====================================================================================================
+
+
+
+
+	}
+}

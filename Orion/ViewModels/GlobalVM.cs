@@ -41,6 +41,7 @@ namespace Orion.ViewModels {
 		private LineasViewModel _lineasvm;
 		private OpcionesViewModel _opcionesvm;
         private EstadisticasViewModel _estadisticasvm;
+		private ResumenAnualViewModel _resumenanualvm;
 
 
 		#endregion
@@ -461,6 +462,13 @@ namespace Orion.ViewModels {
                 return _estadisticasvm;
             }
         }
+
+		public ResumenAnualViewModel ResumenAnualVM {
+			get {
+				if (_resumenanualvm == null) _resumenanualvm = new ResumenAnualViewModel(mensajes, Informes);
+				return _resumenanualvm;
+			}
+		}
 
 
         #endregion

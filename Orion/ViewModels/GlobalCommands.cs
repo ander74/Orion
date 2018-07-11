@@ -118,6 +118,7 @@ namespace Orion.ViewModels {
 			CalendariosVM.Reiniciar();
 			LineasVM.Reiniciar();
 			OpcionesVM.Reiniciar();
+			ResumenAnualVM.Reiniciar();
 			PropiedadCambiada("");
 		}
 		#endregion

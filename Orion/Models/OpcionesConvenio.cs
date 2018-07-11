@@ -58,6 +58,19 @@ namespace Orion.Models {
 		}
 
 
+
+		private int horasanuales = 1620;
+		public int HorasAnuales {
+			get { return horasanuales; }
+			set {
+				if (horasanuales != value) {
+					horasanuales = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
 		private int _trabajoanuales = 225;
 		public int TrabajoAnuales {
 			get { return _trabajoanuales; }
@@ -88,6 +101,18 @@ namespace Orion.Models {
 			set {
 				if (_vacacionesanuales != value) {
 					_vacacionesanuales = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private int findescompletosanuales = 21;
+		public int FindesCompletosAnuales {
+			get { return findescompletosanuales; }
+			set {
+				if (findescompletosanuales != value) {
+					findescompletosanuales = value;
 					PropiedadCambiada();
 				}
 			}
