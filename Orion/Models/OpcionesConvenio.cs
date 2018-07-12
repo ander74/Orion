@@ -59,7 +59,7 @@ namespace Orion.Models {
 
 
 
-		private int horasanuales = 1620;
+		private int horasanuales = 1650;
 		public int HorasAnuales {
 			get { return horasanuales; }
 			set {

@@ -117,11 +117,8 @@ namespace Orion.ViewModels {
 				App.Global.IniciarProgreso("Recopilando datos...");
 				// Solicitamos los pijamas
 				pijamasAño = await GetPijamas(AñoActual, ConductorActual.Id);
-				// Si la lista de pijamas está vacía, salimos.
-				if (pijamasAño.Count > 0) {
-					LlenarListaResumen();
-					//TODO: Llenar los datos actuales.
-				}
+				// Llenar los datos con los resultados de los pijamas.
+				LlenarListaResumen();
 
 			} catch (Exception ex) {
 				mensajes.VerError("ResumenAnualViewModel.CargarDatos", ex);
