@@ -69,7 +69,7 @@ namespace Orion.ViewModels {
                 TurnosArrasate = null;
                 HoraMediaArrasate = null;
             } else {
-                EstArrasate = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoArrasate.Id, Centros.Arrasate);
+                EstArrasate = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoArrasate.Id, Centros.Arrasate) ?? new EstadisticaGrupoGraficos();
                 TituloArrasate = $"ARRASATE\n({EstArrasate.Validez:dd-MM-yy})";
                 // TURNOS
                 TurnosArrasate = new ChartValues<decimal> { EstArrasate.PorcentajeTurnos1, EstArrasate.PorcentajeTurnos2,
@@ -87,7 +87,7 @@ namespace Orion.ViewModels {
                 TurnosBilbao = null;
                 HoraMediaBilbao = null;
             } else {
-                EstBilbao = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoBilbao.Id, Centros.Bilbao);
+                EstBilbao = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoBilbao.Id, Centros.Bilbao) ?? new EstadisticaGrupoGraficos();
                 TituloBilbao = $"BILBAO\n({EstBilbao.Validez:dd-MM-yy})";
                 // TURNOS
                 TurnosBilbao = new ChartValues<decimal> { EstBilbao.PorcentajeTurnos1, EstBilbao.PorcentajeTurnos2,
@@ -105,7 +105,7 @@ namespace Orion.ViewModels {
                 TurnosDonosti = null;
                 HoraMediaDonosti = null;
             } else {
-                EstDonosti = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoDonosti.Id, Centros.Donosti);
+                EstDonosti = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoDonosti.Id, Centros.Donosti) ?? new EstadisticaGrupoGraficos();
                 TituloDonosti = $"DONOSTI\n({EstDonosti.Validez:dd-MM-yy})";
                 // TURNOS
                 TurnosDonosti = new ChartValues<decimal> { EstDonosti.PorcentajeTurnos1, EstDonosti.PorcentajeTurnos2,
@@ -123,7 +123,7 @@ namespace Orion.ViewModels {
                 TurnosVitoria = null;
                 HoraMediaVitoria = null;
             } else {
-                EstVitoria = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoVitoria.Id, Centros.Vitoria);
+                EstVitoria = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoVitoria.Id, Centros.Vitoria) ?? new EstadisticaGrupoGraficos();
                 TituloVitoria = $"GASTEIZ\n({EstVitoria.Validez:dd-MM-yy})";
                 // TURNOS
                 TurnosVitoria = new ChartValues<decimal> { EstVitoria.PorcentajeTurnos1, EstVitoria.PorcentajeTurnos2,
