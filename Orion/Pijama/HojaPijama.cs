@@ -804,7 +804,29 @@ namespace Orion.Pijama {
 			}
 		}
 
-		
+
+		/// <summary>
+		/// Días de enfermedad o baja del mes actual (E(JD) => -10).
+		/// </summary>
+		public int EnfermoEnJD {
+			get {
+				if (ListaDias == null) return 0;
+				return ListaDias.Count(d => d.Grafico == -10);
+			}
+		}
+
+
+		/// <summary>
+		/// Días de enfermedad o baja del mes actual (E(FN) => -11).
+		/// </summary>
+		public int EnfermoEnFN {
+			get {
+				if (ListaDias == null) return 0;
+				return ListaDias.Count(d => d.Grafico == -11);
+			}
+		}
+
+
 		/// <summary>
 		/// Descansos sueltos del mes actual (DS => -5).
 		/// </summary>

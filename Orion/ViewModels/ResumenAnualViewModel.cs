@@ -208,20 +208,28 @@ namespace Orion.ViewModels {
 				OtrasHoras.SetDato(mes, pijamasAño[mes].OtrasHoras);
 				// DÍAS
 				DiasTrabajo.SetDato(mes, pijamasAño[mes].Trabajo);
-				TotalDiasTrabajo += pijamasAño[mes].Trabajo;
+				TotalDiasTrabajo += pijamasAño[mes].Trabajo; // Añadimos al total de trabajados.
 				DiasJD.SetDato(mes, pijamasAño[mes].Descanso);
-				TotalDiasDescanso += pijamasAño[mes].Descanso;
+				TotalDiasDescanso += pijamasAño[mes].Descanso; // Añadimos al total de descansos.
 				DiasOV.SetDato(mes, pijamasAño[mes].Vacaciones);
 				TotalDiasVacaciones += pijamasAño[mes].Vacaciones;
 				DiasDND.SetDato(mes, pijamasAño[mes].DescansosNoDisfrutados);
+				TotalDiasDescanso += pijamasAño[mes].DescansosNoDisfrutados; // Añadimos DND al total de descansos. **** DUDA ****
 				DiasTrabajoJD.SetDato(mes, pijamasAño[mes].TrabajoEnDescanso);
 				DiasFN.SetDato(mes, pijamasAño[mes].DescansoEnFinde);
-				TotalDiasDescanso += pijamasAño[mes].DescansoEnFinde;
+				TotalDiasDescanso += pijamasAño[mes].DescansoEnFinde; // Añadimos al total de descansos.
 				DiasE.SetDato(mes, pijamasAño[mes].Enfermo);
+				TotalDiasTrabajo += pijamasAño[mes].Enfermo; // Añadimos E al total de trabajados
 				DiasDS.SetDato(mes, pijamasAño[mes].DescansoSuelto);
+				TotalDiasDescanso += pijamasAño[mes].DescansoSuelto; // Añadimos DS al total de descansos.
 				DiasDC.SetDato(mes, pijamasAño[mes].DescansoCompensatorio);
+				TotalDiasTrabajo += pijamasAño[mes].DescansoCompensatorio; // Añadimos DC al total de trabajados.
 				DiasPER.SetDato(mes, pijamasAño[mes].Permiso);
+				TotalDiasTrabajo += pijamasAño[mes].Permiso; // Añadimos PER al total de trabajados.
 				DiasF6.SetDato(mes, pijamasAño[mes].LibreDisposicionF6);
+				TotalDiasTrabajo += pijamasAño[mes].LibreDisposicionF6; // Añadimos F6 al total de trabajados.
+				TotalDiasDescanso += pijamasAño[mes].EnfermoEnJD; // Añadimos E(JD) al total de descansos.
+				TotalDiasDescanso += pijamasAño[mes].EnfermoEnFN; // Añadimos E(FN) al total de descansos.
 				// COMITÉ
 				DiasComite.SetDato(mes, pijamasAño[mes].Comite);
 				DiasComiteJD.SetDato(mes, pijamasAño[mes].ComiteEnDescanso);
