@@ -55,9 +55,10 @@ namespace Orion.DataModels {
 						regulacion.Nuevo = false;
 						regulacion.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdRgulacionConductor.GetRegulaciones", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;

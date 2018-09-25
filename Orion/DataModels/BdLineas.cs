@@ -53,9 +53,10 @@ namespace Orion.DataModels {
 						linea.Nuevo = false;
 						linea.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdLineas.GetLineas", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;

@@ -53,9 +53,10 @@ namespace Orion.DataModels {
 						parada.Nuevo = false;
 						parada.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdParadas.GetParadas", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;

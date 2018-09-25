@@ -635,7 +635,6 @@ namespace Orion.ViewModels {
 			}
 		}
 
-
 		private async void PijamasSeparadosEnPdf() {
 
 			List<Pijama.HojaPijama> listaPijamas = new List<Pijama.HojaPijama>();

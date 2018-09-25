@@ -70,6 +70,5 @@ namespace Orion.Servicios{
 			ventanaError.TbDescripcion.Text = ex.Message + "\n\n--- TRAZADO DEL ERROR ---\n\n" + ex.StackTrace;
 			ventanaError.ShowDialog();
 		}
-
 	}
 }

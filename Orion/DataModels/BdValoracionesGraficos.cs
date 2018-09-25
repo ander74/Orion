@@ -58,9 +58,10 @@ namespace Orion.DataModels {
 						valoracion.Nuevo = false;
 						valoracion.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdValoracionesGraficos.GetValoraciones", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;

@@ -61,10 +61,12 @@ namespace Orion.DataModels {
 						calendario.Modificado = false;
 
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdCalendarios.GetCalendarios", ex);
+				} finally {
+					lector.Close();
 				}
+
 			}
 			// Devolvemos la lista.
 			return lista;
@@ -112,10 +114,12 @@ namespace Orion.DataModels {
 						calendario.Nuevo = false;
 						calendario.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdCalendarios.GetCalendariosConductor", ex);
+				} finally {
+					lector.Close();
 				}
+
 			}
 			// Devolvemos la lista.
 			return lista;

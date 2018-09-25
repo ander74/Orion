@@ -56,9 +56,10 @@ namespace Orion.DataModels {
 						conductor.Nuevo = false;
 						conductor.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdConductores.GetConductores", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;
@@ -230,9 +231,10 @@ namespace Orion.DataModels {
 						conductor = new Conductor(lector);
 						conductor.ListaRegulaciones = BdRegulacionConductor.GetRegulaciones(conductor.Id);
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdConductores.GetConductor", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return conductor;

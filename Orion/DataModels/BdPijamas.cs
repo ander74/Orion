@@ -208,6 +208,7 @@ namespace Orion.DataModels {
 						if (lector.Read()) diaPijama.GraficoTrabajado = new Grafico(lector);
 						// Añadimos el día pijama a la lista.
 						lista.Add(diaPijama);
+						lector.Close();
 					}
 				} catch (Exception ex) {
 					Utils.VerError("BdPijamas.GetDiasPijama2", ex);

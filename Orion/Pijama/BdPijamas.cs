@@ -127,6 +127,8 @@ namespace Orion.Pijama {
 						}
 						// Añadimos el día pijama a la lista.
 						lista.Add(diaPijama);
+						// Cerramos el lector.
+						lector.Close();
 					}
 				} catch (Exception ex) {
 					Utils.VerError("BdPijamas.GetDiasPijama", ex);
@@ -187,6 +189,7 @@ namespace Orion.Pijama {
 							}
 							resultado.HorasAcumuladas += grafico.Acumuladas;
 						}
+						lector2.Close();
 					}
 					lector.Close();
 					//----------------------------------------------------------------------------------------------------

@@ -59,10 +59,11 @@ namespace Orion.DataModels {
 						grafico.Nuevo = false;
 						grafico.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
                     Utils.VerError("BdGraficos.getGraficos", ex);
-                }
+				} finally {
+					lector.Close();
+				}
 			}
 			return lista;
 
@@ -224,9 +225,10 @@ namespace Orion.DataModels {
 						grafico.Nuevo = false;
 						grafico.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdGraficos.getGraficosGrupoPorFecha", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;
@@ -247,11 +249,11 @@ namespace Orion.DataModels {
 			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
 			List<EstadisticasGraficos> lista = new List<EstadisticasGraficos>();
 			using (conexion) {
+				OleDbDataReader lector = null;
 				try {
 					string comandoSQL = "GetEstadisticasGraficos";
 					OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
 					Comando.CommandType = System.Data.CommandType.StoredProcedure;
-					OleDbDataReader lector = null;
 					Comando.Parameters.AddWithValue("@JornadaMedia", App.Global.Convenio.JornadaMedia.Ticks);
 					Comando.Parameters.AddWithValue("@IdGrupo", IdGrupo);
 					conexion.Open();
@@ -262,9 +264,10 @@ namespace Orion.DataModels {
 							lista.Add(estadistica);
 						}
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdGraficos.GetEstadisticasGrupoGraficos", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;
@@ -285,11 +288,11 @@ namespace Orion.DataModels {
 
 			List<EstadisticasGraficos> lista = new List<EstadisticasGraficos>();
 			using (conexion) {
+				OleDbDataReader lector = null;
 				try {
 					string comandoSQL = "GetEstadisticasGraficosDesdeFecha";
 					OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
 					Comando.CommandType = System.Data.CommandType.StoredProcedure;
-					OleDbDataReader lector = null;
 					Comando.Parameters.AddWithValue("@JornadaMedia", App.Global.Convenio.JornadaMedia.Ticks);
 					Comando.Parameters.AddWithValue("@Fecha", fecha.ToString("yyyy-MM-dd"));
 					conexion.Open();
@@ -300,9 +303,10 @@ namespace Orion.DataModels {
 							lista.Add(estadistica);
 						}
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdGraficos.GetEstadisticasGraficosDesdeFecha", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;
@@ -338,9 +342,10 @@ namespace Orion.DataModels {
 					conexion.Open();
 					lector = comando.ExecuteReader();
 					if (lector.Read()) resultado = new GraficoBase(lector);
-					lector.Close();
 				} catch (OleDbException ex) {
 					Utils.VerError("BdGraficos.GetGrafico", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return resultado;

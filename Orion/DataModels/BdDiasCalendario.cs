@@ -55,9 +55,11 @@ namespace Orion.DataModels {
 						dia.Nuevo = false;
 						dia.Modificado = false;
 					}
-					lector.Close();
+					
 				} catch (OleDbException ex) {
 					Utils.VerError("BdDiasCalendarios.GetDiasCalendario(idcalendario)", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			// Devolvemos la lista.
@@ -89,9 +91,10 @@ namespace Orion.DataModels {
 					conexion.Open();
 					lector = comando.ExecuteReader();
 					if (lector.Read()) resultado =  new DiaCalendarioBase(lector);
-					lector.Close();
 				} catch (OleDbException ex) {
 					Utils.VerError("BdDiasCalendarios.GetDiaCalendario", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return resultado;
@@ -270,6 +273,8 @@ namespace Orion.DataModels {
 					}
 				} catch (OleDbException ex) {
 					Utils.VerError("BdDiasCalendarios.GetDiasCalendarioConBloqueos", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			// Devolvemos la lista.

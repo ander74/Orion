@@ -53,9 +53,10 @@ namespace Orion.DataModels {
 						itinerario.Nuevo = false;
 						itinerario.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdItinerarios.GetItinerarios", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;
@@ -165,9 +166,10 @@ namespace Orion.DataModels {
 						itinerario = new Itinerario(lector);
 						itinerario.ListaParadas = BdParadas.GetParadas(itinerario.Id);
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdItinerarios.GetItinerarioByNombre", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 

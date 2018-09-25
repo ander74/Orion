@@ -52,9 +52,10 @@ namespace Orion.DataModels {
 						grupo.Nuevo = false;
 						grupo.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdGruposGraficos.getGrupos", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;

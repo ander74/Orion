@@ -56,9 +56,10 @@ namespace Orion.DataModels {
 						festivo.Nuevo = false;
 						festivo.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdFestivos.GetFestivosPorMes", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;
@@ -96,9 +97,10 @@ namespace Orion.DataModels {
 						festivo.Nuevo = false;
 						festivo.Modificado = false;
 					}
-					lector.Close();
 				} catch (Exception ex) {
 					Utils.VerError("BdFestivos.GetFestivosPorAño", ex);
+				} finally {
+					lector.Close();
 				}
 			}
 			return lista;
