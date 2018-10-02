@@ -23,7 +23,9 @@ using System.Windows.Controls;
 
 namespace Orion.ViewModels {
 
+
 	public partial class GlobalVM: NotifyBase, IDisposable{
+
 
 		// ====================================================================================================
 		#region  CAMPOS PRIVADOS
@@ -72,7 +74,6 @@ namespace Orion.ViewModels {
 			CentroActual = (Centros)Configuracion.CentroInicial;
 			// Activamos el botón de la calculadora.
 			Configuracion.BotonCalculadoraActivo = true;
-
 
 		}
 
@@ -539,8 +540,6 @@ namespace Orion.ViewModels {
 
 		#endregion
 		// ====================================================================================================
-
-
 
 
 	} //Fin de la clase.

@@ -114,7 +114,7 @@ namespace Orion.ViewModels {
 
 		public Conductor GetConductor(int idconductor) {
 
-			Conductor resultado = ListaConductores.First(c => c.Id == idconductor);
+			Conductor resultado = ListaConductores.FirstOrDefault(c => c.Id == idconductor);
 			return resultado;
 
 		}

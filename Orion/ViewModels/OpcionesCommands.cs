@@ -509,11 +509,7 @@ namespace Orion.ViewModels {
 
 
         }
-        #endregion
-
-
-
-
+		#endregion
 
 
 

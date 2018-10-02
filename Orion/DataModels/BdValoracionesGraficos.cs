@@ -41,15 +41,17 @@ namespace Orion.DataModels {
 			ObservableCollection<ValoracionGrafico> lista = new ObservableCollection<ValoracionGrafico>();
 
 			using (conexion) {
-				string comandoSQL = "SELECT * FROM Valoraciones WHERE IdGrafico=? ORDER BY Inicio, Id";
-				OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
 				OleDbDataReader lector = null;
-				Comando.Parameters.AddWithValue("idgrafico", IdGrafico);
 
 				// Ejecutamos el comando y extraemos los gráficos del lector a la lista.
 				try {
 
-					conexion.Open();
+					if (conexion.State != System.Data.ConnectionState.Open) conexion.Open();
+
+					string comandoSQL = "SELECT * FROM Valoraciones WHERE IdGrafico=? ORDER BY Inicio, Id";
+					OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
+					Comando.Parameters.AddWithValue("idgrafico", IdGrafico);
+
 					lector = Comando.ExecuteReader();
 
 					while (lector.Read()) {

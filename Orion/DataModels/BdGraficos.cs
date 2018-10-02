@@ -41,20 +41,35 @@ namespace Orion.DataModels {
 
 			using (conexion) {
 
-				string comandoSQL = "SELECT * FROM Graficos WHERE IdGrupo=? ORDER BY Numero";
-				OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
 				OleDbDataReader lector = null;
-				Comando.Parameters.AddWithValue("idgrupo", IdGrupo);
-                
+				OleDbDataReader lectorValoraciones = null;
+
 				try {
 
                     // Ejecutamos el comando y extraemos los gráficos del lector a la lista.
                     conexion.Open();
+					OleDbTransaction transaccion = conexion.BeginTransaction();
+
+					string comandoSQL = "SELECT * FROM Graficos WHERE IdGrupo=? ORDER BY Numero";
+					OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion, transaccion);
+					Comando.Parameters.AddWithValue("idgrupo", IdGrupo);
+
 					lector = Comando.ExecuteReader();
 
 					while (lector.Read()) {
 						Grafico grafico = new Grafico(lector);
-						grafico.ListaValoraciones = BdValoracionesGraficos.getValoraciones(grafico.Id);
+						grafico.ListaValoraciones = new ObservableCollection<ValoracionGrafico>();
+						string comandoSQLValoraciones = "SELECT * FROM Valoraciones WHERE IdGrafico=? ORDER BY Inicio, Id";
+						OleDbCommand ComandoValoraciones = new OleDbCommand(comandoSQLValoraciones, conexion, transaccion);
+						ComandoValoraciones.Parameters.AddWithValue("idgrafico", grafico.Id);
+						lectorValoraciones = ComandoValoraciones.ExecuteReader();
+						while (lectorValoraciones.Read()) {
+							ValoracionGrafico valoracion = new ValoracionGrafico(lectorValoraciones);
+							grafico.ListaValoraciones.Add(valoracion);
+							valoracion.Nuevo = false;
+							valoracion.Modificado = false;
+						}
+						//grafico.ListaValoraciones = BdValoracionesGraficos.getValoraciones(grafico.Id);
 						lista.Add(grafico);
 						grafico.Nuevo = false;
 						grafico.Modificado = false;
