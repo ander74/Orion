@@ -27,8 +27,9 @@
         <cnv:ConvertidorNumeroGrafico x:Key="cnvNumGrafico"/>
         <cnv:ConvertidorItinerario x:Key="cnvItinerario"/>
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility"/>
+		<cnv:ConvertidorDiaSemanaGrafico x:Key="cnvDiaSemanaGrafico"/>
 
-        <Style x:Key="EstiloGridGraficos" TargetType="DataGrid">
+		<Style x:Key="EstiloGridGraficos" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}"/>
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasVerde}"/>
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasGraficos}"/>
@@ -42,6 +43,8 @@
     </UserControl.Resources>
 
 
+	
+	
     <!-- ==================================================================================================== -->
     <!-- CONTENIDO -->
     <!-- ==================================================================================================== -->
@@ -503,8 +506,11 @@
                     
                     <DataGridTextColumn Header="Número" Binding="{Binding Numero, Converter={StaticResource cnvNumGrafico}}" 
                                         Width="1*" MinWidth="60"/>
-                    
-                    <DataGridTextColumn Header="Turno" Binding="{Binding Turno}" Width="1*" MinWidth="60"/>
+
+					<DataGridTextColumn Header="D" Binding="{Binding DiaSemana, Converter={StaticResource cnvDiaSemanaGrafico}}" 
+                                        Width="0.3*" MinWidth="20"/>
+
+					<DataGridTextColumn Header="Turno" Binding="{Binding Turno}" Width="1*" MinWidth="60"/>
                     
                     <DataGridTextColumn Header="Inicio" Width="1*" MinWidth="60"
                                     Binding="{Binding Inicio, Converter={StaticResource cnvHora}}"/>

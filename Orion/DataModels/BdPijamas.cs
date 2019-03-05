@@ -24,15 +24,13 @@ namespace Orion.DataModels {
 		/*================================================================================
  		* GET DÍAS PIJAMA
  		*================================================================================*/
-		public static List<DiaPijama> GetDiasPijama(DateTime fecha, IEnumerable<DiaCalendario> listadias, bool reduccionJornada, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static List<DiaPijama> GetDiasPijama(DateTime fecha, IEnumerable<DiaCalendario> listadias, bool reduccionJornada) {
 
 			// Creamos la lista que se devolverá.
 			List<DiaPijama> lista = new List<DiaPijama>();
 
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 				string comandoSQL = "SELECT * " +
 									"FROM (SELECT * " +
 									"      FROM Graficos" +
@@ -93,27 +91,27 @@ namespace Orion.DataModels {
 							diapijama.PlusCena = grafico?.PlusCena ?? 0m;
 							// Plus Paquetería.
 							if (grafico.PlusPaqueteria) {
-								diapijama.PlusPaqueteria = App.Global.Convenio.PlusPaqueteria;
+								diapijama.PlusPaqueteria = App.Global.OpcionesVM.GetPluses(diapijama.Fecha.Year).PlusPaqueteria;
 							} else {
 								diapijama.PlusPaqueteria = dia.FacturadoPaqueteria * 0.10m; //TODO: Añadir este valor a las opciones.
 							}
 							// Plus Limpieza
 							if (grafico.PlusLimpieza) {
-								diapijama.PlusLimpieza = App.Global.Convenio.PlusLimpieza;
+								diapijama.PlusLimpieza = App.Global.OpcionesVM.GetPluses(diapijama.Fecha.Year).PlusLimpieza;
 							} else {
 								if (dia.Limpieza == null)
-									diapijama.PlusLimpieza = App.Global.Convenio.PlusLimpieza / 2m; //TODO: Evaluar si se hace así o es un valor fijo.
+									diapijama.PlusLimpieza = App.Global.OpcionesVM.GetPluses(diapijama.Fecha.Year).PlusLimpieza / 2m; //TODO: Evaluar si se hace así o es un valor fijo.
 								if (dia.Limpieza == true)
-									diapijama.PlusLimpieza = App.Global.Convenio.PlusLimpieza;
+									diapijama.PlusLimpieza = App.Global.OpcionesVM.GetPluses(diapijama.Fecha.Year).PlusLimpieza;
 							}
 							// Plus Nocturnidad
-							if (grafico.Turno == 3) diapijama.PlusNocturnidad = App.Global.Convenio.PlusNocturnidad;
+							if (grafico.Turno == 3) diapijama.PlusNocturnidad = App.Global.OpcionesVM.GetPluses(diapijama.Fecha.Year).PlusNocturnidad;
 							// Plus Navidad
 							if (grafico.Numero > 0 && diapijama.Fecha.Day == 25 && diapijama.Fecha.Month == 12) {
-								diapijama.PlusNavidad = App.Global.Convenio.PlusNavidad;
+								diapijama.PlusNavidad = App.Global.OpcionesVM.GetPluses(diapijama.Fecha.Year).PlusNavidad;
 							}
 							if (grafico.Numero > 0 && diapijama.Fecha.Day == 1 && diapijama.Fecha.Month == 1) {
-								diapijama.PlusNavidad = App.Global.Convenio.PlusNavidad;
+								diapijama.PlusNavidad = App.Global.OpcionesVM.GetPluses(diapijama.Fecha.Year).PlusNavidad;
 							}
 							// Calculamos la dieta por menor descanso si existe para menos de 12 horas.
 							if (finalAnterior.HasValue && diapijama.Inicio.HasValue) {
@@ -125,7 +123,7 @@ namespace Orion.DataModels {
 								decimal diferenciahoras = (decimal)(inicio - finalAnterior.Value).TotalHours;
 								if (diferenciahoras < 12) {
 									//TODO: Establecer la dieta pijama.
-									diapijama.PlusMenorDescanso = (12 - diferenciahoras) * App.Global.Convenio.DietaMenorDescanso;
+									diapijama.PlusMenorDescanso = (12 - diferenciahoras) * App.Global.OpcionesVM.GetPluses(diapijama.Fecha.Year).DietaMenorDescanso;
 								}
 							}
 
@@ -170,10 +168,8 @@ namespace Orion.DataModels {
 		/*================================================================================
  		* GET DÍAS PIJAMA 2
  		*================================================================================*/
-		public static List<Pijama.DiaPijama> GetDiasPijama2(IEnumerable<DiaCalendarioBase> listadias, OleDbConnection conexion = null) {
+		public static List<Pijama.DiaPijama> GetDiasPijama2(IEnumerable<DiaCalendarioBase> listadias) {
 
-			// Si no se pasa una conexión, se establece la conexion del centro actual.
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
 			// Creamos la lista que se devolverá.
 			List<Pijama.DiaPijama> lista = new List<Pijama.DiaPijama>();
 
@@ -188,10 +184,12 @@ namespace Orion.DataModels {
 								"WHERE Numero = ?";
 
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 				// Habrá que quitar el control de excepciones aquí y ponerselo en la llamada al método, ya que aquí no hay
 				// gestión de ventanas (o no debería haberlo).
-				try {
+				try
+				{
 					conexion.Open();
 					foreach (DiaCalendarioBase dia in listadias) {
 						// Creamos el día pijama a añadir a la lista.

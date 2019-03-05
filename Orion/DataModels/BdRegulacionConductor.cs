@@ -29,14 +29,13 @@ namespace Orion.DataModels {
 		/// </summary>
 		/// <param name="IdConductor">Id del conductor al que pertenecen las regulaciones.</param>
 		/// <returns>Colección de regulaciones.</returns>
-		public static ObservableCollection<RegulacionConductor> GetRegulaciones(int IdConductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static ObservableCollection<RegulacionConductor> GetRegulaciones(int IdConductor) {
 
 			// Creamos la lista y el comando que extrae los gráficos.
 			ObservableCollection<RegulacionConductor> lista = new ObservableCollection<RegulacionConductor>();
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				string comandoSQL = "SELECT * FROM Regulaciones WHERE IdConductor=? ORDER BY Fecha,Id";
 
@@ -72,14 +71,13 @@ namespace Orion.DataModels {
 		/// Guarda la lista de regulaciones que se le pasa en la base de datos, actualizando las modificadas e insertando las nuevas.
 		/// </summary>
 		/// <param name="lista">Lista con las regulaciones a guardar.</param>
-		public static void GuardarRegulaciones(ObservableCollection<RegulacionConductor> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static void GuardarRegulaciones(ObservableCollection<RegulacionConductor> lista) {
 
 			// Si la lista está vacía, salimos.
 			if (lista == null || lista.Count == 0) return;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				string SQLInsertar = "INSERT INTO Regulaciones (IdConductor, Codigo, Fecha, Horas, Descansos, Motivo) " +
 									 "VALUES (?, ?, ?, ?, ?, ?);";
@@ -119,16 +117,15 @@ namespace Orion.DataModels {
 		/// </summary>
 		/// <param name="regulacion">Regulación a insertar.</param>
 		/// <returns>Id asignado a la nueva regulación.</returns>
-		public static int InsertarRegulacion(RegulacionConductor regulacion, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int InsertarRegulacion(RegulacionConductor regulacion) {
 
 			// Si la conexión no existe o la valoracion es nula, devolvemos nulo.
 			if (regulacion == null) return -1;
 
 			int resultado = -1;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				string SQLInsertar = "INSERT INTO Regulaciones (IdConductor, Codigo, Fecha, Horas, Descansos, Motivo) " +
 								 "VALUES (?, ?, ?, ?, ?, ?);";
@@ -157,11 +154,10 @@ namespace Orion.DataModels {
 		/// Elimina de la base de datos las regulaciones pasados en la lista.
 		/// </summary>
 		/// <param name="lista">Lista con las regulaciones a borrar.</param>
-		public static void BorrarRegulaciones(List<RegulacionConductor> lista, OleDbConnection conexion = null) {
+		public static void BorrarRegulaciones(List<RegulacionConductor> lista) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
-
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				string SQLBorrar = "DELETE FROM Regulaciones WHERE Id=?";
 

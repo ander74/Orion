@@ -6,9 +6,27 @@ PROYECTO ORION
 	Acciones pendientes de implementar
 	----------------------------------
 
+		- Añadir las F6(DC) que descuentan un DC en lugar de una hora.
+
+		- En el resumen anual, los fines de semana completos no se contabilizan bien por los medios.
+
+	 ** - En el resumen anual, en descansos solo contabiliza JD y tiene que sumar DS y FN.
+
+	 ** - Añadir incidencias OV en descanso y en fin de semana.
+
+	 ** - Las F6 descuentan de las horas del mes en lugar del contador de DCs.
+
+	 ** - Tener en cuenta las regulaciones de fin de año para las horas acumuladas.
+
+	 ** - Corregir las horas acumuladas negativas en el pijama, si fuera necesario.
+
+	 ** - Añadir opción en el calendario para ir a un mes en concreto sin tener que ir mes a mes.
+
+
+
+
 		- Actualizar DataGrids modificados por otros procesos: Actualizar DataGrid Conductores al añadir conductores desconocidos desde Calendarios.
 															   Actualizar DataGrid Calendarios al eliminar un conductor.
-
 
 		- Cambiar las consultas a bases de datos por procedimientos almacenados.
 
@@ -18,28 +36,6 @@ PROYECTO ORION
 
 		- Gestionar los conductores desde la tabla y no desde la base de datos, ya que se cargan todos.
 
-	 ** - Crear árbol de carpetas de conductores.
-			· Las carpetas con nombre deben ir en modo Título.
-			· Las carpetas se clasifican por centros, por lo que el primer nivel será el centro.
-			· Dentro de cada centro, hay que decidir si se clasifican por conductor o por tipo de informe.
-			· Los gráficos (grupos de ellos) irán en una carpeta.
-			· Las estadísticas de gráficos, irán en una carpeta.
-			· Los calendarios irán en una carpeta.
-			· Los fallos en los calendarios irán en una carpeta en concreto.
-			· Las hojas pijama y las reclamaciones irán en la carpeta del conductor en concreto.
-
-	 ** - Añadir opción que determine si guardar los informes directamente o pedir nombre de archivo.
-
-	 ** - Crear un «Servicio» para el manejo de los informes de Excel, en el cuál sólo se abrirá una aplicación de Excel con el primer informe
-		  y se reutilizará con los siguientes, cerrándola al salir de la aplicación. Este «Servicio» tendrá una «Factory» de documentos. Al
-		  «Servicio» le podemos llamar "Informes" y meter en él toda la maquinaria de generación y gestión de los mismos.
-
-	 ** - Modificar la calculadora para que el botón cerrar sea un comando.
-
-	 ** - Al detectar fallos de calendario, las O-V las tiene en cuenta como días trabajados.
-
-	 ** - Añadir en los calendarios la opción de marcar ciertos días, según tengan un gráfico concreto u otra cosa.
-
 		- Crear una ficha, llamada "Programador" en la que se puedan realizar consultas a las bases de datos, para poder trabajar con SQL.
 		  Esta ficha, tendrá también un botón en el que poder cargar un procedimiento del disco duro (o de Dropbox) y que realice el trabajo.
 		  Las consultas SQL que se van a ejecutar, podrán ser múltiples. El programa deberá separarlas usando el caracter ';' y así no tener
@@ -47,19 +43,6 @@ PROYECTO ORION
 
 		- Implementar un Delegado en los ViewModels de las ventanas (como se ha hecho en la calculadora) y asignar un comando que cierre las mismas.
 
-	 ** - No se computa el exceso de jornada en los pijamas.
-
-	 ** - Las horas acumuladas que se generan al añadir un exceso de jornada, no se añaden a las acumuladas globales.
-
-	 ** - En las reclamaciones, el botón Aceptar, hacerlo focusable para validar los datos, y al abrir las notas, que se haga foco en el textbox.
-
-	 ** - Aplicar el redondeo a los cálculos generales, pero no a los individuales.
-
-	 ** - En el pijama, en la dieta de menor descanso, poner un tip con el tiempo que representa (como en las dietas se pone el importe).
-
-	 ** - Añadir botón 'Cancelar' en la ventana 'Modificar Contraseña'.
-
-	 ** - Añadir acuerdo de licencia al programa.
 		
 
 	Consultas pendientes

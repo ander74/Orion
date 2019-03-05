@@ -20,14 +20,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET CALENDARIOS
 		 *================================================================================*/
-		public static ObservableCollection<Calendario> GetCalendarios(int año, int mes, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static ObservableCollection<Calendario> GetCalendarios(int año, int mes) {
 
 			// Creamos la lista y el comando que extrae los gráficos.
 			ObservableCollection<Calendario> lista = new ObservableCollection<Calendario>();
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Creamos el comando SQL.
 				//string comandoSQL = "SELECT Calendarios.*, Conductores.Indefinido " +
@@ -59,7 +58,6 @@ namespace Orion.DataModels {
 						lista.Add(calendario);
 						calendario.Nuevo = false;
 						calendario.Modificado = false;
-
 					}
 				} catch (Exception ex) {
 					Utils.VerError("BdCalendarios.GetCalendarios", ex);
@@ -76,15 +74,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET CALENDARIOS CONDUCTOR
 		 *================================================================================*/
-		public static List<Calendario> GetCalendariosConductor(int año, int matricula, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static List<Calendario> GetCalendariosConductor(int año, int matricula) {
 
 			// Creamos la lista y el comando que extrae los gráficos.
 			List<Calendario> lista = new List<Calendario>();
 
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 				// Creamos el comando SQL.
 				string comandoSQL = "SELECT Calendarios.*, Conductores.Indefinido " +
 									"FROM Calendarios LEFT JOIN Conductores ON Calendarios.IdConductor = Conductores.Id " +
@@ -129,14 +125,13 @@ namespace Orion.DataModels {
 		/*================================================================================
  		 * GUARDAR CALENDARIOS
 		 *================================================================================*/
-		public static void GuardarCalendarios(ObservableCollection<Calendario> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static void GuardarCalendarios(ObservableCollection<Calendario> lista) {
 
 			// Si la lista está vacía, salimos.
 			if (lista == null || lista.Count == 0) return;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Creamos las instrucciones SQL.
 				//string SQLInsertar = "INSERT INTO Calendarios (IdConductor, Fecha, HorasDescuadre, ExcesoJornadaCobrada, Notas) " +
@@ -194,11 +189,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * BORRAR CALENDARIOS
 		 *================================================================================*/
-		public static void BorrarCalendarios(List<Calendario> lista, OleDbConnection conexion = null) {
+		public static void BorrarCalendarios(List<Calendario> lista) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
-
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 				// Creamos el comando SQL
 				//string SQLBorrar = "DELETE FROM Calendarios WHERE Id=?;";
 				string SQLBorrar = "BorrarCalendario";
@@ -222,13 +216,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET DESCANSOS REGULADOS HASTA MES
 		 *================================================================================*/
-		public static int GetDescansosReguladosHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int GetDescansosReguladosHastaMes(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(Descansos) FROM Regulaciones WHERE IdConductor = ? AND Fecha < ?";
@@ -259,13 +252,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET DESCANSOS REGULADOS AÑO
 		 *================================================================================*/
-		public static int GetDescansosReguladosAño(int año, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int GetDescansosReguladosAño(int año, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(Descansos) FROM Regulaciones WHERE IdConductor = ? AND Year(Fecha) = ? AND Codigo = 2;";
@@ -292,13 +284,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET DESCANSOS DISFRUTADOS HASTA MES
 		 *================================================================================*/
-		public static int GetDescansosDisfrutadosHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int GetDescansosDisfrutadosHastaMes(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
@@ -329,13 +320,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET DC DISFRUTADOS AÑO
 		 *================================================================================*/
-		public static int GetDCDisfrutadosAño(int idconductor, int año, int mes=0, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int GetDCDisfrutadosAño(int idconductor, int año, int mes=0) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
@@ -375,13 +365,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET DIAS F6 HASTA MES
 		 *================================================================================*/
-		public static int GetDiasF6HastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int GetDiasF6HastaMes(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
@@ -412,13 +401,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET HORAS REGULADAS HASTA MES
 		 *================================================================================*/
-		public static TimeSpan GetHorasReguladasHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static TimeSpan GetHorasReguladasHastaMes(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Fecha < ?";
@@ -515,13 +503,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET HORAS REGULADAS AÑO
 		 *================================================================================*/
-		public static TimeSpan GetHorasReguladasAño(int año, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static TimeSpan GetHorasReguladasAño(int año, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Year(Fecha) = ? AND Codigo = 2;";
@@ -549,13 +536,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET HORAS COBRADAS MES
 		 *================================================================================*/
-		public static TimeSpan GetHorasCobradasMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static TimeSpan GetHorasCobradasMes(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Year(Fecha) = ? AND Month(Fecha) = ? AND Codigo = 1;";
@@ -584,13 +570,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET HORAS COBRADAS AÑO
 		 *================================================================================*/
-		public static TimeSpan GetHorasCobradasAño(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static TimeSpan GetHorasCobradasAño(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Fecha > ? AND Fecha < ? AND Codigo = 1;";
@@ -623,13 +608,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET EXCESO JORNADA COBRADA HASTA MES
 		 *================================================================================*/
-		public static TimeSpan GetExcesoJornadaCobradaHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static TimeSpan GetExcesoJornadaCobradaHastaMes(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(ExcesoJornadaCobrada) FROM Calendarios WHERE IdConductor = ? AND Fecha < ?;";
@@ -660,14 +644,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET ACUMULADAS HASTA MES
 		 *================================================================================*/
-		public static TimeSpan GetAcumuladasHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static TimeSpan GetAcumuladasHastaMes(int año, int mes, int idconductor) {
 
 			// Inicializamos las horas acumuladas.
 			TimeSpan acumuladas = TimeSpan.Zero;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Creamos el comando SQL para los días
 				string comandoDias = "SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha " +
@@ -731,16 +714,15 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET COMITE EN DESCANSO HASTA MES
 		 *================================================================================*/
-		public static int GetComiteEnDescansoHastaMes(int idconductor, int año, int mes, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int GetComiteEnDescansoHastaMes(int idconductor, int año, int mes) {
 
 			// Inicializamos el resultado.
 			int resultado = 0;
 			// Establecemos la fecha del día 1 del siguiente mes al indicado.
 			DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Count(DiasCalendario.Grafico) " +
@@ -774,16 +756,15 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET TRABAJO EN DESCANSO HASTA MES
 		 *================================================================================*/
-		public static int GetTrabajoEnDescansoHastaMes(int idconductor, int año, int mes, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int GetTrabajoEnDescansoHastaMes(int idconductor, int año, int mes) {
 
 			// Inicializamos el resultado.
 			int resultado = 0;
 			// Establecemos la fecha del día 1 del siguiente mes al indicado.
 			DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Count(DiasCalendario.Grafico) " +
@@ -815,16 +796,15 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET DND HASTA MES
 		 *================================================================================*/
-		public static int GetDNDHastaMes(int idconductor, int año, int mes, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int GetDNDHastaMes(int idconductor, int año, int mes) {
 
 			// Inicializamos el resultado.
 			int resultado = 0;
 			// Establecemos la fecha del día 1 del siguiente mes al indicado.
 			DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Count(DiasCalendario.Grafico) " +
@@ -857,13 +837,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET DND DISFRUTADOS AÑO
 		 *================================================================================*/
-		public static int GetDNDDisfrutadosAño(int idconductor, int año, int mes = 0, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int GetDNDDisfrutadosAño(int idconductor, int año, int mes = 0) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +

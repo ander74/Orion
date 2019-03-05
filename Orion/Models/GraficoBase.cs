@@ -108,6 +108,7 @@ namespace Orion.Models {
 			grafico.IdGrupo = lector.ToInt32("IdGrupo");
 			grafico.NoCalcular = lector.ToBool("NoCalcular");
 			grafico.Numero = lector.ToInt16("Numero");
+			grafico.DiaSemana = lector.ToString("DiaSemana");
 			grafico.Turno = lector.ToInt16("Turno");
 			grafico.Inicio = lector.ToTimeSpanNulable("Inicio");
 			grafico.Final = lector.ToTimeSpanNulable("Final");
@@ -130,6 +131,7 @@ namespace Orion.Models {
 			Comando.Parameters.AddWithValue("idgrupo", grafico.IdGrupo);
 			Comando.Parameters.AddWithValue("nocalcular", grafico.NoCalcular);
 			Comando.Parameters.AddWithValue("numero", grafico.Numero);
+			Comando.Parameters.AddWithValue("DiaSemana", grafico.DiaSemana);
 			Comando.Parameters.AddWithValue("turno", grafico.Turno);
 			Comando.Parameters.AddWithValue("inicio", grafico.Inicio.HasValue ? grafico.Inicio.Value.Ticks : (object)DBNull.Value);
 			Comando.Parameters.AddWithValue("final", grafico.Final.HasValue ? grafico.Final.Value.Ticks : (object)DBNull.Value);
@@ -198,6 +200,22 @@ namespace Orion.Models {
 			set {
 				if (value != _numero) {
 					_numero = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private string _diasemana;
+		public string DiaSemana
+		{
+			get { return _diasemana; }
+			set
+			{
+				if (value != _diasemana)
+				{
+					_diasemana = value;
 					Modificado = true;
 					PropiedadCambiada();
 				}

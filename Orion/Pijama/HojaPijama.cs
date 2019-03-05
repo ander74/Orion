@@ -66,27 +66,27 @@ namespace Orion.Pijama {
 					}
 					// Establecemos el Plus de Paquetería
 					if (dia.GraficoTrabajado.PlusPaqueteria) {
-						dia.PlusPaqueteria = App.Global.Convenio.PlusPaqueteria;
+						dia.PlusPaqueteria = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusPaqueteria;
 					} else {
 						dia.PlusPaqueteria = dia.FacturadoPaqueteria * 0.10m;
 					}
 					// Establecemos el Plus de Limpieza
 					if (dia.GraficoTrabajado.PlusLimpieza) {
-						dia.PlusLimpieza = App.Global.Convenio.PlusLimpieza;
+						dia.PlusLimpieza = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
 					} else {
 						if (dia.Limpieza == null)
-							dia.PlusLimpieza = App.Global.Convenio.PlusLimpieza / 2m;
+							dia.PlusLimpieza = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza / 2m;
 						if (dia.Limpieza == true)
-							dia.PlusLimpieza = App.Global.Convenio.PlusLimpieza;
+							dia.PlusLimpieza = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
 					}
 					// Establecemos el Plus de Nocturnidad
-					if (dia.GraficoTrabajado.Turno == 3) dia.PlusNocturnidad = App.Global.Convenio.PlusNocturnidad;
+					if (dia.GraficoTrabajado.Turno == 3) dia.PlusNocturnidad = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusNocturnidad;
 					// Establcemos el Plus de Navidad
 					if (dia.GraficoTrabajado.Numero > 0 && dia.DiaFecha.Day == 25 && dia.DiaFecha.Month == 12) {
-						dia.PlusNavidad = App.Global.Convenio.PlusNavidad;
+						dia.PlusNavidad = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusNavidad;
 					}
 					if (dia.GraficoTrabajado.Numero > 0 && dia.DiaFecha.Day == 1 && dia.DiaFecha.Month == 1) {
-						dia.PlusNavidad = App.Global.Convenio.PlusNavidad;
+						dia.PlusNavidad = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusNavidad;
 					}
 					// Establecemos el Plus por Menor Descanso, si el tiempo entre el final anterior y el inicio es menor de 12 horas.
 					if (finalAnterior.HasValue && dia.GraficoTrabajado.Inicio.HasValue) {
@@ -102,7 +102,7 @@ namespace Orion.Pijama {
 						if (diferenciahoras < 12 && diferenciahoras >= 9) {
 							//dia.TiempoMenorDescanso = (12 - diferenciahoras);
 							dia.TiempoMenorDescanso = $"{df.ToTexto()} ({df.ToDecimal():0.00})";
-							dia.PlusMenorDescanso = (12 - diferenciahoras) * App.Global.Convenio.DietaMenorDescanso;
+							dia.PlusMenorDescanso = (12 - diferenciahoras) * App.Global.OpcionesVM.GetPluses(Fecha.Year).DietaMenorDescanso;
 						}
 					}
 					// Si es un día de permiso, se establecen las horas trabajadas en la jornada media.
@@ -129,7 +129,10 @@ namespace Orion.Pijama {
 				// Extraemos los datos hasta el mes actual.
 				HastaMesActual = BdPijamas.GetResumenHastaMes(Fecha.Year, Fecha.Month, Trabajador.Id);
 				// Extramos los datos hasta el año anterior
-				DateTime fechaanterior = Fecha.Month == 12 ? new DateTime(Fecha.Year, 11, 30) : new DateTime(Fecha.Year - 1, 11, 30);
+				//TODO: Se ha cambiado el mes y día de la hora anterior de 11,30 a 12,1. Esto hace que se incluya la regulación de DCs.
+				DateTime fechaanterior = Fecha.Month == 12 ? new DateTime(Fecha.Year, 12, 1) : new DateTime(Fecha.Year - 1, 12, 1);
+				DateTime fechaanterior2 = Fecha.Month == 12 ? new DateTime(Fecha.Year, 11, 30) : new DateTime(Fecha.Year - 1, 11, 30);
+				fechaanterior = fechaanterior.AddMonths(-1);
 				HastaAñoAnterior = BdPijamas.GetResumenHastaMes(fechaanterior.Year, fechaanterior.Month, Trabajador.Id);
 
 			} catch (Exception ex) {
@@ -506,13 +509,13 @@ namespace Orion.Pijama {
 		/// </summary>
 		public TimeSpan AcumuladasHastaAñoAnterior {
 			get {
-				//return Trabajador.Acumuladas +
-				//	   HastaAñoAnterior.HorasAcumuladas +
-				//	   HastaAñoAnterior.HorasReguladas -
-				//	   new TimeSpan(HastaAñoAnterior.DiasLibreDisposicionF6 * App.Global.Convenio2.JornadaMedia.Ticks);
 				return Trabajador.Acumuladas +
 					   HastaAñoAnterior.HorasAcumuladas +
-					   HastaAñoAnterior.HorasReguladas;
+					   HastaAñoAnterior.HorasReguladas -
+					   new TimeSpan(HastaAñoAnterior.DiasLibreDisposicionF6 * App.Global.Convenio.JornadaMedia.Ticks);
+				//return Trabajador.Acumuladas +
+				//	   HastaAñoAnterior.HorasAcumuladas +
+				//	   HastaAñoAnterior.HorasReguladas;
 			}
 		}
 
@@ -524,8 +527,8 @@ namespace Orion.Pijama {
 			get {
 				return Trabajador.Descansos +
 					   HastaAñoAnterior.DCsRegulados -
-					   HastaAñoAnterior.DCsDisfrutados -
-					   HastaAñoAnterior.DiasLibreDisposicionF6;
+					   HastaAñoAnterior.DCsDisfrutados;
+					   // - HastaAñoAnterior.DiasLibreDisposicionF6;
 			}
 		}
 
@@ -548,15 +551,14 @@ namespace Orion.Pijama {
 		/// </summary>
 		public TimeSpan AcumuladasHastaMes {
 			get {
-				//return Trabajador.Acumuladas +
-				//	   HastaMesActual.HorasAcumuladas + 
-				//	   HastaMesActual.HorasReguladas -
-				//	   new TimeSpan(HastaMesActual.DiasLibreDisposicionF6 * App.Global.Convenio2.JornadaMedia.Ticks) -
-				//	   AcumuladasHastaAñoAnterior;
 				return Trabajador.Acumuladas +
 					   HastaMesActual.HorasAcumuladas +
 					   HastaMesActual.HorasReguladas -
-					   AcumuladasHastaAñoAnterior;
+					   new TimeSpan(HastaMesActual.DiasLibreDisposicionF6 * App.Global.Convenio.JornadaMedia.Ticks);
+				//return Trabajador.Acumuladas +
+				//	   HastaMesActual.HorasAcumuladas +
+				//	   HastaMesActual.HorasReguladas -
+				//	   AcumuladasHastaAñoAnterior;
 			}
 		}
 
@@ -566,10 +568,10 @@ namespace Orion.Pijama {
 		/// </summary>
 		public int DCsPendientesHastaMes {
 			get {
-				return Trabajador.Descansos + 
-					   HastaMesActual.DCsRegulados - 
-					   HastaMesActual.DCsDisfrutados -
-					   HastaMesActual.DiasLibreDisposicionF6;
+				return Trabajador.Descansos +
+					   HastaMesActual.DCsRegulados -
+					   HastaMesActual.DCsDisfrutados;
+					   // - HastaMesActual.DiasLibreDisposicionF6;
 			}
 		}
 
@@ -745,7 +747,7 @@ namespace Orion.Pijama {
 		public int Descanso {
 			get {
 				if (ListaDias == null) return 0;
-				return ListaDias.Count(d => (d.Grafico == -2 || d.Grafico == -10) && !(d.Codigo == 1 || d.Codigo == 2));
+				return ListaDias.Count(d => (d.Grafico == -2 || d.Grafico == -10 || d.Grafico == -12) && !(d.Codigo == 1 || d.Codigo == 2));
 			}
 		}
 
@@ -756,7 +758,7 @@ namespace Orion.Pijama {
 		public int Vacaciones {
 			get {
 				if (ListaDias == null) return 0;
-				return ListaDias.Count(d => d.Grafico == -1);
+				return ListaDias.Count(d => d.Grafico == -1 || d.Grafico == -12 || d.Grafico == -13);
 			}
 		}
 
@@ -789,7 +791,7 @@ namespace Orion.Pijama {
 		public int DescansoEnFinde {
 			get {
 				if (ListaDias == null) return 0;
-				return ListaDias.Count(d => (d.Grafico == -3 || d.Grafico == -11) && !(d.Codigo == 1 || d.Codigo == 2));
+				return ListaDias.Count(d => (d.Grafico == -3 || d.Grafico == -11 || d.Grafico == -13) && !(d.Codigo == 1 || d.Codigo == 2));
 			}
 		}
 
@@ -1035,7 +1037,7 @@ namespace Orion.Pijama {
 		public decimal PlusSabados {
 			get {
 				int sabadosTrabajoNoFestivos = ListaDias.Count(d => (d.Grafico > 0 && !d.EsFestivo) && d.DiaFecha.DayOfWeek == DayOfWeek.Saturday);
-				return sabadosTrabajoNoFestivos * App.Global.Convenio.ImporteSabados;
+				return sabadosTrabajoNoFestivos * App.Global.OpcionesVM.GetPluses(Fecha.Year).ImporteSabados;
 			}
 		}
 
@@ -1067,7 +1069,7 @@ namespace Orion.Pijama {
 		/// </summary>
 		public decimal PlusDomingos {
 			get {
-				return DomingosTrabajados * App.Global.Convenio.ImporteFestivos;
+				return DomingosTrabajados * App.Global.OpcionesVM.GetPluses(Fecha.Year).ImporteFestivos;
 			}
 		}
 
@@ -1099,7 +1101,7 @@ namespace Orion.Pijama {
 		/// </summary>
 		public decimal PlusFestivos {
 			get {
-				return FestivosTrabajados * App.Global.Convenio.ImporteFestivos;
+				return FestivosTrabajados * App.Global.OpcionesVM.GetPluses(Fecha.Year).ImporteFestivos;
 			}
 		}
 
@@ -1217,7 +1219,7 @@ namespace Orion.Pijama {
 		/// </summary>
 		public decimal ImporteTotalDietas {
 			get {
-				return Math.Round(TotalDietas, 2) * App.Global.Convenio.ImporteDietas;
+				return Math.Round(TotalDietas, 2) * App.Global.OpcionesVM.GetPluses(Fecha.Year).ImporteDietas;
 			}
 		}
 
@@ -1248,9 +1250,9 @@ namespace Orion.Pijama {
 			get {
 				if (App.Global.PorCentro.PagarLimpiezas == true) {
 					if (Trabajador.Indefinido) {
-						return App.Global.PorCentro.NumeroLimpiezas * App.Global.Convenio.PlusLimpieza;
+						return App.Global.PorCentro.NumeroLimpiezas * App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
 					} else {
-						return Trabajo * App.Global.Convenio.PlusLimpieza;
+						return Trabajo * App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
 					}
 				} else {
 					if (ListaDias == null) return 0m;

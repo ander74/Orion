@@ -5,22 +5,19 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Orion.DataModels;
-using Orion.Models;
-using Orion.Servicios;
-using Orion.Views;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-
-namespace Orion.ViewModels {
-
+namespace Orion.ViewModels
+{
+	using System;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
+	using System.Collections.Specialized;
+	using System.ComponentModel;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.Windows.Data;
+	using Orion.DataModels;
+	using Orion.Models;
+	using Orion.Servicios;
 
 	public partial class GraficosViewModel: NotifyBase {
 

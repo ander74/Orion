@@ -3,10 +3,17 @@ PROYECTO ORIÓN
 ==============
 
 
-	Versión 1.0
-	-----------
-
-		Versión inicial del programa.
+	CAMBIOS EFECTUADOS
 
 
-		Desde
+		05 de Marzo de 2019
+		-------------------
+
+			- Se añade la tabla Pluses a cada uno de los centros con el fin de guardar los importes de los pluses y dietas por cada año.
+
+			- Se añade el mecanismo de navegación anual en los pluses y dietas.
+
+			- Se modifican todos los elementos del programa que leían los pluses y dietas del convenio para que los coja de la tabla Pluses
+			  en lugar del objeto Convenio.
+
+

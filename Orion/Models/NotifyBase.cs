@@ -58,6 +58,23 @@ namespace Orion.Models {
 		/// </summary>
 		public bool Nuevo { get; set; }
 
+
+
+		/// <summary>
+		/// Si el valor de la propiedad es diferente al que se quiere asignar, se cambia y se lanza el
+		/// evento PropertyChanged correspondiente a la propiedad. Para ello, hay que pasar el campo
+		/// privado por referencia.
+		/// </summary>
+		protected void SetValue<T>(ref T backingField, T value, [CallerMemberName] string propertyName = null)
+		{
+			if (EqualityComparer<T>.Default.Equals(backingField, value)) return;
+			backingField = value;
+			Modificado = true;
+			PropiedadCambiada(propertyName);
+		}
+
+
+
 	}
 
 }

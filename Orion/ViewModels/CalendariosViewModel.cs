@@ -5,24 +5,20 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Orion.Models;
-using Orion.DataModels;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Windows;
-using System.Windows.Controls;
-using Orion.Views;
-using System.Windows.Data;
-using System.ComponentModel;
-using System.Windows.Input;
-using Orion.Servicios;
-
-namespace Orion.ViewModels {
+namespace Orion.ViewModels
+{
+	using System;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
+	using System.Collections.Specialized;
+	using System.ComponentModel;
+	using System.Linq;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.Windows.Data;
+	using Orion.DataModels;
+	using Orion.Models;
+	using Orion.Servicios;
 
 	public partial class CalendariosViewModel: NotifyBase {
 
@@ -106,17 +102,21 @@ namespace Orion.ViewModels {
 		/// <summary>
 		/// Elimina los calendarios de los conductores borrados, pero no los elimina definitivamente hasta que se guarde.
 		/// </summary>
-		public void BorrarCalendariosPorConductor(int idConductor) {
-			List<Calendario> lista = new List<Calendario>();
-			foreach (Calendario c in ListaCalendarios.Where(c => c.IdConductor == idConductor)) {
-				lista.Add(c);
-			}
-			foreach (Calendario c in lista) {
+		public void BorrarCalendariosPorConductor(int idConductor)
+		{
+			//List<Calendario> lista = new List<Calendario>();
+			//foreach (Calendario c in ListaCalendarios.Where(c => c.IdConductor == idConductor))
+			//{
+			//	lista.Add(c);
+			//}
+			List<Calendario> lista = ListaCalendarios.Where(c => c.IdConductor == idConductor).ToList();
+
+			foreach (Calendario c in lista)
+			{
 				_listaborrados.Add(c);
 				ListaCalendarios.Remove(c);
 				HayCambios = true;
 			}
-
 		}
 
 
@@ -174,6 +174,7 @@ namespace Orion.ViewModels {
 				foreach (Calendario calendario in e.NewItems) {
 					calendario.Fecha = FechaActual;
 					calendario.Nuevo = true;
+					calendario.Modificado = false;
 					calendario.ObjetoCambiado += ObjetoCambiadoEventHandler;
 					HayCambios = true;
 				}
@@ -270,6 +271,7 @@ namespace Orion.ViewModels {
 			set {
 				if (_fechaactual != value) {
 					_fechaactual = value;
+					VisibilidadPanelFecha = Visibility.Collapsed;
 					if (HayCambios) GuardarCalendarios();
 					// Por el momento, la siguiente instrucción se ignora. Atender a buenas prácticas al borrar conductores.
 					//if (App.Global.ConductoresVM.HayCambios) App.Global.ConductoresVM.GuardarConductores();
@@ -574,6 +576,24 @@ namespace Orion.ViewModels {
 				}
 			}
 		}
+
+
+		private Visibility _visibilidadpanelfecha = Visibility.Collapsed;
+		public Visibility VisibilidadPanelFecha
+		{
+			get { return _visibilidadpanelfecha; }
+			set
+			{
+				if (_visibilidadpanelfecha != value)
+				{
+					_visibilidadpanelfecha = value;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+		
+
 
 		#endregion
 

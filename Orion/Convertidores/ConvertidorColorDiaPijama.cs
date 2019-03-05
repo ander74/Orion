@@ -49,7 +49,7 @@ namespace Orion.Convertidores {
 					color = new SolidColorBrush(Colors.Black); break;
 			}
 			switch (grafico) {
-				case -1:
+				case -1: case -12: case -13:
 					color = new SolidColorBrush(App.Global.Configuracion.ColorOV); break;
 				case -2:
 					color = new SolidColorBrush(App.Global.Configuracion.ColorJD); break;

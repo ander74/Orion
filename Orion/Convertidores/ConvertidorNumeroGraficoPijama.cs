@@ -46,6 +46,8 @@ namespace Orion.Convertidores {
 						case -9: return resultado + "PER";
 						case -10: return resultado + "E-(JD)";
 						case -11: return resultado + "E-(FN)";
+						case -12: return resultado + "O-V (JD)";
+						case -13: return resultado + "O-V (FN)";
 					}
 				}
 			}
@@ -68,10 +70,12 @@ namespace Orion.Convertidores {
 					case "ds": grafico = -5; break;
 					case "dc": case "oh": case "dh": grafico = -6; break;
 					case "f6": case "f4": grafico = -7; break;
-					case "dnd": grafico = -8; break;
+					case "dnd": case "df": grafico = -8; break;
 					case "per": grafico = -9; break;
 					case "ejd": grafico = -10; break;
 					case "efn": grafico = -11; break;
+					case "ovjd": grafico = -12; break;
+					case "ovfn": grafico = -13; break;
 					default: Int32.TryParse(texto[0], out grafico); break;
 				}
 

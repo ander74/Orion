@@ -24,14 +24,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET DIAS CALENDARIO
 		 *================================================================================*/
-		public static ObservableCollection<DiaCalendario> GetDiasCalendario(int idcalendario, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static ObservableCollection<DiaCalendario> GetDiasCalendario(int idcalendario) {
 
 			// Creamos la lista y el comando que extrae los gráficos.
 			ObservableCollection<DiaCalendario> lista = new ObservableCollection<DiaCalendario>();
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				//string comandoSQL = "SELECT * FROM DiasCalendario WHERE IdCalendario = ? ORDER BY Dia";
 				string comandoSQL = "GetDiasCalendario";
@@ -70,12 +69,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET DIA CALENDARIO
 		 *================================================================================*/
-		public static DiaCalendarioBase GetDiaCalendario(int idConductor, DateTime fecha, OleDbConnection conexion = null) {
+		public static DiaCalendarioBase GetDiaCalendario(int idConductor, DateTime fecha) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
 			DiaCalendarioBase resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				string comandoSQL = "SELECT * FROM DiasCalendario WHERE IdCalendario IN (SELECT Id " +
 																						"FROM Calendarios " +
@@ -104,14 +103,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GUARDAR DIAS CALENDARIO
 		*================================================================================*/
-		public static void GuardarDiasCalendario(ObservableCollection<DiaCalendario> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static void GuardarDiasCalendario(ObservableCollection<DiaCalendario> lista) {
 
 			// Si la lista está vacía, salimos.
 			if (lista == null || lista.Count == 0) return;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				//string SQLInsertar = "INSERT INTO DiasCalendario (IdCalendario, Dia, Grafico, Codigo, ExcesoJornada, HorasDescuadre, FacturadoPaqueteria, " +
 				//					 "Limpieza, GraficoVinculado, Notas) " +
@@ -158,13 +156,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET HORAS DESCUADRE HASTA MES
 		 *================================================================================*/
-		public static int GetHorasDescuadreHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int GetHorasDescuadreHastaMes(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(Descuadre) " +
@@ -199,13 +196,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET EXCESO JORNADA HASTA MES
 		 *================================================================================*/
-		public static TimeSpan GetExcesoJornadaHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static TimeSpan GetExcesoJornadaHastaMes(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(ExcesoJornada) " +
@@ -240,14 +236,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET DIAS CALENDARIO CON BLOQUEOS
 		 *================================================================================*/
-		public static ObservableCollection<DiaCalendario> GetDiasCalendarioConBloqueos(long idConductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static ObservableCollection<DiaCalendario> GetDiasCalendarioConBloqueos(long idConductor) {
 
 			// Creamos la lista y el comando que extrae los gráficos.
 			ObservableCollection<DiaCalendario> lista = new ObservableCollection<DiaCalendario>();
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 				//string comandoSQL = "SELECT * " +
 				//					"FROM DiasCalendario " +
 				//					"WHERE (ExcesoJornada <> 0 OR Descuadre <> 0) AND IdCalendario IN (SELECT Id " +
@@ -286,13 +281,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET EXCESO JORNADA PENDIENTE HASTA MES
 		 *================================================================================*/
-		public static TimeSpan GetExcesoJornadaPendienteHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static TimeSpan GetExcesoJornadaPendienteHastaMes(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(ExcesoJornada) " +
@@ -327,13 +321,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET DESCUADRE PENDIENTE HASTA MES
 		 *================================================================================*/
-		public static int GetDescuadrePendienteHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int GetDescuadrePendienteHastaMes(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(Descuadre) " +

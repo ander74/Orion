@@ -27,14 +27,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GET FESTIVOS POR MES
 		*================================================================================*/
-		public static ObservableCollection<Festivo> GetFestivosPorMes(int año, int mes, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static ObservableCollection<Festivo> GetFestivosPorMes(int año, int mes) {
 
 			// Creamos la lista y el comando que extrae las líneas.
 			ObservableCollection<Festivo> lista = new ObservableCollection<Festivo>();
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				//string comandoSQL = "SELECT * FROM Festivos WHERE Año=? AND Month(Fecha)=? ORDER BY Fecha;";
 				string comandoSQL = "GetFestivosPorMes";
@@ -69,14 +68,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GET FESTIVOS POR AÑO
 		*================================================================================*/
-		public static ObservableCollection<Festivo> GetFestivosPorAño(int año, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static ObservableCollection<Festivo> GetFestivosPorAño(int año) {
 
 			// Creamos la lista y el comando que extrae las líneas.
 			ObservableCollection<Festivo> lista = new ObservableCollection<Festivo>();
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				//string comandoSQL = "SELECT * FROM Festivos WHERE Año=? ORDER BY Fecha;";
 				string comandoSQL = "GetFestivosPorAño";
@@ -110,14 +108,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GUARDAR FESTIVOS
 		*================================================================================*/
-		public static void GuardarFestivos(IEnumerable<Festivo> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static void GuardarFestivos(IEnumerable<Festivo> lista) {
 
 			// Si la lista está vacía, salimos.
 			if (lista == null || lista.Count() == 0) return;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				//string SQLInsertar = "INSERT INTO Festivos (Año, Fecha) VALUES (?, ?)";
 				string SQLInsertar = "InsertarFestivo";
@@ -154,11 +151,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* BORRAR FESTIVOS
 		*================================================================================*/
-		public static void BorrarFestivos(IEnumerable<Festivo> lista, OleDbConnection conexion = null) {
+		public static void BorrarFestivos(IEnumerable<Festivo> lista) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
-
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				//string SQLBorrar = "DELETE FROM Festivos WHERE Id=?";
 				string SQLBorrar = "BorrarFestivo";

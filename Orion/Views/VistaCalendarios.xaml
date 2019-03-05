@@ -116,17 +116,21 @@
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
             <!--BOTON RETROCEDE MES-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdRetrocedeMes}">
-                <Button.Content>
-                    <Image Source="Imagenes/Anterior.png" Style="{StaticResource EstiloImagen}"/>
-                </Button.Content>
-            </Button>
+			<Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdRetrocedeMes}">
+				<Button.Content>
+					<Image Source="Imagenes/Anterior.png" Style="{StaticResource EstiloImagen}"/>
+				</Button.Content>
+			</Button>
 
             <!--ETIQUETA MES-->
             <StackPanel Orientation="Vertical" Margin="6,12,6,6" VerticalAlignment="Center" Width="150">
                 <Label FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center" Content="{Binding CalendariosVM.MesActual}"/>
-                <Label FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center" Content="{Binding CalendariosVM.AñoActual}"/>
-            </StackPanel>
+				<!-- Label FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center" Content="{Binding CalendariosVM.AñoActual}"/ -->
+				<Button x:Name="BotonValidezGrupo" FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center"
+                        Style="{StaticResource EstiloBotonValidezFecha}" Width="Auto" Height="Auto" Padding="15, 3"
+                        Command="{Binding CalendariosVM.cmdCambiarFecha}"
+                        Content="{Binding CalendariosVM.AñoActual}"/>
+			</StackPanel>
 
             <!--BOTON AVANZA MES-->
             <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdAvanzaMes}">
@@ -2464,7 +2468,7 @@
                             <TextBlock Style="{StaticResource TextoPijama2}" FontSize="13" Width="120" TextAlignment="Center"
                                        Text="{Binding CalendariosVM.Pijama.AcumuladasHastaMes, Converter={StaticResource cnvHoraMixta},
                                               ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
-                                       ToolTip="Horas acumuladas generadas en el año en curso."/>
+                                       ToolTip="Horas acumuladas disponibles hasta final del mes."/>
                         </StackPanel>
 
                         <Border Height="1" BorderBrush="DarkGray" BorderThickness="1"/>
@@ -2496,7 +2500,38 @@
                     Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}" CornerRadius="4"/>
 
 
-    </Grid>
+		<!-- ==================================================================================================== -->
+		<!-- PANEL CAMBIAR FECHA -->
+		<!-- ==================================================================================================== -->
+		<StackPanel Grid.Row="2" Grid.RowSpan="2" Orientation="Vertical">
+			<Border x:Name="PanelFecha" BorderBrush="DarkBlue" BorderThickness="1" CornerRadius="5" Padding="10" Margin="150,0,0,0" 
+                    HorizontalAlignment="Left" Visibility="{Binding CalendariosVM.VisibilidadPanelFecha, Mode=TwoWay}" 
+					Background="{StaticResource DegradadoCeleste1}">
+				<StackPanel Orientation="Vertical">
+
+					<!-- BARRA SUPERIOR -->
+					<Grid Margin="0">
+						<TextBlock FontSize="12" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Mes Visualizado"/>
+						<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="X" Foreground="Red" FontWeight="Bold" FontSize="12" Margin="0"
+                                Padding="10,5" HorizontalAlignment="Right" Height="Auto"
+                                Command="{Binding CalendariosVM.cmdCerrarPanelFecha}"/>
+					</Grid>
+
+					<!-- CALENDARIO -->
+					<Calendar Style="{StaticResource EstiloCalendario}" DisplayMode="Month"  FirstDayOfWeek="Monday" SelectionMode="SingleDate"  Focusable="False"
+                          GotMouseCapture="Calendar_GotMouseCapture" SelectedDate="{Binding CalendariosVM.FechaActual, Mode=TwoWay}">
+						<!-- SelectedDatesChanged="Calendar_SelectedDatesChanged" -->
+
+					</Calendar>
+					<TextBlock FontSize="10" Text="Selecciona el día 1 del mes deseado."/>
+				</StackPanel>
+			</Border>
+		</StackPanel>
+
+
+
+
+	</Grid>
 
 
 </UserControl>

@@ -30,17 +30,13 @@ namespace Orion.DataModels {
 		/// </summary>
 		/// <param name="IdGrafico">Id del gráfico al que pertenecen las valoraciones.</param>
 		/// <returns>Colección de valoraciones.</returns>
-		public static ObservableCollection<ValoracionGrafico> getValoraciones(long IdGrafico, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
-
-			// Si la conexión no existe, devolvemos nulo.
-			//if (App.Global.Conexion == null) return null;
+		public static ObservableCollection<ValoracionGrafico> getValoraciones(long IdGrafico) {
 
 			// Creamos la lista y el comando que extrae los gráficos.
 			ObservableCollection<ValoracionGrafico> lista = new ObservableCollection<ValoracionGrafico>();
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 				OleDbDataReader lector = null;
 
 				// Ejecutamos el comando y extraemos los gráficos del lector a la lista.
@@ -77,17 +73,13 @@ namespace Orion.DataModels {
 		/// Guarda la lista de valoraciones que se le pasa en la base de datos, actualizando las modificadas e insertando las nuevas.
 		/// </summary>
 		/// <param name="lista">Lista con las valoraciones a guardar.</param>
-		public static void GuardarValoraciones(ObservableCollection<ValoracionGrafico> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
-
-			// Si la conexión no existe, devolvemos nulo.
-			//if (App.Global.Conexion == null) return;
+		public static void GuardarValoraciones(ObservableCollection<ValoracionGrafico> lista) {
 
 			// Si la lista está vacía, salimos.
 			if (lista == null || lista.Count == 0) return;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				string SQLInsertar = "INSERT INTO Valoraciones (IdGrafico, Inicio, Linea, Descripcion, Final, Tiempo) " +
 									 "VALUES (?, ?, ?, ?, ?, ?);";
@@ -126,9 +118,7 @@ namespace Orion.DataModels {
 		/// Guarda la lista de valoraciones que se le pasa en la base de datos, actualizando las modificadas e insertando las nuevas.
 		/// </summary>
 		/// <param name="lista">Lista con las valoraciones a guardar.</param>
-		public static void InsertarValoracion(ValoracionGrafico valoracion, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static void InsertarValoracion(ValoracionGrafico valoracion) {
 
 			// Si la conexión no existe o la valoracion es nula, devolvemos nulo.
 			if (App.Global.CadenaConexion == null || valoracion == null) return;
@@ -136,7 +126,8 @@ namespace Orion.DataModels {
 			string SQLInsertar = "INSERT INTO Valoraciones (IdGrafico, Inicio, Linea, Descripcion, Final, Tiempo) " +
 								 "VALUES (?, ?, ?, ?, ?, ?);";
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
 				ValoracionGrafico.ParseToCommand(comando, valoracion);
@@ -159,15 +150,15 @@ namespace Orion.DataModels {
 		/// Elimina de la base de datos las valoraciones pasados en la lista.
 		/// </summary>
 		/// <param name="lista">Lista con las valoraciones a borrar.</param>
-		public static void BorrarValoraciones(List<ValoracionGrafico> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static void BorrarValoraciones(List<ValoracionGrafico> lista) {
 
 			string SQLBorrar = "DELETE FROM Valoraciones WHERE Id=?";
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
-				try {
+				try
+				{
 					//App.Global.AbrirConexion();
 					conexion.Open(); // TODO: Probar a ver si podemos borrar todas usando Where Id IN (lista)
 					foreach (ValoracionGrafico valoracion in lista) {

@@ -27,15 +27,13 @@ namespace Orion.DataModels {
 		/*================================================================================
  		 * GET PARADAS
 		 *================================================================================*/
-		public static ObservableCollection<Parada> GetParadas(long IdItinerario, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexionLineas);
+		public static ObservableCollection<Parada> GetParadas(long IdItinerario) {
 
 			// Creamos la lista y el comando que extrae los gráficos.
 			ObservableCollection<Parada> lista = new ObservableCollection<Parada>();
 
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas))
+			{
 				string comandoSQL = "SELECT * FROM Paradas WHERE IdItinerario=? ORDER BY Orden";
 
 				OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
@@ -66,15 +64,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GUARDAR PARADAS
 		*================================================================================*/
-		public static void GuardarParadas(ObservableCollection<Parada> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexionLineas);
+		public static void GuardarParadas(ObservableCollection<Parada> lista) {
 
 			// Si la lista está vacía, salimos.
 			if (lista == null || lista.Count == 0) return;
 
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas))
+			{
 				string SQLInsertar = "INSERT INTO Paradas (IdItinerario, Orden, Descripcion, Tiempo) " +
 									 "VALUES (?, ?, ?, ?);";
 
@@ -107,12 +103,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * BORRAR PARADAS
 		 *================================================================================*/
-		public static void BorrarParadas(List<Parada> lista, OleDbConnection conexion = null) {
+		public static void BorrarParadas(List<Parada> lista) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexionLineas);
-
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas))
+			{
 				string SQLBorrar = "DELETE FROM Paradas WHERE Id=?";
 
 				try {

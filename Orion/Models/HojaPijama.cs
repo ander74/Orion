@@ -921,7 +921,7 @@ namespace Orion.Models {
 		public decimal ImporteSabados {
 			get {
 				int sabadosTrabajoNoFestivos = ListaDias.Count(d => (d.Grafico > 0 && !d.EsFestivo) && d.Fecha.DayOfWeek == DayOfWeek.Saturday);
-				return sabadosTrabajoNoFestivos * App.Global.Convenio.ImporteSabados;
+				return sabadosTrabajoNoFestivos * App.Global.OpcionesVM.GetPluses(Fecha.Year).ImporteSabados;
 			}
 		}
 
@@ -936,7 +936,7 @@ namespace Orion.Models {
 
 		public decimal ImporteDomingos {
 			get {
-				return DomingosTrabajados * App.Global.Convenio.ImporteFestivos;
+				return DomingosTrabajados * App.Global.OpcionesVM.GetPluses(Fecha.Year).ImporteFestivos;
 			}
 		}
 
@@ -951,7 +951,7 @@ namespace Orion.Models {
 
 		public decimal ImporteFestivos {
 			get {
-				return FestivosTrabajados * App.Global.Convenio.ImporteFestivos;
+				return FestivosTrabajados * App.Global.OpcionesVM.GetPluses(Fecha.Year).ImporteFestivos;
 			}
 		}
 
@@ -1021,9 +1021,9 @@ namespace Orion.Models {
 			get {
 				if (App.Global.PorCentro.PagarLimpiezas == true) {
 					if (Trabajador.Indefinido) {
-						return App.Global.PorCentro.NumeroLimpiezas * App.Global.Convenio.PlusLimpieza;
+						return App.Global.PorCentro.NumeroLimpiezas * App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
 					} else {
-						return DiasTrabajados * App.Global.Convenio.PlusLimpieza;
+						return DiasTrabajados * App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
 					}
 				} else {
 					if (ListaDias == null) return 0m;
@@ -1074,7 +1074,7 @@ namespace Orion.Models {
 
 		public decimal ImporteDietas {
 			get {
-				return TotalDietas * App.Global.Convenio.ImporteDietas;
+				return TotalDietas * App.Global.OpcionesVM.GetPluses(Fecha.Year).ImporteDietas;
 			}
 		}
 

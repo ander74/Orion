@@ -33,13 +33,12 @@ namespace Orion.DataModels {
 		/// </summary>
 		/// <param name="IdGrupo">Id del grupo al que pertenecen los gráficos.</param>
 		/// <returns>Colección de gráficos.</returns>
-		public static ObservableCollection<Grafico> getGraficos(long IdGrupo, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static ObservableCollection<Grafico> getGraficos(long IdGrupo) {
 
 			ObservableCollection<Grafico> lista = new ObservableCollection<Grafico>();
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				OleDbDataReader lector = null;
 				OleDbDataReader lectorValoraciones = null;
@@ -93,19 +92,18 @@ namespace Orion.DataModels {
 		/// Guarda la lista de gráficos que se le pasa en la base de datos, actualizando los modificados e insertando los nuevos.
 		/// </summary>
 		/// <param name="lista">Lista con los gráficos a guardar.</param>
-		public static void GuardarGraficos(ObservableCollection<Grafico> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static void GuardarGraficos(ObservableCollection<Grafico> lista) {
 
 			// Si la lista está vacía, salimos.
 			if (lista == null || lista.Count == 0) return;
 
-			using (conexion) {
-				string SQLInsertar = "INSERT INTO Graficos (IdGrupo, NoCalcular, Numero, Turno, Inicio, Final, InicioPartido, " +
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
+				string SQLInsertar = "INSERT INTO Graficos (IdGrupo, NoCalcular, Numero, DiaSemana, Turno, Inicio, Final, InicioPartido, " +
 									 "FinalPartido, Valoracion, Trabajadas, Acumuladas, Nocturnas, Desayuno, Comida, Cena, PlusCena, PlusLimpieza, PlusPaqueteria) " +
-									 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+									 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
-				string SQLActualizar = "UPDATE Graficos SET IdGrupo=?, NoCalcular=?, Numero=?, Turno=?, Inicio=?, Final=?, " +
+				string SQLActualizar = "UPDATE Graficos SET IdGrupo=?, NoCalcular=?, Numero=?, DiaSemana=?, Turno=?, Inicio=?, Final=?, " +
 									   "InicioPartido=?, FinalPartido=?, Valoracion=?, Trabajadas=?, " +
 									   "Acumuladas=?, Nocturnas=?, Desayuno=?, Comida=?, Cena=?, " +
 									   "PlusCena=?, PlusLimpieza=?, PlusPaqueteria=? WHERE Id=?;";
@@ -151,16 +149,15 @@ namespace Orion.DataModels {
 		/// Guarda la lista de gráficos que se le pasa en la base de datos, actualizando los modificados e insertando los nuevos.
 		/// </summary>
 		/// <param name="lista">Lista con los gráficos a guardar.</param>
-		public static int InsertarGrafico(Grafico grafico, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int InsertarGrafico(Grafico grafico) {
 
 			int idgraficonuevo = -1;
 
-			using (conexion) {
-				string SQLInsertar = "INSERT INTO Graficos (IdGrupo, NoCalcular, Numero, Turno, Inicio, Final, InicioPartido, " +
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
+				string SQLInsertar = "INSERT INTO Graficos (IdGrupo, NoCalcular, Numero, DiaSemana, Turno, Inicio, Final, InicioPartido, " +
 								 "FinalPartido, Valoracion, Trabajadas, Acumuladas, Nocturnas, Desayuno, Comida, Cena, PlusCena, PlusLimpieza, PlusPaqueteria) " +
-								 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+								 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 
 				OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
 				Grafico.ParseToCommand(comando, grafico);
@@ -191,11 +188,10 @@ namespace Orion.DataModels {
 		/// Elimina de la base de datos los gráficos pasados en la lista.
 		/// </summary>
 		/// <param name="lista">Lista con los gráficos a borrar.</param>
-		public static void BorrarGraficos(List<Grafico> lista, OleDbConnection conexion = null) {
+		public static void BorrarGraficos(List<Grafico> lista) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
-
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 				string SQLBorrar = "DELETE FROM Graficos WHERE Id=?";
 				try {
 					conexion.Open();
@@ -215,14 +211,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET GRÁFICOS GRUPO POR FECHA
 		 *================================================================================*/
-		public static ObservableCollection<Grafico> getGraficosGrupoPorFecha(DateTime fecha, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static ObservableCollection<Grafico> getGraficosGrupoPorFecha(DateTime fecha) {
 
 			// Creamos la lista y el comando que extrae los gráficos.
 			ObservableCollection<Grafico> lista = new ObservableCollection<Grafico>();
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				string comandoSQL = "SELECT * FROM Graficos WHERE IdGrupo = " +
 								"(SELECT Id FROM GruposGraficos WHERE Validez = ?)";
@@ -261,9 +256,11 @@ namespace Orion.DataModels {
 		/// <returns>Colección de gráficos.</returns>
 		public static List<EstadisticasGraficos> GetEstadisticasGrupoGraficos(long IdGrupo, OleDbConnection conexion = null) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
 			List<EstadisticasGraficos> lista = new List<EstadisticasGraficos>();
-			using (conexion) {
+
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+			using (conexion)
+			{
 				OleDbDataReader lector = null;
 				try {
 					string comandoSQL = "GetEstadisticasGraficos";
@@ -297,12 +294,11 @@ namespace Orion.DataModels {
 		/// </summary>
 		/// <param name="IdGrupo">Id del grupo al que pertenecen los gráficos.</param>
 		/// <returns>Colección de gráficos.</returns>
-		public static List<EstadisticasGraficos> GetEstadisticasGraficosDesdeFecha(DateTime fecha, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static List<EstadisticasGraficos> GetEstadisticasGraficosDesdeFecha(DateTime fecha) {
 
 			List<EstadisticasGraficos> lista = new List<EstadisticasGraficos>();
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 				OleDbDataReader lector = null;
 				try {
 					string comandoSQL = "GetEstadisticasGraficosDesdeFecha";
@@ -331,12 +327,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GET GRÁFICO
 		*================================================================================*/
-		public static GraficoBase GetGrafico(int numero, DateTime fecha, OleDbConnection conexion = null) {
+		public static GraficoBase GetGrafico(int numero, DateTime fecha) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
 			GraficoBase resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				string comandoSQL = "SELECT * " +
 									"FROM (SELECT * " +

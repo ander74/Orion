@@ -400,12 +400,14 @@ namespace Orion.ViewModels {
 		// SE PUEDE EJECUTAR
 		private bool PuedeAbrirPijama() {
 			if (CalendarioSeleccionado == null) return false;
+			//if (HayCambios) return false;
 			return true;
 		}
 
 		// EJECUCIÓN DEL COMANDO
 		private void AbrirPijama() {
 
+			GuardarCalendarios();
 			Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
 			VisibilidadTablaCalendarios = Visibility.Collapsed;
 
@@ -802,6 +804,7 @@ namespace Orion.ViewModels {
 			if (CalendarioSeleccionado == null) return false;
 			if (Pijama == null) return false;
 			if ((Pijama.AcumuladasHastaAñoAnterior) < App.Global.Convenio.JornadaMedia) return false;
+			if (Pijama.Fecha.Month != 12) return false;
 			return true;
 		}
 
@@ -832,7 +835,8 @@ namespace Orion.ViewModels {
 				regulacion.Descansos = (int)dcs;
 				regulacion.Horas = new TimeSpan((horasdisponibles - resto).Ticks * -1);
 				regulacion.IdConductor = Pijama.Trabajador.Id;
-				regulacion.Fecha = new DateTime(Pijama.Fecha.Year, Pijama.Fecha.Month, 1);
+				regulacion.Fecha = new DateTime(Pijama.Fecha.Year, 11, 30);
+				regulacion.Motivo = $"Horas reguladas del año {Pijama.Fecha.Year}";
 
 				BdRegulacionConductor.InsertarRegulacion(regulacion);
 
@@ -1696,10 +1700,10 @@ namespace Orion.ViewModels {
                             estadistica.Comida += Math.Round(dp.GraficoTrabajado.Comida, 2);
                             estadistica.Cena += Math.Round(dp.GraficoTrabajado.Cena, 2);
                             estadistica.PlusCena += Math.Round(dp.GraficoTrabajado.PlusCena, 2);
-                            estadistica.ImporteDesayuno += Math.Round((dp.GraficoTrabajado.Desayuno * App.Global.Convenio.PorcentajeDesayuno / 100) * App.Global.Convenio.ImporteDietas, 2);
-                            estadistica.ImporteComida += Math.Round(dp.GraficoTrabajado.Comida * App.Global.Convenio.ImporteDietas, 2);
-                            estadistica.ImporteCena += Math.Round(dp.GraficoTrabajado.Cena * App.Global.Convenio.ImporteDietas, 2);
-                            estadistica.ImportePlusCena += Math.Round(dp.GraficoTrabajado.PlusCena * App.Global.Convenio.ImporteDietas, 2);
+                            estadistica.ImporteDesayuno += Math.Round((dp.GraficoTrabajado.Desayuno * App.Global.Convenio.PorcentajeDesayuno / 100) * App.Global.OpcionesVM.GetPluses(dp.DiaFecha.Year).ImporteDietas, 2);
+                            estadistica.ImporteComida += Math.Round(dp.GraficoTrabajado.Comida * App.Global.OpcionesVM.GetPluses(dp.DiaFecha.Year).ImporteDietas, 2);
+                            estadistica.ImporteCena += Math.Round(dp.GraficoTrabajado.Cena * App.Global.OpcionesVM.GetPluses(dp.DiaFecha.Year).ImporteDietas, 2);
+                            estadistica.ImportePlusCena += Math.Round(dp.GraficoTrabajado.PlusCena * App.Global.OpcionesVM.GetPluses(dp.DiaFecha.Year).ImporteDietas, 2);
                             // Pluses
                             estadistica.PlusMenorDescanso += Math.Round(dp.PlusMenorDescanso, 2);
                             estadistica.PlusNocturnidad += Math.Round(dp.PlusNocturnidad, 2);
@@ -1808,10 +1812,53 @@ namespace Orion.ViewModels {
 
 
         }
-        #endregion
+		#endregion
+
+
+		#region CAMBIAR FECHA
+		// Comando
+		private ICommand _cambiarfecha;
+		public ICommand cmdCambiarFecha
+		{
+			get
+			{
+				if (_cambiarfecha == null) _cambiarfecha = new RelayCommand(p => CambiarFecha());
+				return _cambiarfecha;
+			}
+		}
+
+		// Ejecución del comando
+		private void CambiarFecha()
+		{
+			VisibilidadPanelFecha = Visibility.Visible;
+		}
+		#endregion
 
 
 
 
-    }// Fin de la clase.
+		#region COMANDO 
+
+		// Comando
+		private ICommand _cerrarpanelfecha;
+		public ICommand cmdCerrarPanelFecha
+		{
+			get
+			{
+				if (_cerrarpanelfecha == null) _cerrarpanelfecha = new RelayCommand(p => CerrarPanelFecha());
+				return _cerrarpanelfecha;
+			}
+		}
+
+		// Ejecución del comando
+		private void CerrarPanelFecha()
+		{
+			VisibilidadPanelFecha = Visibility.Collapsed;
+		}
+		#endregion
+
+
+
+
+	}// Fin de la clase.
 }

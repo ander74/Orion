@@ -19,6 +19,7 @@ using System.Windows.Controls;
 using Orion.Views;
 using Orion.Properties;
 using Orion.Servicios;
+using Orion.Config;
 
 namespace Orion.ViewModels {
 
@@ -40,7 +41,9 @@ namespace Orion.ViewModels {
 			mensajes = servicioMensajes;
 			_listafestivos.CollectionChanged += ListaFestivos_CollectionChanged;
 			AñoFestivos = DateTime.Now.Year;
-			CargarFestivos();
+			CargarDatos();
+			AñoPluses = DateTime.Now.Year;
+
 		}
 		#endregion
 
@@ -48,16 +51,18 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
-		public void CargarFestivos() {
+		public void CargarDatos() {
 			if (App.Global.CadenaConexion == null) {
 				_listafestivos.Clear();
 				return;
 			}
 			ListaFestivos = BdFestivos.GetFestivosPorAño(AñoFestivos);
+			ListaPluses = BdPluses.GetPluses();
+			ListaPluses.ItemPropertyChanged += ListaPluses_ItemPropertyChanged;
 		}
 
-
-		public void GuardarFestivos() {
+	
+		public void GuardarDatos() {
 			HayCambios = false;
 			if (ListaFestivos != null && ListaFestivos.Count > 0) {
 				BdFestivos.GuardarFestivos(ListaFestivos);
@@ -66,11 +71,15 @@ namespace Orion.ViewModels {
 				BdFestivos.BorrarFestivos(_listaborrados);
 				_listaborrados.Clear();
 			}
+			if (ListaPluses != null && ListaPluses.Any())
+			{
+				BdPluses.GuardarPluses(ListaPluses);
+			}
 		}
 
 
 		public void GuardarTodo() {
-			GuardarFestivos();
+			GuardarDatos();
 			//App.Global.Configuracion.Save();
 			//App.Global.Convenio2.Save();
 			//PorCentro.Default.Save();
@@ -80,9 +89,21 @@ namespace Orion.ViewModels {
 
 		public void Reiniciar() {
 			AñoFestivos = DateTime.Now.Year;
-			CargarFestivos();
+			CargarDatos();
 			HayCambios = false;
 		}
+
+
+		// USO DE LOS PLUSES
+		// ----------------------------------------------------------------------------------------------------
+
+		public Pluses GetPluses(int año)
+		{
+			Pluses resultado = ListaPluses.FirstOrDefault(p => p.Año == año);
+			if (resultado == null) resultado = new Pluses();
+			return resultado;
+		}
+
 
 
 		#endregion
@@ -110,6 +131,13 @@ namespace Orion.ViewModels {
 
 			PropiedadCambiada(nameof(ListaFestivos));
 		}
+
+
+		private void ListaPluses_ItemPropertyChanged(object sender, ItemPropertyChangedEventArgs e)
+		{
+			HayCambios = true;
+		}
+
 
 		private void ObjetoCambiadoEventHandler(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
 			HayCambios = true;
@@ -198,6 +226,46 @@ namespace Orion.ViewModels {
 				}
 			}
 		}
+
+
+
+		// PLUSES
+		// ----------------------------------------------------------------------------------------------------
+
+		private FullObservableCollection<Pluses> _listapluses = new FullObservableCollection<Pluses>();
+		public FullObservableCollection<Pluses> ListaPluses
+		{
+			get { return _listapluses; }
+			set { SetValue(ref _listapluses, value); }
+		}
+
+
+		private int _añopluses;
+		public int AñoPluses
+		{
+			get { return _añopluses; }
+			set {
+				if (_añopluses != value) {
+					if (!ListaPluses.Any(p => p.Año == value)) {
+						ListaPluses.Add(new Pluses(value, ListaPluses.FirstOrDefault(p => p.Año == _añopluses)));
+						HayCambios = true;
+					}
+					_añopluses = value;
+					PropiedadCambiada();
+					PlusesActuales = ListaPluses.FirstOrDefault(p => p.Año == _añopluses);
+				}
+			} 
+		}
+
+
+
+		private Pluses _plusesactuales;
+		public Pluses PlusesActuales
+		{
+			get { return _plusesactuales; }
+			set { SetValue(ref _plusesactuales, value); } 
+		}
+
 
 
 		#endregion

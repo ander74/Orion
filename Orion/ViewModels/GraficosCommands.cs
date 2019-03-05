@@ -444,25 +444,29 @@ namespace Orion.ViewModels {
 				case "LunJue":
 					del = App.Global.PorCentro.LunDel;
 					al = App.Global.PorCentro.LunAl;
-					VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
+					//VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
+					VistaGraficos.Filter = (g) => { return ((g as Grafico).DiaSemana == "L"); };
 					TextoFiltros = "Lunes a Jueves";
 					break;
 				case "Vie":
 					del = App.Global.PorCentro.VieDel;
 					al = App.Global.PorCentro.VieAl;
-					VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
+					//VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
+					VistaGraficos.Filter = (g) => { return ((g as Grafico).DiaSemana == "V"); };
 					TextoFiltros = "Viernes";
 					break;
 				case "Sab":
 					del = App.Global.PorCentro.SabDel;
 					al = App.Global.PorCentro.SabAl;
-					VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
+					//VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
+					VistaGraficos.Filter = (g) => { return ((g as Grafico).DiaSemana == "S"); };
 					TextoFiltros = "Sábados";
 					break;
 				case "Fes":
 					del = App.Global.PorCentro.DomDel;
 					al = App.Global.PorCentro.DomAl;
-					VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
+					//VistaGraficos.Filter = (g) => { return ((g as Grafico).Numero >= del && (g as Grafico).Numero <= al); };
+					VistaGraficos.Filter = (g) => { return ((g as Grafico).DiaSemana == "F"); };
 					TextoFiltros = "Domingos y Festivos";
 					break;
 				case "Modificados":

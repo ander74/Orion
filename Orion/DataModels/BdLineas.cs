@@ -27,15 +27,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GET LÍNEAS
 		*================================================================================*/
-		public static ObservableCollection<Linea> GetLineas(OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexionLineas);
+		public static ObservableCollection<Linea> GetLineas() {
 
 			// Creamos la lista y el comando que extrae las líneas.
 			ObservableCollection<Linea> lista = new ObservableCollection<Linea>();
 
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas))
+			{
 				string comandoSQL = "SELECT * FROM Lineas ORDER BY Nombre;";
 
 				OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
@@ -66,15 +64,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GUARDAR LÍNEAS
 		*================================================================================*/
-		public static void GuardarLineas(ObservableCollection<Linea> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexionLineas);
+		public static void GuardarLineas(ObservableCollection<Linea> lista) {
 
 			// Si la lista está vacía, salimos.
 			if (lista == null || lista.Count == 0) return;
 
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas))
+			{
 				string SQLInsertar = "INSERT INTO Lineas (Nombre, Descripcion) VALUES (?, ?)";
 
 				string SQLActualizar = "UPDATE Lineas SET Nombre=?, Descripcion=? WHERE Id=?";
@@ -117,12 +113,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* BORRAR LÍNEAS
 		*================================================================================*/
-		public static void BorrarLineas(List<Linea> lista, OleDbConnection conexion = null) {
+		public static void BorrarLineas(List<Linea> lista) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexionLineas);
-
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas))
+			{
 				string SQLBorrar = "DELETE FROM Lineas WHERE Id=?";
 
 				try {

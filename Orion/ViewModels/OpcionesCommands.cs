@@ -15,6 +15,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows;
@@ -196,7 +197,7 @@ namespace Orion.ViewModels {
 		// Ejecución del comando 
 		private void MostrarGenerales() {
 
-			CargarFestivos();
+			CargarDatos();
 			VisibilidadPanelConvenio = Visibility.Collapsed;
 			VisibilidadPanelPorCentro = Visibility.Collapsed;
 			VisibilidadPanelGenerales = Visibility.Visible;
@@ -269,9 +270,9 @@ namespace Orion.ViewModels {
 		// Ejecución del comando 
 		private void AñoFestivosMenos() {
 
-			GuardarFestivos();
+			GuardarDatos();
 			AñoFestivos--;
-			CargarFestivos();
+			CargarDatos();
 
 		}
 		#endregion
@@ -290,9 +291,9 @@ namespace Orion.ViewModels {
 		// Ejecución del comando 
 		private void AñoFestivosMas() {
 
-			GuardarFestivos();
+			GuardarDatos();
 			AñoFestivos++;
-			CargarFestivos();
+			CargarDatos();
 
 		}
 		#endregion
@@ -410,31 +411,59 @@ namespace Orion.ViewModels {
 
 			if (PorcentajeIncremento == 0m) return;
 
-			decimal multiplicador = 1 + (PorcentajeIncremento / 100);
+			decimal multiplicador = 1 + (PorcentajeIncremento < 0 ? PorcentajeIncremento * -1 : PorcentajeIncremento) / 100;
 
 			StringBuilder mensaje = new StringBuilder();
 			mensaje.Append($"NUEVOS VALORES\n\n");
-			mensaje.Append($"Importe Dietas: {App.Global.Convenio.ImporteDietas * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Sábados: {App.Global.Convenio.ImporteSabados * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Festivos: {App.Global.Convenio.ImporteFestivos * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Nocturnidad: {App.Global.Convenio.PlusNocturnidad * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Menor Descanso: {App.Global.Convenio.DietaMenorDescanso * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Limpieza: {App.Global.Convenio.PlusLimpieza * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Paquetería: {App.Global.Convenio.PlusPaqueteria * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Navidad: {App.Global.Convenio.PlusNavidad * multiplicador:0.00}\n");
-			mensaje.Append($"Importe Plus Viaje: {App.Global.PorCentro.PlusViaje * multiplicador:0.00}\n\n");
+			if (PorcentajeIncremento < 0)
+			{
+				mensaje.Append($"Importe Dietas: {PlusesActuales.ImporteDietas / multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Sábados: {PlusesActuales.ImporteSabados / multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Festivos: {PlusesActuales.ImporteFestivos / multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Nocturnidad: {PlusesActuales.PlusNocturnidad / multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Menor Descanso: {PlusesActuales.DietaMenorDescanso / multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Limpieza: {PlusesActuales.PlusLimpieza / multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Paquetería: {PlusesActuales.PlusPaqueteria / multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Navidad: {PlusesActuales.PlusNavidad / multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Viaje: {App.Global.PorCentro.PlusViaje / multiplicador:0.00}\n\n");
+			} else
+			{
+				mensaje.Append($"Importe Dietas: {PlusesActuales.ImporteDietas * multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Sábados: {PlusesActuales.ImporteSabados * multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Festivos: {PlusesActuales.ImporteFestivos * multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Nocturnidad: {PlusesActuales.PlusNocturnidad * multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Menor Descanso: {PlusesActuales.DietaMenorDescanso * multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Limpieza: {PlusesActuales.PlusLimpieza * multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Paquetería: {PlusesActuales.PlusPaqueteria * multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Navidad: {PlusesActuales.PlusNavidad * multiplicador:0.00}\n");
+				mensaje.Append($"Importe Plus Viaje: {App.Global.PorCentro.PlusViaje * multiplicador:0.00}\n\n");
+			}
 			mensaje.Append($"¿Aceptar?");
 
 			if (mensajes.VerMensaje(mensaje.ToString(), "Incremento de importes", true) == true) {
-				App.Global.Convenio.ImporteDietas *= multiplicador;
-				App.Global.Convenio.ImporteSabados *= multiplicador;
-				App.Global.Convenio.ImporteFestivos *= multiplicador;
-				App.Global.Convenio.PlusNocturnidad *= multiplicador;
-				App.Global.Convenio.DietaMenorDescanso *= multiplicador;
-				App.Global.Convenio.PlusLimpieza *= multiplicador;
-				App.Global.Convenio.PlusPaqueteria *= multiplicador;
-				App.Global.Convenio.PlusNavidad *= multiplicador;
-				App.Global.PorCentro.PlusViaje *= multiplicador;
+				if (PorcentajeIncremento < 0)
+				{
+					PlusesActuales.ImporteDietas /= multiplicador;
+					PlusesActuales.ImporteSabados /= multiplicador;
+					PlusesActuales.ImporteFestivos /= multiplicador;
+					PlusesActuales.PlusNocturnidad /= multiplicador;
+					PlusesActuales.DietaMenorDescanso /= multiplicador;
+					PlusesActuales.PlusLimpieza /= multiplicador;
+					PlusesActuales.PlusPaqueteria /= multiplicador;
+					PlusesActuales.PlusNavidad /= multiplicador;
+					App.Global.PorCentro.PlusViaje /= multiplicador;
+				} else {
+					PlusesActuales.ImporteDietas *= multiplicador;
+					PlusesActuales.ImporteSabados *= multiplicador;
+					PlusesActuales.ImporteFestivos *= multiplicador;
+					PlusesActuales.PlusNocturnidad *= multiplicador;
+					PlusesActuales.DietaMenorDescanso *= multiplicador;
+					PlusesActuales.PlusLimpieza *= multiplicador;
+					PlusesActuales.PlusPaqueteria *= multiplicador;
+					PlusesActuales.PlusNavidad *= multiplicador;
+					App.Global.PorCentro.PlusViaje *= multiplicador;
+				}
+
 			}
 
 		}
@@ -513,5 +542,61 @@ namespace Orion.ViewModels {
 
 
 
-    }
+		#region COMANDO AÑO PLUSES MENOS
+
+		// Comando
+		private ICommand _cmdañoplusesmenos;
+		public ICommand cmdAñoPlusesMenos
+		{
+			get
+			{
+				if (_cmdañoplusesmenos == null) _cmdañoplusesmenos = new RelayCommand(p => AñoPlusesMenos());
+				return _cmdañoplusesmenos;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void AñoPlusesMenos()
+		{
+			if (!ListaPluses.Any(p => p.Año == AñoPluses - 1))
+			{
+				if (mensajes.VerMensaje($"El año {AñoPluses - 1} no existe.\n\n" +
+					$"Se va a crear un nuevo año con los valores del año actual.\n\n¿Desea continuar?", "Año no existente.", true) == false) return;
+			}
+			AñoPluses--;
+		}
+		#endregion
+
+
+
+		#region COMANDO AÑO PLUSES MAS
+
+		// Comando
+		private ICommand _cmdañoplusesmas;
+		public ICommand cmdAñoPlusesMas
+		{
+			get
+			{
+				if (_cmdañoplusesmas == null) _cmdañoplusesmas = new RelayCommand(p => AñoPlusesMas());
+				return _cmdañoplusesmas;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void AñoPlusesMas()
+		{
+			if (!ListaPluses.Any(p => p.Año == AñoPluses + 1))
+			{
+				if (mensajes.VerMensaje($"El año {AñoPluses + 1} no existe.\n\n" +
+					$"Se va a crear un nuevo año con los valores del año actual.\n\n¿Desea continuar?", "Año no existente.", true) == false) return;
+			}
+			AñoPluses++;
+		}
+		#endregion
+
+
+
+	}
 }

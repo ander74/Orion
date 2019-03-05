@@ -147,6 +147,10 @@ namespace Orion.Models {
 						_grafico = -10;
 					} else if (value == -4 && _grafico == -3) {
 						_grafico = -11;
+					} else if (value == -1 && _grafico == -2) {
+						_grafico = -12;
+					} else if (value == -1 && _grafico == -3) {
+						_grafico = -13;
 					} else { 
 						_grafico = value;
 					}

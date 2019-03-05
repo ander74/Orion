@@ -62,7 +62,7 @@ namespace Orion.Pijama {
 
 		private static string comandoDCsDisfrutados = "SELECT Count(Grafico) FROM DiasCalendario " +
 													  "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha < ? AND IdConductor = ?)" +
-													  "      AND Grafico = -6 AND (Codigo = 0 OR Codigo Is Null);";
+													  "      AND Grafico = -6;";// AND (Codigo = 0 OR Codigo Is Null);";
 
 
 		private static string comandoDNDsDisfrutados = "SELECT Count(DiasCalendario.Grafico) " +
@@ -73,7 +73,8 @@ namespace Orion.Pijama {
 		private static string comandoDiasComiteEnJD = "SELECT Count(DiasCalendario.Grafico) " +
 													  "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios.Id = DiasCalendario.IdCalendario " +
 													  "WHERE Calendarios.IdConductor = ? AND " +
-													  "      (DiasCalendario.Grafico = -2 OR DiasCalendario.Grafico = -3 OR DiasCalendario.Grafico = -5) AND " +
+													  "      (DiasCalendario.Grafico = -2 OR DiasCalendario.Grafico = -3 OR DiasCalendario.Grafico = -5 OR " +
+													  "       DiasCalendario.Grafico = -6 OR DiasCalendario.Grafico = -1) AND " +
 													  "	   (DiasCalendario.Codigo = 1 OR DiasCalendario.Codigo = 2) AND " +
 													  "      Fecha < ?";
 
@@ -97,16 +98,16 @@ namespace Orion.Pijama {
 		//================================================================================
  		// GET DÍAS PIJAMA
  		//================================================================================
-		public static List<DiaPijama> GetDiasPijama(IEnumerable<DiaCalendarioBase> listadias, OleDbConnection conexion = null) {
+		public static List<DiaPijama> GetDiasPijama(IEnumerable<DiaCalendarioBase> listadias) {
 
-			// Si no se pasa una conexión, se establece la conexion del centro actual.
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
 			// Creamos la lista que se devolverá.
 			List<DiaPijama> lista = new List<DiaPijama>();
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 				// Habrá que quitar el control de excepciones aquí y ponerselo en la llamada al método, ya que aquí no hay
 				// gestión de ventanas (o no debería haberlo).
-				try {
+				try
+				{
 					conexion.Open();
 					foreach (DiaCalendarioBase dia in listadias) {
 						// Creamos el día pijama a añadir a la lista.
@@ -141,14 +142,13 @@ namespace Orion.Pijama {
 		//================================================================================
 		// GET RESUMEN HASTA MES
 		//================================================================================
-		public static ResumenPijama GetResumenHastaMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static ResumenPijama GetResumenHastaMes(int año, int mes, int idconductor) {
 
 			// Inicializamos las horas acumuladas.
 			ResumenPijama resultado = new ResumenPijama();
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Establecemos la fecha del día 1 del siguiente mes al indicado.
 				DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
@@ -199,7 +199,10 @@ namespace Orion.Pijama {
 					comando.Parameters.AddWithValue("idconductor", idconductor);
 					comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
 					objeto = comando.ExecuteScalar();
-					if (objeto == DBNull.Value) objeto = 0d;
+					if (objeto == DBNull.Value)
+					{
+						objeto = 0d;
+					}
 					resultado.HorasReguladas = new TimeSpan(Convert.ToInt64(objeto));
 					//----------------------------------------------------------------------------------------------------
 					// DIAS F6
@@ -272,13 +275,12 @@ namespace Orion.Pijama {
 		//================================================================================
 		// GET HORAS COBRADAS MES
 		//================================================================================
-		public static TimeSpan GetHorasCobradasMes(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static TimeSpan GetHorasCobradasMes(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Year(Fecha) = ? AND Month(Fecha) = ? AND Codigo = 1;";
@@ -295,7 +297,7 @@ namespace Orion.Pijama {
 					resultado = comando.ExecuteScalar();
 				} catch (Exception ex) {
 					Utils.VerError("BdCalendarios.GetHorasCobradasMes", ex);
-				}
+				} 
 			}
 			// Devolvemos el resultado.
 			if (resultado == DBNull.Value) resultado = 0d;
@@ -307,13 +309,12 @@ namespace Orion.Pijama {
 		//================================================================================
 		// GET HORAS COBRADAS AÑO
 		//================================================================================
-		public static TimeSpan GetHorasCobradasAño(int año, int mes, int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static TimeSpan GetHorasCobradasAño(int año, int mes, int idconductor) {
 
 			object resultado = null;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Definimos el comando SQL.
 				string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Fecha > ? AND Fecha < ? AND Codigo = 1;";

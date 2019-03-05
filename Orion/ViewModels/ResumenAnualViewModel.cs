@@ -5,17 +5,17 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Orion.DataModels;
-using Orion.Models;
-using Orion.Servicios;
-
 namespace Orion.ViewModels {
+
+	using System;
+	using System.Collections.Generic;
+	using System.Collections.ObjectModel;
+	using System.Linq;
+	using System.Text;
+	using System.Threading.Tasks;
+	using Orion.DataModels;
+	using Orion.Models;
+	using Orion.Servicios;
 
 	public partial class ResumenAnualViewModel : NotifyBase {
 
@@ -117,8 +117,31 @@ namespace Orion.ViewModels {
 				App.Global.IniciarProgreso("Recopilando datos...");
 				// Solicitamos los pijamas
 				pijamasAño = await GetPijamas(AñoActual, ConductorActual.Id);
+
+
+				//// Cargamos los calendarios del año del conductor.
+				//List<Calendario> listaCalendarios = BdCalendarios.GetCalendariosConductor(AñoActual, ConductorActual.Id);
+				//// Inicializamos la lista de pijamas del año.
+				//pijamasAño = new Dictionary<int, Pijama.HojaPijama>();
+				//// Iniciamos el valor para la barra de progreso.
+				//double num = 1;
+				//// Cargamos las hojas pijama disponibles.
+				//foreach (Calendario cal in listaCalendarios)
+				//{
+				//	// Incrementamos la barra de progreso.
+				//	App.Global.ValorBarraProgreso = num / listaCalendarios.Count * 100;
+				//	// Cargamos un pijama nuevo.
+				//	Pijama.HojaPijama hoja = null;
+				//	await Task.Run(() => { hoja = new Pijama.HojaPijama(cal, mensajes); });
+				//	// Añadimos el pijama a la lista.
+				//	pijamasAño.Add(cal.Fecha.Month, hoja);
+				//	// Incrementamos el valor de la barra de progreso.
+				//	num++;
+				//}
+				
+
 				// Llenar los datos con los resultados de los pijamas.
-				LlenarListaResumen();
+				LlenarListaResumen(AñoActual);
 
 			} catch (Exception ex) {
 				mensajes.VerError("ResumenAnualViewModel.CargarDatos", ex);
@@ -131,8 +154,8 @@ namespace Orion.ViewModels {
 		}
 
 
-		private async Task<Dictionary<int, Pijama.HojaPijama>> GetPijamas(int año, int idConductor) {
-
+		private async Task<Dictionary<int, Pijama.HojaPijama>> GetPijamas(int año, int idConductor)
+		{
 			return await Task.Run(() => {
 				// Cargamos los calendarios del año del conductor.
 				List<Calendario> listaCalendarios = BdCalendarios.GetCalendariosConductor(año, idConductor);
@@ -141,7 +164,8 @@ namespace Orion.ViewModels {
 				// Iniciamos el valor para la barra de progreso.
 				double num = 1;
 				// Cargamos las hojas pijama disponibles.
-				foreach (Calendario cal in listaCalendarios) {
+				foreach (Calendario cal in listaCalendarios)
+				{
 					// Incrementamos la barra de progreso.
 					App.Global.ValorBarraProgreso = num / listaCalendarios.Count * 100;
 					// Añadimos el pijama a la lista.
@@ -154,7 +178,7 @@ namespace Orion.ViewModels {
 		}
 
 
-		private void LlenarListaResumen() {
+		private void LlenarListaResumen(int año) {
 			// Reiniciamos la lista y los valores totales.
 			ListaResumen = new List<ItemResumenAnual>();
 			TotalTrabajadas = 0;
@@ -209,8 +233,10 @@ namespace Orion.ViewModels {
 				// DÍAS
 				DiasTrabajo.SetDato(mes, pijamasAño[mes].Trabajo);
 				TotalDiasTrabajo += pijamasAño[mes].Trabajo; // Añadimos al total de trabajados.
-				DiasJD.SetDato(mes, pijamasAño[mes].Descanso);
+				DiasJD.SetDato(mes, pijamasAño[mes].Descanso + pijamasAño[mes].DescansoEnFinde + pijamasAño[mes].DescansoSuelto);
 				TotalDiasDescanso += pijamasAño[mes].Descanso; // Añadimos al total de descansos.
+				TotalDiasDescanso += pijamasAño[mes].DescansoEnFinde;
+				TotalDiasDescanso += pijamasAño[mes].DescansoSuelto;
 				DiasOV.SetDato(mes, pijamasAño[mes].Vacaciones);
 				TotalDiasVacaciones += pijamasAño[mes].Vacaciones;
 				DiasDND.SetDato(mes, pijamasAño[mes].DescansosNoDisfrutados);
@@ -241,8 +267,34 @@ namespace Orion.ViewModels {
 				DomingosDescansados.SetDato(mes, pijamasAño[mes].DomingosDescansados);
 				FestivosTrabajados.SetDato(mes, pijamasAño[mes].FestivosTrabajados);
 				FestivosDescansados.SetDato(mes, pijamasAño[mes].FestivosDescansados);
-				FindesCompletos.SetDato(mes, pijamasAño[mes].FindesCompletos);
-				TotalFindes += pijamasAño[mes].FindesCompletos;
+				// FINES DE SEMANA COMPLETOS
+				decimal findes = pijamasAño[mes].FindesCompletos;
+				// Último día del mes.
+				if (mes > 1)
+				{
+					bool sabadoDescanso = false;
+					bool domingoDescanso = false;
+					int ultimoDiaMesAnterior = DateTime.DaysInMonth(año, mes - 1);
+					DayOfWeek ultimoDiaSemanaMesAnterior = new DateTime(año, mes - 1, ultimoDiaMesAnterior).DayOfWeek;
+					DayOfWeek primerDiaSemanaMes = new DateTime(año, mes, 1).DayOfWeek;
+					// Si el último día del mes anterior es sábado y descanso, lo marcamos.
+					if (ultimoDiaSemanaMesAnterior == DayOfWeek.Saturday && EsDescanso(pijamasAño[mes-1].ListaDias[ultimoDiaMesAnterior-1].Grafico))
+					{
+						sabadoDescanso = true;
+					}
+					// Si el primer día del mes es domingo y descanso, lo marcamos.
+					if (primerDiaSemanaMes == DayOfWeek.Sunday && EsDescanso(pijamasAño[mes].ListaDias[0].Grafico))
+					{
+						domingoDescanso = true;
+					}
+					// Si uno de los dos días del fin de semana dividido entre dos meses es descanso, pero el otro no, 
+					// eliminamos el 0,5 que se ha generado en el pijama.
+					if (sabadoDescanso && !domingoDescanso) findes = findes > 0 ? findes - 0.5m : 0m;
+					if (domingoDescanso && !sabadoDescanso) findes = findes > 0 ? findes - 0.5m : 0m;
+				}
+				FindesCompletos.SetDato(mes, findes);
+				TotalFindes += findes;
+
 				// RESUMEN HASTA MES ACTUAL
 				DNDsPendientes = pijamasAño[mes].DNDsPendientesHastaMes;
 				DCsPendientes = pijamasAño[mes].DCsPendientesHastaMes;
@@ -277,6 +329,12 @@ namespace Orion.ViewModels {
 			ListaResumen.Add(FestivosTrabajados);
 			ListaResumen.Add(FestivosDescansados);
 			ListaResumen.Add(FindesCompletos);
+		}
+
+
+		private bool EsDescanso(int grafico)
+		{
+			return (grafico == -2 || grafico == -3 || grafico == -10 || grafico == -11 || grafico == -12 || grafico == -13);
 		}
 
 

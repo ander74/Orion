@@ -28,14 +28,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GET CONDUCTORES
 		*================================================================================*/
-		public static ObservableCollection<Conductor> GetConductores(OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static ObservableCollection<Conductor> GetConductores() {
 
 			// Creamos la lista y el comando que extrae los gráficos.
 			ObservableCollection<Conductor> lista = new ObservableCollection<Conductor>();
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				//string comandoSQL = "SELECT * FROM Conductores ORDER BY Id";
 
@@ -69,14 +68,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GUARDAR CONDUCTORES
 		*================================================================================*/
-		public static void GuardarConductores(ObservableCollection<Conductor> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static void GuardarConductores(ObservableCollection<Conductor> lista) {
 
 			// Si la lista está vacía, salimos.
 			if (lista == null || lista.Count == 0) return;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				//string SQLInsertar = "INSERT INTO Conductores (Nombre, Apellidos, Indefinido, Telefono, Email, Acumuladas, Descansos, " +
 				//				 "DescansosNoDisfrutados, PlusDistancia, Notas) " +
@@ -126,11 +124,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * BORRAR CONDUCTORES
 		 *================================================================================*/
-		public static void BorrarConductores(List<Conductor> lista, OleDbConnection conexion = null) {
+		public static void BorrarConductores(List<Conductor> lista) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
-
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				//string SQLBorrar = "DELETE FROM Conductores WHERE Id=?";
 				string SQLBorrar = "BorrarConductor";
@@ -154,13 +151,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * EXISTE CONDUCTOR
 		 *================================================================================*/
-		public static bool ExisteConductor(int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static bool ExisteConductor(int idconductor) {
 
 			int numero = 0;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				// Creamos el comando que lee el número de conductores que tienen el id
 				//string comandoSQL = "SELECT Count(Id) FROM Conductores WHERE Id = ?";
@@ -184,11 +180,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * INSERTAR CONDUCTOR DESCONOCIDO
 		 *================================================================================*/
-		public static void InsertarConductorDesconocido(int idconductor, OleDbConnection conexion = null) {
+		public static void InsertarConductorDesconocido(int idconductor) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
-
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 				//string SQLInsertar = "INSERT INTO Conductores (Id, Nombre) VALUES (?, 'Desconocido')";
 				string SQLInsertar = "InsertarConductorDesconocido";
 				OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
@@ -207,14 +202,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET CONDUCTOR
 		 *================================================================================*/
-		 public static Conductor GetConductor(int idconductor, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		 public static Conductor GetConductor(int idconductor) {
 
 			Conductor conductor = null;
 
-			using (conexion) {
-				
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
+
 				// Creamos el comando que extrae el conductor
 				//string comandoSQL = "SELECT * FROM Conductores WHERE Id = ?";
 				string comandoSQL = "GetConductor";

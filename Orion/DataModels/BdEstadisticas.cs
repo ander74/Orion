@@ -139,49 +139,65 @@ namespace Orion.DataModels {
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.GetCadenaConexion(App.Global.CentroActual))) {
 
-                string comandoSQL = "SELECT Numero " +
-                                    "FROM Graficos " +
-                                    "WHERE IdGrupo = (SELECT Id " +
-                                    "                 FROM GruposGraficos " +
-                                    "                 WHERE Validez = (SELECT Max(Validez) " +
-                                    "                                  FROM GruposGraficos " +
-                                    "                                  WHERE Validez <= @fecha)) " +
-                                    "AND Numero >= @del " +
-                                    "AND Numero <= @al " +
-                                    "ORDER BY Numero";
+                //string comandoSQL = "SELECT Numero " +
+                //                    "FROM Graficos " +
+                //                    "WHERE IdGrupo = (SELECT Id " +
+                //                    "                 FROM GruposGraficos " +
+                //                    "                 WHERE Validez = (SELECT Max(Validez) " +
+                //                    "                                  FROM GruposGraficos " +
+                //                    "                                  WHERE Validez <= @fecha)) " +
+                //                    "AND Numero >= @del " +
+                //                    "AND Numero <= @al " +
+                //                    "ORDER BY Numero";
+				string comandoSQL = "SELECT Numero " +
+									"FROM Graficos " +
+									"WHERE IdGrupo = (SELECT Id " +
+									"                 FROM GruposGraficos " +
+									"                 WHERE Validez = (SELECT Max(Validez) " +
+									"                                  FROM GruposGraficos " +
+									"                                  WHERE Validez <= @fecha)) " +
+									"AND DiaSemana = @diasemana " +
+									"ORDER BY Numero";
 
-                conexion.Open();
+				conexion.Open();
                 for (int dia = 1; dia <= DateTime.DaysInMonth(fecha.Year, fecha.Month); dia++) {
                     OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
                     DateTime fechaDia = new DateTime(fecha.Year, fecha.Month, dia);
-                    int del;
-                    int al;
+                    //int del;
+                    //int al;
+					string diasemana;
                     switch (fechaDia.DayOfWeek) {
                         case DayOfWeek.Sunday:
-                            del = App.Global.PorCentro.DomDel;
-                            al = App.Global.PorCentro.DomAl;
+                            //del = App.Global.PorCentro.DomDel;
+                            //al = App.Global.PorCentro.DomAl;
+							diasemana = "F";
                             break;
                         case DayOfWeek.Saturday:
-                            del = App.Global.PorCentro.SabDel;
-                            al = App.Global.PorCentro.SabAl;
-                            break;
+                            //del = App.Global.PorCentro.SabDel;
+                            //al = App.Global.PorCentro.SabAl;
+							diasemana = "S";
+							break;
                         case DayOfWeek.Friday:
-                            del = App.Global.PorCentro.VieDel;
-                            al = App.Global.PorCentro.VieAl;
-                            break;
+                            //del = App.Global.PorCentro.VieDel;
+                            //al = App.Global.PorCentro.VieAl;
+							diasemana = "V";
+							break;
                         default:
-                            del = App.Global.PorCentro.LunDel;
-                            al = App.Global.PorCentro.LunAl;
-                            break;
+                            //del = App.Global.PorCentro.LunDel;
+                            //al = App.Global.PorCentro.LunAl;
+							diasemana = "L";
+							break;
                     }
                     if (App.Global.CalendariosVM.EsFestivo(fechaDia)) {
-                        del = App.Global.PorCentro.DomDel;
-                        al = App.Global.PorCentro.DomAl;
-                    }
-                    Comando.Parameters.AddWithValue("@fecha", fechaDia);
-                    Comando.Parameters.AddWithValue("@del", del);
-                    Comando.Parameters.AddWithValue("@al", al);
-                    OleDbDataReader lector = Comando.ExecuteReader();
+                        //del = App.Global.PorCentro.DomDel;
+                        //al = App.Global.PorCentro.DomAl;
+						diasemana = "F";
+					}
+					Comando.Parameters.AddWithValue("@fecha", fechaDia);
+					Comando.Parameters.AddWithValue("@diasemana", diasemana);
+					//Comando.Parameters.AddWithValue("@del", del);
+					//Comando.Parameters.AddWithValue("@al", al);
+					OleDbDataReader lector = Comando.ExecuteReader();
                     GraficosPorDia Gpd = new GraficosPorDia();
                     Gpd.Fecha = fechaDia;
                     while (lector.Read()) {

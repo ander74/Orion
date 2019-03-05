@@ -189,31 +189,31 @@ namespace Orion.Pijama {
 
 		public decimal ImporteDesayuno {
 			get {
-				return (GraficoTrabajado.Desayuno * App.Global.Convenio.PorcentajeDesayuno / 100) * App.Global.Convenio.ImporteDietas;
+				return (GraficoTrabajado.Desayuno * App.Global.Convenio.PorcentajeDesayuno / 100) * App.Global.OpcionesVM.GetPluses(DiaFecha.Year).ImporteDietas;
 			}
 		}
 
 		public decimal ImporteComida {
 			get {
-				return GraficoTrabajado.Comida * App.Global.Convenio.ImporteDietas;
+				return GraficoTrabajado.Comida * App.Global.OpcionesVM.GetPluses(DiaFecha.Year).ImporteDietas;
 			}
 		}
 
 		public decimal ImporteCena {
 			get {
-				return GraficoTrabajado.Cena * App.Global.Convenio.ImporteDietas;
+				return GraficoTrabajado.Cena * App.Global.OpcionesVM.GetPluses(DiaFecha.Year).ImporteDietas;
 			}
 		}
 
 		public decimal ImportePlusCena {
 			get {
-				return GraficoTrabajado.PlusCena * App.Global.Convenio.ImporteDietas;
+				return GraficoTrabajado.PlusCena * App.Global.OpcionesVM.GetPluses(DiaFecha.Year).ImporteDietas;
 			}
 		}
 
 		public decimal ImporteTotalDietas {
 			get {
-				return TotalDietas * App.Global.Convenio.ImporteDietas;
+				return TotalDietas * App.Global.OpcionesVM.GetPluses(DiaFecha.Year).ImporteDietas;
 			}
 		}
 

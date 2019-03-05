@@ -16,6 +16,12 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <TargetFrameworkProfile />
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
     <PublishUrl>publicar\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -30,12 +36,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <SccProjectName>SAK</SccProjectName>
-    <SccLocalPath>SAK</SccLocalPath>
-    <SccAuxPath>SAK</SccAuxPath>
-    <SccProvider>SAK</SccProvider>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -188,6 +188,7 @@
     </ApplicationDefinition>
     <Compile Include="Config\FullObservableCollection.cs" />
     <Compile Include="Config\GestionGraficos.cs" />
+    <Compile Include="Convertidores\ConvertidorDiaSemanaGrafico.cs" />
     <Compile Include="Convertidores\ConvertidorMinutosToHora.cs" />
     <Compile Include="Convertidores\ConvertidorMinutosToHoraMixta.cs" />
     <Compile Include="Convertidores\ConvertidorVisibilityInverter.cs" />
@@ -220,6 +221,7 @@
     <Compile Include="DataModels\BdLineas.cs" />
     <Compile Include="DataModels\BdParadas.cs" />
     <Compile Include="DataModels\BdPijamas.cs" />
+    <Compile Include="DataModels\BdPluses.cs" />
     <Compile Include="DataModels\BdRegulacionConductor.cs" />
     <Compile Include="DataModels\BdValoracionesGraficos.cs" />
     <Compile Include="DataModels\ProcSQL.cs" />
@@ -250,6 +252,7 @@
     <Compile Include="Models\Linea.cs" />
     <Compile Include="Models\Parada.cs" />
     <Compile Include="Models\OpcionesPorCentro.cs" />
+    <Compile Include="Models\Pluses.cs" />
     <Compile Include="Models\RegulacionConductor.cs" />
     <Compile Include="Models\ValoracionGrafico.cs" />
     <Compile Include="Pijama\BdPijamas.cs" />

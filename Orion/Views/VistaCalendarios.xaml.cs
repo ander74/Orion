@@ -10,6 +10,7 @@ using Orion.ViewModels;
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace Orion.Views {
@@ -20,6 +21,12 @@ namespace Orion.Views {
 		public VistaCalendarios() {
 
 			InitializeComponent();
+		}
+
+		// Al capturar el raton el calendario, soltarlo si se lo queda.
+		private void Calendar_GotMouseCapture(object sender, MouseEventArgs e)
+		{
+			if (e.OriginalSource is CalendarDayButton || e.OriginalSource is CalendarItem) Mouse.Capture(null);
 		}
 
 

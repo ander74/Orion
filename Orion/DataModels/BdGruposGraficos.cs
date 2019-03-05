@@ -31,12 +31,12 @@ namespace Orion.DataModels {
 		*================================================================================*/
 		public static ObservableCollection<GrupoGraficos> getGrupos(OleDbConnection conexion = null) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
-
 			// Creamos la lista.
 			ObservableCollection<GrupoGraficos> lista = new ObservableCollection<GrupoGraficos>();
 
-			using (conexion) {
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+			using (conexion)
+			{
 
 				string comandoSQL = "SELECT * FROM GruposGraficos ORDER BY Validez DESC";
 				OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
@@ -66,9 +66,7 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GUARDAR GRUPOS
 		*================================================================================*/
-		public static void GuardarGrupos(ObservableCollection<GrupoGraficos> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static void GuardarGrupos(ObservableCollection<GrupoGraficos> lista) {
 
 			// Si la lista está vacía, salimos.
 			if (lista == null || lista.Count == 0) return;
@@ -77,9 +75,11 @@ namespace Orion.DataModels {
 
 			string SQLActualizar = "UPDATE GruposGraficos SET Validez=?, Notas=? WHERE Id=?";
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
-				try {
+				try
+				{
 					conexion.Open();
 
 					foreach (GrupoGraficos grupo in lista) {
@@ -107,13 +107,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * BORRAR GRUPO POR ID
 		 *================================================================================*/
-		public static void BorrarGrupoPorId(long idgrupo, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static void BorrarGrupoPorId(long idgrupo) {
 
 			string SQLBorrar = "DELETE FROM GruposGraficos WHERE Id=?";
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				OleDbCommand comando = new OleDbCommand(SQLBorrar, conexion);
 				comando.Parameters.AddWithValue("id", idgrupo);
@@ -130,13 +129,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * NUEVO GRUPO
 		 *================================================================================*/
-		public static int NuevoGrupo(DateTime fecha, string notas, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static int NuevoGrupo(DateTime fecha, string notas) {
 
 			int idgruponuevo = -1;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 
 				string SQLNuevo = "INSERT INTO GruposGraficos (Validez, Notas) VALUES (?, ?)";
 
@@ -160,13 +158,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * EXISTE GRUPO
 		 *================================================================================*/
-		public static bool ExisteGrupo(DateTime fecha, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+		public static bool ExisteGrupo(DateTime fecha) {
 
 			Int32 numero = 0;
 
-			using (conexion) {
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
+			{
 				string comandoSQL = "SELECT Count(*) FROM GruposGraficos WHERE Validez=?";
 				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
 				comando.Parameters.AddWithValue("validez", fecha.ToString("yyyy-MM-dd"));
@@ -189,10 +186,11 @@ namespace Orion.DataModels {
 		 *================================================================================*/
 		 public static GrupoGraficos GetUltimoGrupo(OleDbConnection conexion = null) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
 			GrupoGraficos grupo = null;
 
-			using (conexion) {
+			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+			using (conexion)
+			{
 				string comandoSQL = "SELECT * FROM GruposGraficos WHERE Validez=(SELECT Max(Validez) FROM GruposGraficos);";
 				OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
 

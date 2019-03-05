@@ -27,15 +27,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET ITINERARIOS
 		 *================================================================================*/
-		public static ObservableCollection<Itinerario> GetItinerarios(long IdLinea, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexionLineas);
+		public static ObservableCollection<Itinerario> GetItinerarios(long IdLinea) {
 
 			// Creamos la lista.
 			ObservableCollection<Itinerario> lista = new ObservableCollection<Itinerario>();
 
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas))
+			{
 				string comandoSQL = "SELECT * FROM Itinerarios WHERE IdLinea=? ORDER BY Nombre";
 
 				OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
@@ -66,15 +64,13 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GUARDAR ITINERARIOS
 		 *================================================================================*/
-		public static void GuardarItinerarios(ObservableCollection<Itinerario> lista, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexionLineas);
+		public static void GuardarItinerarios(ObservableCollection<Itinerario> lista) {
 
 			// Si la lista está vacía, salimos.
 			if (lista == null || lista.Count == 0) return;
 
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas))
+			{
 				string SQLInsertar = "INSERT INTO Itinerarios (IdLinea, Nombre, Descripcion, TiempoReal, TiempoPago) " +
 									 "VALUES (?, ?, ?, ?, ?);";
 
@@ -116,12 +112,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * BORRAR ITINERARIOS
 		 *================================================================================*/
-		public static void BorrarItinerarios(List<Itinerario> lista, OleDbConnection conexion = null) {
+		public static void BorrarItinerarios(List<Itinerario> lista) {
 
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexionLineas);
-
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas))
+			{
 				string SQLBorrar = "DELETE FROM Itinerarios WHERE Id=?";
 
 				try {
@@ -142,14 +136,12 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * GET ITINERARIO BY NOMBRE
 		 *================================================================================*/
-		 public static Itinerario GetItinerarioByNombre(decimal nombre, OleDbConnection conexion = null) {
-
-			if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexionLineas);
+		 public static Itinerario GetItinerarioByNombre(decimal nombre) {
 
 			Itinerario itinerario = null;
 
-			using (conexion) {
-
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas))
+			{
 				// Creamos el comando que extrae el itinerario
 				string comandoSQL = "SELECT * FROM Itinerarios WHERE Nombre = ?";
 
