@@ -164,7 +164,18 @@
                                     </Button.Content>
                                 </Button>
 
-                                <!-- DESPLEGABLE COMPARAR GRUPO -->
+								<!-- BOTON DEDUCIR DÍA SEMANA -->
+								<Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64"
+                                        Command="{Binding cmdDeducirDiaSemana}">
+									<Button.Content>
+										<StackPanel Orientation="Vertical">
+											<Image Source="Imagenes/Calendario.png" Style="{StaticResource EstiloImagen}"/>
+											<TextBlock Text="Deducir Día Semana" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
+										</StackPanel>
+									</Button.Content>
+								</Button>
+
+								<!-- DESPLEGABLE COMPARAR GRUPO -->
                                 <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" VerticalContentAlignment="Center"
                                                        Height="80" Width="64"
                                                       IsOpen="{Binding BtCompararAbierto, Mode=TwoWay}">
@@ -507,8 +518,12 @@
                     <DataGridTextColumn Header="Número" Binding="{Binding Numero, Converter={StaticResource cnvNumGrafico}}" 
                                         Width="1*" MinWidth="60"/>
 
-					<DataGridTextColumn Header="D" Binding="{Binding DiaSemana, Converter={StaticResource cnvDiaSemanaGrafico}}" 
-                                        Width="0.3*" MinWidth="20"/>
+					<DataGridTextColumn Binding="{Binding DiaSemana, Converter={StaticResource cnvDiaSemanaGrafico}}" 
+                                        Width="0.3*" MinWidth="20">
+						<DataGridTextColumn.Header>
+							<TextBlock Text="D" ToolTip="Día de la semana.&#x0a;    L=Lunes a Jueves&#x0a;    V=Viernes&#x0a;    S=Sábados&#x0a;    F=Domingos y festivos"/>
+						</DataGridTextColumn.Header>
+					</DataGridTextColumn>
 
 					<DataGridTextColumn Header="Turno" Binding="{Binding Turno}" Width="1*" MinWidth="60"/>
                     

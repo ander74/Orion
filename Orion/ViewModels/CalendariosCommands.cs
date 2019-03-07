@@ -838,7 +838,8 @@ namespace Orion.ViewModels {
 				regulacion.Fecha = new DateTime(Pijama.Fecha.Year, 11, 30);
 				regulacion.Motivo = $"Horas reguladas del año {Pijama.Fecha.Year}";
 
-				BdRegulacionConductor.InsertarRegulacion(regulacion);
+				//BdRegulacionConductor.InsertarRegulacion(regulacion);
+				App.Global.ConductoresVM.InsertarRegulacion(regulacion);
 
 				CerrarPijama();
 			}
@@ -895,7 +896,8 @@ namespace Orion.ViewModels {
 					regulacion.Motivo = "Horas Cobradas";
 					regulacion.Codigo = 1;
 					regulacion.Horas = new TimeSpan(contexto.HorasACobrar.Value.Ticks * -1);
-					BdRegulacionConductor.InsertarRegulacion(regulacion);
+					//BdRegulacionConductor.InsertarRegulacion(regulacion);
+					App.Global.ConductoresVM.InsertarRegulacion(regulacion);
 				} else {
 					Mensajes.VerMensaje("Debes escribir las horas que quieres cobrar.", "ATENCIÓN");
 				}
@@ -1835,9 +1837,7 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-
-
-		#region COMANDO 
+		#region COMANDO CERRAR PANEL FECHA
 
 		// Comando
 		private ICommand _cerrarpanelfecha;

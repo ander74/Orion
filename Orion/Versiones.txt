@@ -6,6 +6,19 @@ PROYECTO ORIÓN
 	CAMBIOS EFECTUADOS
 
 
+		06 de Marzo de 2019
+		-------------------
+
+			- Se añade toda la funcionalidad automática del campo DiaSemana de la tabla Gráficos. Al introducir los gráficos por medio de la 
+			  ventana Añadir Gráfico, la acción por lotes para hacerlo a todos y al crear un grupo nuevo desde Word. También se modifica el objeto
+			  Gráfico para añadir el Header 'D' para el borrado, así como el comando Pegar para tener en cuenta la nueva columna.
+
+			- Se solucionan los problemas que había al introducir calendarios con conductores desconocidos. Estos se añaden automáticamente y
+			  se guarda la tabla de conductores antes de guardar los calendarios nuevos.
+
+			- Se solucionan algunos problemas que había al trabajar con los conductores. No se guardaban correctamente y ahora sí lo hacen.
+
+
 		05 de Marzo de 2019
 		-------------------
 
@@ -15,5 +28,13 @@ PROYECTO ORIÓN
 
 			- Se modifican todos los elementos del programa que leían los pluses y dietas del convenio para que los coja de la tabla Pluses
 			  en lugar del objeto Convenio.
+
+			- Se añade el campo DiaSemana a los gráficos para establecer al día de la semana que pertenece. Se añade, por tanto, la columna D a la
+			  tabla de gráficos para establecer el campo.
+
+			- Al filtrar la tabla de gráficos, se tiene en cuenta el nuevo campo para determinar a que día pertenece el gráfico.
+
+			- En la pestaña Calendarios, al generar el PDF Estadísticas Mes, se tiene en cuenta el nuevo campo DiaSemana para determinar si el gráfico
+			  de un día pertenece a él o no.
 
 

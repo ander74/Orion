@@ -46,6 +46,7 @@ namespace Orion.Models {
 			switch (header) {
 				case "#": NoCalcular = false; break;
 				case "Número": Numero = 0; break;
+				case "D": DiaSemana = ""; break;
 				case "Turno": Turno = 1; break;
 				case "Inicio": Inicio = null; break;
 				case "Final": Final = null; break;

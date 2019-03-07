@@ -153,9 +153,10 @@ namespace Orion.DataModels {
 							//if (!BdConductores.ExisteConductor(calendario.IdConductor)) {
 							//	BdConductores.InsertarConductorDesconocido(calendario.IdConductor);
 							//}
-							if (!App.Global.ConductoresVM.ExisteConductor(calendario.IdConductor)) {
-								App.Global.ConductoresVM.CrearConductorDesconocido(calendario.IdConductor);
-							}
+							//if (!App.Global.ConductoresVM.ExisteConductor(calendario.IdConductor)) {
+							//	App.Global.ConductoresVM.CrearConductorDesconocido(calendario.IdConductor);
+							//}
+							//TODO: Eliminar lo de arriba, ya que se debe añadir el conductor al añadir un calendario a la tabla.
 							OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
 							comando.CommandType = System.Data.CommandType.StoredProcedure;
 							Calendario.ParseToCommand(comando, calendario);

@@ -28,10 +28,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GET CONDUCTORES
 		*================================================================================*/
-		public static ObservableCollection<Conductor> GetConductores() {
+		public static List<Conductor> GetConductores() {
 
 			// Creamos la lista y el comando que extrae los gráficos.
-			ObservableCollection<Conductor> lista = new ObservableCollection<Conductor>();
+			List<Conductor> lista = new List<Conductor>();
 
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{
@@ -50,7 +50,7 @@ namespace Orion.DataModels {
 
 					while (lector.Read()) {
 						Conductor conductor = new Conductor(lector);
-						conductor.ListaRegulaciones = BdRegulacionConductor.GetRegulaciones(conductor.Id);
+						conductor.ListaRegulaciones = new NotifyCollection<RegulacionConductor>(BdRegulacionConductor.GetRegulaciones(conductor.Id));
 						lista.Add(conductor);
 						conductor.Nuevo = false;
 						conductor.Modificado = false;
@@ -68,10 +68,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GUARDAR CONDUCTORES
 		*================================================================================*/
-		public static void GuardarConductores(ObservableCollection<Conductor> lista) {
+		public static void GuardarConductores(IEnumerable<Conductor> lista) {
 
 			// Si la lista está vacía, salimos.
-			if (lista == null || lista.Count == 0) return;
+			if (lista == null || lista.Count() == 0) return;
 
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{
@@ -124,7 +124,7 @@ namespace Orion.DataModels {
 		/*================================================================================
 		 * BORRAR CONDUCTORES
 		 *================================================================================*/
-		public static void BorrarConductores(List<Conductor> lista) {
+		public static void BorrarConductores(IEnumerable<Conductor> lista) {
 
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{
@@ -223,7 +223,7 @@ namespace Orion.DataModels {
 
 					if (lector.Read()) {
 						conductor = new Conductor(lector);
-						conductor.ListaRegulaciones = BdRegulacionConductor.GetRegulaciones(conductor.Id);
+						conductor.ListaRegulaciones = new NotifyCollection<RegulacionConductor>(BdRegulacionConductor.GetRegulaciones(conductor.Id));
 					}
 				} catch (Exception ex) {
 					Utils.VerError("BdConductores.GetConductor", ex);

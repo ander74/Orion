@@ -20,6 +20,7 @@ using System.Windows.Data;
 using System.ComponentModel;
 using Orion.Servicios;
 using System.Windows.Controls;
+using Orion.Config;
 
 namespace Orion.ViewModels {
 
@@ -30,7 +31,7 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
-		ObservableCollection<Conductor> _listaconductores = new ObservableCollection<Conductor>();
+		NotifyCollection<Conductor> _listaconductores = new NotifyCollection<Conductor>();
 		List<Conductor> _listaborrados = new List<Conductor>();
 		List<RegulacionConductor> _regulacionesborradas = new List<RegulacionConductor>();
 		Conductor _conductorseleccionado;
@@ -39,7 +40,6 @@ namespace Orion.ViewModels {
 		private Visibility _panelregulacionesvisibilidad = Visibility.Collapsed;
 		private bool _haycambios = false;
 		private IMensajes mensajes;
-		//private GenericOleDb DatosOleDb;
 		#endregion
 
 
@@ -48,9 +48,7 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		public ConductoresViewModel(IMensajes servicioMensajes) {
 			mensajes = servicioMensajes;
-			//DatosOleDb = new GenericOleDb(App.Global.CadenaConexion);
-			//DatosOleDb.ErrorProducido += DatosOleDb_ErrorProducido;
-			_listaconductores.CollectionChanged += ListaConductores_CollectionChanged;
+			//_listaconductores.CollectionChanged += ListaConductores_CollectionChanged;
 			CargarConductores();
 		}
 
@@ -62,20 +60,19 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		public void CargarConductores() {
 			if (App.Global.CadenaConexion == null) {
-				_listaconductores.Clear();
+				ListaConductores.Clear();
 				return;
 			}
-			ListaConductores = BdConductores.GetConductores();
-			//ListaConductores = DatosOleDb.GetModelos<Conductor>(ProcSQL.GetConductores);
-			foreach (Conductor c in ListaConductores) {
-				c.PropertyChanged += ConductorPropertyChangedHandler;
-			}
+			ListaConductores = new NotifyCollection<Conductor>(BdConductores.GetConductores());
+			//foreach (Conductor c in ListaConductores) {
+			//	c.PropertyChanged += ConductorPropertyChangedHandler;
+			//}
 			PropiedadCambiada(nameof(Detalle));
 		}
 
-
 		public void GuardarConductores() {
 			try {
+				App.Global.CalendariosVM.AñadirConductoresDesconocidos();
 				HayCambios = false;
 				if (_listaborrados.Count > 0) {
 					BdConductores.BorrarConductores(_listaborrados);
@@ -101,7 +98,7 @@ namespace Orion.ViewModels {
 
 		public void GuardarTodo() {
 			GuardarConductores();
-			HayCambios = false;
+			Reiniciar();
 		}
 
 
@@ -114,8 +111,7 @@ namespace Orion.ViewModels {
 
 		public Conductor GetConductor(int idconductor) {
 
-			Conductor resultado = ListaConductores.FirstOrDefault(c => c.Id == idconductor);
-			return resultado;
+			return ListaConductores.FirstOrDefault(c => c.Id == idconductor);
 
 		}
 
@@ -127,7 +123,15 @@ namespace Orion.ViewModels {
 
 		public void CrearConductorDesconocido(int idConductor) {
 			if (ExisteConductor(idConductor)) return;
+			Conductor desconocido = new Conductor { Id = idConductor, Nombre = "Desconocido", Notas="Conductor insertado automáticamente por el sistema." };
+			ListaConductores.Add(desconocido);
+		}
 
+
+		public void InsertarRegulacion(RegulacionConductor regulacion)
+		{
+			Conductor conductor = ListaConductores.First(c => c.Id == regulacion.IdConductor);
+			conductor.ListaRegulaciones.Add(regulacion);
 		}
 
 		#endregion
@@ -137,26 +141,22 @@ namespace Orion.ViewModels {
 		#region EVENTOS
 		// ====================================================================================================
 		private void ListaConductores_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
-			
-			if (e.NewItems != null) {
-				foreach (Conductor conductor in e.NewItems) {
-					conductor.PropertyChanged += (s, ev) => HayCambios = true;
+
+			if (e.NewItems != null)
+			{
+				foreach (Conductor conductor in e.NewItems)
+				{
 					conductor.Nuevo = true;
 					HayCambios = true;
 				}
 			}
-
-			if (e.OldItems != null) {
-				foreach (Conductor conductor in e.OldItems) {
-					conductor.PropertyChanged -= ConductorPropertyChangedHandler;
-				}
-				PropiedadCambiada(nameof(ListaConductores));
-			}
 		}
 
-		private void ConductorPropertyChangedHandler(object sender, PropertyChangedEventArgs e) {
+		private void ListaConductores_ItemPropertyChanged(object sender, ItemChangedEventArgs<Conductor> e)
+		{
 			HayCambios = true;
 		}
+
 
 
 		//private void DatosOleDb_ErrorProducido(object sender, ErrorProducidoEventArgs e) {
@@ -169,12 +169,13 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region PROPIEDADES
 		// ====================================================================================================
-		public ObservableCollection<Conductor> ListaConductores {
+		public NotifyCollection<Conductor> ListaConductores {
 			get { return _listaconductores; }
 			set {
 				if (_listaconductores != value) {
 					_listaconductores = value;
 					_listaconductores.CollectionChanged += ListaConductores_CollectionChanged;
+					_listaconductores.ItemPropertyChanged += ListaConductores_ItemPropertyChanged;
 					VistaConductores = new ListCollectionView(_listaconductores);//ADDED
 					PropiedadCambiada();
 				}

@@ -108,7 +108,9 @@
                       FontSize="16" Margin="6" Focusable="False"/>
                 <CheckBox x:Name="ChDeducirTurno" Content="Deducir turno" IsChecked="{Binding Path=DeducirTurnoMarcado}"
                       FontSize="16" Margin="6" Focusable="False"/>
-            </StackPanel>
+				<CheckBox x:Name="ChDeducirDiaSemana" Content="Deducir día de la semana" IsChecked="{Binding Path=DeducirDiaSemanaMarcado}"
+                      FontSize="16" Margin="6" Focusable="False"/>
+			</StackPanel>
 
             <!-- BOTÓN CANCELAR -->
             <Button x:Name="BtCancelar" Grid.Row="3" Grid.Column="3" Content="Cancelar" Margin="10" Height="48" FontSize="16" HorizontalAlignment="Stretch"

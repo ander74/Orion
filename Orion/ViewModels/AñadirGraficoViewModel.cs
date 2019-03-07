@@ -30,6 +30,7 @@ namespace Orion.ViewModels {
 			mensajes = servicioMensajes;
 			IncrementarNumeroMarcado = true;
 			DeducirTurnoMarcado = true;
+			DeducirDiaSemanaMarcado = true;
 		}
 		#endregion
 
@@ -41,7 +42,7 @@ namespace Orion.ViewModels {
 		private Grafico _graficoActual;
 		public Grafico GraficoActual {
 			get {
-				_graficoActual = new Grafico { Numero = Numero, Turno = Turno, Valoracion = Valoracion, Inicio = Inicio, Final = Final,
+				_graficoActual = new Grafico { Numero = Numero, DiaSemana = DiaSemana, Turno = Turno, Valoracion = Valoracion, Inicio = Inicio, Final = Final,
 											   InicioPartido = InicioPartido, FinalPartido = FinalPartido };
 				return _graficoActual;
 			}
@@ -56,6 +57,13 @@ namespace Orion.ViewModels {
 					_numero = value;
 					PropiedadCambiada();
 					if (DeducirTurnoMarcado) { Turno = (value % 2 == 0) ? 2 : 1; }
+					if (DeducirDiaSemanaMarcado)
+					{
+						if (_numero >= App.Global.PorCentro.LunDel && _numero <= App.Global.PorCentro.LunAl) DiaSemana = "L";
+						if (_numero >= App.Global.PorCentro.VieDel && _numero <= App.Global.PorCentro.VieAl) DiaSemana = "V";
+						if (_numero >= App.Global.PorCentro.SabDel && _numero <= App.Global.PorCentro.SabAl) DiaSemana = "S";
+						if (_numero >= App.Global.PorCentro.DomDel && _numero <= App.Global.PorCentro.DomAl) DiaSemana = "F";
+					}
 				}
 			}
 		}
@@ -71,6 +79,14 @@ namespace Orion.ViewModels {
 					PropiedadCambiada(nameof(VerPartido));
 				}
 			}
+		}
+
+
+		private string _diasemana;
+		public string DiaSemana
+		{
+			get { return _diasemana; }
+			set { SetValue(ref _diasemana, value); }
 		}
 
 
@@ -143,6 +159,8 @@ namespace Orion.ViewModels {
 		public bool IncrementarNumeroMarcado { get; set; }
 
 		public bool DeducirTurnoMarcado { get; set; }
+
+		public bool DeducirDiaSemanaMarcado { get; set; }
 
 		#endregion
 

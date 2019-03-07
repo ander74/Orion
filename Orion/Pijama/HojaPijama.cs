@@ -35,7 +35,8 @@ namespace Orion.Pijama {
 				// Establecemos la fecha del pijama.
 				Fecha = calendario.Fecha;
 				// Extraemos el conductor del calendario.
-				Trabajador = BdConductores.GetConductor(calendario.IdConductor);
+				//Trabajador = BdConductores.GetConductor(calendario.IdConductor);
+				Trabajador = App.Global.ConductoresVM.GetConductor(calendario.IdConductor);
 				// Si el trabajador no existe, salimos.
 				if (Trabajador == null) return;
 				// Extraemos la lista de los días pijama.

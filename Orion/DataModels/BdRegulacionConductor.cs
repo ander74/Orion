@@ -29,10 +29,10 @@ namespace Orion.DataModels {
 		/// </summary>
 		/// <param name="IdConductor">Id del conductor al que pertenecen las regulaciones.</param>
 		/// <returns>Colección de regulaciones.</returns>
-		public static ObservableCollection<RegulacionConductor> GetRegulaciones(int IdConductor) {
+		public static List<RegulacionConductor> GetRegulaciones(int IdConductor) {
 
 			// Creamos la lista y el comando que extrae los gráficos.
-			ObservableCollection<RegulacionConductor> lista = new ObservableCollection<RegulacionConductor>();
+			List<RegulacionConductor> lista = new List<RegulacionConductor>();
 
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{
@@ -71,10 +71,10 @@ namespace Orion.DataModels {
 		/// Guarda la lista de regulaciones que se le pasa en la base de datos, actualizando las modificadas e insertando las nuevas.
 		/// </summary>
 		/// <param name="lista">Lista con las regulaciones a guardar.</param>
-		public static void GuardarRegulaciones(ObservableCollection<RegulacionConductor> lista) {
+		public static void GuardarRegulaciones(IEnumerable<RegulacionConductor> lista) {
 
 			// Si la lista está vacía, salimos.
-			if (lista == null || lista.Count == 0) return;
+			if (lista == null || lista.Count() == 0) return;
 
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{
@@ -154,23 +154,24 @@ namespace Orion.DataModels {
 		/// Elimina de la base de datos las regulaciones pasados en la lista.
 		/// </summary>
 		/// <param name="lista">Lista con las regulaciones a borrar.</param>
-		public static void BorrarRegulaciones(List<RegulacionConductor> lista) {
+		public static void BorrarRegulaciones(IEnumerable<RegulacionConductor> lista) {
 
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{
 
-				string SQLBorrar = "DELETE FROM Regulaciones WHERE Id=?";
+				string SQLBorrar = "DELETE FROM Regulaciones WHERE Id=@Id";
 
 				try {
 					conexion.Open();
 
 					foreach (RegulacionConductor regulacion in lista) {
 						OleDbCommand comando = new OleDbCommand(SQLBorrar, conexion);
-						comando.Parameters.AddWithValue("id", regulacion.Id);
+						comando.Parameters.AddWithValue("Id", regulacion.Id);
 						comando.ExecuteNonQuery();
 					}
+					conexion.Close();
 				} catch (Exception ex) {
-					Utils.VerError("BdRgulacionConductor.BorrarRegulaciones", ex);
+					Utils.VerError("BdRegulacionConductor.BorrarRegulaciones", ex);
 				}
 			}
 		}

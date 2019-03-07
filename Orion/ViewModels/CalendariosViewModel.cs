@@ -82,6 +82,10 @@ namespace Orion.ViewModels
 
 
 		public void GuardarCalendarios() {
+			if (AñadirConductoresDesconocidos())
+			{
+				App.Global.ConductoresVM.GuardarConductores();
+			}
 			try {
 				HayCambios = false;
 				if (ListaCalendarios != null && ListaCalendarios.Count > 0) {
@@ -98,6 +102,21 @@ namespace Orion.ViewModels
 
 		}
 
+
+		public bool AñadirConductoresDesconocidos()
+		{
+			bool hayDesconocidos = false;
+			foreach (Calendario calendario in ListaCalendarios)
+			{
+				if (!App.Global.ConductoresVM.ExisteConductor(calendario.IdConductor))
+				{
+					App.Global.ConductoresVM.CrearConductorDesconocido(calendario.IdConductor);
+					hayDesconocidos = true;
+				}
+
+			}
+			return hayDesconocidos;
+		}
 
 		/// <summary>
 		/// Elimina los calendarios de los conductores borrados, pero no los elimina definitivamente hasta que se guarde.

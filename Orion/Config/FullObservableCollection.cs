@@ -18,7 +18,7 @@ namespace Orion.Config
     public class FullObservableCollection<T> : ObservableCollection<T> where T : INotifyPropertyChanged {
         
 		/// <summary>
-        /// Occurs when a property is changed within an item.
+        /// Ocurre cuando un elemento hijo de la colección ha cambiado.
         /// </summary>
         public event EventHandler<ItemPropertyChangedEventArgs> ItemPropertyChanged;
 

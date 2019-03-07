@@ -430,7 +430,7 @@ namespace Orion.ViewModels {
 
 		// Puede ejecutarse
 		private bool PuedeAplicarFiltro() {
-			return (HayGrupo && ListaGraficos.Count > 0);
+			return (HayGrupo && ListaGraficos.Count > 0 && !(VistaGraficos.IsAddingNew || VistaGraficos.IsEditingItem));
 		}
 
 
@@ -651,7 +651,7 @@ namespace Orion.ViewModels {
 				int columna = ColumnaActual;
 				// Iteramos por cada campo de la fila del portapapeles
 				foreach (string texto in fila) {
-					if (columna >= 17) continue;
+					if (columna >= 18) continue;
 					while (!ColumnaVisible(columna)) {
 						columna++;
 					}
@@ -669,56 +669,59 @@ namespace Orion.ViewModels {
 						case 1: // Numero.
 							grafico.Numero = Int32.TryParse(texto, out i) ? i : 0;
 							break;
-						case 2: // Turno.
+						case 2: // DiaSemana.
+							grafico.DiaSemana = texto;
+							break;
+						case 3: // Turno.
 							grafico.Turno = int.TryParse(texto, out i) ? i : 1;
 							break;
-						case 3: // Inicio.
+						case 4: // Inicio.
 							grafico.Inicio = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
 							break;
-						case 4: // Final.
+						case 5: // Final.
 							grafico.Final = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
 							break;
-						case 5: // InicioPartido.
+						case 6: // InicioPartido.
 							grafico.InicioPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
 							break;
-						case 6: // FinalPartido.
+						case 7: // FinalPartido.
 							grafico.FinalPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
 							break;
-						case 7: // Valoracion.
+						case 8: // Valoracion.
 							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
 							grafico.Valoracion = h != null ? h.Value : TimeSpan.Zero;
 							break;
-						case 8: // Trabajadas.
+						case 9: // Trabajadas.
 							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
 							grafico.Trabajadas = h != null ? h.Value : TimeSpan.Zero;
 							break;
-						case 9: // Acumuladas.
+						case 10: // Acumuladas.
 							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
 							grafico.Acumuladas = h != null ? h.Value : TimeSpan.Zero;
 							break;
-						case 10: // Nocturnas.
+						case 11: // Nocturnas.
 							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
 							grafico.Nocturnas = h != null ? h.Value : TimeSpan.Zero;
 							break;
-						case 11: // Desayuno.
+						case 12: // Desayuno.
 							grafico.Desayuno = decimal.TryParse(texto, out d) ? d : 0;
 							break;
-						case 12: // Comida.
+						case 13: // Comida.
 							grafico.Comida = decimal.TryParse(texto, out d) ? d : 0;
 							break;
-						case 13: // Cena.
+						case 14: // Cena.
 							grafico.Cena = decimal.TryParse(texto, out d) ? d : 0;
 							break;
-						case 14: // PlusCena.
+						case 15: // PlusCena.
 							grafico.PlusCena = decimal.TryParse(texto, out d) ? d : 0;
 							break;
-						case 15: // PlusLimpieza.
+						case 16: // PlusLimpieza.
 							grafico.PlusLimpieza = false;
 							if (int.TryParse(texto, out i)) {
 								grafico.PlusLimpieza = (i != 0);
 							} else if (texto.ToLower() != "false") grafico.PlusLimpieza = true;
 							break;
-						case 16: // PlusPaqueteria.
+						case 17: // PlusPaqueteria.
 							grafico.PlusPaqueteria = false;
 							if (int.TryParse(texto, out i)) {
 								grafico.PlusPaqueteria = (i != 0);
@@ -730,6 +733,7 @@ namespace Orion.ViewModels {
 				// Si el elemento es nuevo, se añade a la vista.
 				if (esnuevo) {
 					VistaGraficos.AddNewItem(grafico);
+					VistaGraficos.CommitNew();
 				}
 				filagrid++;
 				HayCambios = true;
@@ -1466,6 +1470,46 @@ namespace Orion.ViewModels {
 				VisibilidadBotonSeleccionFila = Visibility.Visible;
 				ModoSeleccion = DataGridSelectionUnit.Cell;
 			}
+
+		}
+		#endregion
+
+
+		#region COMANDO DEDUCIR DÍA SEMANA
+
+		// Comando
+		private ICommand _cmddeducirdiasemana;
+		public ICommand cmdDeducirDiaSemana
+		{
+			get
+			{
+				if (_cmddeducirdiasemana == null) _cmddeducirdiasemana = new RelayCommand(p => DeducirDiaSemana(), p => PuedeDeducirDiaSemana());
+				return _cmddeducirdiasemana;
+			}
+		}
+
+
+		// Se puede ejecutar el comando
+		private bool PuedeDeducirDiaSemana()
+		{
+			return ListaGraficos.Any();
+		}
+
+		// Ejecución del comando
+		private void DeducirDiaSemana()
+		{
+			foreach (Grafico grafico in _listagraficos)
+			{
+				if (string.IsNullOrWhiteSpace(grafico.DiaSemana))
+				{
+					if (grafico.Numero >= App.Global.PorCentro.LunDel && grafico.Numero <= App.Global.PorCentro.LunAl) grafico.DiaSemana = "L";
+					if (grafico.Numero >= App.Global.PorCentro.VieDel && grafico.Numero <= App.Global.PorCentro.VieAl) grafico.DiaSemana = "V";
+					if (grafico.Numero >= App.Global.PorCentro.SabDel && grafico.Numero <= App.Global.PorCentro.SabAl) grafico.DiaSemana = "S";
+					if (grafico.Numero >= App.Global.PorCentro.DomDel && grafico.Numero <= App.Global.PorCentro.DomAl) grafico.DiaSemana = "F";
+				}
+				//HayCambios = true;
+			}
+			BtAccionesAbierto = false;
 
 		}
 		#endregion

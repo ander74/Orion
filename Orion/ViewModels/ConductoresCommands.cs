@@ -96,8 +96,7 @@ namespace Orion.ViewModels {
 		private bool PuedeBorrarConductor(object parametro) {
 			DataGrid tabla = parametro as DataGrid;
 			if (tabla == null || tabla.CurrentCell == null || tabla.CurrentCell.Column == null) return false;
-			if (tabla.CurrentCell.Column.Header.ToString() != "Número" || tabla.CurrentCell.Item.GetType().Name != "Conductor") return false;
-			return true;
+			return tabla.CurrentCell.Column.Header.ToString() == "Número" || tabla.CurrentCell.Item.GetType().Name == "Conductor";
 		}
 
 		// Ejecución del comando
@@ -106,8 +105,7 @@ namespace Orion.ViewModels {
 			if (tabla == null || tabla.CurrentCell == null) return;
 			List<Conductor> lista = new List<Conductor>();
 			DataGridCellInfo celda = tabla.CurrentCell;
-			Conductor conductor = celda.Item as Conductor;
-			if (conductor == null) return;
+			if (!(celda.Item is Conductor conductor)) return;
 			if (mensajes.VerMensaje($"Vas a borrar al conductor:\n\n{conductor.Id:000}: {conductor.Apellidos}\n\n" +
 									$"Esto hará que se borren todos sus calendarios.\n\n" +
 									$"¿Deseas continuar?", "ATENCIÓN", true) == false) return;
@@ -122,6 +120,7 @@ namespace Orion.ViewModels {
 			}
 			lista.Clear();
 			App.Global.CalendariosVM.BorrarCalendariosPorConductor(conductor.Id);
+			//TODO: Esta última igual se elimina y se deja que sea el propio sistema el que se encargue de eliminar los calendarios.
 		}
 		#endregion
 

@@ -33,12 +33,12 @@ namespace Orion.Models {
 		#region  CONSTRUCTORES
 		// ====================================================================================================
 		public Conductor() {
-			_regulaciones.CollectionChanged += ListaRegulaciones_CollectionChanged;
+			//_regulaciones.CollectionChanged += ListaRegulaciones_CollectionChanged;
 		}
 
 		public Conductor(OleDbDataReader lector) {
 			FromReader(lector);
-			_regulaciones.CollectionChanged += ListaRegulaciones_CollectionChanged;
+			//_regulaciones.CollectionChanged += ListaRegulaciones_CollectionChanged;
 		}
 		#endregion
 
@@ -168,24 +168,22 @@ namespace Orion.Models {
 				foreach (RegulacionConductor regulacion in e.NewItems) {
 					regulacion.IdConductor = this.Id;
 					regulacion.Nuevo = true;
-					regulacion.ObjetoCambiado += ObjetoCambiadoEventHandler;
 				}
 				Modificado = true;
 			}
 
 			if (e.OldItems != null) {
-				foreach (RegulacionConductor regulacion in e.OldItems) {
-					regulacion.ObjetoCambiado -= ObjetoCambiadoEventHandler;
-				}
 				Modificado = true;
 			}
 
 			PropiedadCambiada(nameof(ListaRegulaciones));
 		}
 
-		private void ObjetoCambiadoEventHandler(object sender, PropertyChangedEventArgs e) {
+		private void _regulaciones_ItemPropertyChanged(object sender, ItemChangedEventArgs<RegulacionConductor> e)
+		{
 			Modificado = true;
 		}
+
 
 		#endregion
 
@@ -360,14 +358,15 @@ namespace Orion.Models {
 		}
 
 
-		private ObservableCollection<RegulacionConductor> _regulaciones = new ObservableCollection<RegulacionConductor>();
-		public ObservableCollection<RegulacionConductor> ListaRegulaciones {
+		private NotifyCollection<RegulacionConductor> _regulaciones = new NotifyCollection<RegulacionConductor>();
+		public NotifyCollection<RegulacionConductor> ListaRegulaciones {
 			get { return _regulaciones; }
 			set {
 				if (_regulaciones != value) {
 					_regulaciones = value;
 					Modificado = true;
 					_regulaciones.CollectionChanged += ListaRegulaciones_CollectionChanged;
+					_regulaciones.ItemPropertyChanged += _regulaciones_ItemPropertyChanged;
 					PropiedadCambiada();
 				}
 			}

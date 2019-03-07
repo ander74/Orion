@@ -49,7 +49,8 @@ namespace Orion.Models {
 			Fecha = calendario.Fecha;
 			try {
 				// Extraemos el trabajador.
-				Trabajador = BdConductores.GetConductor(calendario.IdConductor);
+				//Trabajador = BdConductores.GetConductor(calendario.IdConductor);
+				Trabajador = App.Global.ConductoresVM.GetConductor(calendario.IdConductor);
 				if (Trabajador != null) {
 					// Extraemos la lista de los días del calendario.
 					ListaDias = BdPijamas.GetDiasPijama(Fecha, calendario.ListaDias, Trabajador.ReduccionJornada);

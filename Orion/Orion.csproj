@@ -188,6 +188,8 @@
     </ApplicationDefinition>
     <Compile Include="Config\FullObservableCollection.cs" />
     <Compile Include="Config\GestionGraficos.cs" />
+    <Compile Include="Config\ItemChangedEventArgs.cs" />
+    <Compile Include="Config\NotifyCollection.cs" />
     <Compile Include="Convertidores\ConvertidorDiaSemanaGrafico.cs" />
     <Compile Include="Convertidores\ConvertidorMinutosToHora.cs" />
     <Compile Include="Convertidores\ConvertidorMinutosToHoraMixta.cs" />

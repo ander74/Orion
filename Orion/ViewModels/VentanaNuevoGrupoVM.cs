@@ -451,7 +451,12 @@ namespace Orion.ViewModels {
                                 grafico.Final = valoracionanterior.Inicio;
                                 grafico.Valoracion = valoracion.Tiempo;
                                 grafico.Recalcular();
-                                BdGraficos.InsertarGrafico(grafico);
+								// Inferimos el día de la semana a la que pertenece.
+								if (grafico.Numero >= App.Global.PorCentro.LunDel && grafico.Numero <= App.Global.PorCentro.LunAl) grafico.DiaSemana = "L";
+								if (grafico.Numero >= App.Global.PorCentro.VieDel && grafico.Numero <= App.Global.PorCentro.VieAl) grafico.DiaSemana = "V";
+								if (grafico.Numero >= App.Global.PorCentro.SabDel && grafico.Numero <= App.Global.PorCentro.SabAl) grafico.DiaSemana = "S";
+								if (grafico.Numero >= App.Global.PorCentro.DomDel && grafico.Numero <= App.Global.PorCentro.DomAl) grafico.DiaSemana = "F";
+								BdGraficos.InsertarGrafico(grafico);
                                 IniciaGrafico = false;
                                 EnUnGrafico = false;
                             }
