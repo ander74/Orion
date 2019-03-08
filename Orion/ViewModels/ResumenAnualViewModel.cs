@@ -183,8 +183,11 @@ namespace Orion.ViewModels {
 			ListaResumen = new List<ItemResumenAnual>();
 			TotalTrabajadas = 0;
 			TotalDiasTrabajo = 0;
+			TotalDiasTrabajoEventual = 0;
 			TotalDiasDescanso = 0;
+			TotalDiasDescansoEventual = 0;
 			TotalDiasVacaciones = 0;
+			TotalDiasVacacionesEventual = 0;
 			TotalFindes = 0;
 			DNDsPendientes = 0;
 			DCsPendientes = 0;
@@ -199,8 +202,13 @@ namespace Orion.ViewModels {
 			ItemResumenAnual ExcesoJornada = new ItemResumenAnual("Excesos de Jornada");
 			ItemResumenAnual OtrasHoras = new ItemResumenAnual("Otras Horas");
 			ItemResumenAnual DiasTrabajo = new ItemResumenAnual("Dias Trabajados");
-			ItemResumenAnual DiasJD = new ItemResumenAnual("Días Descansados (JD)");
+			ItemResumenAnual DiasJD = new ItemResumenAnual("Días J-D");
 			ItemResumenAnual DiasOV = new ItemResumenAnual("Días Vacaciones");
+			if (!ConductorActual.Indefinido) {
+				DiasTrabajo.Descripcion = "Dias Trabajados (Event.)";
+				DiasJD.Descripcion = "Días J-D (Event.)";
+				DiasOV.Descripcion = "Días Vacaciones (Event.)";
+			}
 			ItemResumenAnual DiasDND = new ItemResumenAnual("Descansos No Disfrutados");
 			ItemResumenAnual DiasTrabajoJD = new ItemResumenAnual("Días Trabajados en JD");
 			ItemResumenAnual DiasFN = new ItemResumenAnual("Descansos en Fin de Semana");
@@ -231,13 +239,29 @@ namespace Orion.ViewModels {
 				ExcesoJornada.SetDato(mes, pijamasAño[mes].ExcesoJornada);
 				OtrasHoras.SetDato(mes, pijamasAño[mes].OtrasHoras);
 				// DÍAS
-				DiasTrabajo.SetDato(mes, pijamasAño[mes].Trabajo);
+				if (ConductorActual.Indefinido) {
+					DiasTrabajo.SetDato(mes, pijamasAño[mes].Trabajo);
+				} else {
+					DiasTrabajo.SetDatoEventual(mes, pijamasAño[mes].Trabajo, pijamasAño[mes].DiasComputoTrabajo);
+				}
 				TotalDiasTrabajo += pijamasAño[mes].Trabajo; // Añadimos al total de trabajados.
-				DiasJD.SetDato(mes, pijamasAño[mes].Descanso + pijamasAño[mes].DescansoEnFinde + pijamasAño[mes].DescansoSuelto);
+				if (ConductorActual.Indefinido)
+				{
+					DiasJD.SetDato(mes, pijamasAño[mes].Descanso + pijamasAño[mes].DescansoEnFinde + pijamasAño[mes].DescansoSuelto);
+				} else
+				{
+					DiasJD.SetDatoEventual(mes, pijamasAño[mes].Descanso + pijamasAño[mes].DescansoEnFinde + pijamasAño[mes].DescansoSuelto, pijamasAño[mes].DiasComputoDescanso);
+				}
 				TotalDiasDescanso += pijamasAño[mes].Descanso; // Añadimos al total de descansos.
 				TotalDiasDescanso += pijamasAño[mes].DescansoEnFinde;
 				TotalDiasDescanso += pijamasAño[mes].DescansoSuelto;
-				DiasOV.SetDato(mes, pijamasAño[mes].Vacaciones);
+				if (ConductorActual.Indefinido)
+				{
+					DiasOV.SetDato(mes, pijamasAño[mes].Vacaciones);
+				} else
+				{
+					DiasOV.SetDatoEventual(mes, pijamasAño[mes].Vacaciones, pijamasAño[mes].DiasComputoVacaciones);
+				}
 				TotalDiasVacaciones += pijamasAño[mes].Vacaciones;
 				DiasDND.SetDato(mes, pijamasAño[mes].DescansosNoDisfrutados);
 				TotalDiasDescanso += pijamasAño[mes].DescansosNoDisfrutados; // Añadimos DND al total de descansos. **** DUDA ****
@@ -434,6 +458,16 @@ namespace Orion.ViewModels {
 		}
 
 
+
+		private int totalDiasTrabajoEventual;
+		public int TotalDiasTrabajoEventual
+		{
+			get { return totalDiasTrabajoEventual; }
+			set { SetValue(ref totalDiasTrabajoEventual, value); }
+		}
+
+
+
 		private int totalDiasDescanso;
 		public int TotalDiasDescanso {
 			get { return totalDiasDescanso; }
@@ -446,6 +480,14 @@ namespace Orion.ViewModels {
 		}
 
 
+		private int totalDiasDescansoEventual;
+		public int TotalDiasDescansoEventual
+		{
+			get { return totalDiasDescansoEventual; }
+			set { SetValue(ref totalDiasDescansoEventual, value); }
+		}
+
+
 		private int totalDiasVacaciones;
 		public int TotalDiasVacaciones {
 			get { return totalDiasVacaciones; }
@@ -455,6 +497,14 @@ namespace Orion.ViewModels {
 					PropiedadCambiada();
 				}
 			}
+		}
+
+
+		private int totalDiasVacacionesEventual;
+		public int TotalDiasVacacionesEventual
+		{
+			get { return totalDiasVacacionesEventual; }
+			set { SetValue(ref totalDiasVacacionesEventual, value); }
 		}
 
 

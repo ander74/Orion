@@ -25,6 +25,40 @@ namespace Orion.DataModels {
 
 
 		/*================================================================================
+		* GET FESTIVOS
+		*================================================================================*/
+		public static List<Festivo> GetFestivos() {
+
+			// Creamos la lista y el comando que extrae las líneas.
+			List<Festivo> lista = new List<Festivo>();
+
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+				string comandoSQL = "SELECT * FROM Festivos ORDER BY Fecha;";
+
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				OleDbDataReader lector = null;
+
+				try {
+					conexion.Open();
+					lector = comando.ExecuteReader();
+					while (lector.Read()) {
+						Festivo festivo = new Festivo(lector);
+						lista.Add(festivo);
+						festivo.Nuevo = false;
+						festivo.Modificado = false;
+					}
+				} catch (Exception ex) {
+					Utils.VerError("BdFestivos.GetFestivosPorMes", ex);
+				} finally {
+					lector.Close();
+				}
+			}
+			return lista;
+		}
+
+
+		/*================================================================================
 		* GET FESTIVOS POR MES
 		*================================================================================*/
 		public static ObservableCollection<Festivo> GetFestivosPorMes(int año, int mes) {

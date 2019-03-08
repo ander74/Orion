@@ -1968,7 +1968,7 @@
                 <DataGridTextColumn Header="Nocturnas" Width="*" Binding="{Binding GraficoTrabajado.Nocturnas, 
                                     Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
                 <DataGridTextColumn Header="Ex.Jornada" Width="*" Binding="{Binding ExcesoJornada, 
-                                    Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                                    Converter={StaticResource cnvSuperHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
                 <DataGridTextColumn Width="*" Binding="{Binding GraficoTrabajado.Desayuno, Converter={StaticResource cnvDecimal}, 
                                     ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
                     <DataGridTextColumn.Header>
@@ -2205,7 +2205,7 @@
                                        Text="{Binding CalendariosVM.Pijama.Permiso, StringFormat=00}"
                                        ToolTip="Días de permiso."/>
                             <TextBlock Style="{StaticResource TextoPijama2}" Width="60" TextAlignment="Center"
-                                       Text="{Binding CalendariosVM.Pijama.LibreDisposicionF6, StringFormat=00}"
+                                       Text="{Binding CalendariosVM.Pijama.DiasF6Totales, StringFormat=00}"
                                        ToolTip="Días de libre disposición."/>
                             <!--ToolTip="{Binding CalendariosVM.Pijama.LibreDisposicionF6, Converter={StaticResource cnvDiasF6}}"/>-->
                         </StackPanel>

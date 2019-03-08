@@ -17,6 +17,7 @@ PROYECTO ORION
 		-11 : E-(FN) - Enfermo en FN.
 		-12 : O-V(JD) - Vacaciones en día de descanso.
 		-13 : O-V(FN) - Vacaciones en descanso en fin de semana.
+		-14 : F6(DC) - F6 a cuenta de un DC.
 
 
 	Códigos de modificación de gráfico (se ponen como decimal):

@@ -6,7 +6,7 @@ PROYECTO ORION
 	Acciones pendientes de implementar
 	----------------------------------
 
-		- Añadir las F6(DC) que descuentan un DC en lugar de una hora.
+	 ** - Añadir las F6(DC) que descuentan un DC en lugar de una hora.
 
 		- En el resumen anual, los fines de semana completos no se contabilizan bien por los medios.
 

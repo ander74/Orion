@@ -30,7 +30,7 @@ namespace Orion.ViewModels {
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
 		private IMensajes mensajes;
-		private List<Festivo> _listaborrados = new List<Festivo>();
+		//private List<Festivo> _listaborrados = new List<Festivo>();
 		#endregion
 
 
@@ -39,8 +39,8 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		public OpcionesViewModel(IMensajes servicioMensajes) {
 			mensajes = servicioMensajes;
-			_listafestivos.CollectionChanged += ListaFestivos_CollectionChanged;
-			AñoFestivos = DateTime.Now.Year;
+			//_listafestivos.CollectionChanged += ListaFestivos_CollectionChanged;
+			//AñoFestivos = DateTime.Now.Year;
 			CargarDatos();
 			AñoPluses = DateTime.Now.Year;
 
@@ -52,11 +52,11 @@ namespace Orion.ViewModels {
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
 		public void CargarDatos() {
-			if (App.Global.CadenaConexion == null) {
-				_listafestivos.Clear();
-				return;
-			}
-			ListaFestivos = BdFestivos.GetFestivosPorAño(AñoFestivos);
+			//if (App.Global.CadenaConexion == null) {
+			//	_listafestivos.Clear();
+			//	return;
+			//}
+			//ListaFestivos = BdFestivos.GetFestivosPorAño(AñoFestivos);
 			ListaPluses = BdPluses.GetPluses();
 			ListaPluses.ItemPropertyChanged += ListaPluses_ItemPropertyChanged;
 		}
@@ -64,13 +64,13 @@ namespace Orion.ViewModels {
 	
 		public void GuardarDatos() {
 			HayCambios = false;
-			if (ListaFestivos != null && ListaFestivos.Count > 0) {
-				BdFestivos.GuardarFestivos(ListaFestivos);
-			}
-			if (_listaborrados.Count > 0) {
-				BdFestivos.BorrarFestivos(_listaborrados);
-				_listaborrados.Clear();
-			}
+			//if (ListaFestivos != null && ListaFestivos.Count > 0) {
+			//	BdFestivos.GuardarFestivos(ListaFestivos);
+			//}
+			//if (_listaborrados.Count > 0) {
+			//	BdFestivos.BorrarFestivos(_listaborrados);
+			//	_listaborrados.Clear();
+			//}
 			if (ListaPluses != null && ListaPluses.Any())
 			{
 				BdPluses.GuardarPluses(ListaPluses);
@@ -80,15 +80,12 @@ namespace Orion.ViewModels {
 
 		public void GuardarTodo() {
 			GuardarDatos();
-			//App.Global.Configuracion.Save();
-			//App.Global.Convenio2.Save();
-			//PorCentro.Default.Save();
 			HayCambios = false;
 		}
 
 
 		public void Reiniciar() {
-			AñoFestivos = DateTime.Now.Year;
+			//AñoFestivos = DateTime.Now.Year;
 			CargarDatos();
 			HayCambios = false;
 		}
@@ -112,25 +109,25 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region EVENTOS
 		// ====================================================================================================
-		private void ListaFestivos_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+		//private void ListaFestivos_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
 
-			if (e.NewItems != null) {
-				foreach (Festivo festivo in e.NewItems) {
-					festivo.Año = AñoFestivos;
-					festivo.Nuevo = true;
-					festivo.ObjetoCambiado += ObjetoCambiadoEventHandler;
-					HayCambios = true;
-				}
-			}
+		//	if (e.NewItems != null) {
+		//		foreach (Festivo festivo in e.NewItems) {
+		//			festivo.Año = AñoFestivos;
+		//			festivo.Nuevo = true;
+		//			festivo.ObjetoCambiado += ObjetoCambiadoEventHandler;
+		//			HayCambios = true;
+		//		}
+		//	}
 
-			if (e.OldItems != null) {
-				foreach (Festivo festivo in e.OldItems) {
-					festivo.ObjetoCambiado -= ObjetoCambiadoEventHandler;
-				}
-			}
+		//	if (e.OldItems != null) {
+		//		foreach (Festivo festivo in e.OldItems) {
+		//			festivo.ObjetoCambiado -= ObjetoCambiadoEventHandler;
+		//		}
+		//	}
 
-			PropiedadCambiada(nameof(ListaFestivos));
-		}
+		//	PropiedadCambiada(nameof(ListaFestivos));
+		//}
 
 
 		private void ListaPluses_ItemPropertyChanged(object sender, ItemPropertyChangedEventArgs e)
@@ -150,32 +147,32 @@ namespace Orion.ViewModels {
 		#region PROPIEDADES
 		// ====================================================================================================
 
-		private ObservableCollection<Festivo> _listafestivos = new ObservableCollection<Festivo>();
-		public ObservableCollection<Festivo> ListaFestivos {
-			get { return _listafestivos; }
-			set {
-				if (_listafestivos != value) {
-					_listafestivos = value;
-					_listafestivos.CollectionChanged += ListaFestivos_CollectionChanged;
-					foreach(Festivo f in _listafestivos) {
-						f.ObjetoCambiado += ObjetoCambiadoEventHandler;
-					}
-					PropiedadCambiada();
-				}
-			}
-		}
+		//private ObservableCollection<Festivo> _listafestivos = new ObservableCollection<Festivo>();
+		//public ObservableCollection<Festivo> ListaFestivos {
+		//	get { return _listafestivos; }
+		//	set {
+		//		if (_listafestivos != value) {
+		//			_listafestivos = value;
+		//			_listafestivos.CollectionChanged += ListaFestivos_CollectionChanged;
+		//			foreach(Festivo f in _listafestivos) {
+		//				f.ObjetoCambiado += ObjetoCambiadoEventHandler;
+		//			}
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
-		private int _añofestivos;
-		public int AñoFestivos {
-			get { return _añofestivos; }
-			set {
-				if (_añofestivos != value) {
-					_añofestivos = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//private int _añofestivos;
+		//public int AñoFestivos {
+		//	get { return _añofestivos; }
+		//	set {
+		//		if (_añofestivos != value) {
+		//			_añofestivos = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 		public bool HayCambios { get; set; }
 

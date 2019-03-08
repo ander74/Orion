@@ -62,6 +62,7 @@ namespace Orion.ViewModels {
 			CalendariosVM.GuardarTodo();
 			LineasVM.GuardarTodo();
 			OpcionesVM.GuardarTodo();
+			FestivosVM.GuardarTodo();
 			// Guardamos las configuraciones.
 			Configuracion.Guardar(ArchivoOpcionesConfiguracion);
 			Convenio.Guardar(ArchivoOpcionesConvenio);
@@ -118,6 +119,7 @@ namespace Orion.ViewModels {
 			CalendariosVM.Reiniciar();
 			LineasVM.Reiniciar();
 			OpcionesVM.Reiniciar();
+			FestivosVM.Reiniciar();
 			ResumenAnualVM.Reiniciar();
 			PropiedadCambiada("");
 		}

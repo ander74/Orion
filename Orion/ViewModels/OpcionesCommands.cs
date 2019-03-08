@@ -270,9 +270,10 @@ namespace Orion.ViewModels {
 		// Ejecución del comando 
 		private void AñoFestivosMenos() {
 
-			GuardarDatos();
-			AñoFestivos--;
-			CargarDatos();
+			//GuardarDatos();
+			//AñoFestivos--;
+			//CargarDatos();
+			App.Global.FestivosVM.AñoActual--;
 
 		}
 		#endregion
@@ -291,9 +292,10 @@ namespace Orion.ViewModels {
 		// Ejecución del comando 
 		private void AñoFestivosMas() {
 
-			GuardarDatos();
-			AñoFestivos++;
-			CargarDatos();
+			//GuardarDatos();
+			//AñoFestivos++;
+			//CargarDatos();
+			App.Global.FestivosVM.AñoActual++;
 
 		}
 		#endregion
@@ -316,9 +318,9 @@ namespace Orion.ViewModels {
 				lista.Add((Festivo)celda.Item);
 			}
 			foreach (Festivo f in lista) {
-				_listaborrados.Add(f);
-				_listafestivos.Remove(f);
-				HayCambios = true;
+				//_listaborrados.Add(f);
+				//_listafestivos.Remove(f);
+				App.Global.FestivosVM.Borrar(f);
 			}
 			lista.Clear();
 

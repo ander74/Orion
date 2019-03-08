@@ -52,11 +52,28 @@ namespace Orion.Pijama {
 		/// <summary>
 		/// Días de libre disposición.
 		/// </summary>
-		public int DiasLibreDisposicionF6 {
+		public int DiasLibreDisposicionF6
+		{
 			get { return _diaslibredisposicionf6; }
-			set {
-				if (_diaslibredisposicionf6 != value) {
+			set
+			{
+				if (_diaslibredisposicionf6 != value)
+				{
 					_diaslibredisposicionf6 = value;
+				}
+			}
+		}
+
+
+		private int _diasF6DC;
+		/// <summary>
+		/// Días de libre disposición.
+		/// </summary>
+		public int DiasF6DC {
+			get { return _diasF6DC; }
+			set {
+				if (_diasF6DC != value) {
+					_diasF6DC = value;
 				}
 			}
 		}

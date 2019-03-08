@@ -4,10 +4,23 @@ PROYECTO ORIÓN
 
 
 	CAMBIOS EFECTUADOS
+	------------------
+
+
+		07 de Marzo de 2019
+
+			- Se añade el dato de cómputo para días trabajados, descansados(JD) y vacaciones en el resumen anual cuando el trabajador es eventual.
+
+			- Se crea el ViewModel Festivos que carga todos los festivos y desde donde se gestiona todo, sin pasar por las bases de datos.
+
+			- Se corrige un error que no permitía poner excesos de jornada en negativo en el calendario.
+
+			- Se corrige el campo DCs Generados del pijama, que contabilizaba dos veces el pico de horas del año anterior.
+
+			- Se añade la incidencia F6(DC) con código -14 que descuenta un DC en lugar de las horas correspondientes a la jornada media.
 
 
 		06 de Marzo de 2019
-		-------------------
 
 			- Se añade toda la funcionalidad automática del campo DiaSemana de la tabla Gráficos. Al introducir los gráficos por medio de la 
 			  ventana Añadir Gráfico, la acción por lotes para hacerlo a todos y al crear un grupo nuevo desde Word. También se modifica el objeto
@@ -20,7 +33,6 @@ PROYECTO ORIÓN
 
 
 		05 de Marzo de 2019
-		-------------------
 
 			- Se añade la tabla Pluses a cada uno de los centros con el fin de guardar los importes de los pluses y dietas por cada año.
 

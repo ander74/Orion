@@ -55,7 +55,7 @@ namespace Orion.Models {
 					// Extraemos la lista de los días del calendario.
 					ListaDias = BdPijamas.GetDiasPijama(Fecha, calendario.ListaDias, Trabajador.ReduccionJornada);
 					// Extraemos la lista de festivos del mes del calendario.
-					ListaFestivos = BdFestivos.GetFestivosPorMes(Fecha.Year, Fecha.Month).ToList();
+					//ListaFestivos = BdFestivos.GetFestivosPorMes(Fecha.Year, Fecha.Month).ToList();
 
 					// Extraemos las horas hasta el mes actual
 					HastaMesActual = new HorasHojaPijamaHastaMes(Fecha.Year, Fecha.Month, Trabajador.Id);
@@ -196,7 +196,7 @@ namespace Orion.Models {
 
 				// EXCESO DE HORAS TRABAJADAS EN LABORABLES Y FESTIVOS
 				if (dia.Fecha.DayOfWeek != DayOfWeek.Saturday && dia.Fecha.DayOfWeek != DayOfWeek.Sunday) {
-					if (ListaFestivos.Count(x => x.Fecha.Ticks == dia.Fecha.Ticks) > 0) {
+					if (App.Global.FestivosVM.ListaFestivos.Count(x => x.Fecha.Ticks == dia.Fecha.Ticks) > 0) {
 						if (dia.Horas > App.Global.Convenio.MaxHorasFinesSemana) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en festivo.\n";
 					} else {
 						if (dia.Horas > App.Global.Convenio.MaxHorasLaborables) resultado += $"Día {dia.Dia:00}: Exceso de horas trabajadas en laborable.\n";
@@ -299,16 +299,16 @@ namespace Orion.Models {
 		}
 
 
-		private List<Festivo> _listafestivos;
-		public List<Festivo> ListaFestivos {
-			get { return _listafestivos; }
-			set {
-				if (_listafestivos != value) {
-					_listafestivos = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//private List<Festivo> _listafestivos;
+		//public List<Festivo> ListaFestivos {
+		//	get { return _listafestivos; }
+		//	set {
+		//		if (_listafestivos != value) {
+		//			_listafestivos = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
 		private Conductor _trabajador;
@@ -658,7 +658,7 @@ namespace Orion.Models {
 			get {
 				if (DiasInactivos == 0) {
 					int dias = ListaDias.Count(d => d.Fecha.DayOfWeek == DayOfWeek.Saturday || d.Fecha.DayOfWeek == DayOfWeek.Sunday);
-					dias += ListaFestivos.Count(d => d.Fecha.DayOfWeek != DayOfWeek.Saturday);
+					dias += App.Global.FestivosVM.ListaFestivos.Count(d => d.Fecha.DayOfWeek != DayOfWeek.Saturday);
 					return TotalDias - dias;
 				} else {
 					int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
@@ -672,7 +672,7 @@ namespace Orion.Models {
 			get {
 				if (DiasInactivos == 0) {
 					int dias = ListaDias.Count(d => d.Fecha.DayOfWeek == DayOfWeek.Saturday || d.Fecha.DayOfWeek == DayOfWeek.Sunday);
-					dias += ListaFestivos.Count(d => d.Fecha.DayOfWeek != DayOfWeek.Saturday);
+					dias += App.Global.FestivosVM.ListaFestivos.Count(d => d.Fecha.DayOfWeek != DayOfWeek.Saturday);
 					return dias;
 				} else {
 					int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);

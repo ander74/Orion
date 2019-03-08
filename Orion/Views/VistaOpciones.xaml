@@ -1083,7 +1083,7 @@
 
                         <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,6">
                             <TextBlock FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Text="FESTIVOS"/>
-                            <TextBlock FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Text="{Binding OpcionesVM.AñoFestivos}"/>
+                            <TextBlock FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Text="{Binding FestivosVM.AñoActual}"/>
                         </StackPanel>
 
                         <Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="&gt;" Foreground="Blue" FontWeight="Bold" FontSize="20" Margin="6"
@@ -1096,7 +1096,7 @@
                               AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Extended"
                               SelectionUnit="Cell" CanUserAddRows="True" CanUserSortColumns="True"
                               Background="Transparent" Style="{StaticResource EstiloGridFestivos}"
-                              ItemsSource="{Binding OpcionesVM.ListaFestivos}">
+                              ItemsSource="{Binding FestivosVM.VistaFestivos}">
 
                         <DataGrid.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource orAzul2}"/>

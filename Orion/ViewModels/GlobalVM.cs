@@ -44,6 +44,7 @@ namespace Orion.ViewModels {
 		private OpcionesViewModel _opcionesvm;
         private EstadisticasViewModel _estadisticasvm;
 		private ResumenAnualViewModel _resumenanualvm;
+		private FestivosViewModel _festivosvm;
 
 
 		#endregion
@@ -315,6 +316,7 @@ namespace Orion.ViewModels {
 				if (CalendariosVM.HayCambios) return true;
 				if (LineasVM.HayCambios) return true;
 				if (OpcionesVM.HayCambios) return true;
+				if (FestivosVM.HayCambios) return true;
 				return false;
 			}
 		}
@@ -471,17 +473,26 @@ namespace Orion.ViewModels {
 			}
 		}
 
+		public FestivosViewModel FestivosVM
+		{
+			get
+			{
+				if (_festivosvm == null) _festivosvm = new FestivosViewModel(mensajes);
+				return _festivosvm;
+			}
+		}
 
-        #endregion
-        // ====================================================================================================
+
+		#endregion
+		// ====================================================================================================
 
 
-        // ====================================================================================================
-        #region OPCIONES
-        // ====================================================================================================
+		// ====================================================================================================
+		#region OPCIONES
+		// ====================================================================================================
 
 
-        public string ArchivoOpcionesConfiguracion {
+		public string ArchivoOpcionesConfiguracion {
 			get {
 				return "Config.json";
 			}

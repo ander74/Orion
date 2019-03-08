@@ -69,6 +69,14 @@ namespace Orion.Models {
 			Acumulado[mes] = Math.Round(numeroAcumulado, 2) == 0 ? "" : Math.Round(numeroAcumulado, 2).ToString("0.00");
 		}
 
+		public void SetDatoEventual(int mes, int dias, decimal diasEventual)
+		{
+			Datos[mes] = (dias == 0 ? "" : dias.ToString("00")) + (Math.Round(diasEventual, 2) == 0 ? "" : " (" + Math.Round(diasEventual, 2).ToString("0.00") + ")");
+			diasAcumulados += dias;
+			numeroAcumulado += diasEventual;
+			Acumulado[mes] = (diasAcumulados == 0 ? "" : diasAcumulados.ToString("00")) + (Math.Round(numeroAcumulado, 2) == 0 ? "" : " (" + Math.Round(numeroAcumulado, 2).ToString("0.00") + ")");
+		}
+
 		#endregion
 		// ====================================================================================================
 

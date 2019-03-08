@@ -48,6 +48,7 @@ namespace Orion.Convertidores {
 						case -11: return resultado + "E-(FN)";
 						case -12: return resultado + "O-V (JD)";
 						case -13: return resultado + "O-V (FN)";
+						case -14: return resultado + "F6 (DC)";
 					}
 				}
 			}
@@ -76,6 +77,7 @@ namespace Orion.Convertidores {
 					case "efn": grafico = -11; break;
 					case "ovjd": grafico = -12; break;
 					case "ovfn": grafico = -13; break;
+					case "f6dc": case "dcf6": grafico = -14; break;
 					default: Int32.TryParse(texto[0], out grafico); break;
 				}
 

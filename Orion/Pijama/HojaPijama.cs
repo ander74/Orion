@@ -528,8 +528,8 @@ namespace Orion.Pijama {
 			get {
 				return Trabajador.Descansos +
 					   HastaAñoAnterior.DCsRegulados -
-					   HastaAñoAnterior.DCsDisfrutados;
-					   // - HastaAñoAnterior.DiasLibreDisposicionF6;
+					   HastaAñoAnterior.DCsDisfrutados
+					   - HastaAñoAnterior.DiasF6DC;
 			}
 		}
 
@@ -571,8 +571,8 @@ namespace Orion.Pijama {
 			get {
 				return Trabajador.Descansos +
 					   HastaMesActual.DCsRegulados -
-					   HastaMesActual.DCsDisfrutados;
-					   // - HastaMesActual.DiasLibreDisposicionF6;
+					   HastaMesActual.DCsDisfrutados
+					   - HastaMesActual.DiasF6DC;
 			}
 		}
 
@@ -608,7 +608,8 @@ namespace Orion.Pijama {
 		public decimal DCsGeneradosHastaMes{
 			get {
 				decimal resultado = DCsPendientesHastaMes;
-				resultado += ((decimal)AcumuladasHastaMes.Ticks + AcumuladasHastaAñoAnterior.Ticks )/ App.Global.Convenio.JornadaMedia.Ticks;
+				//resultado += ((decimal)AcumuladasHastaMes.Ticks + AcumuladasHastaAñoAnterior.Ticks )/ App.Global.Convenio.JornadaMedia.Ticks;
+				resultado += (decimal)AcumuladasHastaMes.Ticks / App.Global.Convenio.JornadaMedia.Ticks;
 				return Math.Round(resultado, 2);
 			}
 		}
@@ -873,7 +874,32 @@ namespace Orion.Pijama {
 			}
 		}
 
-		
+
+		/// <summary>
+		/// Días de libre disposición a cuenta de DCs del mes actual (F6(DC) => -14).
+		/// </summary>
+		public int F6DC
+		{
+			get
+			{
+				if (ListaDias == null) return 0;
+				return ListaDias.Count(d => d.Grafico == -14);
+			}
+		}
+
+
+		/// <summary>
+		/// Días de libre disposición del mes actual (F6 => -7).
+		/// </summary>
+		public int DiasF6Totales
+		{
+			get
+			{
+				return LibreDisposicionF6 + F6DC;
+			}
+		}
+
+
 		/// <summary>
 		/// Días de comité del mes actual (código 1 o 2).
 		/// </summary>

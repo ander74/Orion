@@ -67,17 +67,19 @@ namespace Orion.ViewModels
 		}
 
 
-		public void CargarFestivos() {
-			if (App.Global.CadenaConexion == null) {
-				if (_listafestivos != null)_listafestivos.Clear();
-				return;
-			}
-			_listafestivos = new List<Festivo>(BdFestivos.GetFestivosPorAño(FechaActual.Year));
-		}
+		//public void CargarFestivos() {
+		//	if (App.Global.CadenaConexion == null) {
+		//		if (_listafestivos != null)_listafestivos.Clear();
+		//		return;
+		//	}
+		//	_listafestivos = new List<Festivo>(BdFestivos.GetFestivosPorAño(FechaActual.Year));
+		//}
 
 
 		public bool EsFestivo(DateTime fecha) {
-			return _listafestivos.Count(f => f.Fecha.Year == fecha.Year && f.Fecha.Month == fecha.Month && f.Fecha.Day == fecha.Day) > 0;
+			//return _listafestivos.Count(f => f.Fecha.Year == fecha.Year && f.Fecha.Month == fecha.Month && f.Fecha.Day == fecha.Day) > 0;
+			return App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha.Year == fecha.Year && f.Fecha.Month == fecha.Month && f.Fecha.Day == fecha.Day) > 0;
+
 		}
 
 
@@ -294,7 +296,7 @@ namespace Orion.ViewModels
 					if (HayCambios) GuardarCalendarios();
 					// Por el momento, la siguiente instrucción se ignora. Atender a buenas prácticas al borrar conductores.
 					//if (App.Global.ConductoresVM.HayCambios) App.Global.ConductoresVM.GuardarConductores();
-					CargarFestivos();
+					//CargarFestivos();
 					CargarCalendarios();
 					PropiedadCambiada();
 					PropiedadCambiada(nameof(MesActual));

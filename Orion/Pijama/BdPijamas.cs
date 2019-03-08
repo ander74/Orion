@@ -57,6 +57,11 @@ namespace Orion.Pijama {
 											  "      AND Grafico = -7; ";
 
 
+		private static string comandoDiasF6DC = "SELECT Count(Grafico) FROM DiasCalendario " +
+											  "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha < ? AND IdConductor = ?)" +
+											  "      AND Grafico = -14; ";
+
+
 		private static string comandoDCsRegulados = "SELECT Sum(Descansos) FROM Regulaciones WHERE IdConductor = ? AND Fecha < ?";
 
 
@@ -213,6 +218,15 @@ namespace Orion.Pijama {
 					objeto = comando.ExecuteScalar();
 					if (objeto == DBNull.Value) objeto = 0d;
 					resultado.DiasLibreDisposicionF6 = Convert.ToInt32(objeto);
+					//----------------------------------------------------------------------------------------------------
+					// DIAS F6DC
+					//----------------------------------------------------------------------------------------------------
+					comando = new OleDbCommand(comandoDiasF6DC, conexion);
+					comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+					comando.Parameters.AddWithValue("idconductor", idconductor);
+					objeto = comando.ExecuteScalar();
+					if (objeto == DBNull.Value) objeto = 0d;
+					resultado.DiasF6DC = Convert.ToInt32(objeto);
 					//----------------------------------------------------------------------------------------------------
 					// DCS REGULADOS 
 					//----------------------------------------------------------------------------------------------------

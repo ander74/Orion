@@ -281,6 +281,7 @@
     <Compile Include="ViewModels\ConductoresViewModel.cs" />
     <Compile Include="ViewModels\EstadisticasCommands.cs" />
     <Compile Include="ViewModels\EstadisticasViewModel.cs" />
+    <Compile Include="ViewModels\FestivosViewModel.cs" />
     <Compile Include="ViewModels\GlobalCommands.cs" />
     <Compile Include="ViewModels\GlobalVM.cs" />
     <Compile Include="ViewModels\GraficosCommands.cs" />

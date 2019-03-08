@@ -58,8 +58,9 @@ namespace Orion.Convertidores {
 			string[] valores = texto.Split(':');
 			bool esnegativo = false;
 			if (int.TryParse(valores[0], out int h)) {
-				if (h < 0) {
-					esnegativo = true; h = h * -1;
+				if (valores[0].StartsWith("-")) {
+					esnegativo = true;
+					h = h * -1;
 				}
 				int dias = (int)Math.Truncate(h / 24m);
 				string m = valores.Length > 1 ? valores[1] : "00";
