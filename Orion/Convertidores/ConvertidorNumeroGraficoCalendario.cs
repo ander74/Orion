@@ -41,6 +41,7 @@ namespace Orion.Convertidores {
 					case -12: return "OV(JD)";
 					case -13: return "OV(FN)";
 					case -14: return "F6(DC)";
+					case -15: return "FOR";
 				}
 			}
 			return "";
@@ -71,6 +72,7 @@ namespace Orion.Convertidores {
 					case "ovjd": grafico = -12; break;
 					case "ovfn": grafico = -13; break;
 					case "f6dc": case "dcf6": grafico = -14; break;
+					case "for": grafico = -15; break;
 					// Códigos
 					case "co": codigo = 1; break;
 					case "ce": codigo = 2; break;

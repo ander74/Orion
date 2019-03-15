@@ -794,7 +794,8 @@
 
 
         <!-- TABLA CALENDARIOS -->
-        <DataGrid x:Name="TablaCalendarios" ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
+		<FrameworkElement x:Name="ElementoFalso" Visibility="Collapsed"/>
+		<DataGrid x:Name="TablaCalendarios" ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
                   IsReadOnly="False" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HeadersVisibility="Column" FontSize="12"
                   MouseDoubleClick="TablaCalendarios_MouseDoubleClick"
                   AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Extended"
@@ -1779,7 +1780,9 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="29"  Width="1*" Binding="{Binding ListaDias[28].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
+                <DataGridTextColumn Header="29"  Width="1*" Binding="{Binding ListaDias[28].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
+									Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.CalendariosVM.VisibilidadColumna29,
+												 Converter={StaticResource cnvBoolToVisibility}}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource EstiloCeldasCalendarios}">
                             <Style.Triggers>
@@ -1813,8 +1816,10 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="30"  Width="1*" Binding="{Binding ListaDias[29].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
-                    <DataGridTextColumn.CellStyle>
+                <DataGridTextColumn Header="30"  Width="1*" Binding="{Binding ListaDias[29].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
+									Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.CalendariosVM.VisibilidadColumna30,
+												 Converter={StaticResource cnvBoolToVisibility}}">
+					<DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource EstiloCeldasCalendarios}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ListaDias[29].Resaltar}" Value="True">
@@ -1847,8 +1852,10 @@
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
 
-                <DataGridTextColumn Header="31"  Width="1*" Binding="{Binding ListaDias[30].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}">
-                    <DataGridTextColumn.CellStyle>
+                <DataGridTextColumn Header="31"  Width="1*" Binding="{Binding ListaDias[30].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
+									Visibility="{Binding Source={x:Reference ElementoFalso}, Path=DataContext.CalendariosVM.VisibilidadColumna31,
+												 Converter={StaticResource cnvBoolToVisibility}}">
+					<DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource EstiloCeldasCalendarios}">
                             <Style.Triggers>
                                 <DataTrigger Binding="{Binding ListaDias[30].Resaltar}" Value="True">

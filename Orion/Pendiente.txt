@@ -34,8 +34,6 @@ PROYECTO ORION
 
 		- Crear el procedimiento almacenado GetIdentidad.
 
-		- Gestionar los conductores desde la tabla y no desde la base de datos, ya que se cargan todos.
-
 		- Crear una ficha, llamada "Programador" en la que se puedan realizar consultas a las bases de datos, para poder trabajar con SQL.
 		  Esta ficha, tendrá también un botón en el que poder cargar un procedimiento del disco duro (o de Dropbox) y que realice el trabajo.
 		  Las consultas SQL que se van a ejecutar, podrán ser múltiples. El programa deberá separarlas usando el caracter ';' y así no tener

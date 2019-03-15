@@ -136,9 +136,10 @@
 		{
 			get { return _listafestivos; }
 			set {
-				SetValue(ref _listafestivos, value);
-				_listafestivos.CollectionChanged += Listafestivos_CollectionChanged;
-				_listafestivos.ItemPropertyChanged += Listafestivos_ItemPropertyChanged;
+				if (SetValue(ref _listafestivos, value)) {
+					_listafestivos.CollectionChanged += Listafestivos_CollectionChanged;
+					_listafestivos.ItemPropertyChanged += Listafestivos_ItemPropertyChanged;
+				}
 			}
 		}
 
@@ -156,9 +157,9 @@
 		{
 			get { return _añoactual; }
 			set {
-				SetValue(ref _añoactual, value);
-				//VistaFestivos.Filter = (f) => { return (f as Festivo).Fecha.Year == _añoactual; };
-				VistaFestivos.Filter = f => (f as Festivo).Año == _añoactual;
+				if (SetValue(ref _añoactual, value)) {
+					VistaFestivos.Filter = f => (f as Festivo).Año == _añoactual;
+				}
 			}
 		}
 

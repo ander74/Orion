@@ -9,13 +9,7 @@
 	/// <summary>
 	/// Esta clase añade la notificación de cambios en las propiedades de los elementos dentro de la colección.
 	/// 
-	/// Estudiar si al estar la colección enlazada a un Grid (o elemento similar) reconoce los cambios en los
-	/// elementos dentro de la colección. Si no, habrá que llamar a 'OnCollectionChange' para que se notifiquen
-	/// los cambios dentro de los elementos.
-	/// 
-	/// Otro comportamiento podría ser, que cuando un elemento dispare el evento PropertyChanged, se dispare
-	/// el evento CollectionChanged de la propia colección, mediante la llamada al OnCollectionChanged.
-	/// 
+	/// Los elementos de la colección deberán implementar obligatoriamente la interfaz INotifyPropertyChanged.
 	/// </summary>
 	public class NotifyCollection<T> : ObservableCollection<T> where T : INotifyPropertyChanged
 	{
@@ -37,7 +31,6 @@
 		{
 			ObserveAll();
 		}
-
 
 		public NotifyCollection(IEnumerable<T> enumerable) : base(enumerable)
 		{
@@ -98,5 +91,6 @@
 			var args = new ItemChangedEventArgs<T>(typedSender, e.PropertyName);
 			ItemPropertyChanged?.Invoke(this, args);
 		}
+
 	}
 }

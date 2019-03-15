@@ -3,7 +3,7 @@
 
 	/// <summary>
 	/// Clase que encapsula un Item T y el nombre de la propiedad que ha cambiado en T para devolverlo en el
-	/// evento ItemPropertyChanged de la clase TrulyObservableCollection.
+	/// evento ItemPropertyChanged de la clase NotifyCollection
 	/// </summary>
 	/// <typeparam name="T">Tipo del item cambiado.</typeparam>
 	public class ItemChangedEventArgs<T>

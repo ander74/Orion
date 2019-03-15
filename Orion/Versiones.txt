@@ -6,6 +6,18 @@ PROYECTO ORIÓN
 	CAMBIOS EFECTUADOS
 	------------------
 
+		Sin Publicar
+
+			- 
+
+		15 de Marzo de 2019
+
+			- Ahora, tanto el calendario como el pijama, muestran únicamente los días que tiene el mes.
+
+			- Corregido pequeño problema con el día de la semana en los gráficos (al guardar en base de datos un valor nulo daba error).
+
+			- Se añade la incidencia FOR (Formación) con código -15, que cuenta como la jornada trabajada.
+
 
 		07 de Marzo de 2019
 

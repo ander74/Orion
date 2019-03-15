@@ -29,3 +29,28 @@ PROYECTO ORION
 			    FROM Calendarios LEFT JOIN DiasCalendario ON Calendarios.Id = DiasCalendario.IdCalendario
 			   )  AS SubConsulta
 		SET F = FF;
+
+
+	NUEVA CONSULTA PARA LAS HOJAS PIJAMA.
+
+	Con esta consulta, recogemos todos los gráficos de todos los días del calendario con id=@IdCalendario, teniendo en cuenta a qué grupo pertenecen.
+
+	Una vez leída, se puede acceder a ella para rellenar los días del pijama.
+
+
+
+			SELECT DC.DiaFecha, G.* FROM DiasCalendario DC LEFT JOIN Graficos G
+														   ON DC.Grafico = G.Numero
+			WHERE DC.IdCalendario = @IdCalendario AND
+				  G.IdGrupo = (SELECT Id 
+					           FROM GruposGraficos GG
+					           WHERE GG.Validez = (SELECT Max(GG.Validez)
+					                               FROM GruposGraficos GG
+					                               WHERE GG.Validez <= DC.DiaFecha))
+			ORDER BY DC.DiaFecha
+    
+	Se puede hacer que se devuelvan los valores para que entren directamente al día pijama, combinando los de la tabla días calendario con la
+	tabla Gráficos y no tener que recorrer la lista dos veces.
+
+	El problema de esta consulta está en el gráfico comodín y que no recoge los gráficos que no están en el grupo de gráficos correspondiente.
+	Además de ser más lento que el método inicial (al contrario de lo que podría parecer).

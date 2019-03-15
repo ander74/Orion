@@ -108,6 +108,8 @@ namespace Orion.Pijama {
 					}
 					// Si es un día de permiso, se establecen las horas trabajadas en la jornada media.
 					if (dia.Grafico == -9) dia.GraficoTrabajado.Trabajadas = App.Global.Convenio.JornadaMedia;
+					// Si es un día de formación, se establecen las horas trabajadas en la jornada media.
+					if (dia.Grafico == -15) dia.GraficoTrabajado.Trabajadas = App.Global.Convenio.JornadaMedia;
 					// Establecemos el final anterior, si existe.
 					if (dia.GraficoTrabajado!= null && dia.GraficoTrabajado.Final.HasValue) {
 						finalAnterior = dia.GraficoTrabajado.Final.Value;

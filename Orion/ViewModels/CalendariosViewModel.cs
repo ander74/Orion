@@ -301,6 +301,9 @@ namespace Orion.ViewModels
 					PropiedadCambiada();
 					PropiedadCambiada(nameof(MesActual));
 					PropiedadCambiada(nameof(AñoActual));
+					PropiedadCambiada(nameof(VisibilidadColumna29));
+					PropiedadCambiada(nameof(VisibilidadColumna30));
+					PropiedadCambiada(nameof(VisibilidadColumna31));
 				}
 			}
 		}
@@ -613,7 +616,29 @@ namespace Orion.ViewModels
 			}
 		}
 
-		
+
+
+		public bool VisibilidadColumna29 {
+			get {
+				return !(DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month) < 29);
+			}
+		}
+
+
+		public bool VisibilidadColumna30 {
+			get {
+				return !(DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month) < 30);
+			}
+		}
+
+
+		public bool VisibilidadColumna31 {
+			get {
+				return !(DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month) < 31);
+			}
+		}
+
+
 
 
 		#endregion

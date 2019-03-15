@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.OleDb;
+using System.Linq;
 
 namespace Orion.Pijama {
 
@@ -32,6 +33,24 @@ namespace Orion.Pijama {
 												  "WHERE Numero = ?";
 
 
+		/// <summary>
+		/// Este comando recoge todos los gráficos que pertenecen al calendario indicado en @IdCalendario, cogiendo cada gráfico
+		/// del grupo correspondiente. Falta resolver cómo se captura el gráfico comodín. En el futuro (Orion 2) el gráfico comodín
+		/// no será necesario ya que se permitirá editar cada día de calendario individualmente.
+		/// Finalmente no se usa, ya que es más lento que el método anterior (primera versión).
+		/// </summary>
+		private static string comandoGetGrafico2 = "SELECT DC.DiaFecha, G.* " +
+												   "FROM DiasCalendario DC LEFT JOIN Graficos G " +
+												   "					   ON DC.Grafico = G.Numero " +
+												   "WHERE DC.IdCalendario = @IdCaledario AND " +
+												   "	  G.IdGrupo = (SELECT Id " +
+												   "		           FROM GruposGraficos GG " +
+												   "		           WHERE GG.Validez = (SELECT Max(GG.Validez) " +
+												   "		                               FROM GruposGraficos GG " +
+												   "		                               WHERE GG.Validez <= DC.DiaFecha)) " +
+												   "ORDER BY DC.DiaFecha, G.Numero";
+
+
 		private static string comandoDiasCalendario = "SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha, " +
 													  "DiasCalendario.ExcesoJornada " +
 													  "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios.Id " +
@@ -40,7 +59,7 @@ namespace Orion.Pijama {
 													  "ORDER BY Calendarios.Fecha, DiasCalendario.Dia;";
 
 
-		private static string comandoAcumuladas = "SELECT * " + 
+		private static string comandoAcumuladas = "SELECT * " +
 												  "FROM (SELECT * FROM Graficos WHERE IdGrupo = (SELECT Id " +
 												  "										         FROM GruposGraficos " +
 												  "												 WHERE Validez = (SELECT Max(Validez) " +
@@ -101,22 +120,22 @@ namespace Orion.Pijama {
 
 
 		//================================================================================
- 		// GET DÍAS PIJAMA
- 		//================================================================================
+		// GET DÍAS PIJAMA
+		//================================================================================
 		public static List<DiaPijama> GetDiasPijama(IEnumerable<DiaCalendarioBase> listadias) {
 
 			// Creamos la lista que se devolverá.
 			List<DiaPijama> lista = new List<DiaPijama>();
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
-			{
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 				// Habrá que quitar el control de excepciones aquí y ponerselo en la llamada al método, ya que aquí no hay
 				// gestión de ventanas (o no debería haberlo).
-				try
-				{
+				try {
 					conexion.Open();
 					foreach (DiaCalendarioBase dia in listadias) {
 						// Creamos el día pijama a añadir a la lista.
 						DiaPijama diaPijama = new DiaPijama(dia);
+						// Si el día no pertenece al mes, continuamos el bucle al siguiente día.
+						if (dia.Dia > DateTime.DaysInMonth(dia.DiaFecha.Year, dia.DiaFecha.Month)) continue;
 						// Establecemos el gráfico a buscar, por si está seleccionado el comodín.
 						int GraficoBusqueda = dia.Grafico;
 						if (dia.GraficoVinculado != 0 && dia.Grafico == App.Global.PorCentro.Comodin) GraficoBusqueda = dia.GraficoVinculado;

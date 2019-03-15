@@ -28,6 +28,33 @@ namespace Orion.Models {
 		public GraficoBase(OleDbDataReader lector) {
 			ParseFromReader(lector, this);
 		}
+
+		
+		public GraficoBase(GraficoBase otro) {
+			if (otro == null) return;
+			//this.Id = otro.Id;
+			this.IdGrupo = otro.IdGrupo;
+			this.NoCalcular = otro.NoCalcular;
+			this.Numero = otro.Numero;
+			this.DiaSemana = otro.DiaSemana;
+			this.Turno = otro.Turno;
+			this.Inicio = otro.Inicio;
+			this.Final = otro.Final;
+			this.InicioPartido = otro.InicioPartido;
+			this.FinalPartido = otro.FinalPartido;
+			this.Valoracion = otro.Valoracion;
+			this.Trabajadas = otro.Trabajadas;
+			this.Acumuladas = otro.Acumuladas;
+			this.Nocturnas = otro.Nocturnas;
+			this.Desayuno = otro.Desayuno;
+			this.Comida = otro.Comida;
+			this.Cena = otro.Cena;
+			this.PlusCena = otro.PlusCena;
+			this.PlusLimpieza = otro.PlusLimpieza;
+			this.PlusPaqueteria = otro.PlusPaqueteria;
+			Modificado = false;
+			Nuevo = true;
+		}
 		#endregion
 
 
@@ -207,7 +234,7 @@ namespace Orion.Models {
 		}
 
 
-		private string _diasemana;
+		private string _diasemana = "";
 		public string DiaSemana
 		{
 			get { return _diasemana; }
