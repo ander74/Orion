@@ -68,7 +68,22 @@ namespace Orion.Models {
 				case "11": case "12": case "13": case "14": case "15": case "16": case "17": case "18": case "19": case "20":
 				case "21": case "22": case "23": case "24": case "25": case "26": case "27": case "28": case "29": case "30":
 				case "31":
-					ListaDias[int.Parse(header) - 1].Grafico = 0; break;
+					ListaDias[int.Parse(header) - 1].Grafico = 0;
+					ListaDias[int.Parse(header) - 1].TurnoAlt = null;
+					ListaDias[int.Parse(header) - 1].InicioAlt = null;
+					ListaDias[int.Parse(header) - 1].FinalAlt = null;
+					ListaDias[int.Parse(header) - 1].InicioPartidoAlt = null;
+					ListaDias[int.Parse(header) - 1].FinalPartidoAlt = null;
+					ListaDias[int.Parse(header) - 1].TrabajadasAlt = null;
+					ListaDias[int.Parse(header) - 1].AcumuladasAlt = null;
+					ListaDias[int.Parse(header) - 1].NocturnasAlt = null;
+					ListaDias[int.Parse(header) - 1].DesayunoAlt = null;
+					ListaDias[int.Parse(header) - 1].ComidaAlt = null;
+					ListaDias[int.Parse(header) - 1].CenaAlt = null;
+					ListaDias[int.Parse(header) - 1].PlusCenaAlt = null;
+					ListaDias[int.Parse(header) - 1].PlusLimpiezaAlt = null;
+					ListaDias[int.Parse(header) - 1].PlusPaqueteriaAlt = null;
+					break;
 			}
 		}
 
