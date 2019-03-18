@@ -1858,6 +1858,113 @@ namespace Orion.ViewModels {
 		#endregion
 
 
+		#region COMANDO ACTIVAR BOTON GRÁFICO ALTERNATIVO
+
+		// Comando
+		private ICommand _cmdactivarbotongraficoalternativo;
+		public ICommand cmdActivarBotonGraficoAlternativo {
+			get {
+				if (_cmdactivarbotongraficoalternativo == null) _cmdactivarbotongraficoalternativo = new RelayCommand(p => ActivarBotonGraficoAlternativo());
+				return _cmdactivarbotongraficoalternativo;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void ActivarBotonGraficoAlternativo() {
+			if (VisibilidadGraficoAlternativo == Visibility.Visible) {
+				VisibilidadGraficoAlternativo = Visibility.Collapsed;
+				TextoBotonGraficoAlternativo = ">";
+			} else {
+				VisibilidadGraficoAlternativo = Visibility.Visible;
+				TextoBotonGraficoAlternativo = "v";
+			}
+		}
+		#endregion
+
+
+		#region COMANDO CARGAR GRÁFICO ALTERNATIVO
+
+		// Comando
+		private ICommand _cargargraficoalternativo;
+		public ICommand cmdCargarGraficoAlternativo {
+			get {
+				if (_cargargraficoalternativo == null) _cargargraficoalternativo = new RelayCommand(p => CargarGraficoAlternativo(), p => PuedeCargarGraficoAlternativo());
+				return _cargargraficoalternativo;
+			}
+		}
+
+
+		// Se puede ejecutar el comando
+		private bool PuedeCargarGraficoAlternativo() {
+			return CalendarioSeleccionado != null;
+		}
+
+		// Ejecución del comando
+		private void CargarGraficoAlternativo() {
+			if (Mensajes.VerMensaje($"Vas a cargar los datos del gráfico {DiaCalendarioSeleccionado.Grafico:0000}\n\n" +
+						$"Esto hará que se borren todos los datos que hay ahora.\n\n" +
+						$"¿Deseas continuar?", "ATENCIÓN", true) == false) return;
+
+			if (DiaCalendarioSeleccionado.Grafico <= 0) return;
+			GraficoBase grafico = Orion.Pijama.BdPijamas.GetGrafico(DiaCalendarioSeleccionado.Grafico, DiaCalendarioSeleccionado.DiaFecha);
+			if (grafico == null) return;
+			DiaCalendarioSeleccionado.TurnoAlt = grafico.Turno;
+			DiaCalendarioSeleccionado.InicioAlt = grafico.Inicio;
+			DiaCalendarioSeleccionado.FinalAlt = grafico.Final;
+			DiaCalendarioSeleccionado.InicioPartidoAlt = grafico.InicioPartido;
+			DiaCalendarioSeleccionado.FinalPartidoAlt = grafico.FinalPartido;
+			DiaCalendarioSeleccionado.TrabajadasAlt = grafico.Trabajadas;
+			DiaCalendarioSeleccionado.AcumuladasAlt = grafico.Acumuladas;
+			DiaCalendarioSeleccionado.NocturnasAlt = grafico.Nocturnas;
+			DiaCalendarioSeleccionado.DesayunoAlt = grafico.Desayuno;
+			DiaCalendarioSeleccionado.ComidaAlt = grafico.Comida;
+			DiaCalendarioSeleccionado.CenaAlt = grafico.Cena;
+			DiaCalendarioSeleccionado.PlusCenaAlt = grafico.PlusCena;
+			DiaCalendarioSeleccionado.PlusLimpiezaAlt = grafico.PlusLimpieza;
+			DiaCalendarioSeleccionado.PlusPaqueteriaAlt = grafico.PlusPaqueteria;
+		}
+		#endregion
+
+
+		#region COMANDO BORRAR GRÁFICO ALTERNATIVO
+
+		// Comando
+		private ICommand _borrargraficoalternativo;
+		public ICommand cmdBorrarGraficoAlternativo {
+			get {
+				if (_borrargraficoalternativo == null) _borrargraficoalternativo = new RelayCommand(p => BorrarGraficoAlternativo(), p => PuedeBorrarGraficoAlternativo());
+				return _borrargraficoalternativo;
+			}
+		}
+
+
+		// Se puede ejecutar el comando
+		private bool PuedeBorrarGraficoAlternativo() {
+			return HayDiaCalendarioSeleccionado;
+		}
+
+		// Ejecución del comando
+		private void BorrarGraficoAlternativo() {
+			if (Mensajes.VerMensaje($"Vas a borrar los datos actuales\n\n" +
+						$"¿Deseas continuar?", "ATENCIÓN", true) == false) return;
+
+			DiaCalendarioSeleccionado.TurnoAlt = null;
+			DiaCalendarioSeleccionado.InicioAlt = null;
+			DiaCalendarioSeleccionado.FinalAlt = null;
+			DiaCalendarioSeleccionado.InicioPartidoAlt = null;
+			DiaCalendarioSeleccionado.FinalPartidoAlt = null;
+			DiaCalendarioSeleccionado.TrabajadasAlt = null;
+			DiaCalendarioSeleccionado.AcumuladasAlt = null;
+			DiaCalendarioSeleccionado.NocturnasAlt = null;
+			DiaCalendarioSeleccionado.DesayunoAlt = null;
+			DiaCalendarioSeleccionado.ComidaAlt = null;
+			DiaCalendarioSeleccionado.CenaAlt = null;
+			DiaCalendarioSeleccionado.PlusCenaAlt = null;
+			DiaCalendarioSeleccionado.PlusLimpiezaAlt = null;
+			DiaCalendarioSeleccionado.PlusPaqueteriaAlt = null;
+		}
+		#endregion
 
 
 	}// Fin de la clase.

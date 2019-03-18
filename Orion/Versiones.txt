@@ -10,6 +10,14 @@ PROYECTO ORIÓN
 
 			- 
 
+		18 de Marzo de 2019
+
+			- Se implementa el gráfico alternativo en el calendario. Se añaden los campos correspondientes al modelo 'DiaCalendario' así como
+			  a la tabla 'DiasCalendario' y todas las funciones para gestionar esta función. Ahora, los datos que se metan en este apartado,
+			  prevalecen sobre los datos que hay en la tabla de gráficos. Con esto se puede modificar el gráfico para un día en concreto
+			  sin tener que trampear gráficos o usar el gráfico comodín.
+
+
 		15 de Marzo de 2019
 
 			- Ahora, tanto el calendario como el pijama, muestran únicamente los días que tiene el mes.

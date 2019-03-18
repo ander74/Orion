@@ -640,6 +640,20 @@ namespace Orion.ViewModels
 
 
 
+		private string _textobotongraficoalternativo = ">";
+		public string TextoBotonGraficoAlternativo {
+			get { return _textobotongraficoalternativo; }
+			set { SetValue(ref _textobotongraficoalternativo, value); }
+		}
+
+
+		private Visibility _visibilidadgraficoalternativo = Visibility.Collapsed;
+		public Visibility VisibilidadGraficoAlternativo {
+			get { return _visibilidadgraficoalternativo; }
+			set { SetValue(ref _visibilidadgraficoalternativo, value); }
+		}
+
+
 
 		#endregion
 

@@ -111,14 +111,19 @@ namespace Orion.DataModels {
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{
 
-				//string SQLInsertar = "INSERT INTO DiasCalendario (IdCalendario, Dia, Grafico, Codigo, ExcesoJornada, HorasDescuadre, FacturadoPaqueteria, " +
-				//					 "Limpieza, GraficoVinculado, Notas) " +
-				//					 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
-				string SQLInsertar = "InsertarDiaCalendario";
+				string SQLInsertar = "INSERT INTO DiasCalendario (IdCalendario, Dia, DiaFecha, Grafico, Codigo, ExcesoJornada, FacturadoPaqueteria, " +
+								     "Limpieza, GraficoVinculado, Notas, TurnoAlt, InicioAlt, FinalAlt, InicioPartidoAlt, FinalPartidoAlt, " +
+									 "TrabajadasAlt, AcumuladasAlt, NocturnasAlt, DesayunoAlt, ComidaAlt, CenaAlt, PlusCenaAlt, " +
+									 "PlusLimpiezaAlt, PlusPaqueteriaAlt) " +
+									 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+				//string SQLInsertar = "InsertarDiaCalendario";
 
-				//string SQLActualizar = "UPDATE DiasCalendario SET IdCalendario=?, Dia=?, Grafico=?, Codigo=?, ExcesoJornada=?, HorasDescuadre=?, " +
-				//					   "FacturadoPaqueteria=?, Limpieza=?, GraficoVinculado=?, Notas=? WHERE Id=?;";
-				string SQLActualizar = "ActualizarDiaCalendario";
+				string SQLActualizar = "UPDATE DiasCalendario SET IdCalendario = ?, Dia = ?, DiaFecha = ?, Grafico = ?, Codigo = ?, " +
+									   "ExcesoJornada = ?, FacturadoPaqueteria = ?, Limpieza = ?, GraficoVinculado = ?, Notas = ?, " +
+									   "TurnoAlt=?, InicioAlt=?, FinalAlt=?, InicioPartidoAlt=?, FinalPartidoAlt=?, TrabajadasAlt=?, AcumuladasAlt=?, " +
+									   "NocturnasAlt=?, DesayunoAlt=?, ComidaAlt=?, CenaAlt=?, PlusCenaAlt=?, PlusLimpiezaAlt=?, PlusPaqueteriaAlt=? " +
+									   "WHERE Id=?;";
+				//string SQLActualizar = "ActualizarDiaCalendario";
 
 				string SQLGetId = "SELECT @@IDENTITY;";
 
@@ -129,7 +134,7 @@ namespace Orion.DataModels {
 						if (dia.Id == 0 && dia.Grafico == 0) continue;
 						if (dia.Nuevo) {
 							OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
-							comando.CommandType = System.Data.CommandType.StoredProcedure;
+							//comando.CommandType = System.Data.CommandType.StoredProcedure;
 							DiaCalendario.ParseToCommand(comando, dia);
 							comando.ExecuteNonQuery();
 							comando.CommandText = SQLGetId;
@@ -140,7 +145,7 @@ namespace Orion.DataModels {
 							dia.Modificado = false;
 						} else if (dia.Modificado) {
 							OleDbCommand comando = new OleDbCommand(SQLActualizar, conexion);
-							comando.CommandType = System.Data.CommandType.StoredProcedure;
+							//comando.CommandType = System.Data.CommandType.StoredProcedure;
 							DiaCalendario.ParseToCommand(comando, dia);
 							comando.ExecuteNonQuery();
 							dia.Modificado = false;

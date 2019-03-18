@@ -150,6 +150,21 @@ namespace Orion.Pijama {
 						} else {
 							diaPijama.GraficoTrabajado = new GraficoBase();
 						}
+						// Modificamos los parámetros del gráfico trabajado en función de si existen en el DiaCalendarioBase.
+						if (dia.TurnoAlt.HasValue) diaPijama.GraficoTrabajado.Turno = dia.TurnoAlt.Value;
+						if (dia.InicioAlt.HasValue) diaPijama.GraficoTrabajado.Inicio = new TimeSpan(dia.InicioAlt.Value.Ticks);
+						if (dia.FinalAlt.HasValue) diaPijama.GraficoTrabajado.Final = new TimeSpan(dia.FinalAlt.Value.Ticks);
+						if (dia.InicioPartidoAlt.HasValue) diaPijama.GraficoTrabajado.InicioPartido = new TimeSpan(dia.InicioPartidoAlt.Value.Ticks);
+						if (dia.FinalPartidoAlt.HasValue) diaPijama.GraficoTrabajado.FinalPartido = new TimeSpan(dia.FinalPartidoAlt.Value.Ticks);
+						if (dia.TrabajadasAlt.HasValue) diaPijama.GraficoTrabajado.Trabajadas = new TimeSpan(dia.TrabajadasAlt.Value.Ticks);
+						if (dia.AcumuladasAlt.HasValue) diaPijama.GraficoTrabajado.Acumuladas = new TimeSpan(dia.AcumuladasAlt.Value.Ticks);
+						if (dia.NocturnasAlt.HasValue) diaPijama.GraficoTrabajado.Nocturnas = new TimeSpan(dia.NocturnasAlt.Value.Ticks);
+						if (dia.DesayunoAlt.HasValue) diaPijama.GraficoTrabajado.Desayuno = dia.DesayunoAlt.Value;
+						if (dia.ComidaAlt.HasValue) diaPijama.GraficoTrabajado.Comida = dia.ComidaAlt.Value;
+						if (dia.CenaAlt.HasValue) diaPijama.GraficoTrabajado.Cena = dia.CenaAlt.Value;
+						if (dia.PlusCenaAlt.HasValue) diaPijama.GraficoTrabajado.PlusCena = dia.PlusCenaAlt.Value;
+						if (dia.PlusLimpiezaAlt.HasValue) diaPijama.GraficoTrabajado.PlusLimpieza = dia.PlusLimpiezaAlt.Value;
+						if (dia.PlusPaqueteriaAlt.HasValue) diaPijama.GraficoTrabajado.PlusPaqueteria = dia.PlusPaqueteriaAlt.Value;
 						// Añadimos el día pijama a la lista.
 						lista.Add(diaPijama);
 						// Cerramos el lector.
@@ -443,6 +458,34 @@ namespace Orion.Pijama {
 		}
 
 
+		//================================================================================
+		// GET GRAFICO
+		//================================================================================
+		public static GraficoBase GetGrafico(int numero, DateTime validez) {
+
+			GraficoBase grafico = null;
+			OleDbDataReader lector = null;
+
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+				try {
+					conexion.Open();
+					OleDbCommand comando = new OleDbCommand(comandoGetGrafico, conexion);
+					comando.Parameters.AddWithValue("@Validez", validez.ToString("yyyy-MM-dd"));
+					comando.Parameters.AddWithValue("@Numero", numero);
+					// Ejecutamos el comando y extraemos el gráfico.
+					lector = comando.ExecuteReader();
+					if (lector.Read()) {
+						grafico = new GraficoBase(lector);
+					}
+				} catch (Exception ex) {
+					Utils.VerError("BdPijamas.GetGrafico", ex);
+				} finally {
+					lector?.Close();
+				}
+			}
+			return grafico;
+		}
 
 
 

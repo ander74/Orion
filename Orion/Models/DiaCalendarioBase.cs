@@ -21,10 +21,15 @@ namespace Orion.Models {
 		// ====================================================================================================
 		#region  CONSTRUCTORES
 		// ====================================================================================================
-		public DiaCalendarioBase() { }
+		public DiaCalendarioBase() {
+			PlusLimpiezaAlt = null;
+			PlusPaqueteriaAlt = null;
+		}
 
 
 		public DiaCalendarioBase(OleDbDataReader lector) {
+			PlusLimpiezaAlt = null;
+			PlusPaqueteriaAlt = null;
 			ParseFromReader(lector, this);
 		}
 
@@ -40,6 +45,20 @@ namespace Orion.Models {
 			_limpieza = dia.Limpieza;
 			_graficovinculado = dia.GraficoVinculado;
 			_notas = dia.Notas;
+			turnoalt = dia.TurnoAlt;
+			inicioalt = dia.InicioAlt;
+			finalalt = dia.FinalAlt;
+			iniciopartidoalt = dia.InicioPartidoAlt;
+			finalpartidoalt = dia.FinalPartidoAlt;
+			trabajadasalt = dia.TrabajadasAlt;
+			acumuladasalt = dia.AcumuladasAlt;
+			nocturnasalt = dia.NocturnasAlt;
+			desayunoalt = dia.DesayunoAlt;
+			comidaalt = dia.ComidaAlt;
+			cenaalt = dia.CenaAlt;
+			pluscenaalt = dia.PlusCenaAlt;
+			pluslimpiezaalt = dia.PlusLimpiezaAlt;
+			pluspaqueteriaalt = dia.PlusPaqueteriaAlt;
 		}
 
 
@@ -63,6 +82,20 @@ namespace Orion.Models {
 			diacalendario.Limpieza = lector["Limpieza"] is DBNull ? null : (bool?)lector["Limpieza"];
 			diacalendario.GraficoVinculado = lector.ToInt16("GraficoVinculado");
 			diacalendario.Notas = lector.ToString("Notas");
+			diacalendario.TurnoAlt = lector.ToInt16Nulable("TurnoAlt");
+			diacalendario.InicioAlt = lector.ToTimeSpanNulable("InicioAlt");
+			diacalendario.FinalAlt = lector.ToTimeSpanNulable("FinalAlt");
+			diacalendario.InicioPartidoAlt = lector.ToTimeSpanNulable("InicioPartidoAlt");
+			diacalendario.FinalPartidoAlt = lector.ToTimeSpanNulable("FinalPartidoAlt");
+			diacalendario.TrabajadasAlt = lector.ToTimeSpanNulable("TrabajadasAlt");
+			diacalendario.AcumuladasAlt = lector.ToTimeSpanNulable("AcumuladasAlt");
+			diacalendario.NocturnasAlt = lector.ToTimeSpanNulable("NocturnasAlt");
+			diacalendario.DesayunoAlt = lector.ToDecimalNulable("DesayunoAlt");
+			diacalendario.ComidaAlt = lector.ToDecimalNulable("ComidaAlt");
+			diacalendario.CenaAlt = lector.ToDecimalNulable("CenaAlt");
+			diacalendario.PlusCenaAlt = lector.ToDecimalNulable("PlusCenaAlt");
+			diacalendario.PlusLimpiezaAlt = lector.ToBoolNulable("PlusLimpiezaAlt");
+			diacalendario.PlusPaqueteriaAlt = lector.ToBoolNulable("PlusPaqueteriaAlt");
 		}
 
 
@@ -77,8 +110,31 @@ namespace Orion.Models {
 			Comando.Parameters.AddWithValue("@Limpieza", diacalendario.Limpieza == null ? (object)DBNull.Value : diacalendario.Limpieza);
 			Comando.Parameters.AddWithValue("@GraficoVinculado", diacalendario.GraficoVinculado);
 			Comando.Parameters.AddWithValue("@Notas", diacalendario.Notas.TrimEnd(new char[] { ' ', '\n', '\r', '\t' }));
+			Comando.Parameters.AddWithValue("TurnoAlt", diacalendario.TurnoAlt.HasValue ? diacalendario.TurnoAlt : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("InicioAlt", diacalendario.InicioAlt.HasValue ? diacalendario.InicioAlt.Value.Ticks : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("FinalAlt", diacalendario.FinalAlt.HasValue ? diacalendario.FinalAlt.Value.Ticks : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("InicioPartidoAlt", diacalendario.InicioPartidoAlt.HasValue ? diacalendario.InicioPartidoAlt.Value.Ticks : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("FinalPartidoAlt", diacalendario.FinalPartidoAlt.HasValue ? diacalendario.FinalPartidoAlt.Value.Ticks : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("TrabajadasAlt", diacalendario.TrabajadasAlt.HasValue ? diacalendario.TrabajadasAlt.Value.Ticks : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("AcumuladasAlt", diacalendario.AcumuladasAlt.HasValue ? diacalendario.AcumuladasAlt.Value.Ticks : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("NocturnasAlt", diacalendario.NocturnasAlt.HasValue ? diacalendario.NocturnasAlt.Value.Ticks : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("DesayunoAlt", diacalendario.DesayunoAlt.HasValue ? diacalendario.DesayunoAlt.Value.ToString("0.0000") : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("ComidaAlt", diacalendario.ComidaAlt.HasValue ? diacalendario.ComidaAlt.Value.ToString("0.0000") : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("CenaAlt", diacalendario.CenaAlt.HasValue ? diacalendario.CenaAlt.Value.ToString("0.0000") : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("PluscenaAlt", diacalendario.PlusCenaAlt.HasValue ? diacalendario.PlusCenaAlt.Value.ToString("0.0000") : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("PluslimpiezaAlt", diacalendario.PlusLimpiezaAlt.HasValue ? diacalendario.PlusLimpiezaAlt.Value : (object)DBNull.Value);
+			Comando.Parameters.AddWithValue("PluspaqueteriaAlt", diacalendario.PlusPaqueteriaAlt.HasValue ? diacalendario.PlusPaqueteriaAlt.Value : (object)DBNull.Value);
 			Comando.Parameters.AddWithValue("@Id", diacalendario.Id);
 		}
+
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region EVENTOS
+		// ====================================================================================================
 
 
 		#endregion
@@ -258,10 +314,196 @@ namespace Orion.Models {
 			}
 		}
 
-
 		#endregion
 		// ====================================================================================================
 
+		// ====================================================================================================
+		#region PROPIEDADES ALTERNATIVO
+		// ====================================================================================================
+
+		private int? turnoalt = null;
+		public int? TurnoAlt {
+			get { return turnoalt; }
+			set {
+				if (value != turnoalt) {
+					turnoalt = (value < 1 || value > 4) ? null : value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private TimeSpan? inicioalt;
+		public TimeSpan? InicioAlt {
+			get { return inicioalt; }
+			set {
+				if (!value.Equals(inicioalt)) {
+					inicioalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private TimeSpan? finalalt;
+		public TimeSpan? FinalAlt {
+			get { return finalalt; }
+			set {
+				if (!value.Equals(finalalt)) {
+					finalalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private TimeSpan? iniciopartidoalt;
+		public TimeSpan? InicioPartidoAlt {
+			get { return iniciopartidoalt; }
+			set {
+				if (!value.Equals(iniciopartidoalt)) {
+					iniciopartidoalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private TimeSpan? finalpartidoalt;
+		public TimeSpan? FinalPartidoAlt {
+			get { return finalpartidoalt; }
+			set {
+				if (!value.Equals(finalpartidoalt)) {
+					finalpartidoalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private TimeSpan? trabajadasalt = null;
+		public TimeSpan? TrabajadasAlt {
+			get { return trabajadasalt; }
+			set {
+				if (!value.Equals(trabajadasalt)) {
+					trabajadasalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private TimeSpan? acumuladasalt = null;
+		public TimeSpan? AcumuladasAlt {
+			get { return acumuladasalt; }
+			set {
+				if (!value.Equals(acumuladasalt)) {
+					acumuladasalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private TimeSpan? nocturnasalt = null;
+		public TimeSpan? NocturnasAlt {
+			get { return nocturnasalt; }
+			set {
+				if (!value.Equals(nocturnasalt)) {
+					nocturnasalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private decimal? desayunoalt = null;
+		public decimal? DesayunoAlt {
+			get { return desayunoalt; }
+			set {
+				if (value != desayunoalt) {
+					desayunoalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private decimal? comidaalt = null;
+		public decimal? ComidaAlt {
+			get { return comidaalt; }
+			set {
+				if (value != comidaalt) {
+					comidaalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private decimal? cenaalt = null;
+		public decimal? CenaAlt {
+			get { return cenaalt; }
+			set {
+				if (value != cenaalt) {
+					cenaalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private decimal? pluscenaalt = null;
+		public decimal? PlusCenaAlt {
+			get { return pluscenaalt; }
+			set {
+				if (value != pluscenaalt) {
+					pluscenaalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private bool? pluslimpiezaalt = null;
+		public bool? PlusLimpiezaAlt {
+			get { return pluslimpiezaalt; }
+			set {
+				if (pluslimpiezaalt != value) {
+					pluslimpiezaalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+
+		private bool? pluspaqueteriaalt = null;
+		public bool? PlusPaqueteriaAlt {
+			get { return pluspaqueteriaalt; }
+			set {
+				if (pluspaqueteriaalt != value) {
+					pluspaqueteriaalt = value;
+					Modificado = true;
+					PropiedadCambiada();
+				}
+			}
+		}
+
+		#endregion
+		// ====================================================================================================
 
 	}
 

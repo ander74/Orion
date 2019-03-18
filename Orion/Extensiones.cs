@@ -164,6 +164,18 @@ namespace Orion {
 
 
 		/// <summary>
+		/// Extrae un campo de tipo Bool? del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un Bool? con el valor almacenado en el campo.</returns>
+		public static bool? ToBoolNulable(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return null;
+			return Convert.ToBoolean(lector[campo]);
+		}
+
+
+		/// <summary>
 		/// Extrae un campo de tipo DateTime del lector.
 		/// </summary>
 		/// <param name="lector">Lector del que se extraerá el campo.</param>
@@ -224,6 +236,18 @@ namespace Orion {
 
 
 		/// <summary>
+		/// Extrae un campo de tipo Int16? del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un Int16? con el valor almacenado en el campo.</returns>
+		public static Int16? ToInt16Nulable(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return null;
+			return (Int16?)lector[campo];
+		}
+
+
+		/// <summary>
 		/// Extrae un campo de tipo Int32(int) del lector.
 		/// </summary>
 		/// <param name="lector">Lector del que se extraerá el campo.</param>
@@ -259,6 +283,18 @@ namespace Orion {
 		}
 
 
+		/// <summary>
+		/// Extrae un campo de tipo Decimal? del lector.
+		/// </summary>
+		/// <param name="lector">Lector del que se extraerá el campo.</param>
+		/// <param name="campo">Campo que se va a extraer</param>
+		/// <returns>Un Decimal? con el valor almacenado en el campo.</returns>
+		public static decimal? ToDecimalNulable(this OleDbDataReader lector, string campo) {
+			if (lector == null || lector[campo] is DBNull) return null;
+			return (decimal)lector[campo];
+		}
+
+		
 		#endregion
 		// ====================================================================================================
 

@@ -37,7 +37,8 @@
         <cnv:ConvertidorFecha x:Key="cnvFecha"/>
         <cnv:ConvertidorDecimal x:Key="cnvDecimal"/>
         <cnv:ConvertidorDecimalEuro x:Key="cnvDecimalEuro"/>
-        <cnv:ConvertidorNumeroGrafico x:Key="cnvNumGrafico"/>
+		<cnv:ConvertidorDecimalNulable x:Key="cnvDecimalNulable"/>
+		<cnv:ConvertidorNumeroGrafico x:Key="cnvNumGrafico"/>
         <cnv:ConvertidorNumeroGraficoCalendario x:Key="cnvNumGraficoCalendario"/>
         <cnv:ConvertidorNumeroGraficoPijama x:Key="cnvNumGraficoPijama"/>
         <cnv:ConvertidorRojoSiTrue x:Key="cnvRojoSiTrue"/>
@@ -715,7 +716,8 @@
 
 
         <!-- PANEL DATOS CALENDARIO -->
-        <Grid Grid.Row="2" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
+        <Grid Grid.Row="2" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}"
+			  HorizontalAlignment="Stretch">
             <Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3" Padding="3" CornerRadius="4"
                     Background="{StaticResource DegradadoCeleste1}" IsEnabled="{Binding CalendariosVM.HayDiaCalendarioSeleccionado}">
 
@@ -724,7 +726,12 @@
                            IsEnabled="{Binding CalendariosVM.HayDiaCalendarioSeleccionado}">
                         <StackPanel Orientation="Horizontal">
 
-                            <!-- CONDUCTOR -->
+							<!-- BOTÓN GRÁFICO ALTERNATIVO -->
+							<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="{Binding CalendariosVM.TextoBotonGraficoAlternativo}"
+									Padding="8,5" Margin="0,0" VerticalAlignment="Center" Width="30" FontSize="16"
+									Command="{Binding CalendariosVM.cmdActivarBotonGraficoAlternativo}"/>
+
+							<!-- CONDUCTOR -->
                             <TextBlock Margin="4,0" VerticalAlignment="Center" Width="40" FontWeight="Bold"
                                        Text="{Binding CalendariosVM.CalendarioSeleccionado.IdConductor}"/>
                             <!-- DÍA -->
@@ -779,7 +786,127 @@
                         </StackPanel>
                     </Label>
 
-                    <!-- FILTRO APLICADO -->
+					<!-- TODO: Crear lista con los datos del gráfico alternativo en otra label -->
+					<Label FontFamily="Verdana" FontSize="10" FontWeight="Normal" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
+                           IsEnabled="{Binding CalendariosVM.HayDiaCalendarioSeleccionado}"
+						   Visibility="{Binding CalendariosVM.VisibilidadGraficoAlternativo}">
+						<StackPanel Orientation="Horizontal">
+							<StackPanel Orientation="Vertical">
+
+								<!-- BOTÓN CARGAR GRÁFICO ALTERNATIVO -->
+								<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="Cargar"
+									Padding="8,5" Margin="0,0,10,0" VerticalAlignment="Center" Width="70"
+									Command="{Binding CalendariosVM.cmdCargarGraficoAlternativo}"/>
+
+								<!-- BOTÓN BORRAR GRÁFICO ALTERNATIVO -->
+								<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="Borrar"
+									Padding="8,5" Margin="0,0,10,0" VerticalAlignment="Center" Width="70"
+									Command="{Binding CalendariosVM.cmdBorrarGraficoAlternativo}"/>
+
+							</StackPanel>
+							<Grid DataContext="{Binding CalendariosVM.DiaCalendarioSeleccionado}">
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
+								</Grid.RowDefinitions>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
+
+								<!-- ENCABEZADOS -->
+								<TextBlock Grid.Row="0" Grid.Column="0" Text="Turno" Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<TextBlock Grid.Row="0" Grid.Column="1" Text="Inicio" Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<TextBlock Grid.Row="0" Grid.Column="2" Text="Final" Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<TextBlock Grid.Row="0" Grid.Column="3" Text="Inicio Part." Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<TextBlock Grid.Row="0" Grid.Column="4" Text="Final Part." Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<TextBlock Grid.Row="0" Grid.Column="5" Text="Trabajadas" Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<TextBlock Grid.Row="0" Grid.Column="6" Text="Acumuladas" Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<TextBlock Grid.Row="0" Grid.Column="7" Text="Nocturnas" Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<TextBlock Grid.Row="0" Grid.Column="8" Text="Desayuno" Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<TextBlock Grid.Row="0" Grid.Column="9" Text="Comida" Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<TextBlock Grid.Row="0" Grid.Column="10" Text="Cena" Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<TextBlock Grid.Row="0" Grid.Column="11" Text="Plus Cena" Padding="4" Width="70" VerticalAlignment="Bottom"/>
+								<!--<TextBlock Grid.Row="0" Grid.Column="12" Text="P. Limpieza" Padding="4" Width="70" VerticalAlignment="Bottom"/>-->
+								<!--<TextBlock Grid.Row="0" Grid.Column="13" Text="P. Paquetería" Padding="4" Width="70" VerticalAlignment="Bottom"/>-->
+
+								<TextBox Grid.Row="1" Grid.Column="0" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding TurnoAlt}"/>
+								<TextBox Grid.Row="1" Grid.Column="1" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding InicioAlt, Converter={StaticResource cnvHora}}"/>
+								<TextBox Grid.Row="1" Grid.Column="2" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding FinalAlt, Converter={StaticResource cnvHora}}"/>
+								<TextBox Grid.Row="1" Grid.Column="3" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding InicioPartidoAlt, Converter={StaticResource cnvHora}}"/>
+								<TextBox Grid.Row="1" Grid.Column="4" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding FinalPartidoAlt, Converter={StaticResource cnvHora}}"/>
+								<TextBox Grid.Row="1" Grid.Column="5" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding TrabajadasAlt, Converter={StaticResource cnvHora}}"/>
+								<TextBox Grid.Row="1" Grid.Column="6" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding AcumuladasAlt, Converter={StaticResource cnvHora}}"/>
+								<TextBox Grid.Row="1" Grid.Column="7" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding NocturnasAlt, Converter={StaticResource cnvHora}}"/>
+								<TextBox Grid.Row="1" Grid.Column="8" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding DesayunoAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+								<TextBox Grid.Row="1" Grid.Column="9" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding ComidaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+								<TextBox Grid.Row="1" Grid.Column="10" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding CenaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+								<TextBox Grid.Row="1" Grid.Column="11" FontSize="12" 
+										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+										 Text="{Binding PlusCenaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+								<StackPanel Grid.Row="0" Grid.Column="12" Orientation="Horizontal" Margin="10,0,0,0">
+									<TextBlock Text="Plus Limpieza: " VerticalAlignment="Center"/>
+									<CheckBox Grid.Row="1" Grid.Column="12" FontSize="12" IsThreeState="True" 
+									  Margin="0" VerticalAlignment="Center" Padding="3" HorizontalAlignment="Center"
+									  IsChecked="{Binding PlusLimpiezaAlt, UpdateSourceTrigger=PropertyChanged}"/>
+								</StackPanel>
+								<StackPanel Grid.Row="1" Grid.Column="12" Orientation="Horizontal" Margin="10,0,0,0">
+									<TextBlock Text="Plus Paquetería: " VerticalAlignment="Center"/>
+									<CheckBox Grid.Row="1" Grid.Column="12" FontSize="12" IsThreeState="True" 
+									  Margin="0" VerticalAlignment="Center" Padding="3" HorizontalAlignment="Center"
+									  IsChecked="{Binding PlusPaqueteriaAlt, UpdateSourceTrigger=PropertyChanged}"/>
+								</StackPanel>
+
+							</Grid>
+						</StackPanel>
+					</Label>
+					
+					<!-- FILTRO APLICADO -->
                     <Label FontFamily="Verdana" FontSize="14" FontWeight="Normal" VerticalContentAlignment="Center"
                            Visibility="{Binding CalendariosVM.VisibilidadPanelFiltros}">
                         <StackPanel Orientation="Horizontal">
