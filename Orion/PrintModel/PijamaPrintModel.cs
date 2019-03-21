@@ -5,35 +5,29 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using iText.Forms;
-using iText.Forms.Fields;
-using iText.IO.Image;
-using iText.Kernel.Colors;
-using iText.Kernel.Font;
-using iText.Kernel.Geom;
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas;
-using iText.Layout;
-using iText.Layout.Borders;
-using iText.Layout.Element;
-using iText.Layout.Properties;
-using Microsoft.Office.Interop.Excel;
-using Orion.Config;
-using Orion.Convertidores;
-using Orion.Models;
-using Orion.Properties;
-using Orion.Servicios;
-using Orion.Views;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Threading.Tasks;
-using System.Windows.Data;
-using System.Windows.Media;
-
 namespace Orion.PrintModel {
+
+	using System;
+	using System.Collections;
+	using System.Collections.Generic;
+	using System.Threading.Tasks;
+	using System.Windows.Data;
+	using System.Windows.Media;
+	using iText.Forms;
+	using iText.Forms.Fields;
+	using iText.Kernel.Colors;
+	using iText.Kernel.Font;
+	using iText.Kernel.Geom;
+	using iText.Kernel.Pdf.Canvas;
+	using iText.Layout;
+	using iText.Layout.Borders;
+	using iText.Layout.Element;
+	using iText.Layout.Properties;
+	using Microsoft.Office.Interop.Excel;
+	using Config;
+	using Convertidores;
+	using Models;
+	using Servicios;
 
 	public static class PijamaPrintModel {
 
@@ -50,6 +44,7 @@ namespace Orion.PrintModel {
 		private static ConvertidorColorDia cnvColorDia = new ConvertidorColorDia();
 		private static ConvertidorColorDiaPijama cnvColorDiaPijama = new ConvertidorColorDiaPijama();
 		private static ConvertidorColorDiaSinGraficos cnvColorDiaSinGraficos = new ConvertidorColorDiaSinGraficos();
+		private static ConvertidorColorColumnaPijama cnvColorColumnaPijama = new ConvertidorColorColumnaPijama();
 
 		private static string rutaPlantillaPijama = Utils.CombinarCarpetas(App.RutaInicial, "/Plantillas/Pijama.xlsx");
 
@@ -262,6 +257,8 @@ namespace Orion.PrintModel {
 			estiloDia.SetBorderLeft(new SolidBorder(1))
 					 .SetBorderRight(new SolidBorder(1))
 					 .SetBold();
+			// Estilo con negrita.
+			iText.Layout.Style estiloColumnaPijama = new iText.Layout.Style();
 			// Creamos la tabla que tendrá la Hoja Pijama.
 			float[] columnas = new float[] { 4f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f, 6.9f };
 			Table tabla = new Table(UnitValue.CreatePercentArray(columnas));
@@ -292,27 +289,145 @@ namespace Orion.PrintModel {
 				// Deducimos los colores de la primera y segunda columnas.
 				System.Windows.Media.Color c1 = Colors.Black;
 				System.Windows.Media.Color c2 = Colors.Black;
+				System.Windows.Media.Color c3 = Colors.Black;
 				if (dia.Grafico != 0) {
-					object[] valores2 = new object[] { dia.ComboGrafico, dia.DiaFecha, dia.Dia };
-					c1 = ((System.Windows.Media.SolidColorBrush)cnvColorDiaSinGraficos.Convert(dia.DiaFecha, null, null, null)).Color;
-					c2 = ((System.Windows.Media.SolidColorBrush)cnvColorDiaPijama.Convert(valores2, null, null, null)).Color;
+					object[] valores2 = new object[] { dia.ComboGrafico, dia.DiaFecha, dia.Dia, dia.TieneHorarioAlternativo };
+					c1 = ((SolidColorBrush)cnvColorDiaSinGraficos.Convert(dia.DiaFecha, null, null, null)).Color;
+					c2 = ((SolidColorBrush)cnvColorDiaPijama.Convert(valores2, null, null, null)).Color;
 				}
-				// Insertamos cada celda.
-				tabla.AddCell(new Cell().Add(new Paragraph(dia.Dia.ToString("00")).SetFontColor(new DeviceRgb(c1.R, c1.G, c1.B))).AddStyle(estiloDia).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvNumGraficoPijama.Convert(dia.ComboGrafico, null, null, null)).SetFontColor(new DeviceRgb(c2.R, c2.G, c2.B))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(dia.GraficoTrabajado.Trabajadas, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(dia.GraficoTrabajado.Acumuladas, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(dia.GraficoTrabajado.Nocturnas, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(dia.ExcesoJornada, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.Desayuno, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.Comida, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.Cena, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.PlusCena, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.TotalDietas, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.PlusMenorDescanso, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.PlusPaqueteria, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.PlusLimpieza, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
-				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.OtrosPluses, null, VerValores.NoCeros, null))).AddStyle(estiloCeldas));
+				
+				// COLUMNA DÍA
+				tabla.AddCell(new Cell().Add(new Paragraph(dia.Dia.ToString("00"))
+									    .SetFontColor(new DeviceRgb(c1.R, c1.G, c1.B)))
+										.AddStyle(estiloDia)
+										.AddStyle(estiloCeldas));
+				// COLUMNA GRÁFICO
+				if (dia.TieneHorarioAlternativo) estiloColumnaPijama = new iText.Layout.Style().SetBold();
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvNumGraficoPijama.Convert(dia.ComboGrafico, null, null, null))
+									    .SetFontColor(new DeviceRgb(c2.R, c2.G, c2.B)))
+										.AddStyle(estiloCeldas)
+										.AddStyle(estiloColumnaPijama));
+				// COLUMNA TRABAJADAS
+				if (dia.TrabajadasAlt.HasValue) {
+					c3 = ((SolidColorBrush)cnvColorColumnaPijama.Convert(true, null, null, null)).Color;
+					estiloColumnaPijama = new iText.Layout.Style().SetBold();
+				} else {
+					c3 = Colors.Black;
+					estiloColumnaPijama = new iText.Layout.Style();
+				}
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(dia.GraficoTrabajado.Trabajadas, null, VerValores.NoCeros, null))
+										.SetFontColor(new DeviceRgb(c3.R, c3.G, c3.B)))
+										.AddStyle(estiloCeldas)
+										.AddStyle(estiloColumnaPijama));
+				// COLUMNA ACUMULADAS
+				if (dia.AcumuladasAlt.HasValue) {
+					c3 = ((SolidColorBrush)cnvColorColumnaPijama.Convert(true, null, null, null)).Color;
+					estiloColumnaPijama = new iText.Layout.Style().SetBold();
+				} else {
+					c3 = Colors.Black;
+					estiloColumnaPijama = new iText.Layout.Style();
+				}
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora
+										.Convert(dia.GraficoTrabajado.Acumuladas, null, VerValores.NoCeros, null))
+										.SetFontColor(new DeviceRgb(c3.R, c3.G, c3.B)))
+										.AddStyle(estiloCeldas)
+										.AddStyle(estiloColumnaPijama));
+				// COLUMNA NOCTURNAS
+				if (dia.NocturnasAlt.HasValue) {
+					c3 = ((SolidColorBrush)cnvColorColumnaPijama.Convert(true, null, null, null)).Color;
+					estiloColumnaPijama = new iText.Layout.Style().SetBold();
+				} else {
+					c3 = Colors.Black;
+					estiloColumnaPijama = new iText.Layout.Style();
+				}
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(dia.GraficoTrabajado.Nocturnas, null, VerValores.NoCeros, null))
+										.SetFontColor(new DeviceRgb(c3.R, c3.G, c3.B)))
+										.AddStyle(estiloCeldas)
+										.AddStyle(estiloColumnaPijama));
+				// COLUMNA EXCESO JORNADA
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvHora.Convert(dia.ExcesoJornada, null, VerValores.NoCeros, null)))
+										.AddStyle(estiloCeldas));
+				// COLUMNA DESAYUNO
+				if (dia.DesayunoAlt.HasValue) {
+					c3 = ((SolidColorBrush)cnvColorColumnaPijama.Convert(true, null, null, null)).Color;
+					estiloColumnaPijama = new iText.Layout.Style().SetBold();
+				} else {
+					c3 = Colors.Black;
+					estiloColumnaPijama = new iText.Layout.Style();
+				}
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.Desayuno, null, VerValores.NoCeros, null))
+										.SetFontColor(new DeviceRgb(c3.R, c3.G, c3.B)))
+										.AddStyle(estiloCeldas)
+										.AddStyle(estiloColumnaPijama));
+				// COLUMNA COMIDA
+				if (dia.ComidaAlt.HasValue) {
+					c3 = ((SolidColorBrush)cnvColorColumnaPijama.Convert(true, null, null, null)).Color;
+					estiloColumnaPijama = new iText.Layout.Style().SetBold();
+				} else {
+					c3 = Colors.Black;
+					estiloColumnaPijama = new iText.Layout.Style();
+				}
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.Comida, null, VerValores.NoCeros, null))
+										.SetFontColor(new DeviceRgb(c3.R, c3.G, c3.B)))
+										.AddStyle(estiloCeldas)
+										.AddStyle(estiloColumnaPijama));
+				// COLUMNA CENA
+				if (dia.CenaAlt.HasValue) {
+					c3 = ((SolidColorBrush)cnvColorColumnaPijama.Convert(true, null, null, null)).Color;
+					estiloColumnaPijama = new iText.Layout.Style().SetBold();
+				} else {
+					c3 = Colors.Black;
+					estiloColumnaPijama = new iText.Layout.Style();
+				}
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.Cena, null, VerValores.NoCeros, null))
+										.SetFontColor(new DeviceRgb(c3.R, c3.G, c3.B)))
+										.AddStyle(estiloCeldas)
+										.AddStyle(estiloColumnaPijama));
+				// COLUMNA PLUS CENA
+				if (dia.PlusCenaAlt.HasValue) {
+					c3 = ((SolidColorBrush)cnvColorColumnaPijama.Convert(true, null, null, null)).Color;
+					estiloColumnaPijama = new iText.Layout.Style().SetBold();
+				} else {
+					c3 = Colors.Black;
+					estiloColumnaPijama = new iText.Layout.Style();
+				}
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.GraficoTrabajado.PlusCena, null, VerValores.NoCeros, null))
+										.SetFontColor(new DeviceRgb(c3.R, c3.G, c3.B)))
+										.AddStyle(estiloCeldas)
+										.AddStyle(estiloColumnaPijama));
+				// COLUMNA TOTAL DIETAS
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimal.Convert(dia.TotalDietas, null, VerValores.NoCeros, null)))
+										.AddStyle(estiloCeldas));
+				// COLUMNA PLUS MENOR DESCANSO
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.PlusMenorDescanso, null, VerValores.NoCeros, null)))
+										.AddStyle(estiloCeldas));
+				// COLUMNA PLUS PAQUETERÍA
+				if (dia.PlusPaqueteriaAlt.HasValue) {
+					c3 = ((SolidColorBrush)cnvColorColumnaPijama.Convert(true, null, null, null)).Color;
+					estiloColumnaPijama = new iText.Layout.Style().SetBold();
+				} else {
+					c3 = Colors.Black;
+					estiloColumnaPijama = new iText.Layout.Style();
+				}
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.PlusPaqueteria, null, VerValores.NoCeros, null))
+										.SetFontColor(new DeviceRgb(c3.R, c3.G, c3.B)))
+										.AddStyle(estiloCeldas)
+										.AddStyle(estiloColumnaPijama));
+				// COLUMNA PLUS LIMPIEZA
+				if (dia.PlusLimpiezaAlt.HasValue) {
+					c3 = ((SolidColorBrush)cnvColorColumnaPijama.Convert(true, null, null, null)).Color;
+					estiloColumnaPijama = new iText.Layout.Style().SetBold();
+				} else {
+					c3 = Colors.Black;
+					estiloColumnaPijama = new iText.Layout.Style();
+				}
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.PlusLimpieza, null, VerValores.NoCeros, null))
+										.SetFontColor(new DeviceRgb(c3.R, c3.G, c3.B)))
+										.AddStyle(estiloCeldas)
+										.AddStyle(estiloColumnaPijama));
+				// COLUMNA OTROS PLUSES
+				tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.OtrosPluses, null, VerValores.NoCeros, null)))
+										.AddStyle(estiloCeldas));
 			}
 			// Añadimos el borde a la tabla y al encabezado
 			tabla.SetBorder(new SolidBorder(1));

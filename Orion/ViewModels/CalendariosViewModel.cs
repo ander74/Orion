@@ -272,6 +272,7 @@ namespace Orion.ViewModels
 			set {
 				if (_diacalendarioseleccionado != value) {
 					_diacalendarioseleccionado = value;
+					GraficoOriginal = null;
 					PropiedadCambiada();
 					PropiedadCambiada(nameof(HayDiaCalendarioSeleccionado));
 				}
@@ -652,6 +653,15 @@ namespace Orion.ViewModels
 			get { return _visibilidadgraficoalternativo; }
 			set { SetValue(ref _visibilidadgraficoalternativo, value); }
 		}
+
+
+
+		private GraficoBase _graficooriginal;
+		public GraficoBase GraficoOriginal {
+			get { return _graficooriginal; }
+			set { SetValue(ref _graficooriginal, value); }
+		}
+
 
 
 

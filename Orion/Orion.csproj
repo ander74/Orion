@@ -190,10 +190,13 @@
     <Compile Include="Config\GestionGraficos.cs" />
     <Compile Include="Config\ItemChangedEventArgs.cs" />
     <Compile Include="Config\NotifyCollection.cs" />
+    <Compile Include="Convertidores\ConvertidorColorColumnaPijama.cs" />
     <Compile Include="Convertidores\ConvertidorDecimalNulable.cs" />
     <Compile Include="Convertidores\ConvertidorDiaSemanaGrafico.cs" />
     <Compile Include="Convertidores\ConvertidorMinutosToHora.cs" />
     <Compile Include="Convertidores\ConvertidorMinutosToHoraMixta.cs" />
+    <Compile Include="Convertidores\ConvertidorNegritaColumnaPijama.cs" />
+    <Compile Include="Convertidores\ConvertidorNegritaDiaPijama.cs" />
     <Compile Include="Convertidores\ConvertidorVisibilityInverter.cs" />
     <Compile Include="Convertidores\ConvertidorColorDia.cs" />
     <Compile Include="Convertidores\ConvertidorColorDiaPijama.cs" />

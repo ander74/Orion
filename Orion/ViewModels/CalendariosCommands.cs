@@ -1902,27 +1902,8 @@ namespace Orion.ViewModels {
 
 		// Ejecución del comando
 		private void CargarGraficoAlternativo() {
-			if (Mensajes.VerMensaje($"Vas a cargar los datos del gráfico {DiaCalendarioSeleccionado.Grafico:0000}\n\n" +
-						$"Esto hará que se borren todos los datos que hay ahora.\n\n" +
-						$"¿Deseas continuar?", "ATENCIÓN", true) == false) return;
-
 			if (DiaCalendarioSeleccionado.Grafico <= 0) return;
-			GraficoBase grafico = Orion.Pijama.BdPijamas.GetGrafico(DiaCalendarioSeleccionado.Grafico, DiaCalendarioSeleccionado.DiaFecha);
-			if (grafico == null) return;
-			DiaCalendarioSeleccionado.TurnoAlt = grafico.Turno;
-			DiaCalendarioSeleccionado.InicioAlt = grafico.Inicio;
-			DiaCalendarioSeleccionado.FinalAlt = grafico.Final;
-			DiaCalendarioSeleccionado.InicioPartidoAlt = grafico.InicioPartido;
-			DiaCalendarioSeleccionado.FinalPartidoAlt = grafico.FinalPartido;
-			DiaCalendarioSeleccionado.TrabajadasAlt = grafico.Trabajadas;
-			DiaCalendarioSeleccionado.AcumuladasAlt = grafico.Acumuladas;
-			DiaCalendarioSeleccionado.NocturnasAlt = grafico.Nocturnas;
-			DiaCalendarioSeleccionado.DesayunoAlt = grafico.Desayuno;
-			DiaCalendarioSeleccionado.ComidaAlt = grafico.Comida;
-			DiaCalendarioSeleccionado.CenaAlt = grafico.Cena;
-			DiaCalendarioSeleccionado.PlusCenaAlt = grafico.PlusCena;
-			DiaCalendarioSeleccionado.PlusLimpiezaAlt = grafico.PlusLimpieza;
-			DiaCalendarioSeleccionado.PlusPaqueteriaAlt = grafico.PlusPaqueteria;
+			GraficoOriginal = Orion.Pijama.BdPijamas.GetGrafico(DiaCalendarioSeleccionado.Grafico, DiaCalendarioSeleccionado.DiaFecha);
 		}
 		#endregion
 

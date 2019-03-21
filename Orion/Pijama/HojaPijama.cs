@@ -122,7 +122,7 @@ namespace Orion.Pijama {
 					}
 				}
 				// Extraemos las horas de las regulaciones.
-				HorasCobradas = BdPijamas.GetHorasCobradasMes(Trabajador.Id, Fecha.Year, Fecha.Month);
+				HorasCobradas = BdPijamas.GetHorasCobradasMes(Fecha.Year, Fecha.Month, Trabajador.Id);
 				HorasCobradasAño = BdPijamas.GetHorasCobradasAño(Fecha.Year, Fecha.Month, Trabajador.Id);
 				HorasReguladas = BdPijamas.GetHorasCambiadasPorDCsMes(Fecha.Year, Fecha.Month, Trabajador.Id);
 				OtrasHoras = BdPijamas.GetHorasReguladasMes(Fecha.Year, Fecha.Month, Trabajador.Id);

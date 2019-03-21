@@ -52,7 +52,7 @@ namespace Orion.Pijama {
 
 
 		private static string comandoDiasCalendario = "SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha, " +
-													  "DiasCalendario.ExcesoJornada " +
+													  "DiasCalendario.ExcesoJornada, DiasCalendario.AcumuladasAlt " +
 													  "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios.Id " +
 													  "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha < ? AND IdConductor = ?) " +
 													  "      AND Grafico > 0 " +
@@ -210,6 +210,7 @@ namespace Orion.Pijama {
 						int d = (lector["Dia"] is DBNull) ? 0 : (Int16)lector["Dia"];
 						int g = (lector["Grafico"] is DBNull) ? 0 : (Int16)lector["Grafico"];
 						int v = (lector["GraficoVinculado"] is DBNull) ? 0 : (Int16)lector["GraficoVinculado"];
+						TimeSpan? acumuladasAlt = lector.ToTimeSpanNulable("AcumuladasAlt");
 						TimeSpan ej = lector.ToTimeSpan("ExcesoJornada");
 						if (v != 0 && g == App.Global.PorCentro.Comodin) g = v;
 						DateTime f = (lector["Fecha"] is DBNull) ? new DateTime(0) : (DateTime)lector["Fecha"];
@@ -226,6 +227,7 @@ namespace Orion.Pijama {
 							if (ej != TimeSpan.Zero) {
 								if (grafico != null) grafico.Final += ej;
 							}
+							if (acumuladasAlt.HasValue) grafico.Acumuladas = acumuladasAlt.Value;
 							resultado.HorasAcumuladas += grafico.Acumuladas;
 						}
 						lector2.Close();
@@ -243,6 +245,17 @@ namespace Orion.Pijama {
 						objeto = 0d;
 					}
 					resultado.HorasReguladas = new TimeSpan(Convert.ToInt64(objeto));
+					//----------------------------------------------------------------------------------------------------
+					// HORAS COBRADAS
+					//----------------------------------------------------------------------------------------------------
+					//comando = new OleDbCommand(comandoCobradas, conexion);
+					//comando.Parameters.AddWithValue("idconductor", idconductor);
+					//comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+					//objeto = comando.ExecuteScalar();
+					//if (objeto == DBNull.Value) {
+					//	objeto = 0d;
+					//}
+					//resultado.HorasCobradas = new TimeSpan(Convert.ToInt64(objeto));
 					//----------------------------------------------------------------------------------------------------
 					// DIAS F6
 					//----------------------------------------------------------------------------------------------------
@@ -331,7 +344,7 @@ namespace Orion.Pijama {
 			{
 
 				// Definimos el comando SQL.
-				string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Year(Fecha) = ? AND Month(Fecha) = ? AND Codigo = 1;";
+				string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idconductor AND Year(Fecha) = @año AND Month(Fecha) = @mes AND Codigo = 1";
 
 				// Creamos el comando y añadimos los parámetros.
 				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);

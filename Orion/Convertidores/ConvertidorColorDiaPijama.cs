@@ -33,6 +33,7 @@ namespace Orion.Convertidores {
 			int codigo = combo.Item2;
 			DateTime f = values[1] == null ? new DateTime() : (DateTime)values[1];
 			int dia = values[2] == null ? 0 : (int)values[2];
+			bool alternativo = values[3] == null ? false : (bool)values[3];
 			if (f == null) return color;
 
 			//Creamos la fecha a evaluar.
@@ -67,6 +68,7 @@ namespace Orion.Convertidores {
 					color = new SolidColorBrush(App.Global.Configuracion.ColorJD); break;
 			}
 			if (codigo == 3) color = new SolidColorBrush(App.Global.Configuracion.ColorJD);
+			if (alternativo) color = new SolidColorBrush(Colors.DarkRed);
 
 			// Devolvemos el color.
 			return color;

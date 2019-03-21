@@ -8,7 +8,18 @@ PROYECTO ORIÓN
 
 		Sin Publicar
 
-			- 
+			- Corregido el problema de que no se veían las horas cobradas en el pijama.
+
+			- Corregido el problema que no contabilizaba los datos del gráfico alternativo en el global de horas.
+
+			- Se colorean y se ponen en negrita los campos que tienen algún elemento alternativo.
+
+			- Al cargar el gráfico original en el calendario, se carga fuera de los campos, sólo como información.
+
+			- Cuando se pone un valor en los apartados del gráfico alternativo del calendario, el día se subraya.
+
+			- Se colorean tambien los datos del pijama que son alternativos en el informe PDF.
+
 
 		18 de Marzo de 2019
 

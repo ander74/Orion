@@ -221,6 +221,27 @@ namespace Orion.Pijama {
 		// ====================================================================================================
 
 
+		// ====================================================================================================
+		#region PROPIEDADES GRÁFICO ALTERNATIVO
+		// ====================================================================================================
+
+
+
+		private bool _tienehorarioalternativo;
+		public bool TieneHorarioAlternativo{
+			get {
+				if (TurnoAlt.HasValue || InicioAlt.HasValue || FinalAlt.HasValue) return true;
+				if (InicioPartidoAlt.HasValue || FinalPartidoAlt.HasValue) return true;
+				return false;
+			}
+		}
+
+
+		#endregion
+		// ====================================================================================================
+
+
+
 
 	}
 }

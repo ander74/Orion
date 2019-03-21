@@ -5,32 +5,26 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using iText.Forms;
-using iText.Forms.Fields;
-using iText.Kernel.Colors;
-using iText.Kernel.Font;
-using iText.Kernel.Geom;
-using iText.Kernel.Pdf;
-using iText.Kernel.Pdf.Canvas;
-using iText.Layout;
-using iText.Layout.Borders;
-using iText.Layout.Element;
-using iText.Layout.Properties;
-using iText.Layout.Renderer;
-using Microsoft.Office.Interop.Excel;
-using Orion.Config;
-using Orion.Convertidores;
-using Orion.Models;
-using Orion.Servicios;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows.Data;
-
 namespace Orion.PrintModel {
 
-    public static class CalendarioPrintModel {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Threading.Tasks;
+	using System.Windows.Data;
+	using iText.Kernel.Colors;
+	using iText.Kernel.Font;
+	using iText.Layout;
+	using iText.Layout.Borders;
+	using iText.Layout.Element;
+	using iText.Layout.Properties;
+	using Microsoft.Office.Interop.Excel;
+	using Orion.Config;
+	using Orion.Convertidores;
+	using Orion.Models;
+	using Orion.Servicios;
+
+	public static class CalendarioPrintModel {
 
 
         // ====================================================================================================

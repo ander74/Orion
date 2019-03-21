@@ -44,8 +44,11 @@
         <cnv:ConvertidorRojoSiTrue x:Key="cnvRojoSiTrue"/>
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility"/>
         <cnv:ConvertidorVisibilityInverter x:Key="cnvVisibilityInverter"/>
+		<cnv:ConvertidorColorColumnaPijama x:Key="cnvColorColumnaPijama"/>
+		<cnv:ConvertidorNegritaColumnaPijama x:Key="cnvNegritaColumnaPijama"/>
+		<cnv:ConvertidorNegritaDiaPijama x:Key="cnvNegritaDiaPijama"/>
 
-        <Style x:Key="EstiloGridCalendarios" TargetType="DataGrid">
+		<Style x:Key="EstiloGridCalendarios" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}"/>
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasVerde}"/>
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasCalendarios}"/>
@@ -791,21 +794,22 @@
                            IsEnabled="{Binding CalendariosVM.HayDiaCalendarioSeleccionado}"
 						   Visibility="{Binding CalendariosVM.VisibilidadGraficoAlternativo}">
 						<StackPanel Orientation="Horizontal">
-							<StackPanel Orientation="Vertical">
-
-								<!-- BOTÓN CARGAR GRÁFICO ALTERNATIVO -->
-								<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="Cargar"
-									Padding="8,5" Margin="0,0,10,0" VerticalAlignment="Center" Width="70"
-									Command="{Binding CalendariosVM.cmdCargarGraficoAlternativo}"/>
+							<StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
 
 								<!-- BOTÓN BORRAR GRÁFICO ALTERNATIVO -->
 								<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="Borrar"
 									Padding="8,5" Margin="0,0,10,0" VerticalAlignment="Center" Width="70"
 									Command="{Binding CalendariosVM.cmdBorrarGraficoAlternativo}"/>
 
+								<!-- BOTÓN CARGAR GRÁFICO ALTERNATIVO -->
+								<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="Cargar"
+									Padding="8,5" Margin="0,0,10,0" VerticalAlignment="Center" Width="70"
+									Command="{Binding CalendariosVM.cmdCargarGraficoAlternativo}"/>
+
 							</StackPanel>
-							<Grid DataContext="{Binding CalendariosVM.DiaCalendarioSeleccionado}">
+							<Grid DataContext="{Binding CalendariosVM}">
 								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
 									<RowDefinition Height="Auto"/>
 									<RowDefinition Height="Auto"/>
 								</Grid.RowDefinitions>
@@ -841,66 +845,112 @@
 								<!--<TextBlock Grid.Row="0" Grid.Column="12" Text="P. Limpieza" Padding="4" Width="70" VerticalAlignment="Bottom"/>-->
 								<!--<TextBlock Grid.Row="0" Grid.Column="13" Text="P. Paquetería" Padding="4" Width="70" VerticalAlignment="Bottom"/>-->
 
+								<!-- VALORES -->
 								<TextBox Grid.Row="1" Grid.Column="0" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding TurnoAlt}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.TurnoAlt}"/>
 								<TextBox Grid.Row="1" Grid.Column="1" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding InicioAlt, Converter={StaticResource cnvHora}}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.InicioAlt, Converter={StaticResource cnvHora}}"/>
 								<TextBox Grid.Row="1" Grid.Column="2" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding FinalAlt, Converter={StaticResource cnvHora}}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.FinalAlt, Converter={StaticResource cnvHora}}"/>
 								<TextBox Grid.Row="1" Grid.Column="3" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding InicioPartidoAlt, Converter={StaticResource cnvHora}}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.InicioPartidoAlt, Converter={StaticResource cnvHora}}"/>
 								<TextBox Grid.Row="1" Grid.Column="4" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding FinalPartidoAlt, Converter={StaticResource cnvHora}}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.FinalPartidoAlt, Converter={StaticResource cnvHora}}"/>
 								<TextBox Grid.Row="1" Grid.Column="5" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding TrabajadasAlt, Converter={StaticResource cnvHora}}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.TrabajadasAlt, Converter={StaticResource cnvHora}}"/>
 								<TextBox Grid.Row="1" Grid.Column="6" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding AcumuladasAlt, Converter={StaticResource cnvHora}}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.AcumuladasAlt, Converter={StaticResource cnvHora}}"/>
 								<TextBox Grid.Row="1" Grid.Column="7" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding NocturnasAlt, Converter={StaticResource cnvHora}}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.NocturnasAlt, Converter={StaticResource cnvHora}}"/>
 								<TextBox Grid.Row="1" Grid.Column="8" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding DesayunoAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.DesayunoAlt, Converter={StaticResource cnvDecimalNulable}}"/>
 								<TextBox Grid.Row="1" Grid.Column="9" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding ComidaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.ComidaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
 								<TextBox Grid.Row="1" Grid.Column="10" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding CenaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.CenaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
 								<TextBox Grid.Row="1" Grid.Column="11" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
-										 Text="{Binding PlusCenaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+										 Text="{Binding DiaCalendarioSeleccionado.PlusCenaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
 								<StackPanel Grid.Row="0" Grid.Column="12" Orientation="Horizontal" Margin="10,0,0,0">
 									<TextBlock Text="Plus Limpieza: " VerticalAlignment="Center"/>
 									<CheckBox Grid.Row="1" Grid.Column="12" FontSize="12" IsThreeState="True" 
 									  Margin="0" VerticalAlignment="Center" Padding="3" HorizontalAlignment="Center"
-									  IsChecked="{Binding PlusLimpiezaAlt, UpdateSourceTrigger=PropertyChanged}"/>
+									  IsChecked="{Binding DiaCalendarioSeleccionado.PlusLimpiezaAlt, UpdateSourceTrigger=PropertyChanged}"/>
 								</StackPanel>
 								<StackPanel Grid.Row="1" Grid.Column="12" Orientation="Horizontal" Margin="10,0,0,0">
 									<TextBlock Text="Plus Paquetería: " VerticalAlignment="Center"/>
 									<CheckBox Grid.Row="1" Grid.Column="12" FontSize="12" IsThreeState="True" 
 									  Margin="0" VerticalAlignment="Center" Padding="3" HorizontalAlignment="Center"
-									  IsChecked="{Binding PlusPaqueteriaAlt, UpdateSourceTrigger=PropertyChanged}"/>
+									  IsChecked="{Binding DiaCalendarioSeleccionado.PlusPaqueteriaAlt, UpdateSourceTrigger=PropertyChanged}"/>
 								</StackPanel>
+
+								<!-- GRÁFICO original -->
+								<Label Grid.Row="2" Grid.Column="0" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.Turno}" />
+								<Label Grid.Row="2" Grid.Column="0" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.Turno}" />
+								<Label Grid.Row="2" Grid.Column="1" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.Inicio, Converter={StaticResource cnvHora}}"/>
+								<Label Grid.Row="2" Grid.Column="2" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.Final, Converter={StaticResource cnvHora}}"/>
+								<Label Grid.Row="2" Grid.Column="3" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.InicioPartido, Converter={StaticResource cnvHora}}"/>
+								<Label Grid.Row="2" Grid.Column="4" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.FinalPartido, Converter={StaticResource cnvHora}}"/>
+								<Label Grid.Row="2" Grid.Column="5" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.Trabajadas, Converter={StaticResource cnvHora}}"/>
+								<Label Grid.Row="2" Grid.Column="6" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.Acumuladas, Converter={StaticResource cnvHora}}"/>
+								<Label Grid.Row="2" Grid.Column="7" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.Nocturnas, Converter={StaticResource cnvHora}}"/>
+								<Label Grid.Row="2" Grid.Column="8" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.Desayuno, Converter={StaticResource cnvDecimalNulable}}"/>
+								<Label Grid.Row="2" Grid.Column="9" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.Comida, Converter={StaticResource cnvDecimalNulable}}"/>
+								<Label Grid.Row="2" Grid.Column="10" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.Cena, Converter={StaticResource cnvDecimalNulable}}"/>
+								<Label Grid.Row="2" Grid.Column="11" Padding="4" Width="70" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content="{Binding GraficoOriginal.PlusCena, Converter={StaticResource cnvDecimalNulable}}"/>
+								<Label Grid.Row="2" Grid.Column="12" Padding="4" Width="20" VerticalAlignment="Top"
+									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+									   Content=" "/>
+
 
 							</Grid>
 						</StackPanel>
@@ -2073,14 +2123,23 @@
                 <DataGridTextColumn Header="Gráfico" Width="*" Binding="{Binding ComboGrafico, Converter={StaticResource cnvNumGraficoPijama}}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>
-                            <Setter Property="Foreground">
+                            <!--<Setter Property="FontWeight" Value="{Binding ComboGrafico, Converter={StaticResource cnvNegritaDia}}"/>-->
+							<Setter Property="FontWeight">
+								<Setter.Value>
+									<MultiBinding Converter="{StaticResource cnvNegritaDiaPijama}">
+										<Binding Path="ComboGrafico"/>
+										<Binding Path="TieneHorarioAlternativo"/>
+									</MultiBinding>
+								</Setter.Value>
+							</Setter>
+							<Setter Property="Foreground">
                                 <Setter.Value>
                                     <MultiBinding Converter="{StaticResource cnvColorDiaPijama}">
                                         <Binding Path="ComboGrafico"/>
                                         <Binding Path="DiaFecha"/>
                                         <Binding Path="DiaFecha.Day"/>
-                                    </MultiBinding>
+										<Binding Path="TieneHorarioAlternativo"/>
+									</MultiBinding>
                                 </Setter.Value>
                             </Setter>
                             <Setter Property="ToolTip" Value="{Binding TextoInicioFinal}"/>
@@ -2094,25 +2153,43 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="ToolTip" Value="{Binding TrabajadasReales, Converter={StaticResource cnvHora}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
-                        </Style>
+							<Setter Property="FontWeight" Value="{Binding TrabajadasAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
+							<Setter Property="Foreground" Value="{Binding TrabajadasAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+						</Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
-                <DataGridTextColumn Header="Acumulad." Width="*" Binding="{Binding GraficoTrabajado.Acumuladas, 
-                                    Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+				<DataGridTextColumn Header="Acumulad." Width="*" Binding="{Binding GraficoTrabajado.Acumuladas, 
+                                    Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+					<DataGridTextColumn.ElementStyle>
+						<Style TargetType="TextBlock">
+							<Setter Property="FontWeight" Value="{Binding AcumuladasAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
+							<Setter Property="Foreground" Value="{Binding AcumuladasAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
                 <DataGridTextColumn Header="Nocturnas" Width="*" Binding="{Binding GraficoTrabajado.Nocturnas, 
-                                    Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                                    Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+					<DataGridTextColumn.ElementStyle>
+						<Style TargetType="TextBlock">
+							<Setter Property="FontWeight" Value="{Binding NocturnasAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
+							<Setter Property="Foreground" Value="{Binding NocturnasAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
                 <DataGridTextColumn Header="Ex.Jornada" Width="*" Binding="{Binding ExcesoJornada, 
                                     Converter={StaticResource cnvSuperHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                <DataGridTextColumn Width="*" Binding="{Binding GraficoTrabajado.Desayuno, Converter={StaticResource cnvDecimal}, 
+				<DataGridTextColumn Width="*" Binding="{Binding GraficoTrabajado.Desayuno, Converter={StaticResource cnvDecimal}, 
                                     ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
-                    <DataGridTextColumn.Header>
+					<DataGridTextColumn.Header>
                         <TextBlock Text="Desayuno" ToolTip="El importe incluye el porcentaje aplicado."/>
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="ToolTip" Value="{Binding ImporteDesayuno, Converter={StaticResource cnvDecimalEuro}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
-                        </Style>
+							<Setter Property="FontWeight" Value="{Binding DesayunoAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
+							<Setter Property="Foreground" Value="{Binding DesayunoAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+						</Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Comida" Width="*" Binding="{Binding GraficoTrabajado.Comida, 
@@ -2121,7 +2198,9 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="ToolTip" Value="{Binding ImporteComida, Converter={StaticResource cnvDecimalEuro}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
-                        </Style>
+							<Setter Property="FontWeight" Value="{Binding ComidaAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
+							<Setter Property="Foreground" Value="{Binding ComidaAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+						</Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Cena" Width="*" Binding="{Binding GraficoTrabajado.Cena, 
@@ -2130,7 +2209,9 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="ToolTip" Value="{Binding ImporteCena, Converter={StaticResource cnvDecimalEuro}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
-                        </Style>
+							<Setter Property="FontWeight" Value="{Binding CenaAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
+							<Setter Property="Foreground" Value="{Binding CenaAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+						</Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="PlusCena" Width="*" Binding="{Binding GraficoTrabajado.PlusCena, 
@@ -2139,7 +2220,9 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="ToolTip" Value="{Binding ImportePlusCena, Converter={StaticResource cnvDecimalEuro}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
-                        </Style>
+							<Setter Property="FontWeight" Value="{Binding PlusCenaAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
+							<Setter Property="Foreground" Value="{Binding PlusCenaAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+						</Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="TotalDietas" Width="*" Binding="{Binding TotalDietas,
@@ -2166,11 +2249,20 @@
                         <Style TargetType="TextBlock">
                             <Setter Property="ToolTip" Value="{Binding FacturadoPaqueteria, Converter={StaticResource cnvDecimalEuro}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
-                        </Style>
+							<Setter Property="FontWeight" Value="{Binding PlusPaqueteriaAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
+							<Setter Property="Foreground" Value="{Binding PlusPaqueteriaAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+						</Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
                 <DataGridTextColumn Header="Limpieza" Width="*" Binding="{Binding PlusLimpieza, 
-                                    Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                                    Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+					<DataGridTextColumn.ElementStyle>
+						<Style TargetType="TextBlock">
+							<Setter Property="FontWeight" Value="{Binding PlusLimpiezaAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
+							<Setter Property="Foreground" Value="{Binding PlusLimpiezaAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+						</Style>
+					</DataGridTextColumn.ElementStyle>
+				</DataGridTextColumn>
                 <DataGridTextColumn Header="Otros" Width="*" Binding="{Binding OtrosPluses,
                                     Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
             </DataGrid.Columns>

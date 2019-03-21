@@ -41,12 +41,22 @@ namespace Orion.Models {
 		private void LlamarPropiedadCambiada(object sender, PropertyChangedEventArgs e) {
 			switch (e.PropertyName) {
 				case nameof(ExcesoJornada):
-					PropiedadCambiada(nameof(HayExtras));
-					break;
 				case nameof(FacturadoPaqueteria):
-					PropiedadCambiada(nameof(HayExtras));
-					break;
 				case nameof(Limpieza):
+				case nameof(TurnoAlt):
+				case nameof(InicioAlt):
+				case nameof(FinalAlt):
+				case nameof(InicioPartidoAlt):
+				case nameof(FinalPartidoAlt):
+				case nameof(TrabajadasAlt):
+				case nameof(AcumuladasAlt):
+				case nameof(NocturnasAlt):
+				case nameof(DesayunoAlt):
+				case nameof(ComidaAlt):
+				case nameof(CenaAlt):
+				case nameof(PlusCenaAlt):
+				case nameof(PlusLimpiezaAlt):
+				case nameof(PlusPaqueteriaAlt):
 					PropiedadCambiada(nameof(HayExtras));
 					break;
 				case nameof(Notas):
@@ -79,6 +89,11 @@ namespace Orion.Models {
 				if (FacturadoPaqueteria != 0) return true;
 				if (Limpieza != false) return true;
 				if (!String.IsNullOrWhiteSpace(Notas)) return true;
+				if (TurnoAlt != null || InicioAlt != null || InicioPartidoAlt != null) return true;
+				if (PlusCenaAlt != null || FinalAlt != null || FinalPartidoAlt != null) return true;
+				if (TrabajadasAlt != null || AcumuladasAlt != null || NocturnasAlt != null) return true;
+				if (DesayunoAlt != null || ComidaAlt != null || CenaAlt != null) return true;
+				if (PlusLimpiezaAlt != null || PlusPaqueteriaAlt != null) return true;
 				return false;
 			}
 		}
