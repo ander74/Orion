@@ -36,7 +36,8 @@
         <cnv:ConvertidorDiasF6 x:Key="cnvDiasF6"/>
         <cnv:ConvertidorFecha x:Key="cnvFecha"/>
         <cnv:ConvertidorDecimal x:Key="cnvDecimal"/>
-        <cnv:ConvertidorDecimalEuro x:Key="cnvDecimalEuro"/>
+		<cnv:ConvertidorDecimal6 x:Key="cnvDecimal6"/>
+		<cnv:ConvertidorDecimalEuro x:Key="cnvDecimalEuro"/>
 		<cnv:ConvertidorDecimalNulable x:Key="cnvDecimalNulable"/>
 		<cnv:ConvertidorNumeroGrafico x:Key="cnvNumGrafico"/>
         <cnv:ConvertidorNumeroGraficoCalendario x:Key="cnvNumGraficoCalendario"/>
@@ -503,10 +504,10 @@
                 <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
                     <TextBlock Style="{StaticResource TextoPijama1}" Text="DCs Pendientes:  " Margin="0,5" FontSize="13" Width="150" TextAlignment="Right"/>
                     <TextBlock Style="{StaticResource TextoPijama2}" Margin="0,5" FontSize="14" Width="Auto"
-                               Text="{Binding CalendariosVM.Pijama.DCsPendientesHastaAñoAnterior, StringFormat=00}" />
+                               Text="{Binding CalendariosVM.Pijama.DCsPendientesHastaAñoAnterior, Converter={StaticResource cnvDecimal6}}" />
                     <TextBlock Style="{StaticResource TextoPijama2}" Margin="0,5" FontSize="14" Width="Auto" Text=" ("/>
                     <TextBlock Style="{StaticResource TextoPijama2}" Margin="0,5" FontSize="14" Width="Auto"
-                               Text="{Binding CalendariosVM.Pijama.DCsGeneradosHastaAñoAnterior, Converter={StaticResource cnvDecimal}}" />
+                               Text="{Binding CalendariosVM.Pijama.DCsGeneradosHastaAñoAnterior, Converter={StaticResource cnvDecimal6}}" />
                     <TextBlock Style="{StaticResource TextoPijama2}" Margin="0,5" FontSize="14" Width="Auto" Text=")"/>
                     <StackPanel.ToolTip>
                         <TextBlock>
@@ -2689,7 +2690,7 @@
                                        Text="{Binding CalendariosVM.Pijama.DNDsPendientesHastaMes, StringFormat=00}"
                                        ToolTip="Descansos no disfrutados pendientes de disfrutar."/>
                             <TextBlock Style="{StaticResource TextoPijama2}" FontSize="13" Width="120" TextAlignment="Center"
-                                       Text="{Binding CalendariosVM.Pijama.DCsPendientesHastaMes, StringFormat=00}"
+                                       Text="{Binding CalendariosVM.Pijama.DCsPendientesHastaMes, Converter={StaticResource cnvDecimal6}}"
                                        ToolTip="Descansos compensatorios pendientes de disfrutar."/>
                             <TextBlock Style="{StaticResource TextoPijama2}" FontSize="13" Width="120" TextAlignment="Center"
                                        Text="{Binding CalendariosVM.Pijama.AcumuladasHastaMes, Converter={StaticResource cnvHoraMixta},
@@ -2704,7 +2705,7 @@
                             <TextBlock FontFamily="Verdana" FontSize="13" FontWeight="Bold" Foreground="DarkBlue"
                                        Text="DCs Generados:  "/>
                             <TextBlock FontFamily="Verdana" FontSize="13" Foreground="DarkBlue"
-                                       Text="{Binding CalendariosVM.Pijama.DCsGeneradosHastaMes,  Converter={StaticResource cnvDecimal}}"/>
+                                       Text="{Binding CalendariosVM.Pijama.DCsGeneradosHastaMes,  Converter={StaticResource cnvDecimal6}}"/>
                             <StackPanel.ToolTip>
                                 <TextBlock>
                                     Descansos compensatorios generados a partir de las horas acumuladas actuales <LineBreak/>

@@ -54,7 +54,8 @@ namespace Orion.Models {
 			_telefono = lector.ToString("Telefono");
 			_email = lector.ToString("Email");
 			_acumuladas = lector.ToTimeSpan("Acumuladas");
-			_descansos = lector.ToInt16("Descansos");
+			//_descansos = lector.ToInt16("Descansos");
+			_descansos = lector.ToDecimal("Descansos");
 			_descansosnodisfrutados = lector.ToInt16("DescansosNoDisfrutados");
 			_plusdistancia = lector.ToDecimal("PlusDistancia");
 			_reduccionjornada = lector.ToBool("ReduccionJornada");
@@ -134,7 +135,8 @@ namespace Orion.Models {
 			conductor.Telefono = lector.ToString("Telefono");
 			conductor.Email = lector.ToString("Email");
 			conductor.Acumuladas = lector.ToTimeSpan("Acumuladas");
-			conductor.Descansos = lector.ToInt16("Descansos");
+			//conductor.Descansos = lector.ToInt16("Descansos");
+			conductor.Descansos = lector.ToDecimal("Descansos");
 			conductor.DescansosNoDisfrutados = lector.ToInt16("DescansosNoDisfrutados");
 			conductor.PlusDistancia = lector.ToDecimal("PlusDistancia");
 			conductor.ReduccionJornada = lector.ToBool("ReduccionJornada");
@@ -149,7 +151,8 @@ namespace Orion.Models {
 			Comando.Parameters.AddWithValue("@Telefono", conductor.Telefono);
 			Comando.Parameters.AddWithValue("@Email", conductor.Email);
 			Comando.Parameters.AddWithValue("@Acumuladas", conductor.Acumuladas.Ticks);
-			Comando.Parameters.AddWithValue("@Descansos", conductor.Descansos);
+			//Comando.Parameters.AddWithValue("@Descansos", conductor.Descansos);
+			Comando.Parameters.AddWithValue("@Descansos", conductor.Descansos.ToString("0.0000"));
 			Comando.Parameters.AddWithValue("@Descansosnodisfrutados", conductor.DescansosNoDisfrutados);
 			Comando.Parameters.AddWithValue("@Plusdistancia", conductor.PlusDistancia.ToString("0.0000"));
 			Comando.Parameters.AddWithValue("@ReduccionJornada", conductor.ReduccionJornada);
@@ -286,8 +289,8 @@ namespace Orion.Models {
 		}
 
 
-		private int _descansos;
-		public int Descansos {
+		private decimal _descansos; // Cambiamos el tipo int por decimal
+		public decimal Descansos {
 			get { return _descansos; }
 			set {
 				if (value != _descansos) {

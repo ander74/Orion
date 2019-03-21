@@ -8,6 +8,10 @@ PROYECTO ORIÓN
 
 		Sin Publicar
 
+			- 
+
+		21 de Marzo de 2019
+
 			- Corregido el problema de que no se veían las horas cobradas en el pijama.
 
 			- Corregido el problema que no contabilizaba los datos del gráfico alternativo en el global de horas.

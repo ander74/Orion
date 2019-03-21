@@ -579,8 +579,8 @@ namespace Orion.ViewModels {
 		}
 
 
-		private int dcspendientes;
-		public int DCsPendientes {
+		private decimal dcspendientes; //Cambiamos el tipo int por decimal.
+		public decimal DCsPendientes { //Cambiamos el tipo int por decimal.
 			get { return dcspendientes; }
 			set {
 				if (dcspendientes != value) {

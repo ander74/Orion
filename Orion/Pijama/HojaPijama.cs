@@ -526,7 +526,7 @@ namespace Orion.Pijama {
 		/// <summary>
 		/// Descansos compensatorios pendientes hasta el año anterior.
 		/// </summary>
-		public int DCsPendientesHastaAñoAnterior {
+		public decimal DCsPendientesHastaAñoAnterior { //TODO: Cambiamos el tipo int por decimal.
 			get {
 				return Trabajador.Descansos +
 					   HastaAñoAnterior.DCsRegulados -
@@ -569,7 +569,7 @@ namespace Orion.Pijama {
 		/// <summary>
 		/// Descansos compensatorios pendientes hasta el mes actual.
 		/// </summary>
-		public int DCsPendientesHastaMes {
+		public decimal DCsPendientesHastaMes { // Cambiamos el tipo int por decimal
 			get {
 				return Trabajador.Descansos +
 					   HastaMesActual.DCsRegulados -
@@ -599,7 +599,7 @@ namespace Orion.Pijama {
 			get {
 				decimal resultado = DCsPendientesHastaAñoAnterior;
 				resultado += (decimal)AcumuladasHastaAñoAnterior.Ticks / App.Global.Convenio.JornadaMedia.Ticks;
-				return Math.Round(resultado, 2);
+				return Math.Round(resultado, 4);
 			}
 		}
 
@@ -612,7 +612,7 @@ namespace Orion.Pijama {
 				decimal resultado = DCsPendientesHastaMes;
 				//resultado += ((decimal)AcumuladasHastaMes.Ticks + AcumuladasHastaAñoAnterior.Ticks )/ App.Global.Convenio.JornadaMedia.Ticks;
 				resultado += (decimal)AcumuladasHastaMes.Ticks / App.Global.Convenio.JornadaMedia.Ticks;
-				return Math.Round(resultado, 2);
+				return Math.Round(resultado, 4);
 			}
 		}
 

@@ -25,7 +25,8 @@
         <cnv:ConvertidorFecha x:Key="cnvFecha"/>
         <cnv:ConvertidorNumeroGrafico x:Key="cnvNumGrafico"/>
         <cnv:ConvertidorDecimal x:Key="cnvDecimal"/>
-        <BooleanToVisibilityConverter x:Key="cnvVisibilidad"/>
+		<cnv:ConvertidorDecimal6 x:Key="cnvDecimal6"/>
+		<BooleanToVisibilityConverter x:Key="cnvVisibilidad"/>
 
         <Style x:Key="EstiloGridConductores" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}"/>
@@ -264,7 +265,7 @@
                     <DataGridTextColumn Header="Email" Width="6*" MinWidth="60" Binding="{Binding Email}"/>
                     <DataGridCheckBoxColumn Header="Fijo" Width="1*" MinWidth="60" IsThreeState="False" Binding="{Binding Indefinido, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Horas" Width="2*" MinWidth="60" Binding="{Binding Acumuladas, Converter={StaticResource cnvSuperHora}}"/>
-                    <DataGridTextColumn Header="DCs" Width="2*" MinWidth="60" Binding="{Binding Descansos}"/>
+                    <DataGridTextColumn Header="DCs" Width="2*" MinWidth="60" Binding="{Binding Descansos, Converter={StaticResource cnvDecimal6}}"/>
                     <DataGridTextColumn Header="DNDs" Width="2*" MinWidth="60" Binding="{Binding DescansosNoDisfrutados}"/>
                     <DataGridTextColumn Header="Plus Distancia" Width="2*" MinWidth="60" Binding="{Binding PlusDistancia, Converter={StaticResource cnvDecimal}}"/>
                     <DataGridCheckBoxColumn Header="R.Jor." Width="1*" MinWidth="60" IsThreeState="False" Binding="{Binding ReduccionJornada, UpdateSourceTrigger=PropertyChanged}"/>

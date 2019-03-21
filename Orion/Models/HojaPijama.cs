@@ -778,7 +778,7 @@ namespace Orion.Models {
 		}
 
 
-		public int DCsPendientesHastaMes {
+		public decimal DCsPendientesHastaMes { //Cambiamos el tipo int por decimal.
 			get {
 				if (Trabajador == null) return 0;
 				return Trabajador.Descansos + HastaMesActual.DcRegulados - HastaMesActual.DCs;
@@ -786,7 +786,7 @@ namespace Orion.Models {
 		}
 
 
-		public int DCsPendientesHastaAñoAnterior {
+		public decimal DCsPendientesHastaAñoAnterior { //Cambiamos el tipo int por decimal.
 			get {
 				if (Trabajador == null) return 0;
 				return Trabajador.Descansos + HastaAñoAnterior.DcRegulados - HastaAñoAnterior.DCs + DCsReguladosAñoActual;
@@ -810,7 +810,7 @@ namespace Orion.Models {
 		}
 
 
-		public int DCsAñoActual {
+		public decimal DCsAñoActual { //Cambiamos el tipo int por decimal.
 			get {
 				if (Trabajador == null) return 0;
 				return DCsPendientesHastaAñoAnterior - DCsPendientesHastaMes;
