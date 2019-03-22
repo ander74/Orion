@@ -334,7 +334,7 @@ namespace Orion.Models {
 		}
 
 
-		private TimeSpan? inicioalt;
+		private TimeSpan? inicioalt = null;
 		public TimeSpan? InicioAlt {
 			get { return inicioalt; }
 			set {
@@ -347,7 +347,7 @@ namespace Orion.Models {
 		}
 
 
-		private TimeSpan? finalalt;
+		private TimeSpan? finalalt = null;
 		public TimeSpan? FinalAlt {
 			get { return finalalt; }
 			set {
@@ -360,7 +360,7 @@ namespace Orion.Models {
 		}
 
 
-		private TimeSpan? iniciopartidoalt;
+		private TimeSpan? iniciopartidoalt = null;
 		public TimeSpan? InicioPartidoAlt {
 			get { return iniciopartidoalt; }
 			set {
@@ -373,7 +373,7 @@ namespace Orion.Models {
 		}
 
 
-		private TimeSpan? finalpartidoalt;
+		private TimeSpan? finalpartidoalt = null;
 		public TimeSpan? FinalPartidoAlt {
 			get { return finalpartidoalt; }
 			set {

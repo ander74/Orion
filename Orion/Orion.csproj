@@ -295,6 +295,7 @@
     <Compile Include="ViewModels\LineasViewModel.cs" />
     <Compile Include="ViewModels\OpcionesCommands.cs" />
     <Compile Include="ViewModels\OpcionesViewModel.cs" />
+    <Compile Include="ViewModels\ProgramadorViewModel.cs" />
     <Compile Include="ViewModels\ReclamacionesViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="ViewModels\ResumenAnualCommands.cs" />
@@ -368,6 +369,9 @@
     </Compile>
     <Compile Include="Views\VentanaResumenAnual.xaml.cs">
       <DependentUpon>VentanaResumenAnual.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VistaProgramador.xaml.cs">
+      <DependentUpon>VistaProgramador.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VistaResumenAnual.xaml.cs">
       <DependentUpon>VistaResumenAnual.xaml</DependentUpon>
@@ -489,6 +493,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\VentanaResumenAnual.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VistaProgramador.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

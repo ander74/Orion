@@ -87,8 +87,9 @@
 
             <!--ETIQUETA GRUPO-->
             <StackPanel Orientation="Vertical" Margin="6,12,6,6" VerticalAlignment="Top">
-                <Label FontFamily="Bookman Old Style" FontSize="12" HorizontalAlignment="Center" Content="GRUPO DE GRÁFICOS"/>
-                <Button x:Name="BotonValidezGrupo" FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center"
+				<Label FontFamily="Bookman Old Style" FontSize="12" HorizontalAlignment="Center" Content="GRUPO DE GRÁFICOS"
+					   MouseDoubleClick="Label_MouseDoubleClick"/>
+				<Button x:Name="BotonValidezGrupo" FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center"
                         Style="{StaticResource EstiloBotonValidezFecha}" Width="Auto" Height="Auto" Padding="15, 3"
                         Command="{Binding GraficosVM.cmdModificarFechaGrupo}"
                         Content="{Binding GraficosVM.GrupoSeleccionado.Validez, Converter={StaticResource cnvFecha}}"/>

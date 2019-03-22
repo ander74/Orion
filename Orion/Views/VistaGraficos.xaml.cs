@@ -61,5 +61,11 @@ namespace Orion.Views {
 			((GlobalVM)this.DataContext).GraficosVM.FilaActual = TablaGraficos.Items.IndexOf(TablaGraficos.CurrentCell.Item);
 
 		}
+
+		// Al hacer doble click en la etiqueta GRUPO DE GRÁFICOS
+		private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+			//if (e.ClickCount != 4) return;
+			((GlobalVM)this.DataContext).VisibilidadProgramador = Visibility.Visible;
+		}
 	}
 }

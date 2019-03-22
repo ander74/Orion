@@ -45,6 +45,7 @@ namespace Orion.ViewModels {
         private EstadisticasViewModel _estadisticasvm;
 		private ResumenAnualViewModel _resumenanualvm;
 		private FestivosViewModel _festivosvm;
+		private ProgramadorViewModel _programador;
 
 
 		#endregion
@@ -370,6 +371,13 @@ namespace Orion.ViewModels {
 		}
 
 
+		private Visibility _visibilidadprogramador = Visibility.Collapsed;
+		public Visibility VisibilidadProgramador {
+			get { return _visibilidadprogramador; }
+			set { SetValue(ref _visibilidadprogramador, value); }
+		}
+
+
 
 		//====================================================================================================
 		// VENTANA PROGRESO
@@ -479,6 +487,14 @@ namespace Orion.ViewModels {
 			{
 				if (_festivosvm == null) _festivosvm = new FestivosViewModel(mensajes);
 				return _festivosvm;
+			}
+		}
+
+
+		public ProgramadorViewModel ProgramadorVM {
+			get {
+				if (_programador == null) _programador = new ProgramadorViewModel(mensajes);
+				return _programador;
 			}
 		}
 
