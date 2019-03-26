@@ -73,7 +73,7 @@ namespace Orion.ViewModels {
 			try {
 				HayCambios = false;
 				if (ListaLineas != null && ListaLineas.Count > 0) {
-					BdLineas.GuardarLineas(ListaLineas);
+					BdLineas.GuardarLineas(ListaLineas.Where(item => item.Nuevo || item.Modificado));
 				}
 				if (_listalineasborradas.Count > 0) {
 					BdLineas.BorrarLineas(_listalineasborradas);

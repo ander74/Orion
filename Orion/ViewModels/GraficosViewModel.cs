@@ -12,6 +12,7 @@ namespace Orion.ViewModels
 	using System.Collections.ObjectModel;
 	using System.Collections.Specialized;
 	using System.ComponentModel;
+	using System.Linq;
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Data;
@@ -86,7 +87,7 @@ namespace Orion.ViewModels
 			try {
 				HayCambios = false;
 				if (ListaGraficos != null && ListaGraficos.Count > 0) {
-					BdGraficos.GuardarGraficos(ListaGraficos);
+					BdGraficos.GuardarGraficos(ListaGraficos.Where(gg => gg.Nuevo || gg.Modificado));
 				}
 				if (_listaborrados.Count > 0) {
 					BdGraficos.BorrarGraficos(_listaborrados);
@@ -108,7 +109,7 @@ namespace Orion.ViewModels
 			try {
 				HayCambios = false;
 				if (ListaGrupos != null && ListaGrupos.Count > 0) {
-					BdGruposGraficos.GuardarGrupos(ListaGrupos);
+					BdGruposGraficos.GuardarGrupos(ListaGrupos.Where(gg => gg.Nuevo || gg.Modificado));
 				}
 			} catch (Exception ex) {
 				Mensajes.VerError("GraficosViewModel.GuardarGrupos", ex);

@@ -83,7 +83,7 @@ namespace Orion.ViewModels {
 					_regulacionesborradas.Clear();
 				}
 				if (ListaConductores != null && ListaConductores.Count > 0) {
-					BdConductores.GuardarConductores(ListaConductores);
+					BdConductores.GuardarConductores(ListaConductores.Where(c => c.Nuevo || c.Modificado));
 				}
 				// Si hay conductores con el id cero, avisamos.
 				if (ListaConductores.Count(item => item.Id == 0) > 0) {

@@ -73,7 +73,7 @@ namespace Orion.ViewModels {
 			//}
 			if (ListaPluses != null && ListaPluses.Any())
 			{
-				BdPluses.GuardarPluses(ListaPluses);
+				BdPluses.GuardarPluses(ListaPluses.Where(item => item.Nuevo || item.Modificado));
 			}
 		}
 

@@ -112,7 +112,7 @@ namespace Orion.DataModels {
 							comando.ExecuteNonQuery();
 							conductor.Modificado = false;
 						}
-						BdRegulacionConductor.GuardarRegulaciones(conductor.ListaRegulaciones);
+						BdRegulacionConductor.GuardarRegulaciones(conductor.ListaRegulaciones.Where(r => r.Nuevo || r.Modificado));
 					}
 				} catch (Exception ex) {
 					Utils.VerError("BdConductores.GuardarConductores", ex);

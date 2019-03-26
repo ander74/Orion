@@ -73,10 +73,10 @@ namespace Orion.DataModels {
 		/// Guarda la lista de valoraciones que se le pasa en la base de datos, actualizando las modificadas e insertando las nuevas.
 		/// </summary>
 		/// <param name="lista">Lista con las valoraciones a guardar.</param>
-		public static void GuardarValoraciones(ObservableCollection<ValoracionGrafico> lista) {
+		public static void GuardarValoraciones(IEnumerable<ValoracionGrafico> lista) {
 
 			// Si la lista está vacía, salimos.
-			if (lista == null || lista.Count == 0) return;
+			if (lista == null || lista.Count() == 0) return;
 
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{

@@ -64,10 +64,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GUARDAR LÍNEAS
 		*================================================================================*/
-		public static void GuardarLineas(ObservableCollection<Linea> lista) {
+		public static void GuardarLineas(IEnumerable<Linea> lista) {
 
 			// Si la lista está vacía, salimos.
-			if (lista == null || lista.Count == 0) return;
+			if (lista == null || lista.Count() == 0) return;
 
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas))
 			{
@@ -100,7 +100,7 @@ namespace Orion.DataModels {
 						}
 					}
 					foreach(Linea linea in lista) {
-						BdItinerarios.GuardarItinerarios(linea.ListaItinerarios);
+						BdItinerarios.GuardarItinerarios(linea.ListaItinerarios.Where(item => item.Nuevo || item.Modificado));
 						BdItinerarios.BorrarItinerarios(linea.ItinerariosBorrados);
 					}
 				} catch (Exception ex) {

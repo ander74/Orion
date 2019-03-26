@@ -92,10 +92,10 @@ namespace Orion.DataModels {
 		/// Guarda la lista de gráficos que se le pasa en la base de datos, actualizando los modificados e insertando los nuevos.
 		/// </summary>
 		/// <param name="lista">Lista con los gráficos a guardar.</param>
-		public static void GuardarGraficos(ObservableCollection<Grafico> lista) {
+		public static void GuardarGraficos(IEnumerable<Grafico> lista) {
 
 			// Si la lista está vacía, salimos.
-			if (lista == null || lista.Count == 0) return;
+			if (lista == null || lista.Count() == 0) return;
 
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{
@@ -132,7 +132,7 @@ namespace Orion.DataModels {
 							comando.ExecuteNonQuery();
 							grafico.Modificado = false;
 						}
-						BdValoracionesGraficos.GuardarValoraciones(grafico.ListaValoraciones);
+						BdValoracionesGraficos.GuardarValoraciones(grafico.ListaValoraciones.Where(v => v.Nuevo || v.Modificado));
 					}
 				} catch (Exception ex) {
 					Utils.VerError("BdGraficos.GuardarGraficos", ex);
@@ -172,7 +172,7 @@ namespace Orion.DataModels {
 						valoracion.IdGrafico = idgraficonuevo;
 						valoracion.Nuevo = true;
 					}
-					BdValoracionesGraficos.GuardarValoraciones(grafico.ListaValoraciones);
+					BdValoracionesGraficos.GuardarValoraciones(grafico.ListaValoraciones.Where(v => v.Nuevo || v.Modificado));
 				} catch (Exception ex){
 					Utils.VerError("BdGraficos.InsertarGrafico", ex);
 				}

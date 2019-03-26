@@ -91,7 +91,7 @@ namespace Orion.ViewModels
 			try {
 				HayCambios = false;
 				if (ListaCalendarios != null && ListaCalendarios.Count > 0) {
-					BdCalendarios.GuardarCalendarios(ListaCalendarios);
+					BdCalendarios.GuardarCalendarios(ListaCalendarios.Where(c => c.Modificado || c.Nuevo));
 				}
 				if (_listaborrados.Count > 0) {
 					BdCalendarios.BorrarCalendarios(_listaborrados);

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.OleDb;
+using System.Linq;
 
 namespace Orion.DataModels {
 
@@ -125,10 +126,10 @@ namespace Orion.DataModels {
 		/*================================================================================
  		 * GUARDAR CALENDARIOS
 		 *================================================================================*/
-		public static void GuardarCalendarios(ObservableCollection<Calendario> lista) {
+		public static void GuardarCalendarios(IEnumerable<Calendario> lista) {
 
 			// Si la lista está vacía, salimos.
-			if (lista == null || lista.Count == 0) return;
+			if (lista == null || lista.Count() == 0) return;
 
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{
@@ -178,7 +179,7 @@ namespace Orion.DataModels {
 							calendario.Modificado = false;
 						}
 						//Guardamos los días del calendario.
-						BdDiasCalendario.GuardarDiasCalendario(calendario.ListaDias);
+						BdDiasCalendario.GuardarDiasCalendario(calendario.ListaDias.Where(dc => dc.Nuevo || dc.Modificado));
 					}
 				} catch (Exception ex) {
 					Utils.VerError("BdCalendarios.GuardarCalendarios", ex);

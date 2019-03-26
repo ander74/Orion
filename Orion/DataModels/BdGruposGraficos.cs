@@ -66,10 +66,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GUARDAR GRUPOS
 		*================================================================================*/
-		public static void GuardarGrupos(ObservableCollection<GrupoGraficos> lista) {
+		public static void GuardarGrupos(IEnumerable<GrupoGraficos> lista) {
 
 			// Si la lista está vacía, salimos.
-			if (lista == null || lista.Count == 0) return;
+			if (lista == null || lista.Count() == 0) return;
 
 			string SQLInsertar = "INSERT INTO GruposGraficos (Validez, Notas) VALUES (?, ?)";
 

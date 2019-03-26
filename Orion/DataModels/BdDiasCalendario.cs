@@ -103,10 +103,10 @@ namespace Orion.DataModels {
 		/*================================================================================
 		* GUARDAR DIAS CALENDARIO
 		*================================================================================*/
-		public static void GuardarDiasCalendario(ObservableCollection<DiaCalendario> lista) {
+		public static void GuardarDiasCalendario(IEnumerable<DiaCalendario> lista) {
 
 			// Si la lista está vacía, salimos.
-			if (lista == null || lista.Count == 0) return;
+			if (lista == null || lista.Count() == 0) return;
 
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{

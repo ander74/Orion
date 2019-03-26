@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
+	using System.Linq;
 	using System.Windows.Data;
 	using Orion.Config;
 	using Orion.DataModels;
@@ -51,6 +52,7 @@
 			}
 			ListaFestivos = new NotifyCollection<Festivo>(BdFestivos.GetFestivos());
 			VistaFestivos = new ListCollectionView(ListaFestivos);
+			//VistaFestivos.Filter = f => (f as Festivo).Año == AñoActual;
 		}
 
 
@@ -59,7 +61,7 @@
 			HayCambios = false;
 			if (ListaFestivos != null && ListaFestivos.Count > 0)
 			{
-				BdFestivos.GuardarFestivos(ListaFestivos);
+				BdFestivos.GuardarFestivos(ListaFestivos.Where(f => f.Nuevo || f.Modificado));
 			}
 			if (_listaborrados.Count > 0)
 			{
@@ -158,7 +160,7 @@
 			get { return _añoactual; }
 			set {
 				if (SetValue(ref _añoactual, value)) {
-					VistaFestivos.Filter = f => (f as Festivo).Año == _añoactual;
+					if (VistaFestivos != null) VistaFestivos.Filter = f => (f as Festivo).Año == _añoactual;
 				}
 			}
 		}
