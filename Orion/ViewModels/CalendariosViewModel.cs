@@ -309,6 +309,21 @@ namespace Orion.ViewModels
 			}
 		}
 
+
+		private DateTime _fechapijama;
+		public DateTime FechaPijama {
+			get { return _fechapijama; }
+			set {
+				if (SetValue(ref _fechapijama, value)) PropiedadCambiada(nameof(TextoMesPijama));
+			}
+		}
+
+
+		public string TextoMesPijama {
+			get => $"{FechaPijama:MMMM}".ToUpper();
+		}
+
+
 		public string MesActual {
 			get {
 				return FechaActual.ToString("MMMM").ToUpper();

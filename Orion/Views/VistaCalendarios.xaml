@@ -2078,20 +2078,33 @@
         <!-- PANEL CONDUCTOR EN PIJAMA -->
         <Grid Grid.Row="1" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}">
 
-            <Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3,3,3" Padding="3" CornerRadius="4"
+            <Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3,3,3" Padding="0" CornerRadius="4"
                     Background="{StaticResource DegradadoCeleste2}"/>
 
             <TextBlock FontFamily="Verdana" FontSize="20" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Left"
                        Text="{Binding CalendariosVM.Pijama.TextoTrabajador}" Padding="10" Foreground="DarkBlue" />
 
-            <Label Padding="10" FontFamily="Verdana" FontSize="20" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Right"
+            <Label Padding="0" FontFamily="Verdana" FontSize="20" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Right"
                    VerticalContentAlignment="Center">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Foreground="DarkRed" Text="{Binding CalendariosVM.Pijama.TextoMesActual}" VerticalAlignment="Center"/>
+					<Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="10,5" Margin="10,0" VerticalAlignment="Center"
+							ToolTip="Mes anterior" Command="{Binding CalendariosVM.cmdPijamaMesMenos}">
+						<Button.Content>
+							<Image Source="Imagenes/Anterior.png" Style="{StaticResource EstiloImagenPequeña}"/>
+						</Button.Content>
+					</Button>
+					<TextBlock Foreground="DarkRed" Text="{Binding CalendariosVM.TextoMesPijama}" VerticalAlignment="Center"/>
                     <TextBlock Text="  " VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding CalendariosVM.Pijama.Fecha, StringFormat=yyyy}" VerticalAlignment="Center"/>
-                    <Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="{Binding CalendariosVM.TextoBotonPanelPijama}"
-                            Padding="10,5" Margin="10,0,0,0" VerticalAlignment="Center"
+                    <TextBlock Text="{Binding CalendariosVM.FechaPijama, StringFormat=yyyy}" VerticalAlignment="Center"/>
+					<Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="10,5" Margin="10,0" VerticalAlignment="Center"
+							ToolTip="Mes siguiente" Command="{Binding CalendariosVM.cmdPijamaMesMas}">
+						<Button.Content>
+							<Image Source="Imagenes/Siguiente.png" Style="{StaticResource EstiloImagenPequeña}"/>
+						</Button.Content>
+					</Button>
+					<Rectangle Width="1" VerticalAlignment="Stretch" Fill="DarkBlue"/>
+					<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="{Binding CalendariosVM.TextoBotonPanelPijama}"
+                            Padding="10,5" Margin="10,0" VerticalAlignment="Center" ToolTip="Mostrar/Ocultar Resumen"
                             Command="{Binding CalendariosVM.cmdActivarBotonPanelPijama}"/>
                 </StackPanel>
             </Label>
@@ -2280,11 +2293,11 @@
                 <!-- HORAS -->
                 <Grid HorizontalAlignment="Stretch">
                     <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Horas Mes Actual"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="HorasMes"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="HorasMes" ToolTip="Mostrar/Ocultar"
                         Style="{StaticResource EstiloBotonBarraPequeña}" HorizontalAlignment="Left"/>
 
                     <Button Margin="5,5,5,5" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="q" FontFamily="WingDings 3"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="Todos"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="Todos"  ToolTip="Mostrar Todos"
                         Style="{StaticResource EstiloBotonBarraPequeña}" HorizontalAlignment="Right"/>
                 </Grid>
                 
@@ -2342,7 +2355,7 @@
 
                 <!-- DÍAS -->
                 <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Días Mes Actual"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="DiasMes"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="DiasMes" ToolTip="Mostrar/Ocultar"
                         Style="{StaticResource EstiloBotonBarraPequeña}"/>
                 <!--<TextBlock Text="Días Mes Actual" Margin="10,10,5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"/>-->
                 
@@ -2491,7 +2504,7 @@
 
                 <!-- FINES DE SEMANA -->
                 <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Fines de Semana Mes Actual"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="FindesMes"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="FindesMes" ToolTip="Mostrar/Ocultar"
                         Style="{StaticResource EstiloBotonBarraPequeña}"/>
                 <!--<TextBlock Text="Fines de Semana Mes Actual" Margin="10,10,5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"/>-->
 
@@ -2554,7 +2567,7 @@
 
                 <!-- DIETAS Y PLUSES -->
                 <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Dietas y Pluses Mes Actual"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="DietasMes"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="DietasMes" ToolTip="Mostrar/Ocultar"
                         Style="{StaticResource EstiloBotonBarraPequeña}"/>
 
                 <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelDietasMes}">
@@ -2667,7 +2680,7 @@
 
                 <!-- RESUMEN HASTA MES ACTUAL -->
                 <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Resumen Hasta Mes Actual"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="ResumenAño"
+                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="ResumenAño" ToolTip="Mostrar/Ocultar"
                         Style="{StaticResource EstiloBotonBarraPequeña}"/>
 
                 <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelResumenAño}">

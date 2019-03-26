@@ -408,6 +408,7 @@ namespace Orion.ViewModels {
 		private void AbrirPijama() {
 
 			GuardarCalendarios();
+			FechaPijama = FechaActual;
 			Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
 			VisibilidadTablaCalendarios = Visibility.Collapsed;
 
@@ -1946,6 +1947,69 @@ namespace Orion.ViewModels {
 			DiaCalendarioSeleccionado.PlusPaqueteriaAlt = null;
 		}
 		#endregion
+
+
+		#region COMANDO PIJAMA MES MENOS
+
+		// Comando
+		private ICommand cmdpijamamesmenos;
+		public ICommand cmdPijamaMesMenos {
+			get {
+				if (cmdpijamamesmenos == null) cmdpijamamesmenos = new RelayCommand(p => PijamaMesMenos());
+				return cmdpijamamesmenos;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void PijamaMesMenos() {
+			int conductor = CalendarioSeleccionado.IdConductor;
+			FechaPijama = FechaPijama.AddMonths(-1);
+			Calendario nuevoCalendario = BdCalendarios.GetCalendarioConductor(FechaPijama.Year, FechaPijama.Month, CalendarioSeleccionado.IdConductor);
+			//FechaActual = FechaActual.AddMonths(-1);
+			//CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.IdConductor == conductor);
+			if (nuevoCalendario != null) {
+				Pijama = new Pijama.HojaPijama(nuevoCalendario, Mensajes);
+				Pijama.PropiedadCambiada("");
+			} else {
+				Pijama = null;
+				//Pijama.PropiedadCambiada("");
+				//VisibilidadTablaCalendarios = Visibility.Visible;
+			}
+		}
+		#endregion
+
+
+		#region COMANDO  PIJAMA MES MÁS
+
+		// Comando
+		private ICommand cmdpijamamesmas;
+		public ICommand cmdPijamaMesMas {
+			get {
+				if (cmdpijamamesmas == null) cmdpijamamesmas = new RelayCommand(p => PijamaMesMas());
+				return cmdpijamamesmas;
+			}
+		}
+
+
+		// Ejecución del comando
+		private void PijamaMesMas() {
+			int conductor = CalendarioSeleccionado.IdConductor;
+			FechaPijama = FechaPijama.AddMonths(1);
+			Calendario nuevoCalendario = BdCalendarios.GetCalendarioConductor(FechaPijama.Year, FechaPijama.Month, CalendarioSeleccionado.IdConductor);
+			//FechaActual = FechaActual.AddMonths(-1);
+			//CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.IdConductor == conductor);
+			if (nuevoCalendario != null) {
+				Pijama = new Pijama.HojaPijama(nuevoCalendario, Mensajes);
+				Pijama.PropiedadCambiada("");
+			} else {
+				Pijama = null;
+				//Pijama.PropiedadCambiada("");
+				//VisibilidadTablaCalendarios = Visibility.Visible;
+			}
+		}
+		#endregion
+
 
 
 	}// Fin de la clase.

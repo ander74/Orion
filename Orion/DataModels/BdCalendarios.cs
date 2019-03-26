@@ -124,6 +124,54 @@ namespace Orion.DataModels {
 
 
 		/*================================================================================
+		 * GET CALENDARIOS CONDUCTOR
+		 *================================================================================*/
+		public static Calendario GetCalendarioConductor(int año, int mes, int matricula) {
+
+			// Creamos la lista y el comando que extrae los gráficos.
+			Calendario resultado = null;
+
+			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+				// Creamos el comando SQL.
+				string comandoSQL = "SELECT Calendarios.*, Conductores.Indefinido " +
+									"FROM Calendarios LEFT JOIN Conductores ON Calendarios.IdConductor = Conductores.Id " +
+									"WHERE Year(Calendarios.Fecha) = ? AND Month(Calendarios.Fecha) = ? AND Calendarios.IdConductor = ? ;";
+
+				// Elementos para la consulta de calendarios y días de calendario.
+				OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+				comando.Parameters.AddWithValue("año", año);
+				comando.Parameters.AddWithValue("mes", mes);
+				comando.Parameters.AddWithValue("matricula", matricula);
+				OleDbDataReader lector = null;
+
+				try {
+					// Extraemos los calendarios.
+					conexion.Open();
+					lector = comando.ExecuteReader();
+
+					// Por cada calendario extraido...
+					if (lector.Read()) {
+						// Extraemos el calendario y sus días
+						resultado = new Calendario(lector);
+						resultado.ListaDias = BdDiasCalendario.GetDiasCalendario(resultado.Id);
+						// Extraemos los datos del conductor.
+						resultado.ConductorIndefinido = lector.ToBool("Indefinido");
+						resultado.Nuevo = false;
+						resultado.Modificado = false;
+					}
+				} catch (Exception ex) {
+					Utils.VerError("BdCalendarios.GetCalendarioConductor", ex);
+				} finally {
+					lector.Close();
+				}
+
+			}
+			// Devolvemos la lista.
+			return resultado;
+		}
+
+
+		/*================================================================================
  		 * GUARDAR CALENDARIOS
 		 *================================================================================*/
 		public static void GuardarCalendarios(IEnumerable<Calendario> lista) {

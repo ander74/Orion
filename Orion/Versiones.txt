@@ -8,6 +8,8 @@ PROYECTO ORIÓN
 
 		Sin Publicar
 
+			- Se añade navegación de meses en el pijama.
+
 			- 
 
 		21 de Marzo de 2019
