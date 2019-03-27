@@ -133,7 +133,7 @@
 				<!-- Label FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center" Content="{Binding CalendariosVM.AñoActual}"/ -->
 				<Button x:Name="BotonValidezGrupo" FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center"
                         Style="{StaticResource EstiloBotonValidezFecha}" Width="Auto" Height="Auto" Padding="15, 3"
-                        Command="{Binding CalendariosVM.cmdCambiarFecha}"
+                        Command="{Binding CalendariosVM.cmdAbrirPanelFecha}"
                         Content="{Binding CalendariosVM.AñoActual}"/>
 			</StackPanel>
 
@@ -2754,12 +2754,13 @@
 						<TextBlock FontSize="12" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Mes Visualizado"/>
 						<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="X" Foreground="Red" FontWeight="Bold" FontSize="12" Margin="0"
                                 Padding="10,5" HorizontalAlignment="Right" Height="Auto"
-                                Command="{Binding CalendariosVM.cmdCerrarPanelFecha}"/>
+                                Command="{Binding CalendariosVM.cmdAbrirPanelFecha}"/>
 					</Grid>
 
 					<!-- CALENDARIO -->
 					<Calendar Style="{StaticResource EstiloCalendario}" DisplayMode="Month"  FirstDayOfWeek="Monday" SelectionMode="SingleDate"  Focusable="False"
-                          GotMouseCapture="Calendar_GotMouseCapture" SelectedDate="{Binding CalendariosVM.FechaActual, Mode=TwoWay}">
+							  GotMouseCapture="Calendar_GotMouseCapture" SelectedDate="{Binding CalendariosVM.FechaActual, Mode=TwoWay}"
+							  DisplayDate="{Binding CalendariosVM.FechaCalendarios, Mode=TwoWay}">
 						<!-- SelectedDatesChanged="Calendar_SelectedDatesChanged" -->
 
 					</Calendar>

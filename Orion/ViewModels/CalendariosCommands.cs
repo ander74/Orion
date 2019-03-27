@@ -255,17 +255,6 @@ namespace Orion.ViewModels {
 			}
 		}
 
-		private bool PuedePegarCalendarios2(object parametro) {
-			DataGrid tabla = parametro as DataGrid;
-			if (tabla == null) return false;
-			bool resultado = true;
-			
-			foreach (DataGridColumn columna in tabla.Columns) {
-				if (columna.SortDirection != null) resultado = false;
-			}
-			if (VistaCalendarios != null && VistaCalendarios.Count < ListaCalendarios.Count) resultado = false;
-			return resultado && tabla.CurrentCell != null & Clipboard.ContainsText();
-		}
 
 		private bool PuedePegarCalendarios() {
 			if (ColumnaActual == -1) return false;
@@ -273,66 +262,9 @@ namespace Orion.ViewModels {
 		}
 
 
-		private void PegarCalendarios2(object parametro) {
-			// Convertimos el parámetro pasado.
-			DataGrid grid = parametro as DataGrid;
-			if (grid == null || grid.CurrentCell == null) return;
-			// Parseamos los datos del portapapeles y definimos las variables.
-			List<string[]> portapapeles = Utils.parseClipboard();
-			int columnagrid;
-			int filagrid;
-			bool esnuevo;
-			// Si no hay datos, salimos.
-			if (portapapeles == null) return;
-			// Establecemos la columna donde se empieza a pegar.
-			columnagrid = grid.Columns.IndexOf(grid.CurrentCell.Column);// Puede sustituirse por: columnagrid = grid.CurrentCell.Column.DisplayIndex;
-			filagrid = grid.Items.IndexOf(grid.CurrentCell.Item);// Puede sustituirse por: filagrid = VistaCalendarios.IndexOf(CalendarioSeleccionado); Si esto da -1, significa que es nuevo, o sea igual a VistaCalendarios.Count - 1.
-			// Iteramos por las filas del portapapeles.
-			foreach (string[] fila in portapapeles) {
-				// Creamos un objeto Calendario o reutilizamos el existente.
-				Calendario calendario;
-				if (filagrid < VistaCalendarios.Count -1) { // Cambio ListaCalendarios.Count por VistaCalendarios.Count-1
-					//calendario = ListaCalendarios[filagrid];
-					calendario = VistaCalendarios.GetItemAt(filagrid) as Calendario;//NUEVO
-					esnuevo = false;
-				} else {
-					calendario = new Calendario();
-					calendario.Fecha = FechaActual;
-					esnuevo = true;
-				}
-				int columna = columnagrid;
-
-				foreach (string texto in fila) {
-					if (columna >= grid.Columns.Count) continue; //El número de columnas es fijo, esten ocultas o no, así que se puede poner su literal.
-					while (grid.Columns[columna].Visibility == Visibility.Collapsed) {// Esto sólo se tiene en cuenta si en el grid se pueden o no ocultar las columnas.
-																					  // Si ponemos en el ViewModel una funcion que averigüe si el número de columna está o no oculto
-																					  // podemos eliminar esta dependencia del Grid. Para ello, buscamos en las propiedades que las ocultan.
-																					  // La función en Graficos ViewModel es ColumnaVisible(int numero).
-						columna++;
-					}
-					switch (columna) {
-						case 0: // Conductor.
-							calendario.IdConductor = int.TryParse(texto, out int i) ? i : 0;
-							break;
-						default: // Dia x.
-							ConvertidorNumeroGraficoCalendario convertidor = new ConvertidorNumeroGraficoCalendario();
-							Tuple<int, int> combografico = (Tuple<int, int>)convertidor.ConvertBack(texto, null, null, null);
-							calendario.ListaDias[columna - 1].Grafico = combografico.Item1;
-							calendario.ListaDias[columna - 1].Codigo = combografico.Item2;
-							break;
-					}
-					columna++;
-				}
-				if (esnuevo) {
-					//ListaCalendarios.Add(calendario);
-					VistaCalendarios.AddNewItem(calendario);//NUEVO
-				}
-				filagrid++;
-				HayCambios = true;
-			}
-		}
-
 		private void PegarCalendarios() {
+			// Definimos el convertidor que vamos a usar.
+			ConvertidorNumeroGraficoCalendario convertidor = new ConvertidorNumeroGraficoCalendario();
 			// Parseamos los datos del portapapeles y definimos las variables.
 			List<string[]> portapapeles = Utils.parseClipboard();
 			bool esnuevo;
@@ -349,8 +281,7 @@ namespace Orion.ViewModels {
 					calendario = VistaCalendarios.GetItemAt(filagrid) as Calendario;
 					esnuevo = false;
 				} else {
-					calendario = new Calendario();
-					calendario.Fecha = FechaActual;
+					calendario = new Calendario(FechaActual);
 					esnuevo = true;
 				}
 				// Establecemos la columna inicial en la que se va a pegar.
@@ -358,20 +289,17 @@ namespace Orion.ViewModels {
 				// Iteramos por cada campo de la fila del portapapeles
 				foreach (string texto in fila) {
 					if (columna >= 32) continue;
-					// No Hay columnas ocultas, así que ignoramos lo siguiente.
-					//while (!ColumnaVisible(columna)) {
-					//	columna++;
-					//}
 					// Evaluamos la columna actual y parseamos el valor del portapapeles a su valor.
 					switch (columna) {
 						case 0: // Conductor.
 							calendario.IdConductor = int.TryParse(texto, out int i) ? i : 0;
 							break;
 						default: // Dia x.
-							ConvertidorNumeroGraficoCalendario convertidor = new ConvertidorNumeroGraficoCalendario();
-							Tuple<int, int> combografico = (Tuple<int, int>)convertidor.ConvertBack(texto, null, null, null);
-							calendario.ListaDias[columna - 1].Grafico = combografico.Item1;
-							calendario.ListaDias[columna - 1].Codigo = combografico.Item2;
+							if (columna <= calendario.ListaDias.Count) {
+								Tuple<int, int> combografico = (Tuple<int, int>)convertidor.ConvertBack(texto, null, null, null);
+								calendario.ListaDias[columna - 1].Grafico = combografico.Item1;
+								calendario.ListaDias[columna - 1].Codigo = combografico.Item2;
+							}
 							break;
 					}
 					columna++;
@@ -379,6 +307,7 @@ namespace Orion.ViewModels {
 				// Si el elemento es nuevo, se añade a la vista.
 				if (esnuevo) {
 					VistaCalendarios.AddNewItem(calendario);
+					VistaCalendarios.CommitNew();
 				}
 				filagrid++;
 				HayCambios = true;
@@ -1818,43 +1747,27 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region CAMBIAR FECHA
+		#region ABRIR PANEL FECHA
 		// Comando
-		private ICommand _cambiarfecha;
-		public ICommand cmdCambiarFecha
+		private ICommand _abrirpanelfecha;
+		public ICommand cmdAbrirPanelFecha
 		{
 			get
 			{
-				if (_cambiarfecha == null) _cambiarfecha = new RelayCommand(p => CambiarFecha());
-				return _cambiarfecha;
+				if (_abrirpanelfecha == null) _abrirpanelfecha = new RelayCommand(p => AbrirPanelFecha());
+				return _abrirpanelfecha;
 			}
 		}
 
 		// Ejecución del comando
-		private void CambiarFecha()
+		private void AbrirPanelFecha()
 		{
-			VisibilidadPanelFecha = Visibility.Visible;
-		}
-		#endregion
-
-
-		#region COMANDO CERRAR PANEL FECHA
-
-		// Comando
-		private ICommand _cerrarpanelfecha;
-		public ICommand cmdCerrarPanelFecha
-		{
-			get
-			{
-				if (_cerrarpanelfecha == null) _cerrarpanelfecha = new RelayCommand(p => CerrarPanelFecha());
-				return _cerrarpanelfecha;
+			if (VisibilidadPanelFecha == Visibility.Visible) {
+				VisibilidadPanelFecha = Visibility.Collapsed;
+			} else {
+				FechaCalendarios = FechaActual;
+				VisibilidadPanelFecha = Visibility.Visible;
 			}
-		}
-
-		// Ejecución del comando
-		private void CerrarPanelFecha()
-		{
-			VisibilidadPanelFecha = Visibility.Collapsed;
 		}
 		#endregion
 

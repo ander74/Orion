@@ -129,14 +129,15 @@ namespace Orion.DataModels {
 
 				try {
 					conexion.Open();
-					foreach (DiaCalendario dia in lista) {
-						// Si el día tiene como gráfico cero y no existe, no se evalúa.
-						if (dia.Id == 0 && dia.Grafico == 0) continue;
-						if (dia.Nuevo) {
+					//foreach (DiaCalendario dia in lista) {
+					lista.ToList().ForEach(dia => { 
+					// Si el día tiene como gráfico cero y no existe, no se evalúa.
+					//if (dia.Id == 0 && dia.Grafico == 0) continue;
+					if (dia.Nuevo) {
 							OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
 							//comando.CommandType = System.Data.CommandType.StoredProcedure;
 							DiaCalendario.ParseToCommand(comando, dia);
-							comando.ExecuteNonQuery();
+							int xx = comando.ExecuteNonQuery();
 							comando.CommandText = SQLGetId;
 							comando.CommandType = System.Data.CommandType.Text;
 							int iddia = (int)comando.ExecuteScalar();
@@ -147,10 +148,11 @@ namespace Orion.DataModels {
 							OleDbCommand comando = new OleDbCommand(SQLActualizar, conexion);
 							//comando.CommandType = System.Data.CommandType.StoredProcedure;
 							DiaCalendario.ParseToCommand(comando, dia);
-							comando.ExecuteNonQuery();
+							int x = comando.ExecuteNonQuery();
 							dia.Modificado = false;
 						}
-					}
+						//}
+					});
 				} catch (OleDbException ex) {
 					Utils.VerError("BdDiasCalendario.GuardarDiasCalendario", ex);
 				}

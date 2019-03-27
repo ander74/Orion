@@ -10,7 +10,10 @@ PROYECTO ORIÓN
 
 			- Se añade navegación de meses en el pijama.
 
-			- 
+			- Se generan todos los días vacíos de los calendarios para que siempre estén disponibles.
+
+			- Se hace que la fecha del navegador rápido de calendarios, siempre coincida con la fecha del
+			  calendario donde se encuentra.
 
 		21 de Marzo de 2019
 

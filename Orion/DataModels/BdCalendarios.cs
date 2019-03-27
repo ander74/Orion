@@ -59,6 +59,7 @@ namespace Orion.DataModels {
 						lista.Add(calendario);
 						calendario.Nuevo = false;
 						calendario.Modificado = false;
+						if (calendario.HayDiasNuevos) calendario.Modificado = true;
 					}
 				} catch (Exception ex) {
 					Utils.VerError("BdCalendarios.GetCalendarios", ex);
@@ -124,7 +125,7 @@ namespace Orion.DataModels {
 
 
 		/*================================================================================
-		 * GET CALENDARIOS CONDUCTOR
+		 * GET CALENDARIO CONDUCTOR
 		 *================================================================================*/
 		public static Calendario GetCalendarioConductor(int año, int mes, int matricula) {
 

@@ -58,6 +58,7 @@ namespace Orion.ViewModels
 				return;
 			}
 			ListaCalendarios = BdCalendarios.GetCalendarios(FechaActual.Year, FechaActual.Month);
+			if (ListaCalendarios.Any(x => x.HayDiasNuevos)) HayCambios = true;
 			foreach (Calendario c in ListaCalendarios) {
 				c.ObjetoCambiado += ObjetoCambiadoEventHandler;
 			}
@@ -194,6 +195,13 @@ namespace Orion.ViewModels
 			if (e.NewItems != null) {
 				foreach (Calendario calendario in e.NewItems) {
 					calendario.Fecha = FechaActual;
+					if (calendario.ListaDias == null) {
+						calendario.ListaDias = new ObservableCollection<DiaCalendario>(
+							Enumerable.Range(1, DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month)).Select(d => new DiaCalendario() {
+								Dia = d,
+								DiaFecha = new DateTime(FechaActual.Year, FechaActual.Month, d),
+							}).ToList());
+					}
 					calendario.Nuevo = true;
 					calendario.Modificado = false;
 					calendario.ObjetoCambiado += ObjetoCambiadoEventHandler;
@@ -307,6 +315,13 @@ namespace Orion.ViewModels
 					PropiedadCambiada(nameof(VisibilidadColumna31));
 				}
 			}
+		}
+
+
+		private DateTime _fechacalendarios;
+		public DateTime FechaCalendarios {
+			get { return _fechacalendarios; }
+			set { SetValue(ref _fechacalendarios, value); }
 		}
 
 
