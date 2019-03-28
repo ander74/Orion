@@ -51,6 +51,13 @@ namespace Orion.Pijama {
 		}
 
 
+		private GraficoBase _graficooriginal;
+		public GraficoBase GraficoOriginal {
+			get { return _graficooriginal; }
+			set { SetValue(ref _graficooriginal, value); }
+		}
+
+
         private TimeSpan _trabajadasreales;
         public TimeSpan TrabajadasReales {
             get { return _trabajadasreales; }
@@ -227,7 +234,7 @@ namespace Orion.Pijama {
 
 
 
-		private bool _tienehorarioalternativo;
+		//private bool _tienehorarioalternativo;
 		public bool TieneHorarioAlternativo{
 			get {
 				if (TurnoAlt.HasValue || InicioAlt.HasValue || FinalAlt.HasValue) return true;

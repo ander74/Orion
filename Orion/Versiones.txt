@@ -8,6 +8,10 @@ PROYECTO ORIÓN
 
 		Sin Publicar
 
+			- 
+
+		27 de Marzo de 2019
+
 			- Se añade navegación de meses en el pijama.
 
 			- Se generan todos los días vacíos de los calendarios para que siempre estén disponibles.

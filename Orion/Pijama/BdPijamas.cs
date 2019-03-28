@@ -147,8 +147,10 @@ namespace Orion.Pijama {
 						OleDbDataReader lector = comando.ExecuteReader();
 						if (lector.Read()) {
 							diaPijama.GraficoTrabajado = new GraficoBase(lector);
+							diaPijama.GraficoOriginal = new GraficoBase(lector);
 						} else {
 							diaPijama.GraficoTrabajado = new GraficoBase();
+							diaPijama.GraficoOriginal = new GraficoBase();
 						}
 						// Modificamos los parámetros del gráfico trabajado en función de si existen en el DiaCalendarioBase.
 						if (dia.TurnoAlt.HasValue) diaPijama.GraficoTrabajado.Turno = dia.TurnoAlt.Value;

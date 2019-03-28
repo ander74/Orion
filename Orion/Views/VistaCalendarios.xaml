@@ -412,8 +412,18 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Height="95" Background="{StaticResource DegradadoCeleste0}"
                     Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}">
 
-            <!--BOTON GUARDAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding cmdGuardarCambios}">
+			<!--BOTON ACTUALIZAR-->
+			<Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdActualizarPijama}">
+				<Button.Content>
+					<StackPanel Orientation="Vertical">
+						<Image Source="Imagenes/Actualizar.png" Style="{StaticResource EstiloImagen}"/>
+						<TextBlock Text="Actualizar" TextWrapping="Wrap" TextAlignment="Center"/>
+					</StackPanel>
+				</Button.Content>
+			</Button>
+			
+			<!--BOTON GUARDAR-->
+            <!--<Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding cmdGuardarCambios}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/Guardar.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarAzul}"/>
@@ -421,19 +431,19 @@
                         <TextBlock Text="Guardar" TextWrapping="Wrap" TextAlignment="Center"/>
                     </StackPanel>
                 </Button.Content>
-            </Button>
+            </Button>-->
 
             <!--BOTON VOLVER-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdCerrarPijama}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Volver.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Volver" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+			<Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdCerrarPijama}">
+				<Button.Content>
+					<StackPanel Orientation="Vertical">
+						<Image Source="Imagenes/Volver.png" Style="{StaticResource EstiloImagen}"/>
+						<TextBlock Text="Volver" TextWrapping="Wrap" TextAlignment="Center"/>
+					</StackPanel>
+				</Button.Content>
+			</Button>
 
-            <!--SEPARADOR-->
+			<!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
             <!-- COBRAR Y REGULAR HORAS-->
@@ -720,29 +730,37 @@
 
 
         <!-- PANEL DATOS CALENDARIO -->
-        <Grid Grid.Row="2" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}"
+		<Grid Grid.Row="2" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}"
 			  HorizontalAlignment="Stretch">
-            <Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3" Padding="3" CornerRadius="4"
-                    Background="{StaticResource DegradadoCeleste1}" IsEnabled="{Binding CalendariosVM.HayDiaCalendarioSeleccionado}">
+			<Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3" Padding="3" CornerRadius="4"
+                    Background="{StaticResource DegradadoCeleste1}">
 
-                <StackPanel Orientation="Vertical">
+				<!--<StackPanel Orientation="Vertical">
                     <Label FontFamily="Verdana" FontSize="14" FontWeight="Normal" VerticalContentAlignment="Center"
                            IsEnabled="{Binding CalendariosVM.HayDiaCalendarioSeleccionado}">
                         <StackPanel Orientation="Horizontal">
 
-							<!-- BOTÓN GRÁFICO ALTERNATIVO -->
+							-->
+				<!-- BOTÓN GRÁFICO ALTERNATIVO -->
+				<!--
 							<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="{Binding CalendariosVM.TextoBotonGraficoAlternativo}"
 									Padding="8,5" Margin="0,0" VerticalAlignment="Center" Width="30" FontSize="16"
 									Command="{Binding CalendariosVM.cmdActivarBotonGraficoAlternativo}"/>
 
-							<!-- CONDUCTOR -->
+							-->
+				<!-- CONDUCTOR -->
+				<!--
                             <TextBlock Margin="4,0" VerticalAlignment="Center" Width="40" FontWeight="Bold"
                                        Text="{Binding CalendariosVM.CalendarioSeleccionado.IdConductor}"/>
-                            <!-- DÍA -->
+                            -->
+				<!-- DÍA -->
+				<!--
                             <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Día"/>
                             <TextBlock Margin="4,0" VerticalAlignment="Center" Width="30" FontWeight="Bold"
                                        Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.Dia, StringFormat='{}{0:00}:'}"/>
-                            <!-- CODIGO -->
+                            -->
+				<!-- CODIGO -->
+				<!--
                             <ComboBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="120"
                                   SelectedIndex="{Binding CalendariosVM.DiaCalendarioSeleccionado.Codigo}">
                                 <ComboBox.Items>
@@ -753,26 +771,34 @@
                                 </ComboBox.Items>
                             </ComboBox>
 
-                            <!-- EXCESO JORNADA -->
+                            -->
+				<!-- EXCESO JORNADA -->
+				<!--
                             <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Exc. Jornada:"/>
                             <TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
                                      GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
                                      Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.ExcesoJornada, Converter={StaticResource cnvSuperHora}}">
                             </TextBox>
 
-                            <!-- PAQUETERÍA-->
+                            -->
+				<!-- PAQUETERÍA-->
+				<!--
                             <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Fact. Paquetería:"/>
                             <TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center"
                                      GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
                                      Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.FacturadoPaqueteria, Converter={StaticResource cnvDecimal}}">
                             </TextBox>
 
-                            <!-- LIMPIEZA -->
+                            -->
+				<!-- LIMPIEZA -->
+				<!--
                             <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Limpieza:"/>
                             <CheckBox Margin="4,0" VerticalAlignment="Center" IsThreeState="True" 
                                       IsChecked="{Binding CalendariosVM.DiaCalendarioSeleccionado.Limpieza}"/>
 
-                            <!-- NOTAS -->
+                            -->
+				<!-- NOTAS -->
+				<!--
                             <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Notas:"/>
                             <xceed:MultiLineTextEditor Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50"
                                                        Content="{Binding CalendariosVM.DiaCalendarioSeleccionado.HayNotas}" 
@@ -780,7 +806,9 @@
                                                        DropDownWidth="400" DropDownHeight="200" Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.Notas}">
                             </xceed:MultiLineTextEditor>
 
-                            <!-- VÍNCULO -->
+                            -->
+				<!-- VÍNCULO -->
+				<!--
                             <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Vínculo:"/>
                             <TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
                                      GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
@@ -790,19 +818,25 @@
                         </StackPanel>
                     </Label>
 
-					<!-- TODO: Crear lista con los datos del gráfico alternativo en otra label -->
+					-->
+				<!-- TODO: Crear lista con los datos del gráfico alternativo en otra label -->
+				<!--
 					<Label FontFamily="Verdana" FontSize="10" FontWeight="Normal" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
                            IsEnabled="{Binding CalendariosVM.HayDiaCalendarioSeleccionado}"
 						   Visibility="{Binding CalendariosVM.VisibilidadGraficoAlternativo}">
 						<StackPanel Orientation="Horizontal">
 							<StackPanel Orientation="Vertical" VerticalAlignment="Stretch">
 
-								<!-- BOTÓN BORRAR GRÁFICO ALTERNATIVO -->
+								-->
+				<!-- BOTÓN BORRAR GRÁFICO ALTERNATIVO -->
+				<!--
 								<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="Borrar"
 									Padding="8,5" Margin="0,0,10,0" VerticalAlignment="Center" Width="70"
 									Command="{Binding CalendariosVM.cmdBorrarGraficoAlternativo}"/>
 
-								<!-- BOTÓN CARGAR GRÁFICO ALTERNATIVO -->
+								-->
+				<!-- BOTÓN CARGAR GRÁFICO ALTERNATIVO -->
+				<!--
 								<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="Cargar"
 									Padding="8,5" Margin="0,0,10,0" VerticalAlignment="Center" Width="70"
 									Command="{Binding CalendariosVM.cmdCargarGraficoAlternativo}"/>
@@ -830,7 +864,9 @@
 									<ColumnDefinition Width="*"/>
 								</Grid.ColumnDefinitions>
 
-								<!-- ENCABEZADOS -->
+								-->
+				<!-- ENCABEZADOS -->
+				<!--
 								<TextBlock Grid.Row="0" Grid.Column="0" Text="Turno" Padding="4" Width="70" VerticalAlignment="Bottom"/>
 								<TextBlock Grid.Row="0" Grid.Column="1" Text="Inicio" Padding="4" Width="70" VerticalAlignment="Bottom"/>
 								<TextBlock Grid.Row="0" Grid.Column="2" Text="Final" Padding="4" Width="70" VerticalAlignment="Bottom"/>
@@ -843,10 +879,12 @@
 								<TextBlock Grid.Row="0" Grid.Column="9" Text="Comida" Padding="4" Width="70" VerticalAlignment="Bottom"/>
 								<TextBlock Grid.Row="0" Grid.Column="10" Text="Cena" Padding="4" Width="70" VerticalAlignment="Bottom"/>
 								<TextBlock Grid.Row="0" Grid.Column="11" Text="Plus Cena" Padding="4" Width="70" VerticalAlignment="Bottom"/>
-								<!--<TextBlock Grid.Row="0" Grid.Column="12" Text="P. Limpieza" Padding="4" Width="70" VerticalAlignment="Bottom"/>-->
-								<!--<TextBlock Grid.Row="0" Grid.Column="13" Text="P. Paquetería" Padding="4" Width="70" VerticalAlignment="Bottom"/>-->
+								-->
+				<!--<TextBlock Grid.Row="0" Grid.Column="12" Text="P. Limpieza" Padding="4" Width="70" VerticalAlignment="Bottom"/>-->
+				<!--<TextBlock Grid.Row="0" Grid.Column="13" Text="P. Paquetería" Padding="4" Width="70" VerticalAlignment="Bottom"/>-->
 
-								<!-- VALORES -->
+				<!-- VALORES -->
+				<!--
 								<TextBox Grid.Row="1" Grid.Column="0" FontSize="12" 
 										 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
 										 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
@@ -908,7 +946,9 @@
 									  IsChecked="{Binding DiaCalendarioSeleccionado.PlusPaqueteriaAlt, UpdateSourceTrigger=PropertyChanged}"/>
 								</StackPanel>
 
-								<!-- GRÁFICO original -->
+								-->
+				<!-- GRÁFICO original -->
+				<!--
 								<Label Grid.Row="2" Grid.Column="0" Padding="4" Width="70" VerticalAlignment="Top"
 									   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
 									   Content="{Binding GraficoOriginal.Turno}" />
@@ -957,7 +997,9 @@
 						</StackPanel>
 					</Label>
 					
-					<!-- FILTRO APLICADO -->
+					-->
+				<!-- FILTRO APLICADO -->
+				<!--
                     <Label FontFamily="Verdana" FontSize="14" FontWeight="Normal" VerticalContentAlignment="Center"
                            Visibility="{Binding CalendariosVM.VisibilidadPanelFiltros}">
                         <StackPanel Orientation="Horizontal">
@@ -966,12 +1008,22 @@
                         </StackPanel>
                     </Label>
 
-                </StackPanel>
-            </Border>
-        </Grid>
+                </StackPanel>-->
+
+				<!-- FILTRO APLICADO -->
+				<Label FontFamily="Verdana" FontSize="14" FontWeight="Normal" VerticalContentAlignment="Center"
+                           Visibility="{Binding CalendariosVM.VisibilidadPanelFiltros}">
+					<StackPanel Orientation="Horizontal">
+						<TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Filtro aplicado:"/>
+						<TextBlock Margin="4,0" Width="300" VerticalAlignment="Center" Text="{Binding CalendariosVM.TextoFiltros}"/>
+					</StackPanel>
+				</Label>
+
+			</Border>
+		</Grid>
 
 
-        <!-- TABLA CALENDARIOS -->
+		<!-- TABLA CALENDARIOS -->
 		<FrameworkElement x:Name="ElementoFalso" Visibility="Collapsed"/>
 		<DataGrid x:Name="TablaCalendarios" ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
                   IsReadOnly="False" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HeadersVisibility="Column" FontSize="12"
@@ -2078,41 +2130,263 @@
         <!-- PANEL CONDUCTOR EN PIJAMA -->
         <Grid Grid.Row="1" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}">
 
-            <Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3,3,3" Padding="0" CornerRadius="4"
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+			
+			<!-- CABECERA -->
+            <Border Grid.RowSpan="2" BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3,3,3" Padding="0" CornerRadius="4"
                     Background="{StaticResource DegradadoCeleste2}"/>
 
-            <TextBlock FontFamily="Verdana" FontSize="20" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Left"
+			<StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
+				<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="{Binding CalendariosVM.TextoBotonGraficoAlternativo}"
+									Padding="8,5" Margin="5,0" VerticalAlignment="Center" Width="30" FontSize="20"
+									Command="{Binding CalendariosVM.cmdActivarBotonGraficoAlternativo}"/>
+
+				<TextBlock FontFamily="Verdana" FontSize="20" FontWeight="DemiBold" VerticalAlignment="Center"
                        Text="{Binding CalendariosVM.Pijama.TextoTrabajador}" Padding="10" Foreground="DarkBlue" />
 
-            <Label Padding="0" FontFamily="Verdana" FontSize="20" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Right"
+			</StackPanel>
+
+			<!-- NAVEGACIÓN PIJAMA -->
+			<Label Grid.Row="0" Padding="0" FontFamily="Verdana" FontSize="20" FontWeight="DemiBold" VerticalAlignment="Center" HorizontalAlignment="Right"
                    VerticalContentAlignment="Center">
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-					<Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="10,5" Margin="10,0" VerticalAlignment="Center"
+					<StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+						<Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="10,5" Margin="10,0" VerticalAlignment="Center"
 							ToolTip="Mes anterior" Command="{Binding CalendariosVM.cmdPijamaMesMenos}">
-						<Button.Content>
-							<Image Source="Imagenes/Anterior.png" Style="{StaticResource EstiloImagenPequeña}"/>
-						</Button.Content>
-					</Button>
-					<TextBlock Foreground="DarkRed" Text="{Binding CalendariosVM.TextoMesPijama}" VerticalAlignment="Center"/>
-                    <TextBlock Text="  " VerticalAlignment="Center"/>
-                    <TextBlock Text="{Binding CalendariosVM.FechaPijama, StringFormat=yyyy}" VerticalAlignment="Center"/>
-					<Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="10,5" Margin="10,0" VerticalAlignment="Center"
+							<Button.Content>
+								<Image Source="Imagenes/Anterior.png" Style="{StaticResource EstiloImagenPequeña}"/>
+							</Button.Content>
+						</Button>
+						<TextBlock Foreground="DarkRed" Text="{Binding CalendariosVM.TextoMesPijama}" VerticalAlignment="Center"/>
+						<TextBlock Text="  " VerticalAlignment="Center"/>
+						<TextBlock Text="{Binding CalendariosVM.FechaPijama, StringFormat=yyyy}" VerticalAlignment="Center"/>
+						<Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="10,5" Margin="10,0" VerticalAlignment="Center"
 							ToolTip="Mes siguiente" Command="{Binding CalendariosVM.cmdPijamaMesMas}">
-						<Button.Content>
-							<Image Source="Imagenes/Siguiente.png" Style="{StaticResource EstiloImagenPequeña}"/>
-						</Button.Content>
-					</Button>
-					<Rectangle Width="1" VerticalAlignment="Stretch" Fill="DarkBlue"/>
-					<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="{Binding CalendariosVM.TextoBotonPanelPijama}"
+							<Button.Content>
+								<Image Source="Imagenes/Siguiente.png" Style="{StaticResource EstiloImagenPequeña}"/>
+							</Button.Content>
+						</Button>
+						<Rectangle Width="1" VerticalAlignment="Stretch" Fill="DarkBlue"/>
+						<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="{Binding CalendariosVM.TextoBotonPanelPijama}"
                             Padding="10,5" Margin="10,0" VerticalAlignment="Center" ToolTip="Mostrar/Ocultar Resumen"
                             Command="{Binding CalendariosVM.cmdActivarBotonPanelPijama}"/>
-                </StackPanel>
-            </Label>
+					</StackPanel>
+				</Label>
 
-        </Grid>
+			<!-- DATOS DE CALENDARIO -->
+			<StackPanel Grid.Row="1" Orientation="Vertical" Visibility="{Binding CalendariosVM.VisibilidadGraficoAlternativo}"
+						IsEnabled="{Binding CalendariosVM.Pijama.HayDiaSeleccionado}">
+
+				<!-- DATOS DEL CALENDARIO -->
+				<Label FontFamily="Verdana" FontSize="10" FontWeight="Normal" VerticalContentAlignment="Center">
+					<StackPanel Orientation="Horizontal">
+
+						<!-- CODIGO -->
+						<ComboBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="100"
+                                  SelectedIndex="{Binding CalendariosVM.DiaCalendarioSeleccionado.Codigo}">
+							<ComboBox.Items>
+								<ComboBoxItem Content="Normal"/>
+								<ComboBoxItem Content="Comite CO"/>
+								<ComboBoxItem Content="Comite CE"/>
+								<ComboBoxItem Content="Trabajo JD"/>
+							</ComboBox.Items>
+						</ComboBox>
+
+						<!-- EXCESO JORNADA -->
+						<TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Exc. Jornada:"/>
+						<TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+                                     Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.ExcesoJornada, Converter={StaticResource cnvSuperHora}}">
+						</TextBox>
+
+						<!-- PAQUETERÍA-->
+						<TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Fact. Paquetería:"/>
+						<TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+                                     Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.FacturadoPaqueteria, Converter={StaticResource cnvDecimal}}">
+						</TextBox>
+
+						<!-- LIMPIEZA -->
+						<TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Limpieza:"/>
+						<CheckBox Margin="4,0" VerticalAlignment="Center" IsThreeState="True" 
+                                      IsChecked="{Binding CalendariosVM.DiaCalendarioSeleccionado.Limpieza}"/>
+
+						<!-- NOTAS -->
+						<TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Notas:"/>
+						<xceed:MultiLineTextEditor Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50"
+                                                       Content="{Binding CalendariosVM.DiaCalendarioSeleccionado.HayNotas}" 
+                                                       TextWrapping="Wrap"
+                                                       DropDownWidth="400" DropDownHeight="200" Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.Notas}">
+						</xceed:MultiLineTextEditor>
+
+						<!-- VÍNCULO -->
+						<TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Vínculo:"/>
+						<TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+                                     Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.GraficoVinculado, Converter={StaticResource cnvNumGrafico}}">
+						</TextBox>
+
+					</StackPanel>
+				</Label>
+
+				<!-- GRÁFICO ORIGINAL -->
+				<Label FontFamily="Verdana" FontSize="10" FontWeight="Normal" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
+						   Visibility="{Binding CalendariosVM.VisibilidadGraficoAlternativo}">
+					<Grid DataContext="{Binding CalendariosVM}">
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="*"/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+
+						<!-- ENCABEZADOS -->
+						<TextBlock Grid.Row="0" Grid.Column="1" Text="Turno" Padding="4" Width="50" VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Row="0" Grid.Column="2" Text="Inicio" Padding="4" Width="50" VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Row="0" Grid.Column="3" Text="Final" Padding="4" Width="50" VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Row="0" Grid.Column="4" Text="I.Part." Padding="4" Width="50" VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Row="0" Grid.Column="5" Text="F.Part." Padding="4" Width="50" VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Row="0" Grid.Column="6" Text="Trab." Padding="4" Width="50" VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Row="0" Grid.Column="7" Text="Acum." Padding="4" Width="50" VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Row="0" Grid.Column="8" Text="Noct." Padding="4" Width="50" VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Row="0" Grid.Column="9" Text="Desay." Padding="4" Width="50" VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Row="0" Grid.Column="10" Text="Comida" Padding="4" Width="50" VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Row="0" Grid.Column="11" Text="Cena" Padding="4" Width="50" VerticalAlignment="Bottom"/>
+						<TextBlock Grid.Row="0" Grid.Column="12" Text="P.Cena" Padding="4" Width="50" VerticalAlignment="Bottom"/>
+
+						<!-- VALORES -->
+						<Label Grid.Row="1" Grid.Column="0" FontWeight="Bold" Padding="4" Width="60" VerticalAlignment="Center"
+							   VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+							   Content="{Binding Pijama.DiaSeleccionado.ComboGrafico, Converter={StaticResource cnvNumGraficoPijama}}"/>
+						<TextBox Grid.Row="1" Grid.Column="1" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.TurnoAlt}"/>
+						<TextBox Grid.Row="1" Grid.Column="2" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.InicioAlt, Converter={StaticResource cnvHora}}"/>
+						<TextBox Grid.Row="1" Grid.Column="3" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.FinalAlt, Converter={StaticResource cnvHora}}"/>
+						<TextBox Grid.Row="1" Grid.Column="4" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.InicioPartidoAlt, Converter={StaticResource cnvHora}}"/>
+						<TextBox Grid.Row="1" Grid.Column="5" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.FinalPartidoAlt, Converter={StaticResource cnvHora}}"/>
+						<TextBox Grid.Row="1" Grid.Column="6" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.TrabajadasAlt, Converter={StaticResource cnvHora}}"/>
+						<TextBox Grid.Row="1" Grid.Column="7" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.AcumuladasAlt, Converter={StaticResource cnvHora}}"/>
+						<TextBox Grid.Row="1" Grid.Column="8" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.NocturnasAlt, Converter={StaticResource cnvHora}}"/>
+						<TextBox Grid.Row="1" Grid.Column="9" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.DesayunoAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+						<TextBox Grid.Row="1" Grid.Column="10" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.ComidaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+						<TextBox Grid.Row="1" Grid.Column="11" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.CenaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+						<TextBox Grid.Row="1" Grid.Column="12" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.PlusCenaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+						<StackPanel Grid.Row="0" Grid.Column="13" Orientation="Horizontal" Margin="10,0,0,0">
+							<TextBlock Text="Limpieza: " VerticalAlignment="Center"/>
+							<CheckBox Grid.Row="1" Grid.Column="13" FontSize="12" IsThreeState="True" 
+									  Margin="0" VerticalAlignment="Center" Padding="3" HorizontalAlignment="Center"
+									  IsChecked="{Binding DiaCalendarioSeleccionado.PlusLimpiezaAlt, UpdateSourceTrigger=PropertyChanged}"/>
+						</StackPanel>
+						<StackPanel Grid.Row="1" Grid.Column="13" Orientation="Horizontal" Margin="10,0,0,0">
+							<TextBlock Text="Paquetería: " VerticalAlignment="Center"/>
+							<CheckBox Grid.Row="1" Grid.Column="13" FontSize="12" IsThreeState="True" 
+									  Margin="0" VerticalAlignment="Center" Padding="3" HorizontalAlignment="Center"
+									  IsChecked="{Binding DiaCalendarioSeleccionado.PlusPaqueteriaAlt, UpdateSourceTrigger=PropertyChanged}"/>
+						</StackPanel>
+
+						<!-- GRÁFICO original -->
+						<Label Grid.Row="2" Grid.Column="1" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.Turno}" />
+						<Label Grid.Row="2" Grid.Column="2" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.Inicio, Converter={StaticResource cnvHora}}"/>
+						<Label Grid.Row="2" Grid.Column="3" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.Final, Converter={StaticResource cnvHora}}"/>
+						<Label Grid.Row="2" Grid.Column="4" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.InicioPartido, Converter={StaticResource cnvHora}}"/>
+						<Label Grid.Row="2" Grid.Column="5" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.FinalPartido, Converter={StaticResource cnvHora}}"/>
+						<Label Grid.Row="2" Grid.Column="6" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.Trabajadas, Converter={StaticResource cnvHora}}"/>
+						<Label Grid.Row="2" Grid.Column="7" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.Acumuladas, Converter={StaticResource cnvHora}}"/>
+						<Label Grid.Row="2" Grid.Column="8" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.Nocturnas, Converter={StaticResource cnvHora}}"/>
+						<Label Grid.Row="2" Grid.Column="9" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.Desayuno, Converter={StaticResource cnvDecimalNulable}}"/>
+						<Label Grid.Row="2" Grid.Column="10" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.Comida, Converter={StaticResource cnvDecimalNulable}}"/>
+						<Label Grid.Row="2" Grid.Column="11" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.Cena, Converter={StaticResource cnvDecimalNulable}}"/>
+						<Label Grid.Row="2" Grid.Column="12" Padding="4" Width="50" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content="{Binding Pijama.DiaSeleccionado.GraficoOriginal.PlusCena, Converter={StaticResource cnvDecimalNulable}}"/>
+						<Label Grid.Row="2" Grid.Column="13" Padding="4" Width="20" VerticalAlignment="Top"
+							   HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Margin="0"
+							   Content=" "/>
 
 
-        <!-- TABLA PIJAMA -->
+					</Grid>
+				</Label>
+
+			</StackPanel>
+
+		</Grid>
+
+
+		<!-- TABLA PIJAMA -->
         <DataGrid x:Name="TablaPijama" IsReadOnly="True"  Grid.Row="3" Grid.Column="0" HeadersVisibility="Column" FontSize="12"
                   AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Single"
                   SelectionUnit="FullRow" Background="Transparent" CanUserSortColumns="False"

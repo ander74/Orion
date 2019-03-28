@@ -222,6 +222,11 @@ namespace Orion.ViewModels
 		}
 
 
+		// Cuando cambia un día pijama, se selecciona el día del calendario concreto.
+		private void _pijama_DiaCambiado(object sender, Pijama.HojaPijama.DiaCambiadoEventArgs e) {
+			DiaCalendarioSeleccionado = CalendarioSeleccionado?.ListaDias?[e.Dia.Dia - 1];
+		}
+
 
 
 
@@ -282,18 +287,9 @@ namespace Orion.ViewModels
 					_diacalendarioseleccionado = value;
 					GraficoOriginal = null;
 					PropiedadCambiada();
-					PropiedadCambiada(nameof(HayDiaCalendarioSeleccionado));
 				}
 			}
 		}
-
-
-		public bool HayDiaCalendarioSeleccionado {
-			get {
-				return DiaCalendarioSeleccionado != null;
-			}
-		}
-
 
 		private DateTime _fechaactual;
 		public DateTime FechaActual {
@@ -545,6 +541,7 @@ namespace Orion.ViewModels
 			set {
 				if (_pijama != value) {
 					_pijama = value;
+					if (_pijama != null) _pijama.DiaCambiado += _pijama_DiaCambiado;
 					PropiedadCambiada();
 				}
 			}

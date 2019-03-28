@@ -1797,71 +1797,6 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region COMANDO CARGAR GRÁFICO ALTERNATIVO
-
-		// Comando
-		private ICommand _cargargraficoalternativo;
-		public ICommand cmdCargarGraficoAlternativo {
-			get {
-				if (_cargargraficoalternativo == null) _cargargraficoalternativo = new RelayCommand(p => CargarGraficoAlternativo(), p => PuedeCargarGraficoAlternativo());
-				return _cargargraficoalternativo;
-			}
-		}
-
-
-		// Se puede ejecutar el comando
-		private bool PuedeCargarGraficoAlternativo() {
-			return CalendarioSeleccionado != null;
-		}
-
-		// Ejecución del comando
-		private void CargarGraficoAlternativo() {
-			if (DiaCalendarioSeleccionado.Grafico <= 0) return;
-			GraficoOriginal = Orion.Pijama.BdPijamas.GetGrafico(DiaCalendarioSeleccionado.Grafico, DiaCalendarioSeleccionado.DiaFecha);
-		}
-		#endregion
-
-
-		#region COMANDO BORRAR GRÁFICO ALTERNATIVO
-
-		// Comando
-		private ICommand _borrargraficoalternativo;
-		public ICommand cmdBorrarGraficoAlternativo {
-			get {
-				if (_borrargraficoalternativo == null) _borrargraficoalternativo = new RelayCommand(p => BorrarGraficoAlternativo(), p => PuedeBorrarGraficoAlternativo());
-				return _borrargraficoalternativo;
-			}
-		}
-
-
-		// Se puede ejecutar el comando
-		private bool PuedeBorrarGraficoAlternativo() {
-			return HayDiaCalendarioSeleccionado;
-		}
-
-		// Ejecución del comando
-		private void BorrarGraficoAlternativo() {
-			if (Mensajes.VerMensaje($"Vas a borrar los datos actuales\n\n" +
-						$"¿Deseas continuar?", "ATENCIÓN", true) == false) return;
-
-			DiaCalendarioSeleccionado.TurnoAlt = null;
-			DiaCalendarioSeleccionado.InicioAlt = null;
-			DiaCalendarioSeleccionado.FinalAlt = null;
-			DiaCalendarioSeleccionado.InicioPartidoAlt = null;
-			DiaCalendarioSeleccionado.FinalPartidoAlt = null;
-			DiaCalendarioSeleccionado.TrabajadasAlt = null;
-			DiaCalendarioSeleccionado.AcumuladasAlt = null;
-			DiaCalendarioSeleccionado.NocturnasAlt = null;
-			DiaCalendarioSeleccionado.DesayunoAlt = null;
-			DiaCalendarioSeleccionado.ComidaAlt = null;
-			DiaCalendarioSeleccionado.CenaAlt = null;
-			DiaCalendarioSeleccionado.PlusCenaAlt = null;
-			DiaCalendarioSeleccionado.PlusLimpiezaAlt = null;
-			DiaCalendarioSeleccionado.PlusPaqueteriaAlt = null;
-		}
-		#endregion
-
-
 		#region COMANDO PIJAMA MES MENOS
 
 		// Comando
@@ -1923,6 +1858,37 @@ namespace Orion.ViewModels {
 		}
 		#endregion
 
+
+
+		#region COMANDO ACTUALIZAR PIJAMA
+
+		// Comando
+		private ICommand actualizarpijama;
+		public ICommand cmdActualizarPijama {
+			get {
+				if (actualizarpijama == null) actualizarpijama = new RelayCommand(p => ActualizarPijama(), p => PuedeActualizarPijama());
+				return actualizarpijama;
+			}
+		}
+
+		private bool PuedeActualizarPijama() { 
+			return HayCambios;
+		}
+
+		// Ejecución del comando
+		private void ActualizarPijama() {
+			//int conductor = CalendarioSeleccionado.IdConductor;
+			//Calendario nuevoCalendario = BdCalendarios.GetCalendarioConductor(FechaPijama.Year, FechaPijama.Month, CalendarioSeleccionado.IdConductor);
+			if (CalendarioSeleccionado != null) {
+				if (HayCambios) GuardarCalendarios();
+				Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
+				Pijama.PropiedadCambiada("");
+			} else {
+				Pijama = null;
+			}
+		}
+
+		#endregion
 
 
 	}// Fin de la clase.

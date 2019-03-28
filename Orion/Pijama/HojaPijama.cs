@@ -11,7 +11,9 @@ using Orion.Servicios;
 using Orion.Views;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -331,6 +333,29 @@ namespace Orion.Pijama {
 
 
 		// ====================================================================================================
+		#region EVENTOS
+		// ====================================================================================================
+
+		public event EventHandler<DiaCambiadoEventArgs> DiaCambiado;
+
+		public class DiaCambiadoEventArgs : EventArgs {
+			public DiaCambiadoEventArgs(DiaPijama dia) {
+				Dia = dia;
+			}
+
+			public DiaPijama Dia { get; }
+		}
+
+		public void CambiaDia(DiaPijama dia) {
+			DiaCambiado?.Invoke(this, new DiaCambiadoEventArgs(dia));
+		}
+
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
 		#region PROPIEDADES GENERALES
 		// ====================================================================================================
 
@@ -404,9 +429,17 @@ namespace Orion.Pijama {
 			set {
 				if (_diaseleccionado != value) {
 					_diaseleccionado = value;
+					CambiaDia(_diaseleccionado);
 					PropiedadCambiada();
+					PropiedadCambiada(nameof(HayDiaSeleccionado));
+					_diaseleccionado.PropiedadCambiada(nameof(_diaseleccionado.GraficoTrabajado));
 				}
 			}
+		}
+
+
+		public bool HayDiaSeleccionado {
+			get => DiaSeleccionado != null;
 		}
 
 
