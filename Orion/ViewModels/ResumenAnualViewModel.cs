@@ -591,8 +591,8 @@ namespace Orion.ViewModels {
 		}
 
 
-		private int dndspendientes;
-		public int DNDsPendientes {
+		private decimal dndspendientes;
+		public decimal DNDsPendientes {
 			get { return dndspendientes; }
 			set {
 				if (dndspendientes != value) {

@@ -266,7 +266,7 @@
                     <DataGridCheckBoxColumn Header="Fijo" Width="1*" MinWidth="60" IsThreeState="False" Binding="{Binding Indefinido, UpdateSourceTrigger=PropertyChanged}"/>
                     <DataGridTextColumn Header="Horas" Width="2*" MinWidth="60" Binding="{Binding Acumuladas, Converter={StaticResource cnvSuperHora}}"/>
                     <DataGridTextColumn Header="DCs" Width="2*" MinWidth="60" Binding="{Binding Descansos, Converter={StaticResource cnvDecimal6}}"/>
-                    <DataGridTextColumn Header="DNDs" Width="2*" MinWidth="60" Binding="{Binding DescansosNoDisfrutados}"/>
+					<DataGridTextColumn Header="DNDs" Width="2*" MinWidth="60" Binding="{Binding DescansosNoDisfrutados, Converter={StaticResource cnvDecimal6}}"/>
                     <DataGridTextColumn Header="Plus Distancia" Width="2*" MinWidth="60" Binding="{Binding PlusDistancia, Converter={StaticResource cnvDecimal}}"/>
                     <DataGridCheckBoxColumn Header="R.Jor." Width="1*" MinWidth="60" IsThreeState="False" Binding="{Binding ReduccionJornada, UpdateSourceTrigger=PropertyChanged}"/>
                 </DataGrid.Columns>
@@ -367,8 +367,9 @@
                             <DataGridTextColumn Header="Fecha" Width="2*" Binding="{Binding Fecha, Converter={StaticResource cnvFecha}}"/>
                             <DataGridTextColumn Header="Horas" Width="1.5*" Binding="{Binding Horas, 
                                 Converter={StaticResource cnvSuperHora}}"/>
-                            <DataGridTextColumn Header="Descansos" Width="1.5*" Binding="{Binding Descansos}"/>
-                            <DataGridTextColumn Header="Motivo" Width="5*" Binding="{Binding Motivo}"/>
+                            <DataGridTextColumn Header="DCs" Width="1.5*" Binding="{Binding Descansos, Converter={StaticResource cnvDecimal6}}"/>
+							<DataGridTextColumn Header="DNDs" Width="1.5*" Binding="{Binding Dnds, Converter={StaticResource cnvDecimal6}}"/>
+							<DataGridTextColumn Header="Motivo" Width="5*" Binding="{Binding Motivo}"/>
                         </DataGrid.Columns>
                     </DataGrid>
 

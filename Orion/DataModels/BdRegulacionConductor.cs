@@ -79,10 +79,10 @@ namespace Orion.DataModels {
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{
 
-				string SQLInsertar = "INSERT INTO Regulaciones (IdConductor, Codigo, Fecha, Horas, Descansos, Motivo) " +
-									 "VALUES (?, ?, ?, ?, ?, ?);";
+				string SQLInsertar = "INSERT INTO Regulaciones (IdConductor, Codigo, Fecha, Horas, Descansos, Dnds, Motivo) " +
+									 "VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-				string SQLActualizar = "UPDATE Regulaciones SET IdConductor=?, Codigo=?, Fecha=?, Horas=?, Descansos=?, " +
+				string SQLActualizar = "UPDATE Regulaciones SET IdConductor=?, Codigo=?, Fecha=?, Horas=?, Descansos=?, Dnds=?, " +
 									   "Motivo=? WHERE Id=?;";
 
 				try {
@@ -127,8 +127,8 @@ namespace Orion.DataModels {
 			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion))
 			{
 
-				string SQLInsertar = "INSERT INTO Regulaciones (IdConductor, Codigo, Fecha, Horas, Descansos, Motivo) " +
-								 "VALUES (?, ?, ?, ?, ?, ?);";
+				string SQLInsertar = "INSERT INTO Regulaciones (IdConductor, Codigo, Fecha, Horas, Descansos, Dnds, Motivo) " +
+								 "VALUES (?, ?, ?, ?, ?, ?, ?);";
 
 				OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
 				RegulacionConductor.ParseToCommand(comando, regulacion);

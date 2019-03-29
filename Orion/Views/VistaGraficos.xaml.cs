@@ -48,22 +48,18 @@ namespace Orion.Views {
 
 		}
 
-		// La celda actual ha cambiado.
-		private void TablaGraficos_CurrentCellChanged(object sender, EventArgs e) {
-			if (TablaGraficos?.CurrentCell.Column == null) return;
-			((GlobalVM)this.DataContext).GraficosVM.ColumnaActual = TablaGraficos.CurrentCell.Column.DisplayIndex;
-			((GlobalVM)this.DataContext).GraficosVM.FilaActual = TablaGraficos.Items.IndexOf(TablaGraficos.CurrentCell.Item);
+		private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) {
+			var tabla = sender as DataGrid;
+			if (tabla != null && e.AddedCells != null && e.AddedCells.Count > 0) {
+				var cell = e.AddedCells[0];
+				if (!cell.IsValid) return;
+				ColumnaActual.Tag = cell.Column.DisplayIndex;
+				FilaActual.Tag = tabla.Items.IndexOf(cell.Item);
+			}
 		}
 
-		private void TablaGraficos_LoadingRow(object sender, DataGridRowEventArgs e) {
-			if (TablaGraficos?.CurrentCell.Column == null) return;
-			((GlobalVM)this.DataContext).GraficosVM.ColumnaActual = TablaGraficos.CurrentCell.Column.DisplayIndex;
-			((GlobalVM)this.DataContext).GraficosVM.FilaActual = TablaGraficos.Items.IndexOf(TablaGraficos.CurrentCell.Item);
-
-		}
-
-		// Al hacer doble click en la etiqueta GRUPO DE GRÁFICOS
-		private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+			// Al hacer doble click en la etiqueta GRUPO DE GRÁFICOS
+			private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 			//if (e.ClickCount != 4) return;
 			((GlobalVM)this.DataContext).VisibilidadProgramador = Visibility.Visible;
 		}

@@ -548,7 +548,7 @@ namespace Orion.Pijama {
 				return Trabajador.Acumuladas +
 					   HastaAñoAnterior.HorasAcumuladas +
 					   HastaAñoAnterior.HorasReguladas -
-					   new TimeSpan(HastaAñoAnterior.DiasLibreDisposicionF6 * App.Global.Convenio.JornadaMedia.Ticks);
+					   new TimeSpan(Convert.ToInt64(HastaAñoAnterior.DiasLibreDisposicionF6 * App.Global.Convenio.JornadaMedia.Ticks));
 				//return Trabajador.Acumuladas +
 				//	   HastaAñoAnterior.HorasAcumuladas +
 				//	   HastaAñoAnterior.HorasReguladas;
@@ -572,9 +572,10 @@ namespace Orion.Pijama {
 		/// <summary>
 		/// Descansos no disfrutados pendientes hasta el año anterior.
 		/// </summary>
-		public int DNDsPendientesHastaAñoAnterior {
+		public decimal DNDsPendientesHastaAñoAnterior {
 			get {
 				return Trabajador.DescansosNoDisfrutados +
+					   HastaAñoAnterior.DNDsRegulados +
 					   HastaAñoAnterior.DiasComiteEnDescanso +
 					   HastaAñoAnterior.DiasTrabajoEnDescanso -
 					   HastaAñoAnterior.DNDsDisfrutados;
@@ -590,7 +591,7 @@ namespace Orion.Pijama {
 				return Trabajador.Acumuladas +
 					   HastaMesActual.HorasAcumuladas +
 					   HastaMesActual.HorasReguladas -
-					   new TimeSpan(HastaMesActual.DiasLibreDisposicionF6 * App.Global.Convenio.JornadaMedia.Ticks);
+					   new TimeSpan(Convert.ToInt64(HastaMesActual.DiasLibreDisposicionF6 * App.Global.Convenio.JornadaMedia.Ticks));
 				//return Trabajador.Acumuladas +
 				//	   HastaMesActual.HorasAcumuladas +
 				//	   HastaMesActual.HorasReguladas -
@@ -615,9 +616,10 @@ namespace Orion.Pijama {
 		/// <summary>
 		/// Descansos no disfrutados pendientes hasta el mes actual.
 		/// </summary>
-		public int DNDsPendientesHastaMes {
+		public decimal DNDsPendientesHastaMes {
 			get {
 				return Trabajador.DescansosNoDisfrutados + 
+					   HastaMesActual.DNDsRegulados +
 					   HastaMesActual.DiasComiteEnDescanso + 
 					   HastaMesActual.DiasTrabajoEnDescanso -
 					   HastaMesActual.DNDsDisfrutados;

@@ -56,7 +56,7 @@ namespace Orion.Models {
 			_acumuladas = lector.ToTimeSpan("Acumuladas");
 			//_descansos = lector.ToInt16("Descansos");
 			_descansos = lector.ToDecimal("Descansos");
-			_descansosnodisfrutados = lector.ToInt16("DescansosNoDisfrutados");
+			_descansosnodisfrutados = lector.ToDecimal("DescansosNoDisfrutados");
 			_plusdistancia = lector.ToDecimal("PlusDistancia");
 			_reduccionjornada = lector.ToBool("ReduccionJornada");
 			_notas = lector.ToString("Notas");
@@ -76,8 +76,8 @@ namespace Orion.Models {
 				case "Teléfono": Telefono = ""; break;
 				case "Email": Email = ""; break;
 				case "Horas": Acumuladas = TimeSpan.Zero; break;
-				case "DCs": Descansos = 0; break;
-				case "DNDs": DescansosNoDisfrutados = 0; break;
+				case "DCs": Descansos = 0m; break;
+				case "DNDs": DescansosNoDisfrutados = 0m; break;
 				case "Plus Distancia": PlusDistancia = 0m; break;
 				case "R.Jor.": ReduccionJornada = false; break;
 			}
@@ -137,7 +137,7 @@ namespace Orion.Models {
 			conductor.Acumuladas = lector.ToTimeSpan("Acumuladas");
 			//conductor.Descansos = lector.ToInt16("Descansos");
 			conductor.Descansos = lector.ToDecimal("Descansos");
-			conductor.DescansosNoDisfrutados = lector.ToInt16("DescansosNoDisfrutados");
+			conductor.DescansosNoDisfrutados = lector.ToDecimal("DescansosNoDisfrutados");
 			conductor.PlusDistancia = lector.ToDecimal("PlusDistancia");
 			conductor.ReduccionJornada = lector.ToBool("ReduccionJornada");
 			conductor.Notas = lector.ToString("Notas");
@@ -153,7 +153,7 @@ namespace Orion.Models {
 			Comando.Parameters.AddWithValue("@Acumuladas", conductor.Acumuladas.Ticks);
 			//Comando.Parameters.AddWithValue("@Descansos", conductor.Descansos);
 			Comando.Parameters.AddWithValue("@Descansos", conductor.Descansos.ToString("0.0000"));
-			Comando.Parameters.AddWithValue("@Descansosnodisfrutados", conductor.DescansosNoDisfrutados);
+			Comando.Parameters.AddWithValue("@Descansosnodisfrutados", conductor.DescansosNoDisfrutados.ToString("0.0000"));
 			Comando.Parameters.AddWithValue("@Plusdistancia", conductor.PlusDistancia.ToString("0.0000"));
 			Comando.Parameters.AddWithValue("@ReduccionJornada", conductor.ReduccionJornada);
 			Comando.Parameters.AddWithValue("@Notas", conductor.Notas);
@@ -302,8 +302,8 @@ namespace Orion.Models {
 		}
 
 
-		private int _descansosnodisfrutados;
-		public int DescansosNoDisfrutados {
+		private decimal _descansosnodisfrutados;
+		public decimal DescansosNoDisfrutados {
 			get { return _descansosnodisfrutados; }
 			set {
 				if (_descansosnodisfrutados != value) {

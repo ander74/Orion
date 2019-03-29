@@ -6,6 +6,20 @@ PROYECTO ORION
 	Acciones pendientes de implementar
 	----------------------------------
 
+	 ** - Poner en las regulaciones los DCs decimales (Tocar tablas).
+			· Regulaciones: Campo Descansos = Moneda(4)
+							Campo Dnds = Moneda(4)
+			- Conductores : Campo DescansosNoDisfrutados = Moneda(4)
+
+	 ** - Guardar conductores al cobrar o regular las horas en el pijama.
+
+	 ** - Al regular las horas, no se genera pico de horas, sino que se genera DC decimal.
+
+	 ** - Añadir DNDs a las regulaciones. 
+
+
+
+
 	 ** - Añadir las F6(DC) que descuentan un DC en lugar de una hora.
 
 		- En el resumen anual, los fines de semana completos no se contabilizan bien por los medios.

@@ -794,7 +794,7 @@ namespace Orion.Models {
 		}
 
 
-		public int DNDsPendientesHastaMes {
+		public decimal DNDsPendientesHastaMes {
 			get {
 				if (Trabajador == null) return 0;
 				return Trabajador.DescansosNoDisfrutados + HastaMesActual.ComiteEnDescanso + HastaMesActual.TrabajoEnDescanso - HastaMesActual.DNDs;
@@ -802,7 +802,7 @@ namespace Orion.Models {
 		}
 
 
-		public int DNDsPendientesHastaAñoAnterior {
+		public decimal DNDsPendientesHastaAñoAnterior {
 			get {
 				if (Trabajador == null) return 0;
 				return Trabajador.DescansosNoDisfrutados + HastaAñoAnterior.ComiteEnDescanso + HastaAñoAnterior.TrabajoEnDescanso - HastaAñoAnterior.DNDs;
@@ -818,8 +818,8 @@ namespace Orion.Models {
 		}
 
 
-		private int _dcsreguladosañoactual;
-		public int DCsReguladosAñoActual {
+		private decimal _dcsreguladosañoactual;
+		public decimal DCsReguladosAñoActual {
 			get { return _dcsreguladosañoactual; }
 			set {
 				if (_dcsreguladosañoactual != value) {
@@ -830,7 +830,7 @@ namespace Orion.Models {
 		}
 
 
-		public int DNDsAñoActual {
+		public decimal DNDsAñoActual {
 			get {
 				if (Trabajador == null) return 0;
 				return DNDsPendientesHastaAñoAnterior - DNDsPendientesHastaMes;

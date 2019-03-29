@@ -89,6 +89,9 @@ namespace Orion.Pijama {
 													  "      AND Grafico = -6;";// AND (Codigo = 0 OR Codigo Is Null);";
 
 
+		private static string comandoDNDsRegulados = "SELECT Sum(Dnds) FROM Regulaciones WHERE IdConductor = ? AND Fecha < ?";
+
+
 		private static string comandoDNDsDisfrutados = "SELECT Count(DiasCalendario.Grafico) " +
 													   "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios.Id = DiasCalendario.IdCalendario " +
 													   "WHERE Calendarios.IdConductor = ? AND DiasCalendario.Grafico = -8 AND Fecha < ?";
@@ -266,7 +269,7 @@ namespace Orion.Pijama {
 					comando.Parameters.AddWithValue("idconductor", idconductor);
 					objeto = comando.ExecuteScalar();
 					if (objeto == DBNull.Value) objeto = 0d;
-					resultado.DiasLibreDisposicionF6 = Convert.ToInt32(objeto);
+					resultado.DiasLibreDisposicionF6 = Convert.ToDecimal(objeto);
 					//----------------------------------------------------------------------------------------------------
 					// DIAS F6DC
 					//----------------------------------------------------------------------------------------------------
@@ -275,7 +278,7 @@ namespace Orion.Pijama {
 					comando.Parameters.AddWithValue("idconductor", idconductor);
 					objeto = comando.ExecuteScalar();
 					if (objeto == DBNull.Value) objeto = 0d;
-					resultado.DiasF6DC = Convert.ToInt32(objeto);
+					resultado.DiasF6DC = Convert.ToDecimal(objeto);
 					//----------------------------------------------------------------------------------------------------
 					// DCS REGULADOS 
 					//----------------------------------------------------------------------------------------------------
@@ -284,7 +287,7 @@ namespace Orion.Pijama {
 					comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
 					objeto = comando.ExecuteScalar();
 					if (objeto == DBNull.Value) objeto = 0d;
-					resultado.DCsRegulados = Convert.ToInt32(objeto);
+					resultado.DCsRegulados = Convert.ToDecimal(objeto);
 					//----------------------------------------------------------------------------------------------------
 					// DCS DISFRUTADOS
 					//----------------------------------------------------------------------------------------------------
@@ -293,7 +296,16 @@ namespace Orion.Pijama {
 					comando.Parameters.AddWithValue("idconductor", idconductor);
 					objeto = comando.ExecuteScalar();
 					if (objeto == DBNull.Value) objeto = 0d;
-					resultado.DCsDisfrutados = Convert.ToInt32(objeto);
+					resultado.DCsDisfrutados = Convert.ToDecimal(objeto);
+					//----------------------------------------------------------------------------------------------------
+					// DNDs REGULADOS 
+					//----------------------------------------------------------------------------------------------------
+					comando = new OleDbCommand(comandoDNDsRegulados, conexion);
+					comando.Parameters.AddWithValue("idconductor", idconductor);
+					comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+					objeto = comando.ExecuteScalar();
+					if (objeto == DBNull.Value) objeto = 0d;
+					resultado.DNDsRegulados = Convert.ToDecimal(objeto);
 					//----------------------------------------------------------------------------------------------------
 					// DNDS DISFRUTADOS
 					//----------------------------------------------------------------------------------------------------
@@ -302,7 +314,7 @@ namespace Orion.Pijama {
 					comando.Parameters.AddWithValue("fecha", fecha);
 					objeto = comando.ExecuteScalar();
 					if (objeto == DBNull.Value) objeto = 0d;
-					resultado.DNDsDisfrutados = Convert.ToInt32(objeto);
+					resultado.DNDsDisfrutados = Convert.ToDecimal(objeto);
 					//----------------------------------------------------------------------------------------------------
 					// DÍAS COMITÉ EN DESCANSO
 					//----------------------------------------------------------------------------------------------------
@@ -311,7 +323,7 @@ namespace Orion.Pijama {
 					comando.Parameters.AddWithValue("fecha", fecha);
 					objeto = comando.ExecuteScalar();
 					if (objeto == DBNull.Value) objeto = 0d;
-					resultado.DiasComiteEnDescanso = Convert.ToInt32(objeto);
+					resultado.DiasComiteEnDescanso = Convert.ToDecimal(objeto);
 					//----------------------------------------------------------------------------------------------------
 					// DÍAS TRABAJO EN DESCANSO
 					//----------------------------------------------------------------------------------------------------
@@ -320,7 +332,7 @@ namespace Orion.Pijama {
 					comando.Parameters.AddWithValue("fecha", fecha);
 					objeto = comando.ExecuteScalar();
 					if (objeto == DBNull.Value) objeto = 0d;
-					resultado.DiasTrabajoEnDescanso = Convert.ToInt32(objeto);
+					resultado.DiasTrabajoEnDescanso = Convert.ToDecimal(objeto);
 					//----------------------------------------------------------------------------------------------------
 					// FINAL
 					//----------------------------------------------------------------------------------------------------

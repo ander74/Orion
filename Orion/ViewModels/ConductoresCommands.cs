@@ -421,7 +421,8 @@ namespace Orion.ViewModels {
 			string mensaje = "Vas a insertar la siguiente regulacion a todos los conductores.\n\n";
 			mensaje += $"Fecha: {RegulacionSeleccionada.Fecha:dd-MM-yyyy}\n";
 			mensaje += $"Horas: {RegulacionSeleccionada.Horas.ToTexto(true)}\n";
-			mensaje += $"Descansos: {RegulacionSeleccionada.Descansos:00}\n";
+			mensaje += $"DCs: {RegulacionSeleccionada.Descansos:0.0000}\n";
+			mensaje += $"DNDs: {RegulacionSeleccionada.Dnds:0.0000}\n";
 			mensaje += $"Motivo: {RegulacionSeleccionada.Motivo}\n\n";
 			mensaje += "¿Desea continuar?";
 			if (mensajes.VerMensaje(mensaje, "Añadir Regulacion a Todos", true) == true) {
@@ -430,6 +431,7 @@ namespace Orion.ViewModels {
 						RegulacionConductor reg = new RegulacionConductor();
 						reg.Codigo = RegulacionSeleccionada.Codigo;
 						reg.Descansos = RegulacionSeleccionada.Descansos;
+						reg.Dnds = RegulacionSeleccionada.Dnds;
 						reg.Fecha = RegulacionSeleccionada.Fecha;
 						reg.Horas = RegulacionSeleccionada.Horas;
 						reg.Motivo = RegulacionSeleccionada.Motivo;

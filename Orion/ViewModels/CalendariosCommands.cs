@@ -337,7 +337,7 @@ namespace Orion.ViewModels {
 		private void AbrirPijama() {
 
 			GuardarCalendarios();
-			FechaPijama = FechaActual;
+			//CalendarioPijama = CalendarioSeleccionado;
 			Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
 			VisibilidadTablaCalendarios = Visibility.Collapsed;
 
@@ -744,34 +744,41 @@ namespace Orion.ViewModels {
 			if (p == null) p = "Año";
 
 			int diasmes = DateTime.DaysInMonth(Pijama.Fecha.Year, Pijama.Fecha.Month);
-			TimeSpan horasdisponibles = Pijama.AcumuladasHastaAñoAnterior;
-			TimeSpan resto = new TimeSpan(horasdisponibles.Ticks % App.Global.Convenio.JornadaMedia.Ticks);
-			decimal dcs = (horasdisponibles - resto).ToDecimal() / App.Global.Convenio.JornadaMedia.ToDecimal();
-			string usadas = (string)cnvSuperHoraMixta.Convert(horasdisponibles - resto, null, null, null);
-			string restantes = (string)cnvSuperHoraMixta.Convert(resto, null, null, null);
-			string disponibles = (string)cnvSuperHoraMixta.Convert(horasdisponibles, null, null, null);
-			string titulo = "Regulación de Horas";
+			//TimeSpan horasdisponibles = Pijama.AcumuladasHastaAñoAnterior;
+			//TimeSpan resto = new TimeSpan(horasdisponibles.Ticks % App.Global.Convenio.JornadaMedia.Ticks);
+			//decimal dcs = (horasdisponibles - resto).ToDecimal() / App.Global.Convenio.JornadaMedia.ToDecimal();
+			//string usadas = (string)cnvSuperHoraMixta.Convert(horasdisponibles - resto, null, null, null);
+			//string restantes = (string)cnvSuperHoraMixta.Convert(resto, null, null, null);
+			//string disponibles = (string)cnvSuperHoraMixta.Convert(horasdisponibles, null, null, null);
 
-			string mensaje = "ATENCIÓN.\n\n";
-			mensaje += String.Format("Dispone de {0} horas para regular.\n\n", disponibles);
-			mensaje += String.Format("Se van a regular {0} horas en {1:00} DCs.\n\n", usadas, dcs);
-			mensaje += String.Format("Tras la conversión le sobrarán {0} horas.\n\n", restantes);
-			mensaje += "¿Desea continuar?";
+			TimeSpan horasdisponibles = Pijama.AcumuladasHastaAñoAnterior;
+			decimal dcs = Math.Round(horasdisponibles.ToDecimal() / App.Global.Convenio.JornadaMedia.ToDecimal(), 4);
+			string disponibles = (string)cnvSuperHoraMixta.Convert(horasdisponibles, null, null, null);
+
+			string titulo = "Regulación de Horas";
+			//string mensaje = $"ATENCIÓN.\n\n";
+			//mensaje += String.Format("Dispone de {0} horas para regular.\n\n", disponibles);
+			//mensaje += String.Format("Se van a regular {0} horas en {1:00} DCs.\n\n", usadas, dcs);
+			//mensaje += String.Format("Tras la conversión le sobrarán {0} horas.\n\n", restantes);
+			//mensaje += "¿Desea continuar?";
+			string mensaje = $"ATENCIÓN.\n\n" +
+				$"Se van a regular {disponibles} horas en {dcs} DCs.\n\n" +
+				$"¿Desea continuar?";
 
 			if (Mensajes.VerMensaje(mensaje, titulo, true) == true) {
 
 				RegulacionConductor regulacion = new RegulacionConductor();
 				regulacion.Codigo = 2;
-				regulacion.Descansos = (int)dcs;
-				regulacion.Horas = new TimeSpan((horasdisponibles - resto).Ticks * -1);
+				regulacion.Descansos = dcs;
+				regulacion.Horas = new TimeSpan(horasdisponibles.Ticks * -1);
 				regulacion.IdConductor = Pijama.Trabajador.Id;
 				regulacion.Fecha = new DateTime(Pijama.Fecha.Year, 11, 30);
 				regulacion.Motivo = $"Horas reguladas del año {Pijama.Fecha.Year}";
 
 				//BdRegulacionConductor.InsertarRegulacion(regulacion);
 				App.Global.ConductoresVM.InsertarRegulacion(regulacion);
-
-				CerrarPijama();
+				App.Global.ConductoresVM.GuardarTodo();
+				ActualizarPijama();
 			}
 
 		}
@@ -828,6 +835,8 @@ namespace Orion.ViewModels {
 					regulacion.Horas = new TimeSpan(contexto.HorasACobrar.Value.Ticks * -1);
 					//BdRegulacionConductor.InsertarRegulacion(regulacion);
 					App.Global.ConductoresVM.InsertarRegulacion(regulacion);
+					App.Global.ConductoresVM.GuardarTodo();
+					ActualizarPijama();
 				} else {
 					Mensajes.VerMensaje("Debes escribir las horas que quieres cobrar.", "ATENCIÓN");
 				}
@@ -1812,12 +1821,12 @@ namespace Orion.ViewModels {
 		// Ejecución del comando
 		private void PijamaMesMenos() {
 			int conductor = CalendarioSeleccionado.IdConductor;
-			FechaPijama = FechaPijama.AddMonths(-1);
-			Calendario nuevoCalendario = BdCalendarios.GetCalendarioConductor(FechaPijama.Year, FechaPijama.Month, CalendarioSeleccionado.IdConductor);
-			//FechaActual = FechaActual.AddMonths(-1);
-			//CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.IdConductor == conductor);
-			if (nuevoCalendario != null) {
-				Pijama = new Pijama.HojaPijama(nuevoCalendario, Mensajes);
+			//FechaPijama = FechaPijama.AddMonths(-1);
+			//CalendarioPijama = BdCalendarios.GetCalendarioConductor(FechaPijama.Year, FechaPijama.Month, conductor);
+			FechaActual = FechaActual.AddMonths(-1);
+			CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.IdConductor == conductor);
+			if (CalendarioSeleccionado != null) {
+				Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
 				Pijama.PropiedadCambiada("");
 			} else {
 				Pijama = null;
@@ -1843,12 +1852,12 @@ namespace Orion.ViewModels {
 		// Ejecución del comando
 		private void PijamaMesMas() {
 			int conductor = CalendarioSeleccionado.IdConductor;
-			FechaPijama = FechaPijama.AddMonths(1);
-			Calendario nuevoCalendario = BdCalendarios.GetCalendarioConductor(FechaPijama.Year, FechaPijama.Month, CalendarioSeleccionado.IdConductor);
-			//FechaActual = FechaActual.AddMonths(-1);
-			//CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.IdConductor == conductor);
-			if (nuevoCalendario != null) {
-				Pijama = new Pijama.HojaPijama(nuevoCalendario, Mensajes);
+			//FechaPijama = FechaPijama.AddMonths(1);
+			//CalendarioPijama = BdCalendarios.GetCalendarioConductor(FechaPijama.Year, FechaPijama.Month, conductor);
+			FechaActual = FechaActual.AddMonths(1);
+			CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.IdConductor == conductor);
+			if (CalendarioSeleccionado != null) {
+				Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
 				Pijama.PropiedadCambiada("");
 			} else {
 				Pijama = null;
@@ -1859,20 +1868,15 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-
 		#region COMANDO ACTUALIZAR PIJAMA
 
 		// Comando
 		private ICommand actualizarpijama;
 		public ICommand cmdActualizarPijama {
 			get {
-				if (actualizarpijama == null) actualizarpijama = new RelayCommand(p => ActualizarPijama(), p => PuedeActualizarPijama());
+				if (actualizarpijama == null) actualizarpijama = new RelayCommand(p => ActualizarPijama());
 				return actualizarpijama;
 			}
-		}
-
-		private bool PuedeActualizarPijama() { 
-			return HayCambios;
 		}
 
 		// Ejecución del comando

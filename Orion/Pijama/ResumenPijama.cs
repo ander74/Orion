@@ -48,11 +48,11 @@ namespace Orion.Pijama {
 		}
 
 
-		private int _diaslibredisposicionf6;
+		private decimal _diaslibredisposicionf6;
 		/// <summary>
 		/// Días de libre disposición.
 		/// </summary>
-		public int DiasLibreDisposicionF6
+		public decimal DiasLibreDisposicionF6
 		{
 			get { return _diaslibredisposicionf6; }
 			set
@@ -65,11 +65,11 @@ namespace Orion.Pijama {
 		}
 
 
-		private int _diasF6DC;
+		private decimal _diasF6DC;
 		/// <summary>
 		/// Días de libre disposición.
 		/// </summary>
-		public int DiasF6DC {
+		public decimal DiasF6DC {
 			get { return _diasF6DC; }
 			set {
 				if (_diasF6DC != value) {
@@ -79,11 +79,11 @@ namespace Orion.Pijama {
 		}
 
 
-		private int _dcsregulados;
+		private decimal _dcsregulados;
 		/// <summary>
 		/// Descansos compensatorios regulados (se hace un computo de todos).
 		/// </summary>
-		public int DCsRegulados {
+		public decimal DCsRegulados {
 			get { return _dcsregulados; }
 			set {
 				if (_dcsregulados != value) {
@@ -93,11 +93,11 @@ namespace Orion.Pijama {
 		}
 
 
-		private int _dcsdisfrutados;
+		private decimal _dcsdisfrutados;
 		/// <summary>
 		/// Descansos compensatorios disfrutados.
 		/// </summary>
-		public int DCsDisfrutados {
+		public decimal DCsDisfrutados {
 			get { return _dcsdisfrutados; }
 			set {
 				if (_dcsdisfrutados != value) {
@@ -107,11 +107,25 @@ namespace Orion.Pijama {
 		}
 
 
-		private int _dndsdisfrutados;
+		private decimal _dndsregulados;
 		/// <summary>
 		/// Descansos no disfrutados que se han disfrutado.
 		/// </summary>
-		public int DNDsDisfrutados {
+		public decimal DNDsRegulados {
+			get { return _dndsregulados; }
+			set {
+				if (_dndsregulados != value) {
+					_dndsregulados = value;
+				}
+			}
+		}
+
+
+		private decimal _dndsdisfrutados;
+		/// <summary>
+		/// Descansos no disfrutados que se han disfrutado.
+		/// </summary>
+		public decimal DNDsDisfrutados {
 			get { return _dndsdisfrutados; }
 			set {
 				if (_dndsdisfrutados != value) {
@@ -121,11 +135,11 @@ namespace Orion.Pijama {
 		}
 
 
-		private int _diascomiteendescanso;
+		private decimal _diascomiteendescanso;
 		/// <summary>
 		/// Días de comite que se han tenido un día de descanso.
 		/// </summary>
-		public int DiasComiteEnDescanso {
+		public decimal DiasComiteEnDescanso {
 			get { return _diascomiteendescanso; }
 			set {
 				if (_diascomiteendescanso != value) {
@@ -135,11 +149,11 @@ namespace Orion.Pijama {
 		}
 
 
-		private int _diastrabajoendescanso;
+		private decimal _diastrabajoendescanso;
 		/// <summary>
 		/// Días trabajados en un día de descanso.
 		/// </summary>
-		public int DiasTrabajoEnDescanso {
+		public decimal DiasTrabajoEnDescanso {
 			get { return _diastrabajoendescanso; }
 			set {
 				if (_diastrabajoendescanso != value) {

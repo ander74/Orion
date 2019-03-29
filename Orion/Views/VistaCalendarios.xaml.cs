@@ -63,25 +63,15 @@ namespace Orion.Views {
 		}
 
 
-		// AL CAMBIAR LA CELDA ACTUAL DE LA TABLA CALENDARIOS
-		private void TablaCalendarios_CurrentCellChanged(object sender, EventArgs e) {
-			if (TablaCalendarios?.CurrentCell.Column == null) return;
-			CalendariosViewModel VM = ((GlobalVM)this.DataContext).CalendariosVM;
-			VM.ColumnaActual = TablaCalendarios.CurrentCell.Column.DisplayIndex;
-			VM.FilaActual = TablaCalendarios.Items.IndexOf(TablaCalendarios.CurrentCell.Item);
-			if (VM.ColumnaActual >= 0) VM.CalendarioSeleccionado = TablaCalendarios.CurrentCell.Item as Calendario;
-			if (VM.ColumnaActual <= 0) {
-				if (VM.ColumnaActual == 0) VM.DiaCalendarioSeleccionado = null;
-			} else {
-				VM.DiaCalendarioSeleccionado = VM.CalendarioSeleccionado?.ListaDias[VM.ColumnaActual - 1];
+		private void DataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e) {
+			var tabla = sender as DataGrid;
+			if (tabla != null && e.AddedCells != null && e.AddedCells.Count > 0) {
+				var cell = e.AddedCells[0];
+				if (!cell.IsValid) return;
+				ColumnaActual.Tag = cell.Column.DisplayIndex;
+				FilaActual.Tag = tabla.Items.IndexOf(cell.Item);
 			}
-			
 		}
 
-		private void TablaCalendarios_LoadingRow(object sender, DataGridRowEventArgs e) {
-			if (TablaCalendarios?.CurrentCell.Column == null) return;
-			((GlobalVM)this.DataContext).CalendariosVM.ColumnaActual = TablaCalendarios.CurrentCell.Column.DisplayIndex;
-			((GlobalVM)this.DataContext).CalendariosVM.FilaActual = TablaCalendarios.Items.IndexOf(TablaCalendarios.CurrentCell.Item);
-		}
 	}
 }

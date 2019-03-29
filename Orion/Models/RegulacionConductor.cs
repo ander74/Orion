@@ -5,17 +5,10 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Orion.Config;
-using System.Data.OleDb;
-using System.Windows;
-
 namespace Orion.Models {
 
+	using System;
+	using System.Data.OleDb;
 
 	public class RegulacionConductor: NotifyBase {
 
@@ -45,7 +38,8 @@ namespace Orion.Models {
 			switch (header) {
 				case "Fecha": Fecha = new DateTime(2001,1,2); break;
 				case "Horas": Horas = TimeSpan.Zero; break;
-				case "Descansos": Descansos = 0; break;
+				case "DCs": Descansos = 0m; break;
+				case "DNDs": Dnds = 0m; break;
 				case "Motivo": Motivo = ""; break;
 			}
 		}
@@ -62,7 +56,8 @@ namespace Orion.Models {
 			_codigo = lector.ToInt16("Codigo");//(lector["Codigo"] is DBNull) ? 0 : (Int16)lector["Codigo"];
 			_fecha = (lector["Fecha"] is DBNull) ? new DateTime(2001, 1, 2) : (DateTime)lector["Fecha"];
 			_horas = lector.ToTimeSpan("Horas");
-			_descansos = lector.ToInt16("Descansos");//(lector["Descansos"] is DBNull) ? 0 : (Int16)lector["Descansos"];
+			_descansos = lector.ToDecimal("Descansos");//(lector["Descansos"] is DBNull) ? 0 : (Int16)lector["Descansos"];
+			_dnds = lector.ToDecimal("Dnds");//(lector["Dnds"] is DBNull) ? 0 : (Int16)lector["Dnds"];
 			_motivo = lector.ToString("Motivo");//(lector["Motivo"] is DBNull) ? "" : (string)lector["Motivo"];
 		}
 
@@ -78,6 +73,7 @@ namespace Orion.Models {
 			if (r.Codigo != Codigo || r.Fecha.Ticks != Fecha.Ticks) return false;
 			if (r.Horas != Horas) return false;
 			if (r.Descansos != Descansos) return false;
+			if (r.Dnds != Dnds) return false;
 			return true;
 		}
 
@@ -87,7 +83,7 @@ namespace Orion.Models {
 
 
 		public override string ToString() {
-			return Fecha.ToString(@"dd-MM-yyyy") + ": " + Horas.ToTexto() + " horas y " + Descansos + " descansos (" + Motivo + ").";
+			return Fecha.ToString(@"dd-MM-yyyy") + ": " + Horas.ToTexto() + " horas, " + Descansos + " descansos y " + Dnds + "(" + Motivo + ").";
 		}
 
 		#endregion
@@ -102,7 +98,8 @@ namespace Orion.Models {
 			regulacion.Codigo = lector.ToInt16("Codigo");
 			regulacion.Fecha = (lector["Fecha"] is DBNull) ? new DateTime(2001, 1, 2) : (DateTime)lector["Fecha"];
 			regulacion.Horas = lector.ToTimeSpan("Horas");
-			regulacion.Descansos = lector.ToInt16("Descansos");
+			regulacion.Descansos = lector.ToDecimal("Descansos");
+			regulacion.Dnds = lector.ToDecimal("Dnds");
 			regulacion.Motivo = lector.ToString("Motivo");
 		}
 
@@ -112,7 +109,8 @@ namespace Orion.Models {
 			Comando.Parameters.AddWithValue("codigo", regulacion.Codigo);
 			Comando.Parameters.AddWithValue("fecha", regulacion.Fecha.ToString("yyyy-MM-dd"));
 			Comando.Parameters.AddWithValue("horas", regulacion.Horas.Ticks);
-			Comando.Parameters.AddWithValue("descansos", regulacion.Descansos);
+			Comando.Parameters.AddWithValue("descansos", regulacion.Descansos.ToString("0.0000"));
+			Comando.Parameters.AddWithValue("dnds", regulacion.Dnds.ToString("0.0000"));
 			Comando.Parameters.AddWithValue("motivo", regulacion.Motivo);
 			Comando.Parameters.AddWithValue("id", regulacion.Id);
 		}
@@ -189,8 +187,8 @@ namespace Orion.Models {
 		}
 
 
-		private int _descansos;
-		public int Descansos {
+		private decimal _descansos;
+		public decimal Descansos {
 			get { return _descansos; }
 			set {
 				if (_descansos != value) {
@@ -200,6 +198,14 @@ namespace Orion.Models {
 				}
 			}
 		}
+
+
+		private decimal _dnds;
+		public decimal Dnds {
+			get => _dnds;
+			set => SetValue(ref _dnds, value);
+		}
+
 
 
 		private string _motivo = "";

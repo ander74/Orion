@@ -279,6 +279,7 @@ namespace Orion.ViewModels
 		}
 
 
+
 		private DiaCalendario _diacalendarioseleccionado;
 		public DiaCalendario DiaCalendarioSeleccionado {
 			get { return _diacalendarioseleccionado; }
@@ -321,18 +322,13 @@ namespace Orion.ViewModels
 		}
 
 
-		private DateTime _fechapijama;
-		public DateTime FechaPijama {
-			get { return _fechapijama; }
-			set {
-				if (SetValue(ref _fechapijama, value)) PropiedadCambiada(nameof(TextoMesPijama));
-			}
-		}
-
-
-		public string TextoMesPijama {
-			get => $"{FechaPijama:MMMM}".ToUpper();
-		}
+		//private DateTime _fechapijama;
+		//public DateTime FechaPijama {
+		//	get { return _fechapijama; }
+		//	set {
+		//		if (SetValue(ref _fechapijama, value)) PropiedadCambiada(nameof(TextoMesPijama));
+		//	}
+		//}
 
 
 		public string MesActual {
@@ -610,9 +606,11 @@ namespace Orion.ViewModels
 		public int ColumnaActual {
 			get { return _columnaactual; }
 			set {
-				if (_columnaactual != value) {
-					_columnaactual = value;
-					PropiedadCambiada();
+				if (value is int i) {
+					if (_columnaactual != i) {
+						_columnaactual = i;
+						PropiedadCambiada();
+					}
 				}
 			}
 		}
@@ -622,9 +620,11 @@ namespace Orion.ViewModels
 		public int FilaActual {
 			get { return _filaactual; }
 			set {
-				if (_filaactual != value) {
-					_filaactual = value;
-					PropiedadCambiada();
+				if (value is int i) {
+					if (_filaactual != i) {
+						_filaactual = i;
+						PropiedadCambiada();
+					}
 				}
 			}
 		}
