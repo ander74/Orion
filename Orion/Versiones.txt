@@ -8,6 +8,20 @@ PROYECTO ORIÓN
 
 		Sin Publicar
 
+			- 
+
+
+		01 de Abril de 2019
+
+			- Se corrige el problema que hacía que no se guardaran los días del calendario al pegarlos.
+
+			- Se añaden los controles personalizados QDatagrid, QCalendar y QTextBox.
+
+			- Se inicia la fase de desacople del ViewModel de la Vista.
+
+
+		29 de Marzo de 2019
+
 			- Se pasan los datos de calendario y de gráfico alternativo al pijama.
 
 			- Se convierten los DNDs en decimal y se añade campo DNDs a las regulaciones de conductor.
@@ -15,8 +29,6 @@ PROYECTO ORIÓN
 			- Al regular o cobrar horas, los conductores de guardan y se recarga el pijama.
 
 			- La regulación de horas no genera pico de horas sino que genera DCs decimales.
-
-			- 
 
 
 		27 de Marzo de 2019

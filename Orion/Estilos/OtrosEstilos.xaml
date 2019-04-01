@@ -122,7 +122,58 @@
     </Style>
 
 
-    <!-- ==================================================================================================== -->
+	<!-- ==================================================================================================== -->
+	<!-- ESTILO TOGGLE BARRA -->
+	<!-- ==================================================================================================== -->
+	<Style TargetType="ToggleButton" x:Key="EstiloToggleBarra">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Margin" Value="2,5"/>
+		<Setter Property="FontSize" Value="10"/>
+		<Setter Property="Focusable" Value="False"/>
+		<Setter Property="Width" Value="58"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ToggleButton">
+					<Border CornerRadius="5" Background="{TemplateBinding Background}" 
+                                BorderBrush="Transparent" BorderThickness="{TemplateBinding BorderThickness}" >
+						<ContentPresenter x:Name="contentPresenter" 
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                              Content="{TemplateBinding Content}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Style.Triggers>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter Property="Background" Value="{StaticResource orDegradadoNaranja}"/>
+			</Trigger>
+			<Trigger Property="IsChecked" Value="True">
+				<Setter Property="Background" Value="{StaticResource orDegradadoMarron}"/>
+			</Trigger>
+			<Trigger Property="IsPressed" Value="True">
+				<Setter Property="Background" Value="{StaticResource orDegradadoMarron}"/>
+			</Trigger>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="{StaticResource GrisMedio}"/>
+			</Trigger>
+			<MultiTrigger>
+				<MultiTrigger.Conditions>
+					<Condition Property="IsChecked" Value="True"/>
+					<Condition Property="IsMouseOver" Value="True"/>
+				</MultiTrigger.Conditions>
+				<MultiTrigger.Setters>
+					<Setter Property="Background" Value="{StaticResource orDegradadoNaranja}"/>
+				</MultiTrigger.Setters>
+			</MultiTrigger>
+		</Style.Triggers>
+	</Style>
+
+
+	<!-- ==================================================================================================== -->
     <!-- ESTILO BOTON VALIDEZ FECHA -->
     <!-- ==================================================================================================== -->
     <Style TargetType="Button" x:Key="EstiloBotonValidezFecha">
@@ -200,7 +251,58 @@
     </Style>
 
 
-    <!-- ==================================================================================================== -->
+	<!-- ==================================================================================================== -->
+	<!-- ESTILO TOGGLE BARRA PEQUEÑA -->
+	<!-- ==================================================================================================== -->
+	<Style TargetType="ToggleButton" x:Key="EstiloToggleBarraPequeña">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Margin" Value="2,5"/>
+		<Setter Property="Padding" Value="5"/>
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="Focusable" Value="False"/>
+		<Setter Property="HorizontalAlignment" Value="Left"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="ToggleButton">
+					<Border CornerRadius="5" Background="{TemplateBinding Background}" 
+                                BorderBrush="Transparent" BorderThickness="{TemplateBinding BorderThickness}" >
+						<ContentPresenter x:Name="contentPresenter" 
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                              Content="{TemplateBinding Content}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+					</Border>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+		<Style.Triggers>
+			<Trigger Property="IsMouseOver" Value="True">
+				<Setter Property="Background" Value="{StaticResource orDegradadoNaranja}"/>
+			</Trigger>
+			<Trigger Property="IsChecked" Value="True">
+				<Setter Property="Background" Value="{StaticResource orDegradadoMarron}"/>
+			</Trigger>
+			<Trigger Property="IsPressed" Value="True">
+				<Setter Property="Background" Value="{StaticResource orDegradadoMarron}"/>
+			</Trigger>
+			<Trigger Property="IsEnabled" Value="False">
+				<Setter Property="Foreground" Value="{StaticResource GrisMedio}"/>
+			</Trigger>
+			<MultiTrigger>
+				<MultiTrigger.Conditions>
+					<Condition Property="IsChecked" Value="True"/>
+					<Condition Property="IsMouseOver" Value="True"/>
+				</MultiTrigger.Conditions>
+				<MultiTrigger.Setters>
+					<Setter Property="Background" Value="{StaticResource orDegradadoNaranja}"/>
+				</MultiTrigger.Setters>
+			</MultiTrigger>
+		</Style.Triggers>
+	</Style>
+
+
+	<!-- ==================================================================================================== -->
     <!-- ESTILO BOTON CONTROL ESTADÍSTICAS -->
     <!-- ==================================================================================================== -->
     <Style TargetType="ToggleButton" x:Key="EstiloBotonControlEstadisticas">

@@ -10,6 +10,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:Orion.Views"
+			 xmlns:controls="clr-namespace:Orion.Controls"
              xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:p="clr-namespace:Orion.Properties"
              xmlns:cnv="clr-namespace:Orion.Convertidores"
@@ -75,8 +76,7 @@
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
             <!--BOTON GRUPOS DE GRÁFICOS-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdMostrarPanelGrupos}"
-                    CommandParameter="{Binding ElementName=PanelGrupos}">
+			<Button Style="{StaticResource EstiloBotonBarra}" Click="BtGrupos_Click">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/AbrirPanelIzquierdo.png" Style="{StaticResource EstiloImagen}"/>
@@ -96,8 +96,7 @@
             </StackPanel>
 
             <!--BOTON VALORACIONES DE GRÁFICOS-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdMostrarPanelValoraciones}"
-                    CommandParameter="{Binding ElementName=PanelValoraciones}">
+			<Button Style="{StaticResource EstiloBotonBarra}" Click="BtValoraciones_Click">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/AbrirPanelDerecho.png" Style="{StaticResource EstiloImagen}"/>
@@ -273,31 +272,43 @@
                                 <!--SEPARADOR-->
                                 <TextBlock Height="2" Margin="5,3" Background="LightGray"/>
 
-                                <!--BOTON SELECCIÓN FILA -->
-                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64" Visibility="{Binding VisibilidadBotonSeleccionFila}"
-                                        Command="{Binding cmdCambiarModoSeleccion}">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Vertical">
-                                            <Image Source="Imagenes/SeleccionFila.png" Style="{StaticResource EstiloImagen}"/>
-                                            <TextBlock Text="Seleccionar Filas" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
+								<!--BOTON ALTERNAR SELECCION TABLA GRAFICOS -->
+								<ToggleButton Height="80" Width="64" Command="{Binding Source={x:Reference TablaGraficos}, Path=ComandoAlternarModoSeleccion}">
+									<ToggleButton.Style>
+										<Style BasedOn="{StaticResource EstiloToggleBarra}" TargetType="ToggleButton">
+											<Style.Triggers>
+												<Trigger Property="IsChecked" Value="True">
+													<Setter Property="Content">
+														<Setter.Value>
+															<StackPanel Orientation="Vertical">
+																<Image Source="Imagenes/SeleccionFila.png" Style="{StaticResource EstiloImagen}"/>
+																<TextBlock Text="Seleccionar Filas" TextWrapping="Wrap" TextAlignment="Center"
+																		   VerticalAlignment="Center" FontSize="10"/>
+															</StackPanel>
 
-                                <!--BOTON SELECCIÓN CELDA -->
-                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64" Visibility="{Binding VisibilidadBotonSeleccionCelda}"
-                                        Command="{Binding cmdCambiarModoSeleccion}">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Vertical">
-                                            <Image Source="Imagenes/SeleccionCelda.png" Style="{StaticResource EstiloImagen}"/>
-                                            <TextBlock Text="Seleccionar Celdas" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+												<Trigger Property="IsChecked" Value="False">
+													<Setter Property="Content">
+														<Setter.Value>
+															<StackPanel Orientation="Vertical">
+																<Image Source="Imagenes/SeleccionCelda.png" Style="{StaticResource EstiloImagen}"/>
+																<TextBlock Text="Seleccionar Celdas" TextWrapping="Wrap" TextAlignment="Center" 
+																		   VerticalAlignment="Center" FontSize="10"/>
+															</StackPanel>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+											</Style.Triggers>
+										</Style>
+									</ToggleButton.Style>
+								</ToggleButton>
 
 
 
-                            </StackPanel>
+
+							</StackPanel>
                         </Border>
                     </Border>
                 </xceed:DropDownButton.DropDownContent>
@@ -320,16 +331,16 @@
             </Button>
 
             <!--BOTON PEGAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdPegarGraficos}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Pegar.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Pegar" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+			<Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding ElementName=TablaGraficos, Path=ComandoPegar}">
+				<Button.Content>
+					<StackPanel Orientation="Vertical">
+						<Image Source="Imagenes/Pegar.png" Style="{StaticResource EstiloImagen}"/>
+						<TextBlock Text="Pegar" TextWrapping="Wrap" TextAlignment="Center"/>
+					</StackPanel>
+				</Button.Content>
+			</Button>
 
-            <!-- DESPLEGABLE FILTRAR GRÁFICOS -->
+			<!-- DESPLEGABLE FILTRAR GRÁFICOS -->
             <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" IsOpen="{Binding GraficosVM.BtFiltrarAbierto, Mode=TwoWay}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
@@ -483,32 +494,38 @@
             <!-- ==================================================================================================== -->
             <!-- TABLA GRAFICOS -->
             <!-- ==================================================================================================== -->
-			<FrameworkElement x:Name="ColumnaActual" Tag="{Binding GraficosVM.ColumnaActual, Mode=TwoWay}" Visibility="Collapsed"/>
-			<FrameworkElement x:Name="FilaActual" Tag="{Binding GraficosVM.FilaActual, Mode=TwoWay}" Visibility="Collapsed"/>
-			<DataGrid x:Name="TablaGraficos" ItemsSource="{Binding GraficosVM.VistaGraficos}"
-                      SelectedItem="{Binding GraficosVM.GraficoSeleccionado}"
-                      IsReadOnly="False" Grid.Column="1" HeadersVisibility="Column" FontSize="12"
-                      AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False"
-                      SelectionUnit="{Binding GraficosVM.ModoSeleccion}"  
-                      SelectionMode="Extended" CanUserAddRows="{Binding GraficosVM.HayGrupo}"
-                      GotFocus="TablaGraficos_GotFocus" 
-					  SelectedCellsChanged="DataGrid_SelectedCellsChanged"
-                      Background="Transparent" Style="{StaticResource EstiloGridGraficos}">
+			<FrameworkElement x:Name="ColumnaActual" Visibility="Collapsed"/>
+			<controls:QDataGrid x:Name="TablaGraficos" 
+								AlternationCount="2" 
+								AutoGenerateColumns="False"
+								Background="Transparent" 
+								CanUserAddRows="{Binding GraficosVM.HayGrupo}"
+								CanUserReorderColumns="False"
+								FontSize="12"
+								Grid.Column="1" 
+								GotFocus="TablaGraficos_GotFocus"
+								HeadersVisibility="Column" 
+								IsReadOnly="False" 
+								ItemsSource="{Binding GraficosVM.VistaGraficos}"								
+								SelectedItem="{Binding GraficosVM.GraficoSeleccionado}"
+								SelectionMode="Extended" 
+								SelectionUnit="{Binding GraficosVM.ModoSeleccion}"  
+								Style="{StaticResource EstiloGridGraficos}">
 
-                <DataGrid.Resources>
+				<controls:QDataGrid.Resources>
                     <!--<SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource orAzul2}"/>-->
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod"/>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
-                </DataGrid.Resources>
+                </controls:QDataGrid.Resources>
 
-                <DataGrid.InputBindings>
+				<!--<controls:QDataGrid.InputBindings>
                     <KeyBinding Key="Delete" Command="{Binding GraficosVM.cmdBorrarCeldas}"
                                 CommandParameter="{Binding ElementName=TablaGraficos}"/>
                     <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding GraficosVM.cmdPegarGraficos}"
                                 CommandParameter="{Binding ElementName=TablaGraficos}"/>
-                </DataGrid.InputBindings>
-                
-                <DataGrid.Columns>
+                </controls:QDataGrid.InputBindings>-->
+
+				<controls:QDataGrid.Columns>
 					<DataGridCheckBoxColumn Width="0.3*" MinWidth="20" IsThreeState="False"
                                         Binding="{Binding NoCalcular, UpdateSourceTrigger=PropertyChanged}"
                                         Visibility="{Binding Source={x:Reference ColumnaActual}, 
@@ -618,13 +635,13 @@
                                         Visibility="{Binding Source={x:Reference ColumnaActual}, 
 													 Path=DataContext.Configuracion.MostrarGrafPlusPaqueteria,
                                                      Converter={StaticResource cnvBoolToVisibility}}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                </controls:QDataGrid.Columns>
+            </controls:QDataGrid>
 
             <!-- ==================================================================================================== -->
             <!-- PANEL GRUPOS DE GRÁFICOS -->
             <!-- ==================================================================================================== -->
-            <Grid x:Name="PanelGrupos" Visibility="{Binding GraficosVM.PanelGruposVisibilidad, Mode=TwoWay}" Grid.Column="1" Width="160"
+            <Grid x:Name="PanelGrupos" Visibility="Collapsed" Grid.Column="1" Width="160"
                   Background="{StaticResource DegradadoCeleste0}" HorizontalAlignment="Left" Margin="0,0,5,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -638,8 +655,7 @@
 
                 <Label Grid.Row="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" FontWeight="Black" Content="GRUPOS"/>
 
-                <CheckBox x:Name="ChPanel" Grid.Row="0" Margin="5" IsChecked="{Binding GraficosVM.PanelGruposFijo}"
-                          Command="{Binding GraficosVM.cmdFijarPanelGrupos}" CommandParameter="{Binding ElementName=PanelGrupos}"/>
+				<CheckBox x:Name="ChPanelGrupos" Grid.Row="0" Margin="5" Click="ChPanelGrupos_Click"/>
 
                 <!-- CONTENIDO DEL PANEL -->
                 <Grid Grid.Row="1">
@@ -702,8 +718,7 @@
             <!-- ==================================================================================================== -->
             <!-- PANEL VALORACIONES DE GRÁFICO -->
             <!-- ==================================================================================================== -->
-            <Grid x:Name="PanelValoraciones" Visibility="{Binding GraficosVM.PanelValoracionesVisibilidad, Mode=TwoWay}"
-                  Background="{StaticResource DegradadoCeleste0}"
+            <Grid x:Name="PanelValoraciones" Visibility="Collapsed" Background="{StaticResource DegradadoCeleste0}"
                   Grid.Column="1" Width="550" HorizontalAlignment="Right" Margin="5,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
@@ -717,10 +732,7 @@
 
                 <Label Grid.Row="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" FontWeight="Black" Content="VALORACIONES DE GRÁFICO"/>
 
-                <CheckBox x:Name="ChPanelDerecho" Grid.Row="0" Margin="5" HorizontalAlignment="Right"
-                          IsChecked="{Binding GraficosVM.PanelValoracionesFijo}"
-                          Command="{Binding GraficosVM.cmdFijarPanelValoraciones}" CommandParameter="{Binding ElementName=PanelValoraciones}"/>
-                <!--Click="ChPanelDerecho_Click"-->
+				<CheckBox x:Name="ChPanelValoraciones" Grid.Row="0" Margin="5" HorizontalAlignment="Right" Click="ChPanelValoraciones_Click"/>
 
                 <!-- CONTENIDO DEL PANEL -->
                 <Grid Grid.Row="1">
@@ -792,33 +804,27 @@
                     </StackPanel>
 
                     <!-- TABLA VALORACIONES -->
-                    <DataGrid Grid.Row="2" ItemsSource="{Binding GraficosVM.GraficoSeleccionado.ListaValoraciones}"
-                              SelectedItem="{Binding GraficosVM.ValoracionSeleccionada}"
-                              BorderThickness="1" VerticalScrollBarVisibility="Disabled" Margin="4"
-                              x:Name="TablaValoraciones" IsReadOnly="False" AutoGenerateColumns="False" AlternationCount="2"
-                              SelectionMode="Single" SelectionUnit="FullRow" HeadersVisibility="Column"
-                              CanUserResizeRows="False" CanUserReorderColumns="False" HorizontalAlignment="Left" CanUserSortColumns="False"
-                              Style="{StaticResource EstiloGridValoraciones}" Background="{StaticResource GrisMuyClaro}" FontSize="10"
-                              RowEditEnding="TablaValoraciones_RowEditEnding"
-                              CanUserAddRows="{Binding GraficosVM.HayGrafico}">
+                    <controls:QDataGrid Grid.Row="2" ItemsSource="{Binding GraficosVM.GraficoSeleccionado.ListaValoraciones}"
+										SelectedItem="{Binding GraficosVM.ValoracionSeleccionada}"
+										BorderThickness="1" VerticalScrollBarVisibility="Disabled" Margin="4"
+										x:Name="TablaValoraciones" IsReadOnly="False" AutoGenerateColumns="False" AlternationCount="2"
+										SelectionMode="Single" SelectionUnit="FullRow" HeadersVisibility="Column"
+										CanUserResizeRows="False" CanUserReorderColumns="False" HorizontalAlignment="Left" CanUserSortColumns="False"
+										Style="{StaticResource EstiloGridValoraciones}" Background="{StaticResource GrisMuyClaro}" FontSize="10"
+										RowEditEnding="TablaValoraciones_RowEditEnding"
+										CanUserAddRows="{Binding GraficosVM.HayGrafico}">
 
-                        <DataGrid.InputBindings>
-                            <KeyBinding Key="Delete" Command="{Binding GraficosVM.cmdBorrarCeldasValoracion}"
-                                CommandParameter="{Binding ElementName=TablaValoraciones}"/>
-                        </DataGrid.InputBindings>
-
-                        <DataGrid.Columns>
-                            <DataGridTextColumn Header="Inicio" Width="1.5*" Binding="{Binding Inicio, Converter={StaticResource cnvHora},
-                                                                                       UpdateSourceTrigger=LostFocus}"/>
+						<controls:QDataGrid.Columns>
+                            <DataGridTextColumn Header="Inicio" Width="1.5*" 
+												Binding="{Binding Inicio, Converter={StaticResource cnvHora}, UpdateSourceTrigger=LostFocus}"/>
                             <DataGridTextColumn Header="Línea" Width="1.5*" Binding="{Binding Linea, Converter={StaticResource cnvItinerario},
-                                                                                      ConverterParameter={x:Static cnv:VerValores.NoCeros},
-                                                                                      UpdateSourceTrigger=LostFocus}"/>
+												ConverterParameter={x:Static cnv:VerValores.NoCeros}, UpdateSourceTrigger=LostFocus}"/>
                             <DataGridTextColumn Header="Descripción" Width="8*" Binding="{Binding Descripcion}"/>
                             <DataGridTextColumn Header="Final" Width="1.5*" Binding="{Binding Final, Converter={StaticResource cnvHora}}"/>
-                            <DataGridTextColumn Header="Tiempo" Width="1.5*" Binding="{Binding Tiempo, Converter={StaticResource cnvHora}, 
-                                                                                       ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                            <DataGridTextColumn Header="Tiempo" Width="1.5*" 
+												Binding="{Binding Tiempo, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"/>
+                        </controls:QDataGrid.Columns>
+                    </controls:QDataGrid>
 
                 </Grid>
             </Grid>
@@ -842,11 +848,12 @@
                     </Grid>
                     
                     <!-- CALENDARIO -->
-                    <Calendar Style="{StaticResource EstiloCalendario}" DisplayMode="Month" FirstDayOfWeek="Monday" SelectionMode="SingleDate"  Focusable="False"
-                          GotMouseCapture="Calendar_GotMouseCapture" SelectedDate="{Binding GraficosVM.GrupoSeleccionado.Validez, Mode=TwoWay}"
-                              SelectedDatesChanged="Calendar_SelectedDatesChanged">
+                    <controls:QCalendar Style="{StaticResource EstiloCalendario}" 
+										DisplayMode="Month" FirstDayOfWeek="Monday" SelectionMode="SingleDate"  Focusable="False"
+										SelectedDate="{Binding GraficosVM.GrupoSeleccionado.Validez, Mode=TwoWay}"
+										SelectedDatesChanged="Calendar_SelectedDatesChanged">
 
-                    </Calendar>
+                    </controls:QCalendar>
                 </StackPanel>
             </Border>
         </StackPanel>

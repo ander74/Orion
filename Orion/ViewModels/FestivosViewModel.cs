@@ -80,8 +80,9 @@
 
 		public void Reiniciar()
 		{
-			AñoActual = DateTime.Now.Year;
 			CargarDatos();
+			AñoActual = DateTime.Now.Year;
+			if (VistaFestivos != null) VistaFestivos.Filter = f => (f as Festivo).Año == _añoactual;
 			HayCambios = false;
 		}
 

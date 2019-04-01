@@ -5,13 +5,16 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-namespace Orion.Views {
+namespace Orion.Controls {
 
 	using System.Windows.Controls;
+	using System.Windows.Controls.Primitives;
+	using System.Windows.Input;
 
-	public partial class VistaOpciones : UserControl {
-		public VistaOpciones() {
-			InitializeComponent();
+	public class QCalendar : Calendar {
+
+		protected override void OnGotMouseCapture(MouseEventArgs e) {
+			if (e.OriginalSource is CalendarDayButton || e.OriginalSource is CalendarItem) Mouse.Capture(null);
 		}
 
 	}

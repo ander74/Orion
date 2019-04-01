@@ -9,9 +9,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Orion.Views"
+			 xmlns:controls="clr-namespace:Orion.Controls"
              xmlns:cnv="clr-namespace:Orion.Convertidores"
-             xmlns:p="clr-namespace:Orion.Properties"
-             xmlns:v="clr-namespace:Orion.Views"
              xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
              mc:Ignorable="d"
              d:DesignHeight="800" d:DesignWidth="1200">
@@ -220,28 +219,39 @@
 
                                 <!--SEPARADOR-->
                                 <TextBlock Height="2" Margin="5,3" Background="LightGray"/>
+								
+                                <!--BOTON ALTERNAR SELECCION TABLA CALENDARIOS -->
+								<ToggleButton Height="80" Width="64" Command="{Binding Source={x:Reference TablaCalendarios}, Path=ComandoAlternarModoSeleccion}">
+									<ToggleButton.Style>
+										<Style BasedOn="{StaticResource EstiloToggleBarra}" TargetType="ToggleButton">
+											<Style.Triggers>
+												<Trigger Property="IsChecked" Value="True">
+													<Setter Property="Content">
+														<Setter.Value>
+															<StackPanel Orientation="Vertical">
+																<Image Source="Imagenes/SeleccionFila.png" Style="{StaticResource EstiloImagen}"/>
+																<TextBlock Text="Seleccionar Filas" TextWrapping="Wrap" TextAlignment="Center"
+																		   VerticalAlignment="Center" FontSize="10"/>
+															</StackPanel>
 
-                                <!--BOTON SELECCIÓN FILA -->
-                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64" Visibility="{Binding VisibilidadBotonSeleccionFila}"
-                                        Command="{Binding cmdCambiarModoSeleccion}">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Vertical">
-                                            <Image Source="Imagenes/SeleccionFila.png" Style="{StaticResource EstiloImagen}"/>
-                                            <TextBlock Text="Seleccionar Filas" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
-
-                                <!--BOTON SELECCIÓN CELDA -->
-                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64" Visibility="{Binding VisibilidadBotonSeleccionCelda}"
-                                        Command="{Binding cmdCambiarModoSeleccion}">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Vertical">
-                                            <Image Source="Imagenes/SeleccionCelda.png" Style="{StaticResource EstiloImagen}"/>
-                                            <TextBlock Text="Seleccionar Celdas" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+												<Trigger Property="IsChecked" Value="False">
+													<Setter Property="Content">
+														<Setter.Value>
+															<StackPanel Orientation="Vertical">
+																<Image Source="Imagenes/SeleccionCelda.png" Style="{StaticResource EstiloImagen}"/>
+																<TextBlock Text="Seleccionar Celdas" TextWrapping="Wrap" TextAlignment="Center" 
+																		   VerticalAlignment="Center" FontSize="10"/>
+															</StackPanel>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+											</Style.Triggers>
+										</Style>
+									</ToggleButton.Style>
+								</ToggleButton>
 
                             </StackPanel>
                         </Border>
@@ -263,18 +273,17 @@
                 </Button.Content>
             </Button>
 
-            <!--BOTON PEGAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdPegarCalendarios}"
-                    CommandParameter="{Binding ElementName=TablaCalendarios}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Pegar.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Pegar" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+			<!--BOTON PEGAR-->
+			<Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding ElementName=TablaCalendarios, Path=ComandoPegar}">
+				<Button.Content>
+					<StackPanel Orientation="Vertical">
+						<Image Source="Imagenes/Pegar.png" Style="{StaticResource EstiloImagen}"/>
+						<TextBlock Text="Pegar" TextWrapping="Wrap" TextAlignment="Center"/>
+					</StackPanel>
+				</Button.Content>
+			</Button>
 
-            <!-- DESPLEGABLE FILTRAR TABLA -->
+			<!-- DESPLEGABLE FILTRAR TABLA -->
             <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" IsOpen="{Binding CalendariosVM.BtFiltrarAbierto, Mode=TwoWay}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
@@ -614,10 +623,12 @@
                         <!-- GRÁFICO DE APLICACION -->
                         <StackPanel Orientation="Horizontal" Margin="5,0">
                             <TextBlock Style="{StaticResource TextoPijama1}"  Text="Aplicar al Gráfico: " Width="Auto"/>
-                            <TextBox Width="70" Style="{StaticResource TextBoxPijama}"
+                            <!--<TextBox Width="70" Style="{StaticResource TextBoxPijama}"
                                      Text="{Binding Grafico, Converter={StaticResource cnvNumGrafico}}"
-                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                            <ComboBox VerticalAlignment="Center" Padding="6" Margin="5,0" Width="100" Height="24" FontSize="12"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>-->
+							<controls:QTextBox Width="70" Style="{StaticResource TextBoxPijama}"
+                                     Text="{Binding Grafico, Converter={StaticResource cnvNumGrafico}}"/>
+							<ComboBox VerticalAlignment="Center" Padding="6" Margin="5,0" Width="100" Height="24" FontSize="12"
                                       VerticalContentAlignment="Center"
                                   SelectedIndex="{Binding Codigo}">
                                 <ComboBox.Items>
@@ -634,14 +645,18 @@
                         <!-- DIAS DE APLICACION -->
                         <StackPanel Orientation="Horizontal" Margin="5,0">
                             <TextBlock Style="{StaticResource TextoPijama1}"  Text="Aplicar a los días: " Width="Auto"/>
-                            <TextBox Style="{StaticResource TextBoxPijama}" Width="40"
+                            <!--<TextBox Style="{StaticResource TextBoxPijama}" Width="40"
                                      Text="{Binding DelDia, StringFormat=00, UpdateSourceTrigger=PropertyChanged}"
-                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                            <TextBlock Style="{StaticResource TextoPijama2}" Text="  Al  " Width="Auto"/>
-                            <TextBox  Style="{StaticResource TextBoxPijama}" Width="40"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>-->
+							<controls:QTextBox Style="{StaticResource TextBoxPijama}" Width="40"
+                                     Text="{Binding DelDia, StringFormat=00, UpdateSourceTrigger=PropertyChanged}"/>
+							<TextBlock Style="{StaticResource TextoPijama2}" Text="  Al  " Width="Auto"/>
+                            <!--<TextBox  Style="{StaticResource TextBoxPijama}" Width="40"
                                       Text="{Binding AlDia, StringFormat=00, UpdateSourceTrigger=PropertyChanged}"
-                                      GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                        </StackPanel>
+                                      GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>-->
+							<controls:QTextBox  Style="{StaticResource TextBoxPijama}" Width="40"
+                                      Text="{Binding AlDia, StringFormat=00, UpdateSourceTrigger=PropertyChanged}"/>
+						</StackPanel>
 
                         <!-- ACCIÓN -->
                         <StackPanel Orientation="Horizontal" Margin="5,0">
@@ -664,7 +679,7 @@
                         <!-- VALOR PEDIDO -->
                         <StackPanel Orientation="Horizontal" Margin="5,0">
                             <TextBlock Style="{StaticResource TextoPijama1}"  Text="{Binding TextoValorPedido}" Width="Auto"/>
-                            <TextBox Style="{StaticResource TextBoxPijama}" Width="70" Visibility="{Binding VisibilidadHoras}"
+                            <!--<TextBox Style="{StaticResource TextBoxPijama}" Width="70" Visibility="{Binding VisibilidadHoras}"
                                      GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
                                      Text="{Binding Horas, Converter={StaticResource cnvHora}}"/>
                             <TextBox Style="{StaticResource TextBoxPijama}" Width="80" Visibility="{Binding VisibilidadImporte}"
@@ -672,8 +687,14 @@
                                      Text="{Binding Importe, Converter={StaticResource cnvDecimal}}"/>
                             <TextBox Width="70" Style="{StaticResource TextBoxPijama}" Visibility="{Binding VisibilidadNumero}"
                                      Text="{Binding NuevoGrafico, Converter={StaticResource cnvNumGrafico}}"
-                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                            <ComboBox VerticalAlignment="Center" Padding="6" Margin="5,0" Width="100" Height="24" FontSize="12"
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>-->
+							<controls:QTextBox Style="{StaticResource TextBoxPijama}" Width="70" Visibility="{Binding VisibilidadHoras}"
+                                     Text="{Binding Horas, Converter={StaticResource cnvHora}}"/>
+							<controls:QTextBox Style="{StaticResource TextBoxPijama}" Width="80" Visibility="{Binding VisibilidadImporte}"
+                                     Text="{Binding Importe, Converter={StaticResource cnvDecimal}}"/>
+							<controls:QTextBox Width="70" Style="{StaticResource TextBoxPijama}" Visibility="{Binding VisibilidadNumero}"
+                                     Text="{Binding NuevoGrafico, Converter={StaticResource cnvNumGrafico}}"/>
+							<ComboBox VerticalAlignment="Center" Padding="6" Margin="5,0" Width="100" Height="24" FontSize="12"
                                       VerticalContentAlignment="Center" Visibility="{Binding VisibilidadNumero}"
                                   SelectedIndex="{Binding NuevoCodigo}">
                                 <ComboBox.Items>
@@ -709,10 +730,12 @@
                             <CheckBox FontFamily="Verdana" FontSize="12" FontWeight="Bold" Margin="10,0" VerticalAlignment="Center"
                                       VerticalContentAlignment="Center" Content="Sumar Valor" IsChecked="{Binding SumarValor}"/>
                             <TextBlock Style="{StaticResource TextoPijama1}"  Text="Notas: " Width="Auto" Margin="10,0"/>
-                            <TextBox Style="{StaticResource TextBoxPijama}" Width="500" TextAlignment="Left"
+							<!--<TextBox Style="{StaticResource TextBoxPijama}" Width="500" TextAlignment="Left"
                                      Text="{Binding Notas, UpdateSourceTrigger=PropertyChanged}"
-                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                        </StackPanel>
+                                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>-->
+							<controls:QTextBox Style="{StaticResource TextBoxPijama}" Width="500" TextAlignment="Left"
+                                     Text="{Binding Notas, UpdateSourceTrigger=PropertyChanged}"/>
+						</StackPanel>
 
                     </StackPanel>
 
@@ -747,32 +770,42 @@
 
 
 		<!-- TABLA CALENDARIOS -->
-		<FrameworkElement x:Name="ColumnaActual" Tag="{Binding CalendariosVM.ColumnaActual, Mode=TwoWay}" Visibility="Collapsed"/>
-		<FrameworkElement x:Name="FilaActual" Tag="{Binding CalendariosVM.FilaActual, Mode=TwoWay}" Visibility="Collapsed"/>
-		<DataGrid x:Name="TablaCalendarios" ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
-				  SelectedItem="{Binding CalendariosVM.CalendarioSeleccionado}"
-                  IsReadOnly="False" Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" HeadersVisibility="Column" FontSize="12"
-                  MouseDoubleClick="TablaCalendarios_MouseDoubleClick"
-                  AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Extended"
-                  SelectionUnit="{Binding CalendariosVM.ModoSeleccion}"
-                  Background="Transparent" Style="{StaticResource EstiloGridCalendarios}"
-                  SelectedCellsChanged="DataGrid_SelectedCellsChanged"
-                  Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
+		<!--<FrameworkElement x:Name="ColumnaActual" Tag="{Binding CalendariosVM.ColumnaActual, Mode=TwoWay}" Visibility="Collapsed"/>
+		<FrameworkElement x:Name="FilaActual" Tag="{Binding CalendariosVM.FilaActual, Mode=TwoWay}" Visibility="Collapsed"/>-->
+		<FrameworkElement x:Name="ColumnaActual" Visibility="Collapsed"/>
+		<controls:QDataGrid x:Name="TablaCalendarios" 
+							AlternationCount="2" 
+							AutoGenerateColumns="False" 
+							Background="Transparent" 
+							CanUserAddRows="True"
+							CanUserReorderColumns="False" 
+							FontSize="12"
+							Grid.Column="0" 
+							Grid.ColumnSpan="2" 
+							Grid.Row="3" 
+							HeadersVisibility="Column" 
+							IsReadOnly="False" 
+							ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
+							SelectedItem="{Binding CalendariosVM.CalendarioSeleccionado}"
+							SelectionMode="Extended"
+							SelectionUnit="{Binding CalendariosVM.ModoSeleccion}"
+							Style="{StaticResource EstiloGridCalendarios}"
+							Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
 
-            <DataGrid.Resources>
+			<controls:QDataGrid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod"/>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
-            </DataGrid.Resources>
+            </controls:QDataGrid.Resources>
 
-            <DataGrid.InputBindings>
-                <KeyBinding Key="Delete" Command="{Binding CalendariosVM.cmdBorrarCeldas}"
+			<!--<controls:QDataGrid.InputBindings>
+				<KeyBinding Key="Delete" Command="{Binding CalendariosVM.cmdBorrarCeldas}"
                                 CommandParameter="{Binding ElementName=TablaCalendarios}"/>
                 <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding CalendariosVM.cmdPegarCalendarios}"
                                 CommandParameter="{Binding ElementName=TablaCalendarios}"/>
-            </DataGrid.InputBindings>
+			</controls:QDataGrid.InputBindings>-->
 
             <!-- COLUMNAS -->
-            <DataGrid.Columns>
+			<controls:QDataGrid.Columns>
                 <DataGridTextColumn Header="Conductor" Width="2*" Binding="{Binding IdConductor}">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
@@ -1847,9 +1880,9 @@
 
 
 
-            </DataGrid.Columns>
+            </controls:QDataGrid.Columns>
 
-        </DataGrid>
+        </controls:QDataGrid>
 
 
         <!-- PANEL CONDUCTOR EN PIJAMA -->
@@ -1865,9 +1898,21 @@
                     Background="{StaticResource DegradadoCeleste2}"/>
 
 			<StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Left">
-				<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="{Binding CalendariosVM.TextoBotonGraficoAlternativo}"
-									Padding="8,5" Margin="5,0" VerticalAlignment="Center" Width="30" FontSize="20"
-									Command="{Binding CalendariosVM.cmdActivarBotonGraficoAlternativo}"/>
+				<ToggleButton x:Name="BtDatosDiaPijama" Padding="8,5" Margin="5,0" VerticalAlignment="Center" Width="30" FontSize="20">
+					<ToggleButton.Style>
+						<Style BasedOn="{StaticResource EstiloToggleBarraPequeña}" TargetType="ToggleButton">
+							<Style.Triggers>
+								<Trigger Property="IsChecked" Value="False">
+									<Setter Property="Content" Value="&gt;"/>
+								</Trigger>
+								<Trigger Property="IsChecked" Value="true">
+									<Setter Property="Content" Value="v"/>
+								</Trigger>
+							</Style.Triggers>
+						</Style>
+					</ToggleButton.Style>
+
+				</ToggleButton>
 
 				<TextBlock FontFamily="Verdana" FontSize="20" FontWeight="DemiBold" VerticalAlignment="Center"
                        Text="{Binding CalendariosVM.Pijama.TextoTrabajador}" Padding="10" Foreground="DarkBlue" />
@@ -1894,15 +1939,30 @@
 							</Button.Content>
 						</Button>
 						<Rectangle Width="1" VerticalAlignment="Stretch" Fill="DarkBlue"/>
-						<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="{Binding CalendariosVM.TextoBotonPanelPijama}"
-                            Padding="10,5" Margin="10,0" VerticalAlignment="Center" ToolTip="Mostrar/Ocultar Resumen"
-                            Command="{Binding CalendariosVM.cmdActivarBotonPanelPijama}"/>
-					</StackPanel>
+						<!--<Button x:Name="BtOcultarPanelPijama" Style="{StaticResource EstiloBotonBarraPequeña}" Content="\>\>"
+								Padding="10,5" Margin="10,0" VerticalAlignment="Center" ToolTip="Mostrar/Ocultar Resumen"
+								Click="BtOcultarPanelPijama_Click"/>-->
+					<ToggleButton x:Name="BtOcultarPanelPijama"
+								Padding="10,5" Margin="10,0" VerticalAlignment="Center" ToolTip="Mostrar/Ocultar Resumen">
+						<ToggleButton.Style>
+							<Style BasedOn="{StaticResource EstiloToggleBarraPequeña}" TargetType="ToggleButton">
+								<Style.Triggers>
+									<Trigger Property="IsChecked" Value="False">
+										<Setter Property="Content" Value="&gt;&gt;"/>
+									</Trigger>
+									<Trigger Property="IsChecked" Value="true">
+										<Setter Property="Content" Value="&lt;&lt;"/>
+									</Trigger>
+								</Style.Triggers>
+							</Style>
+						</ToggleButton.Style>
+					</ToggleButton>
+				</StackPanel>
 				</Label>
 
 			<!-- DATOS DE CALENDARIO -->
-			<StackPanel Grid.Row="1" Orientation="Vertical" Visibility="{Binding CalendariosVM.VisibilidadGraficoAlternativo}"
-						IsEnabled="{Binding CalendariosVM.Pijama.HayDiaSeleccionado}">
+			<StackPanel Grid.Row="1" Orientation="Vertical" IsEnabled="{Binding CalendariosVM.Pijama.HayDiaSeleccionado}"
+						Visibility="{Binding ElementName=BtDatosDiaPijama, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
 
 				<!-- DATOS DEL CALENDARIO -->
 				<Label FontFamily="Verdana" FontSize="10" FontWeight="Normal" VerticalContentAlignment="Center">
@@ -1921,17 +1981,21 @@
 
 						<!-- EXCESO JORNADA -->
 						<TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Exc. Jornada:"/>
-						<TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+						<!--<TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center"
                                      GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+                                     Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.ExcesoJornada, Converter={StaticResource cnvSuperHora}}">-->
+						<controls:QTextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center"
                                      Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.ExcesoJornada, Converter={StaticResource cnvSuperHora}}">
-						</TextBox>
+						</controls:QTextBox>
 
 						<!-- PAQUETERÍA-->
 						<TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Fact. Paquetería:"/>
-						<TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center"
+						<!--<TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center"
                                      GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+                                     Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.FacturadoPaqueteria, Converter={StaticResource cnvDecimal}}">-->
+						<controls:QTextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center"
                                      Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.FacturadoPaqueteria, Converter={StaticResource cnvDecimal}}">
-						</TextBox>
+						</controls:QTextBox>
 
 						<!-- LIMPIEZA -->
 						<TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Limpieza:"/>
@@ -1948,17 +2012,18 @@
 
 						<!-- VÍNCULO -->
 						<TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Vínculo:"/>
-						<TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
+						<!--<TextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
                                      GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+                                     Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.GraficoVinculado, Converter={StaticResource cnvNumGrafico}}">-->
+						<controls:QTextBox Margin="4,0" VerticalAlignment="Center" Padding="3" Width="60" HorizontalContentAlignment="Center" 
                                      Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.GraficoVinculado, Converter={StaticResource cnvNumGrafico}}">
-						</TextBox>
+						</controls:QTextBox>
 
 					</StackPanel>
 				</Label>
 
 				<!-- GRÁFICO ORIGINAL -->
-				<Label FontFamily="Verdana" FontSize="10" FontWeight="Normal" VerticalContentAlignment="Center" HorizontalAlignment="Stretch"
-						   Visibility="{Binding CalendariosVM.VisibilidadGraficoAlternativo}">
+				<Label FontFamily="Verdana" FontSize="10" FontWeight="Normal" VerticalContentAlignment="Center" HorizontalAlignment="Stretch">
 					<Grid DataContext="{Binding CalendariosVM}">
 						<Grid.RowDefinitions>
 							<RowDefinition Height="Auto"/>
@@ -2000,7 +2065,7 @@
 						<Label Grid.Row="1" Grid.Column="0" FontWeight="Bold" Padding="4" Width="60" VerticalAlignment="Center"
 							   VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
 							   Content="{Binding Pijama.DiaSeleccionado.ComboGrafico, Converter={StaticResource cnvNumGraficoPijama}}"/>
-						<TextBox Grid.Row="1" Grid.Column="1" FontSize="12" 
+						<!--<TextBox Grid.Row="1" Grid.Column="1" FontSize="12" 
 								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
 								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
 								 Text="{Binding DiaCalendarioSeleccionado.TurnoAlt}"/>
@@ -2047,6 +2112,42 @@
 						<TextBox Grid.Row="1" Grid.Column="12" FontSize="12" 
 								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
 								 GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"
+								 Text="{Binding DiaCalendarioSeleccionado.PlusCenaAlt, Converter={StaticResource cnvDecimalNulable}}"/>-->
+						<controls:QTextBox Grid.Row="1" Grid.Column="1" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Text="{Binding DiaCalendarioSeleccionado.TurnoAlt}"/>
+						<controls:QTextBox Grid.Row="1" Grid.Column="2" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Text="{Binding DiaCalendarioSeleccionado.InicioAlt, Converter={StaticResource cnvHora}}"/>
+						<controls:QTextBox Grid.Row="1" Grid.Column="3" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Text="{Binding DiaCalendarioSeleccionado.FinalAlt, Converter={StaticResource cnvHora}}"/>
+						<controls:QTextBox Grid.Row="1" Grid.Column="4" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Text="{Binding DiaCalendarioSeleccionado.InicioPartidoAlt, Converter={StaticResource cnvHora}}"/>
+						<controls:QTextBox Grid.Row="1" Grid.Column="5" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Text="{Binding DiaCalendarioSeleccionado.FinalPartidoAlt, Converter={StaticResource cnvHora}}"/>
+						<controls:QTextBox Grid.Row="1" Grid.Column="6" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Text="{Binding DiaCalendarioSeleccionado.TrabajadasAlt, Converter={StaticResource cnvHora}}"/>
+						<controls:QTextBox Grid.Row="1" Grid.Column="7" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Text="{Binding DiaCalendarioSeleccionado.AcumuladasAlt, Converter={StaticResource cnvHora}}"/>
+						<controls:QTextBox Grid.Row="1" Grid.Column="8" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Text="{Binding DiaCalendarioSeleccionado.NocturnasAlt, Converter={StaticResource cnvHora}}"/>
+						<controls:QTextBox Grid.Row="1" Grid.Column="9" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Text="{Binding DiaCalendarioSeleccionado.DesayunoAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+						<controls:QTextBox Grid.Row="1" Grid.Column="10" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Text="{Binding DiaCalendarioSeleccionado.ComidaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+						<controls:QTextBox Grid.Row="1" Grid.Column="11" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Text="{Binding DiaCalendarioSeleccionado.CenaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
+						<controls:QTextBox Grid.Row="1" Grid.Column="12" FontSize="12" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
 								 Text="{Binding DiaCalendarioSeleccionado.PlusCenaAlt, Converter={StaticResource cnvDecimalNulable}}"/>
 						<StackPanel Grid.Row="0" Grid.Column="13" Orientation="Horizontal" Margin="10,0,0,0">
 							<TextBlock Text="Limpieza: " VerticalAlignment="Center"/>
@@ -2286,22 +2387,22 @@
         <ScrollViewer  x:Name="PanelResumen" Grid.RowSpan="4" Grid.Column="1" Width="Auto" Background="{StaticResource DegradadoCeleste1}"
                         Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}"
                        VerticalScrollBarVisibility="Hidden">
-            <StackPanel Orientation="Vertical" Width="370" ScrollViewer.VerticalScrollBarVisibility="Hidden"
-                        Visibility="{Binding CalendariosVM.VisibilidadPanelPijama}">
+            <StackPanel x:Name="PanelPijama" Orientation="Vertical" Width="370" ScrollViewer.VerticalScrollBarVisibility="Hidden"
+                        Visibility="{Binding ElementName=BtOcultarPanelPijama, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
 
                 <!-- HORAS -->
                 <Grid HorizontalAlignment="Stretch">
-                    <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Horas Mes Actual"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="HorasMes" ToolTip="Mostrar/Ocultar"
-                        Style="{StaticResource EstiloBotonBarraPequeña}" HorizontalAlignment="Left"/>
+                    <ToggleButton x:Name="BtHorasMes" Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"
+								  Content="Horas Mes Actual" ToolTip="Mostrar/Ocultar" Style="{StaticResource EstiloToggleBarraPequeña}"
+								  HorizontalAlignment="Left"/>
 
-                    <Button Margin="5,5,5,5" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="q" FontFamily="WingDings 3"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="Todos"  ToolTip="Mostrar Todos"
-                        Style="{StaticResource EstiloBotonBarraPequeña}" HorizontalAlignment="Right"/>
+					<!-- TODO Poner este en Code Behind-->
+                    <Button Margin="5,5,5,5" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="q"
+							FontFamily="WingDings 3" ToolTip="Mostrar Todos" Style="{StaticResource EstiloBotonBarraPequeña}"
+							Click="BtMostrarTodos_Click" HorizontalAlignment="Right"/>
                 </Grid>
                 
-                <!--<TextBlock Text="Horas Mes Actual" Margin="10,10,5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"/>-->
-                <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelHorasMes}">
+                <Grid Margin="5,0" Visibility="{Binding ElementName=BtHorasMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
                     <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
 
                     <StackPanel Orientation="Vertical">
@@ -2353,12 +2454,10 @@
 
 
                 <!-- DÍAS -->
-                <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Días Mes Actual"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="DiasMes" ToolTip="Mostrar/Ocultar"
-                        Style="{StaticResource EstiloBotonBarraPequeña}"/>
-                <!--<TextBlock Text="Días Mes Actual" Margin="10,10,5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"/>-->
-                
-                <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelDiasMes}">
+                <ToggleButton x:Name="BtDiasMes" Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"
+							  Content="Días Mes Actual" ToolTip="Mostrar/Ocultar" Style="{StaticResource EstiloToggleBarraPequeña}"/>
+
+				<Grid Margin="5,0" Visibility="{Binding ElementName=BtDiasMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
                     <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
 
                     <StackPanel Orientation="Vertical">
@@ -2502,13 +2601,11 @@
 
 
                 <!-- FINES DE SEMANA -->
-                <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Fines de Semana Mes Actual"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="FindesMes" ToolTip="Mostrar/Ocultar"
-                        Style="{StaticResource EstiloBotonBarraPequeña}"/>
-                <!--<TextBlock Text="Fines de Semana Mes Actual" Margin="10,10,5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"/>-->
+				<ToggleButton x:Name="BtFindesMes" Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"
+							  Content="Fines de Semana Mes Actual" ToolTip="Mostrar/Ocultar" Style="{StaticResource EstiloToggleBarraPequeña}"/>
 
-                <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelFindesMes}">
-                    <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
+				<Grid Margin="5,0" Visibility="{Binding ElementName=BtFindesMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
+					<Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
 
                     <StackPanel Orientation="Vertical">
                         <!-- FINES DE SEMANA -->
@@ -2565,12 +2662,11 @@
 
 
                 <!-- DIETAS Y PLUSES -->
-                <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Dietas y Pluses Mes Actual"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="DietasMes" ToolTip="Mostrar/Ocultar"
-                        Style="{StaticResource EstiloBotonBarraPequeña}"/>
+				<ToggleButton x:Name="BtDietasMes" Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"
+							  Content="Dietas y Pluses Mes Actual" ToolTip="Mostrar/Ocultar" Style="{StaticResource EstiloToggleBarraPequeña}"/>
 
-                <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelDietasMes}">
-                    <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
+				<Grid Margin="5,0" Visibility="{Binding ElementName=BtDietasMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
+					<Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
 
                     <StackPanel Orientation="Vertical">
 
@@ -2678,12 +2774,11 @@
 
 
                 <!-- RESUMEN HASTA MES ACTUAL -->
-                <Button Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" Content="Resumen Hasta Mes Actual"
-                        Command="{Binding CalendariosVM.cmdMostrarPanelesPijama}" CommandParameter="ResumenAño" ToolTip="Mostrar/Ocultar"
-                        Style="{StaticResource EstiloBotonBarraPequeña}"/>
+				<ToggleButton x:Name="BtResumenMes" Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold" 
+							  Content="Resumen Hasta Mes Actual" ToolTip="Mostrar/Ocultar" Style="{StaticResource EstiloToggleBarraPequeña}"/>
 
-                <Grid Margin="5,0" Visibility="{Binding CalendariosVM.VisibilidadPanelResumenAño}">
-                    <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
+				<Grid Margin="5,0" Visibility="{Binding ElementName=BtResumenMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
+					<Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
 
                     <StackPanel Orientation="Vertical">
 
@@ -2757,12 +2852,12 @@
 					</Grid>
 
 					<!-- CALENDARIO -->
-					<Calendar Style="{StaticResource EstiloCalendario}" DisplayMode="Month"  FirstDayOfWeek="Monday" SelectionMode="SingleDate"  Focusable="False"
-							  GotMouseCapture="Calendar_GotMouseCapture" SelectedDate="{Binding CalendariosVM.FechaActual, Mode=TwoWay}"
-							  DisplayDate="{Binding CalendariosVM.FechaCalendarios, Mode=TwoWay}">
-						<!-- SelectedDatesChanged="Calendar_SelectedDatesChanged" -->
+					<controls:QCalendar Style="{StaticResource EstiloCalendario}"
+										DisplayMode="Month"  FirstDayOfWeek="Monday" SelectionMode="SingleDate"  Focusable="False"
+										SelectedDate="{Binding CalendariosVM.FechaActual, Mode=TwoWay}"
+										DisplayDate="{Binding CalendariosVM.FechaCalendarios, Mode=TwoWay}">
 
-					</Calendar>
+					</controls:QCalendar>
 					<TextBlock FontSize="10" Text="Selecciona el día 1 del mes deseado."/>
 				</StackPanel>
 			</Border>

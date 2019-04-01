@@ -61,52 +61,52 @@ namespace Orion.ViewModels {
 		//====================================================================================================
 
 
-		#region MOSTRAR PANEL GRUPOS
-		//Comando
-		public ICommand cmdMostrarPanelGrupos {
-			get {
-				if (_cmdmostrarpanelgrupos == null) _cmdmostrarpanelgrupos = new RelayCommand(p => MostrarPanelGrupos(p));
-				return _cmdmostrarpanelgrupos;
-			}
-		}
+		//#region MOSTRAR PANEL GRUPOS
+		////Comando
+		//public ICommand cmdMostrarPanelGrupos {
+		//	get {
+		//		if (_cmdmostrarpanelgrupos == null) _cmdmostrarpanelgrupos = new RelayCommand(p => MostrarPanelGrupos(p));
+		//		return _cmdmostrarpanelgrupos;
+		//	}
+		//}
 
-		// Ejecución del comando
-		private void MostrarPanelGrupos(object parametro) {
-			Grid panel = (Grid)parametro;
-			if (panel == null) return;
-			if (PanelGruposVisibilidad == Visibility.Visible) {
-				PanelGruposVisibilidad = Visibility.Collapsed;
-				PanelGruposFijo = false;
-				Grid.SetColumn(panel, 1);
-			} else {
-				PanelGruposVisibilidad = Visibility.Visible;
-			}
-		}
-		#endregion
+		//// Ejecución del comando
+		//private void MostrarPanelGrupos(object parametro) {
+		//	Grid panel = (Grid)parametro;
+		//	if (panel == null) return;
+		//	if (PanelGruposVisibilidad == Visibility.Visible) {
+		//		PanelGruposVisibilidad = Visibility.Collapsed;
+		//		PanelGruposFijo = false;
+		//		Grid.SetColumn(panel, 1);
+		//	} else {
+		//		PanelGruposVisibilidad = Visibility.Visible;
+		//	}
+		//}
+		//#endregion
 
 
-		#region MOSTRAR PANEL VALORACIONES
-		//Comando
-		public ICommand cmdMostrarPanelValoraciones {
-			get {
-				if (_cmdmostrarpanelvaloraciones == null) _cmdmostrarpanelvaloraciones = new RelayCommand(p => MostrarPanelValoraciones(p));
-				return _cmdmostrarpanelvaloraciones;
-			}
-		}
+		//#region MOSTRAR PANEL VALORACIONES
+		////Comando
+		//public ICommand cmdMostrarPanelValoraciones {
+		//	get {
+		//		if (_cmdmostrarpanelvaloraciones == null) _cmdmostrarpanelvaloraciones = new RelayCommand(p => MostrarPanelValoraciones(p));
+		//		return _cmdmostrarpanelvaloraciones;
+		//	}
+		//}
 
-		// Ejecución del comando
-		private void MostrarPanelValoraciones(object parametro) {
-			Grid panel = (Grid)parametro;
-			if (panel == null) return;
-			if (panel.IsVisible) {
-				PanelValoracionesVisibilidad = Visibility.Collapsed;
-				PanelValoracionesFijo = false;
-				Grid.SetColumn(panel, 1);
-			} else {
-				PanelValoracionesVisibilidad = Visibility.Visible;
-			}
-		}
-		#endregion
+		//// Ejecución del comando
+		//private void MostrarPanelValoraciones(object parametro) {
+		//	Grid panel = (Grid)parametro;
+		//	if (panel == null) return;
+		//	if (panel.IsVisible) {
+		//		PanelValoracionesVisibilidad = Visibility.Collapsed;
+		//		PanelValoracionesFijo = false;
+		//		Grid.SetColumn(panel, 1);
+		//	} else {
+		//		PanelValoracionesVisibilidad = Visibility.Visible;
+		//	}
+		//}
+		//#endregion
 
 
 		#region AÑADIR GRAFICO
@@ -254,97 +254,97 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region BORRAR CELDAS
-		public ICommand cmdBorrarCeldas {
-			get {
-				if (_cmdborrarceldas == null) _cmdborrarceldas = new RelayCommand(p => BorrarCeldas(p));
-				return _cmdborrarceldas;
-			}
-		}
+		//#region BORRAR CELDAS
+		//public ICommand cmdBorrarCeldas {
+		//	get {
+		//		if (_cmdborrarceldas == null) _cmdborrarceldas = new RelayCommand(p => BorrarCeldas(p));
+		//		return _cmdborrarceldas;
+		//	}
+		//}
 
-		private void BorrarCeldas(object parametro) {
-			DataGrid tabla = parametro as DataGrid;
-			if (tabla == null) return;
-			if (tabla.CurrentCell == null) return;
-			DataGridCellInfo celda = tabla.CurrentCell;
+		//private void BorrarCeldas(object parametro) {
+		//	DataGrid tabla = parametro as DataGrid;
+		//	if (tabla == null) return;
+		//	if (tabla.CurrentCell == null) return;
+		//	DataGridCellInfo celda = tabla.CurrentCell;
 
-			Grafico grafico = tabla.SelectedCells[0].Item as Grafico;
-			if (grafico == null) return;
-			string encabezado;
-			if (celda.Column.Header is TextBlock) {
-				encabezado = ((TextBlock)celda.Column.Header).Text;
-			} else {
-				encabezado = celda.Column.Header.ToString();
-			}
-			grafico.BorrarValorPorHeader(encabezado);
-			HayCambios = true;
-			PropiedadCambiada(nameof(Detalle));
-		}
-		#endregion
-
-
-		#region BORRAR CELDAS VALORACION
-		public ICommand cmdBorrarCeldasValoracion {
-			get {
-				if (_cmdborrarceldasvaloracion == null) _cmdborrarceldasvaloracion = new RelayCommand(p => BorrarCeldasValoracion(p));
-				return _cmdborrarceldasvaloracion;
-			}
-		}
-
-		private void BorrarCeldasValoracion(object parametro) {
-			if (parametro == null) return;
-			DataGrid tabla = (DataGrid)parametro;
-			foreach (DataGridCellInfo celda in tabla.SelectedCells) {
-				((ValoracionGrafico)celda.Item).BorrarValorPorHeader(celda.Column.Header.ToString());
-				HayCambios = true;
-			}
-			//Propiedades.DatosModificados = true;
-		}
-		#endregion
+		//	Grafico grafico = tabla.SelectedCells[0].Item as Grafico;
+		//	if (grafico == null) return;
+		//	string encabezado;
+		//	if (celda.Column.Header is TextBlock) {
+		//		encabezado = ((TextBlock)celda.Column.Header).Text;
+		//	} else {
+		//		encabezado = celda.Column.Header.ToString();
+		//	}
+		//	grafico.BorrarValorPorHeader(encabezado);
+		//	HayCambios = true;
+		//	PropiedadCambiada(nameof(Detalle));
+		//}
+		//#endregion
 
 
-		#region FIJAR PANEL GRUPOS
-		//Comando
-		public ICommand cmdFijarPanelGrupos {
-			get {
-				if (_cmdfijarpanelgrupos == null) _cmdfijarpanelgrupos = new RelayCommand(p => FijarPanelGrupos(p));
-				return _cmdfijarpanelgrupos;
-			}
-		}
+		//#region BORRAR CELDAS VALORACION
+		//public ICommand cmdBorrarCeldasValoracion {
+		//	get {
+		//		if (_cmdborrarceldasvaloracion == null) _cmdborrarceldasvaloracion = new RelayCommand(p => BorrarCeldasValoracion(p));
+		//		return _cmdborrarceldasvaloracion;
+		//	}
+		//}
 
-		// Ejecución del comando
-		private void FijarPanelGrupos(object parametro) {
-			Grid panel = (Grid)parametro;
-			if (panel == null) return;
-			if (PanelGruposFijo) {
-				Grid.SetColumn(panel, 0);
-			} else {
-				Grid.SetColumn(panel, 1);
-			}
-		}
-		#endregion
+		//private void BorrarCeldasValoracion(object parametro) {
+		//	if (parametro == null) return;
+		//	DataGrid tabla = (DataGrid)parametro;
+		//	foreach (DataGridCellInfo celda in tabla.SelectedCells) {
+		//		((ValoracionGrafico)celda.Item).BorrarValorPorHeader(celda.Column.Header.ToString());
+		//		HayCambios = true;
+		//	}
+		//	//Propiedades.DatosModificados = true;
+		//}
+		//#endregion
 
 
-		#region FIJAR PANEL VALORACIONES
-		//Comando
-		public ICommand cmdFijarPanelValoraciones {
-			get {
-				if (_cmdfijarpanelvaloraciones == null) _cmdfijarpanelvaloraciones = new RelayCommand(p => FijarPanelValoraciones(p));
-				return _cmdfijarpanelvaloraciones;
-			}
-		}
+		//#region FIJAR PANEL GRUPOS
+		////Comando
+		//public ICommand cmdFijarPanelGrupos {
+		//	get {
+		//		if (_cmdfijarpanelgrupos == null) _cmdfijarpanelgrupos = new RelayCommand(p => FijarPanelGrupos(p));
+		//		return _cmdfijarpanelgrupos;
+		//	}
+		//}
 
-		// Ejecución del comando
-		private void FijarPanelValoraciones(object parametro) {
-			Grid panel = (Grid)parametro;
-			if (panel == null) return;
-			if (PanelValoracionesFijo) {
-				Grid.SetColumn(panel, 2);
-			} else {
-				Grid.SetColumn(panel, 1);
-			}
-		}
-		#endregion
+		//// Ejecución del comando
+		//private void FijarPanelGrupos(object parametro) {
+		//	Grid panel = (Grid)parametro;
+		//	if (panel == null) return;
+		//	if (PanelGruposFijo) {
+		//		Grid.SetColumn(panel, 0);
+		//	} else {
+		//		Grid.SetColumn(panel, 1);
+		//	}
+		//}
+		//#endregion
+
+
+		//#region FIJAR PANEL VALORACIONES
+		////Comando
+		//public ICommand cmdFijarPanelValoraciones {
+		//	get {
+		//		if (_cmdfijarpanelvaloraciones == null) _cmdfijarpanelvaloraciones = new RelayCommand(p => FijarPanelValoraciones(p));
+		//		return _cmdfijarpanelvaloraciones;
+		//	}
+		//}
+
+		//// Ejecución del comando
+		//private void FijarPanelValoraciones(object parametro) {
+		//	Grid panel = (Grid)parametro;
+		//	if (panel == null) return;
+		//	if (PanelValoracionesFijo) {
+		//		Grid.SetColumn(panel, 2);
+		//	} else {
+		//		Grid.SetColumn(panel, 1);
+		//	}
+		//}
+		//#endregion
 
 
 		#region BORRAR GRUPO
@@ -480,270 +480,270 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region PEGAR GRAFICOS
-		public ICommand cmdPegarGraficos {
-			get {
-				if (_cmdpegargraficos == null) _cmdpegargraficos = new RelayCommand(p => PegarGraficos(), p => PuedePegarGraficos());
-				return _cmdpegargraficos;
-			}
-		}
+		//#region PEGAR GRAFICOS
+		//public ICommand cmdPegarGraficos {
+		//	get {
+		//		if (_cmdpegargraficos == null) _cmdpegargraficos = new RelayCommand(p => PegarGraficos(), p => PuedePegarGraficos());
+		//		return _cmdpegargraficos;
+		//	}
+		//}
 
-		[Obsolete("Este método está optimizado en el siguiente.")]
-		private bool PuedePegarGraficos2(object parametro) {
-			DataGrid tabla = parametro as DataGrid;
-			if (tabla == null) return false;
-			bool resultado = true;
-			foreach (DataGridColumn columna in tabla.Columns) {
-				if (columna.SortDirection != null) resultado = false;
-			}
-			if (VistaGraficos != null && VistaGraficos.Count < ListaGraficos.Count) resultado = false;
-			return resultado && tabla.CurrentCell != null & Clipboard.ContainsText();
-		}
+		//[Obsolete("Este método está optimizado en el siguiente.")]
+		//private bool PuedePegarGraficos2(object parametro) {
+		//	DataGrid tabla = parametro as DataGrid;
+		//	if (tabla == null) return false;
+		//	bool resultado = true;
+		//	foreach (DataGridColumn columna in tabla.Columns) {
+		//		if (columna.SortDirection != null) resultado = false;
+		//	}
+		//	if (VistaGraficos != null && VistaGraficos.Count < ListaGraficos.Count) resultado = false;
+		//	return resultado && tabla.CurrentCell != null & Clipboard.ContainsText();
+		//}
 
-		// NUEVO MÉTODO QUE NO NECESITA EVALUAR
-		private bool PuedePegarGraficos() {
-			if (ColumnaActual == -1) return false;
-			return true;
-		}
+		//// NUEVO MÉTODO QUE NO NECESITA EVALUAR
+		//private bool PuedePegarGraficos() {
+		//	if (ColumnaActual == -1) return false;
+		//	return true;
+		//}
 
-		[Obsolete("Este método está optimizado en el siguiente.")]
-		private void PegarGraficos2(object parametro) {
-			// Convertimos el parámetro pasado.
-			DataGrid grid = parametro as DataGrid;
-			if (grid == null) return;
-			// Parseamos los datos del portapapeles y definimos las variables.
-			List<string[]> portapapeles = Utils.parseClipboard();
-			int columnagrid;
-			int filagrid;
-			bool esnuevo;
-			// Si no hay datos, salimos.
-			if (portapapeles == null) return;
-			// Si no hay celdas seleccionadas, salimos.
-			if (grid.CurrentCell == null) return;
-			// Establecemos la columna donde se empieza a pegar.
-			columnagrid = grid.Columns.IndexOf(grid.CurrentCell.Column);
-			filagrid = grid.Items.IndexOf(grid.CurrentCell.Item);
-			// Creamos un objeto ConvertidorHora
-			Convertidores.ConvertidorHora cnvHora = new Convertidores.ConvertidorHora();
-			// Iteramos por las filas del portapapeles.
-			foreach (string[] fila in portapapeles) {
-				// Creamos un objeto Grafico o reutilizamos el existente.
-				Grafico grafico;
-				if (filagrid < ListaGraficos.Count) {
-					grafico = ListaGraficos[filagrid];
-					esnuevo = false;
-				} else {
-					grafico = new Grafico();
-					esnuevo = true;
-				}
-				int columna = columnagrid;
+		//[Obsolete("Este método está optimizado en el siguiente.")]
+		//private void PegarGraficos2(object parametro) {
+		//	// Convertimos el parámetro pasado.
+		//	DataGrid grid = parametro as DataGrid;
+		//	if (grid == null) return;
+		//	// Parseamos los datos del portapapeles y definimos las variables.
+		//	List<string[]> portapapeles = Utils.parseClipboard();
+		//	int columnagrid;
+		//	int filagrid;
+		//	bool esnuevo;
+		//	// Si no hay datos, salimos.
+		//	if (portapapeles == null) return;
+		//	// Si no hay celdas seleccionadas, salimos.
+		//	if (grid.CurrentCell == null) return;
+		//	// Establecemos la columna donde se empieza a pegar.
+		//	columnagrid = grid.Columns.IndexOf(grid.CurrentCell.Column);
+		//	filagrid = grid.Items.IndexOf(grid.CurrentCell.Item);
+		//	// Creamos un objeto ConvertidorHora
+		//	Convertidores.ConvertidorHora cnvHora = new Convertidores.ConvertidorHora();
+		//	// Iteramos por las filas del portapapeles.
+		//	foreach (string[] fila in portapapeles) {
+		//		// Creamos un objeto Grafico o reutilizamos el existente.
+		//		Grafico grafico;
+		//		if (filagrid < ListaGraficos.Count) {
+		//			grafico = ListaGraficos[filagrid];
+		//			esnuevo = false;
+		//		} else {
+		//			grafico = new Grafico();
+		//			esnuevo = true;
+		//		}
+		//		int columna = columnagrid;
 
-				foreach (string texto in fila) {
-					if (columna >= grid.Columns.Count) continue;
-					while (grid.Columns[columna].Visibility == Visibility.Collapsed) {
-						columna++;
-					}
-					decimal d;
-					int i;
-					TimeSpan? h;
-					switch (columna) {
-						case 0: // No Calcular.
-							grafico.NoCalcular = false;
-							if (int.TryParse(texto, out i)) {
-								grafico.NoCalcular = (i != 0);
-							} else if (texto.ToLower() != "false") grafico.NoCalcular = true;
-							break;
-						case 1: // Numero.
-							grafico.Numero = Int32.TryParse(texto, out i) ? i : 0;
-							break;
-						case 2: // Turno.
-							grafico.Turno = int.TryParse(texto, out i) ? i : 1;
-							break;
-						case 3: // Inicio.
-							grafico.Inicio = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							break;
-						case 4: // Final.
-							grafico.Final = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							break;
-						case 5: // InicioPartido.
-							grafico.InicioPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							break;
-						case 6: // FinalPartido.
-							grafico.FinalPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							break;
-						case 7: // Valoracion.
-							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							grafico.Valoracion = h != null ? h.Value : TimeSpan.Zero;
-							break;
-						case 8: // Trabajadas.
-							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							grafico.Trabajadas = h != null ? h.Value : TimeSpan.Zero;
-							break;
-						case 9: // Acumuladas.
-							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							grafico.Acumuladas = h != null ? h.Value : TimeSpan.Zero;
-							break;
-						case 10: // Nocturnas.
-							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							grafico.Nocturnas = h != null ? h.Value : TimeSpan.Zero;
-							break;
-						case 11: // Desayuno.
-							grafico.Desayuno = decimal.TryParse(texto, out d) ? d : 0;
-							break;
-						case 12: // Comida.
-							grafico.Comida = decimal.TryParse(texto, out d) ? d : 0;
-							break;
-						case 13: // Cena.
-							grafico.Cena = decimal.TryParse(texto, out d) ? d : 0;
-							break;
-						case 14: // PlusCena.
-							grafico.PlusCena = decimal.TryParse(texto, out d) ? d : 0;
-							break;
-						case 15: // PlusLimpieza.
-							grafico.PlusLimpieza = false;
-							if (int.TryParse(texto, out i)) {
-								grafico.PlusLimpieza = (i != 0);
-							} else if (texto.ToLower() != "false") grafico.PlusLimpieza = true;
-							break;
-						case 16: // PlusPaqueteria.
-							grafico.PlusPaqueteria = false;
-							if (int.TryParse(texto, out i)) {
-								grafico.PlusPaqueteria = (i != 0);
-							} else if (texto.ToLower() != "false") grafico.PlusPaqueteria = true;
-							break;
-					}
-					columna++;
-				}
-				if (esnuevo) {
-					ListaGraficos.Add(grafico);
-				}
-				filagrid++;
-				HayCambios = true;
-				PropiedadCambiada(nameof(Detalle));
-			}
-			//Propiedades.DatosModificados = true;
-		}
+		//		foreach (string texto in fila) {
+		//			if (columna >= grid.Columns.Count) continue;
+		//			while (grid.Columns[columna].Visibility == Visibility.Collapsed) {
+		//				columna++;
+		//			}
+		//			decimal d;
+		//			int i;
+		//			TimeSpan? h;
+		//			switch (columna) {
+		//				case 0: // No Calcular.
+		//					grafico.NoCalcular = false;
+		//					if (int.TryParse(texto, out i)) {
+		//						grafico.NoCalcular = (i != 0);
+		//					} else if (texto.ToLower() != "false") grafico.NoCalcular = true;
+		//					break;
+		//				case 1: // Numero.
+		//					grafico.Numero = Int32.TryParse(texto, out i) ? i : 0;
+		//					break;
+		//				case 2: // Turno.
+		//					grafico.Turno = int.TryParse(texto, out i) ? i : 1;
+		//					break;
+		//				case 3: // Inicio.
+		//					grafico.Inicio = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					break;
+		//				case 4: // Final.
+		//					grafico.Final = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					break;
+		//				case 5: // InicioPartido.
+		//					grafico.InicioPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					break;
+		//				case 6: // FinalPartido.
+		//					grafico.FinalPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					break;
+		//				case 7: // Valoracion.
+		//					h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					grafico.Valoracion = h != null ? h.Value : TimeSpan.Zero;
+		//					break;
+		//				case 8: // Trabajadas.
+		//					h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					grafico.Trabajadas = h != null ? h.Value : TimeSpan.Zero;
+		//					break;
+		//				case 9: // Acumuladas.
+		//					h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					grafico.Acumuladas = h != null ? h.Value : TimeSpan.Zero;
+		//					break;
+		//				case 10: // Nocturnas.
+		//					h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					grafico.Nocturnas = h != null ? h.Value : TimeSpan.Zero;
+		//					break;
+		//				case 11: // Desayuno.
+		//					grafico.Desayuno = decimal.TryParse(texto, out d) ? d : 0;
+		//					break;
+		//				case 12: // Comida.
+		//					grafico.Comida = decimal.TryParse(texto, out d) ? d : 0;
+		//					break;
+		//				case 13: // Cena.
+		//					grafico.Cena = decimal.TryParse(texto, out d) ? d : 0;
+		//					break;
+		//				case 14: // PlusCena.
+		//					grafico.PlusCena = decimal.TryParse(texto, out d) ? d : 0;
+		//					break;
+		//				case 15: // PlusLimpieza.
+		//					grafico.PlusLimpieza = false;
+		//					if (int.TryParse(texto, out i)) {
+		//						grafico.PlusLimpieza = (i != 0);
+		//					} else if (texto.ToLower() != "false") grafico.PlusLimpieza = true;
+		//					break;
+		//				case 16: // PlusPaqueteria.
+		//					grafico.PlusPaqueteria = false;
+		//					if (int.TryParse(texto, out i)) {
+		//						grafico.PlusPaqueteria = (i != 0);
+		//					} else if (texto.ToLower() != "false") grafico.PlusPaqueteria = true;
+		//					break;
+		//			}
+		//			columna++;
+		//		}
+		//		if (esnuevo) {
+		//			ListaGraficos.Add(grafico);
+		//		}
+		//		filagrid++;
+		//		HayCambios = true;
+		//		PropiedadCambiada(nameof(Detalle));
+		//	}
+		//	//Propiedades.DatosModificados = true;
+		//}
 
-		// NUEVO MÉTODO PEGAR CON VIEWMODEL Y SIN DEPENDENCIA DEL GRID
-		private void PegarGraficos() {
-			// Parseamos los datos del portapapeles y definimos las variables.
-			List<string[]> portapapeles = Utils.parseClipboard();
-			bool esnuevo;
-			// Si no hay datos, salimos.
-			if (portapapeles == null) return;
-			// Establecemos la fila donde se empieza a pegar.
-			int filagrid = FilaActual;
-			if (filagrid == -1) filagrid = VistaGraficos.Count - 1;
-			// Creamos un objeto ConvertidorHora
-			Convertidores.ConvertidorHora cnvHora = new Convertidores.ConvertidorHora();
-			// Iteramos por las filas del portapapeles.
-			foreach (string[] fila in portapapeles) {
-				// Creamos un objeto Grafico o reutilizamos el existente.
-				Grafico grafico;
-				if (filagrid < VistaGraficos.Count - 1) { 
-					grafico = VistaGraficos.GetItemAt(filagrid) as Grafico;
-					esnuevo = false;
-				} else {
-					grafico = new Grafico();
-					esnuevo = true;
-				}
-				// Establecemos la columna inicial en la que se va a pegar.
-				int columna = ColumnaActual;
-				// Iteramos por cada campo de la fila del portapapeles
-				foreach (string texto in fila) {
-					if (columna >= 18) continue;
-					while (!ColumnaVisible(columna)) {
-						columna++;
-					}
-					// Evaluamos la columna actual y parseamos el valor del portapapeles a su valor.
-					decimal d;
-					int i;
-					TimeSpan? h;
-					switch (columna) {
-						case 0: // No Calcular.
-							grafico.NoCalcular = false;
-							if (int.TryParse(texto, out i)) {
-								grafico.NoCalcular = (i != 0);
-							} else if (texto.ToLower() != "false") grafico.NoCalcular = true;
-							break;
-						case 1: // Numero.
-							grafico.Numero = Int32.TryParse(texto, out i) ? i : 0;
-							break;
-						case 2: // DiaSemana.
-							grafico.DiaSemana = texto;
-							break;
-						case 3: // Turno.
-							grafico.Turno = int.TryParse(texto, out i) ? i : 1;
-							break;
-						case 4: // Inicio.
-							grafico.Inicio = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							break;
-						case 5: // Final.
-							grafico.Final = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							break;
-						case 6: // InicioPartido.
-							grafico.InicioPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							break;
-						case 7: // FinalPartido.
-							grafico.FinalPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							break;
-						case 8: // Valoracion.
-							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							grafico.Valoracion = h != null ? h.Value : TimeSpan.Zero;
-							break;
-						case 9: // Trabajadas.
-							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							grafico.Trabajadas = h != null ? h.Value : TimeSpan.Zero;
-							break;
-						case 10: // Acumuladas.
-							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							grafico.Acumuladas = h != null ? h.Value : TimeSpan.Zero;
-							break;
-						case 11: // Nocturnas.
-							h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
-							grafico.Nocturnas = h != null ? h.Value : TimeSpan.Zero;
-							break;
-						case 12: // Desayuno.
-							grafico.Desayuno = decimal.TryParse(texto, out d) ? d : 0;
-							break;
-						case 13: // Comida.
-							grafico.Comida = decimal.TryParse(texto, out d) ? d : 0;
-							break;
-						case 14: // Cena.
-							grafico.Cena = decimal.TryParse(texto, out d) ? d : 0;
-							break;
-						case 15: // PlusCena.
-							grafico.PlusCena = decimal.TryParse(texto, out d) ? d : 0;
-							break;
-						case 16: // PlusLimpieza.
-							grafico.PlusLimpieza = false;
-							if (int.TryParse(texto, out i)) {
-								grafico.PlusLimpieza = (i != 0);
-							} else if (texto.ToLower() != "false") grafico.PlusLimpieza = true;
-							break;
-						case 17: // PlusPaqueteria.
-							grafico.PlusPaqueteria = false;
-							if (int.TryParse(texto, out i)) {
-								grafico.PlusPaqueteria = (i != 0);
-							} else if (texto.ToLower() != "false") grafico.PlusPaqueteria = true;
-							break;
-					}
-					columna++;
-				}
-				// Si el elemento es nuevo, se añade a la vista.
-				if (esnuevo) {
-					VistaGraficos.AddNewItem(grafico);
-					VistaGraficos.CommitNew();
-				}
-				filagrid++;
-				HayCambios = true;
-				PropiedadCambiada(nameof(Detalle));
-			}
-		}
+		//// NUEVO MÉTODO PEGAR CON VIEWMODEL Y SIN DEPENDENCIA DEL GRID
+		//private void PegarGraficos() {
+		//	// Parseamos los datos del portapapeles y definimos las variables.
+		//	List<string[]> portapapeles = Utils.parseClipboard();
+		//	bool esnuevo;
+		//	// Si no hay datos, salimos.
+		//	if (portapapeles == null) return;
+		//	// Establecemos la fila donde se empieza a pegar.
+		//	int filagrid = FilaActual;
+		//	if (filagrid == -1) filagrid = VistaGraficos.Count - 1;
+		//	// Creamos un objeto ConvertidorHora
+		//	Convertidores.ConvertidorHora cnvHora = new Convertidores.ConvertidorHora();
+		//	// Iteramos por las filas del portapapeles.
+		//	foreach (string[] fila in portapapeles) {
+		//		// Creamos un objeto Grafico o reutilizamos el existente.
+		//		Grafico grafico;
+		//		if (filagrid < VistaGraficos.Count - 1) { 
+		//			grafico = VistaGraficos.GetItemAt(filagrid) as Grafico;
+		//			esnuevo = false;
+		//		} else {
+		//			grafico = new Grafico();
+		//			esnuevo = true;
+		//		}
+		//		// Establecemos la columna inicial en la que se va a pegar.
+		//		int columna = ColumnaActual;
+		//		// Iteramos por cada campo de la fila del portapapeles
+		//		foreach (string texto in fila) {
+		//			if (columna >= 18) continue;
+		//			while (!ColumnaVisible(columna)) {
+		//				columna++;
+		//			}
+		//			// Evaluamos la columna actual y parseamos el valor del portapapeles a su valor.
+		//			decimal d;
+		//			int i;
+		//			TimeSpan? h;
+		//			switch (columna) {
+		//				case 0: // No Calcular.
+		//					grafico.NoCalcular = false;
+		//					if (int.TryParse(texto, out i)) {
+		//						grafico.NoCalcular = (i != 0);
+		//					} else if (texto.ToLower() != "false") grafico.NoCalcular = true;
+		//					break;
+		//				case 1: // Numero.
+		//					grafico.Numero = Int32.TryParse(texto, out i) ? i : 0;
+		//					break;
+		//				case 2: // DiaSemana.
+		//					grafico.DiaSemana = texto;
+		//					break;
+		//				case 3: // Turno.
+		//					grafico.Turno = int.TryParse(texto, out i) ? i : 1;
+		//					break;
+		//				case 4: // Inicio.
+		//					grafico.Inicio = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					break;
+		//				case 5: // Final.
+		//					grafico.Final = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					break;
+		//				case 6: // InicioPartido.
+		//					grafico.InicioPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					break;
+		//				case 7: // FinalPartido.
+		//					grafico.FinalPartido = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					break;
+		//				case 8: // Valoracion.
+		//					h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					grafico.Valoracion = h != null ? h.Value : TimeSpan.Zero;
+		//					break;
+		//				case 9: // Trabajadas.
+		//					h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					grafico.Trabajadas = h != null ? h.Value : TimeSpan.Zero;
+		//					break;
+		//				case 10: // Acumuladas.
+		//					h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					grafico.Acumuladas = h != null ? h.Value : TimeSpan.Zero;
+		//					break;
+		//				case 11: // Nocturnas.
+		//					h = (TimeSpan?)cnvHora.ConvertBack(texto, null, null, null);
+		//					grafico.Nocturnas = h != null ? h.Value : TimeSpan.Zero;
+		//					break;
+		//				case 12: // Desayuno.
+		//					grafico.Desayuno = decimal.TryParse(texto, out d) ? d : 0;
+		//					break;
+		//				case 13: // Comida.
+		//					grafico.Comida = decimal.TryParse(texto, out d) ? d : 0;
+		//					break;
+		//				case 14: // Cena.
+		//					grafico.Cena = decimal.TryParse(texto, out d) ? d : 0;
+		//					break;
+		//				case 15: // PlusCena.
+		//					grafico.PlusCena = decimal.TryParse(texto, out d) ? d : 0;
+		//					break;
+		//				case 16: // PlusLimpieza.
+		//					grafico.PlusLimpieza = false;
+		//					if (int.TryParse(texto, out i)) {
+		//						grafico.PlusLimpieza = (i != 0);
+		//					} else if (texto.ToLower() != "false") grafico.PlusLimpieza = true;
+		//					break;
+		//				case 17: // PlusPaqueteria.
+		//					grafico.PlusPaqueteria = false;
+		//					if (int.TryParse(texto, out i)) {
+		//						grafico.PlusPaqueteria = (i != 0);
+		//					} else if (texto.ToLower() != "false") grafico.PlusPaqueteria = true;
+		//					break;
+		//			}
+		//			columna++;
+		//		}
+		//		// Si el elemento es nuevo, se añade a la vista.
+		//		if (esnuevo) {
+		//			VistaGraficos.AddNewItem(grafico);
+		//			VistaGraficos.CommitNew();
+		//		}
+		//		filagrid++;
+		//		HayCambios = true;
+		//		PropiedadCambiada(nameof(Detalle));
+		//	}
+		//}
 
 
 
-		#endregion
+		//#endregion
 
 
 		#region BORRAR VALORACION
@@ -1446,33 +1446,33 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region CAMBIAR MODO SELECCION
+		//#region CAMBIAR MODO SELECCION
 
-		// Comando
-		private ICommand _cmdcambiarmodoseleccion;
-		public ICommand cmdCambiarModoSeleccion {
-			get {
-				if (_cmdcambiarmodoseleccion == null) _cmdcambiarmodoseleccion = new RelayCommand(p => CambiarModoSeleccion());
-				return _cmdcambiarmodoseleccion;
-			}
-		}
+		//// Comando
+		//private ICommand _cmdcambiarmodoseleccion;
+		//public ICommand cmdCambiarModoSeleccion {
+		//	get {
+		//		if (_cmdcambiarmodoseleccion == null) _cmdcambiarmodoseleccion = new RelayCommand(p => CambiarModoSeleccion());
+		//		return _cmdcambiarmodoseleccion;
+		//	}
+		//}
 
 
-		// Ejecución del comando
-		private void CambiarModoSeleccion() {
+		//// Ejecución del comando
+		//private void CambiarModoSeleccion() {
 
-			if (VisibilidadBotonSeleccionFila == Visibility.Visible) {
-				VisibilidadBotonSeleccionFila = Visibility.Collapsed;
-				VisibilidadBotonSeleccionCelda = Visibility.Visible;
-				ModoSeleccion = DataGridSelectionUnit.FullRow;
-			} else {
-				VisibilidadBotonSeleccionCelda = Visibility.Collapsed;
-				VisibilidadBotonSeleccionFila = Visibility.Visible;
-				ModoSeleccion = DataGridSelectionUnit.Cell;
-			}
+		//	if (VisibilidadBotonSeleccionFila == Visibility.Visible) {
+		//		VisibilidadBotonSeleccionFila = Visibility.Collapsed;
+		//		VisibilidadBotonSeleccionCelda = Visibility.Visible;
+		//		ModoSeleccion = DataGridSelectionUnit.FullRow;
+		//	} else {
+		//		VisibilidadBotonSeleccionCelda = Visibility.Collapsed;
+		//		VisibilidadBotonSeleccionFila = Visibility.Visible;
+		//		ModoSeleccion = DataGridSelectionUnit.Cell;
+		//	}
 
-		}
-		#endregion
+		//}
+		//#endregion
 
 
 		#region COMANDO DEDUCIR DÍA SEMANA

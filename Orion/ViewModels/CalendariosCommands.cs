@@ -151,24 +151,24 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region BORRAR CELDAS
-		public ICommand cmdBorrarCeldas {
-			get {
-				if (_cmdborrarceldas == null) _cmdborrarceldas = new RelayCommand(p => BorrarCeldas(p));
-				return _cmdborrarceldas;
-			}
-		}
+		//#region BORRAR CELDAS
+		//public ICommand cmdBorrarCeldas {
+		//	get {
+		//		if (_cmdborrarceldas == null) _cmdborrarceldas = new RelayCommand(p => BorrarCeldas(p));
+		//		return _cmdborrarceldas;
+		//	}
+		//}
 
-		private void BorrarCeldas(object parametro) {
-			DataGrid tabla = parametro as DataGrid;
-			if (tabla == null || tabla.CurrentCell == null) return;
-			DataGridCellInfo celda = tabla.CurrentCell;
-			Calendario calendario = celda.Item as Calendario;
-			if (calendario == null) return;
-			calendario.BorrarValorPorHeader(celda.Column.Header.ToString());
-			HayCambios = true;			
-		}
-		#endregion
+		//private void BorrarCeldas(object parametro) {
+		//	DataGrid tabla = parametro as DataGrid;
+		//	if (tabla == null || tabla.CurrentCell == null) return;
+		//	DataGridCellInfo celda = tabla.CurrentCell;
+		//	Calendario calendario = celda.Item as Calendario;
+		//	if (calendario == null) return;
+		//	calendario.BorrarValorPorHeader(celda.Column.Header.ToString());
+		//	HayCambios = true;			
+		//}
+		//#endregion
 
 
 		#region QUITAR FILTRO
@@ -247,81 +247,81 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region PEGAR CALENDARIOS
-		public ICommand cmdPegarCalendarios {
-			get {
-				if (_cmdpegarcalendarios == null) _cmdpegarcalendarios = new RelayCommand(p => PegarCalendarios(), p => PuedePegarCalendarios());
-				return _cmdpegarcalendarios;
-			}
-		}
+		//#region PEGAR CALENDARIOS
+		//public ICommand cmdPegarCalendarios {
+		//	get {
+		//		if (_cmdpegarcalendarios == null) _cmdpegarcalendarios = new RelayCommand(p => PegarCalendarios(), p => PuedePegarCalendarios());
+		//		return _cmdpegarcalendarios;
+		//	}
+		//}
 
 
-		private bool PuedePegarCalendarios() {
-			if (ColumnaActual == -1) return false;
-			return true;
-		}
+		//private bool PuedePegarCalendarios() {
+		//	if (ColumnaActual == -1) return false;
+		//	return true;
+		//}
 
 
-		private void PegarCalendarios() {
-			// Definimos el convertidor que vamos a usar.
-			ConvertidorNumeroGraficoCalendario convertidor = new ConvertidorNumeroGraficoCalendario();
-			// Parseamos los datos del portapapeles y definimos las variables.
-			List<string[]> portapapeles = Utils.parseClipboard();
-			bool esnuevo;
-			// Si no hay datos, salimos.
-			if (portapapeles == null) return;
-			// Establecemos la fila donde se empieza a pegar.
-			int filagrid = FilaActual;
-			if (filagrid == -1) filagrid = VistaCalendarios.Count - 1;
-			// Iteramos por las filas del portapapeles.
-			foreach (string[] fila in portapapeles) {
-				// Creamos un objeto Calendario o reutilizamos el existente.
-				Calendario calendario;
-				if (filagrid < VistaCalendarios.Count - 1) { 
-					calendario = VistaCalendarios.GetItemAt(filagrid) as Calendario;
-					esnuevo = false;
-				} else {
-					calendario = new Calendario(FechaActual);
-					esnuevo = true;
-				}
-				// Establecemos la columna inicial en la que se va a pegar.
-				int columna = ColumnaActual;
-				// Iteramos por cada campo de la fila del portapapeles
-				foreach (string texto in fila) {
-					if (columna >= 32) continue;
-					// Evaluamos la columna actual y parseamos el valor del portapapeles a su valor.
-					switch (columna) {
-						case 0: // Conductor.
-							calendario.IdConductor = int.TryParse(texto, out int i) ? i : 0;
-							break;
-						default: // Dia x.
-							if (columna <= calendario.ListaDias.Count) {
-								Tuple<int, int> combografico = (Tuple<int, int>)convertidor.ConvertBack(texto, null, null, null);
-								calendario.ListaDias[columna - 1].Grafico = combografico.Item1;
-								calendario.ListaDias[columna - 1].Codigo = combografico.Item2;
-							}
-							break;
-					}
-					columna++;
-				}
-				// Si el elemento es nuevo, se añade a la vista.
-				if (esnuevo) {
-					VistaCalendarios.AddNewItem(calendario);
-					VistaCalendarios.CommitNew();
-				}
-				filagrid++;
-				HayCambios = true;
-			}
-		}
+		//private void PegarCalendarios() {
+		//	// Definimos el convertidor que vamos a usar.
+		//	ConvertidorNumeroGraficoCalendario convertidor = new ConvertidorNumeroGraficoCalendario();
+		//	// Parseamos los datos del portapapeles y definimos las variables.
+		//	List<string[]> portapapeles = Utils.parseClipboard();
+		//	bool esnuevo;
+		//	// Si no hay datos, salimos.
+		//	if (portapapeles == null) return;
+		//	// Establecemos la fila donde se empieza a pegar.
+		//	int filagrid = FilaActual;
+		//	if (filagrid == -1) filagrid = VistaCalendarios.Count - 1;
+		//	// Iteramos por las filas del portapapeles.
+		//	foreach (string[] fila in portapapeles) {
+		//		// Creamos un objeto Calendario o reutilizamos el existente.
+		//		Calendario calendario;
+		//		if (filagrid < VistaCalendarios.Count - 1) { 
+		//			calendario = VistaCalendarios.GetItemAt(filagrid) as Calendario;
+		//			esnuevo = false;
+		//		} else {
+		//			calendario = new Calendario(FechaActual);
+		//			esnuevo = true;
+		//		}
+		//		// Establecemos la columna inicial en la que se va a pegar.
+		//		int columna = ColumnaActual;
+		//		// Iteramos por cada campo de la fila del portapapeles
+		//		foreach (string texto in fila) {
+		//			if (columna >= 32) continue;
+		//			// Evaluamos la columna actual y parseamos el valor del portapapeles a su valor.
+		//			switch (columna) {
+		//				case 0: // Conductor.
+		//					calendario.IdConductor = int.TryParse(texto, out int i) ? i : 0;
+		//					break;
+		//				default: // Dia x.
+		//					if (columna <= calendario.ListaDias.Count) {
+		//						Tuple<int, int> combografico = (Tuple<int, int>)convertidor.ConvertBack(texto, null, null, null);
+		//						calendario.ListaDias[columna - 1].Grafico = combografico.Item1;
+		//						calendario.ListaDias[columna - 1].Codigo = combografico.Item2;
+		//					}
+		//					break;
+		//			}
+		//			columna++;
+		//		}
+		//		// Si el elemento es nuevo, se añade a la vista.
+		//		if (esnuevo) {
+		//			VistaCalendarios.AddNewItem(calendario);
+		//			VistaCalendarios.CommitNew();
+		//		}
+		//		filagrid++;
+		//		HayCambios = true;
+		//	}
+		//}
 
-		#endregion
+		//#endregion
 
 
 		#region ABRIR PIJAMA
 		// COMANDO
 		public ICommand cmdAbrirPijama {
 			get {
-				if (_cmdabrirpijama == null) _cmdabrirpijama = new RelayCommand(p => AbrirPijama(), p=> PuedeAbrirPijama());
+				if (_cmdabrirpijama == null) _cmdabrirpijama = new RelayCommand(p => AbrirPijama(p), p=> PuedeAbrirPijama());
 				return _cmdabrirpijama;
 			}
 		}
@@ -334,16 +334,16 @@ namespace Orion.ViewModels {
 		}
 
 		// EJECUCIÓN DEL COMANDO
-		private void AbrirPijama() {
-
-			GuardarCalendarios();
-			//CalendarioPijama = CalendarioSeleccionado;
-			Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
-			VisibilidadTablaCalendarios = Visibility.Collapsed;
-
+		private void AbrirPijama(object parametro) {
+			if (parametro is string s && s == "Conductor") {
+				GuardarCalendarios();
+				//CalendarioPijama = CalendarioSeleccionado;
+				Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
+				VisibilidadTablaCalendarios = Visibility.Collapsed;
+			}
 		}
 		#endregion
-		
+
 
 		#region CERRAR PIJAMA
 		// Comando
@@ -361,29 +361,29 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region ACTIVAR BOTON PANEL PIJAMA
-		// COMANDO
-		private ICommand _cmdactivarbotonpanelpijama;
-		public ICommand cmdActivarBotonPanelPijama {
-			get {
-				if (_cmdactivarbotonpanelpijama == null) _cmdactivarbotonpanelpijama = new RelayCommand(p => ActivarBotonPanelPijama());
-				return _cmdactivarbotonpanelpijama;
-			}
-		}
+		//#region ACTIVAR BOTON PANEL PIJAMA
+		//// COMANDO
+		//private ICommand _cmdactivarbotonpanelpijama;
+		//public ICommand cmdActivarBotonPanelPijama {
+		//	get {
+		//		if (_cmdactivarbotonpanelpijama == null) _cmdactivarbotonpanelpijama = new RelayCommand(p => ActivarBotonPanelPijama());
+		//		return _cmdactivarbotonpanelpijama;
+		//	}
+		//}
 
-		// EJECUCIÓN DEL COMANDO
-		private void ActivarBotonPanelPijama() {
+		//// EJECUCIÓN DEL COMANDO
+		//private void ActivarBotonPanelPijama() {
 
-			if (VisibilidadPanelPijama == Visibility.Visible) {
-				VisibilidadPanelPijama = Visibility.Collapsed;
-				TextoBotonPanelPijama = "<<";
-			} else {
-				VisibilidadPanelPijama = Visibility.Visible;
-				TextoBotonPanelPijama = ">>";
-			}
+		//	if (VisibilidadPanelPijama == Visibility.Visible) {
+		//		VisibilidadPanelPijama = Visibility.Collapsed;
+		//		TextoBotonPanelPijama = "<<";
+		//	} else {
+		//		VisibilidadPanelPijama = Visibility.Visible;
+		//		TextoBotonPanelPijama = ">>";
+		//	}
 
-		}
-		#endregion
+		//}
+		//#endregion
 
 
 		#region CREAR PDF PIJAMA
@@ -1153,75 +1153,75 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region MOSTRAR PANELES PIJAMA
-		// Comando
-		private ICommand _cmdmostrarpanelespijama;
-		public ICommand cmdMostrarPanelesPijama {
-			get {
-				if (_cmdmostrarpanelespijama == null) _cmdmostrarpanelespijama = new RelayCommand(p => MostrarPanelesPijama(p));
-				return _cmdmostrarpanelespijama;
-			}
-		}
+		//#region MOSTRAR PANELES PIJAMA
+		//// Comando
+		//private ICommand _cmdmostrarpanelespijama;
+		//public ICommand cmdMostrarPanelesPijama {
+		//	get {
+		//		if (_cmdmostrarpanelespijama == null) _cmdmostrarpanelespijama = new RelayCommand(p => MostrarPanelesPijama(p));
+		//		return _cmdmostrarpanelespijama;
+		//	}
+		//}
 
-		private void MostrarPanelesPijama(object p) {
+		//private void MostrarPanelesPijama(object p) {
 
-			string panel = p as string;
-			if (panel == null) return;
-			Visibility v = new Visibility();
+		//	string panel = p as string;
+		//	if (panel == null) return;
+		//	Visibility v = new Visibility();
 
-			switch (panel){
-				case "HorasMes":
-					if (VisibilidadPanelHorasMes == Visibility.Visible) {
-						VisibilidadPanelHorasMes = Visibility.Collapsed;
-					} else {
-						VisibilidadPanelHorasMes = Visibility.Visible;
-					}
-					break;
-				case "DiasMes":
-					if (VisibilidadPanelDiasMes == Visibility.Visible) {
-						VisibilidadPanelDiasMes = Visibility.Collapsed;
-					} else {
-						VisibilidadPanelDiasMes = Visibility.Visible;
-					}
-					break;
-				case "FindesMes":
-					if (VisibilidadPanelFindesMes == Visibility.Visible) {
-						VisibilidadPanelFindesMes = Visibility.Collapsed;
-					} else {
-						VisibilidadPanelFindesMes = Visibility.Visible;
-					}
-					break;
-				case "DietasMes":
-					if (VisibilidadPanelDietasMes == Visibility.Visible) {
-						VisibilidadPanelDietasMes = Visibility.Collapsed;
-					} else {
-						VisibilidadPanelDietasMes = Visibility.Visible;
-					}
-					break;
-				case "ResumenAño":
-					if (VisibilidadPanelResumenAño == Visibility.Visible) {
-						VisibilidadPanelResumenAño = Visibility.Collapsed;
-					} else {
-						VisibilidadPanelResumenAño = Visibility.Visible;
-					}
-					break;
-				case "Todos":
-					VisibilidadPanelHorasMes = Visibility.Visible;
-					VisibilidadPanelDiasMes = Visibility.Visible;
-					VisibilidadPanelFindesMes = Visibility.Visible;
-					VisibilidadPanelDietasMes = Visibility.Visible;
-					VisibilidadPanelResumenAño = Visibility.Visible;
-					break;
-			}
+		//	switch (panel){
+		//		case "HorasMes":
+		//			if (VisibilidadPanelHorasMes == Visibility.Visible) {
+		//				VisibilidadPanelHorasMes = Visibility.Collapsed;
+		//			} else {
+		//				VisibilidadPanelHorasMes = Visibility.Visible;
+		//			}
+		//			break;
+		//		case "DiasMes":
+		//			if (VisibilidadPanelDiasMes == Visibility.Visible) {
+		//				VisibilidadPanelDiasMes = Visibility.Collapsed;
+		//			} else {
+		//				VisibilidadPanelDiasMes = Visibility.Visible;
+		//			}
+		//			break;
+		//		case "FindesMes":
+		//			if (VisibilidadPanelFindesMes == Visibility.Visible) {
+		//				VisibilidadPanelFindesMes = Visibility.Collapsed;
+		//			} else {
+		//				VisibilidadPanelFindesMes = Visibility.Visible;
+		//			}
+		//			break;
+		//		case "DietasMes":
+		//			if (VisibilidadPanelDietasMes == Visibility.Visible) {
+		//				VisibilidadPanelDietasMes = Visibility.Collapsed;
+		//			} else {
+		//				VisibilidadPanelDietasMes = Visibility.Visible;
+		//			}
+		//			break;
+		//		case "ResumenAño":
+		//			if (VisibilidadPanelResumenAño == Visibility.Visible) {
+		//				VisibilidadPanelResumenAño = Visibility.Collapsed;
+		//			} else {
+		//				VisibilidadPanelResumenAño = Visibility.Visible;
+		//			}
+		//			break;
+		//		case "Todos":
+		//			VisibilidadPanelHorasMes = Visibility.Visible;
+		//			VisibilidadPanelDiasMes = Visibility.Visible;
+		//			VisibilidadPanelFindesMes = Visibility.Visible;
+		//			VisibilidadPanelDietasMes = Visibility.Visible;
+		//			VisibilidadPanelResumenAño = Visibility.Visible;
+		//			break;
+		//	}
 
-			if (v == Visibility.Visible) {
-				v = Visibility.Collapsed;
-			} else {
-				v = Visibility.Visible;
-			}
+		//	if (v == Visibility.Visible) {
+		//		v = Visibility.Collapsed;
+		//	} else {
+		//		v = Visibility.Visible;
+		//	}
 
-		}
-		#endregion
+		//}
+		//#endregion
 
 
 		#region RECLAMAR
@@ -1535,33 +1535,33 @@ namespace Orion.ViewModels {
         #endregion
 
 
-        #region CAMBIAR MODO SELECCION
+  //      #region CAMBIAR MODO SELECCION
 
-        // Comando
-        private ICommand _cmdcambiarmodoseleccion;
-		public ICommand cmdCambiarModoSeleccion {
-			get {
-				if (_cmdcambiarmodoseleccion == null) _cmdcambiarmodoseleccion = new RelayCommand(p => CambiarModoSeleccion());
-				return _cmdcambiarmodoseleccion;
-			}
-		}
+  //      // Comando
+  //      private ICommand _cmdcambiarmodoseleccion;
+		//public ICommand cmdCambiarModoSeleccion {
+		//	get {
+		//		if (_cmdcambiarmodoseleccion == null) _cmdcambiarmodoseleccion = new RelayCommand(p => CambiarModoSeleccion());
+		//		return _cmdcambiarmodoseleccion;
+		//	}
+		//}
 
 
-		// Ejecución del comando
-		private void CambiarModoSeleccion() {
+		//// Ejecución del comando
+		//private void CambiarModoSeleccion() {
 
-			if (VisibilidadBotonSeleccionFila == Visibility.Visible) {
-				VisibilidadBotonSeleccionFila = Visibility.Collapsed;
-				VisibilidadBotonSeleccionCelda = Visibility.Visible;
-				ModoSeleccion = DataGridSelectionUnit.FullRow;
-			} else {
-				VisibilidadBotonSeleccionCelda = Visibility.Collapsed;
-				VisibilidadBotonSeleccionFila = Visibility.Visible;
-				ModoSeleccion = DataGridSelectionUnit.Cell;
-			}
+		//	if (VisibilidadBotonSeleccionFila == Visibility.Visible) {
+		//		VisibilidadBotonSeleccionFila = Visibility.Collapsed;
+		//		VisibilidadBotonSeleccionCelda = Visibility.Visible;
+		//		ModoSeleccion = DataGridSelectionUnit.FullRow;
+		//	} else {
+		//		VisibilidadBotonSeleccionCelda = Visibility.Collapsed;
+		//		VisibilidadBotonSeleccionFila = Visibility.Visible;
+		//		ModoSeleccion = DataGridSelectionUnit.Cell;
+		//	}
 
-		}
-        #endregion
+		//}
+  //      #endregion
 
 
         #region PDF ESTADÍSTICAS
@@ -1781,29 +1781,29 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region COMANDO ACTIVAR BOTON GRÁFICO ALTERNATIVO
+		//#region COMANDO ACTIVAR BOTON GRÁFICO ALTERNATIVO
 
-		// Comando
-		private ICommand _cmdactivarbotongraficoalternativo;
-		public ICommand cmdActivarBotonGraficoAlternativo {
-			get {
-				if (_cmdactivarbotongraficoalternativo == null) _cmdactivarbotongraficoalternativo = new RelayCommand(p => ActivarBotonGraficoAlternativo());
-				return _cmdactivarbotongraficoalternativo;
-			}
-		}
+		//// Comando
+		//private ICommand _cmdactivarbotongraficoalternativo;
+		//public ICommand cmdActivarBotonGraficoAlternativo {
+		//	get {
+		//		if (_cmdactivarbotongraficoalternativo == null) _cmdactivarbotongraficoalternativo = new RelayCommand(p => ActivarBotonGraficoAlternativo());
+		//		return _cmdactivarbotongraficoalternativo;
+		//	}
+		//}
 
 
-		// Ejecución del comando
-		private void ActivarBotonGraficoAlternativo() {
-			if (VisibilidadGraficoAlternativo == Visibility.Visible) {
-				VisibilidadGraficoAlternativo = Visibility.Collapsed;
-				TextoBotonGraficoAlternativo = ">";
-			} else {
-				VisibilidadGraficoAlternativo = Visibility.Visible;
-				TextoBotonGraficoAlternativo = "v";
-			}
-		}
-		#endregion
+		//// Ejecución del comando
+		//private void ActivarBotonGraficoAlternativo() {
+		//	if (VisibilidadGraficoAlternativo == Visibility.Visible) {
+		//		VisibilidadGraficoAlternativo = Visibility.Collapsed;
+		//		TextoBotonGraficoAlternativo = ">";
+		//	} else {
+		//		VisibilidadGraficoAlternativo = Visibility.Visible;
+		//		TextoBotonGraficoAlternativo = "v";
+		//	}
+		//}
+		//#endregion
 
 
 		#region COMANDO PIJAMA MES MENOS

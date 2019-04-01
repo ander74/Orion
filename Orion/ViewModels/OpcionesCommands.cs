@@ -301,31 +301,31 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region BORRAR CELDAS FESTIVOS
-		private ICommand _cmdborrarceldasfestivos;
-		public ICommand cmdBorrarCeldasFestivos {
-			get {
-				if (_cmdborrarceldasfestivos == null) _cmdborrarceldasfestivos = new RelayCommand(p => BorrarCeldasFestivos(p));
-				return _cmdborrarceldasfestivos;
-			}
-		}
+		//#region BORRAR CELDAS FESTIVOS
+		//private ICommand _cmdborrarceldasfestivos;
+		//public ICommand cmdBorrarCeldasFestivos {
+		//	get {
+		//		if (_cmdborrarceldasfestivos == null) _cmdborrarceldasfestivos = new RelayCommand(p => BorrarCeldasFestivos(p));
+		//		return _cmdborrarceldasfestivos;
+		//	}
+		//}
 
-		private void BorrarCeldasFestivos(object parametro) {
-			if (parametro == null) return;
-			System.Windows.Controls.DataGrid tabla = (System.Windows.Controls.DataGrid)parametro;
-			List<Festivo> lista = new List<Festivo>();
-			foreach (DataGridCellInfo celda in tabla.SelectedCells) {
-				lista.Add((Festivo)celda.Item);
-			}
-			foreach (Festivo f in lista) {
-				//_listaborrados.Add(f);
-				//_listafestivos.Remove(f);
-				App.Global.FestivosVM.Borrar(f);
-			}
-			lista.Clear();
+		//private void BorrarCeldasFestivos(object parametro) {
+		//	if (parametro == null) return;
+		//	System.Windows.Controls.DataGrid tabla = (System.Windows.Controls.DataGrid)parametro;
+		//	List<Festivo> lista = new List<Festivo>();
+		//	foreach (DataGridCellInfo celda in tabla.SelectedCells) {
+		//		lista.Add((Festivo)celda.Item);
+		//	}
+		//	foreach (Festivo f in lista) {
+		//		//_listaborrados.Add(f);
+		//		//_listafestivos.Remove(f);
+		//		App.Global.FestivosVM.Borrar(f);
+		//	}
+		//	lista.Clear();
 
-		}
-		#endregion
+		//}
+		//#endregion
 
 
 		#region COPIA SEGURIDAD MANUAL
@@ -543,7 +543,6 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-
 		#region COMANDO AÑO PLUSES MENOS
 
 		// Comando
@@ -571,7 +570,6 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-
 		#region COMANDO AÑO PLUSES MAS
 
 		// Comando
@@ -597,7 +595,6 @@ namespace Orion.ViewModels {
 			AñoPluses++;
 		}
 		#endregion
-
 
 
 	}

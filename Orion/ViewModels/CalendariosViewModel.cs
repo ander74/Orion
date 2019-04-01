@@ -200,6 +200,7 @@ namespace Orion.ViewModels
 							Enumerable.Range(1, DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month)).Select(d => new DiaCalendario() {
 								Dia = d,
 								DiaFecha = new DateTime(FechaActual.Year, FechaActual.Month, d),
+								Nuevo = true,
 							}).ToList());
 					}
 					calendario.Nuevo = true;
@@ -300,9 +301,6 @@ namespace Orion.ViewModels
 					_fechaactual = value;
 					VisibilidadPanelFecha = Visibility.Collapsed;
 					if (HayCambios) GuardarCalendarios();
-					// Por el momento, la siguiente instrucción se ignora. Atender a buenas prácticas al borrar conductores.
-					//if (App.Global.ConductoresVM.HayCambios) App.Global.ConductoresVM.GuardarConductores();
-					//CargarFestivos();
 					CargarCalendarios();
 					PropiedadCambiada();
 					PropiedadCambiada(nameof(MesActual));
@@ -320,15 +318,6 @@ namespace Orion.ViewModels
 			get { return _fechacalendarios; }
 			set { SetValue(ref _fechacalendarios, value); }
 		}
-
-
-		//private DateTime _fechapijama;
-		//public DateTime FechaPijama {
-		//	get { return _fechapijama; }
-		//	set {
-		//		if (SetValue(ref _fechapijama, value)) PropiedadCambiada(nameof(TextoMesPijama));
-		//	}
-		//}
 
 
 		public string MesActual {
@@ -372,90 +361,6 @@ namespace Orion.ViewModels
 			set {
 				if (_visibilidadtablacalendarios != value) {
 					_visibilidadtablacalendarios = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private Visibility _visibilidadpanelpijama = Visibility.Visible;
-		public Visibility VisibilidadPanelPijama {
-			get { return _visibilidadpanelpijama; }
-			set {
-				if (_visibilidadpanelpijama != value) {
-					_visibilidadpanelpijama = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private string _textobotonpanelpijama = ">>";
-		public string TextoBotonPanelPijama {
-			get { return _textobotonpanelpijama; }
-			set {
-				if (_textobotonpanelpijama != value) {
-					_textobotonpanelpijama = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private Visibility _visibilidadpanelhorasmes = Visibility.Visible;
-		public Visibility VisibilidadPanelHorasMes {
-			get { return _visibilidadpanelhorasmes; }
-			set {
-				if (_visibilidadpanelhorasmes != value) {
-					_visibilidadpanelhorasmes = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private Visibility _visibilidadpaneldiasmes = Visibility.Visible;
-		public Visibility VisibilidadPanelDiasMes {
-			get { return _visibilidadpaneldiasmes; }
-			set {
-				if (_visibilidadpaneldiasmes != value) {
-					_visibilidadpaneldiasmes = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private Visibility _visibilidadpanelfindesmes = Visibility.Visible;
-		public Visibility VisibilidadPanelFindesMes {
-			get { return _visibilidadpanelfindesmes; }
-			set {
-				if (_visibilidadpanelfindesmes != value) {
-					_visibilidadpanelfindesmes = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private Visibility _visibilidadpaneldietasmes = Visibility.Visible;
-		public Visibility VisibilidadPanelDietasMes {
-			get { return _visibilidadpaneldietasmes; }
-			set {
-				if (_visibilidadpaneldietasmes != value) {
-					_visibilidadpaneldietasmes = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private Visibility _visibilidadpanelresumenaño = Visibility.Visible;
-		public Visibility VisibilidadPanelResumenAño {
-			get { return _visibilidadpanelresumenaño; }
-			set {
-				if (_visibilidadpanelresumenaño != value) {
-					_visibilidadpanelresumenaño = value;
 					PropiedadCambiada();
 				}
 			}
@@ -567,69 +472,6 @@ namespace Orion.ViewModels
 		}
 
 
-		private Visibility _visibilidadbotonseleccionfila = Visibility.Collapsed;
-		public Visibility VisibilidadBotonSeleccionFila {
-			get { return _visibilidadbotonseleccionfila; }
-			set {
-				if (_visibilidadbotonseleccionfila != value) {
-					_visibilidadbotonseleccionfila = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private Visibility _visibilidadbotonseleccioncelda = Visibility.Visible;
-		public Visibility VisibilidadBotonSeleccionCelda {
-			get { return _visibilidadbotonseleccioncelda; }
-			set {
-				if (_visibilidadbotonseleccioncelda != value) {
-					_visibilidadbotonseleccioncelda = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private DataGridSelectionUnit _modoseleccion = DataGridSelectionUnit.FullRow;
-		public DataGridSelectionUnit ModoSeleccion {
-			get { return _modoseleccion; }
-			set {
-				if (_modoseleccion != value) {
-					_modoseleccion = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-		private int _columnaactual = -1;
-		public int ColumnaActual {
-			get { return _columnaactual; }
-			set {
-				if (value is int i) {
-					if (_columnaactual != i) {
-						_columnaactual = i;
-						PropiedadCambiada();
-					}
-				}
-			}
-		}
-
-
-		private int _filaactual = -1;
-		public int FilaActual {
-			get { return _filaactual; }
-			set {
-				if (value is int i) {
-					if (_filaactual != i) {
-						_filaactual = i;
-						PropiedadCambiada();
-					}
-				}
-			}
-		}
-
-
 		private Visibility _visibilidadpanelfecha = Visibility.Collapsed;
 		public Visibility VisibilidadPanelFecha
 		{
@@ -664,21 +506,6 @@ namespace Orion.ViewModels
 			get {
 				return !(DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month) < 31);
 			}
-		}
-
-
-
-		private string _textobotongraficoalternativo = ">";
-		public string TextoBotonGraficoAlternativo {
-			get { return _textobotongraficoalternativo; }
-			set { SetValue(ref _textobotongraficoalternativo, value); }
-		}
-
-
-		private Visibility _visibilidadgraficoalternativo = Visibility.Collapsed;
-		public Visibility VisibilidadGraficoAlternativo {
-			get { return _visibilidadgraficoalternativo; }
-			set { SetValue(ref _visibilidadgraficoalternativo, value); }
 		}
 
 

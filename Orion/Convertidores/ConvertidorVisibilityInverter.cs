@@ -19,9 +19,12 @@ namespace Orion.Convertidores {
 	class ConvertidorVisibilityInverter :IValueConverter {
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-			if (value == null) return Visibility.Visible;
-			Visibility v = (Visibility)value;
-			if (v == Visibility.Visible) return Visibility.Collapsed;
+			if (value is Visibility v) {
+				if (v == Visibility.Visible) return Visibility.Collapsed;
+			}
+			if (value is bool) {
+				if ((bool)value) return Visibility.Collapsed;
+			}
 			return Visibility.Visible;
 		}
 

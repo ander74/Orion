@@ -512,43 +512,6 @@ namespace Orion.ViewModels
 		}
 
 
-		// MODO DE SELECCIÓN DEL GRID
-
-		private Visibility _visibilidadbotonseleccionfila = Visibility.Collapsed;
-		public Visibility VisibilidadBotonSeleccionFila {
-			get { return _visibilidadbotonseleccionfila; }
-			set {
-				if (_visibilidadbotonseleccionfila != value) {
-					_visibilidadbotonseleccionfila = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private Visibility _visibilidadbotonseleccioncelda = Visibility.Visible;
-		public Visibility VisibilidadBotonSeleccionCelda {
-			get { return _visibilidadbotonseleccioncelda; }
-			set {
-				if (_visibilidadbotonseleccioncelda != value) {
-					_visibilidadbotonseleccioncelda = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private DataGridSelectionUnit _modoseleccion = DataGridSelectionUnit.FullRow;
-		public DataGridSelectionUnit ModoSeleccion {
-			get { return _modoseleccion; }
-			set {
-				if (_modoseleccion != value) {
-					_modoseleccion = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
 		#endregion
 
 

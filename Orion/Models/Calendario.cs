@@ -38,6 +38,7 @@ namespace Orion.Models {
 				Enumerable.Range(1, DateTime.DaysInMonth(fecha.Year, fecha.Month)).Select(d => new DiaCalendario() {
 					Dia = d,
 					DiaFecha = new DateTime(fecha.Year, fecha.Month, d),
+					Nuevo = true,
 				}).ToList());
 		}
 

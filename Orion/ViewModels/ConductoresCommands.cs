@@ -5,19 +5,18 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Orion.Config;
-using Orion.Models;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Globalization;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
-
 namespace Orion.ViewModels {
 
+	using System;
+	using System.Collections.Generic;
+	using System.ComponentModel;
+	using System.Globalization;
+	using System.Windows;
+	using System.Windows.Controls;
+	using System.Windows.Data;
+	using System.Windows.Input;
+	using Config;
+	using Models;
 
 	public partial class ConductoresViewModel {
 
@@ -38,50 +37,50 @@ namespace Orion.ViewModels {
 		//====================================================================================================
 
 
-		#region VER REGULACIONES
-		//Comando
-		public ICommand cmdVerRegulaciones {
-			get {
-				if (_cmdverregulaciones == null) _cmdverregulaciones = new RelayCommand(p => VerRegulaciones(p));
-				return _cmdverregulaciones;
-			}
-		}
+		//#region VER REGULACIONES
+		////Comando
+		//public ICommand cmdVerRegulaciones {
+		//	get {
+		//		if (_cmdverregulaciones == null) _cmdverregulaciones = new RelayCommand(p => VerRegulaciones(p));
+		//		return _cmdverregulaciones;
+		//	}
+		//}
 
-		// Ejecución del comando
-		private void VerRegulaciones(object parametro) {
-			if (parametro == null) return;
-			Grid panel = (Grid)parametro;
-			if (panel.IsVisible) {
-				PanelRegulacionesVisibilidad = Visibility.Collapsed;
-				PanelRegulacionesFijo = false;
-				Grid.SetColumn(panel, 1);
-			} else {
-				PanelRegulacionesVisibilidad = Visibility.Visible;
-			}
-		}
-		#endregion
+		//// Ejecución del comando
+		//private void VerRegulaciones(object parametro) {
+		//	if (parametro == null) return;
+		//	Grid panel = (Grid)parametro;
+		//	if (panel.IsVisible) {
+		//		PanelRegulacionesVisibilidad = Visibility.Collapsed;
+		//		PanelRegulacionesFijo = false;
+		//		Grid.SetColumn(panel, 1);
+		//	} else {
+		//		PanelRegulacionesVisibilidad = Visibility.Visible;
+		//	}
+		//}
+		//#endregion
 
 
-		#region FIJAR PANEL REGULACIONES
-		//Comando
-		public ICommand cmdFijarPanelRegulaciones {
-			get {
-				if (_cmdfijarpanelregulaciones == null) _cmdfijarpanelregulaciones = new RelayCommand(p => FijarPanelRegulaciones(p));
-				return _cmdfijarpanelregulaciones;
-			}
-		}
+		//#region FIJAR PANEL REGULACIONES
+		////Comando
+		//public ICommand cmdFijarPanelRegulaciones {
+		//	get {
+		//		if (_cmdfijarpanelregulaciones == null) _cmdfijarpanelregulaciones = new RelayCommand(p => FijarPanelRegulaciones(p));
+		//		return _cmdfijarpanelregulaciones;
+		//	}
+		//}
 
-		// Ejecución del comando
-		private void FijarPanelRegulaciones(object parametro) {
-			if (parametro == null) return;
-			Grid panel = (Grid)parametro;
-			if (PanelRegulacionesFijo) {
-				Grid.SetColumn(panel, 2);
-			} else {
-				Grid.SetColumn(panel, 1);
-			}
-		}
-		#endregion
+		//// Ejecución del comando
+		//private void FijarPanelRegulaciones(object parametro) {
+		//	if (parametro == null) return;
+		//	Grid panel = (Grid)parametro;
+		//	if (PanelRegulacionesFijo) {
+		//		Grid.SetColumn(panel, 2);
+		//	} else {
+		//		Grid.SetColumn(panel, 1);
+		//	}
+		//}
+		//#endregion
 
 
 		#region BORRAR CONDUCTOR
@@ -154,23 +153,23 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region BORRAR CELDAS
-		public ICommand cmdBorrarCeldas {
-			get {
-				if (_cmdborrarceldas == null) _cmdborrarceldas = new RelayCommand(p => BorrarCeldas(p));
-				return _cmdborrarceldas;
-			}
-		}
+		//#region BORRAR CELDAS
+		//public ICommand cmdBorrarCeldas {
+		//	get {
+		//		if (_cmdborrarceldas == null) _cmdborrarceldas = new RelayCommand(p => BorrarCeldas(p));
+		//		return _cmdborrarceldas;
+		//	}
+		//}
 
-		private void BorrarCeldas(object parametro) {
-			DataGrid tabla = parametro as DataGrid;
-			if (tabla == null || tabla.CurrentCell == null) return;
-			Conductor conductor = tabla.CurrentCell.Item as Conductor;
-			if (conductor == null) return;
-			conductor.BorrarValorPorHeader(tabla.CurrentCell.Column.Header.ToString());
-			HayCambios = true;
-		}
-		#endregion
+		//private void BorrarCeldas(object parametro) {
+		//	DataGrid tabla = parametro as DataGrid;
+		//	if (tabla == null || tabla.CurrentCell == null) return;
+		//	Conductor conductor = tabla.CurrentCell.Item as Conductor;
+		//	if (conductor == null) return;
+		//	conductor.BorrarValorPorHeader(tabla.CurrentCell.Column.Header.ToString());
+		//	HayCambios = true;
+		//}
+		//#endregion
 
 
 		#region QUITAR FILTRO
@@ -208,101 +207,101 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region PEGAR CONDUCTORES
-		public ICommand cmdPegarConductores {
-			get {
-				if (_cmdpegarconductores == null) _cmdpegarconductores = new RelayCommand(p => PegarConductores(p), p => PuedePegarConductores(p));
-				return _cmdpegarconductores;
-			}
-		}
+		//#region PEGAR CONDUCTORES
+		//public ICommand cmdPegarConductores {
+		//	get {
+		//		if (_cmdpegarconductores == null) _cmdpegarconductores = new RelayCommand(p => PegarConductores(p), p => PuedePegarConductores(p));
+		//		return _cmdpegarconductores;
+		//	}
+		//}
 
-		private bool PuedePegarConductores(object parametro) {
-			DataGrid tabla = parametro as DataGrid;
-			if (tabla == null) return false;
-			bool resultado = true;
-			foreach (DataGridColumn columna in tabla.Columns) {
-				if (columna.SortDirection != null) resultado = false;
-			}
-			if (VistaConductores != null && VistaConductores.Count < ListaConductores.Count) resultado = false;//ADDED
-			return resultado && tabla.CurrentCell != null & Clipboard.ContainsText();
-		}
+		//private bool PuedePegarConductores(object parametro) {
+		//	DataGrid tabla = parametro as DataGrid;
+		//	if (tabla == null) return false;
+		//	bool resultado = true;
+		//	foreach (DataGridColumn columna in tabla.Columns) {
+		//		if (columna.SortDirection != null) resultado = false;
+		//	}
+		//	if (VistaConductores != null && VistaConductores.Count < ListaConductores.Count) resultado = false;//ADDED
+		//	return resultado && tabla.CurrentCell != null & Clipboard.ContainsText();
+		//}
 
-		private void PegarConductores(object parametro) {
-			// Convertimos el parámetro pasado.
-			DataGrid grid = parametro as DataGrid;
-			if (grid == null || grid.CurrentCell == null) return;
-			// Parseamos los datos del portapapeles y definimos las variables.
-			List<string[]> portapapeles = Utils.parseClipboard();
-			int columnagrid;
-			int filagrid;
-			bool esnuevo;
-			// Si no hay datos, salimos.
-			if (portapapeles == null) return;
-			// Establecemos la columna donde se empieza a pegar.
-			columnagrid = grid.Columns.IndexOf(grid.CurrentCell.Column);
-			filagrid = grid.Items.IndexOf(grid.CurrentCell.Item);
-			// Creamos un objeto ConvertidorHora
-			Convertidores.ConvertidorHora cnvHora = new Convertidores.ConvertidorHora();
-			// Iteramos por las filas del portapapeles.
-			foreach (string[] fila in portapapeles) {
-				// Creamos un objeto Conductor o reutilizamos el existente.
-				Conductor conductor;
-				if (filagrid < ListaConductores.Count) {
-					conductor = ListaConductores[filagrid];
-					esnuevo = false;
-				} else {
-					conductor = new Conductor();
-					esnuevo = true;
-				}
-				int columna = columnagrid;
+		//private void PegarConductores(object parametro) {
+		//	// Convertimos el parámetro pasado.
+		//	DataGrid grid = parametro as DataGrid;
+		//	if (grid == null || grid.CurrentCell == null) return;
+		//	// Parseamos los datos del portapapeles y definimos las variables.
+		//	List<string[]> portapapeles = Utils.parseClipboard();
+		//	int columnagrid;
+		//	int filagrid;
+		//	bool esnuevo;
+		//	// Si no hay datos, salimos.
+		//	if (portapapeles == null) return;
+		//	// Establecemos la columna donde se empieza a pegar.
+		//	columnagrid = grid.Columns.IndexOf(grid.CurrentCell.Column);
+		//	filagrid = grid.Items.IndexOf(grid.CurrentCell.Item);
+		//	// Creamos un objeto ConvertidorHora
+		//	Convertidores.ConvertidorHora cnvHora = new Convertidores.ConvertidorHora();
+		//	// Iteramos por las filas del portapapeles.
+		//	foreach (string[] fila in portapapeles) {
+		//		// Creamos un objeto Conductor o reutilizamos el existente.
+		//		Conductor conductor;
+		//		if (filagrid < ListaConductores.Count) {
+		//			conductor = ListaConductores[filagrid];
+		//			esnuevo = false;
+		//		} else {
+		//			conductor = new Conductor();
+		//			esnuevo = true;
+		//		}
+		//		int columna = columnagrid;
 
-				foreach (string texto in fila) {
-					while (grid.Columns[columna].Visibility == Visibility.Collapsed) {
-						columna++;
-					}
-					int i;
-					switch (columna) {
-						case 0: // Numero.
-							conductor.Id = int.TryParse(texto, out i) ? i : 0;
-							break;
-						case 1: // Nombre.
-							conductor.Nombre = texto;
-							break;
-						case 2: // Apellidos.
-							conductor.Apellidos = texto;
-							break;
-						case 3: // Telefono.
-							conductor.Telefono = texto;
-							break;
-						case 4: // Email.
-							conductor.Email = texto;
-							break;
-						case 5: // Fijo.
-							conductor.Indefinido = false;
-							if (int.TryParse(texto, out i)) {
-								conductor.Indefinido = (i != 0);
-							} else if (texto.ToLower() != "false") conductor.Indefinido = true;
-							break;
-						case 6: // Horas.
-							conductor.Acumuladas = (TimeSpan)cnvHora.ConvertBack(texto, null, null, null);
-							break;
-						case 7: // Descansos.
-							conductor.Descansos = int.TryParse(texto, out i) ? i : 0;
-							break;
-						case 8: // Descansos No Disfrutados.
-							conductor.DescansosNoDisfrutados = int.TryParse(texto, out i) ? i : 0;
-							break;
-					}
-					columna++;
-				}
-				if (esnuevo) {
-					ListaConductores.Add(conductor);
-				}
-				filagrid++;
-				HayCambios = true;
-			}
-		}
-		#endregion
+		//		foreach (string texto in fila) {
+		//			while (grid.Columns[columna].Visibility == Visibility.Collapsed) {
+		//				columna++;
+		//			}
+		//			int i;
+		//			switch (columna) {
+		//				case 0: // Numero.
+		//					conductor.Id = int.TryParse(texto, out i) ? i : 0;
+		//					break;
+		//				case 1: // Nombre.
+		//					conductor.Nombre = texto;
+		//					break;
+		//				case 2: // Apellidos.
+		//					conductor.Apellidos = texto;
+		//					break;
+		//				case 3: // Telefono.
+		//					conductor.Telefono = texto;
+		//					break;
+		//				case 4: // Email.
+		//					conductor.Email = texto;
+		//					break;
+		//				case 5: // Fijo.
+		//					conductor.Indefinido = false;
+		//					if (int.TryParse(texto, out i)) {
+		//						conductor.Indefinido = (i != 0);
+		//					} else if (texto.ToLower() != "false") conductor.Indefinido = true;
+		//					break;
+		//				case 6: // Horas.
+		//					conductor.Acumuladas = (TimeSpan)cnvHora.ConvertBack(texto, null, null, null);
+		//					break;
+		//				case 7: // Descansos.
+		//					conductor.Descansos = int.TryParse(texto, out i) ? i : 0;
+		//					break;
+		//				case 8: // Descansos No Disfrutados.
+		//					conductor.DescansosNoDisfrutados = int.TryParse(texto, out i) ? i : 0;
+		//					break;
+		//			}
+		//			columna++;
+		//		}
+		//		if (esnuevo) {
+		//			ListaConductores.Add(conductor);
+		//		}
+		//		filagrid++;
+		//		HayCambios = true;
+		//	}
+		//}
+		//#endregion
 
 
 		#region BORRAR REGULACION
@@ -473,33 +472,33 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region CAMBIAR MODO SELECCION
+		//#region CAMBIAR MODO SELECCION
 
-		// Comando
-		private ICommand _cmdcambiarmodoseleccion;
-		public ICommand cmdCambiarModoSeleccion {
-			get {
-				if (_cmdcambiarmodoseleccion == null) _cmdcambiarmodoseleccion = new RelayCommand(p => CambiarModoSeleccion());
-				return _cmdcambiarmodoseleccion;
-			}
-		}
+		//// Comando
+		//private ICommand _cmdcambiarmodoseleccion;
+		//public ICommand cmdCambiarModoSeleccion {
+		//	get {
+		//		if (_cmdcambiarmodoseleccion == null) _cmdcambiarmodoseleccion = new RelayCommand(p => CambiarModoSeleccion());
+		//		return _cmdcambiarmodoseleccion;
+		//	}
+		//}
 
 
-		// Ejecución del comando
-		private void CambiarModoSeleccion() {
+		//// Ejecución del comando
+		//private void CambiarModoSeleccion() {
 
-			if (VisibilidadBotonSeleccionFila == Visibility.Visible) {
-				VisibilidadBotonSeleccionFila = Visibility.Collapsed;
-				VisibilidadBotonSeleccionCelda = Visibility.Visible;
-				ModoSeleccion = DataGridSelectionUnit.FullRow;
-			} else {
-				VisibilidadBotonSeleccionCelda = Visibility.Collapsed;
-				VisibilidadBotonSeleccionFila = Visibility.Visible;
-				ModoSeleccion = DataGridSelectionUnit.Cell;
-			}
+		//	if (VisibilidadBotonSeleccionFila == Visibility.Visible) {
+		//		VisibilidadBotonSeleccionFila = Visibility.Collapsed;
+		//		VisibilidadBotonSeleccionCelda = Visibility.Visible;
+		//		ModoSeleccion = DataGridSelectionUnit.FullRow;
+		//	} else {
+		//		VisibilidadBotonSeleccionCelda = Visibility.Collapsed;
+		//		VisibilidadBotonSeleccionFila = Visibility.Visible;
+		//		ModoSeleccion = DataGridSelectionUnit.Cell;
+		//	}
 
-		}
-		#endregion
+		//}
+		//#endregion
 
 
 

@@ -5,34 +5,56 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Orion.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-
 namespace Orion.Views {
-	/// <summary>
-	/// Lógica de interacción para VistaConductores.xaml
-	/// </summary>
+
+	using System.Windows;
+	using System.Windows.Controls;
+	using Controls;
+
 	public partial class VistaConductores : UserControl {
 		public VistaConductores() {
 			InitializeComponent();
 		}
 
+
+		// ====================================================================================================
+		#region GESTIÓN PANEL REGULACIONES
+		// ====================================================================================================
+
+		// TABLA CONDUCTORES - GOT FOCUS
 		private void TablaConductores_GotFocus(object sender, RoutedEventArgs e) {
-			ConductoresViewModel VM = ((GlobalVM)this.DataContext).ConductoresVM;
-			if (!VM.PanelRegulacionesFijo) PanelRegulaciones.Visibility = Visibility.Collapsed;
+			if (!ChPanelRegulaciones.IsChecked ?? false) PanelRegulaciones.Visibility = Visibility.Collapsed;
 		}
+
+
+		// CHECK REGULACIONES - CLICK
+		private void ChPanelRegulaciones_Click(object sender, RoutedEventArgs e) {
+			if (ChPanelRegulaciones.IsChecked == true) {
+				Grid.SetColumn(PanelRegulaciones, 0);
+			} else {
+				Grid.SetColumn(PanelRegulaciones, 1);
+			}
+		}
+
+
+		// BOTÓN REGULACIONES - CLICK
+		private void BtRegulaciones_Click(object sender, RoutedEventArgs e) {
+			if (PanelRegulaciones.IsVisible) {
+				PanelRegulaciones.Visibility = Visibility.Collapsed;
+				ChPanelRegulaciones.IsChecked = false;
+				Grid.SetColumn(PanelRegulaciones, 1);
+			} else {
+				PanelRegulaciones.Visibility = Visibility.Visible;
+			}
+		}
+
+		#endregion
+		// ====================================================================================================
+
+
+
+
+
+
 	}
 }

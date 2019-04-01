@@ -9,6 +9,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Orion.Views"
+			 xmlns:controls="clr-namespace:Orion.Controls"
              xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:cnv="clr-namespace:Orion.Convertidores"
              xmlns:p="clr-namespace:Orion.Properties"
@@ -136,29 +137,41 @@
                                 <!--SEPARADOR-->
                                 <TextBlock Height="2" Margin="5,3" Background="LightGray"/>
 
-                                <!--BOTON SELECCIÓN FILA -->
-                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64" Visibility="{Binding VisibilidadBotonSeleccionFila}"
-                                        Command="{Binding cmdCambiarModoSeleccion}">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Vertical">
-                                            <Image Source="Imagenes/SeleccionFila.png" Style="{StaticResource EstiloImagen}"/>
-                                            <TextBlock Text="Seleccionar Filas" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
+								<!--BOTON ALTERNAR SELECCION TABLA CONDUCTORES -->
+								<ToggleButton Height="80" Width="64" Command="{Binding Source={x:Reference TablaConductores}, Path=ComandoAlternarModoSeleccion}">
+									<ToggleButton.Style>
+										<Style BasedOn="{StaticResource EstiloToggleBarra}" TargetType="ToggleButton">
+											<Style.Triggers>
+												<Trigger Property="IsChecked" Value="True">
+													<Setter Property="Content">
+														<Setter.Value>
+															<StackPanel Orientation="Vertical">
+																<Image Source="Imagenes/SeleccionFila.png" Style="{StaticResource EstiloImagen}"/>
+																<TextBlock Text="Seleccionar Filas" TextWrapping="Wrap" TextAlignment="Center"
+																		   VerticalAlignment="Center" FontSize="10"/>
+															</StackPanel>
 
-                                <!--BOTON SELECCIÓN CELDA -->
-                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64" Visibility="{Binding VisibilidadBotonSeleccionCelda}"
-                                        Command="{Binding cmdCambiarModoSeleccion}">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Vertical">
-                                            <Image Source="Imagenes/SeleccionCelda.png" Style="{StaticResource EstiloImagen}"/>
-                                            <TextBlock Text="Seleccionar Celdas" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+												<Trigger Property="IsChecked" Value="False">
+													<Setter Property="Content">
+														<Setter.Value>
+															<StackPanel Orientation="Vertical">
+																<Image Source="Imagenes/SeleccionCelda.png" Style="{StaticResource EstiloImagen}"/>
+																<TextBlock Text="Seleccionar Celdas" TextWrapping="Wrap" TextAlignment="Center" 
+																		   VerticalAlignment="Center" FontSize="10"/>
+															</StackPanel>
+														</Setter.Value>
+													</Setter>
+												</Trigger>
+											</Style.Triggers>
+										</Style>
+									</ToggleButton.Style>
+								</ToggleButton>
 
-                            </StackPanel>
+
+							</StackPanel>
                         </Border>
                     </Border>
                 </xceed:DropDownButton.DropDownContent>
@@ -181,17 +194,16 @@
             </Button>
 
             <!--BOTON PEGAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding ConductoresVM.cmdPegarConductores}"
-                    CommandParameter="{Binding ElementName=TablaConductores}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Pegar.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Pegar" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+			<Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding ElementName=TablaConductores, Path=ComandoPegar}">
+				<Button.Content>
+					<StackPanel Orientation="Vertical">
+						<Image Source="Imagenes/Pegar.png" Style="{StaticResource EstiloImagen}"/>
+						<TextBlock Text="Pegar" TextWrapping="Wrap" TextAlignment="Center"/>
+					</StackPanel>
+				</Button.Content>
+			</Button>
 
-            <!--BOTON QUITAR FILTRO-->
+			<!--BOTON QUITAR FILTRO-->
             <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding ConductoresVM.cmdQuitarFiltro}"
                     CommandParameter="{Binding ElementName=TablaConductores}">
                 <Button.Content>
@@ -206,8 +218,7 @@
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
             <!--BOTON VER REGULACIONES-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding ConductoresVM.cmdVerRegulaciones}"
-                    CommandParameter="{Binding ElementName=PanelRegulaciones}">
+			<Button Style="{StaticResource EstiloBotonBarra}" Click="BtRegulaciones_Click">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/AbrirPanelDerecho.png" Style="{StaticResource EstiloImagen}"/>
@@ -236,7 +247,7 @@
             <!-- ==================================================================================================== -->
             <!-- TABLA CONDUCTORES -->
             <!-- ==================================================================================================== -->
-            <DataGrid x:Name="TablaConductores" ItemsSource="{Binding ConductoresVM.VistaConductores}"
+            <controls:QDataGrid x:Name="TablaConductores" ItemsSource="{Binding ConductoresVM.VistaConductores}"
                       SelectedItem="{Binding ConductoresVM.ConductorSeleccionado}"
                       IsReadOnly="False" Grid.Column="1" HeadersVisibility="Column" FontSize="12"
                       AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False"
@@ -245,19 +256,19 @@
                       GotFocus="TablaConductores_GotFocus"
                       Background="Transparent" Style="{StaticResource EstiloGridConductores}">
 
-                <DataGrid.Resources>
+				<controls:QDataGrid.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod"/>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
-                </DataGrid.Resources>
+                </controls:QDataGrid.Resources>
 
-                <DataGrid.InputBindings>
+                <!--<DataGrid.InputBindings>
                     <KeyBinding Key="Delete" Command="{Binding ConductoresVM.cmdBorrarCeldas}"
                                 CommandParameter="{Binding ElementName=TablaConductores}"/>
                     <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding ConductoresVM.cmdPegarConductores}"
                                 CommandParameter="{Binding ElementName=TablaConductores}"/>
-                </DataGrid.InputBindings>
+                </DataGrid.InputBindings>-->
 
-                <DataGrid.Columns>
+				<controls:QDataGrid.Columns>
                     <DataGridTextColumn Header="Número" Width="2*" MinWidth="60" Binding="{Binding Id}"/>
                     <DataGridTextColumn Header="Nombre" Width="5*" MinWidth="60" Binding="{Binding Nombre}"/>
                     <DataGridTextColumn Header="Apellidos" Width="8*" MinWidth="60" Binding="{Binding Apellidos}"/>
@@ -269,14 +280,14 @@
 					<DataGridTextColumn Header="DNDs" Width="2*" MinWidth="60" Binding="{Binding DescansosNoDisfrutados, Converter={StaticResource cnvDecimal6}}"/>
                     <DataGridTextColumn Header="Plus Distancia" Width="2*" MinWidth="60" Binding="{Binding PlusDistancia, Converter={StaticResource cnvDecimal}}"/>
                     <DataGridCheckBoxColumn Header="R.Jor." Width="1*" MinWidth="60" IsThreeState="False" Binding="{Binding ReduccionJornada, UpdateSourceTrigger=PropertyChanged}"/>
-                </DataGrid.Columns>
-            </DataGrid>
+                </controls:QDataGrid.Columns>
+            </controls:QDataGrid>
 
 
             <!-- ==================================================================================================== -->
             <!-- PANEL REGULACIONES DE CONDUCTOR -->
             <!-- ==================================================================================================== -->
-            <Grid x:Name="PanelRegulaciones" Visibility="{Binding ConductoresVM.PanelRegulacionesVisibilidad, Mode=TwoWay}"
+            <Grid x:Name="PanelRegulaciones" Visibility="Collapsed"
                   Background="{StaticResource DegradadoCeleste0}"
                   Grid.Column="1" Width="450" HorizontalAlignment="Right" Margin="5,0,0,0">
                 <Grid.RowDefinitions>
@@ -292,10 +303,7 @@
                 <Label Grid.Row="0" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" FontWeight="Black"
                        Content="REGULACIONES DE CONDUCTOR"/>
 
-                <CheckBox x:Name="ChPanelDerecho" Grid.Row="0" Margin="5" HorizontalAlignment="Right"
-                          IsChecked="{Binding ConductoresVM.PanelRegulacionesFijo}"
-                          Command="{Binding ConductoresVM.cmdFijarPanelRegulaciones}" CommandParameter="{Binding ElementName=PanelRegulaciones}"/>
-                <!--Click="ChPanelDerecho_Click"-->
+				<CheckBox x:Name="ChPanelRegulaciones" Grid.Row="0" Margin="5" HorizontalAlignment="Right" Click="ChPanelRegulaciones_Click"/>
 
                 <!-- CONTENIDO DEL PANEL -->
                 <Grid Grid.Row="1">
@@ -348,30 +356,29 @@
                     </StackPanel>
 
                     <!-- TABLA REGULACIONES -->
-                    <DataGrid Grid.Row="2" ItemsSource="{Binding ConductoresVM.ConductorSeleccionado.ListaRegulaciones}"
+                    <controls:QDataGrid Grid.Row="2" ItemsSource="{Binding ConductoresVM.ConductorSeleccionado.ListaRegulaciones}"
                               SelectedItem="{Binding ConductoresVM.RegulacionSeleccionada}"
                               BorderThickness="1" VerticalScrollBarVisibility="Disabled" Margin="4"
-                          x:Name="TablaRegulaciones" IsReadOnly="False" AutoGenerateColumns="False" AlternationCount="2"
-                          SelectionMode="Single" SelectionUnit="FullRow" HeadersVisibility="Column"
-                          CanUserResizeRows="False" CanUserReorderColumns="False" HorizontalAlignment="Left" CanUserSortColumns="False"
-                          Style="{StaticResource EstiloGridRegulaciones}" Background="{StaticResource GrisMuyClaro}" FontSize="10"
-                          
-                          CanUserAddRows="{Binding ConductoresVM.HayConductor}">
+							  x:Name="TablaRegulaciones" IsReadOnly="False" AutoGenerateColumns="False" AlternationCount="2"
+							  SelectionMode="Single" SelectionUnit="FullRow" HeadersVisibility="Column"
+							  CanUserResizeRows="False" CanUserReorderColumns="False" HorizontalAlignment="Left" CanUserSortColumns="False"
+							  Style="{StaticResource EstiloGridRegulaciones}" Background="{StaticResource GrisMuyClaro}" FontSize="10"
+							  CanUserAddRows="{Binding ConductoresVM.HayConductor}">
 
-                        <DataGrid.InputBindings>
+						<!--<controls:QDataGrid.InputBindings>
                             <KeyBinding Key="Delete" Command="{Binding ConductoresVM.cmdBorrarCeldasRegulacion}"
                                 CommandParameter="{Binding ElementName=TablaRegulaciones}"/>
-                        </DataGrid.InputBindings>
+                        </controls:QDataGrid.InputBindings>-->
 
-                        <DataGrid.Columns>
+						<controls:QDataGrid.Columns>
                             <DataGridTextColumn Header="Fecha" Width="2*" Binding="{Binding Fecha, Converter={StaticResource cnvFecha}}"/>
                             <DataGridTextColumn Header="Horas" Width="1.5*" Binding="{Binding Horas, 
                                 Converter={StaticResource cnvSuperHora}}"/>
                             <DataGridTextColumn Header="DCs" Width="1.5*" Binding="{Binding Descansos, Converter={StaticResource cnvDecimal6}}"/>
 							<DataGridTextColumn Header="DNDs" Width="1.5*" Binding="{Binding Dnds, Converter={StaticResource cnvDecimal6}}"/>
 							<DataGridTextColumn Header="Motivo" Width="5*" Binding="{Binding Motivo}"/>
-                        </DataGrid.Columns>
-                    </DataGrid>
+                        </controls:QDataGrid.Columns>
+                    </controls:QDataGrid>
 
                 </Grid>
             </Grid>
