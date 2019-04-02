@@ -102,8 +102,8 @@
         <!-- ==================================================================================================== -->
         <!-- BARRA DE BOTONES CALENDARIOS -->
         <!-- ==================================================================================================== -->
-        <StackPanel Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Height="80" Background="{StaticResource DegradadoCeleste0}"
-                    Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
+        <StackPanel x:Name="BotonesCalendarios" Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Height="80" Background="{StaticResource DegradadoCeleste0}"
+                    Visibility="Visible">
 
             <!--BOTON GUARDAR-->
             <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding cmdGuardarCambios}">
@@ -129,11 +129,9 @@
             <!--ETIQUETA MES-->
             <StackPanel Orientation="Vertical" Margin="6,12,6,6" VerticalAlignment="Center" Width="150">
                 <Label FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center" Content="{Binding CalendariosVM.MesActual}"/>
-				<!-- Label FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center" Content="{Binding CalendariosVM.AñoActual}"/ -->
 				<Button x:Name="BotonValidezGrupo" FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center"
                         Style="{StaticResource EstiloBotonValidezFecha}" Width="Auto" Height="Auto" Padding="15, 3"
-                        Command="{Binding CalendariosVM.cmdAbrirPanelFecha}"
-                        Content="{Binding CalendariosVM.AñoActual}"/>
+                        Click="BtAbrirPanelFecha_Click" Content="{Binding CalendariosVM.AñoActual}"/>
 			</StackPanel>
 
             <!--BOTON AVANZA MES-->
@@ -171,7 +169,7 @@
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
             <!-- DESPLEGABLE ACCIONES -->
-            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" IsOpen="{Binding CalendariosVM.BtAccionesAbierto, Mode=TwoWay}">
+            <xceed:DropDownButton x:Name="BtDropAcciones" Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/Engranajes.png" Style="{StaticResource EstiloImagen}"/>
@@ -207,8 +205,7 @@
                                 </Button>
 
                                 <!--BOTON ACCIONES POR LOTES -->
-                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64"
-                                        Command="{Binding cmdAccionesPorLotes}">
+                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64" Click="BtAccionesLotes_Click">
                                     <Button.Content>
                                         <StackPanel Orientation="Vertical">
                                             <Image Source="Imagenes/Navaja.png" Style="{StaticResource EstiloImagen}"/>
@@ -284,7 +281,7 @@
 			</Button>
 
 			<!-- DESPLEGABLE FILTRAR TABLA -->
-            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" IsOpen="{Binding CalendariosVM.BtFiltrarAbierto, Mode=TwoWay}">
+            <xceed:DropDownButton x:Name="BtDropFiltros" Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/Filtrar.png" Style="{StaticResource EstiloImagen}"/>
@@ -297,23 +294,26 @@
                         <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
                             <StackPanel Orientation="Vertical">
 
-                                <!--BOTON CREAR PDF-->
+                                <!--BOTON INDEFINIDOS-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
                                         Content="Indefinidos" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
                                         Command="{Binding cmdAplicarFiltro}"
-                                        CommandParameter="Indefinidos" ToolTip="Muestra sólo los conductores indefinidos."/>
+                                        CommandParameter="Indefinidos" ToolTip="Muestra sólo los conductores indefinidos."
+										Click="BotonFiltrado_Click"/>
 
-                                <!--BOTON PIJAMAS EN  PDF-->
+                                <!--BOTON EVENTUALES-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
                                         Content="Eventuales" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
                                         Command="{Binding cmdAplicarFiltro}"
-                                        CommandParameter="Eventuales" ToolTip="Muestra sólo los conductores eventuales"/>
+                                        CommandParameter="Eventuales" ToolTip="Muestra sólo los conductores eventuales"
+										Click="BotonFiltrado_Click"/>
 
-                                <!--BOTON CREAR PDF-->
+                                <!--BOTON EVENTUALES PARCIAL-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                         Content="Eventuales Parcial" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
                                         Command="{Binding cmdAplicarFiltro}"
-                                        CommandParameter="EventualesParcial" ToolTip="Muestra sólo los conductores eventuales que no trabajen todo el mes."/>
+                                        CommandParameter="EventualesParcial" ToolTip="Muestra sólo los conductores eventuales que no trabajen todo el mes."
+										Click="BotonFiltrado_Click"/>
 
                             </StackPanel>
                         </Border>
@@ -337,6 +337,7 @@
 
             <!--BOTON HOJA PIJAMA-->
             <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdAbrirPijama}"
+					Click="BtHojaPijama_Click"
                     CommandParameter="{Binding ElementName=TablaCalendarios, Path=CurrentColumn.Header, Mode=TwoWay}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
@@ -361,7 +362,7 @@
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
             <!-- DESPLEGABLE CREAR PDF -->
-            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}"  IsOpen="{Binding CalendariosVM.BtCrearPdfAbierto, Mode=TwoWay}">
+            <xceed:DropDownButton x:Name="BtDropCrearPdf" Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/GuardarPDF.png" Style="{StaticResource EstiloImagen}"/>
@@ -377,32 +378,32 @@
                                 <!--BOTON CREAR PDF-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
                                 Content="Tabla Calendarios" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding cmdCalendariosEnPDF}"/>
+                                Command="{Binding cmdCalendariosEnPDF}" Click="BtCreandoPdf_Click"/>
 
                                 <!--BOTON PIJAMAS JUNTOS EN  PDF-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
                                 Content="Hojas Pijama Juntas" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding cmdPijamasEnPDF}"/>
+                                Command="{Binding cmdPijamasEnPDF}" Click="BtCreandoPdf_Click"/>
 
                                 <!--BOTON PIJAMAS POR SEPARADO EN  PDF-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
                                 Content="Hojas Pijama Por Separado" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding cmdPijamasSeparadosEnPdf}"/>
+                                Command="{Binding cmdPijamasSeparadosEnPdf}" Click="BtCreandoPdf_Click"/>
 
                                 <!--BOTON FALLOS DE CALENDARIO-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                 Content="Fallos de Calendario" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding cmdCalendariosEnPdfConFallos}"/>
+                                Command="{Binding cmdCalendariosEnPdfConFallos}" Click="BtCreandoPdf_Click"/>
 
                                 <!--BOTON ESTADÍSTICAS-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                 Content="Estadísticas" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding cmdPdfEstadisticas}"/>
+                                Command="{Binding cmdPdfEstadisticas}" Click="BtCreandoPdf_Click"/>
 
                                 <!--BOTON ESTADÍSTICAS-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                 Content="Estadísticas Mes" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                Command="{Binding cmdPdfEstadisticasMes}"/>
+                                Command="{Binding cmdPdfEstadisticasMes}" Click="BtCreandoPdf_Click"/>
 
                             </StackPanel>
                         </Border>
@@ -418,8 +419,8 @@
         <!-- ==================================================================================================== -->
         <!-- BARRA DE BOTONES PIJAMAS -->
         <!-- ==================================================================================================== -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="95" Background="{StaticResource DegradadoCeleste0}"
-                    Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}">
+        <StackPanel x:Name="BotonesPijama" Grid.Row="0" Orientation="Horizontal" Height="95" Background="{StaticResource DegradadoCeleste0}"
+                    Visibility="Collapsed">
 
 			<!--BOTON ACTUALIZAR-->
 			<Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdActualizarPijama}">
@@ -443,7 +444,8 @@
             </Button>-->
 
             <!--BOTON VOLVER-->
-			<Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdCerrarPijama}">
+			<Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdCerrarPijama}"
+					Click="BtCerrarPijama_Click">
 				<Button.Content>
 					<StackPanel Orientation="Vertical">
 						<Image Source="Imagenes/Volver.png" Style="{StaticResource EstiloImagen}"/>
@@ -568,8 +570,8 @@
         <!-- ==================================================================================================== -->
         <!-- BOTONES AUXILIARES -->
         <!-- ==================================================================================================== -->
-        <StackPanel Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center"
-                    Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}">
+        <StackPanel x:Name="BotonesAuxiliares" Grid.Row="0" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Center"
+                    Visibility="Collapsed">
 
             <!-- AYUDA -->
             <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding cmdMostrarAyuda}" CommandParameter="Pijama" Margin="1"
@@ -607,12 +609,12 @@
         <!-- ==================================================================================================== -->
 
         <!-- PANEL ACCIONES POR LOTES -->
-        <Grid Grid.Row="1" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
+        <Grid x:Name="PanelAccionesPorLotes" Grid.Row="1" Grid.Column="0" Visibility="Visible">
 
-            <Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3" Padding="3" CornerRadius="4"
-                    Background="{StaticResource DegradadoCeleste2}" Visibility="{Binding CalendariosVM.VisibilidadAccionesLotes}">
+            <Border x:Name="BordePanelAccionesLotes" BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3"
+					Padding="3" CornerRadius="4" Background="{StaticResource DegradadoCeleste2}" Visibility="Collapsed">
 
-                <StackPanel Orientation="Vertical" Visibility="{Binding CalendariosVM.VisibilidadAccionesLotes}" Margin="5">
+				<StackPanel x:Name="PanelAccionesLotes" Orientation="Vertical" Visibility="Collapsed" Margin="5">
 
                     <!-- TITULO -->
                     <TextBlock FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="DarkBlue" Text="ACCIONES POR LOTES"/>
@@ -744,16 +746,15 @@
             </Border>
 
             <!-- BOTÓN CERRAR -->
-            <Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="X" Padding="8,5" Margin="5,7"
-                    Visibility="{Binding CalendariosVM.VisibilidadAccionesLotes}"
-                    HorizontalAlignment="Right" VerticalAlignment="Top"
-                    FontSize="14" FontWeight="Bold" Foreground="Red" Command="{Binding CalendariosVM.cmdAccionesPorLotes}"/>
+            <Button x:Name="BtCerrarAccionesLotes" Style="{StaticResource EstiloBotonBarraPequeña}" Content="X" Padding="8,5" Margin="5,7"
+                    Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Top"
+                    FontSize="14" FontWeight="Bold" Foreground="Red" Click="BtAccionesLotes_Click"/>
 
         </Grid>
 
 
 		<!-- PANEL FILTRO APLICADO -->
-		<Grid Grid.Row="2" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadPanelFiltros}"
+		<Grid Grid.Row="2" Grid.Column="0" Visibility="{Binding CalendariosVM.HayFiltroAplicado, Converter={StaticResource cnvBoolToVisibility}}"
 			  HorizontalAlignment="Stretch">
 			<Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3" Padding="3" CornerRadius="4"
                     Background="{StaticResource DegradadoCeleste1}">
@@ -761,7 +762,7 @@
 				<Label FontFamily="Verdana" FontSize="14" FontWeight="Normal" VerticalContentAlignment="Center">
 					<StackPanel Orientation="Horizontal">
 						<TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Filtro aplicado:"/>
-						<TextBlock Margin="4,0" Width="300" VerticalAlignment="Center" Text="{Binding CalendariosVM.TextoFiltros}"/>
+						<TextBlock Margin="4,0" Width="300" VerticalAlignment="Center" Text="{Binding CalendariosVM.FiltroAplicado}"/>
 					</StackPanel>
 				</Label>
 
@@ -770,8 +771,6 @@
 
 
 		<!-- TABLA CALENDARIOS -->
-		<!--<FrameworkElement x:Name="ColumnaActual" Tag="{Binding CalendariosVM.ColumnaActual, Mode=TwoWay}" Visibility="Collapsed"/>
-		<FrameworkElement x:Name="FilaActual" Tag="{Binding CalendariosVM.FilaActual, Mode=TwoWay}" Visibility="Collapsed"/>-->
 		<FrameworkElement x:Name="ColumnaActual" Visibility="Collapsed"/>
 		<controls:QDataGrid x:Name="TablaCalendarios" 
 							AlternationCount="2" 
@@ -787,11 +786,12 @@
 							HeadersVisibility="Column" 
 							IsReadOnly="False" 
 							ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
+							MouseDoubleClick="TablaCalendarios_MouseDoubleClick"
 							SelectedItem="{Binding CalendariosVM.CalendarioSeleccionado}"
 							SelectionMode="Extended"
 							SelectionUnit="{Binding CalendariosVM.ModoSeleccion}"
 							Style="{StaticResource EstiloGridCalendarios}"
-							Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios}">
+							Visibility="Visible">
 
 			<controls:QDataGrid.Resources>
                 <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod"/>
@@ -1770,7 +1770,7 @@
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="29"  Width="1*" Binding="{Binding ListaDias[28].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
-									Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.VisibilidadColumna29,
+									Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.ExisteDia29,
 												 Converter={StaticResource cnvBoolToVisibility}}">
                     <DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource EstiloCeldasCalendarios}">
@@ -1806,7 +1806,7 @@
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="30"  Width="1*" Binding="{Binding ListaDias[29].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
-									Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.VisibilidadColumna30,
+									Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.ExisteDia30,
 												 Converter={StaticResource cnvBoolToVisibility}}">
 					<DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource EstiloCeldasCalendarios}">
@@ -1842,7 +1842,7 @@
                 </DataGridTextColumn>
 
                 <DataGridTextColumn Header="31"  Width="1*" Binding="{Binding ListaDias[30].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
-									Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.VisibilidadColumna31,
+									Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.ExisteDia31,
 												 Converter={StaticResource cnvBoolToVisibility}}">
 					<DataGridTextColumn.CellStyle>
                         <Style TargetType="DataGridCell" BasedOn="{StaticResource EstiloCeldasCalendarios}">
@@ -1887,7 +1887,7 @@
 
 
         <!-- PANEL CONDUCTOR EN PIJAMA -->
-        <Grid Grid.Row="1" Grid.Column="0" Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}">
+        <Grid x:Name="PanelConductorPijama" Grid.Row="1" Grid.Column="0" Visibility="Collapsed">
 
 			<Grid.RowDefinitions>
 				<RowDefinition Height="Auto"/>
@@ -2218,7 +2218,7 @@
                   AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Single"
                   SelectionUnit="FullRow" Background="Transparent" CanUserSortColumns="False"
                   Style="{StaticResource EstiloGridPijama}"
-                  Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}"
+                  Visibility="Collapsed"
                   ItemsSource="{Binding CalendariosVM.Pijama.ListaDias}" SelectedItem="{Binding CalendariosVM.Pijama.DiaSeleccionado}">
 
             <DataGrid.Resources>
@@ -2386,7 +2386,7 @@
 
         <!-- PANEL RESUMEN PIJAMA -->
         <ScrollViewer  x:Name="PanelResumen" Grid.RowSpan="4" Grid.Column="1" Width="Auto" Background="{StaticResource DegradadoCeleste1}"
-                        Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}"
+                        Visibility="Collapsed"
                        VerticalScrollBarVisibility="Hidden">
             <StackPanel x:Name="PanelPijama" Orientation="Vertical" Width="370" ScrollViewer.VerticalScrollBarVisibility="Hidden"
                         Visibility="{Binding ElementName=BtOcultarPanelPijama, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
@@ -2831,8 +2831,8 @@
         </StackPanel>
         </ScrollViewer>
 
-        <Border Grid.RowSpan="4" Grid.Column="1" BorderBrush="DarkBlue" BorderThickness="0.5" Width="{Binding ElementName=PanelResumen, Path=Width}"
-                    Visibility="{Binding CalendariosVM.VisibilidadTablaCalendarios, Converter={StaticResource cnvVisibilityInverter}}" CornerRadius="4"/>
+        <Border x:Name="BordePanelResumen" Grid.RowSpan="4" Grid.Column="1" BorderBrush="DarkBlue" BorderThickness="0.5" Width="{Binding ElementName=PanelResumen, Path=Width}"
+                    Visibility="Collapsed" CornerRadius="4"/>
 
 
 		<!-- ==================================================================================================== -->
@@ -2840,7 +2840,7 @@
 		<!-- ==================================================================================================== -->
 		<StackPanel Grid.Row="2" Grid.RowSpan="2" Orientation="Vertical">
 			<Border x:Name="PanelFecha" BorderBrush="DarkBlue" BorderThickness="1" CornerRadius="5" Padding="10" Margin="150,0,0,0" 
-                    HorizontalAlignment="Left" Visibility="{Binding CalendariosVM.VisibilidadPanelFecha, Mode=TwoWay}" 
+                    HorizontalAlignment="Left" Visibility="Collapsed" 
 					Background="{StaticResource DegradadoCeleste1}">
 				<StackPanel Orientation="Vertical">
 
@@ -2848,15 +2848,15 @@
 					<Grid Margin="0">
 						<TextBlock FontSize="12" FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Center" Text="Mes Visualizado"/>
 						<Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="X" Foreground="Red" FontWeight="Bold" FontSize="12" Margin="0"
-                                Padding="10,5" HorizontalAlignment="Right" Height="Auto"
-                                Command="{Binding CalendariosVM.cmdAbrirPanelFecha}"/>
+                                Padding="10,5" HorizontalAlignment="Right" Height="Auto" Click="BtAbrirPanelFecha_Click"/>
 					</Grid>
 
 					<!-- CALENDARIO -->
 					<controls:QCalendar Style="{StaticResource EstiloCalendario}"
 										DisplayMode="Month"  FirstDayOfWeek="Monday" SelectionMode="SingleDate"  Focusable="False"
 										SelectedDate="{Binding CalendariosVM.FechaActual, Mode=TwoWay}"
-										DisplayDate="{Binding CalendariosVM.FechaCalendarios, Mode=TwoWay}">
+										DisplayDate="{Binding CalendariosVM.FechaCalendarios, Mode=TwoWay}"
+										SelectedDatesChanged="QCalendar_SelectedDatesChanged">
 
 					</controls:QCalendar>
 					<TextBlock FontSize="10" Text="Selecciona el día 1 del mes deseado."/>

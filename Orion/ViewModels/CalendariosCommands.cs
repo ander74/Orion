@@ -201,7 +201,7 @@ namespace Orion.ViewModels {
 				}
 			}
 			if (VistaCalendarios != null) VistaCalendarios.Filter = null;
-			TextoFiltros = "Ninguno";
+			FiltroAplicado = "Ninguno";
 		}
 		#endregion
 
@@ -227,11 +227,11 @@ namespace Orion.ViewModels {
 			switch (filtro) {
 				case "Indefinidos":
 					VistaCalendarios.Filter = (c) => { return (c as Calendario).ConductorIndefinido; };
-					TextoFiltros = "Conductores Indefinidos";
+					FiltroAplicado = "Conductores Indefinidos";
 					break;
 				case "Eventuales":
 					VistaCalendarios.Filter = (c) => { return !(c as Calendario).ConductorIndefinido; };
-					TextoFiltros = "Conductores Eventuales";
+					FiltroAplicado = "Conductores Eventuales";
 					break;
 				case "EventualesParcial":
 					VistaCalendarios.Filter = (c) => {
@@ -239,10 +239,9 @@ namespace Orion.ViewModels {
 						int dias = DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month);
 						return (!cal.ConductorIndefinido && cal.ListaDias.Count(cc => cc.Grafico != 0) != dias);
 					};
-					TextoFiltros = "Conductores Eventuales Parcial";
+					FiltroAplicado = "Conductores Eventuales Parcial";
 					break;
 			}
-			BtFiltrarAbierto = false;
 		}
 		#endregion
 
@@ -339,7 +338,7 @@ namespace Orion.ViewModels {
 				GuardarCalendarios();
 				//CalendarioPijama = CalendarioSeleccionado;
 				Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
-				VisibilidadTablaCalendarios = Visibility.Collapsed;
+				//VisibilidadTablaCalendarios = Visibility.Collapsed;
 			}
 		}
 		#endregion
@@ -356,7 +355,7 @@ namespace Orion.ViewModels {
 
 		private void CerrarPijama() {
 			Pijama = null;
-			VisibilidadTablaCalendarios = Visibility.Visible;
+			//VisibilidadTablaCalendarios = Visibility.Visible;
 		}
 		#endregion
 
@@ -472,7 +471,7 @@ namespace Orion.ViewModels {
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Pedimos el nombre de archivo
 				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}", FechaActual);
-				nombreArchivo += TextoFiltros == "Ninguno" ? " - Todos" : $" - {TextoFiltros}";
+				nombreArchivo += FiltroAplicado == "Ninguno" ? " - Todos" : $" - {FiltroAplicado}";
 				nombreArchivo += ".pdf";
 				string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
@@ -490,11 +489,10 @@ namespace Orion.ViewModels {
 
 		private async void PijamasEnPdf() {
 
-			BtCrearPdfAbierto = false;
 			try {
 				// Pedimos el nombre de archivo
 				string nombreArchivo = String.Format("{0:yyyy}-{0:MM}", FechaActual);
-				nombreArchivo += TextoFiltros == "Ninguno" ? " - Todos" : $" - {TextoFiltros}";
+				nombreArchivo += FiltroAplicado == "Ninguno" ? " - Todos" : $" - {FiltroAplicado}";
 				nombreArchivo += ".pdf";
 				string ruta = Informes.GetRutaArchivo(TiposInforme.Pijama, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
@@ -563,14 +561,12 @@ namespace Orion.ViewModels {
 				Mensajes.VerError("CalendariosCommands.PijamasSeparadosEnPdf", ex);
 			} finally {
 				App.Global.FinalizarProgreso();
-				BtCrearPdfAbierto = false;
 			}
 		}
 
 		private async void PijamasSeparadosEnPdf() {
 
 			List<Pijama.HojaPijama> listaPijamas = new List<Pijama.HojaPijama>();
-			BtCrearPdfAbierto = false;
 			try {
 				double num = 1;
 				await Task.Run(() => {
@@ -609,7 +605,6 @@ namespace Orion.ViewModels {
 				Mensajes.VerError("CalendariosCommands.PijamasSeparadosEnPdf", ex);
 			} finally {
 				App.Global.FinalizarProgreso();
-				BtCrearPdfAbierto = false;
 			}
 		}
 
@@ -663,8 +658,6 @@ namespace Orion.ViewModels {
 
 		private void DetectarFallos() {
 
-			BtAccionesAbierto = false;
-
 			Task.Run(() => {
 				try {
 					// Mostramos la barra de progreso y le asignamos el texto
@@ -700,7 +693,6 @@ namespace Orion.ViewModels {
 
 		private void CambiarJDPorDS() {
 
-			BtAccionesAbierto = false;
 			int numero = 0;
 			foreach (object obj in VistaCalendarios) {
 				Calendario cal = obj as Calendario;
@@ -864,7 +856,6 @@ namespace Orion.ViewModels {
 
 		private async void CalendariosEnPDF2() {
 
-			BtCrearPdfAbierto = false;
 			// Creamos el libro a usar.
 			Workbook libro = null;
 			try {
@@ -872,7 +863,7 @@ namespace Orion.ViewModels {
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Pedimos el archivo donde guardarlo.
 				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1}", FechaActual, App.Global.CentroActual.ToString());
-				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
 				nombreArchivo += ".pdf";
 				string ruta = Informes.GetRutaArchivo(TiposInforme.Calendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
@@ -890,13 +881,12 @@ namespace Orion.ViewModels {
 
 		private async void CalendariosEnPDF() {
 
-			BtCrearPdfAbierto = false;
 			try {
 				// Activamos la barra de progreso.
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Pedimos el archivo donde guardarlo.
 				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1}", FechaActual, App.Global.CentroActual.ToString());
-				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
 				nombreArchivo += ".pdf";
 				string ruta = Informes.GetRutaArchivo(TiposInforme.Calendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
@@ -939,7 +929,6 @@ namespace Orion.ViewModels {
 
 		private async void CalendariosEnPdfConFallos2() {
 
-			BtCrearPdfAbierto = false;
 			// Creamos el libro a usar.
 			Workbook libro = null;
 			try {
@@ -947,7 +936,7 @@ namespace Orion.ViewModels {
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Pedimos el archivo donde guardarlo.
 				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1} - Fallos", FechaActual, App.Global.CentroActual.ToString());
-				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
 				nombreArchivo += ".pdf";
 				string ruta = Informes.GetRutaArchivo(TiposInforme.FallosCalendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
@@ -966,13 +955,12 @@ namespace Orion.ViewModels {
 
 		private async void CalendariosEnPdfConFallos() {
 
-			BtCrearPdfAbierto = false;
 			try {
 				// Activamos la barra de progreso.
 				App.Global.IniciarProgreso("Creando PDF...");
 				// Pedimos el archivo donde guardarlo.
 				string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1} - Fallos", FechaActual, App.Global.CentroActual.ToString());
-				if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+				if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
 				nombreArchivo += ".pdf";
 				string ruta = Informes.GetRutaArchivo(TiposInforme.FallosCalendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
 				if (ruta != "") {
@@ -995,33 +983,33 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region ACCIONES POR LOTES
-		// Comando
-		private ICommand _cmdaccionesporlotes;
-		public ICommand cmdAccionesPorLotes {
-			get {
-				if (_cmdaccionesporlotes == null) _cmdaccionesporlotes = new RelayCommand(p => AccionesPorLotes(), p => PuedeAccionesPorLotes());
-				return _cmdaccionesporlotes;
-			}
-		}
+		//#region ACCIONES POR LOTES
+		//// Comando
+		//private ICommand _cmdaccionesporlotes;
+		//public ICommand cmdAccionesPorLotes {
+		//	get {
+		//		if (_cmdaccionesporlotes == null) _cmdaccionesporlotes = new RelayCommand(p => AccionesPorLotes(), p => PuedeAccionesPorLotes());
+		//		return _cmdaccionesporlotes;
+		//	}
+		//}
 
-		private bool PuedeAccionesPorLotes() {
-			if (VistaCalendarios != null && VistaCalendarios.Count > 1) return true;
-			return false;
-		}
+		//private bool PuedeAccionesPorLotes() {
+		//	if (VistaCalendarios != null && VistaCalendarios.Count > 1) return true;
+		//	return false;
+		//}
 
-		private void AccionesPorLotes() {
+		//private void AccionesPorLotes() {
 
-			BtAccionesAbierto = false;
+		//	BtAccionesAbierto = false;
 
-			if (VisibilidadAccionesLotes == Visibility.Visible) {
-				VisibilidadAccionesLotes = Visibility.Collapsed;
-			} else {
-				VisibilidadAccionesLotes = Visibility.Visible;
-			}
+		//	if (VisibilidadAccionesLotes == Visibility.Visible) {
+		//		VisibilidadAccionesLotes = Visibility.Collapsed;
+		//	} else {
+		//		VisibilidadAccionesLotes = Visibility.Visible;
+		//	}
 
-		}
-		#endregion
+		//}
+		//#endregion
 
 
 		#region APLICAR ACCION LOTES
@@ -1089,7 +1077,6 @@ namespace Orion.ViewModels {
 				}
 			}
 			//TODO: Implementar.
-			VisibilidadAccionesLotes = Visibility.Collapsed;
 
 		}
 		#endregion
@@ -1587,7 +1574,6 @@ namespace Orion.ViewModels {
             //List<Pijama.HojaPijama> listaPijamas = new List<Pijama.HojaPijama>();
             List<EstadisticaCalendario> listaEstadisticas = new List<EstadisticaCalendario>();
 
-            BtCrearPdfAbierto = false;
             try {
                 double num = 1;
                 App.Global.IniciarProgreso($"Recopilando...");
@@ -1666,7 +1652,7 @@ namespace Orion.ViewModels {
                 App.Global.IniciarProgreso("Creando PDF...");
                 // Pedimos el archivo donde guardarlo.
                 string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1} - Estadisticas Calendarios", FechaActual, App.Global.CentroActual.ToString());
-                if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+                if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
                 nombreArchivo += ".pdf";
                 //TODO: Cambiar tipo de informe.
                 string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasCalendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
@@ -1684,7 +1670,6 @@ namespace Orion.ViewModels {
                 Mensajes.VerError("CalendariosCommands.PdfEstadisticas", ex);
             } finally {
                 App.Global.FinalizarProgreso();
-                BtCrearPdfAbierto = false;
             }
 
         }
@@ -1711,7 +1696,6 @@ namespace Orion.ViewModels {
         // Ejecución del comando
         private async void PdfEstadisticasMes() {
 
-            BtCrearPdfAbierto = false;
             try {
                 // Creamos las listas que se van a usar.
                 List<GraficoFecha> listaGraficos = null;
@@ -1732,7 +1716,7 @@ namespace Orion.ViewModels {
                 App.Global.IniciarProgreso("Creando PDF...");
                 // Pedimos el archivo donde guardarlo.
                 string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1} - Estadisticas Mes", FechaActual, App.Global.CentroActual.ToString());
-                if (TextoFiltros != "Ninguno") nombreArchivo += $" - ({TextoFiltros})";
+                if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
                 nombreArchivo += ".pdf";
                 string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasCalendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
                 if (ruta != "") {
@@ -1748,7 +1732,6 @@ namespace Orion.ViewModels {
                 Mensajes.VerError("CalendariosCommands.EstadisticasMes", ex);
             } finally {
                 App.Global.FinalizarProgreso();
-                BtCrearPdfAbierto = false;
             }
 
 
@@ -1756,29 +1739,29 @@ namespace Orion.ViewModels {
 		#endregion
 
 
-		#region ABRIR PANEL FECHA
-		// Comando
-		private ICommand _abrirpanelfecha;
-		public ICommand cmdAbrirPanelFecha
-		{
-			get
-			{
-				if (_abrirpanelfecha == null) _abrirpanelfecha = new RelayCommand(p => AbrirPanelFecha());
-				return _abrirpanelfecha;
-			}
-		}
+		//#region ABRIR PANEL FECHA
+		//// Comando
+		//private ICommand _abrirpanelfecha;
+		//public ICommand cmdAbrirPanelFecha
+		//{
+		//	get
+		//	{
+		//		if (_abrirpanelfecha == null) _abrirpanelfecha = new RelayCommand(p => AbrirPanelFecha());
+		//		return _abrirpanelfecha;
+		//	}
+		//}
 
-		// Ejecución del comando
-		private void AbrirPanelFecha()
-		{
-			if (VisibilidadPanelFecha == Visibility.Visible) {
-				VisibilidadPanelFecha = Visibility.Collapsed;
-			} else {
-				FechaCalendarios = FechaActual;
-				VisibilidadPanelFecha = Visibility.Visible;
-			}
-		}
-		#endregion
+		//// Ejecución del comando
+		//private void AbrirPanelFecha()
+		//{
+		//	if (VisibilidadPanelFecha == Visibility.Visible) {
+		//		VisibilidadPanelFecha = Visibility.Collapsed;
+		//	} else {
+		//		FechaCalendarios = FechaActual;
+		//		VisibilidadPanelFecha = Visibility.Visible;
+		//	}
+		//}
+		//#endregion
 
 
 		//#region COMANDO ACTIVAR BOTON GRÁFICO ALTERNATIVO

@@ -348,42 +348,43 @@
                     </StackPanel>
                 </xceed:DropDownButton.Content>
                 <xceed:DropDownButton.DropDownContent>
-                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue">
+                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue"
+							DataContext="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM}">
                         <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
                             <StackPanel Orientation="Vertical">
 
                                 <!--BOTÓN FILTRAR LUN-JUE -->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
                                         Content="Lunes a Jueves" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.cmdAplicarFiltro}"
+                                        Command="{Binding cmdAplicarFiltro}"
                                         CommandParameter="LunJue" ToolTip="Muestra sólo los gráficos de Lunes a Jueves."
 										Click="BotonFiltrado_Click"/>
 
                                 <!--BOTÓN FILTRAR VIERNES -->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
                                         Content="Viernes" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.cmdAplicarFiltro}"
+                                        Command="{Binding cmdAplicarFiltro}"
                                         CommandParameter="Vie" ToolTip="Muestra sólo los gráficos de los Viernes."
 										Click="BotonFiltrado_Click"/>
 
                                 <!--BOTÓN FILTRAR SÁBADOS -->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                         Content="Sábados" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.cmdAplicarFiltro}"
+                                        Command="{Binding cmdAplicarFiltro}"
                                         CommandParameter="Sab" ToolTip="Muestra sólo los gráficos de los sábados."
 										Click="BotonFiltrado_Click"/>
 
                                 <!--BOTÓN FILTRAR FESTIVOS-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                         Content="Domingos y Festivos" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.cmdAplicarFiltro}"
+                                        Command="{Binding cmdAplicarFiltro}"
                                         CommandParameter="Fes" ToolTip="Muestra sólo los gráficos de los domingos y festivos."
 										Click="BotonFiltrado_Click"/>
 
                                 <!--BOTÓN FILTRAR MODIFICADOS-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                         Content="Gráficos Modificados" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                        Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.cmdAplicarFiltro}"
+                                        Command="{Binding cmdAplicarFiltro}"
                                         CommandParameter="Modificados" Click="BotonFiltrado_Click"
 										ToolTip="Muestra sólo los gráficos que son diferentes a los del grupo con los que se han comparado."/>
                                 

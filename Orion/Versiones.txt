@@ -8,9 +8,15 @@ PROYECTO ORIÓN
 
 		Sin Publicar
 
+			- 
+
+
+		02 de Abril de 2019
+
 			- Segunda fase del desacople del ViewModel de la Vista.
 
-			- 
+			- Se corrige el problema que hacía que se ignorara el gráfico alternativo al generar el pijama si
+			  el gráfico del día no existía en el grupo de gráficos correspondiente.
 
 
 		01 de Abril de 2019

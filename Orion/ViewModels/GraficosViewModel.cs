@@ -343,8 +343,6 @@ namespace Orion.ViewModels
 		}
 
 
-
-
 		public GrupoGraficos GrupoSeleccionado {
 			get { return _gruposeleccionado; }
 			set {
@@ -510,28 +508,28 @@ namespace Orion.ViewModels
 		}
 
 
-		private int _columnaactual = -1;
-		public int ColumnaActual {
-			get { return _columnaactual; }
-			set {
-				if (_columnaactual != value) {
-					_columnaactual = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//private int _columnaactual = -1;
+		//public int ColumnaActual {
+		//	get { return _columnaactual; }
+		//	set {
+		//		if (_columnaactual != value) {
+		//			_columnaactual = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
-		private int _filaactual = -1;
-		public int FilaActual {
-			get { return _filaactual; }
-			set {
-				if (_filaactual != value) {
-					_filaactual = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//private int _filaactual = -1;
+		//public int FilaActual {
+		//	get { return _filaactual; }
+		//	set {
+		//		if (_filaactual != value) {
+		//			_filaactual = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
 		#endregion

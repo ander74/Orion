@@ -247,7 +247,7 @@ namespace Orion.ViewModels
 					_listacalendarios = value;
 					_listacalendarios.CollectionChanged += ListaCalendarios_CollectionChanged;
 					VistaCalendarios = new ListCollectionView(ListaCalendarios);
-					TextoFiltros = "Ninguno";
+					FiltroAplicado = "Ninguno";
 					PropiedadCambiada();
 					PropiedadCambiada(nameof(ExcesoJornada));
 				}
@@ -299,15 +299,15 @@ namespace Orion.ViewModels
 			set {
 				if (_fechaactual != value) {
 					_fechaactual = value;
-					VisibilidadPanelFecha = Visibility.Collapsed;
 					if (HayCambios) GuardarCalendarios();
 					CargarCalendarios();
+					FechaCalendarios = _fechaactual;
 					PropiedadCambiada();
 					PropiedadCambiada(nameof(MesActual));
 					PropiedadCambiada(nameof(AñoActual));
-					PropiedadCambiada(nameof(VisibilidadColumna29));
-					PropiedadCambiada(nameof(VisibilidadColumna30));
-					PropiedadCambiada(nameof(VisibilidadColumna31));
+					PropiedadCambiada(nameof(ExisteDia29));
+					PropiedadCambiada(nameof(ExisteDia30));
+					PropiedadCambiada(nameof(ExisteDia31));
 				}
 			}
 		}
@@ -355,84 +355,91 @@ namespace Orion.ViewModels
 		}
 
 
-		private Visibility _visibilidadtablacalendarios = Visibility.Visible;
-		public Visibility VisibilidadTablaCalendarios {
-			get { return _visibilidadtablacalendarios; }
+		//private Visibility _visibilidadtablacalendarios = Visibility.Visible;
+		//[Obsolete("Esto hay que cambiarlo y ponerlo de alguna otra manera")]
+		//public Visibility VisibilidadTablaCalendarios {
+		//	get { return _visibilidadtablacalendarios; }
+		//	set {
+		//		if (_visibilidadtablacalendarios != value) {
+		//			_visibilidadtablacalendarios = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
+
+
+		//public Visibility VisibilidadPanelFiltros{
+		//	get {
+		//		if (TextoFiltros == "Ninguno") return Visibility.Collapsed;
+		//		return Visibility.Visible;
+		//	}
+		//}
+
+
+
+		//private Visibility _visibilidadaccioneslotes = Visibility.Collapsed;
+		//public Visibility VisibilidadAccionesLotes {
+		//	get { return _visibilidadaccioneslotes; }
+		//	set {
+		//		if (_visibilidadaccioneslotes != value) {
+		//			_visibilidadaccioneslotes = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
+
+
+		//private bool _btfiltrarabierto;
+		//public bool BtFiltrarAbierto {
+		//	get { return _btfiltrarabierto; }
+		//	set {
+		//		if (_btfiltrarabierto != value) {
+		//			_btfiltrarabierto = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
+
+
+		//private bool _btaccionesabierto;
+		//public bool BtAccionesAbierto {
+		//	get { return _btaccionesabierto; }
+		//	set {
+		//		if (_btaccionesabierto != value) {
+		//			_btaccionesabierto = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
+
+
+		//private bool _btcrearpdfabierto;
+		//public bool BtCrearPdfAbierto {
+		//	get { return _btcrearpdfabierto; }
+		//	set {
+		//		if (_btcrearpdfabierto != value) {
+		//			_btcrearpdfabierto = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
+
+
+		private string _filtroAplicado = "Ninguno";
+		public string FiltroAplicado {
+			get { return _filtroAplicado; }
 			set {
-				if (_visibilidadtablacalendarios != value) {
-					_visibilidadtablacalendarios = value;
+				if (_filtroAplicado != value) {
+					_filtroAplicado = value;
 					PropiedadCambiada();
+					PropiedadCambiada(nameof(HayFiltroAplicado));
 				}
 			}
 		}
 
 
-		public Visibility VisibilidadPanelFiltros{
-			get {
-				if (TextoFiltros == "Ninguno") return Visibility.Collapsed;
-				return Visibility.Visible;
-			}
-		}
-
-
-		private Visibility _visibilidadaccioneslotes = Visibility.Collapsed;
-		public Visibility VisibilidadAccionesLotes {
-			get { return _visibilidadaccioneslotes; }
-			set {
-				if (_visibilidadaccioneslotes != value) {
-					_visibilidadaccioneslotes = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private bool _btfiltrarabierto;
-		public bool BtFiltrarAbierto {
-			get { return _btfiltrarabierto; }
-			set {
-				if (_btfiltrarabierto != value) {
-					_btfiltrarabierto = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private bool _btaccionesabierto;
-		public bool BtAccionesAbierto {
-			get { return _btaccionesabierto; }
-			set {
-				if (_btaccionesabierto != value) {
-					_btaccionesabierto = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private bool _btcrearpdfabierto;
-		public bool BtCrearPdfAbierto {
-			get { return _btcrearpdfabierto; }
-			set {
-				if (_btcrearpdfabierto != value) {
-					_btcrearpdfabierto = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private string _textofiltros = "Ninguno";
-		public string TextoFiltros {
-			get { return _textofiltros; }
-			set {
-				if (_textofiltros != value) {
-					_textofiltros = value;
-					PropiedadCambiada();
-					PropiedadCambiada(nameof(VisibilidadPanelFiltros));
-				}
-			}
+		public bool HayFiltroAplicado {
+			get => !FiltroAplicado.Equals("Ninguno");
 		}
 
 
@@ -472,37 +479,37 @@ namespace Orion.ViewModels
 		}
 
 
-		private Visibility _visibilidadpanelfecha = Visibility.Collapsed;
-		public Visibility VisibilidadPanelFecha
-		{
-			get { return _visibilidadpanelfecha; }
-			set
-			{
-				if (_visibilidadpanelfecha != value)
-				{
-					_visibilidadpanelfecha = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//private Visibility _visibilidadpanelfecha = Visibility.Collapsed;
+		//public Visibility VisibilidadPanelFecha
+		//{
+		//	get { return _visibilidadpanelfecha; }
+		//	set
+		//	{
+		//		if (_visibilidadpanelfecha != value)
+		//		{
+		//			_visibilidadpanelfecha = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
 
-		public bool VisibilidadColumna29 {
+		public bool ExisteDia29 {
 			get {
 				return !(DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month) < 29);
 			}
 		}
 
 
-		public bool VisibilidadColumna30 {
+		public bool ExisteDia30 {
 			get {
 				return !(DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month) < 30);
 			}
 		}
 
 
-		public bool VisibilidadColumna31 {
+		public bool ExisteDia31 {
 			get {
 				return !(DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month) < 31);
 			}

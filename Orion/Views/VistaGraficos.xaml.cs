@@ -7,6 +7,7 @@
 #endregion
 namespace Orion.Views {
 
+	using System;
 	using System.Windows;
 	using System.Windows.Controls;
 	using System.Windows.Input;
@@ -98,10 +99,9 @@ namespace Orion.Views {
 		// ====================================================================================================
 
 
-		// Al hacer doble click en la etiqueta GRUPO DE GRÁFICOS
-		private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
-			((GlobalVM)this.DataContext).VisibilidadProgramador = Visibility.Visible;
-		}
+		// ====================================================================================================
+		#region GESTIÓN VALIDEZ GRUPOS
+		// ====================================================================================================
 
 		private void QCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e) {
 			PanelValidezGrupo.Visibility = Visibility.Collapsed;
@@ -110,5 +110,17 @@ namespace Orion.Views {
 		private void BotonValidezGrupo_Click(object sender, RoutedEventArgs e) {
 			PanelValidezGrupo.Visibility = Visibility.Visible;
 		}
+
+		#endregion
+		// ====================================================================================================
+
+
+		// Al hacer doble click en la etiqueta GRUPO DE GRÁFICOS
+		[Obsolete("Esto se tiene que hacer de otra manera")]
+		private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
+			((GlobalVM)this.DataContext).VisibilidadProgramador = Visibility.Visible;
+		}
+
+
 	}
 }

@@ -246,26 +246,26 @@ namespace Orion.ViewModels {
 		}
 
 
-		public bool PanelRegulacionesFijo {
-			get { return _panelregulacionesfijo; }
-			set {
-				if (_panelregulacionesfijo != value) {
-					_panelregulacionesfijo = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//public bool PanelRegulacionesFijo {
+		//	get { return _panelregulacionesfijo; }
+		//	set {
+		//		if (_panelregulacionesfijo != value) {
+		//			_panelregulacionesfijo = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
-		public Visibility PanelRegulacionesVisibilidad {
-			get { return _panelregulacionesvisibilidad; }
-			set {
-				if (_panelregulacionesvisibilidad != value) {
-					_panelregulacionesvisibilidad = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//public Visibility PanelRegulacionesVisibilidad {
+		//	get { return _panelregulacionesvisibilidad; }
+		//	set {
+		//		if (_panelregulacionesvisibilidad != value) {
+		//			_panelregulacionesvisibilidad = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
 		public bool HayCambios {
@@ -291,16 +291,16 @@ namespace Orion.ViewModels {
 		}
 
 
-		private bool _btaccionesabierto;
-		public bool BtAccionesAbierto {
-			get { return _btaccionesabierto; }
-			set {
-				if (_btaccionesabierto != value) {
-					_btaccionesabierto = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//private bool _btaccionesabierto;
+		//public bool BtAccionesAbierto {
+		//	get { return _btaccionesabierto; }
+		//	set {
+		//		if (_btaccionesabierto != value) {
+		//			_btaccionesabierto = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
 		#endregion

@@ -232,9 +232,11 @@ namespace Orion.Pijama {
 							if (ej != TimeSpan.Zero) {
 								if (grafico != null) grafico.Final += ej;
 							}
-							if (acumuladasAlt.HasValue) grafico.Acumuladas = acumuladasAlt.Value;
-							resultado.HorasAcumuladas += grafico.Acumuladas;
+						} else {
+							grafico = new GraficoBase();
 						}
+						if (acumuladasAlt.HasValue) grafico.Acumuladas = acumuladasAlt.Value;
+						resultado.HorasAcumuladas += grafico.Acumuladas;
 						lector2.Close();
 					}
 					lector.Close();
