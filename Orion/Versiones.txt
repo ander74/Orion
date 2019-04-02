@@ -8,6 +8,8 @@ PROYECTO ORIÓN
 
 		Sin Publicar
 
+			- Segunda fase del desacople del ViewModel de la Vista.
+
 			- 
 
 

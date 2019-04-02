@@ -57,6 +57,7 @@ namespace Orion.ViewModels {
 			//	return;
 			//}
 			//ListaFestivos = BdFestivos.GetFestivosPorAño(AñoFestivos);
+			if (App.Global.CadenaConexion == null) return;
 			ListaPluses = BdPluses.GetPluses();
 			ListaPluses.ItemPropertyChanged += ListaPluses_ItemPropertyChanged;
 		}
@@ -71,7 +72,7 @@ namespace Orion.ViewModels {
 			//	BdFestivos.BorrarFestivos(_listaborrados);
 			//	_listaborrados.Clear();
 			//}
-			if (ListaPluses != null && ListaPluses.Any())
+			if (ListaPluses != null && ListaPluses.Any() && App.Global.CadenaConexion != null)
 			{
 				BdPluses.GuardarPluses(ListaPluses.Where(item => item.Nuevo || item.Modificado));
 			}

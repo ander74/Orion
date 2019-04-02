@@ -47,7 +47,7 @@
 		{
 			if (App.Global.CadenaConexion == null)
 			{
-				ListaFestivos.Clear();
+				ListaFestivos?.Clear();
 				return;
 			}
 			ListaFestivos = new NotifyCollection<Festivo>(BdFestivos.GetFestivos());

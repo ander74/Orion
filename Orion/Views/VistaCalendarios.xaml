@@ -337,7 +337,7 @@
 
             <!--BOTON HOJA PIJAMA-->
             <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdAbrirPijama}"
-                    CommandParameter="{Binding ElementName=TablaCalendarios}">
+                    CommandParameter="{Binding ElementName=TablaCalendarios, Path=CurrentColumn.Header, Mode=TwoWay}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/HojaPijama.png" Style="{StaticResource EstiloImagen}"/>
@@ -777,8 +777,9 @@
 							AlternationCount="2" 
 							AutoGenerateColumns="False" 
 							Background="Transparent" 
-							CanUserAddRows="True"
-							CanUserReorderColumns="False" 
+							CanUserReorderColumns="False"
+							DobleClick="{Binding CalendariosVM.cmdAbrirPijama}"
+							DobleClickParametro="{Binding ElementName=TablaCalendarios, Path=CurrentColumn.Header, Mode=TwoWay}"
 							FontSize="12"
 							Grid.Column="0" 
 							Grid.ColumnSpan="2" 

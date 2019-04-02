@@ -77,13 +77,13 @@ namespace Orion.Controls {
 
 
 
-		public object ParametroDobleClick {
-			get { return (object)GetValue(ParametroDobleClickProperty); }
-			set { SetValue(ParametroDobleClickProperty, value); }
+		public object DobleClickParametro {
+			get { return (object)GetValue(DobleClickParametroProperty); }
+			set { SetValue(DobleClickParametroProperty, value); }
 		}
 
-		public static readonly DependencyProperty ParametroDobleClickProperty =
-			DependencyProperty.Register("ParametroDobleClick", typeof(object), typeof(QDataGrid), new PropertyMetadata());
+		public static readonly DependencyProperty DobleClickParametroProperty =
+			DependencyProperty.Register("DobleClickParametro", typeof(object), typeof(QDataGrid), new PropertyMetadata());
 
 
 
@@ -224,8 +224,8 @@ namespace Orion.Controls {
 
 
 		protected override void OnMouseDoubleClick(MouseButtonEventArgs e) {
-			if (DobleClick?.CanExecute(ParametroDobleClick) ?? false) {
-				DobleClick.Execute(ParametroDobleClick);
+			if (DobleClick?.CanExecute(DobleClickParametro) ?? false) {
+				DobleClick.Execute(DobleClickParametro);
 				e.Handled = true;
 			}
 			base.OnMouseDoubleClick(e);

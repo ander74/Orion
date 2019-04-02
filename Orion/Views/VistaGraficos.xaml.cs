@@ -79,21 +79,36 @@ namespace Orion.Views {
 		// ====================================================================================================
 
 
-		// Al terminar de editar una fila de la tabla valoraciones
-		private void TablaValoraciones_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e) {
-			GraficosViewModel VM = ((GlobalVM)this.DataContext).GraficosVM;
-			VM.cmdEditarFilaValoracion.Execute(TablaValoraciones);
+		// ====================================================================================================
+		#region GESTIÓN BOTONES DESPLEGABLES
+		// ====================================================================================================
+
+		// AL PULSAR UNO DE LOS BOTONES DEL DESPLEGABLE FILTRAR
+		private void BotonFiltrado_Click(object sender, RoutedEventArgs e) {
+			BtDropFiltros.IsOpen = false;
 		}
 
-		// Al cambiar una fecha en el calendario
-		private void Calendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e) {
-			PanelValidezGrupo.Visibility = Visibility.Collapsed;
-			((GlobalVM)this.DataContext).GraficosVM.HayCambios = true;
+		// AL PULSAR UNO DE LOS BOTONES DEL DESPLEGABLE ACCIONES
+		private void BotonAcciones_Click(object sender, RoutedEventArgs e) {
+			BtDropAcciones.IsOpen = false;
 		}
+
+
+		#endregion
+		// ====================================================================================================
+
 
 		// Al hacer doble click en la etiqueta GRUPO DE GRÁFICOS
 		private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 			((GlobalVM)this.DataContext).VisibilidadProgramador = Visibility.Visible;
+		}
+
+		private void QCalendar_SelectedDatesChanged(object sender, SelectionChangedEventArgs e) {
+			PanelValidezGrupo.Visibility = Visibility.Collapsed;
+		}
+
+		private void BotonValidezGrupo_Click(object sender, RoutedEventArgs e) {
+			PanelValidezGrupo.Visibility = Visibility.Visible;
 		}
 	}
 }

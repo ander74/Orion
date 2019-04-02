@@ -91,7 +91,7 @@
 					   MouseDoubleClick="Label_MouseDoubleClick"/>
 				<Button x:Name="BotonValidezGrupo" FontFamily="Bookman Old Style" FontSize="20" HorizontalAlignment="Center"
                         Style="{StaticResource EstiloBotonValidezFecha}" Width="Auto" Height="Auto" Padding="15, 3"
-                        Command="{Binding GraficosVM.cmdModificarFechaGrupo}"
+                        Command="{Binding GraficosVM.cmdModificarFechaGrupo}" Click="BotonValidezGrupo_Click"
                         Content="{Binding GraficosVM.GrupoSeleccionado.Validez, Converter={StaticResource cnvFecha}}"/>
             </StackPanel>
 
@@ -140,7 +140,7 @@
             </Button>
 
             <!-- DESPLEGABLE ACCIONES -->
-            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" IsOpen="{Binding GraficosVM.BtAccionesAbierto, Mode=TwoWay}">
+            <xceed:DropDownButton x:Name="BtDropAcciones" Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/Engranajes.png" Style="{StaticResource EstiloImagen}"/>
@@ -155,7 +155,7 @@
 
                                 <!-- BOTON CALCULAR TABLA -->
                                 <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64"
-                                        Command="{Binding cmdCalcularTabla}">
+                                        Command="{Binding cmdCalcularTabla}" Click="BotonAcciones_Click">
                                     <Button.Content>
                                         <StackPanel Orientation="Vertical">
                                             <Image Source="Imagenes/CalcularTabla.png" Style="{StaticResource EstiloImagen}"/>
@@ -166,7 +166,7 @@
 
 								<!-- BOTON DEDUCIR DÍA SEMANA -->
 								<Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64"
-                                        Command="{Binding cmdDeducirDiaSemana}">
+                                        Command="{Binding cmdDeducirDiaSemana}" Click="BotonAcciones_Click">
 									<Button.Content>
 										<StackPanel Orientation="Vertical">
 											<Image Source="Imagenes/Calendario.png" Style="{StaticResource EstiloImagen}"/>
@@ -176,9 +176,8 @@
 								</Button>
 
 								<!-- DESPLEGABLE COMPARAR GRUPO -->
-                                <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" VerticalContentAlignment="Center"
-                                                       Height="80" Width="64"
-                                                      IsOpen="{Binding BtCompararAbierto, Mode=TwoWay}">
+                                <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}"
+													  VerticalContentAlignment="Center" Height="80" Width="64">
                                     <xceed:DropDownButton.Content>
                                         <StackPanel Orientation="Vertical">
                                             <Image Source="Imagenes/Comparar.png" Style="{StaticResource EstiloImagen}"/>
@@ -204,7 +203,7 @@
                                                     <!--BOTÓN COMPARAR -->
                                                     <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10"
                                                         Content="Comparar" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
-                                                        Command="{Binding cmdCompararGrupo}"
+                                                        Command="{Binding cmdCompararGrupo}" Click="BotonAcciones_Click"
                                                         ToolTip="Compara el grupo de gráficos actual con el grupo de gráficos seleccionado."/>
 
                                                 </StackPanel>
@@ -217,8 +216,7 @@
                                 <TextBlock Height="2" Margin="5,3" Background="LightGray"/>
 
                                 <!-- DESPLEGABLE COLUMNAS -->
-                                <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" Height="80" Width="64"
-                                                      IsOpen="{Binding GraficosVM.BtColumnasAbierto, Mode=TwoWay}">
+                                <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" Height="80" Width="64">
                                     <xceed:DropDownButton.Content>
                                         <StackPanel Orientation="Vertical">
                                             <Image Source="Imagenes/SeleccionarColumna.png" Style="{StaticResource EstiloImagen}"/>
@@ -273,7 +271,8 @@
                                 <TextBlock Height="2" Margin="5,3" Background="LightGray"/>
 
 								<!--BOTON ALTERNAR SELECCION TABLA GRAFICOS -->
-								<ToggleButton Height="80" Width="64" Command="{Binding Source={x:Reference TablaGraficos}, Path=ComandoAlternarModoSeleccion}">
+								<ToggleButton Height="80" Width="64" Command="{Binding Source={x:Reference TablaGraficos}, Path=ComandoAlternarModoSeleccion}"
+											   Click="BotonAcciones_Click">
 									<ToggleButton.Style>
 										<Style BasedOn="{StaticResource EstiloToggleBarra}" TargetType="ToggleButton">
 											<Style.Triggers>
@@ -341,8 +340,8 @@
 			</Button>
 
 			<!-- DESPLEGABLE FILTRAR GRÁFICOS -->
-            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" IsOpen="{Binding GraficosVM.BtFiltrarAbierto, Mode=TwoWay}">
-                <xceed:DropDownButton.Content>
+			<xceed:DropDownButton x:Name="BtDropFiltros" Style="{StaticResource EstiloBotonDesplegable}">
+				<xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/Filtrar.png" Style="{StaticResource EstiloImagen}"/>
                         <TextBlock Name="TxtFiltrar" Text="Filtrar Gráficos" FontSize="10" FontFamily="Arial" TextWrapping="Wrap" TextAlignment="Center"/>
@@ -357,31 +356,36 @@
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
                                         Content="Lunes a Jueves" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
                                         Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.cmdAplicarFiltro}"
-                                        CommandParameter="LunJue" ToolTip="Muestra sólo los gráficos de Lunes a Jueves."/>
+                                        CommandParameter="LunJue" ToolTip="Muestra sólo los gráficos de Lunes a Jueves."
+										Click="BotonFiltrado_Click"/>
 
                                 <!--BOTÓN FILTRAR VIERNES -->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,3" Padding="20,10" 
                                         Content="Viernes" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
                                         Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.cmdAplicarFiltro}"
-                                        CommandParameter="Vie" ToolTip="Muestra sólo los gráficos de los Viernes."/>
+                                        CommandParameter="Vie" ToolTip="Muestra sólo los gráficos de los Viernes."
+										Click="BotonFiltrado_Click"/>
 
                                 <!--BOTÓN FILTRAR SÁBADOS -->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                         Content="Sábados" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
                                         Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.cmdAplicarFiltro}"
-                                        CommandParameter="Sab" ToolTip="Muestra sólo los gráficos de los sábados."/>
+                                        CommandParameter="Sab" ToolTip="Muestra sólo los gráficos de los sábados."
+										Click="BotonFiltrado_Click"/>
 
                                 <!--BOTÓN FILTRAR FESTIVOS-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                         Content="Domingos y Festivos" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
                                         Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.cmdAplicarFiltro}"
-                                        CommandParameter="Fes" ToolTip="Muestra sólo los gráficos de los domingos y festivos."/>
+                                        CommandParameter="Fes" ToolTip="Muestra sólo los gráficos de los domingos y festivos."
+										Click="BotonFiltrado_Click"/>
 
                                 <!--BOTÓN FILTRAR MODIFICADOS-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                         Content="Gráficos Modificados" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
                                         Command="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM.cmdAplicarFiltro}"
-                                        CommandParameter="Modificados" ToolTip="Muestra sólo los gráficos que son diferentes a los del grupo con los que se han comparado."/>
+                                        CommandParameter="Modificados" Click="BotonFiltrado_Click"
+										ToolTip="Muestra sólo los gráficos que son diferentes a los del grupo con los que se han comparado."/>
                                 
                             </StackPanel>
                         </Border>
@@ -465,7 +469,7 @@
         <Image Source="Imagenes\Orion.png" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.1" Grid.Row="2"/>
 
         <!-- PANEL DATOS GRÁFICOS -->
-        <Grid Grid.Row="1" Visibility="{Binding GraficosVM.VisibilidadPanelFiltros}">
+        <Grid Grid.Row="1" Visibility="{Binding GraficosVM.HayFiltroAplicado, Converter={StaticResource cnvBoolToVisibility}}">
             <Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3" Padding="3" CornerRadius="4"
                     Background="{StaticResource DegradadoCeleste1}">
 
@@ -474,7 +478,7 @@
                         <StackPanel Orientation="Horizontal">
                             <!-- FILTRO APLICADO -->
                             <TextBlock Margin="4,0" VerticalAlignment="Center" FontWeight="Bold" Text="Filtro aplicado:"/>
-                            <TextBlock Margin="4,0" Width="300" VerticalAlignment="Center" Text="{Binding GraficosVM.TextoFiltros}"/>
+                            <TextBlock Margin="4,0" Width="300" VerticalAlignment="Center" Text="{Binding GraficosVM.FiltroAplicado}"/>
                         </StackPanel>
                     </Label>
 
@@ -811,7 +815,6 @@
 										SelectionMode="Single" SelectionUnit="FullRow" HeadersVisibility="Column"
 										CanUserResizeRows="False" CanUserReorderColumns="False" HorizontalAlignment="Left" CanUserSortColumns="False"
 										Style="{StaticResource EstiloGridValoraciones}" Background="{StaticResource GrisMuyClaro}" FontSize="10"
-										RowEditEnding="TablaValoraciones_RowEditEnding"
 										CanUserAddRows="{Binding GraficosVM.HayGrafico}">
 
 						<controls:QDataGrid.Columns>
@@ -836,7 +839,7 @@
         <!-- ==================================================================================================== -->
         <StackPanel Grid.Row="2" Orientation="Vertical">
             <Border x:Name="PanelValidezGrupo" BorderBrush="DarkBlue" BorderThickness="1" CornerRadius="5" Padding="10" Margin="150,0,0,0" 
-                    HorizontalAlignment="Left" Visibility="{Binding GraficosVM.VisibilidadPanelValidezGrupo, Mode=TwoWay}" Background="{StaticResource DegradadoCeleste1}">
+                    HorizontalAlignment="Left" Visibility="Collapsed" Background="{StaticResource DegradadoCeleste1}">
                 <StackPanel Orientation="Vertical">
                     
                     <!-- BARRA SUPERIOR -->
@@ -851,7 +854,7 @@
                     <controls:QCalendar Style="{StaticResource EstiloCalendario}" 
 										DisplayMode="Month" FirstDayOfWeek="Monday" SelectionMode="SingleDate"  Focusable="False"
 										SelectedDate="{Binding GraficosVM.GrupoSeleccionado.Validez, Mode=TwoWay}"
-										SelectedDatesChanged="Calendar_SelectedDatesChanged">
+										SelectedDatesChanged="QCalendar_SelectedDatesChanged">
 
                     </controls:QCalendar>
                 </StackPanel>

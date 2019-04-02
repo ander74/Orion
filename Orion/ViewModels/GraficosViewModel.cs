@@ -198,6 +198,72 @@ namespace Orion.ViewModels
 		}
 
 
+		private void _valoracionseleccionada_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+			if (e.PropertyName == "Linea") {
+				// Extraemos la línea
+				decimal linea = ValoracionSeleccionada.Linea;
+
+				// Si la línea es menor que cero...
+				if (linea < 0) {
+					// Cambiamos el signo.
+					linea = linea * -1;
+					// Si está entre 1000 y 1999...
+					if (linea >= 1000 && linea < 2000) {
+						// Extraemos el descanso.
+						int descanso = (int)(linea - 1000);
+						var indice = GraficoSeleccionado.ListaValoraciones.IndexOf(ValoracionSeleccionada);
+						if (indice > 0) {
+							ValoracionSeleccionada.Inicio = GraficoSeleccionado.ListaValoraciones[indice - 1].Final;
+						} else if (indice == 0 && !ValoracionSeleccionada.Inicio.HasValue) {
+							ValoracionSeleccionada.Inicio = GraficoSeleccionado.Inicio;
+						}
+						ValoracionSeleccionada.Linea = 0m;
+						ValoracionSeleccionada.Descripcion = "Descanso " + descanso.ToString() + " minutos.";
+						ValoracionSeleccionada.Final = ValoracionSeleccionada.Inicio + new TimeSpan(0, descanso, 0);
+					}
+					// Si la línea es mayor que cero.
+				} else if (linea > 0) {
+					// Creamos un itinerario.
+					Itinerario itinerario = null;
+					// Buscamos el itinerario.
+					try {
+						itinerario = BdItinerarios.GetItinerarioByNombre(linea);
+					} catch (Exception ex) {
+						Mensajes.VerError("GraficosViewModel.AñadirValoracion", ex);
+					}
+
+					var indice = GraficoSeleccionado.ListaValoraciones.IndexOf(ValoracionSeleccionada);
+					if (indice > 0) {
+						ValoracionSeleccionada.Inicio = GraficoSeleccionado.ListaValoraciones[indice - 1].Final;
+					} else if (indice == 0 && !ValoracionSeleccionada.Inicio.HasValue) {
+						ValoracionSeleccionada.Inicio = GraficoSeleccionado.Inicio;
+					}
+					ValoracionSeleccionada.Linea = linea;
+					// Si el itinerario no es nulo (existe)...
+					if (itinerario != null) {
+						ValoracionSeleccionada.Descripcion = itinerario.Descripcion;
+						ValoracionSeleccionada.Final = ValoracionSeleccionada.Inicio + new TimeSpan(0, itinerario.TiempoReal, 0);
+					} else {
+						ValoracionSeleccionada.Descripcion = "Línea desconocida.";
+						ValoracionSeleccionada.Final = ValoracionSeleccionada.Inicio;
+					}
+
+					// Si la línea es cero.
+				} else {
+					ValoracionSeleccionada.Final = ValoracionSeleccionada.Inicio;
+				}
+
+			}
+		}
+
+
+		private void _gruposeleccionado_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+			if (e.PropertyName == "Validez") {
+				HayCambios = true;
+			}
+		}
+
+
 		#endregion
 
 
@@ -260,61 +326,23 @@ namespace Orion.ViewModels
 		}
 
 
-		public Visibility VisibilidadPanelFiltros {
-			get {
-				if (TextoFiltros == "Ninguno") return Visibility.Collapsed;
-				return Visibility.Visible;
-			}
-		}
-
-
-		private bool _btfiltrarabierto;
-		public bool BtFiltrarAbierto {
-			get { return _btfiltrarabierto; }
+		private string _filtroAplicado = "Ninguno";
+		public string FiltroAplicado {
+			get { return _filtroAplicado; }
 			set {
-				if (_btfiltrarabierto != value) {
-					_btfiltrarabierto = value;
+				if (_filtroAplicado != value) {
+					_filtroAplicado = value;
 					PropiedadCambiada();
+					PropiedadCambiada(nameof(HayFiltroAplicado));
 				}
 			}
 		}
 
-
-		private bool _btcompararabierto;
-		public bool BtCompararAbierto {
-			get { return _btcompararabierto; }
-			set {
-				if (_btcompararabierto != value) {
-					_btcompararabierto = value;
-					PropiedadCambiada();
-				}
-			}
+		public bool HayFiltroAplicado {
+			get => FiltroAplicado != "Ninguno";
 		}
 
 
-		private bool _btaccionesabierto;
-		public bool BtAccionesAbierto {
-			get { return _btaccionesabierto; }
-			set {
-				if (_btaccionesabierto != value) {
-					_btaccionesabierto = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		private string _textofiltros = "Ninguno";
-		public string TextoFiltros {
-			get { return _textofiltros; }
-			set {
-				if (_textofiltros != value) {
-					_textofiltros = value;
-					PropiedadCambiada();
-					PropiedadCambiada(nameof(VisibilidadPanelFiltros));
-				}
-			}
-		}
 
 
 		public GrupoGraficos GrupoSeleccionado {
@@ -323,9 +351,12 @@ namespace Orion.ViewModels
 				if (_gruposeleccionado != value) {
 					GuardarGraficos();
 					_gruposeleccionado = value;
+					if (_gruposeleccionado != null) {
+						_gruposeleccionado.PropertyChanged += _gruposeleccionado_PropertyChanged;
+					}
 					CargarGraficos();
 					GraficoSeleccionado = null;
-					if (!PanelGruposFijo) PanelGruposVisibilidad = Visibility.Collapsed;
+					//if (!PanelGruposFijo) PanelGruposVisibilidad = Visibility.Collapsed;
 					PropiedadCambiada();
 					HayCambios = false; // Desconozco por qué se establece HayCambios en True cuando se llama a PropiedadCambiada.
 										// Como los gráficos quedan guardados, se establece de nuevo en False para evitar guardados innecesarios.
@@ -365,11 +396,13 @@ namespace Orion.ViewModels
 			set {
 				if (_valoracionseleccionada != value) {
 					_valoracionseleccionada = value;
+					if (_valoracionseleccionada != null) {
+						_valoracionseleccionada.PropertyChanged += _valoracionseleccionada_PropertyChanged;
+					}
 					PropiedadCambiada();
 				}
 			}
 		}
-
 
 		public bool HayGrafico {
 			get {
@@ -385,59 +418,48 @@ namespace Orion.ViewModels
 		}
 
 
-		public bool PanelGruposFijo {
-			get { return _panelgruposfijo; }
-			set {
-				if (_panelgruposfijo != value) {
-					_panelgruposfijo = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//public bool PanelGruposFijo {
+		//	get { return _panelgruposfijo; }
+		//	set {
+		//		if (_panelgruposfijo != value) {
+		//			_panelgruposfijo = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
-		public bool PanelValoracionesFijo {
-			get { return _panelvaloracionesfijo; }
-			set {
-				if (_panelvaloracionesfijo != value) {
-					_panelvaloracionesfijo = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//public bool PanelValoracionesFijo {
+		//	get { return _panelvaloracionesfijo; }
+		//	set {
+		//		if (_panelvaloracionesfijo != value) {
+		//			_panelvaloracionesfijo = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
-		public Visibility PanelGruposVisibilidad {
-			get { return _panelgruposvisibilidad; }
-			set {
-				if (_panelgruposvisibilidad != value) {
-					_panelgruposvisibilidad = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//public Visibility PanelGruposVisibilidad {
+		//	get { return _panelgruposvisibilidad; }
+		//	set {
+		//		if (_panelgruposvisibilidad != value) {
+		//			_panelgruposvisibilidad = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
-		public Visibility PanelValoracionesVisibilidad {
-			get { return _panelvaloracionesvisibilidad; }
-			set {
-				if (_panelvaloracionesvisibilidad != value) {
-					_panelvaloracionesvisibilidad = value;
-					PropiedadCambiada();
-				}
-			}
-		}
-
-
-		public Visibility VisibilidadPanelValidezGrupo {
-			get { return _visibilidadpanelvalidezgrupo; }
-			set {
-				if (_visibilidadpanelvalidezgrupo != value) {
-					_visibilidadpanelvalidezgrupo = value;
-					PropiedadCambiada();
-				}
-			}
-		}
+		//public Visibility PanelValoracionesVisibilidad {
+		//	get { return _panelvaloracionesvisibilidad; }
+		//	set {
+		//		if (_panelvaloracionesvisibilidad != value) {
+		//			_panelvaloracionesvisibilidad = value;
+		//			PropiedadCambiada();
+		//		}
+		//	}
+		//}
 
 
 		private DateTime _fechaestadisticas = new DateTime(DateTime.Today.Year, 1,1);

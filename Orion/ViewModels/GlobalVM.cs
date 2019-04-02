@@ -67,13 +67,13 @@ namespace Orion.ViewModels {
 			if (Configuracion.CarpetaInformes == "") Configuracion.CarpetaInformes = Path.Combine(Directory.GetCurrentDirectory(), "Informes");
 			if (Configuracion.CarpetaAyuda == "") Configuracion.CarpetaAyuda = Path.Combine(Directory.GetCurrentDirectory(), "Ayuda");
 			if (Configuracion.CarpetaCopiasSeguridad == "") Configuracion.CarpetaCopiasSeguridad = Path.Combine(Directory.GetCurrentDirectory(), "CopiasSeguridad");
-
+			if (Configuracion.CarpetaOrigenActualizar == "") Configuracion.CarpetaOrigenActualizar = App.RutaInicial;
 			// Creamos los servicios
 			mensajes = new MensajesServicio();
 			Informes = new InformesServicio();
-			
+
 			// Asignamos el centro actual.
-			CentroActual = (Centros)Configuracion.CentroInicial;
+			CentroActual = (Centros)Configuracion.CentroInicial;// == Centros.Desconocido ? Centros.Bilbao : (Centros)Configuracion.CentroInicial;
 			// Activamos el botón de la calculadora.
 			Configuracion.BotonCalculadoraActivo = true;
 
