@@ -8,6 +8,12 @@ PROYECTO ORIÓN
 
 		Sin Publicar
 
+			- Desacoplado el módulo Conductores de la vista.
+
+			- Desacoplado el módulo Gráficos de la vista.
+
+			- Desacoplado el módulo Calendarios de la vista.
+
 			- 
 
 

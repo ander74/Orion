@@ -8,11 +8,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:Orion.Views"
 			 xmlns:controls="clr-namespace:Orion.Controls"
              xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:p="clr-namespace:Orion.Properties"
              xmlns:cnv="clr-namespace:Orion.Convertidores"
              mc:Ignorable="d" x:Name="Ventana"
              d:DesignHeight="400" d:DesignWidth="900">
@@ -119,8 +117,7 @@
             </Button>
 
             <!--BOTON BORRAR GRAFICO-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdBorrarGrafico}"
-                    CommandParameter="{Binding ElementName=TablaGraficos}">
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdBorrarGrafico}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/BorrarFila.png" Style="{StaticResource EstiloImagen}"/>
@@ -396,7 +393,7 @@
 
             <!--BOTON QUITAR FILTRO-->
             <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdQuitarFiltro}"
-                    CommandParameter="{Binding ElementName=TablaGraficos}">
+                    Click="BtQuitarFiltro_Click">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/QuitarFiltro.png" Style="{StaticResource EstiloImagen}"/>
@@ -707,8 +704,9 @@
                     <!-- LISTA DE GRUPOS -->
                     <ListView x:Name="ListaGrupos"  ItemsSource="{Binding GraficosVM.VistaGrupos}"
                               HorizontalAlignment="Stretch" BorderThickness="0" Margin="6" 
-                                Background="Transparent" Grid.Row="1" HorizontalContentAlignment="Center" FontSize="18"
-                                VerticalAlignment="Stretch" SelectedItem="{Binding GraficosVM.GrupoSeleccionado}">
+                              Background="Transparent" Grid.Row="1" HorizontalContentAlignment="Center" FontSize="18"
+                              VerticalAlignment="Stretch" SelectedItem="{Binding GraficosVM.GrupoSeleccionado}"
+                              SelectionChanged="ListaGrupos_SelectionChanged">
 
                         <ListView.ItemTemplate>
                             <DataTemplate>
@@ -751,8 +749,7 @@
                     <StackPanel Grid.Row="0" Orientation="Horizontal">
 
                         <!--BOTON AÑADIR VALORACION-->
-                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding GraficosVM.cmdAñadirValoracion}"
-                                CommandParameter="{Binding ElementName=TablaValoraciones}">
+                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding GraficosVM.cmdAñadirValoracion}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Imagenes/NuevaFila.png" Style="{StaticResource EstiloImagenPequeña}"/>
@@ -762,8 +759,7 @@
                         </Button>
 
                         <!--BOTON BORRAR VALORACION-->
-                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding GraficosVM.cmdBorrarValoracion}"
-                                CommandParameter="{Binding ElementName=TablaValoraciones}">
+                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding GraficosVM.cmdBorrarValoracion}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Imagenes/BorrarFila.png" Style="{StaticResource EstiloImagenPequeña}"/>
@@ -783,8 +779,7 @@
                         </Button>
 
                         <!--BOTON CALCULAR VALORACIONES-->
-                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding GraficosVM.cmdCalcularValoraciones}"
-                                CommandParameter="{Binding ElementName=TablaValoraciones}">
+                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Command="{Binding GraficosVM.cmdCalcularValoraciones}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
                                     <Image Source="Imagenes/CalcularTabla.png" Style="{StaticResource EstiloImagenPequeña}"/>

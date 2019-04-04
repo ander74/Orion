@@ -10,7 +10,8 @@ namespace Orion.Views {
 	using System;
 	using System.Windows;
 	using System.Windows.Controls;
-	using System.Windows.Input;
+    using System.Windows.Data;
+    using System.Windows.Input;
 	using ViewModels;
 
 	public partial class VistaGraficos : UserControl {
@@ -75,17 +76,21 @@ namespace Orion.Views {
 			}
 		}
 
+        private void ListaGrupos_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (ChPanelGrupos.IsChecked == false) PanelGrupos.Visibility = Visibility.Collapsed;
+        }
 
-		#endregion
-		// ====================================================================================================
+
+        #endregion
+        // ====================================================================================================
 
 
-		// ====================================================================================================
-		#region GESTIÓN BOTONES DESPLEGABLES
-		// ====================================================================================================
+        // ====================================================================================================
+        #region GESTIÓN BOTONES DESPLEGABLES
+        // ====================================================================================================
 
-		// AL PULSAR UNO DE LOS BOTONES DEL DESPLEGABLE FILTRAR
-		private void BotonFiltrado_Click(object sender, RoutedEventArgs e) {
+        // AL PULSAR UNO DE LOS BOTONES DEL DESPLEGABLE FILTRAR
+        private void BotonFiltrado_Click(object sender, RoutedEventArgs e) {
 			BtDropFiltros.IsOpen = false;
 		}
 
@@ -111,16 +116,34 @@ namespace Orion.Views {
 			PanelValidezGrupo.Visibility = Visibility.Visible;
 		}
 
-		#endregion
-		// ====================================================================================================
+        #endregion
+        // ====================================================================================================
 
 
-		// Al hacer doble click en la etiqueta GRUPO DE GRÁFICOS
-		[Obsolete("Esto se tiene que hacer de otra manera")]
+        // ====================================================================================================
+        #region BOTÓN QUITAR FILTRO
+        // ====================================================================================================
+
+        private void BtQuitarFiltro_Click(object sender, RoutedEventArgs e) {
+            var view = CollectionViewSource.GetDefaultView(TablaGraficos.ItemsSource);
+            if (view != null && view.SortDescriptions != null) {
+                view.SortDescriptions.Clear();
+                foreach (DataGridColumn columna in TablaGraficos.Columns) {
+                    columna.SortDirection = null;
+                }
+                view.Filter = null;
+            }
+        }
+
+        #endregion
+        // ====================================================================================================
+
+
+        // Al hacer doble click en la etiqueta GRUPO DE GRÁFICOS
+        [Obsolete("Esto se tiene que hacer de otra manera")]
 		private void Label_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 			((GlobalVM)this.DataContext).VisibilidadProgramador = Visibility.Visible;
 		}
 
-
-	}
+    }
 }

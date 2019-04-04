@@ -12,7 +12,6 @@
 			 xmlns:controls="clr-namespace:Orion.Controls"
              xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:cnv="clr-namespace:Orion.Convertidores"
-             xmlns:p="clr-namespace:Orion.Properties"
              mc:Ignorable="d" 
              d:DesignHeight="400" d:DesignWidth="900">
 
@@ -85,9 +84,8 @@
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
-            <!--BOTON BORRAR GRAFICO-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding ConductoresVM.cmdBorrarConductor}"
-                    CommandParameter="{Binding ElementName=TablaConductores}">
+            <!--BOTON BORRAR CONDUCTOR-->
+            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding ConductoresVM.cmdBorrarConductor}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/BorrarConductor.png" Style="{StaticResource EstiloImagen}"/>
@@ -179,8 +177,6 @@
                 </xceed:DropDownButton.DropDownContent>
             </xceed:DropDownButton>
 
-
-
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
@@ -206,8 +202,7 @@
 			</Button>
 
 			<!--BOTON QUITAR FILTRO-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding ConductoresVM.cmdQuitarFiltro}"
-                    CommandParameter="{Binding ElementName=TablaConductores}">
+            <Button Style="{StaticResource EstiloBotonBarra}" Click="BtQuitarFiltro_Click">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image Source="Imagenes/QuitarFiltro.png" Style="{StaticResource EstiloImagen}"/>

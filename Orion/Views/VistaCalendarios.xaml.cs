@@ -9,7 +9,8 @@ namespace Orion.Views {
 
 	using System.Windows;
 	using System.Windows.Controls;
-	using System.Windows.Input;
+    using System.Windows.Data;
+    using System.Windows.Input;
 
 	public partial class VistaCalendarios : UserControl {
 		public VistaCalendarios() {
@@ -57,7 +58,6 @@ namespace Orion.Views {
 		#region GESTIÓN RESUMEN PIJAMA
 		// ====================================================================================================
 
-
 		private void BtMostrarTodos_Click(object sender, RoutedEventArgs e) {
 			BtHorasMes.IsChecked = false;
 			BtDiasMes.IsChecked = false;
@@ -94,7 +94,7 @@ namespace Orion.Views {
 		#region GESTIÓN CALENDARIO-PIJAMA
 		// ====================================================================================================
 
-		private void BtHojaPijama_Click(object sender, RoutedEventArgs e) {
+		private void BtAbrirPijama_Click(object sender, RoutedEventArgs e) {
 			// OCULTAR
 			BotonesCalendarios.Visibility = Visibility.Collapsed;
 			PanelAccionesPorLotes.Visibility = Visibility.Collapsed;
@@ -140,8 +140,26 @@ namespace Orion.Views {
 			TablaCalendarios.Visibility = Visibility.Visible;
 		}
 
-		#endregion
-		// ====================================================================================================
+        #endregion
+        // ====================================================================================================
 
-	}
+
+        // ====================================================================================================
+        #region BOTÓN QUITAR FILTRO
+        // ====================================================================================================
+
+        private void BtQuitarFiltro_Click(object sender, RoutedEventArgs e) {
+            var view = CollectionViewSource.GetDefaultView(TablaCalendarios.ItemsSource);
+            if (view != null && view.SortDescriptions != null) {
+                view.SortDescriptions.Clear();
+                view.Filter = null;
+            }
+            TablaCalendarios.Columns[0].SortDirection = null;
+        }
+
+
+        #endregion
+        // ====================================================================================================
+
+    }
 }

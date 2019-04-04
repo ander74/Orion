@@ -224,7 +224,7 @@ namespace Orion.Controls {
 
 
 		protected override void OnMouseDoubleClick(MouseButtonEventArgs e) {
-			if (DobleClick?.CanExecute(DobleClickParametro) ?? false) {
+            if (DobleClick?.CanExecute(DobleClickParametro) ?? false) {
 				DobleClick.Execute(DobleClickParametro);
 				
 			}

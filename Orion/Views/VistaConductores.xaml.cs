@@ -9,7 +9,8 @@ namespace Orion.Views {
 
 	using System.Windows;
 	using System.Windows.Controls;
-	using Controls;
+    using System.Windows.Data;
+    using Controls;
 
 	public partial class VistaConductores : UserControl {
 		public VistaConductores() {
@@ -60,13 +61,32 @@ namespace Orion.Views {
 			BtDropAcciones.IsOpen = false;
 		}
 
-		#endregion
-		// ====================================================================================================
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BOTÓN QUITAR FILTRO
+        // ====================================================================================================
+
+        private void BtQuitarFiltro_Click(object sender, RoutedEventArgs e) {
+            var view = CollectionViewSource.GetDefaultView(TablaConductores.ItemsSource);
+            if (view != null && view.SortDescriptions != null) {
+                view.SortDescriptions.Clear();
+                foreach (DataGridColumn columna in TablaConductores.Columns) {
+                    columna.SortDirection = null;
+                }
+                view.Filter = null;
+            }
+        }
+
+
+        #endregion
+        // ====================================================================================================
 
 
 
 
 
-
-	}
+    }
 }
