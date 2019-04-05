@@ -219,7 +219,6 @@ namespace Orion.Controls {
 					if (e.OriginalSource is TextBox) CommitEdit();
 					break;
 			}
-			base.OnKeyDown(e);
 		}
 
 

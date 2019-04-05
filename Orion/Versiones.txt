@@ -8,13 +8,18 @@ PROYECTO ORIÓN
 
 		Sin Publicar
 
+			- 
+
+
+		05 de Abril de 2019
+
 			- Desacoplado el módulo Conductores de la vista.
 
 			- Desacoplado el módulo Gráficos de la vista.
 
 			- Desacoplado el módulo Calendarios de la vista.
 
-			- 
+			- Se añade la columna 'GD (Número de gráficos diferentes)' a la Tabla Calendarios.
 
 
 		02 de Abril de 2019

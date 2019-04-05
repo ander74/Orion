@@ -141,16 +141,24 @@ namespace Orion.Models {
 		}
 
 		private void ObjetoCambiadoEventHandler(object sender, PropertyChangedEventArgs e) {
-			Modificado = true;
+            PropiedadCambiada(nameof(GrafDif));
+            Modificado = true;
 		}
 
-		#endregion
+        #endregion
 
 
-		// ====================================================================================================
-		#region PROPIEDADES
-		// ====================================================================================================
-		private int _id;
+        // ====================================================================================================
+        #region PROPIEDADES
+        // ====================================================================================================
+
+
+        public int GrafDif {
+            get => ListaDias.Where(p => p.Grafico > 0).GroupBy(d => d.Grafico).Count();
+        }
+
+
+        private int _id;
 		public int Id {
 			get { return _id; }
 			set {

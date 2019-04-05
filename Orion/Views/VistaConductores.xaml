@@ -258,13 +258,6 @@
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
                 </controls:QDataGrid.Resources>
 
-                <!--<DataGrid.InputBindings>
-                    <KeyBinding Key="Delete" Command="{Binding ConductoresVM.cmdBorrarCeldas}"
-                                CommandParameter="{Binding ElementName=TablaConductores}"/>
-                    <KeyBinding Key="V" Modifiers="Ctrl" Command="{Binding ConductoresVM.cmdPegarConductores}"
-                                CommandParameter="{Binding ElementName=TablaConductores}"/>
-                </DataGrid.InputBindings>-->
-
 				<controls:QDataGrid.Columns>
                     <DataGridTextColumn Header="Número" Width="2*" MinWidth="60" Binding="{Binding Id}"/>
                     <DataGridTextColumn Header="Nombre" Width="5*" MinWidth="60" Binding="{Binding Nombre}"/>
@@ -361,11 +354,6 @@
 							  CanUserResizeRows="False" CanUserReorderColumns="False" HorizontalAlignment="Left" CanUserSortColumns="False"
 							  Style="{StaticResource EstiloGridRegulaciones}" Background="{StaticResource GrisMuyClaro}" FontSize="10"
 							  CanUserAddRows="{Binding ConductoresVM.HayConductor}">
-
-						<!--<controls:QDataGrid.InputBindings>
-                            <KeyBinding Key="Delete" Command="{Binding ConductoresVM.cmdBorrarCeldasRegulacion}"
-                                CommandParameter="{Binding ElementName=TablaRegulaciones}"/>
-                        </controls:QDataGrid.InputBindings>-->
 
 						<controls:QDataGrid.Columns>
                             <DataGridTextColumn Header="Fecha" Width="2*" Binding="{Binding Fecha, Converter={StaticResource cnvFecha}}"/>
