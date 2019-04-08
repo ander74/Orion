@@ -192,6 +192,7 @@ namespace Orion.Models {
                 _id = value;
                 Modificado = true;
                 PropiedadCambiada();
+                PropiedadCambiada(nameof(MatriculaApellidos));
             }
         }
 
@@ -221,8 +222,14 @@ namespace Orion.Models {
                     _apellidos = value;
                     Modificado = true;
                     PropiedadCambiada();
+                    PropiedadCambiada(nameof(MatriculaApellidos));
                 }
             }
+        }
+
+
+        public string MatriculaApellidos {
+            get => $"{Id}: {Apellidos}";
         }
 
 

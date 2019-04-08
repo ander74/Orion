@@ -28,6 +28,7 @@ namespace Orion.Convertidores
 					case "s": case "sa": case "sab": case "sabado": case "sá": case "sáb": case "sábado": return "S";
 					case "d": case "do": case "dom": case "domingo": return "F";
 					case "f": case "fe": case "fes": case "festivo": return "F";
+                    case "r": case "re": case "red": case "reduccion": return "R";
 				}
 			}
 			return "";
@@ -50,8 +51,9 @@ namespace Orion.Convertidores
 					case "s": case "sa": case "sab": case "sabado": case "sá": case "sáb": case "sábado": return "S";
 					case "d": case "do": case "dom": case "domingo": return "F";
 					case "f": case "fe": case "fes": case "festivo": return "F";
-				}
-			}
+                    case "r": case "re": case "red": case "reduccion": return "R";
+                }
+            }
 			return "";
 		}
 	}

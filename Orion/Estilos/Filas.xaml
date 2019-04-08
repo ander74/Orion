@@ -43,6 +43,22 @@
 
 
     <!-- ==================================================================================================== -->
+    <!-- ESTILO FILAS NARANJA -->
+    <!-- ==================================================================================================== -->
+    <Style x:Key="EstiloFilasNaranja" TargetType="DataGridRow">
+        <Setter Property="Background" Value="{StaticResource GrisMuyClaro}"/>
+        <Setter Property="Height" Value="Auto"/>
+        <Setter Property="MinHeight" Value="26"/>
+        <!-- Cambiar fondo aquí -->
+        <Style.Triggers>
+            <Trigger Property="ItemsControl.AlternationIndex" Value="1">
+                <Setter Property="Background" Value="{StaticResource DegradadoNaranja}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+
+    <!-- ==================================================================================================== -->
     <!-- ESTILO FILAS PIJAMA -->
     <!-- ==================================================================================================== -->
     <Style x:Key="EstiloFilasPijama" TargetType="DataGridRow">

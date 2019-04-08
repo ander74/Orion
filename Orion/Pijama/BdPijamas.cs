@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.OleDb;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Orion.Pijama {
 
@@ -183,10 +184,10 @@ namespace Orion.Pijama {
 		}
 
 
-		//================================================================================
-		// GET RESUMEN HASTA MES
-		//================================================================================
-		public static ResumenPijama GetResumenHastaMes(int año, int mes, int idconductor) {
+        //================================================================================
+        // GET RESUMEN HASTA MES
+        //================================================================================
+        public static ResumenPijama GetResumenHastaMes(int año, int mes, int idconductor) {
 
 			// Inicializamos las horas acumuladas.
 			ResumenPijama resultado = new ResumenPijama();

@@ -36,6 +36,10 @@
         <GradientStop Offset="1" Color="{StaticResource Celeste2}" />
     </LinearGradientBrush>
 
+    <LinearGradientBrush x:Key="DegradadoNaranja" StartPoint="0.5,0" EndPoint="0.5,1">
+        <GradientStop Offset="0" Color="{StaticResource NaranjaMuyClaro}" />
+        <GradientStop Offset="1" Color="{StaticResource Blanco}" />
+    </LinearGradientBrush>
 
 
 

@@ -378,6 +378,13 @@
                                         CommandParameter="Fes" ToolTip="Muestra sólo los gráficos de los domingos y festivos."
 										Click="BotonFiltrado_Click"/>
 
+                                <!--BOTÓN FILTRAR REDUCCIÓN JORNADA-->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
+                                        Content="Reducciones de Jornada" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                        Command="{Binding cmdAplicarFiltro}"
+                                        CommandParameter="ReduccionJornada" Click="BotonFiltrado_Click"
+										ToolTip="Muestra sólo los gráficos que pertenecen a reducciones de jornada."/>
+
                                 <!--BOTÓN FILTRAR MODIFICADOS-->
                                 <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,3,6,6" Padding="20,10" 
                                         Content="Gráficos Modificados" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"

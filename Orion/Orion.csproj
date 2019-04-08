@@ -245,6 +245,7 @@
     <Compile Include="Models\DescansosPorDia.cs" />
     <Compile Include="Models\EstadisticaCalendario.cs" />
     <Compile Include="Models\EstadisticaGrupoGraficos.cs" />
+    <Compile Include="Models\EstadisticaPorTurnos.cs" />
     <Compile Include="Models\GraficoFecha.cs" />
     <Compile Include="Models\GraficosPorDia.cs" />
     <Compile Include="Models\ItemResumenAnual.cs" />
@@ -270,6 +271,10 @@
     <Compile Include="Models\Pluses.cs" />
     <Compile Include="Models\RegulacionConductor.cs" />
     <Compile Include="Models\ValoracionGrafico.cs" />
+    <Compile Include="Mvvm\CommandAsync.cs" />
+    <Compile Include="Mvvm\ICommandAsync.cs" />
+    <Compile Include="Mvvm\IErrorHandler.cs" />
+    <Compile Include="Mvvm\TaskUtilities.cs" />
     <Compile Include="Pijama\BdPijamas.cs" />
     <Compile Include="Pijama\DiaPijama.cs" />
     <Compile Include="Pijama\HojaPijama.cs" />
@@ -293,6 +298,7 @@
     <Compile Include="ViewModels\ConductoresCommands.cs" />
     <Compile Include="ViewModels\ConductoresViewModel.cs" />
     <Compile Include="ViewModels\EstadisticasCommands.cs" />
+    <Compile Include="ViewModels\EstadisticasTurnosViewModel.cs" />
     <Compile Include="ViewModels\EstadisticasViewModel.cs" />
     <Compile Include="ViewModels\FestivosViewModel.cs" />
     <Compile Include="ViewModels\GlobalCommands.cs" />
@@ -366,6 +372,9 @@
     </Compile>
     <Compile Include="Views\VistaEstadisticas.xaml.cs">
       <DependentUpon>VistaEstadisticas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VistaEstadisticasTurnos.xaml.cs">
+      <DependentUpon>VistaEstadisticasTurnos.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VistaGraficos.xaml.cs">
       <DependentUpon>VistaGraficos.xaml</DependentUpon>
@@ -486,6 +495,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\VistaEstadisticas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VistaEstadisticasTurnos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

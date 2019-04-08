@@ -11,6 +11,17 @@ PROYECTO ORIÓN
 			- 
 
 
+		08 de Abril de 2019
+
+			- Se añade la letra R a los gráficos para indicar que son reducciones de jornada.
+
+			- Se añade la propiedad de sólo lectura 'MatriculaApellidos' para uso en las tablas.
+
+			- Se añade la pestaña EstadisticasTurnos para generar estadísticas del calendario.
+
+			- Se corrige un error en la cadena de conexión a la base de datos que generaba problemas de concurrencia.
+
+
 		05 de Abril de 2019
 
 			- Desacoplado el módulo Conductores de la vista.

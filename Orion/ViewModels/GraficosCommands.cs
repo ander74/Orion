@@ -242,6 +242,10 @@ namespace Orion.ViewModels {
                     VistaGraficos.Filter = (g) => { return ((g as Grafico).DiaSemana == "F"); };
                     FiltroAplicado = "Domingos y Festivos";
                     break;
+                case "ReduccionJornada":
+                    VistaGraficos.Filter = (g) => { return ((g as Grafico).DiaSemana == "R"); };
+                    FiltroAplicado = "Reducciones de Jornada";
+                    break;
                 case "Modificados":
                     VistaGraficos.Filter = (g) => { return (g as Grafico).Diferente == true; };
                     FiltroAplicado = "Gráficos Modificados";
