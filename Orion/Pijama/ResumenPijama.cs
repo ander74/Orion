@@ -163,12 +163,40 @@ namespace Orion.Pijama {
 		}
 
 
+        /// <summary>
+        /// Días de vacaciones disfrutados.
+        /// </summary>
+        private int diasVacaciones;
+        public int DiasVacaciones {
+            get => diasVacaciones;
+            set {
+                if (diasVacaciones != value) {
+                    diasVacaciones = value;
+                }
+            }
+
+        }
+
+        /// <summary>
+        /// Días de vacaciones disfrutados.
+        /// </summary>
+        private int diasInactivo;
+        public int DiasInactivo {
+            get => diasInactivo;
+            set {
+                if (diasInactivo != value) {
+                    diasInactivo = value;
+                }
+            }
+
+        }
 
 
 
-		#endregion
-		// ====================================================================================================
+
+        #endregion
+        // ====================================================================================================
 
 
-	}
+    }
 }

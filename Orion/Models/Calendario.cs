@@ -154,7 +154,8 @@ namespace Orion.Models {
 
 
         public int GrafDif {
-            get => ListaDias.Where(p => p.Grafico > 0).GroupBy(d => d.Grafico).Count();
+            //get => ListaDias.Where(p => p.Grafico > 0).GroupBy(d => d.Grafico).Count();
+            get => ListaDias.Where(p => p.Grafico > 0).Distinct().Count();
         }
 
 

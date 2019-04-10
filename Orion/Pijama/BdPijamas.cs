@@ -119,14 +119,16 @@ namespace Orion.Pijama {
 
 
 
-		#endregion
-		// ====================================================================================================
 
 
-		//================================================================================
-		// GET DÍAS PIJAMA
-		//================================================================================
-		public static List<DiaPijama> GetDiasPijama(IEnumerable<DiaCalendarioBase> listadias) {
+        #endregion
+        // ====================================================================================================
+
+
+        //================================================================================
+        // GET DÍAS PIJAMA
+        //================================================================================
+        public static List<DiaPijama> GetDiasPijama(IEnumerable<DiaCalendarioBase> listadias) {
 
 			// Creamos la lista que se devolverá.
 			List<DiaPijama> lista = new List<DiaPijama>();
@@ -336,10 +338,28 @@ namespace Orion.Pijama {
 					objeto = comando.ExecuteScalar();
 					if (objeto == DBNull.Value) objeto = 0d;
 					resultado.DiasTrabajoEnDescanso = Convert.ToDecimal(objeto);
-					//----------------------------------------------------------------------------------------------------
-					// FINAL
-					//----------------------------------------------------------------------------------------------------
-				} catch (Exception ex) {
+                    ////----------------------------------------------------------------------------------------------------
+                    //// DÍAS VACACIONES
+                    ////----------------------------------------------------------------------------------------------------
+                    //comando = new OleDbCommand(comandoDiasVacaciones, conexion);
+                    //comando.Parameters.AddWithValue("idconductor", idconductor);
+                    //comando.Parameters.AddWithValue("fecha", fecha);
+                    //objeto = comando.ExecuteScalar();
+                    //if (objeto == DBNull.Value) objeto = 0;
+                    //resultado.DiasVacaciones = Convert.ToInt32(objeto);
+                    ////----------------------------------------------------------------------------------------------------
+                    //// DÍAS INACTIVO
+                    ////----------------------------------------------------------------------------------------------------
+                    //comando = new OleDbCommand(comandoDiasInactivo, conexion);
+                    //comando.Parameters.AddWithValue("idconductor", idconductor);
+                    //comando.Parameters.AddWithValue("fecha", fecha);
+                    //objeto = comando.ExecuteScalar();
+                    //if (objeto == DBNull.Value) objeto = 0;
+                    //resultado.DiasInactivo = Convert.ToInt32(objeto);
+                    //----------------------------------------------------------------------------------------------------
+                    // FINAL
+                    //----------------------------------------------------------------------------------------------------
+                } catch (Exception ex) {
 					Utils.VerError("BdPijamas.GetResumenHastaMes", ex);
 				}
 			}
@@ -518,7 +538,171 @@ namespace Orion.Pijama {
 		}
 
 
+        //================================================================================
+        // GET DIAS TRABAJADOS HASTA MES EN AÑO
+        //================================================================================
+        public static int GetDiasTrabajadosHastaMesEnAño(int año, int mes, int idconductor) {
+
+            object resultado = null;
+
+            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+                // Definimos el comando SQL.
+                string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
+                                    "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
+                                    "                                                        Fecha < @fechafinal AND " +
+                                    "                                                        IdConductor = @idconductor) " +
+                                    "      AND Grafico > 0; ";
+
+                // Definimos las fechas de inicio y final
+                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+
+                // Creamos el comando y añadimos los parámetros.
+                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+                comando.Parameters.AddWithValue("fechainicio", fechainicio);
+                comando.Parameters.AddWithValue("fechafinal", fechafinal);
+                comando.Parameters.AddWithValue("idconductor", idconductor);
+
+                try {
+                    conexion.Open();
+                    // Ejecutamos el comando y guardamos el resultado.
+                    resultado = comando.ExecuteScalar();
+                } catch (Exception ex) {
+                    Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
+                }
+            }
+            // Devolvemos el resultado.
+            if (resultado == DBNull.Value) resultado = 0;
+            return Convert.ToInt32(resultado);
+
+        }
 
 
-	}
+        //================================================================================
+        // GET DIAS DESCANSO HASTA MES EN AÑO
+        //================================================================================
+        public static int GetDiasDescansoHastaMesEnAño(int año, int mes, int idconductor) {
+
+            object resultado = null;
+
+            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+                // Definimos el comando SQL.
+                string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
+                                    "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
+                                    "                                                        Fecha < @fechafinal AND " +
+                                    "                                                        IdConductor = @idconductor) " +
+                                    "      AND (Grafico = -2 OR Grafico = -10 OR Grafico = -12); ";
+
+                // Definimos las fechas de inicio y final
+                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+
+                // Creamos el comando y añadimos los parámetros.
+                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+                comando.Parameters.AddWithValue("fechainicio", fechainicio);
+                comando.Parameters.AddWithValue("fechafinal", fechafinal);
+                comando.Parameters.AddWithValue("idconductor", idconductor);
+
+                try {
+                    conexion.Open();
+                    // Ejecutamos el comando y guardamos el resultado.
+                    resultado = comando.ExecuteScalar();
+                } catch (Exception ex) {
+                    Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
+                }
+            }
+            // Devolvemos el resultado.
+            if (resultado == DBNull.Value) resultado = 0;
+            return Convert.ToInt32(resultado);
+
+        }
+
+
+        //================================================================================
+        // GET DIAS VACACIONES HASTA MES EN AÑO
+        //================================================================================
+        public static int GetDiasVacacionesHastaMesEnAño(int año, int mes, int idconductor) {
+
+            object resultado = null;
+
+            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+                // Definimos el comando SQL.
+                string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
+                                    "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
+                                    "                                                        Fecha < @fechafinal AND " +
+                                    "                                                        IdConductor = @idconductor) " +
+                                    "      AND Grafico = -1; ";
+
+                // Definimos las fechas de inicio y final
+                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+
+                // Creamos el comando y añadimos los parámetros.
+                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+                comando.Parameters.AddWithValue("fechainicio", fechainicio);
+                comando.Parameters.AddWithValue("fechafinal", fechafinal);
+                comando.Parameters.AddWithValue("idconductor", idconductor);
+
+                try {
+                    conexion.Open();
+                    // Ejecutamos el comando y guardamos el resultado.
+                    resultado = comando.ExecuteScalar();
+                } catch (Exception ex) {
+                    Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
+                }
+            }
+            // Devolvemos el resultado.
+            if (resultado == DBNull.Value) resultado = 0;
+            return Convert.ToInt32(resultado);
+
+        }
+
+
+        //================================================================================
+        // GET DIAS INACTIVO HASTA MES EN AÑO
+        //================================================================================
+        public static int GetDiasInactivoHastaMesEnAño(int año, int mes, int idconductor) {
+
+            object resultado = null;
+
+            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+                // Definimos el comando SQL.
+                string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
+                                    "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
+                                    "                                                        Fecha < @fechafinal AND " +
+                                    "                                                        IdConductor = @idconductor) " +
+                                    "      AND Grafico = 0; ";
+
+                // Definimos las fechas de inicio y final
+                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+
+                // Creamos el comando y añadimos los parámetros.
+                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+                comando.Parameters.AddWithValue("fechainicio", fechainicio);
+                comando.Parameters.AddWithValue("fechafinal", fechafinal);
+                comando.Parameters.AddWithValue("idconductor", idconductor);
+
+                try {
+                    conexion.Open();
+                    // Ejecutamos el comando y guardamos el resultado.
+                    resultado = comando.ExecuteScalar();
+                } catch (Exception ex) {
+                    Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
+                }
+            }
+            // Devolvemos el resultado.
+            if (resultado == DBNull.Value) resultado = 0;
+            return Convert.ToInt32(resultado);
+
+        }
+
+
+
+
+    }
 }

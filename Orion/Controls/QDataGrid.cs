@@ -145,17 +145,16 @@ namespace Orion.Controls {
 			int filagrid = Items.IndexOf(CurrentItem);
 			if (filagrid == -1) return;
 			int columnagrid = Columns.IndexOf(CurrentColumn);
-			//bool hayNuevaFila = false;
-
-			// Iteramos por las filas del portapapeles.
-			foreach (string[] fila in portapapeles) {
+            bool hayNuevaFila = false;
+            ICollectionView cv = CollectionViewSource.GetDefaultView(Items);
+            IEditableCollectionView iecv = cv as IEditableCollectionView;
+            // Iteramos por las filas del portapapeles.
+            foreach (string[] fila in portapapeles) {
 				// Si estamos en la última fila, añadimos una fila más.
 				if (filagrid == Items.Count) {
 					if (!CanUserAddRows) continue;
-					ICollectionView cv = CollectionViewSource.GetDefaultView(Items);
-					IEditableCollectionView iecv = cv as IEditableCollectionView;
 					if (iecv != null) {
-						//hayNuevaFila = true;
+						hayNuevaFila = true;
 						iecv.AddNew();
 						iecv.CommitNew();
 					}
@@ -170,7 +169,7 @@ namespace Orion.Controls {
 					columna++;
 				}
 				filagrid++;
-				//if (hayNuevaFila) iecv.CommitNew();
+				if (hayNuevaFila) iecv.CommitNew();
 			}
 		}
 

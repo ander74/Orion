@@ -11,6 +11,18 @@ PROYECTO ORIÓN
 			- 
 
 
+		10 de Abril de 2019
+
+			- Se añaden los controles ItemResumen e ItemResumenDoble.
+
+			- Se cambia el formato del Panel Resumen del pijama, ocultandose los valores que son cero.
+
+			- Se añade el contador de vacaciones pendientes para los eventuales.
+			  Está activo en la HojaPijama el contador de trabajados y descansados, pero no es fiable, por lo que no se usa.
+
+			- Se corrige un problema a la hora de pegar calendarios.
+
+
 		08 de Abril de 2019
 
 			- Se añade la letra R a los gráficos para indicar que son reducciones de jornada.

@@ -121,6 +121,10 @@ namespace Orion.Pijama {
                 HorasCobradasAño = BdPijamas.GetHorasCobradasAño(Fecha.Year, Fecha.Month, Trabajador.Id);
                 HorasReguladas = BdPijamas.GetHorasCambiadasPorDCsMes(Fecha.Year, Fecha.Month, Trabajador.Id);
                 OtrasHoras = BdPijamas.GetHorasReguladasMes(Fecha.Year, Fecha.Month, Trabajador.Id);
+                DiasTrabajadosHastaMesEnAño = BdPijamas.GetDiasTrabajadosHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Id);
+                DiasDescansoHastaMesEnAño = BdPijamas.GetDiasDescansoHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Id);
+                DiasVacacionesHastaMesEnAño = BdPijamas.GetDiasVacacionesHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Id);
+                DiasInactivoHastaMesEnAño = BdPijamas.GetDiasInactivoHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Id);
                 // Cambiamos el signo de las horas cobradas para que estén en positivo.
                 HorasCobradas = new TimeSpan(HorasCobradas.Ticks * -1);
                 HorasCobradasAño = new TimeSpan(HorasCobradasAño.Ticks * -1);
@@ -646,6 +650,60 @@ namespace Orion.Pijama {
 
 
 
+        private int diasDescansoHastaMesEnAño;
+        public int DiasDescansoHastaMesEnAño {
+            get => diasDescansoHastaMesEnAño;
+            set => SetValue(ref diasDescansoHastaMesEnAño, value);
+        }
+
+
+        private int diasTrabajadosHastaMesEnAño;
+        public int DiasTrabajadosHastaMesEnAño {
+            get => diasTrabajadosHastaMesEnAño;
+            set => SetValue(ref diasTrabajadosHastaMesEnAño, value);
+        }
+
+
+        private int diasVacacionesHastaMesEnAño;
+        public int DiasVacacionesHastaMesEnAño {
+            get => diasVacacionesHastaMesEnAño;
+            set => SetValue(ref diasVacacionesHastaMesEnAño, value);
+        }
+
+
+        private int diasActivoHastaMesEnAño;
+        public int DiasActivoHastaMesEnAño {
+            get => diasActivoHastaMesEnAño;
+            set => SetValue(ref diasActivoHastaMesEnAño, value);
+        }
+
+
+        private int diasInactivoHastaMesEnAño;
+        public int DiasInactivoHastaMesEnAño {
+            get => diasInactivoHastaMesEnAño;
+            set => SetValue(ref diasInactivoHastaMesEnAño, value);
+        }
+
+        public decimal DiasTrabajoPendientes {
+            get {
+                return DiasTrabajadosHastaMesEnAño - DiasComputoTrabajoHastaMes;
+            }
+        }
+
+        public decimal DescansosPendientes {
+            get {
+                return DiasComputoDescansoHastaMes - DiasDescansoHastaMesEnAño;
+            }
+        }
+
+        public decimal VacacionesPendientes {
+            get {
+                return DiasComputoVacacionesHastaMes - DiasVacacionesHastaMesEnAño;
+            }
+        }
+
+
+
         #endregion
         // ====================================================================================================
 
@@ -996,18 +1054,38 @@ namespace Orion.Pijama {
         /// </summary>
         public decimal DiasComputoTrabajo {
             get {
-                //if (DiasInactivo == 0) {
-                //	int dias = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
-                //	dias += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
-                //	return DiasMes - dias;
-                //} else {
-                //	int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-                //	return App.Global.Convenio.TrabajoAnuales * (dias - DiasInactivo) / 365m;
-                //}
                 decimal findes = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
                 findes += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
                 decimal dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
+                var xx = DiasActivo - (findes * (dias - DiasInactivo) / dias);
                 return DiasActivo - (findes * (dias - DiasInactivo) / dias);
+            }
+        }
+
+
+        /// <summary>
+        /// Establece el número de días que se debería trabajar en este mes, teniendo en cuenta los datos del calendario.
+        /// </summary>
+        public decimal DiasComputoTrabajoHastaMes {
+            get {
+                decimal dias = 0;
+                for (int mes = 1; mes <= Fecha.Month; mes++) {
+                    dias += DateTime.DaysInMonth(Fecha.Year, mes);
+                }
+                decimal findes = 0;
+                for (int mes = 1; mes <= Fecha.Month; mes++) {
+                    for (int dia = 1; dia <= DateTime.DaysInMonth(Fecha.Year, mes); dia++) {
+                        DateTime fecha = new DateTime(Fecha.Year, mes, dia);
+                        if (fecha.DayOfWeek == DayOfWeek.Saturday || fecha.DayOfWeek == DayOfWeek.Sunday || App.Global.FestivosVM.EsFestivo(fecha)) {
+                            findes++;
+                        }
+                        if (fecha.DayOfWeek == DayOfWeek.Saturday && App.Global.FestivosVM.EsFestivo(fecha)) {
+                            findes++;
+                        }
+                    }
+                }
+                var xx = (dias - DiasInactivoHastaMesEnAño) - (findes * (dias - DiasInactivoHastaMesEnAño) / dias);
+                return (dias - DiasInactivoHastaMesEnAño) - (findes * (dias - DiasInactivoHastaMesEnAño) / dias);
             }
         }
 
@@ -1017,18 +1095,36 @@ namespace Orion.Pijama {
         /// </summary>
         public decimal DiasComputoDescanso {
             get {
-                //if (DiasInactivo == 0) {
-                //	int dias = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
-                //	dias += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
-                //	return dias;
-                //} else {
-                //int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-                //return App.Global.Convenio.DescansosAnuales * (dias - DiasInactivo) / 365m;
                 decimal findes = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
                 findes += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
                 decimal dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
                 return findes * (dias - DiasInactivo) / dias;
-                //}
+            }
+        }
+
+
+        /// <summary>
+        /// Establece el número de días que debería descansar este mes, teniendo en cuenta los datos del calendario.
+        /// </summary>
+        public decimal DiasComputoDescansoHastaMes {
+            get {
+                decimal dias = 0;
+                for (int mes = 1; mes <= Fecha.Month; mes++) {
+                    dias += DateTime.DaysInMonth(Fecha.Year, mes);
+                }
+                decimal findes = 0;
+                for (int mes = 1; mes <= Fecha.Month; mes++) {
+                    for (int dia = 1; dia <= DateTime.DaysInMonth(Fecha.Year, mes); dia++) {
+                        DateTime fecha = new DateTime(Fecha.Year, mes, dia);
+                        if (fecha.DayOfWeek == DayOfWeek.Saturday || fecha.DayOfWeek == DayOfWeek.Sunday || App.Global.FestivosVM.EsFestivo(fecha)) {
+                            findes++;
+                        }
+                        if (fecha.DayOfWeek == DayOfWeek.Saturday && App.Global.FestivosVM.EsFestivo(fecha)) {
+                            findes++;
+                        }
+                    }
+                }
+                return findes * (dias - DiasInactivoHastaMesEnAño) / dias;
             }
         }
 
@@ -1039,7 +1135,22 @@ namespace Orion.Pijama {
         public decimal DiasComputoVacaciones {
             get {
                 int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-                return App.Global.Convenio.VacacionesAnuales * (dias - DiasInactivo) / 365m;
+                return App.Global.Convenio.VacacionesAnuales * 
+                       (dias - DiasInactivo - ListaDias.Count(d => d.Grafico == -1)) / 
+                       ((DateTime.IsLeapYear(Fecha.Year) ? 366m : 365m) - App.Global.Convenio.VacacionesAnuales); // Igual no se descuentan las vacaciones...
+            }
+        }
+
+
+        public decimal DiasComputoVacacionesHastaMes {
+            get {
+                int dias = 0;
+                for (int mes = 1; mes <= Fecha.Month; mes++) {
+                    dias += DateTime.DaysInMonth(Fecha.Year, mes);
+                }
+                return App.Global.Convenio.VacacionesAnuales * 
+                       (dias - DiasInactivoHastaMesEnAño - DiasVacacionesHastaMesEnAño) /
+                       ((DateTime.IsLeapYear(Fecha.Year) ? 366m : 365m) - App.Global.Convenio.VacacionesAnuales); // Igual no se descuentan las vacaciones...
             }
         }
 

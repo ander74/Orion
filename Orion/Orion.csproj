@@ -196,6 +196,12 @@
     <Compile Include="Config\GestionGraficos.cs" />
     <Compile Include="Config\ItemChangedEventArgs.cs" />
     <Compile Include="Config\NotifyCollection.cs" />
+    <Compile Include="Controls\ItemResumen.xaml.cs">
+      <DependentUpon>ItemResumen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ItemResumenDoble.xaml.cs">
+      <DependentUpon>ItemResumenDoble.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\QCalendar.cs" />
     <Compile Include="Controls\QDataGrid.cs" />
     <Compile Include="Convertidores\ConvertidorColorColumnaPijama.cs" />
@@ -206,6 +212,7 @@
     <Compile Include="Convertidores\ConvertidorMinutosToHoraMixta.cs" />
     <Compile Include="Convertidores\ConvertidorNegritaColumnaPijama.cs" />
     <Compile Include="Convertidores\ConvertidorNegritaDiaPijama.cs" />
+    <Compile Include="Convertidores\ConvertidorOcultoSiCero.cs" />
     <Compile Include="Convertidores\ConvertidorVisibilityInverter.cs" />
     <Compile Include="Convertidores\ConvertidorColorDia.cs" />
     <Compile Include="Convertidores\ConvertidorColorDiaPijama.cs" />
@@ -394,6 +401,14 @@
     <Compile Include="Views\VistaResumenAnual.xaml.cs">
       <DependentUpon>VistaResumenAnual.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\ItemResumen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ItemResumenDoble.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Estilos\OtrosEstilos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
