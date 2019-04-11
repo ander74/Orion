@@ -11,6 +11,15 @@ PROYECTO ORIÓN
 			- 
 
 
+		11 de Abril de 2019
+
+			- Se quitan los botones de calculadora y ayuda del pijama, ya que están en la barra de pestañas.
+
+			- Se añaden los botones de PanelPijama y PanelGraficosPijama para alternar entre ellos.
+
+			- Se añaden los gráficos de Turnos y de Inicio/Horas.
+
+
 		10 de Abril de 2019
 
 			- Se añaden los controles ItemResumen e ItemResumenDoble.

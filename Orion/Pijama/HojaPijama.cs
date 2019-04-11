@@ -5,11 +5,14 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using System;
+
 namespace Orion.Pijama {
 
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using LiveCharts;
     using Orion.DataModels;
     using Orion.Models;
     using Orion.Servicios;
@@ -1494,6 +1497,57 @@ namespace Orion.Pijama {
         #endregion
         // ====================================================================================================
 
+
+        // ====================================================================================================
+        #region PROPIEDADES GRÁFICOS
+        // ====================================================================================================
+
+
+        public ChartValues<int> SerieTurnos {
+            get => new ChartValues<int>(ListaDias.Select(d => d.Grafico > 0 ? d.TurnoAlt.HasValue ? d.TurnoAlt.Value * -1 : d.GraficoTrabajado.Turno * -1 : -6).ToArray());
+        }
+
+
+
+        public ChartValues<int> SerieInicios {
+            get => new ChartValues<int>(ListaDias.Select(d => {
+                int inicio = d.Grafico > 0 ? d.InicioAlt.HasValue ? (int)d.InicioAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Inicio.Value.TotalMinutes : 0;
+                return inicio * -1;
+            }));
+        }
+
+
+        //public ChartValues<int> SerieFinales {
+        //    get => new ChartValues<int>(ListaDias.Select(d => d.Grafico > 0 ? d.FinalAlt.HasValue ? (int)d.FinalAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Final.Value.TotalMinutes : 0).ToArray());
+        //}
+        public ChartValues<int> SerieFinales {
+            get => new ChartValues<int>(ListaDias.Select(d => {
+                int inicio = d.Grafico > 0 ? d.InicioAlt.HasValue ? (int)d.InicioAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Inicio.Value.TotalMinutes : 0;
+                int final = d.Grafico > 0 ? d.FinalAlt.HasValue ? (int)d.FinalAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Final.Value.TotalMinutes : 0;
+                if (final < inicio) final += 1440;
+                return (final - inicio) * -1;
+            })); 
+        }
+
+
+        public Func<double,string> TurnoFormatter {
+            get => x => (x * -1).ToString("0");
+        }
+
+        public Func<double, string> TimeFormatter {
+            get => x => {
+                if (x < 0) x = x * -1;
+                //if (x < -1440) x += 1440;
+                return new TimeSpan(0, (int)x, 0).ToTexto();
+            };
+        }
+
+        public Func<double, string> DiaFormatter {
+            get => x => (x + 1).ToString("00");
+        }
+
+        #endregion
+        // ====================================================================================================
 
 
     }

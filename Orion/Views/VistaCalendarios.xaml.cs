@@ -101,7 +101,6 @@ namespace Orion.Views {
 			TablaCalendarios.Visibility = Visibility.Collapsed;
 			// MOSTRAR
 			BotonesPijama.Visibility = Visibility.Visible;
-			BotonesAuxiliares.Visibility = Visibility.Visible;
 			PanelConductorPijama.Visibility = Visibility.Visible;
 			TablaPijama.Visibility = Visibility.Visible;
 			PanelResumen.Visibility = Visibility.Visible;
@@ -116,7 +115,6 @@ namespace Orion.Views {
 			TablaCalendarios.Visibility = Visibility.Collapsed;
 			// MOSTRAR
 			BotonesPijama.Visibility = Visibility.Visible;
-			BotonesAuxiliares.Visibility = Visibility.Visible;
 			PanelConductorPijama.Visibility = Visibility.Visible;
 			TablaPijama.Visibility = Visibility.Visible;
 			PanelResumen.Visibility = Visibility.Visible;
@@ -129,7 +127,6 @@ namespace Orion.Views {
 		private void BtCerrarPijama_Click(object sender, RoutedEventArgs e) {
 			// OCULTAR
 			BotonesPijama.Visibility = Visibility.Collapsed;
-			BotonesAuxiliares.Visibility = Visibility.Collapsed;
 			PanelConductorPijama.Visibility = Visibility.Collapsed;
 			TablaPijama.Visibility = Visibility.Collapsed;
 			PanelResumen.Visibility = Visibility.Collapsed;
@@ -155,6 +152,26 @@ namespace Orion.Views {
                 view.Filter = null;
             }
             TablaCalendarios.Columns[0].SortDirection = null;
+        }
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region GESTION PANEL RESUMEN Y GRÁFICOS
+        // ====================================================================================================
+
+        private void BtPanelPijama_Click(object sender, RoutedEventArgs e) {
+            PanelGraficosPijama.Visibility = Visibility.Collapsed;
+            PanelPijama.Visibility = Visibility.Visible;
+        }
+
+
+        private void BtPanelGraficosResumen_Click(object sender, RoutedEventArgs e) {
+            PanelPijama.Visibility = Visibility.Collapsed;
+            PanelGraficosPijama.Visibility = Visibility.Visible;
         }
 
 
