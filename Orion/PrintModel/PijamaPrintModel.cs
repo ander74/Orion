@@ -28,8 +28,9 @@ namespace Orion.PrintModel {
 	using Convertidores;
 	using Models;
 	using Servicios;
+    using System.Linq;
 
-	public static class PijamaPrintModel {
+    public static class PijamaPrintModel {
 
 
 		// ====================================================================================================
@@ -830,7 +831,7 @@ namespace Orion.PrintModel {
 		}
 
 
-        public static async Task CrearReclamacionEnPdf(Document doc, DateTime fecha, Conductor conductor) {
+        public static async Task CrearReclamacionEnPdf(Document doc, DateTime fecha, Conductor conductor, IEnumerable<Reclamacion> reclamaciones) {
 
             await Task.Run(() => {
 
@@ -893,18 +894,34 @@ namespace Orion.PrintModel {
                 celda = new Cell().AddStyle(estiloCabecera);
                 celda.Add(new Paragraph("DIFERENCIA"));
                 tabla.AddHeaderCell(celda);
+                // Creamos un array para los campos
+                var campos = new PdfServicio.TextFieldRenderer[17, 4];
                 // Añadimos las filas.
-                for (int f = 1; f <= 17; f++) {
-                    for (int c = 1; c <= 4; c++) {
+                for (int f = 0; f < 17; f++) {
+                    for (int c = 0; c < 4; c++) {
                         App.Global.ValorBarraProgreso = 5.8;
                         celda = new Cell();
-                        if (f % 2 == 0) celda.SetBackgroundColor(new DeviceRgb(221, 221, 221));
+                        if (f % 2 != 0) celda.SetBackgroundColor(new DeviceRgb(221, 221, 221));
                         celda.SetHeight(16);
                         celda.AddStyle(estiloBordes);
-                        celda.SetNextRenderer(new PdfServicio.TextFieldRenderer(celda, $"Fila{f:00}Columna{c}", 2, 10, PdfFormField.ALIGN_CENTER));
+                        var alineacion = PdfFormField.ALIGN_CENTER;
+                        if (c == 0) alineacion = PdfFormField.ALIGN_LEFT;
+                        var campo = new PdfServicio.TextFieldRenderer(celda, $"Fila{f:00}Columna{c}", 2, 10, alineacion);
+                        campos[f, c] = campo;
+                        celda.SetNextRenderer(campo);
                         tabla.AddCell(celda);
                     }
                 }
+                //Añadimos las reclamaciones pasadas.
+                int fila = 0;
+                foreach (Reclamacion reclamacion in reclamaciones) {
+                    campos[fila, 0].valor = reclamacion.Concepto;
+                    campos[fila, 1].valor = reclamacion.EnPijama;
+                    campos[fila, 2].valor = reclamacion.Real;
+                    campos[fila, 3].valor = reclamacion.Diferencia;
+                    fila++;
+                }
+
                 // Dibujamos los bordes de la tabla.
                 tabla.SetBorder(new SolidBorder(1));
                 // Añadimos la tabla al documento.

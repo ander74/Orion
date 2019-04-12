@@ -242,6 +242,14 @@ namespace Orion.ViewModels {
         }
 
 
+
+        private int idConductorPijama;
+        public int IdConductorPijama {
+            get => idConductorPijama;
+            set => SetValue(ref idConductorPijama, value);
+        }
+
+
         private DateTime _fechaactual;
         public DateTime FechaActual {
             get { return _fechaactual; }

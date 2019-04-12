@@ -276,6 +276,7 @@
     <Compile Include="Models\Parada.cs" />
     <Compile Include="Models\OpcionesPorCentro.cs" />
     <Compile Include="Models\Pluses.cs" />
+    <Compile Include="Models\Reclamacion.cs" />
     <Compile Include="Models\RegulacionConductor.cs" />
     <Compile Include="Models\ValoracionGrafico.cs" />
     <Compile Include="Mvvm\CommandAsync.cs" />

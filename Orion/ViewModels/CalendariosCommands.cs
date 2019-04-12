@@ -188,6 +188,7 @@ namespace Orion.ViewModels {
 
         private void AbrirPijama() {
             GuardarCalendarios();
+            IdConductorPijama = CalendarioSeleccionado.IdConductor;
             Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
         }
     
@@ -783,7 +784,56 @@ namespace Orion.ViewModels {
                         doc.GetPdfDocument().GetDocumentInfo().SetTitle("Reclamación");
                         doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
                         doc.SetMargins(40, 40, 40, 40);
-                        await PijamaPrintModel.CrearReclamacionEnPdf(doc, Pijama.Fecha, Pijama.Trabajador);
+                        // Extraemos las reclamaciones.
+                        List<Reclamacion> listaReclamaciones = new List<Reclamacion>();
+                        foreach(var dia in Pijama.ListaDias) {
+                            // ACUMULADAS
+                            if (dia.AcumuladasAlt.HasValue && dia.AcumuladasAlt.Value < dia.GraficoOriginal.Acumuladas) {
+                                listaReclamaciones.Add( new Reclamacion {
+                                    Concepto = $"Horas acumuladas del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                    EnPijama = dia.AcumuladasAlt.ToTexto(),
+                                    Real = dia.GraficoOriginal.Acumuladas.ToTexto(),
+                                    Diferencia = (dia.GraficoOriginal.Acumuladas - dia.AcumuladasAlt).ToTexto()
+                                });
+                            }
+                            // DESAYUNO
+                            if (dia.DesayunoAlt.HasValue && dia.DesayunoAlt.Value < dia.GraficoOriginal.Desayuno) {
+                                listaReclamaciones.Add(new Reclamacion {
+                                    Concepto = $"Dieta de desayuno del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                    EnPijama = dia.DesayunoAlt.Value.ToString("0.00"),
+                                    Real = dia.GraficoOriginal.Desayuno.ToString("0.00"),
+                                    Diferencia = (dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value).ToString("0.00")
+                                });
+                            }
+                            // COMIDA
+                            if (dia.ComidaAlt.HasValue && dia.ComidaAlt.Value < dia.GraficoOriginal.Comida) {
+                                listaReclamaciones.Add(new Reclamacion {
+                                    Concepto = $"Dieta de comida del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                    EnPijama = dia.ComidaAlt.Value.ToString("0.00"),
+                                    Real = dia.GraficoOriginal.Comida.ToString("0.00"),
+                                    Diferencia = (dia.GraficoOriginal.Comida - dia.ComidaAlt.Value).ToString("0.00")
+                                });
+                            }
+                            // CENA
+                            if (dia.CenaAlt.HasValue && dia.CenaAlt.Value < dia.GraficoOriginal.Cena) {
+                                listaReclamaciones.Add(new Reclamacion {
+                                    Concepto = $"Dieta de cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                    EnPijama = dia.CenaAlt.Value.ToString("0.00"),
+                                    Real = dia.GraficoOriginal.Cena.ToString("0.00"),
+                                    Diferencia = (dia.GraficoOriginal.Cena - dia.CenaAlt.Value).ToString("0.00")
+                                });
+                            }
+                            // PLUS CENA
+                            if (dia.PlusCenaAlt.HasValue && dia.PlusCenaAlt.Value < dia.GraficoOriginal.PlusCena) {
+                                listaReclamaciones.Add(new Reclamacion {
+                                    Concepto = $"Plus Cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                    EnPijama = dia.PlusCenaAlt.Value.ToString("0.00"),
+                                    Real = dia.GraficoOriginal.PlusCena.ToString("0.00"),
+                                    Diferencia = (dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value).ToString("0.00")
+                                });
+                            }
+                        }
+                        await PijamaPrintModel.CrearReclamacionEnPdf(doc, Pijama.Fecha, Pijama.Trabajador, listaReclamaciones);
                         doc.Close();
                         Process.Start(ruta);
                     }
@@ -986,7 +1036,7 @@ namespace Orion.ViewModels {
         }
 
         private void PijamaMesMenos() {
-            int conductor = CalendarioSeleccionado.IdConductor;
+            int conductor = IdConductorPijama;
             FechaActual = FechaActual.AddMonths(-1);
             CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.IdConductor == conductor);
             if (CalendarioSeleccionado != null) {
@@ -1011,7 +1061,7 @@ namespace Orion.ViewModels {
         }
 
         private void PijamaMesMas() {
-            int conductor = CalendarioSeleccionado.IdConductor;
+            int conductor = IdConductorPijama;
             FechaActual = FechaActual.AddMonths(1);
             CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.IdConductor == conductor);
             if (CalendarioSeleccionado != null) {

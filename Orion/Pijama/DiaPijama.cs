@@ -17,6 +17,11 @@ namespace Orion.Pijama {
 
 	public class DiaPijama: DiaCalendarioBase {
 
+        public enum Reclama {
+            Nada = 0,
+            EnContra = 1,
+            AFavor = 2,
+        }
 
 		// ====================================================================================================
 		#region CONSTRUCTORES
@@ -31,7 +36,6 @@ namespace Orion.Pijama {
 
 		#endregion
 		// ====================================================================================================
-
 
 
 		// ====================================================================================================
@@ -232,9 +236,6 @@ namespace Orion.Pijama {
 		#region PROPIEDADES GRÁFICO ALTERNATIVO
 		// ====================================================================================================
 
-
-
-		//private bool _tienehorarioalternativo;
 		public bool TieneHorarioAlternativo{
 			get {
 				if (TurnoAlt.HasValue || InicioAlt.HasValue || FinalAlt.HasValue) return true;
@@ -243,12 +244,139 @@ namespace Orion.Pijama {
 			}
 		}
 
+        public Reclama ReclamaTrabajadas {
+            get {
+                if (TrabajadasAlt.HasValue) {
+                    if (TrabajadasAlt.Value < GraficoOriginal.Trabajadas) {
+                        return Reclama.EnContra;
+                    }
+                    if (TrabajadasAlt.Value > GraficoOriginal.Trabajadas) {
+                        return Reclama.AFavor;
+                    }
+                }
+                return Reclama.Nada;
+            }
+        }
 
-		#endregion
-		// ====================================================================================================
+
+        public Reclama ReclamaAcumuladas {
+            get {
+                if (AcumuladasAlt.HasValue) {
+                    if (AcumuladasAlt.Value < GraficoOriginal.Acumuladas) {
+                        return Reclama.EnContra;
+                    }
+                    if (AcumuladasAlt.Value > GraficoOriginal.Acumuladas) {
+                        return Reclama.AFavor;
+                    }
+                }
+                return Reclama.Nada;
+            }
+        }
+
+
+        public Reclama ReclamaNocturnas {
+            get {
+                if (NocturnasAlt.HasValue) {
+                    if (NocturnasAlt.Value < GraficoOriginal.Nocturnas) {
+                        return Reclama.EnContra;
+                    }
+                    if (NocturnasAlt.Value > GraficoOriginal.Nocturnas) {
+                        return Reclama.AFavor;
+                    }
+                }
+                return Reclama.Nada;
+            }
+        }
+
+
+        public Reclama ReclamaDesayuno {
+            get {
+                if (DesayunoAlt.HasValue) {
+                    if (DesayunoAlt.Value < GraficoOriginal.Desayuno) {
+                        return Reclama.EnContra;
+                    }
+                    if (DesayunoAlt.Value > GraficoOriginal.Desayuno) {
+                        return Reclama.AFavor;
+                    }
+                }
+                return Reclama.Nada;
+            }
+        }
+
+
+        public Reclama ReclamaComida {
+            get {
+                if (ComidaAlt.HasValue) {
+                    if (ComidaAlt.Value < GraficoOriginal.Comida) {
+                        return Reclama.EnContra;
+                    }
+                    if (ComidaAlt.Value > GraficoOriginal.Comida) {
+                        return Reclama.AFavor;
+                    }
+                }
+                return Reclama.Nada;
+            }
+        }
+
+
+        public Reclama ReclamaCena {
+            get {
+                if (CenaAlt.HasValue) {
+                    if (CenaAlt.Value < GraficoOriginal.Cena) {
+                        return Reclama.EnContra;
+                    }
+                    if (CenaAlt.Value > GraficoOriginal.Cena) {
+                        return Reclama.AFavor;
+                    }
+                }
+                return Reclama.Nada;
+            }
+        }
+
+
+        public Reclama ReclamaPlusCena {
+            get {
+                if (PlusCenaAlt.HasValue) {
+                    if (PlusCenaAlt.Value < GraficoOriginal.PlusCena) {
+                        return Reclama.EnContra;
+                    }
+                    if (PlusCenaAlt.Value > GraficoOriginal.PlusCena) {
+                        return Reclama.AFavor;
+                    }
+                }
+                return Reclama.Nada;
+            }
+        }
+
+
+        public Reclama ReclamaPaqueteria {
+            get {
+                if (PlusPaqueteriaAlt.HasValue && PlusPaqueteriaAlt.Value != GraficoOriginal.PlusPaqueteria) {
+                    return PlusPaqueteriaAlt.Value == true ? Reclama.AFavor : Reclama.EnContra;
+                }
+                return Reclama.Nada;
+            }
+        }
+
+
+        public Reclama ReclamaPlusLimpieza {
+            get {
+                if (PlusLimpiezaAlt.HasValue && PlusLimpiezaAlt.Value != GraficoOriginal.PlusLimpieza) {
+                    return PlusLimpiezaAlt.Value == true ? Reclama.AFavor : Reclama.EnContra;
+                }
+                return Reclama.Nada;
+            }
+        }
+
+        
+
+
+
+        #endregion
+        // ====================================================================================================
 
 
 
 
-	}
+    }
 }

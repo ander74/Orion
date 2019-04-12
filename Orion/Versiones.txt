@@ -11,6 +11,16 @@ PROYECTO ORIÓN
 			- 
 
 
+		12 de Abril de 2019
+
+			- Se corrige un error al navegar por los pijamas de un conductor, si el actual era nulo, fallaba.
+
+			- Se añade el color verde para los conceptos del gráfico alternativo que son a favor y se mantiene el
+			  rojo para los que son en contra.
+
+			- Al generar una reclamación, los conceptos de gráfico alternativo que son en contra, se añaden a la misma.
+
+
 		11 de Abril de 2019
 
 			- Se quitan los botones de calculadora y ayuda del pijama, ya que están en la barra de pestañas.

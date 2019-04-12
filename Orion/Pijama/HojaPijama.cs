@@ -13,6 +13,7 @@ namespace Orion.Pijama {
     using System.Collections.Generic;
     using System.Linq;
     using LiveCharts;
+    using LiveCharts.Defaults;
     using Orion.DataModels;
     using Orion.Models;
     using Orion.Servicios;
@@ -1504,7 +1505,7 @@ namespace Orion.Pijama {
 
 
         public ChartValues<int> SerieTurnos {
-            get => new ChartValues<int>(ListaDias.Select(d => d.Grafico > 0 ? d.TurnoAlt.HasValue ? d.TurnoAlt.Value * -1 : d.GraficoTrabajado.Turno * -1 : -6).ToArray());
+            get => new ChartValues<int>(ListaDias.Select(d => d.Grafico > 0 ? d.TurnoAlt.HasValue ? d.TurnoAlt.Value : d.GraficoTrabajado.Turno : -1).ToArray());
         }
 
 
@@ -1512,32 +1513,47 @@ namespace Orion.Pijama {
         public ChartValues<int> SerieInicios {
             get => new ChartValues<int>(ListaDias.Select(d => {
                 int inicio = d.Grafico > 0 ? d.InicioAlt.HasValue ? (int)d.InicioAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Inicio.Value.TotalMinutes : 0;
-                return inicio * -1;
+                return inicio;
             }));
         }
 
 
         //public ChartValues<int> SerieFinales {
-        //    get => new ChartValues<int>(ListaDias.Select(d => d.Grafico > 0 ? d.FinalAlt.HasValue ? (int)d.FinalAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Final.Value.TotalMinutes : 0).ToArray());
+        //    get => new ChartValues<int>(ListaDias.Select(d => {
+        //        int inicio = d.Grafico > 0 ? d.InicioAlt.HasValue ? (int)d.InicioAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Inicio.Value.TotalMinutes : 0;
+        //        int final = d.Grafico > 0 ? d.FinalAlt.HasValue ? (int)d.FinalAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Final.Value.TotalMinutes : 0;
+        //        if (final < inicio) final += 1440;
+        //        return (final - inicio);
+        //    })); 
         //}
         public ChartValues<int> SerieFinales {
-            get => new ChartValues<int>(ListaDias.Select(d => {
+            get => new ChartValues<int>(ListaDias.Select(d => d.Grafico > 0 ? d.FinalAlt.HasValue ? (int)d.FinalAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Final.Value.TotalMinutes : 0));
+        }
+
+
+        public ChartValues<OhlcPoint> SerieHorarios {
+            get => new ChartValues<OhlcPoint>(ListaDias.Select(d => {
                 int inicio = d.Grafico > 0 ? d.InicioAlt.HasValue ? (int)d.InicioAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Inicio.Value.TotalMinutes : 0;
                 int final = d.Grafico > 0 ? d.FinalAlt.HasValue ? (int)d.FinalAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Final.Value.TotalMinutes : 0;
-                if (final < inicio) final += 1440;
-                return (final - inicio) * -1;
-            })); 
+                int turno = d.Grafico > 0 ? d.TurnoAlt.HasValue ? d.TurnoAlt.Value : d.GraficoTrabajado.Turno : 0;
+                int ip = 2;
+                int fp = 2;
+                if (turno == 1) {
+                    fp = 1;
+                } else {
+                    fp = 3;
+                }
+                return new OhlcPoint(ip, inicio, final, fp);
+            }).ToArray());
         }
 
 
         public Func<double,string> TurnoFormatter {
-            get => x => (x * -1).ToString("0");
+            get => x => (x).ToString("0");
         }
 
         public Func<double, string> TimeFormatter {
             get => x => {
-                if (x < 0) x = x * -1;
-                //if (x < -1440) x += 1440;
                 return new TimeSpan(0, (int)x, 0).ToTexto();
             };
         }

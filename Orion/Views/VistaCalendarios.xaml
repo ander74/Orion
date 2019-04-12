@@ -2019,7 +2019,7 @@
 							   VerticalContentAlignment="Center" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
 							   Content="{Binding Pijama.DiaSeleccionado.ComboGrafico, Converter={StaticResource cnvNumGraficoPijama}}"/>
                         <controls:QTextBox Grid.Row="1" Grid.Column="1" FontSize="12" 
-								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
+								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center"
 								 Text="{Binding DiaCalendarioSeleccionado.TurnoAlt}"/>
                         <controls:QTextBox Grid.Row="1" Grid.Column="2" FontSize="12" 
 								 Margin="4,0" VerticalAlignment="Center" Padding="3" Width="50" HorizontalContentAlignment="Center" 
@@ -2172,7 +2172,7 @@
                             <Setter Property="ToolTip" Value="{Binding TrabajadasReales, Converter={StaticResource cnvHora}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
                             <Setter Property="FontWeight" Value="{Binding TrabajadasAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
-                            <Setter Property="Foreground" Value="{Binding TrabajadasAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+                            <Setter Property="Foreground" Value="{Binding ReclamaTrabajadas, Converter={StaticResource cnvColorColumnaPijama}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -2181,7 +2181,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="FontWeight" Value="{Binding AcumuladasAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
-                            <Setter Property="Foreground" Value="{Binding AcumuladasAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+                            <Setter Property="Foreground" Value="{Binding ReclamaAcumuladas, Converter={StaticResource cnvColorColumnaPijama}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -2190,7 +2190,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="FontWeight" Value="{Binding NocturnasAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
-                            <Setter Property="Foreground" Value="{Binding NocturnasAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+                            <Setter Property="Foreground" Value="{Binding ReclamaNocturnas, Converter={StaticResource cnvColorColumnaPijama}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -2206,7 +2206,7 @@
                             <Setter Property="ToolTip" Value="{Binding ImporteDesayuno, Converter={StaticResource cnvDecimalEuro}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
                             <Setter Property="FontWeight" Value="{Binding DesayunoAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
-                            <Setter Property="Foreground" Value="{Binding DesayunoAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+                            <Setter Property="Foreground" Value="{Binding ReclamaDesayuno, Converter={StaticResource cnvColorColumnaPijama}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -2217,7 +2217,7 @@
                             <Setter Property="ToolTip" Value="{Binding ImporteComida, Converter={StaticResource cnvDecimalEuro}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
                             <Setter Property="FontWeight" Value="{Binding ComidaAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
-                            <Setter Property="Foreground" Value="{Binding ComidaAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+                            <Setter Property="Foreground" Value="{Binding ReclamaComida, Converter={StaticResource cnvColorColumnaPijama}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -2228,7 +2228,7 @@
                             <Setter Property="ToolTip" Value="{Binding ImporteCena, Converter={StaticResource cnvDecimalEuro}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
                             <Setter Property="FontWeight" Value="{Binding CenaAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
-                            <Setter Property="Foreground" Value="{Binding CenaAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+                            <Setter Property="Foreground" Value="{Binding ReclamaCena, Converter={StaticResource cnvColorColumnaPijama}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -2239,7 +2239,7 @@
                             <Setter Property="ToolTip" Value="{Binding ImportePlusCena, Converter={StaticResource cnvDecimalEuro}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
                             <Setter Property="FontWeight" Value="{Binding PlusCenaAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
-                            <Setter Property="Foreground" Value="{Binding PlusCenaAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+                            <Setter Property="Foreground" Value="{Binding ReclamaPlusCena, Converter={StaticResource cnvColorColumnaPijama}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -2268,7 +2268,7 @@
                             <Setter Property="ToolTip" Value="{Binding FacturadoPaqueteria, Converter={StaticResource cnvDecimalEuro}}"/>
                             <Setter Property="ToolTipService.ShowDuration" Value="1000000"/>
                             <Setter Property="FontWeight" Value="{Binding PlusPaqueteriaAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
-                            <Setter Property="Foreground" Value="{Binding PlusPaqueteriaAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+                            <Setter Property="Foreground" Value="{Binding ReclamaPlusPaqueteria, Converter={StaticResource cnvColorColumnaPijama}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -2277,7 +2277,7 @@
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="FontWeight" Value="{Binding PlusLimpiezaAlt, Converter={StaticResource cnvNegritaColumnaPijama}}"/>
-                            <Setter Property="Foreground" Value="{Binding PlusLimpiezaAlt, Converter={StaticResource cnvColorColumnaPijama}}"/>
+                            <Setter Property="Foreground" Value="{Binding ReclamaPlusLimpieza, Converter={StaticResource cnvColorColumnaPijama}}"/>
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                 </DataGridTextColumn>
@@ -2566,13 +2566,13 @@
                                     <ch:Axis Foreground="DarkBlue" Position="LeftBottom" Title="Días"
                                              LabelFormatter="{Binding CalendariosVM.Pijama.DiaFormatter}">
                                         <ch:Axis.Separator>
-                                            <ch:Separator Step="3"/>
+                                            <ch:Separator Step="2"/>
                                         </ch:Axis.Separator>
                                     </ch:Axis>
                                 </ch:CartesianChart.AxisX>
                                 <!-- EJE Y -->
                                 <ch:CartesianChart.AxisY>
-                                    <ch:Axis Foreground="DarkBlue" MinValue="-5" MaxValue="0" Title="Turno"
+                                    <ch:Axis Foreground="DarkBlue" MinValue="0" MaxValue="5" Title="Turno"
                                              LabelFormatter="{Binding CalendariosVM.Pijama.TurnoFormatter}">
                                         <ch:Axis.Separator>
                                             <ch:Separator Stroke="PaleGoldenrod" Step="1"/>
@@ -2591,23 +2591,16 @@
 
                         <Grid Margin="5,0">
                             <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
-                            <ch:CartesianChart Margin="10" Height="300" LegendLocation="None" Background="Transparent" Foreground="DarkBlue">
+                            <ch:CartesianChart Margin="10" Height="300" LegendLocation="None" Background="Transparent" Foreground="DarkBlue"
+                                               DataTooltip="{x:Null}">
                                 <!-- SERIES -->
                                 <ch:CartesianChart.Series>
-                                    <ch:StackedColumnSeries Title="Inicio"
-                                                            StrokeThickness="0"
-                                                            ColumnPadding="0"
-                                                            LabelsPosition="Merged"
-                                                            Fill="Transparent"
-                                                            Values="{Binding CalendariosVM.Pijama.SerieInicios}"/>
-                                    <ch:StackedColumnSeries Title="Horas"
-                                                            StrokeThickness="0.5"
-                                                            ColumnPadding="0"
-                                                            LabelsPosition="Merged"
-                                                            Fill="{StaticResource orDegradadoRojo}"
-                                                            Stroke="LightGray"
-                                                            Values="{Binding CalendariosVM.Pijama.SerieFinales}"/>
-
+                                    <ch:OhlcSeries Title="Horario"
+                                                   Values="{Binding CalendariosVM.Pijama.SerieHorarios}"
+                                                   StrokeThickness="6"
+                                                   Stroke="DarkBlue"
+                                                   DecreaseBrush="DarkOliveGreen"
+                                                   IncreaseBrush="IndianRed"/>
                                 </ch:CartesianChart.Series>
                                 <!-- EJE X -->
                                 <ch:CartesianChart.AxisX>
@@ -2620,7 +2613,7 @@
                                 </ch:CartesianChart.AxisX>
                                 <!-- EJE Y -->
                                 <ch:CartesianChart.AxisY>
-                                    <ch:Axis Foreground="DarkBlue" Title="Hora" MinValue="-1560" MaxValue="-240"
+                                    <ch:Axis Foreground="DarkBlue" Title="Hora" MinValue="60" MaxValue="1620"
                                              LabelFormatter="{Binding CalendariosVM.Pijama.TimeFormatter}">
                                         <ch:Axis.Separator>
                                             <ch:Separator Stroke="PaleGoldenrod" Step="60"/>

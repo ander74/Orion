@@ -6,20 +6,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
+using static Orion.Pijama.DiaPijama;
 
 namespace Orion.Convertidores {
 
-	[ValueConversion(typeof(bool), typeof(SolidColorBrush))]
+	[ValueConversion(typeof(int), typeof(SolidColorBrush))]
 	class ConvertidorColorColumnaPijama : IValueConverter {
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
-			if (value != null) {
-				return new SolidColorBrush(Colors.DarkRed);
-			}
-			//if (value is bool valor && valor) {
-			//	return new SolidColorBrush(Colors.IndianRed);
-			//}
-			return new SolidColorBrush(Colors.Black);
+            if (value is Reclama i) {
+                if (i == Reclama.EnContra) { 
+                    return new SolidColorBrush(Colors.DarkRed);
+                }
+                if (i == Reclama.AFavor) {
+                    return new SolidColorBrush(Colors.DarkGreen);
+                }
+            }
+            return new SolidColorBrush(Colors.Black);
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) {
