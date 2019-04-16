@@ -11,6 +11,13 @@ PROYECTO ORIÓN
 			- 
 
 
+		16 de Abril de 2019
+
+			- Se añade un contador de turnos a la barra de estado de gráficos.
+
+			- Se modifican las cabeceras de la tabla 'Estadística por turnos'
+
+
 		12 de Abril de 2019
 
 			- Se corrige un error al navegar por los pijamas de un conductor, si el actual era nulo, fallaba.

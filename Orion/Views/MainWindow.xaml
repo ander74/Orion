@@ -162,8 +162,8 @@
         <!-- ==================================================================================================== -->
         <Grid Grid.Row="1" Height="24" VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
@@ -263,6 +263,7 @@
         <Grid Grid.Row="0" Background="LightGray" Opacity="0.5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
               Visibility="{Binding VisibilidadProgreso, Mode=TwoWay}"/>
 
+        
         <Grid VerticalAlignment="Center" HorizontalAlignment="Center" Width="Auto" Height="150" Background="{StaticResource DegradadoCeleste1}"
               Visibility="{Binding VisibilidadProgreso, Mode=TwoWay}">
 

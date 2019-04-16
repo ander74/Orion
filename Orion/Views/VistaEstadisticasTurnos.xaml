@@ -199,40 +199,40 @@
                                             CellStyle="{StaticResource EstiloCeldasNormalIzquierda}"
                                             Binding="{Binding Conductor.MatriculaApellidos}"/>
 
-                        <DataGridTextColumn x:Name="Dias1" Header="Dias-1" Width="*" MinWidth="60" Binding="{Binding Dias[1]}"/>
-                        <DataGridTextColumn x:Name="Dias2" Header="Dias-2" Width="*" MinWidth="60" Binding="{Binding Dias[2]}"/>
-                        <DataGridTextColumn x:Name="Dias3" Header="Dias-3" Width="*" MinWidth="60" Binding="{Binding Dias[3]}"/>
-                        <DataGridTextColumn x:Name="Dias4" Header="Dias-4" Width="*" MinWidth="60" Binding="{Binding Dias[4]}"/>
+                        <DataGridTextColumn x:Name="Dias1" Header="Turnos 1" Width="*" MinWidth="60" Binding="{Binding Dias[1]}"/>
+                        <DataGridTextColumn x:Name="Dias2" Header="Turnos 2" Width="*" MinWidth="60" Binding="{Binding Dias[2]}"/>
+                        <DataGridTextColumn x:Name="Dias3" Header="Turnos 3" Width="*" MinWidth="60" Binding="{Binding Dias[3]}"/>
+                        <DataGridTextColumn x:Name="Dias4" Header="Turnos 4" Width="*" MinWidth="60" Binding="{Binding Dias[4]}"/>
 
-                        <DataGridTextColumn x:Name="Trabajadas1" Header="Horas-1" Width="*" MinWidth="60" Binding="{Binding Trabajadas[1]}"/>
-                        <DataGridTextColumn x:Name="Trabajadas2" Header="Horas-2" Width="*" MinWidth="60" Binding="{Binding Trabajadas[2]}"/>
-                        <DataGridTextColumn x:Name="Trabajadas3" Header="Horas-3" Width="*" MinWidth="60" Binding="{Binding Trabajadas[3]}"/>
-                        <DataGridTextColumn x:Name="Trabajadas4" Header="Horas-4" Width="*" MinWidth="60" Binding="{Binding Trabajadas[4]}"/>
+                        <DataGridTextColumn x:Name="Trabajadas1" Header="Horas T1" Width="*" MinWidth="60" Binding="{Binding Trabajadas[1]}"/>
+                        <DataGridTextColumn x:Name="Trabajadas2" Header="Horas T2" Width="*" MinWidth="60" Binding="{Binding Trabajadas[2]}"/>
+                        <DataGridTextColumn x:Name="Trabajadas3" Header="Horas T3" Width="*" MinWidth="60" Binding="{Binding Trabajadas[3]}"/>
+                        <DataGridTextColumn x:Name="Trabajadas4" Header="Horas T4" Width="*" MinWidth="60" Binding="{Binding Trabajadas[4]}"/>
 
-                        <DataGridTextColumn x:Name="Acumuladas1" Header="Acum-1" Width="*" MinWidth="60" Binding="{Binding Acumuladas[1]}"/>
-                        <DataGridTextColumn x:Name="Acumuladas2" Header="Acum-2" Width="*" MinWidth="60" Binding="{Binding Acumuladas[2]}"/>
-                        <DataGridTextColumn x:Name="Acumuladas3" Header="Acum-3" Width="*" MinWidth="60" Binding="{Binding Acumuladas[3]}"/>
-                        <DataGridTextColumn x:Name="Acumuladas4" Header="Acum-4" Width="*" MinWidth="60" Binding="{Binding Acumuladas[4]}"/>
+                        <DataGridTextColumn x:Name="Acumuladas1" Header="Acum T1" Width="*" MinWidth="60" Binding="{Binding Acumuladas[1]}"/>
+                        <DataGridTextColumn x:Name="Acumuladas2" Header="Acum T2" Width="*" MinWidth="60" Binding="{Binding Acumuladas[2]}"/>
+                        <DataGridTextColumn x:Name="Acumuladas3" Header="Acum T3" Width="*" MinWidth="60" Binding="{Binding Acumuladas[3]}"/>
+                        <DataGridTextColumn x:Name="Acumuladas4" Header="Acum T4" Width="*" MinWidth="60" Binding="{Binding Acumuladas[4]}"/>
 
-                        <DataGridTextColumn x:Name="Nocturnas1" Header="Noct-1" Width="*" MinWidth="60" Binding="{Binding Nocturnas[1]}"/>
-                        <DataGridTextColumn x:Name="Nocturnas2" Header="Noct-2" Width="*" MinWidth="60" Binding="{Binding Nocturnas[2]}"/>
-                        <DataGridTextColumn x:Name="Nocturnas3" Header="Noct-3" Width="*" MinWidth="60" Binding="{Binding Nocturnas[3]}"/>
-                        <DataGridTextColumn x:Name="Nocturnas4" Header="Noct-4" Width="*" MinWidth="60" Binding="{Binding Nocturnas[4]}"/>
+                        <DataGridTextColumn x:Name="Nocturnas1" Header="Noct T1" Width="*" MinWidth="60" Binding="{Binding Nocturnas[1]}"/>
+                        <DataGridTextColumn x:Name="Nocturnas2" Header="Noct T2" Width="*" MinWidth="60" Binding="{Binding Nocturnas[2]}"/>
+                        <DataGridTextColumn x:Name="Nocturnas3" Header="Noct T3" Width="*" MinWidth="60" Binding="{Binding Nocturnas[3]}"/>
+                        <DataGridTextColumn x:Name="Nocturnas4" Header="Noct T4" Width="*" MinWidth="60" Binding="{Binding Nocturnas[4]}"/>
 
-                        <DataGridTextColumn x:Name="ImporteDietas1" Header="Dietas-1" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[1]}"/>
-                        <DataGridTextColumn x:Name="ImporteDietas2" Header="Dietas-2" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[2]}"/>
-                        <DataGridTextColumn x:Name="ImporteDietas3" Header="Dietas-3" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[3]}"/>
-                        <DataGridTextColumn x:Name="ImporteDietas4" Header="Dietas-4" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[4]}"/>
+                        <DataGridTextColumn x:Name="ImporteDietas1" Header="Dietas T1" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[1]}"/>
+                        <DataGridTextColumn x:Name="ImporteDietas2" Header="Dietas T2" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[2]}"/>
+                        <DataGridTextColumn x:Name="ImporteDietas3" Header="Dietas T3" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[3]}"/>
+                        <DataGridTextColumn x:Name="ImporteDietas4" Header="Dietas T4" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[4]}"/>
 
-                        <DataGridTextColumn x:Name="DiasFestivos1" Header="Fest-1" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[1]}"/>
-                        <DataGridTextColumn x:Name="DiasFestivos2" Header="Fest-2" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[2]}"/>
-                        <DataGridTextColumn x:Name="DiasFestivos3" Header="Fest-3" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[3]}"/>
-                        <DataGridTextColumn x:Name="DiasFestivos4" Header="Fest-4" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[4]}"/>
+                        <DataGridTextColumn x:Name="DiasFestivos1" Header="Fest T1" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[1]}"/>
+                        <DataGridTextColumn x:Name="DiasFestivos2" Header="Fest T2" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[2]}"/>
+                        <DataGridTextColumn x:Name="DiasFestivos3" Header="Fest T3" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[3]}"/>
+                        <DataGridTextColumn x:Name="DiasFestivos4" Header="Fest T4" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[4]}"/>
 
                         <DataGridTextColumn x:Name="DiasTrabajo" Header="D.Trab" Width="*" MinWidth="60" Binding="{Binding DiasTrabajo}"/>
                         <DataGridTextColumn x:Name="DiasDescanso" Header="D.Desc" Width="*" MinWidth="60" Binding="{Binding DiasDescanso}"/>
-                        <DataGridTextColumn x:Name="FindesTrabajados" Header="F.Trab" Width="*" MinWidth="60" Binding="{Binding FindesTrabajados}"/>
-                        <DataGridTextColumn x:Name="FindesDescansados" Header="F.Desc" Width="*" MinWidth="60" Binding="{Binding FindesDescansados}"/>
+                        <DataGridTextColumn x:Name="FindesTrabajados" Header="FN.Trab" Width="*" MinWidth="60" Binding="{Binding FindesTrabajados}"/>
+                        <DataGridTextColumn x:Name="FindesDescansados" Header="FN.Desc" Width="*" MinWidth="60" Binding="{Binding FindesDescansados}"/>
                         <DataGridTextColumn x:Name="PlusPaqueteria" Header="Paqu" Width="*" MinWidth="60" Binding="{Binding PlusPaqueteria}"/>
                         <DataGridTextColumn x:Name="PlusMenorDescanso" Header="M.Desc" Width="*" MinWidth="60" Binding="{Binding PlusMenorDescanso}"/>
                     </DataGrid.Columns>

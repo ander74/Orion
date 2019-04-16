@@ -417,20 +417,21 @@ namespace Orion.ViewModels {
                 double trab = 0;
                 double acum = 0;
                 double noc = 0;
+                var turnos = new int[4];
                 if (VistaGraficos != null) {
                     foreach (object obj in VistaGraficos) {
-                        Grafico g = obj as Grafico;
-                        if (g == null) continue;
-                        trab += g.Trabajadas.TotalMinutes;
-                        acum += g.Acumuladas.TotalMinutes;
-                        noc += g.Nocturnas.TotalMinutes;
+                        if (obj is Grafico g) {
+                            trab += g.Trabajadas.TotalMinutes;
+                            acum += g.Acumuladas.TotalMinutes;
+                            noc += g.Nocturnas.TotalMinutes;
+                            turnos[g.Turno - 1]++;
+                        }
                     }
                     num = VistaGraficos.Count - 1;
                 }
-                string texto = "Graficos: " + num.ToString();
-                texto += "  |  Trabajadas=" + (trab / 60).ToString("0.00");
-                texto += "  |  Acumuladas=" + (acum / 60).ToString("0.00");
-                texto += "  |  Nocturnas=" + (noc / 60).ToString("0.00");
+                string texto = "Graf: " + num.ToString();
+                texto += $"  |  Trab: {(trab / 60).ToString("0.00")}  |  Acum: {(acum / 60).ToString("0.00")}  |  Noct: {(noc / 60).ToString("0.00")}";
+                texto += $"  |  T-1: {turnos[0]}  |  T-2: {turnos[1]}  |  T-3: {turnos[2]}  |  T-4: {turnos[3]}";
                 return texto;
             }
         }
