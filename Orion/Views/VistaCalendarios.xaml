@@ -96,6 +96,13 @@
             <Setter Property="LineaPuntos" Value="True"/>
         </Style>
 
+        <Style x:Key="EstiloTextoValor" TargetType="controls:TextoValorH">
+            <Setter Property="FontFamily" Value="Verdana"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Margin" Value="5,2"/>
+            <Setter Property="MostrarLineaPuntos" Value="True"/>
+        </Style>
+
     </UserControl.Resources>
 
 
@@ -117,29 +124,30 @@
         <!-- ==================================================================================================== -->
         <!-- BARRA DE BOTONES CALENDARIOS -->
         <!-- ==================================================================================================== -->
-        <StackPanel x:Name="BotonesCalendarios" Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Height="80" Background="{StaticResource DegradadoCeleste0}"
-                    Visibility="Visible">
+        <StackPanel x:Name="BotonesCalendarios" Grid.Row="0" Grid.ColumnSpan="2" Orientation="Horizontal" Height="80" 
+                    Background="{StaticResource DegradadoCeleste0}" Visibility="Visible">
 
             <!--BOTON GUARDAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding cmdGuardarCambios}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Guardar.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarAzul}"/>
-                        <Image Source="Imagenes/GuardarRojo.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarRojo}"/>
-                        <TextBlock Text="Guardar" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <controls:BotonDual ImagenActivo="Imagenes/GuardarRojo.png"
+                                ImagenNormal="Imagenes/Guardar.png"
+                                TextoActivo="Guardar"
+                                TextoNormal="Guardar"
+                                IsActivo="{Binding EnOtroCentro}"
+                                Command="{Binding cmdGuardarCambios}"/>
 
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
+            
+            <!-- NAVEGADOR MENSUAL NUEVO -->
+            <!--<controls:NavegadorMes Fecha="{Binding CalendariosVM.FechaActual, Mode=TwoWay}" />-->
+
             <!--BOTON RETROCEDE MES-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdRetrocedeMes}">
-                <Button.Content>
-                    <Image Source="Imagenes/Anterior.png" Style="{StaticResource EstiloImagen}"/>
-                </Button.Content>
-            </Button>
+            <controls:BotonBarra Titulo="&#x25C0;"
+                                 FontSize="24"
+                                 Foreground="RoyalBlue"
+                                 Imagen="{x:Null}"
+                                 Command="{Binding CalendariosVM.cmdRetrocedeMes}"/>
 
             <!--ETIQUETA MES-->
             <StackPanel Orientation="Vertical" Margin="6,12,6,6" VerticalAlignment="Center" Width="150">
@@ -150,11 +158,11 @@
             </StackPanel>
 
             <!--BOTON AVANZA MES-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding CalendariosVM.cmdAvanzaMes}">
-                <Button.Content>
-                    <Image Source="Imagenes/Siguiente.png" Style="{StaticResource EstiloImagen}"/>
-                </Button.Content>
-            </Button>
+            <controls:BotonBarra Titulo="&#x25B6;"
+                                 FontSize="24"
+                                 Foreground="RoyalBlue"
+                                 Imagen="{x:Null}"
+                                 Command="{Binding CalendariosVM.cmdAvanzaMes}"/>
 
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
@@ -2313,117 +2321,151 @@
                             <StackPanel Orientation="Vertical" Margin="0,4">
 
                                 <!-- TRABAJADAS, ACUMULADAS Y NOCTURNAS -->
-                                <controls:ItemResumen Descripcion="Horas Trabajadas" Style="{StaticResource EstiloItemResumen}" 
-                                              Valor="{Binding CalendariosVM.Pijama.Trabajadas, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
-                                              Visibility="{Binding CalendariosVM.Pijama.Trabajadas, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="Horas Acumuladas" Style="{StaticResource EstiloItemResumen}" 
-                                              Valor="{Binding CalendariosVM.Pijama.Acumuladas, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
-                                              Visibility="{Binding CalendariosVM.Pijama.Acumuladas, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="Horas Nocturnas" Style="{StaticResource EstiloItemResumen}" 
-                                              Valor="{Binding CalendariosVM.Pijama.Nocturnas, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
-                                              Visibility="{Binding CalendariosVM.Pijama.Nocturnas, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Horas Trabajadas"
+                                                      Style="{StaticResource EstiloItemResumen}" 
+                                                      Valor="{Binding CalendariosVM.Pijama.Trabajadas, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.Acumuladas, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Horas Acumuladas" 
+                                                      Style="{StaticResource EstiloItemResumen}" 
+                                                      Valor="{Binding CalendariosVM.Pijama.Acumuladas, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.Acumuladas, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Horas Nocturnas" 
+                                                      Style="{StaticResource EstiloItemResumen}" 
+                                                      Valor="{Binding CalendariosVM.Pijama.Nocturnas, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.Nocturnas, Converter={StaticResource cnvOcultoSiCero}}"/>
 
                                 <!-- COBRADAS, EXCESO JORNADA y REGULADAS -->
-                                <controls:ItemResumen Descripcion="Horas Cobradas"  Style="{StaticResource EstiloItemResumen}" 
-                                              Valor="{Binding CalendariosVM.Pijama.HorasCobradas,
-                                   Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
-                                              Visibility="{Binding CalendariosVM.Pijama.HorasCobradas, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="Exceso Jornada" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.ExcesoJornada,
-                                   Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
-                                              Visibility="{Binding CalendariosVM.Pijama.ExcesoJornada, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="Otras Horas" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.OtrasHoras,
-                                   Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
-                                              ToolTip="Horas reguladas que no son horas cobradas ni regulaciones de final de año."
-                                              Visibility="{Binding CalendariosVM.Pijama.OtrasHoras, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Horas Cobradas"  
+                                                      Style="{StaticResource EstiloItemResumen}" 
+                                                      Valor="{Binding CalendariosVM.Pijama.HorasCobradas, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.HorasCobradas, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Exceso Jornada" 
+                                                      Style="{StaticResource EstiloItemResumen}" 
+                                                      Valor="{Binding CalendariosVM.Pijama.ExcesoJornada, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.ExcesoJornada, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Otras Horas" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.OtrasHoras, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
+                                                      ToolTip="Horas reguladas que no son horas cobradas ni regulaciones de final de año."
+                                                      Visibility="{Binding CalendariosVM.Pijama.OtrasHoras, Converter={StaticResource cnvOcultoSiCero}}"/>
                             </StackPanel>
                         </Grid>
 
 
                         <!-- DÍAS -->
-                        <ToggleButton x:Name="BtDiasMes" Margin="5,10,5,0" Padding="5,0" FontSize="14" Foreground="DarkRed" FontWeight="Bold"
-							  Content="Días Mes Actual" ToolTip="Mostrar/Ocultar" Style="{StaticResource EstiloToggleBarraPequeña}"/>
+                        <ToggleButton x:Name="BtDiasMes" 
+                                      Margin="5,10,5,0" 
+                                      Padding="5,0" 
+                                      FontSize="14" 
+                                      Foreground="DarkRed" 
+                                      FontWeight="Bold"
+                                      Content="Días Mes Actual" 
+                                      ToolTip="Mostrar/Ocultar" 
+                                      Style="{StaticResource EstiloToggleBarraPequeña}"/>
 
-                        <Grid Margin="5,0" Visibility="{Binding ElementName=BtDiasMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
-                            <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Background="AliceBlue"/>
-                            <StackPanel Orientation="Vertical" Margin="0,4">
+                        <Grid Margin="5,0" 
+                              Visibility="{Binding ElementName=BtDiasMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
+                            <Border BorderBrush="DarkGray" 
+                                    BorderThickness="1" 
+                                    CornerRadius="5" 
+                                    Background="AliceBlue"/>
+                            <StackPanel Orientation="Vertical" 
+                                        Margin="0,4">
 
                                 <!-- TRABAJO Y DESCANSOS -->
-                                <controls:ItemResumen Descripcion="Días Trabajados" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.Trabajo, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.Trabajo, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="   (Debería trabajar)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.DiasComputoTrabajo, StringFormat='(\{0:00.00})'}"
-                                              FontSize="10"
-                                              Foreground="DarkBlue"
-                                              ToolTip="Días que debe trabajar."
-                                              Visibility="{Binding CalendariosVM.Pijama.NoEsFijo, Converter={StaticResource cnvBoolToVisibility}}"/>
-                                <controls:ItemResumen Descripcion="Días Descanso (J-D)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.Descanso, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.Descanso, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Días Trabajados" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.Trabajo, StringFormat=00}" 
+                                                      Visibility="{Binding CalendariosVM.Pijama.Trabajo, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="   (Debería trabajar)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.DiasComputoTrabajo, StringFormat='(\{0:00.00})'}"
+                                                      FontSize="10"
+                                                      Foreground="DarkBlue"
+                                                      ToolTip="Días que debe trabajar."
+                                                      Visibility="{Binding CalendariosVM.Pijama.NoEsFijo, Converter={StaticResource cnvBoolToVisibility}}"/>
+                                <controls:ItemResumen Descripcion="Días Descanso (J-D)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.Descanso, StringFormat=00}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.Descanso, Converter={StaticResource cnvOcultoSiCero}}"/>
                                 <controls:ItemResumen Visibility="{Binding CalendariosVM.Pijama.NoEsFijo, Converter={StaticResource cnvBoolToVisibility}}"
-                                              Descripcion="   (Debería descansar)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.DiasComputoDescanso, StringFormat='(\{0:00.00})'}"
-                                              FontSize="10"
-                                              Foreground="DarkBlue"
-                                              ToolTip="Días que debe descansar."/>
-                                <controls:ItemResumen Descripcion="Días Vacaciones (O-V)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.Vacaciones, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.Vacaciones, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                                      Descripcion="   (Debería descansar)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.DiasComputoDescanso, StringFormat='(\{0:00.00})'}"
+                                                      FontSize="10"
+                                                      Foreground="DarkBlue"
+                                                      ToolTip="Días que debe descansar."/>
+                                <controls:ItemResumen Descripcion="Días Vacaciones (O-V)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.Vacaciones, StringFormat=00}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.Vacaciones, Converter={StaticResource cnvOcultoSiCero}}"/>
                                 <controls:ItemResumen Visibility="{Binding CalendariosVM.Pijama.NoEsFijo, Converter={StaticResource cnvBoolToVisibility}}"
-                                              Descripcion="   (Debería tener de vacaciones)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.DiasComputoVacaciones, StringFormat='(\{0:00.00})'}"
-                                              FontSize="10"
-                                              Foreground="DarkBlue"
-                                              ToolTip="Días de vacaciones que le corresponden."/>
-                                <controls:ItemResumen Descripcion="Descansos no disfrutados (DND)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.DescansosNoDisfrutados, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.DescansosNoDisfrutados, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="Días Trabajado en J-D" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.TrabajoEnDescanso, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.TrabajoEnDescanso, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                                      Descripcion="   (Debería tener de vacaciones)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.DiasComputoVacaciones, StringFormat='(\{0:00.00})'}"
+                                                      FontSize="10"
+                                                      Foreground="DarkBlue"
+                                                      ToolTip="Días de vacaciones que le corresponden."/>
+                                <controls:ItemResumen Descripcion="Descansos no disfrutados (DND)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.DescansosNoDisfrutados, StringFormat=00}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.DescansosNoDisfrutados, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Días Trabajado en J-D" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.TrabajoEnDescanso, StringFormat=00}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.TrabajoEnDescanso, Converter={StaticResource cnvOcultoSiCero}}"/>
 
                                 <!-- DESCANSOS -->
-                                <controls:ItemResumen Descripcion="Descanso en Finde (FN)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.DescansoEnFinde, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.DescansoEnFinde, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="Días de enfermedad (E)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.Enfermo, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.Enfermo, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="Descansos sueltos (DS)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.DescansoSuelto, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.DescansoSuelto, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="Descansos compensatorios (DC)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.DescansoCompensatorio, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.DescansoCompensatorio, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="Días de permiso (PER)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.Permiso, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.Permiso, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="Días de libre disposición (F6)" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.DiasF6Totales, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.DiasF6Totales, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Descanso en Finde (FN)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.DescansoEnFinde, StringFormat=00}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.DescansoEnFinde, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Días de enfermedad (E)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.Enfermo, StringFormat=00}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.Enfermo, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Descansos sueltos (DS)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.DescansoSuelto, StringFormat=00}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.DescansoSuelto, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Descansos compensatorios (DC)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.DescansoCompensatorio, StringFormat=00}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.DescansoCompensatorio, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Días de permiso (PER)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.Permiso, StringFormat=00}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.Permiso, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Días de libre disposición (F6)" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.DiasF6Totales, StringFormat=00}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.DiasF6Totales, Converter={StaticResource cnvOcultoSiCero}}"/>
 
                                 <!-- COMITÉ EN JD Y EN DC -->
-                                <controls:ItemResumen Descripcion="Días de comité" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.Comite, StringFormat=00}"
-                                              Visibility="{Binding CalendariosVM.Pijama.Comite, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="    En JD" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.ComiteEnDescanso, StringFormat=00}"
-                                              ToolTip="Del total de días de comité, los realizados en descanso (J-D)."
-                                              Visibility="{Binding CalendariosVM.Pijama.ComiteEnDescanso, Converter={StaticResource cnvOcultoSiCero}}"/>
-                                <controls:ItemResumen Descripcion="    En DC" Style="{StaticResource EstiloItemResumen}"
-                                              Valor="{Binding CalendariosVM.Pijama.ComiteEnDC, StringFormat=00}"
-                                              ToolTip="Del total de días de comité, los realizados en descanso compensatorio (DC)."
-                                              Visibility="{Binding CalendariosVM.Pijama.ComiteEnDC, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="Días de comité" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.Comite, StringFormat=00}"
+                                                      Visibility="{Binding CalendariosVM.Pijama.Comite, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="    En JD" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.ComiteEnDescanso, StringFormat=00}"
+                                                      ToolTip="Del total de días de comité, los realizados en descanso (J-D)."
+                                                      Visibility="{Binding CalendariosVM.Pijama.ComiteEnDescanso, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumen Descripcion="    En DC" 
+                                                      Style="{StaticResource EstiloItemResumen}"
+                                                      Valor="{Binding CalendariosVM.Pijama.ComiteEnDC, StringFormat=00}"
+                                                      ToolTip="Del total de días de comité, los realizados en descanso compensatorio (DC)."
+                                                      Visibility="{Binding CalendariosVM.Pijama.ComiteEnDC, Converter={StaticResource cnvOcultoSiCero}}"/>
 
                                 <!-- TOTAL DÍAS -->
-                                <controls:ItemResumenDoble Descripcion="TOTAL DÍAS ACTIVO" Style="{StaticResource EstiloItemResumenDoble}" Margin="5,10,5,2"
-                                              Valor1="{Binding CalendariosVM.Pijama.DiasActivo, StringFormat=00}"
-                                                       Separador=" de "
-                                              Valor2="{Binding CalendariosVM.Pijama.DiasMes, StringFormat=00}"
-                                              ToolTip="Total de los días en los que el trabajador está activo."
-                                              Visibility="{Binding CalendariosVM.Pijama.DiasActivo, Converter={StaticResource cnvOcultoSiCero}}"/>
+                                <controls:ItemResumenDoble Descripcion="TOTAL DÍAS ACTIVO" 
+                                                           Style="{StaticResource EstiloItemResumenDoble}" 
+                                                           Margin="5,10,5,2"
+                                                           Valor1="{Binding CalendariosVM.Pijama.DiasActivo, StringFormat=00}"
+                                                           Separador=" de "
+                                                           Valor2="{Binding CalendariosVM.Pijama.DiasMes, StringFormat=00}"
+                                                           ToolTip="Total de los días en los que el trabajador está activo."
+                                                           Visibility="{Binding CalendariosVM.Pijama.DiasActivo, Converter={StaticResource cnvOcultoSiCero}}"/>
 
                             </StackPanel>
                         </Grid>

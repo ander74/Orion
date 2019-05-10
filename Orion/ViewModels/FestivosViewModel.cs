@@ -1,11 +1,19 @@
-﻿namespace Orion.ViewModels
+﻿#region COPYRIGHT
+// ===============================================
+//     Copyright 2017 - Orion 1.0 - A. Herrero    
+// -----------------------------------------------
+//  Vea el archivo Licencia.txt para más detalles 
+// ===============================================
+#endregion
+namespace Orion.ViewModels
 {
 	using System;
 	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Linq;
 	using System.Windows.Data;
-	using Orion.Config;
+    using System.Windows.Input;
+    using Orion.Config;
 	using Orion.DataModels;
 	using Orion.Models;
 	using Orion.Servicios;
@@ -17,7 +25,6 @@
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
 		private IMensajes mensajes;
-		private List<Festivo> _listaborrados = new List<Festivo>();
 
 		#endregion
 		// ====================================================================================================
@@ -52,7 +59,6 @@
 			}
 			ListaFestivos = new NotifyCollection<Festivo>(BdFestivos.GetFestivos());
 			VistaFestivos = new ListCollectionView(ListaFestivos);
-			//VistaFestivos.Filter = f => (f as Festivo).Año == AñoActual;
 		}
 
 
@@ -63,10 +69,9 @@
 			{
 				BdFestivos.GuardarFestivos(ListaFestivos.Where(f => f.Nuevo || f.Modificado));
 			}
-			if (_listaborrados.Count > 0)
+			if (ListaFestivos.Any(f => f.Borrado))
 			{
-				BdFestivos.BorrarFestivos(_listaborrados);
-				_listaborrados.Clear();
+				BdFestivos.BorrarFestivos(ListaFestivos.Where(f => f.Borrado));
 			}
 		}
 
@@ -86,12 +91,6 @@
 			HayCambios = false;
 		}
 
-
-		public void Borrar(Festivo festivo) {
-			_listaborrados.Add(festivo);
-			ListaFestivos.Remove(festivo);
-			HayCambios = true;
-		}
 
         internal bool EsFestivo(DateTime fecha) {
             return ListaFestivos.Any(f => f.Fecha.Equals(fecha));
@@ -127,6 +126,7 @@
 		private void Listafestivos_ItemPropertyChanged(object sender, ItemChangedEventArgs<Festivo> e)
 		{
 			HayCambios = true;
+            if (e.PropertyName == "Borrado") VistaFestivos.Refresh();
 		}
 
 
@@ -166,7 +166,7 @@
 			get { return _añoactual; }
 			set {
 				if (SetValue(ref _añoactual, value)) {
-					if (VistaFestivos != null) VistaFestivos.Filter = f => (f as Festivo).Año == _añoactual;
+					if (VistaFestivos != null) VistaFestivos.Filter = f => (f as Festivo).Año == _añoactual && (f as Festivo).Borrado == false;
 				}
 			}
 		}
@@ -183,6 +183,9 @@
 
         #endregion
         // ====================================================================================================
+
+
+
 
 
     }

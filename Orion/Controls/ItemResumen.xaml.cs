@@ -6,15 +6,24 @@
 // ===============================================
 #endregion
 namespace Orion.Controls {
-    using System;
+
     using System.Windows;
     using System.Windows.Controls;
-    using System.Windows.Media;
 
     public partial class ItemResumen : UserControl {
+
+
+        // ====================================================================================================
+        #region CONSTRUCTOR
+        // ====================================================================================================
+
         public ItemResumen() {
             InitializeComponent();
         }
+
+
+        #endregion
+        // ====================================================================================================
 
 
         // ====================================================================================================
@@ -26,14 +35,14 @@ namespace Orion.Controls {
             set { SetValue(DescripcionProperty, value); }
         }
         public static readonly DependencyProperty DescripcionProperty =
-            DependencyProperty.Register("Descripcion", typeof(string), typeof(ItemResumen), new PropertyMetadata("",null,new CoerceValueCallback(OnDescripcionCoerceValue)));
+            DependencyProperty.Register("Descripcion", typeof(string), typeof(ItemResumen), new PropertyMetadata("", null, new CoerceValueCallback(OnDescripcionCoerceValue)));
 
         public string Valor {
             get { return (string)GetValue(ValorProperty); }
             set { SetValue(ValorProperty, value); }
         }
         public static readonly DependencyProperty ValorProperty =
-            DependencyProperty.Register("Valor", typeof(string), typeof(ItemResumen), new PropertyMetadata());
+            DependencyProperty.Register("Valor", typeof(string), typeof(ItemResumen), new PropertyMetadata(""));
 
         public bool LineaPuntos {
             get { return (bool)GetValue(LineaPuntosProperty); }
@@ -41,6 +50,8 @@ namespace Orion.Controls {
         }
         public static readonly DependencyProperty LineaPuntosProperty =
             DependencyProperty.Register("LineaPuntos", typeof(bool), typeof(ItemResumen), new PropertyMetadata(false, new PropertyChangedCallback(OnLineaPuntosChanged)));
+
+
 
         #endregion
         // ====================================================================================================
@@ -60,6 +71,7 @@ namespace Orion.Controls {
         private static void OnLineaPuntosChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) {
             d.CoerceValue(DescripcionProperty);
         }
+
 
 
 

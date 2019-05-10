@@ -116,7 +116,7 @@
                 <Setter Property="Background" Value="{StaticResource orDegradadoMarron}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource GrisMedio}"/>
+                <Setter Property="Foreground" Value="{StaticResource BrushGris1}"/>
             </Trigger>
         </Style.Triggers>
     </Style>

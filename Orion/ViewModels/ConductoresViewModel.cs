@@ -70,6 +70,9 @@ namespace Orion.ViewModels {
                     _regulacionesborradas.Clear();
                 }
                 if (ListaConductores != null && ListaConductores.Count > 0) {
+                    //TODO: QUitar
+                    var x = ListaConductores.Count(c => c.Nuevo || c.Modificado);
+
                     BdConductores.GuardarConductores(ListaConductores.Where(c => c.Nuevo || c.Modificado));
                 }
                 // Si hay conductores con el id cero, avisamos.

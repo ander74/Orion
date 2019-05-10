@@ -6,6 +6,7 @@
 // ===============================================
 #endregion
 using Orion.Config;
+using Orion.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -13,6 +14,7 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace Orion.Models {
 
@@ -124,8 +126,26 @@ namespace Orion.Models {
 		}
 
 
-		#endregion
+        #endregion
 
 
-	}
+        #region COMANDO BORRAR
+
+        // Comando
+        private ICommand cmdborrarfestivo;
+        public ICommand cmdBorrarFestivo {
+            get {
+                if (cmdborrarfestivo == null) cmdborrarfestivo = new RelayCommand(p => BorrarFestivo());
+                return cmdborrarfestivo;
+            }
+        }
+
+        private void BorrarFestivo() {
+            this.Borrado = true;
+            PropiedadCambiada(nameof(Borrado));
+        }
+        #endregion
+
+
+    }
 }

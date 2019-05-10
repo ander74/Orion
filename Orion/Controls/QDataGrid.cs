@@ -70,7 +70,6 @@ namespace Orion.Controls {
 			get { return (ICommand)GetValue(DobleClickProperty); }
 			set { SetValue(DobleClickProperty, value); }
 		}
-
 		public static readonly DependencyProperty DobleClickProperty =
 			DependencyProperty.Register("DobleClick", typeof(ICommand), typeof(QDataGrid), new PropertyMetadata());
 
@@ -81,7 +80,6 @@ namespace Orion.Controls {
 			get { return (object)GetValue(DobleClickParametroProperty); }
 			set { SetValue(DobleClickParametroProperty, value); }
 		}
-
 		public static readonly DependencyProperty DobleClickParametroProperty =
 			DependencyProperty.Register("DobleClickParametro", typeof(object), typeof(QDataGrid), new PropertyMetadata());
 

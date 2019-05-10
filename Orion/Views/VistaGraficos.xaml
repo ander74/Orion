@@ -60,28 +60,20 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Height="80" Background="{StaticResource DegradadoCeleste0}">
 
             <!--BOTON GUARDAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding cmdGuardarCambios}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Guardar.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarAzul}"/>
-                        <Image Source="Imagenes/GuardarRojo.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarRojo}"/>
-                        <TextBlock Text="Guardar" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <controls:BotonDual ImagenActivo="Imagenes/GuardarRojo.png"
+                                ImagenNormal="Imagenes/Guardar.png"
+                                TextoActivo="Guardar"
+                                TextoNormal="Guardar"
+                                IsActivo="{Binding EnOtroCentro}"
+                                Command="{Binding cmdGuardarCambios}"/>
 
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
             <!--BOTON GRUPOS DE GRÁFICOS-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Click="BtGrupos_Click">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/AbrirPanelIzquierdo.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Grupos" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <controls:BotonBarra Titulo="Grupos" 
+                                 Imagen="Imagenes/AbrirPanelIzquierdo.png" 
+                                 Click="BtGrupos_Click" />
 
             <!--ETIQUETA GRUPO-->
             <StackPanel Orientation="Vertical" Margin="6,12,6,6" VerticalAlignment="Top">
@@ -94,47 +86,27 @@
             </StackPanel>
 
             <!--BOTON VALORACIONES DE GRÁFICOS-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Click="BtValoraciones_Click">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/AbrirPanelDerecho.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Valorac." TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <controls:BotonBarra Titulo="Valorac." 
+                                 Imagen="Imagenes/AbrirPanelDerecho.png" 
+                                 Click="BtValoraciones_Click" />
 
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
             <!--BOTON AÑADIR GRAFICO-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdAñadirGrafico}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/NuevaFila.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Añadir Gráfico" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <controls:BotonBarra Titulo="Añadir Gráfico" 
+                                 Imagen="Imagenes/NuevaFila.png" 
+                                 Command="{Binding GraficosVM.cmdAñadirGrafico}" />
 
             <!--BOTON BORRAR GRAFICO-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdBorrarGrafico}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/BorrarFila.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Borrar Gráfico" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <controls:BotonBarra Titulo="Borrar Gráfico" 
+                                 Imagen="Imagenes/BorrarFila.png" 
+                                 Command="{Binding GraficosVM.cmdBorrarGrafico}" />
 
             <!--BOTON DESHACER BORRAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdDeshacerBorrar}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/ActualizarTabla.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Deshacer Borrar" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <controls:BotonBarra Titulo="Deshacer Borrar" 
+                                 Imagen="Imagenes/ActualizarTabla.png" 
+                                 Command="{Binding GraficosVM.cmdDeshacerBorrar}" />
 
             <!-- DESPLEGABLE ACCIONES -->
             <xceed:DropDownButton x:Name="BtDropAcciones" Style="{StaticResource EstiloBotonDesplegable}">
@@ -151,26 +123,20 @@
                             <StackPanel Orientation="Horizontal">
 
                                 <!-- BOTON CALCULAR TABLA -->
-                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64"
-                                        Command="{Binding cmdCalcularTabla}" Click="BotonAcciones_Click">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Vertical">
-                                            <Image Source="Imagenes/CalcularTabla.png" Style="{StaticResource EstiloImagen}"/>
-                                            <TextBlock Text="Calcular Tabla" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
+                                <controls:BotonBarra Titulo="Calcular Tabla" 
+                                                     Imagen="Imagenes/CalcularTabla.png"
+                                                     Height="80"
+                                                     Width="64"
+                                                     Command="{Binding cmdCalcularTabla}"
+                                                     Click="BotonAcciones_Click" />
 
                                 <!-- BOTON DEDUCIR DÍA SEMANA -->
-                                <Button Style="{StaticResource EstiloBotonBarra}" Height="80" Width="64"
-                                        Command="{Binding cmdDeducirDiaSemana}" Click="BotonAcciones_Click">
-                                    <Button.Content>
-                                        <StackPanel Orientation="Vertical">
-                                            <Image Source="Imagenes/Calendario.png" Style="{StaticResource EstiloImagen}"/>
-                                            <TextBlock Text="Deducir Día Semana" TextWrapping="Wrap" TextAlignment="Center" VerticalAlignment="Center"/>
-                                        </StackPanel>
-                                    </Button.Content>
-                                </Button>
+                                <controls:BotonBarra Titulo="Deducir Día Semana" 
+                                                     Imagen="Imagenes/Calendario.png"
+                                                     Height="80"
+                                                     Width="64"
+                                                     Command="{Binding cmdDeducirDiaSemana}" 
+                                                     Click="BotonAcciones_Click" />
 
                                 <!-- DESPLEGABLE COMPARAR GRUPO -->
                                 <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}"
@@ -268,39 +234,14 @@
                                 <TextBlock Height="2" Margin="5,3" Background="LightGray"/>
 
                                 <!--BOTON ALTERNAR SELECCION TABLA GRAFICOS -->
-                                <ToggleButton Height="80" Width="64" Command="{Binding Source={x:Reference TablaGraficos}, Path=ComandoAlternarModoSeleccion}"
-											   Click="BotonAcciones_Click">
-                                    <ToggleButton.Style>
-                                        <Style BasedOn="{StaticResource EstiloToggleBarra}" TargetType="ToggleButton">
-                                            <Style.Triggers>
-                                                <Trigger Property="IsChecked" Value="True">
-                                                    <Setter Property="Content">
-                                                        <Setter.Value>
-                                                            <StackPanel Orientation="Vertical">
-                                                                <Image Source="Imagenes/SeleccionFila.png" Style="{StaticResource EstiloImagen}"/>
-                                                                <TextBlock Text="Seleccionar Filas" TextWrapping="Wrap" TextAlignment="Center"
-																		   VerticalAlignment="Center" FontSize="10"/>
-                                                            </StackPanel>
-
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                                <Trigger Property="IsChecked" Value="False">
-                                                    <Setter Property="Content">
-                                                        <Setter.Value>
-                                                            <StackPanel Orientation="Vertical">
-                                                                <Image Source="Imagenes/SeleccionCelda.png" Style="{StaticResource EstiloImagen}"/>
-                                                                <TextBlock Text="Seleccionar Celdas" TextWrapping="Wrap" TextAlignment="Center" 
-																		   VerticalAlignment="Center" FontSize="10"/>
-                                                            </StackPanel>
-                                                        </Setter.Value>
-                                                    </Setter>
-                                                </Trigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ToggleButton.Style>
-                                </ToggleButton>
-
+                                <controls:BotonAlterno Height="80"
+                                                       Width="64"
+                                                       Command="{Binding Source={x:Reference TablaGraficos}, Path=ComandoAlternarModoSeleccion}"
+                                                       Click="BotonAcciones_Click"
+                                                       TituloActivo="Seleccionar Filas"
+                                                       ImagenActivo="Imagenes/SeleccionFila.png"
+                                                       TituloInactivo="Seleccionar Celdas"
+                                                       ImagenInactivo="Imagenes/SeleccionCelda.png"/>
 
 
 
@@ -310,31 +251,19 @@
                 </xceed:DropDownButton.DropDownContent>
             </xceed:DropDownButton>
 
-
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
-
             <!--BOTON COPIAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="ApplicationCommands.Copy"
-                    CommandTarget="{Binding ElementName=TablaGraficos}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Copiar.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Copiar" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <controls:BotonBarra Titulo="Copiar" 
+                                 Imagen="Imagenes/Copiar.png" 
+                                 Command="ApplicationCommands.Copy"
+                                 CommandTarget="{Binding ElementName=TablaGraficos}" />
 
             <!--BOTON PEGAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding ElementName=TablaGraficos, Path=ComandoPegar}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Pegar.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Pegar" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <controls:BotonBarra Titulo="Pegar" 
+                                 Imagen="Imagenes/Pegar.png" 
+                                 Command="{Binding ElementName=TablaGraficos, Path=ComandoPegar}" />
 
             <!-- DESPLEGABLE FILTRAR GRÁFICOS -->
             <xceed:DropDownButton x:Name="BtDropFiltros" Style="{StaticResource EstiloBotonDesplegable}">
@@ -399,15 +328,10 @@
             </xceed:DropDownButton>
 
             <!--BOTON QUITAR FILTRO-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding GraficosVM.cmdQuitarFiltro}"
-                    Click="BtQuitarFiltro_Click">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/QuitarFiltro.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Quitar Filtro" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <controls:BotonBarra Titulo="Quitar Filtro" 
+                                 Imagen="Imagenes/QuitarFiltro.png" 
+                                 Command="{Binding GraficosVM.cmdQuitarFiltro}"
+                                 Click="BtQuitarFiltro_Click" />
 
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>

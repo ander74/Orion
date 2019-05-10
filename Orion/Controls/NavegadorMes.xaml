@@ -1,0 +1,50 @@
+﻿<!-- =============================================== -->
+<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
+<!--                                                 -->
+<!--  Vea el archivo Licencia.txt para mas detalles  -->
+<!-- =============================================== -->
+<UserControl x:Class="Orion.Controls.NavegadorMes"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:Orion.Controls"
+             FontFamily="Bookman Old Style"
+             FontSize="20"
+             x:Name="Item">
+    
+    <Grid>
+        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+            
+        <local:BotonBase Grid.Column="0"
+                         Click="RetrocedeMes"
+                         Content="&#x25C0;"
+                         FontSize="{Binding ElementName=Item, Path=TamañoFlechas}"
+                         Foreground="{Binding ElementName=Item, Path=ColorFlechas}"
+                         Margin="2,5"
+                         Width="{Binding ElementName=Item, Path=AnchoBotones}"/>
+
+        <StackPanel Grid.Column="1"
+                    Orientation="Vertical"
+                    VerticalAlignment="Center"
+                    Width="{Binding ElementName=Item, Path=AnchoTitulo}">
+            <TextBlock x:Name="MesTxt"
+                       HorizontalAlignment="Center"/>
+            <TextBlock Height="{Binding ElementName=Item, Path=SeparacionTitulo}"/>
+            <TextBlock x:Name="AñoTxt"
+                       HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <local:BotonBase Grid.Column="2"
+                         Click="AvanzaMes"
+                         Content="&#x25B6;"
+                         FontSize="{Binding ElementName=Item, Path=TamañoFlechas}"
+                         Foreground="{Binding ElementName=Item, Path=ColorFlechas}"
+                         Margin="2,5"
+                         Width="{Binding ElementName=Item, Path=AnchoBotones}"/>
+
+    </Grid>
+</UserControl>

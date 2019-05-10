@@ -196,14 +196,35 @@
     <Compile Include="Config\GestionGraficos.cs" />
     <Compile Include="Config\ItemChangedEventArgs.cs" />
     <Compile Include="Config\NotifyCollection.cs" />
+    <Compile Include="Controls\BotonAlterno.xaml.cs">
+      <DependentUpon>BotonAlterno.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BotonBarra.xaml.cs">
+      <DependentUpon>BotonBarra.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BotonBase.xaml.cs">
+      <DependentUpon>BotonBase.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\BotonDual.xaml.cs">
+      <DependentUpon>BotonDual.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\GrupoOpciones.xaml.cs">
+      <DependentUpon>GrupoOpciones.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ItemResumen.xaml.cs">
       <DependentUpon>ItemResumen.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ItemResumenDoble.xaml.cs">
       <DependentUpon>ItemResumenDoble.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\NavegadorMes.xaml.cs">
+      <DependentUpon>NavegadorMes.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\QCalendar.cs" />
     <Compile Include="Controls\QDataGrid.cs" />
+    <Compile Include="Controls\TextoValorH.xaml.cs">
+      <DependentUpon>TextoValorH.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Convertidores\ConvertidorColorColumnaPijama.cs" />
     <Compile Include="Convertidores\ConvertidorDecimal6.cs" />
     <Compile Include="Convertidores\ConvertidorDecimalNulable.cs" />
@@ -402,11 +423,43 @@
     <Compile Include="Views\VistaResumenAnual.xaml.cs">
       <DependentUpon>VistaResumenAnual.xaml</DependentUpon>
     </Compile>
+    <Page Include="Controls\BotonAlterno.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BotonBarra.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BotonBase.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\BotonDual.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\Estilos.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GrupoOpciones.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ItemResumen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ItemResumenDoble.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\NavegadorMes.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TextoValorH.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

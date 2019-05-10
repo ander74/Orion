@@ -58,6 +58,10 @@ namespace Orion.Models {
 		/// </summary>
 		public bool Nuevo { get; set; }
 
+        /// <summary>
+        /// Indica si el objeto va a ser borrado.
+        /// </summary>
+        public bool Borrado { get; set; }
 
 
 		/// <summary>

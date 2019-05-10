@@ -102,10 +102,27 @@
             <Setter Property="AvailableColorsSortingMode" Value="HueSaturationBrightness"/>
         </Style>
 
+        <ContextMenu x:Key="MenuFestivos"
+                     DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+            <MenuItem Header="Borrar"
+                      Command="{Binding cmdBorrarFestivo}">
+                <MenuItem.Icon>
+                    <Image Source="Imagenes/Cerrar.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+
         <Style x:Key="EstiloGridFestivos" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}"/>
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}"/>
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}"/>
+            <Setter Property="RowStyle">
+                <Setter.Value>
+                    <Style TargetType="DataGridRow" BasedOn="{StaticResource EstiloFilasAzul}">
+                        <Setter Property="ContextMenu" Value="{StaticResource MenuFestivos}"/>
+                    </Style>
+                </Setter.Value>
+            </Setter>
         </Style>
 
 
@@ -126,15 +143,12 @@
         <StackPanel Grid.Row="0" Orientation="Horizontal" Height="80" Background="{StaticResource DegradadoCeleste0}">
 
             <!--BOTON GUARDAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding cmdGuardarCambios}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Guardar.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarAzul}"/>
-                        <Image Source="Imagenes/GuardarRojo.png" Style="{StaticResource EstiloImagen}" Visibility="{Binding BotonGuardarRojo}"/>
-                        <TextBlock Text="Guardar" TextWrapping="Wrap" TextAlignment="Center"/>
-                    </StackPanel>
-                </Button.Content>
-            </Button>
+            <controls:BotonDual ImagenActivo="Imagenes/GuardarRojo.png"
+                                ImagenNormal="Imagenes/Guardar.png"
+                                TextoActivo="Guardar"
+                                TextoNormal="Guardar"
+                                IsActivo="{Binding EnOtroCentro}"
+                                Command="{Binding cmdGuardarCambios}"/>
 
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
@@ -237,16 +251,13 @@
                 <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
 
                     <!-- OPCIONES INICIALES -->
-                    <StackPanel Margin="6">
-
-                        <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="OPCIONES GENERALES" FontSize="16" FontWeight="Bold"
-                       BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoAzul}"/>
-
-                        <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
-
+                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoAzul}"
+                                            Margin="6"
+                                            Titulo="OPCIONES GENERALES">
+                        <controls:GrupoOpciones.Contenido>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
-                                <!-- CENTRO INICIAL -->
+                                <!--  INICIAL -->
                                 <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="28">
                                     <TextBlock Style="{StaticResource EstiloTextoNegrita}" Text="Centro Inicial: " Width="160"/>
                                     <ComboBox FontSize="14" Width="150" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
@@ -280,16 +291,15 @@
                                 </StackPanel>
 
                             </StackPanel>
-                        </Border>
-                    </StackPanel>
+                        </controls:GrupoOpciones.Contenido>
+                    </controls:GrupoOpciones>
+
 
                     <!-- CARPETAS -->
-                    <StackPanel Margin="6">
-                        <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="CARPETAS" FontSize="16" FontWeight="Bold"
-                       BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoCalabaza}"/>
-
-                        <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
-
+                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoCalabaza}"
+                                            Margin="6"
+                                            Titulo="CARPETAS">
+                        <controls:GrupoOpciones.Contenido>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
                                 <!-- CARPETA CON LAS BASES DE DATOS -->
@@ -345,17 +355,14 @@
                                 </StackPanel>
 
                             </StackPanel>
-                        </Border>
-                    </StackPanel>
+                        </controls:GrupoOpciones.Contenido>
+                    </controls:GrupoOpciones>
 
                     <!-- OPCIONES DROPBOX -->
-                    <StackPanel Margin="6">
-
-                        <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="OPCIONES DROPBOX" FontSize="16" FontWeight="Bold"
-                       BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoVioleta}"/>
-
-                        <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,0,0,10">
-
+                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoVioleta}"
+                                            Margin="6"
+                                            Titulo="OPCIONES DROPBOX">
+                        <controls:GrupoOpciones.Contenido>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
                                 <!-- SINCRONIZAR EN DROPBOX -->
@@ -396,10 +403,8 @@
                                 </StackPanel>
 
                             </StackPanel>
-
-                        </Border>
-
-                    </StackPanel>
+                        </controls:GrupoOpciones.Contenido>
+                    </controls:GrupoOpciones>
 
                 </StackPanel>
 
@@ -408,13 +413,10 @@
                 <StackPanel Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="0">
 
                     <!-- ACTUALIZACION AUTOMÁTICA -->
-                    <StackPanel Margin="6">
-                        <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="ACTUALIZACION AUTOMÁTICA" 
-							   FontSize="16" FontWeight="Bold" BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0"
-							   Background="{StaticResource orDegradadoNaranja}"/>
-
-                        <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
-
+                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoNaranja}"
+                                            Margin="6"
+                                            Titulo="ACTUALIZACIÓN AUTOMÁTICA">
+                        <controls:GrupoOpciones.Contenido>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
                                 <!-- CARPETA ORIGEN ACTUALIZACIÓN -->
@@ -437,16 +439,14 @@
                                 </StackPanel>
 
                             </StackPanel>
-                        </Border>
-                    </StackPanel>
+                        </controls:GrupoOpciones.Contenido>
+                    </controls:GrupoOpciones>
 
                     <!-- LOGOS Y MARCAS DE AGUA -->
-                    <StackPanel Margin="6">
-                        <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="LOGOS Y MARCAS DE AGUA" FontSize="16" FontWeight="Bold"
-							   BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoRojo}"/>
-
-                        <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
-
+                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoRojo}"
+                                            Margin="6"
+                                            Titulo="LOGOS Y MARCAS DE AGUA">
+                        <controls:GrupoOpciones.Contenido>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
                                 <!-- RUTA LOGO SINDICATO -->
@@ -470,8 +470,8 @@
 
 
                             </StackPanel>
-                        </Border>
-                    </StackPanel>
+                        </controls:GrupoOpciones.Contenido>
+                    </controls:GrupoOpciones>
 
                 </StackPanel>
 
@@ -480,13 +480,10 @@
                 <StackPanel Grid.Column="2" Grid.Row="1">
 
                     <!--  COLORES DE LAS INCIDENCIAS -->
-                    <StackPanel Margin="6">
-
-                        <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="COLORES INCIDENCIAS" FontSize="16" FontWeight="Bold"
-							   BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoVerde}"/>
-
-                        <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
-
+                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoVerde}"
+                                            Margin="6"
+                                            Titulo="COLORES INCIDENCIAS">
+                        <controls:GrupoOpciones.Contenido>
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
                                 <StackPanel Style="{StaticResource EstiloPanelOpciones}">
@@ -526,10 +523,8 @@
                                 </StackPanel>
 
                             </StackPanel>
-
-                        </Border>
-
-                    </StackPanel>
+                        </controls:GrupoOpciones.Contenido>
+                    </controls:GrupoOpciones>
 
                 </StackPanel>
 
@@ -558,13 +553,10 @@
             <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
 
                 <!--  OPCIONES DE CONVENIO -->
-                <StackPanel Margin="6">
-
-                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Content="CONVENIO" FontSize="16" FontWeight="Bold"
-						   BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Background="{StaticResource orDegradadoMarron}"/>
-
-                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,0,0,10">
-
+                <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoMarron}"
+                                            Margin="6"
+                                            Titulo="CONVENIO">
+                    <controls:GrupoOpciones.Contenido>
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
                             <!-- COLUMNAS -->
@@ -720,8 +712,8 @@
 
                             </StackPanel>
                         </StackPanel>
-                    </Border>
-                </StackPanel>
+                    </controls:GrupoOpciones.Contenido>
+                </controls:GrupoOpciones>
 
             </StackPanel>
 
@@ -752,15 +744,11 @@
             <StackPanel Grid.Column="0">
 
                 <!--  NUMEROS DE GRAFICO  -->
-                <StackPanel Margin="6" DataContext="{Binding PorCentro}">
-
-                    <!-- TITULO -->
-                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="{StaticResource orDegradadoNaranja}"
-                           FontSize="16" FontWeight="Bold" BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Content="NÚMEROS DE GRAFICO">
-                    </Label>
-
-                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
-
+                <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoNaranja}"
+                                        DataContext="{Binding PorCentro}"
+                                        Margin="6"
+                                        Titulo="NÚMEROS DE GRÁFICO">
+                    <controls:GrupoOpciones.Contenido>
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
 
                             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
@@ -820,20 +808,15 @@
 
                         </StackPanel>
 
-                    </Border>
-
-                </StackPanel>
+                    </controls:GrupoOpciones.Contenido>
+                </controls:GrupoOpciones>
 
                 <!--  LIMPIEZAS Y VIAJES -->
-                <StackPanel Margin="6" DataContext="{Binding PorCentro}">
-
-                    <!-- TITULO -->
-                    <Label HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Background="{StaticResource orDegradadoRojo}"
-                           FontSize="16" FontWeight="Bold" BorderBrush="DarkBlue" BorderThickness="0.5,0.5,0.5,0" Content="LIMPIEZAS Y VIAJES">
-                    </Label>
-
-                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
-
+                <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoRojo}"
+                                        DataContext="{Binding PorCentro}"
+                                        Margin="6"
+                                        Titulo="LIMPIEZAS Y VIAJES">
+                    <controls:GrupoOpciones.Contenido>
                         <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
 
                             <!-- PLUS LIMPIEZA -->
@@ -861,9 +844,8 @@
 
                         </StackPanel>
 
-                    </Border>
-
-                </StackPanel>
+                    </controls:GrupoOpciones.Contenido>
+                </controls:GrupoOpciones>
 
             </StackPanel>
 
@@ -999,12 +981,12 @@
                               Background="Transparent" Style="{StaticResource EstiloGridFestivos}"
                               ItemsSource="{Binding FestivosVM.VistaFestivos}">
 
-						<controls:QDataGrid.Resources>
+                        <controls:QDataGrid.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource orAzul2}"/>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
                         </controls:QDataGrid.Resources>
 
-						<controls:QDataGrid.Columns>
+                        <controls:QDataGrid.Columns>
                             <DataGridTextColumn Header="Días" Width="*" MinWidth="60" FontSize="14" FontFamily="Verdana"
                                                 Binding="{Binding Fecha, Converter={StaticResource cnvFecha}}"/>
                         </controls:QDataGrid.Columns>

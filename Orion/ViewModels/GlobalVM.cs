@@ -72,7 +72,6 @@ namespace Orion.ViewModels {
             CentroActual = (Centros)Configuracion.CentroInicial;// == Centros.Desconocido ? Centros.Bilbao : (Centros)Configuracion.CentroInicial;
                                                                 // Activamos el botón de la calculadora.
             Configuracion.BotonCalculadoraActivo = true;
-
         }
 
 
@@ -220,17 +219,22 @@ namespace Orion.ViewModels {
                     _centroactual = value;
                     // Si el centro actual es el centro inicial, mostramos el botón azul, sino el rojo.
                     if ((int)_centroactual == Configuracion.CentroInicial) {
-                        BotonGuardarRojo = Visibility.Collapsed;
-                        BotonGuardarAzul = Visibility.Visible;
+                        EnOtroCentro = false;
                     } else {
-                        BotonGuardarAzul = Visibility.Collapsed;
-                        BotonGuardarRojo = Visibility.Visible;
+                        EnOtroCentro = true;
                     }
                     // Si el centro actual no es desconocido, cargamos las opciones por centro.
                     if (_centroactual != Centros.Desconocido) PorCentro.Cargar(ArchivoOpcionesPorCentro);
                     PropiedadCambiada();
                 }
             }
+        }
+
+
+        private bool enOtroCentro;
+        public bool EnOtroCentro {
+            get => enOtroCentro;
+            set => SetValue(ref enOtroCentro, value);
         }
 
 
@@ -247,30 +251,6 @@ namespace Orion.ViewModels {
             }
         }
 
-
-
-        private Visibility _botonguardarrojo = Visibility.Collapsed;
-        public Visibility BotonGuardarRojo {
-            get { return _botonguardarrojo; }
-            set {
-                if (_botonguardarrojo != value) {
-                    _botonguardarrojo = value;
-                    PropiedadCambiada();
-                }
-            }
-        }
-
-
-        private Visibility _botonguardarazul = Visibility.Visible;
-        public Visibility BotonGuardarAzul {
-            get { return _botonguardarazul; }
-            set {
-                if (_botonguardarazul != value) {
-                    _botonguardarazul = value;
-                    PropiedadCambiada();
-                }
-            }
-        }
 
 
         public string TextoEstado {

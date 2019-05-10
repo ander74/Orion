@@ -5,7 +5,6 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-
 namespace Orion.Views {
 
 	using System.Windows;

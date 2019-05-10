@@ -167,9 +167,9 @@
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.ColumnSpan="3" Background="{StaticResource DegradadoCeleste1}" Visibility="{Binding BotonGuardarAzul}"/>
+            <Border Grid.ColumnSpan="3" Background="{StaticResource DegradadoCeleste1}" Visibility="{Binding EnOtroCentro, Converter={StaticResource VisibilityInverter}}"/>
 
-            <Border Grid.ColumnSpan="3" Background="LightCoral" Visibility="{Binding BotonGuardarRojo}"/>
+            <Border Grid.ColumnSpan="3" Background="LightCoral" Visibility="{Binding EnOtroCentro, Converter={StaticResource VisibilityConverter}}"/>
 
             <!-- TEXTO DE ESTADO -->
             <Label Visibility="{Binding VisibilidadBarraProgreso, Converter={StaticResource VisibilityInverter}}"
