@@ -11,6 +11,12 @@ PROYECTO ORIÓN
 			- 
 
 
+
+		10 de Mayo de 2019
+
+			- Se añade menú contextual para borrar un festivo.
+
+
 		16 de Abril de 2019
 
 			- Se añade un contador de turnos a la barra de estado de gráficos.

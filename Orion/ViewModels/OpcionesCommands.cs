@@ -594,8 +594,8 @@ namespace Orion.ViewModels {
 			}
 			AñoPluses++;
 		}
-		#endregion
+        #endregion
 
 
-	}
+    }
 }

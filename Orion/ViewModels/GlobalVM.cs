@@ -414,7 +414,7 @@ namespace Orion.ViewModels {
 
         public OpcionesViewModel OpcionesVM {
             get {
-                if (_opcionesvm == null) _opcionesvm = new OpcionesViewModel(mensajes);
+                _opcionesvm = _opcionesvm ?? new OpcionesViewModel(mensajes);
                 return _opcionesvm;
             }
         }
@@ -422,7 +422,7 @@ namespace Orion.ViewModels {
 
         public GraficosViewModel GraficosVM {
             get {
-                if (_graficosvm == null) _graficosvm = new GraficosViewModel(mensajes, Informes);
+                _graficosvm = _graficosvm ?? new GraficosViewModel(mensajes, Informes);
                 return _graficosvm;
             }
         }
@@ -430,7 +430,7 @@ namespace Orion.ViewModels {
 
         public ConductoresViewModel ConductoresVM {
             get {
-                if (_conductoresvm == null) _conductoresvm = new ConductoresViewModel(mensajes);
+                _conductoresvm = _conductoresvm ?? new ConductoresViewModel(mensajes);
                 return _conductoresvm;
             }
         }
@@ -438,7 +438,7 @@ namespace Orion.ViewModels {
 
         public CalendariosViewModel CalendariosVM {
             get {
-                if (_calendariosvm == null) _calendariosvm = new CalendariosViewModel(mensajes, Informes);
+                _calendariosvm = _calendariosvm ?? new CalendariosViewModel(mensajes, Informes);
                 return _calendariosvm;
             }
         }
@@ -446,7 +446,7 @@ namespace Orion.ViewModels {
 
         public LineasViewModel LineasVM {
             get {
-                if (_lineasvm == null) _lineasvm = new LineasViewModel(mensajes);
+                _lineasvm = _lineasvm ?? new LineasViewModel(mensajes);
                 return _lineasvm;
             }
         }
@@ -454,21 +454,21 @@ namespace Orion.ViewModels {
 
         public EstadisticasViewModel EstadisticasVM {
             get {
-                if (_estadisticasvm == null) _estadisticasvm = new EstadisticasViewModel(mensajes, Informes);
+                _estadisticasvm = _estadisticasvm ?? new EstadisticasViewModel(mensajes, Informes);
                 return _estadisticasvm;
             }
         }
 
         public ResumenAnualViewModel ResumenAnualVM {
             get {
-                if (_resumenanualvm == null) _resumenanualvm = new ResumenAnualViewModel(mensajes, Informes);
+                _resumenanualvm = _resumenanualvm ?? new ResumenAnualViewModel(mensajes, Informes);
                 return _resumenanualvm;
             }
         }
 
         public FestivosViewModel FestivosVM {
             get {
-                if (_festivosvm == null) _festivosvm = new FestivosViewModel(mensajes);
+                _festivosvm = _festivosvm ?? new FestivosViewModel(mensajes);
                 return _festivosvm;
             }
         }
@@ -476,7 +476,7 @@ namespace Orion.ViewModels {
 
         public ProgramadorViewModel ProgramadorVM {
             get {
-                if (_programador == null) _programador = new ProgramadorViewModel(mensajes);
+                _programador = _programador ?? new ProgramadorViewModel(mensajes);
                 return _programador;
             }
         }
@@ -484,7 +484,7 @@ namespace Orion.ViewModels {
 
         public EstadisticasTurnosViewModel EstadisticasTurnosVM {
             get {
-                if (_estadisticasTurnos == null) _estadisticasTurnos = new EstadisticasTurnosViewModel(mensajes);
+                _estadisticasTurnos = _estadisticasTurnos ?? new EstadisticasTurnosViewModel(mensajes);
                 return _estadisticasTurnos;
             }
         }

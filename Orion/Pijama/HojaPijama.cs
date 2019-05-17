@@ -1512,7 +1512,7 @@ namespace Orion.Pijama {
 
         public ChartValues<int> SerieInicios {
             get => new ChartValues<int>(ListaDias.Select(d => {
-                int inicio = d.Grafico > 0 ? d.InicioAlt.HasValue ? (int)d.InicioAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Inicio.Value.TotalMinutes : 0;
+                int inicio = d.Grafico > 0 ? d.InicioAlt.HasValue ? (int)d.InicioAlt.Value.TotalMinutes : d.GraficoTrabajado.Inicio.HasValue ? (int)d.GraficoTrabajado.Inicio.Value.TotalMinutes : 0 : 0;
                 return inicio;
             }));
         }
@@ -1533,9 +1533,14 @@ namespace Orion.Pijama {
 
         public ChartValues<OhlcPoint> SerieHorarios {
             get => new ChartValues<OhlcPoint>(ListaDias.Select(d => {
-                int inicio = d.Grafico > 0 ? d.InicioAlt.HasValue ? (int)d.InicioAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Inicio.Value.TotalMinutes : 0;
-                int final = d.Grafico > 0 ? d.FinalAlt.HasValue ? (int)d.FinalAlt.Value.TotalMinutes : (int)d.GraficoTrabajado.Final.Value.TotalMinutes : 0;
-                int turno = d.Grafico > 0 ? d.TurnoAlt.HasValue ? d.TurnoAlt.Value : d.GraficoTrabajado.Turno : 0;
+                int inicio = 0;
+                int final = 0;
+                int turno = 0;
+                if (d.Grafico > 0) {
+                    inicio = d.InicioAlt.HasValue ? (int)d.InicioAlt.Value.TotalMinutes : d.GraficoTrabajado.Inicio.HasValue ? (int)d.GraficoTrabajado.Inicio.Value.TotalMinutes : 0;
+                    final = d.FinalAlt.HasValue ? (int)d.FinalAlt.Value.TotalMinutes : d.GraficoTrabajado.Final.HasValue ? (int)d.GraficoTrabajado.Final.Value.TotalMinutes : 0;
+                    turno = d.TurnoAlt.HasValue ? d.TurnoAlt.Value : d.GraficoTrabajado.Turno;
+                }
                 int ip = 2;
                 int fp = 2;
                 if (turno == 1) {

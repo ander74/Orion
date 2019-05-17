@@ -614,7 +614,630 @@ namespace Orion.PrintModel {
 		}
 
 
-		private static Table GetHojaPijama(Pijama.HojaPijama pijama) {
+        private static Cell GetResumenPijamaNuevo(Pijama.HojaPijama pijama) {
+            // Definimos la celda a devolver.
+            Cell celda = new Cell();
+            // Definimos el valor que nos indica si es fila alterna.
+            bool esFilaAlterna = false;
+            // Fuente a utilizar en la tabla.
+            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            // Estilo Tabla
+            iText.Layout.Style estiloTabla = new iText.Layout.Style().SetTextAlignment(TextAlignment.LEFT)
+                                                                     .SetMargins(0, 0, 2, 0)
+                                                                     .SetPaddings(1f, 0, 1f, 0)
+                                                                     .SetBorder(new SolidBorder(1))
+                                                                     .SetFont(arial)
+                                                                     .SetWidth(UnitValue.CreatePercentValue(100))
+                                                                     .SetFontSize(9);
+            // Estilo Seccion
+            iText.Layout.Style estiloSeccion = new iText.Layout.Style().SetTextAlignment(TextAlignment.LEFT)
+                                                                       .SetFontColor(new DeviceRgb(192, 0, 0))
+                                                                       .SetMargin(0)
+                                                                       .SetBold()
+                                                                       .SetFont(arial)
+                                                                       .SetFontSize(12);
+            // Estilo Titulo
+            iText.Layout.Style estiloTitulo = new iText.Layout.Style().SetTextAlignment(TextAlignment.LEFT)
+                                                                      .SetMargin(0)
+                                                                      .SetPaddings(0, 1.5f, 0, 1.5f)
+                                                                      .SetBold()
+                                                                      .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                                                                      .SetBorderBottom(new SolidBorder(0.2f))
+                                                                      .SetFont(arial)
+                                                                      .SetFontSize(9);
+
+            // Estilo Valor
+            iText.Layout.Style estiloValor = new iText.Layout.Style().SetTextAlignment(TextAlignment.RIGHT)
+                                                                      .SetMargin(0)
+                                                                      .SetPaddings(0, 1.5f, 0, 1.5f)
+                                                                      .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                                                                      .SetBorderBottom(new SolidBorder(0.2f))
+                                                                      .SetFont(arial)
+                                                                      .SetFontSize(9);
+
+            // Estilo eventual
+            iText.Layout.Style estiloEventual = new iText.Layout.Style().SetMarginLeft(15)
+                                                                        .SetFontSize(8);
+            // Estilo fila alterna
+            iText.Layout.Style estiloFilaAlterna = new iText.Layout.Style().SetBackgroundColor(new DeviceRgb(204, 236, 255));
+
+
+            // Estilo Encabezado
+            iText.Layout.Style estiloEncabezado = new iText.Layout.Style().SetBackgroundColor(new DeviceRgb(153, 204, 255))
+                                                                          .SetBold();
+
+
+            // Estilo Resumen
+            iText.Layout.Style estiloResumen = new iText.Layout.Style().SetBackgroundColor(new DeviceRgb(153, 204, 255))
+                                                                       .SetBorder(new SolidBorder(1))
+                                                                       .SetPaddings(1.5f, 0, 1.5f, 0)
+                                                                       .SetTextAlignment(TextAlignment.CENTER)
+                                                                       .SetFont(arial)
+                                                                       .SetFontSize(9);
+            // Estilo Eventuales
+            iText.Layout.Style estiloEventuales = new iText.Layout.Style().SetMargins(0, 0, 0, 0)
+                                                                          .SetFontColor(new DeviceRgb(0, 112, 192));
+            // Definimos la tabla y párrafo a usar.
+            Table tabla;
+            Paragraph parrafo;
+            Cell celdaTitulo;
+            Cell celdaValor;
+            // SECCION HORAS MES ACTUAL
+            celda.Add(new Paragraph("Horas Mes Actual").AddStyle(estiloSeccion));
+            tabla = new Table(UnitValue.CreatePercentArray(new float[] { 55f, 45f }));
+            tabla.AddStyle(estiloTabla);
+            // Horas trabajadas
+            if (pijama.Trabajadas.Ticks != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Horas Trabajadas")).AddStyle(estiloTitulo);
+                celdaValor =  new Cell().Add(new Paragraph((string)cnvSuperHoraMixta.Convert(pijama.Trabajadas, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Horas acumuladas
+            if (pijama.Acumuladas.Ticks != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Horas Acumuladas")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvSuperHoraMixta.Convert(pijama.Acumuladas, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Horas nocturnas
+            if (pijama.Nocturnas.Ticks != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Horas Nocturnas")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvSuperHoraMixta.Convert(pijama.Nocturnas, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Horas cobradas
+            if (pijama.HorasCobradas.Ticks != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Horas Cobradas")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvSuperHoraMixta.Convert(pijama.HorasCobradas, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Exceso Jornada
+            if (pijama.ExcesoJornada.Ticks != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Exceso de Jornada")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvSuperHoraMixta.Convert(pijama.ExcesoJornada, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Otras Horas
+            if (pijama.OtrasHoras.Ticks != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Otras Horas")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvSuperHoraMixta.Convert(pijama.OtrasHoras, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            celda.Add(tabla);
+            //SECCION DÍAS MES ACTUAL
+            celda.Add(new Paragraph("Días Mes Actual").AddStyle(estiloSeccion));
+            tabla = new Table(UnitValue.CreatePercentArray(new float[] { 80f, 20f }));
+            tabla.AddStyle(estiloTabla);
+            esFilaAlterna = false;
+            // Días Trabajados
+            if (pijama.Trabajo != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Días trabajados")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.Trabajo.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+                if (pijama.NoEsFijo) {
+                    celdaTitulo = new Cell().Add(new Paragraph("(Debería trabajar)").SetMarginLeft(15)).AddStyle(estiloTitulo).AddStyle(estiloEventual);
+                    celdaValor = new Cell().Add(new Paragraph(pijama.DiasComputoTrabajo.ToString("00.##"))).AddStyle(estiloValor).AddStyle(estiloEventual);
+                    if (esFilaAlterna) {
+                        celdaTitulo.AddStyle(estiloFilaAlterna);
+                        celdaValor.AddStyle(estiloFilaAlterna);
+                    }
+                    tabla.AddCell(celdaTitulo);
+                    tabla.AddCell(celdaValor);
+                }
+                esFilaAlterna = !esFilaAlterna;
+            }
+            // Días Descanso
+            if (pijama.Descanso != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Días descanso (J-D)")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.Descanso.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+                if (pijama.NoEsFijo) {
+                    celdaTitulo = new Cell().Add(new Paragraph("(Debería descansar)").SetMarginLeft(15)).AddStyle(estiloTitulo).AddStyle(estiloEventual);
+                    celdaValor = new Cell().Add(new Paragraph(pijama.DiasComputoDescanso.ToString("00.##"))).AddStyle(estiloValor).AddStyle(estiloEventual);
+                    if (esFilaAlterna) {
+                        celdaTitulo.AddStyle(estiloFilaAlterna);
+                        celdaValor.AddStyle(estiloFilaAlterna);
+                    }
+                    tabla.AddCell(celdaTitulo);
+                    tabla.AddCell(celdaValor);
+                }
+                esFilaAlterna = !esFilaAlterna;
+            }
+            // Días de vacaciones
+            if (pijama.Vacaciones != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Días vacaciones (O-V)")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.Vacaciones.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+                if (pijama.NoEsFijo) {
+                    celdaTitulo = new Cell().Add(new Paragraph("(Debería tener de vacaciones)").SetMarginLeft(15)).AddStyle(estiloTitulo).AddStyle(estiloEventual);
+                    celdaValor = new Cell().Add(new Paragraph(pijama.DiasComputoVacaciones.ToString("00.##"))).AddStyle(estiloValor).AddStyle(estiloEventual);
+                    if (esFilaAlterna) {
+                        celdaTitulo.AddStyle(estiloFilaAlterna);
+                        celdaValor.AddStyle(estiloFilaAlterna);
+                    }
+                    tabla.AddCell(celdaTitulo);
+                    tabla.AddCell(celdaValor);
+                }
+                esFilaAlterna = !esFilaAlterna;
+            }
+            // Días DND
+            if (pijama.DescansosNoDisfrutados != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Descansos no disfrutados (DND)")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.DescansosNoDisfrutados.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Días trabajo en JD
+            if (pijama.TrabajoEnDescanso != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Días trabajados en J-D")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.TrabajoEnDescanso.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Días FN
+            if (pijama.DescansoEnFinde != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Descansos en Finde (FN)")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.DescansoEnFinde.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Días E
+            if (pijama.Enfermo != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Días de enfermedad (E)")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.Enfermo.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Días DS
+            if (pijama.DescansoSuelto != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Descansos sueltos (DS)")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.DescansoSuelto.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Días DC
+            if (pijama.DescansoCompensatorio != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Descansos compensatorios (DC)")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.DescansoCompensatorio.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Días PER
+            if (pijama.Permiso != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Días de permiso (PER)")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.Permiso.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Días F6
+            if (pijama.LibreDisposicionF6 != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Días de libre disposición (F6)")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.LibreDisposicionF6.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Días comité
+            if (pijama.Comite != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Días de comité")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.Comite.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Días comite en JD
+            if (pijama.ComiteEnDescanso != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("    En J-D")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.ComiteEnDescanso.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Días comité en DC
+            if (pijama.ComiteEnDC != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("    En D-C")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(pijama.ComiteEnDC.ToString("00"))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Resumen días
+            parrafo = new Paragraph();
+            parrafo.Add(new Text("Total días: ").SetBold());
+            parrafo.Add(new Text($"{pijama.DiasActivo:00} de {pijama.DiasMes:00}"));
+            tabla.AddCell(new Cell(1, 2).Add(parrafo).AddStyle(estiloResumen));
+            celda.Add(tabla);
+            //SECCION FINES DE SEMANA MES ACTUAL
+            celda.Add(new Paragraph("Fines de Semana Mes Actual").AddStyle(estiloSeccion));
+            tabla = new Table(UnitValue.CreatePercentArray(new float[] { 70f, 30f }));
+            tabla.AddStyle(estiloTabla);
+            esFilaAlterna = false;
+            // Sábados Trabajados/Descansados
+            if (pijama.SabadosTrabajados != 0) {
+                string valor = $"{pijama.SabadosTrabajados.ToString("00")}/{pijama.SabadosDescansados.ToString("00")}";
+                celdaTitulo = new Cell().Add(new Paragraph("Sábados Trabajados/Descansados")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(valor)).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Total Plus Sábados 
+            if (pijama.PlusSabados != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Total Plus Sábados")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(pijama.PlusSabados, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Domingos Trabajados/Descansados
+            if (pijama.DomingosTrabajados != 0) {
+                string valor = $"{pijama.DomingosTrabajados.ToString("00")}/{pijama.DomingosDescansados.ToString("00")}";
+                celdaTitulo = new Cell().Add(new Paragraph("Domingos Trabajados/Descansados")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(valor)).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Total Plus Domingos 
+            if (pijama.PlusDomingos != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Total Plus Domingos")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(pijama.PlusDomingos, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Festivos Trabajados/Descansados
+            if (pijama.FestivosTrabajados != 0) {
+                string valor = $"{pijama.FestivosTrabajados.ToString("00")}/{pijama.FestivosDescansados.ToString("00")}";
+                celdaTitulo = new Cell().Add(new Paragraph("Festivos Trabajados/Descansados")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(valor)).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Total Plus Festivos 
+            if (pijama.PlusFestivos != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Total Plus Festivos")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(pijama.PlusFestivos, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Findes Completos Disfrutados 
+            if (pijama.FindesCompletos != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Findes Completos Disfrutados")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimal.Convert(pijama.FindesCompletos, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // TOTAL FINDES
+            if (pijama.ImporteTotalFindes != 0) {
+                parrafo = new Paragraph();
+                parrafo.Add(new Text("Total Findes+Festivos = ").SetBold());
+                parrafo.Add(new Text((string)cnvDecimalEuro.Convert(pijama.ImporteTotalFindes, null, null, null)));
+                tabla.AddCell(new Cell(1, 2).Add(parrafo).AddStyle(estiloResumen));
+            }
+            celda.Add(tabla);
+            //SECCION DIETAS Y PLUSES MES ACTUAL
+            celda.Add(new Paragraph("Dietas y Pluses Mes Actual").AddStyle(estiloSeccion));
+            tabla = new Table(UnitValue.CreatePercentArray(new float[] { 55f, 45f }));
+            tabla.AddStyle(estiloTabla);
+            esFilaAlterna = false;
+            // Dietas Desayuno
+            if (pijama.DietaDesayuno != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Dietas Desayuno")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimal.Convert(pijama.DietaDesayuno, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Dietas Comida
+            if (pijama.DietaComida != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Dietas Comida")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimal.Convert(pijama.DietaComida, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Dietas Cena
+            if (pijama.DietaCena != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Dietas Cena")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimal.Convert(pijama.DietaCena, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Dietas Plus Cena
+            if (pijama.DietaPlusCena != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Dietas Plus Cena")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimal.Convert(pijama.DietaPlusCena, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Plus Menor Descanso
+            if (pijama.PlusMenorDescanso != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Plus Menor Descanso")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(pijama.PlusMenorDescanso, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Plus Limpieza
+            if (pijama.PlusLimpieza != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Plus Limpieza")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(pijama.PlusLimpieza, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Plus Paquetería
+            if (pijama.PlusPaqueteria != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Plus Paquetería")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(pijama.PlusPaqueteria, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Otros Pluses
+            if (pijama.OtrosPluses != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("Otros Pluses")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(pijama.OtrosPluses, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // TOTAL DIETAS/IMPORTE
+            if (pijama.TotalDietas != 0) {
+                string valor = $"{(string)cnvDecimal.Convert(pijama.TotalDietas, null, null, null)}" +
+                               $"/" +
+                               $"{(string)cnvDecimalEuro.Convert(pijama.ImporteTotalDietas, null, null, null)}";
+                celdaTitulo = new Cell().Add(new Paragraph("TOTAL DIETAS/IMPORTE")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph(valor)).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // Total Pluses
+            if (pijama.ImporteTotalPluses != 0) {
+                celdaTitulo = new Cell().Add(new Paragraph("TOTAL PLUSES")).AddStyle(estiloTitulo);
+                celdaValor = new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(pijama.ImporteTotalPluses, null, null, null))).AddStyle(estiloValor);
+                if (esFilaAlterna) {
+                    celdaTitulo.AddStyle(estiloFilaAlterna);
+                    celdaValor.AddStyle(estiloFilaAlterna);
+                }
+                esFilaAlterna = !esFilaAlterna;
+                tabla.AddCell(celdaTitulo);
+                tabla.AddCell(celdaValor);
+            }
+            // TOTAL FINDES
+            if (pijama.ImporteTotal != 0) {
+                parrafo = new Paragraph();
+                parrafo.Add(new Text("IMPORTE TOTAL A PERCIBIR = ").SetBold());
+                parrafo.Add(new Text((string)cnvDecimalEuro.Convert(pijama.ImporteTotal, null, null, null)));
+                tabla.AddCell(new Cell(1, 2).Add(parrafo).AddStyle(estiloResumen));
+            }
+            //
+            celda.Add(tabla);
+            //SECCION RESUMEN HASTA MES ACTUAL
+            celda.Add(new Paragraph("Pendiente Hasta Mes Actual").AddStyle(estiloSeccion));
+            tabla = new Table(UnitValue.CreatePercentArray(new float[] { 33.3333f, 33.3333f, 33.3333f }));
+            tabla.AddStyle(estiloTabla);
+            tabla.SetVerticalAlignment(VerticalAlignment.BOTTOM);
+            tabla.AddCell(new Cell().Add(new Paragraph("DNDs")).AddStyle(estiloResumen).SetPaddings(0, 1.5f, 0, 1.5f));
+            tabla.AddCell(new Cell().Add(new Paragraph("DCs")).AddStyle(estiloResumen).SetPaddings(0, 1.5f, 0, 1.5f));
+            tabla.AddCell(new Cell().Add(new Paragraph("H.Acumuladas")).AddStyle(estiloResumen).SetPaddings(0, 1.5f, 0, 1.5f));
+            celdaTitulo = new Cell().Add(new Paragraph(pijama.DNDsPendientesHastaMes.ToString("0.0000")))
+                                    .SetTextAlignment(TextAlignment.CENTER)
+                                    .SetPaddings(0, 1.5f, 0, 1.5f)
+                                    .SetBorder(new SolidBorder(1));
+            tabla.AddCell(celdaTitulo);
+            celdaTitulo = new Cell().Add(new Paragraph(pijama.DCsPendientesHastaMes.ToString("0.0000")))
+                                    .SetTextAlignment(TextAlignment.CENTER)
+                                    .SetPaddings(0, 1.5f, 0, 1.5f)
+                                    .SetBorder(new SolidBorder(1));
+            tabla.AddCell(celdaTitulo);
+            celdaTitulo = new Cell().Add(new Paragraph((string)cnvSuperHoraMixta.Convert(pijama.AcumuladasHastaMes, null, null, null)))
+                                    .SetTextAlignment(TextAlignment.CENTER)
+                                    .SetPaddings(0, 1.5f, 0, 1.5f)
+                                    .SetBorder(new SolidBorder(1));
+            tabla.AddCell(celdaTitulo);
+            parrafo = new Paragraph();
+            parrafo.Add(new Text("DCs Generados: ").SetBold());
+            parrafo.Add(new Text($"{pijama.DCsGeneradosHastaMes:0.0000}"));
+            tabla.AddCell(new Cell(1, 3).Add(parrafo).AddStyle(estiloResumen).SetPaddings(0, 1.5f, 0, 1.5f));
+            celda.Add(tabla);
+            // Devolvemos la celda.
+            return celda;
+        }
+
+        private static Table GetHojaPijama(Pijama.HojaPijama pijama) {
 
 			// Fuente a utilizar en la tabla.
 			PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
@@ -662,8 +1285,9 @@ namespace Orion.PrintModel {
 			celda.SetPaddings(0, 8, 0, 0);
 			celda.Add(GetTablaPijama(pijama.ListaDias));
 			tabla.AddCell(celda);
-			// Añadimos el resumen
-			celda = GetResumenPijama(pijama);
+            // Añadimos el resumen
+            //celda = GetResumenPijama(pijama);
+            celda = GetResumenPijamaNuevo(pijama);
 			celda.AddStyle(estiloCelda);
 			tabla.AddCell(celda);
 			// Devolvemos la tabla

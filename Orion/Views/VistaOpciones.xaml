@@ -102,8 +102,11 @@
             <Setter Property="AvailableColorsSortingMode" Value="HueSaturationBrightness"/>
         </Style>
 
-        <ContextMenu x:Key="MenuFestivos"
-                     DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+        <!-- Si queremos que el comando se ejecute en el ViewModel del DataGrid,
+             tenemos que poner el datacontext del menú de esta manera. -->
+        <!--<ContextMenu x:Key="MenuFestivos"
+                         DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type controls:QDataGrid}}}">-->
+        <ContextMenu x:Key="MenuFestivos">
             <MenuItem Header="Borrar"
                       Command="{Binding cmdBorrarFestivo}">
                 <MenuItem.Icon>
