@@ -16,6 +16,7 @@ namespace Orion.ViewModels {
     using Config;
     using DataModels;
     using Models;
+    using Orion.Interfaces;
     using Servicios;
 
     public partial class GlobalVM : NotifyBase, IDisposable {
@@ -29,6 +30,7 @@ namespace Orion.ViewModels {
         private string _textodetalle;
         private MensajesServicio mensajes;
         private InformesServicio Informes;
+        private IFileService fileService;
 
         // ViewModels
         private GraficosViewModel _graficosvm;
@@ -67,6 +69,7 @@ namespace Orion.ViewModels {
             // Creamos los servicios
             mensajes = new MensajesServicio();
             Informes = new InformesServicio();
+            fileService = new FileService();
 
             // Asignamos el centro actual.
             CentroActual = (Centros)Configuracion.CentroInicial;// == Centros.Desconocido ? Centros.Bilbao : (Centros)Configuracion.CentroInicial;
@@ -422,7 +425,7 @@ namespace Orion.ViewModels {
 
         public GraficosViewModel GraficosVM {
             get {
-                _graficosvm = _graficosvm ?? new GraficosViewModel(mensajes, Informes);
+                _graficosvm = _graficosvm ?? new GraficosViewModel(mensajes, Informes, fileService);
                 return _graficosvm;
             }
         }

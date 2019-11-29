@@ -9,15 +9,13 @@ namespace Orion.ViewModels {
 
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Data.OleDb;
     using System.Diagnostics;
+    using System.IO;
     using System.Linq;
-    using System.Windows.Controls;
-    using System.Windows.Data;
     using System.Windows.Input;
-    using Microsoft.Office.Interop.Excel;
     using DataModels;
+    using Microsoft.Office.Interop.Excel;
     using Models;
     using PrintModel;
     using Servicios;
@@ -66,6 +64,7 @@ namespace Orion.ViewModels {
                     // Creamos el gráfico y lo guardamos en la lista.
                     Grafico grafico = ((AñadirGraficoViewModel)ventana.DataContext).GraficoActual;
                     grafico.IdGrupo = GrupoSeleccionado.Id;
+                    grafico.DiaSemana = "";
                     ListaGraficos.Add(grafico);
                     // Establecemos las variables.
                     incrementar = ((AñadirGraficoViewModel)ventana.DataContext).IncrementarNumeroMarcado;
@@ -832,6 +831,41 @@ namespace Orion.ViewModels {
                     if (grafico.Numero >= App.Global.PorCentro.DomDel && grafico.Numero <= App.Global.PorCentro.DomAl) grafico.DiaSemana = "F";
                 }
             }
+        }
+        #endregion
+
+
+        #region COMANDO COMPARAR DIETAS
+
+        // Comando
+        private ICommand _compararDietasexcel;
+        public ICommand cmdCompararDietasExcel {
+            get {
+                if (_compararDietasexcel == null) _compararDietasexcel = new RelayCommand(p => CompararDietasExcel(), p => PuedeCompararDietasExcel());
+                return _compararDietasexcel;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeCompararDietasExcel() {
+            return ListaGraficos.Count > 0;
+        }
+
+        // Ejecución del comando
+        private void CompararDietasExcel() {
+
+            // Definir el nombre del excel de destino.
+            string nombreArchivo = $"Comparación Dietas {GrupoSeleccionado.Validez.ToString("yyyy-MM-dd")} - {App.Global.CentroActual}.xlsx";
+            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Dietas");
+            if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
+            string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
+
+            // Pedimos el archivo excel que se va a comparar.
+            string titulo = "Seleccione un excel con las dietas de la empresa.";
+            string excel = FileService.FileDialog(titulo, @"C:\");
+
+            ExcelService.getInstance().GenerarComparacionGraficos(rutaDestino, ListaGraficos, excel);
         }
         #endregion
 

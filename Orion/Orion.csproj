@@ -102,6 +102,9 @@
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.2, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.2\lib\net40\EPPlus.dll</HintPath>
+    </Reference>
     <Reference Include="itext.barcodes, Version=7.1.5.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
       <HintPath>..\packages\itext7.7.1.5\lib\net40\itext.barcodes.dll</HintPath>
     </Reference>
@@ -143,6 +146,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.110.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Data.SQLite.Core.1.0.110.0\lib\net45\System.Data.SQLite.dll</HintPath>
@@ -270,6 +274,7 @@
     <Compile Include="DataModels\ProcSQL.cs" />
     <Compile Include="DataModels\Respaldo.cs" />
     <Compile Include="Extensiones.cs" />
+    <Compile Include="Interfaces\IFileService.cs" />
     <Compile Include="Models\DescansosPorDia.cs" />
     <Compile Include="Models\EstadisticaCalendario.cs" />
     <Compile Include="Models\EstadisticaGrupoGraficos.cs" />
@@ -313,6 +318,8 @@
     <Compile Include="PrintModel\PdfTools.cs" />
     <Compile Include="PrintModel\PijamaPrintModel.cs" />
     <Compile Include="PrintModel\ReclamacionPrintModel.cs" />
+    <Compile Include="Servicios\ExcelService.cs" />
+    <Compile Include="Servicios\FileService.cs" />
     <Compile Include="Servicios\InformesServicio.cs" />
     <Compile Include="Servicios\PdfServicio.cs" />
     <Compile Include="Soporte\WebBrowserUtility.cs" />
@@ -888,6 +895,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Manuales\DateTime y TimeSpan.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Imagenes\GuardarExcel.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\System.Data.SQLite.Core.1.0.110.0\build\net45\System.Data.SQLite.Core.targets" Condition="Exists('..\packages\System.Data.SQLite.Core.1.0.110.0\build\net45\System.Data.SQLite.Core.targets')" />

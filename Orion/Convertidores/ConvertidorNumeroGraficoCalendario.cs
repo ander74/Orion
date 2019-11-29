@@ -25,8 +25,15 @@ namespace Orion.Convertidores {
 			if (value != null && value is Tuple<int, int>) {
 				Tuple<int, int> comboGrafico = value as Tuple<int, int>;
 				if (comboGrafico.Item1 == 0) return "";
-				if (comboGrafico.Item1 > 0) return comboGrafico.Item1.ToString("0000");
-				switch (comboGrafico.Item1) {
+                if (comboGrafico.Item1 > 0) return comboGrafico.Item1.ToString("0000");
+                //if (comboGrafico.Item1 > 0) {
+                //    string rr = comboGrafico.Item1.ToString("0000");
+                //    if (comboGrafico.Item2 == 1) rr = $"\u26a1{rr}";
+                //    if (comboGrafico.Item2 == 2) rr = $"\ud836{rr}";
+                //    if (comboGrafico.Item2 == 3) rr = $"\u17d9{rr}";
+                //    return rr;
+                //}
+                switch (comboGrafico.Item1) {
 					case -1: return "O-V";
 					case -2: return "J-D";
 					case -3: return "FN";

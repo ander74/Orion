@@ -392,6 +392,35 @@
             <!--SEPARADOR-->
             <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
 
+            <!-- DESPLEGABLE CREAR EXCEL -->
+            <xceed:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" Focusable="False" IsTabStop="False">
+                <xceed:DropDownButton.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/GuardarExcel.png" Style="{StaticResource EstiloImagen}"/>
+                        <TextBlock Name="TxtCrearExcel" Text="Excel" FontSize="10" FontFamily="Arial" TextWrapping="Wrap" TextAlignment="Center"/>
+                    </StackPanel>
+                </xceed:DropDownButton.Content>
+                <xceed:DropDownButton.DropDownContent>
+                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue">
+                        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
+                            <StackPanel Orientation="Vertical">
+
+                                <!--BOTON COMPARAR DIETAS -->
+                                <Button Style="{StaticResource EstiloBotonBarraPequeña}" Margin="6,6,6,3" Padding="20,10"
+                                Content="Comparar Dietas" TextBlock.TextAlignment="Center" HorizontalAlignment="Stretch"
+                                Command="{Binding Source={x:Reference TxtCrearExcel}, Path=DataContext.GraficosVM.cmdCompararDietasExcel}"/>
+
+
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </xceed:DropDownButton.DropDownContent>
+            </xceed:DropDownButton>
+
+
+            <!--SEPARADOR-->
+            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+
         </StackPanel>
 
         <!-- IMAGEN DE FONDO-->
@@ -483,13 +512,68 @@
                                     Binding="{Binding InicioPartido, Converter={StaticResource cnvHora}}"
                                         Visibility="{Binding Source={x:Reference ColumnaActual}, 
 													 Path=DataContext.Configuracion.MostrarGrafTiempoPartido,
-                                                     Converter={StaticResource cnvBoolToVisibility}}"/>
+                                                     Converter={StaticResource cnvBoolToVisibility}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ErrorGraficoPartido}" Value="True">
+                                        <Setter Property="Foreground" Value="DeepPink"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
 
                     <DataGridTextColumn Header="Final Partido"  Width="1*" MinWidth="80" x:Name="ColumnaFinalPartido"
                                     Binding="{Binding FinalPartido, Converter={StaticResource cnvHora}}"
                                         Visibility="{Binding Source={x:Reference ColumnaActual}, 
 													 Path=DataContext.Configuracion.MostrarGrafTiempoPartido,
-                                                     Converter={StaticResource cnvBoolToVisibility}}"/>
+                                                     Converter={StaticResource cnvBoolToVisibility}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ErrorGraficoPartido}" Value="True">
+                                        <Setter Property="Foreground" Value="DeepPink"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    
+                    <!-- TIEMPO PARTIDO + TRABAJADAS PARTIDO
+                    <DataGridTextColumn Header="Partido"  Width="1*" MinWidth="60"
+                                    Binding="{Binding TiempoPartido, Converter={StaticResource cnvHora}}"
+                                         Visibility="{Binding Source={x:Reference ColumnaActual}, 
+													 Path=DataContext.Configuracion.MostrarGrafTiempoPartido,
+                                                     Converter={StaticResource cnvBoolToVisibility}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ErrorGraficoPartido}" Value="True">
+                                        <Setter Property="Foreground" Value="DeepPink"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn Header="Trab Partido"  Width="1*" MinWidth="60"
+                                    Binding="{Binding TrabajadasPartido, Converter={StaticResource cnvHora}}"
+                                         Visibility="{Binding Source={x:Reference ColumnaActual}, 
+													 Path=DataContext.Configuracion.MostrarGrafTiempoPartido,
+                                                     Converter={StaticResource cnvBoolToVisibility}}">
+                        <DataGridTextColumn.ElementStyle>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ErrorGraficoPartido}" Value="True">
+                                        <Setter Property="Foreground" Value="DeepPink"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGridTextColumn.ElementStyle>
+                    </DataGridTextColumn>
+                    -->
 
                     <DataGridTextColumn Header="Valoración"  Width="1*" MinWidth="80"
                                     Binding="{Binding Valoracion, Converter={StaticResource cnvHora}}">

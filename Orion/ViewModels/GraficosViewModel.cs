@@ -13,10 +13,10 @@ namespace Orion.ViewModels {
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Linq;
-    using System.Windows;
     using System.Windows.Data;
     using DataModels;
     using Models;
+    using Orion.Interfaces;
     using Servicios;
 
     public partial class GraficosViewModel : NotifyBase {
@@ -35,16 +35,18 @@ namespace Orion.ViewModels {
         // Servicios
         private IMensajes Mensajes;
         private InformesServicio Informes;
+        private IFileService FileService;
         #endregion
 
 
         // ====================================================================================================
         #region CONSTRUCTORES
         // ====================================================================================================
-        public GraficosViewModel(IMensajes servicioMensajes, InformesServicio servicioInformes) {
+        public GraficosViewModel(IMensajes servicioMensajes, InformesServicio servicioInformes, IFileService fileService) {
             // Asignamos los servicios
             Mensajes = servicioMensajes;
             Informes = servicioInformes;
+            FileService = fileService;
             // Añadimos los eventos a las listas.
             _listagraficos.CollectionChanged += ListaGraficos_CollectionChanged;
             _listagrupos.CollectionChanged += ListaGrupos_CollectionChanged;

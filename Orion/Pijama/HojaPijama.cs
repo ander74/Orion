@@ -5,7 +5,6 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using System;
 
 namespace Orion.Pijama {
 
@@ -1061,8 +1060,10 @@ namespace Orion.Pijama {
                 decimal findes = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
                 findes += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
                 decimal dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-                var xx = DiasActivo - (findes * (dias - DiasInactivo) / dias);
-                return DiasActivo - (findes * (dias - DiasInactivo) / dias);
+                decimal cVac = App.Global.Convenio.VacacionesAnuales * dias / (DateTime.IsLeapYear(Fecha.Year) ? 366m : 365m);
+                decimal cTrab = dias - findes - cVac;
+                decimal resultado = DiasActivo * cTrab / dias;
+                return resultado;
             }
         }
 
@@ -1088,8 +1089,10 @@ namespace Orion.Pijama {
                         }
                     }
                 }
-                var xx = (dias - DiasInactivoHastaMesEnAño) - (findes * (dias - DiasInactivoHastaMesEnAño) / dias);
-                return (dias - DiasInactivoHastaMesEnAño) - (findes * (dias - DiasInactivoHastaMesEnAño) / dias);
+                decimal cVac = App.Global.Convenio.VacacionesAnuales * dias / (DateTime.IsLeapYear(Fecha.Year) ? 366m : 365m);
+                decimal cTrab = dias - findes - cVac;
+                decimal resultado = (dias - DiasInactivoHastaMesEnAño) * cTrab / dias;
+                return resultado;
             }
         }
 
@@ -1102,7 +1105,8 @@ namespace Orion.Pijama {
                 decimal findes = ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
                 findes += ListaDias.Count(d => d.EsFestivo && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
                 decimal dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-                return findes * (dias - DiasInactivo) / dias;
+                decimal resultado = DiasActivo * findes / dias;
+                return resultado;
             }
         }
 
@@ -1128,7 +1132,9 @@ namespace Orion.Pijama {
                         }
                     }
                 }
-                return findes * (dias - DiasInactivoHastaMesEnAño) / dias;
+                decimal resultado = (dias - DiasInactivoHastaMesEnAño) * findes / dias;
+                return resultado;
+
             }
         }
 
@@ -1139,9 +1145,9 @@ namespace Orion.Pijama {
         public decimal DiasComputoVacaciones {
             get {
                 int dias = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-                return App.Global.Convenio.VacacionesAnuales * 
-                       (dias - DiasInactivo - ListaDias.Count(d => d.Grafico == -1)) / 
-                       ((DateTime.IsLeapYear(Fecha.Year) ? 366m : 365m) - App.Global.Convenio.VacacionesAnuales); // Igual no se descuentan las vacaciones...
+                decimal cVac = App.Global.Convenio.VacacionesAnuales * dias / (DateTime.IsLeapYear(Fecha.Year) ? 366m : 365m);
+                decimal resultado = DiasActivo * cVac / dias;
+                return resultado;
             }
         }
 
@@ -1152,9 +1158,9 @@ namespace Orion.Pijama {
                 for (int mes = 1; mes <= Fecha.Month; mes++) {
                     dias += DateTime.DaysInMonth(Fecha.Year, mes);
                 }
-                return App.Global.Convenio.VacacionesAnuales * 
-                       (dias - DiasInactivoHastaMesEnAño - DiasVacacionesHastaMesEnAño) /
-                       ((DateTime.IsLeapYear(Fecha.Year) ? 366m : 365m) - App.Global.Convenio.VacacionesAnuales); // Igual no se descuentan las vacaciones...
+                decimal cVac = App.Global.Convenio.VacacionesAnuales * dias / (DateTime.IsLeapYear(Fecha.Year) ? 366m : 365m);
+                decimal resultado = (dias - DiasInactivoHastaMesEnAño) * cVac / dias;
+                return resultado;
             }
         }
 
@@ -1553,7 +1559,7 @@ namespace Orion.Pijama {
         }
 
 
-        public Func<double,string> TurnoFormatter {
+        public Func<double, string> TurnoFormatter {
             get => x => (x).ToString("0");
         }
 
