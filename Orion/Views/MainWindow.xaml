@@ -19,7 +19,7 @@
         WindowStyle="ThreeDBorderWindow"
         WindowStartupLocation="CenterScreen" WindowState="Maximized"
         Loaded="Ventana_Loaded"
-        Title="Orion" Width="1024" Height="768">
+        Title="Orión" Width="1024" Height="768">
 
 
     <!-- ==================================================================================================== -->

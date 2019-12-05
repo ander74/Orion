@@ -94,8 +94,8 @@
             <Setter Property="Padding" Value="4"/>
             <Setter Property="FontSize" Value="14"/>
             <Setter Property="ShowDropDownButton" Value="False"/>
-            <Setter Property="AdvancedButtonHeader" Value="Avanzado"/>
-            <Setter Property="StandardButtonHeader" Value="Colores"/>
+            <Setter Property="AdvancedTabHeader" Value="Avanzado"/>
+            <Setter Property="StandardTabHeader" Value="Colores"/>
             <Setter Property="AvailableColorsHeader" Value="Colores Disponibles"/>
             <Setter Property="RecentColorsHeader" Value="Colores Recientes"/>
             <Setter Property="StandardColorsHeader" Value="Colores Estandard"/>

@@ -8,11 +8,14 @@
 namespace Orion.Models {
 
     using System;
+    using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Data.OleDb;
+    using System.Data.SQLite;
     using Config;
+    using Orion.Interfaces;
 
-    public class Conductor : NotifyBase {
+    public class Conductor : NotifyBase, ISQLItem {
 
 
         // ====================================================================================================
@@ -373,6 +376,105 @@ namespace Orion.Models {
         }
 
         #endregion
+
+
+        // ====================================================================================================
+        #region INTERFAZ SQL ITEM
+        // ====================================================================================================
+
+        public void FromReader(SQLiteDataReader lector) {
+            _id = lector.ToInt32("_id");
+            _nombre = lector.ToString("Nombre");
+            _apellidos = lector.ToString("Apellidos");
+            _indefinido = lector.ToBool("Indefinido");
+            _telefono = lector.ToString("Telefono");
+            _email = lector.ToString("Email");
+            _acumuladas = lector.ToTimeSpan("Acumuladas");
+            _descansos = lector.ToDecimal("Descansos");
+            _descansosnodisfrutados = lector.ToDecimal("DescansosNoDisfrutados");
+            _plusdistancia = lector.ToDecimal("PlusDistancia");
+            _reduccionjornada = lector.ToBool("ReduccionJornada");
+            _notas = lector.ToString("Notas");
+        }
+
+
+        public IEnumerable<SQLiteParameter> Parametros {
+            get {
+                var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("@nombre", Nombre));
+                lista.Add(new SQLiteParameter("@apellidos", Apellidos));
+                lista.Add(new SQLiteParameter("@indefinido", Indefinido ? 1 : 0));
+                lista.Add(new SQLiteParameter("@telefono", Telefono));
+                lista.Add(new SQLiteParameter("@email", Email));
+                lista.Add(new SQLiteParameter("@acumuladas", Acumuladas.Ticks));
+                lista.Add(new SQLiteParameter("@descansos", Descansos.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@descansosnodisfrutados", DescansosNoDisfrutados.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@plusdistancia", PlusDistancia.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@reduccionJornada", ReduccionJornada ? 1 : 0));
+                lista.Add(new SQLiteParameter("@notas", Notas));
+                lista.Add(new SQLiteParameter("@id", Id));
+                return lista;
+            }
+        }
+
+
+        public IEnumerable<ISQLItem> Lista {
+            get => ListaRegulaciones;
+            set => ListaRegulaciones = new NotifyCollection<RegulacionConductor>(value as IEnumerable<RegulacionConductor>);
+        }
+
+
+        public int ForeignId { get; set; }
+
+
+        public string ForeignName { get; }
+
+
+        public string TableName {
+            get => "Conductores";
+        }
+
+
+        public string ComandoInsertar {
+            //TODO: Corregir el _id añadiendo la matrícula.
+            get => "INSERT INTO Conductores (" +
+                "Nombre, " +
+                "Apellidos, " +
+                "Indefinido, " +
+                "Telefono, " +
+                "Email, " +
+                "Acumuladas, " +
+                "Descansos, " +
+                "DescansosNoDisfrutados, " +
+                "PlusDistancia, " +
+                "ReduccionJornada, " +
+                "Notas, " +
+                "_id) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+        }
+
+
+        public string ComandoActualizar {
+            //TODO: Corregir el _id añadiendo la matrícula.
+            get => "UPDATE Conductores SET " +
+                "Nombre = ?, " +
+                "Apellidos = ?, " +
+                "Indefinido = ?, " +
+                "Telefono = ?, " +
+                "Email = ?, " +
+                "Acumuladas = ?, " +
+                "Descansos = ?, " +
+                "DescansosNoDisfrutados = ?, " +
+                "PlusDistancia = ?, " +
+                "ReduccionJornada = ?, " +
+                "Notas = ? " +
+                "WHERE _id = ?;";
+        }
+
+
+        #endregion
+        // ====================================================================================================
+
 
 
     } //Final de clase

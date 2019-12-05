@@ -168,7 +168,7 @@ namespace Orion.Models {
         public bool ErrorGraficoPartido {
             get {
                 if (Turno == 4) {
-                    if (TiempoPartido < App.Global.Convenio.MaxHorasParticionGraficoPartido) return true;
+                    if (TiempoPartido > App.Global.Convenio.MaxHorasParticionGraficoPartido) return true;
                     if (TrabajadasPartido > App.Global.Convenio.MaxHorasTotalGraficoPartido) return true;
                 }
                 return false;

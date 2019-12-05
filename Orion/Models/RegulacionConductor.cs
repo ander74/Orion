@@ -7,230 +7,311 @@
 #endregion
 namespace Orion.Models {
 
-	using System;
-	using System.Data.OleDb;
+    using System;
+    using System.Collections.Generic;
+    using System.Data.OleDb;
+    using System.Data.SQLite;
+    using Orion.Interfaces;
 
-	public class RegulacionConductor: NotifyBase {
-
-
-		// ====================================================================================================
-		#region CAMPOS PRIVADOS
-		// ====================================================================================================
-		#endregion
+    public class RegulacionConductor : NotifyBase, ISQLItem {
 
 
-		// ====================================================================================================
-		#region CONSTRUCTORES
-		// ====================================================================================================
-		public RegulacionConductor() { }
+        // ====================================================================================================
+        #region CAMPOS PRIVADOS
+        // ====================================================================================================
+        #endregion
 
 
-		public RegulacionConductor(OleDbDataReader lector) {
-			FromReader(lector);
-		}
-		#endregion
+        // ====================================================================================================
+        #region CONSTRUCTORES
+        // ====================================================================================================
+        public RegulacionConductor() { }
 
 
-		// ====================================================================================================
-		#region MÉTODOS PÚBLICOS
-		// ====================================================================================================
-		public void BorrarValorPorHeader(string header) {
-			switch (header) {
-				case "Fecha": Fecha = new DateTime(2001,1,2); break;
-				case "Horas": Horas = TimeSpan.Zero; break;
-				case "DCs": Descansos = 0m; break;
-				case "DNDs": Dnds = 0m; break;
-				case "Motivo": Motivo = ""; break;
-			}
-		}
-
-		#endregion
+        public RegulacionConductor(OleDbDataReader lector) {
+            FromReader(lector);
+        }
+        #endregion
 
 
-		// ====================================================================================================
-		#region MÉTODOS PRIVADOS
-		// ====================================================================================================
-		private void FromReader(OleDbDataReader lector) {
-			_id = lector.ToInt32("Id");//(lector["Id"] is DBNull) ? 0 : (int)lector["Id"];
-			_idconductor = lector.ToInt32("IdConductor");//(lector["IdConductor"] is DBNull) ? 0 : (int)lector["IdConductor"];
-			_codigo = lector.ToInt16("Codigo");//(lector["Codigo"] is DBNull) ? 0 : (Int16)lector["Codigo"];
-			_fecha = (lector["Fecha"] is DBNull) ? new DateTime(2001, 1, 2) : (DateTime)lector["Fecha"];
-			_horas = lector.ToTimeSpan("Horas");
-			_descansos = lector.ToDecimal("Descansos");//(lector["Descansos"] is DBNull) ? 0 : (Int16)lector["Descansos"];
-			_dnds = lector.ToDecimal("Dnds");//(lector["Dnds"] is DBNull) ? 0 : (Int16)lector["Dnds"];
-			_motivo = lector.ToString("Motivo");//(lector["Motivo"] is DBNull) ? "" : (string)lector["Motivo"];
-		}
+        // ====================================================================================================
+        #region MÉTODOS PÚBLICOS
+        // ====================================================================================================
+        public void BorrarValorPorHeader(string header) {
+            switch (header) {
+                case "Fecha": Fecha = new DateTime(2001, 1, 2); break;
+                case "Horas": Horas = TimeSpan.Zero; break;
+                case "DCs": Descansos = 0m; break;
+                case "DNDs": Dnds = 0m; break;
+                case "Motivo": Motivo = ""; break;
+            }
+        }
 
-		#endregion
-
-
-		// ====================================================================================================
-		#region MÉTODOS SOBRECARGADOS
-		// ====================================================================================================
-		public override bool Equals(object obj) {
-			if (!(obj is RegulacionConductor)) return false;
-			RegulacionConductor r = obj as RegulacionConductor;
-			if (r.Codigo != Codigo || r.Fecha.Ticks != Fecha.Ticks) return false;
-			if (r.Horas != Horas) return false;
-			if (r.Descansos != Descansos) return false;
-			if (r.Dnds != Dnds) return false;
-			return true;
-		}
-
-		public override int GetHashCode() {
-			return base.GetHashCode();
-		}
+        #endregion
 
 
-		public override string ToString() {
-			return Fecha.ToString(@"dd-MM-yyyy") + ": " + Horas.ToTexto() + " horas, " + Descansos + " descansos y " + Dnds + "(" + Motivo + ").";
-		}
+        // ====================================================================================================
+        #region MÉTODOS PRIVADOS
+        // ====================================================================================================
+        private void FromReader(OleDbDataReader lector) {
+            _id = lector.ToInt32("Id");//(lector["Id"] is DBNull) ? 0 : (int)lector["Id"];
+            _idconductor = lector.ToInt32("IdConductor");//(lector["IdConductor"] is DBNull) ? 0 : (int)lector["IdConductor"];
+            _codigo = lector.ToInt16("Codigo");//(lector["Codigo"] is DBNull) ? 0 : (Int16)lector["Codigo"];
+            _fecha = (lector["Fecha"] is DBNull) ? new DateTime(2001, 1, 2) : (DateTime)lector["Fecha"];
+            _horas = lector.ToTimeSpan("Horas");
+            _descansos = lector.ToDecimal("Descansos");//(lector["Descansos"] is DBNull) ? 0 : (Int16)lector["Descansos"];
+            _dnds = lector.ToDecimal("Dnds");//(lector["Dnds"] is DBNull) ? 0 : (Int16)lector["Dnds"];
+            _motivo = lector.ToString("Motivo");//(lector["Motivo"] is DBNull) ? "" : (string)lector["Motivo"];
+        }
 
-		#endregion
-
-
-		// ====================================================================================================
-		#region MÉTODOS ESTÁTICOS
-		// ====================================================================================================
-		public static void ParseFromReader(OleDbDataReader lector, RegulacionConductor regulacion) {
-			regulacion.Id = lector.ToInt32("Id");
-			regulacion.IdConductor = lector.ToInt32("IdConductor");
-			regulacion.Codigo = lector.ToInt16("Codigo");
-			regulacion.Fecha = (lector["Fecha"] is DBNull) ? new DateTime(2001, 1, 2) : (DateTime)lector["Fecha"];
-			regulacion.Horas = lector.ToTimeSpan("Horas");
-			regulacion.Descansos = lector.ToDecimal("Descansos");
-			regulacion.Dnds = lector.ToDecimal("Dnds");
-			regulacion.Motivo = lector.ToString("Motivo");
-		}
+        #endregion
 
 
-		public static void ParseToCommand(OleDbCommand Comando, RegulacionConductor regulacion) {
-			Comando.Parameters.AddWithValue("idconductor", regulacion.IdConductor);
-			Comando.Parameters.AddWithValue("codigo", regulacion.Codigo);
-			Comando.Parameters.AddWithValue("fecha", regulacion.Fecha.ToString("yyyy-MM-dd"));
-			Comando.Parameters.AddWithValue("horas", regulacion.Horas.Ticks);
-			Comando.Parameters.AddWithValue("descansos", regulacion.Descansos.ToString("0.0000"));
-			Comando.Parameters.AddWithValue("dnds", regulacion.Dnds.ToString("0.0000"));
-			Comando.Parameters.AddWithValue("motivo", regulacion.Motivo);
-			Comando.Parameters.AddWithValue("id", regulacion.Id);
-		}
+        // ====================================================================================================
+        #region MÉTODOS SOBRECARGADOS
+        // ====================================================================================================
+        public override bool Equals(object obj) {
+            if (!(obj is RegulacionConductor)) return false;
+            RegulacionConductor r = obj as RegulacionConductor;
+            if (r.Codigo != Codigo || r.Fecha.Ticks != Fecha.Ticks) return false;
+            if (r.Horas != Horas) return false;
+            if (r.Descansos != Descansos) return false;
+            if (r.Dnds != Dnds) return false;
+            return true;
+        }
 
-		#endregion
-
-
-		// ====================================================================================================
-		#region PROPIEDADES
-		// ====================================================================================================
-
-		private int _id;
-		public int Id {
-			get { return _id; }
-			set {
-				if (_id != value) {
-					_id = value;
-					Modificado = true;
-					PropiedadCambiada();
-				}
-			}
-		}
+        public override int GetHashCode() {
+            return base.GetHashCode();
+        }
 
 
-		private int _idconductor;
-		public int IdConductor {
-			get { return _idconductor; }
-			set {
-				if (_idconductor != value) {
-					_idconductor = value;
-					Modificado = true;
-					PropiedadCambiada();
-				}
-			}
-		}
+        public override string ToString() {
+            return Fecha.ToString(@"dd-MM-yyyy") + ": " + Horas.ToTexto() + " horas, " + Descansos + " descansos y " + Dnds + "(" + Motivo + ").";
+        }
+
+        #endregion
 
 
-		private int _codigo;
-		public int Codigo {
-			get { return _codigo; }
-			set {
-				if (_codigo != value) {
-					_codigo = value;
-					Modificado = true;
-					PropiedadCambiada();
-				}
-			}
-		}
+        // ====================================================================================================
+        #region MÉTODOS ESTÁTICOS
+        // ====================================================================================================
+        public static void ParseFromReader(OleDbDataReader lector, RegulacionConductor regulacion) {
+            regulacion.Id = lector.ToInt32("Id");
+            regulacion.IdConductor = lector.ToInt32("IdConductor");
+            regulacion.Codigo = lector.ToInt16("Codigo");
+            regulacion.Fecha = (lector["Fecha"] is DBNull) ? new DateTime(2001, 1, 2) : (DateTime)lector["Fecha"];
+            regulacion.Horas = lector.ToTimeSpan("Horas");
+            regulacion.Descansos = lector.ToDecimal("Descansos");
+            regulacion.Dnds = lector.ToDecimal("Dnds");
+            regulacion.Motivo = lector.ToString("Motivo");
+        }
 
 
-		private DateTime _fecha;
-		public DateTime Fecha {
-			get { return _fecha; }
-			set {
-				if (_fecha != value) {
-					_fecha = value;
-					Modificado = true;
-					PropiedadCambiada();
-				}
-			}
-		}
+        public static void ParseToCommand(OleDbCommand Comando, RegulacionConductor regulacion) {
+            Comando.Parameters.AddWithValue("idconductor", regulacion.IdConductor);
+            Comando.Parameters.AddWithValue("codigo", regulacion.Codigo);
+            Comando.Parameters.AddWithValue("fecha", regulacion.Fecha.ToString("yyyy-MM-dd"));
+            Comando.Parameters.AddWithValue("horas", regulacion.Horas.Ticks);
+            Comando.Parameters.AddWithValue("descansos", regulacion.Descansos.ToString("0.0000"));
+            Comando.Parameters.AddWithValue("dnds", regulacion.Dnds.ToString("0.0000"));
+            Comando.Parameters.AddWithValue("motivo", regulacion.Motivo);
+            Comando.Parameters.AddWithValue("id", regulacion.Id);
+        }
+
+        #endregion
 
 
-		private TimeSpan _horas;
-		public TimeSpan Horas {
-			get { return _horas; }
-			set {
-				if (_horas != value) {
-					_horas = value;
-					Modificado = true;
-					PropiedadCambiada();
-				}
-			}
-		}
+        // ====================================================================================================
+        #region PROPIEDADES
+        // ====================================================================================================
+
+        private int _id;
+        public int Id {
+            get { return _id; }
+            set {
+                if (_id != value) {
+                    _id = value;
+                    Modificado = true;
+                    PropiedadCambiada();
+                }
+            }
+        }
 
 
-		private decimal _descansos;
-		public decimal Descansos {
-			get { return _descansos; }
-			set {
-				if (_descansos != value) {
-					_descansos = value;
-					Modificado = true;
-					PropiedadCambiada();
-				}
-			}
-		}
+        private int _idconductor;
+        public int IdConductor {
+            get { return _idconductor; }
+            set {
+                if (_idconductor != value) {
+                    _idconductor = value;
+                    Modificado = true;
+                    PropiedadCambiada();
+                }
+            }
+        }
 
 
-		private decimal _dnds;
-		public decimal Dnds {
-			get => _dnds;
-			set => SetValue(ref _dnds, value);
-		}
+        private int _codigo;
+        public int Codigo {
+            get { return _codigo; }
+            set {
+                if (_codigo != value) {
+                    _codigo = value;
+                    Modificado = true;
+                    PropiedadCambiada();
+                }
+            }
+        }
 
 
-
-		private string _motivo = "";
-		public string Motivo {
-			get { return _motivo; }
-			set {
-				if (value == "0") { Codigo = 0; Modificado = true; PropiedadCambiada(); return; }
-				if (value == "1") { Codigo = 1; Modificado = true; PropiedadCambiada(); return; }
-				if (value == "2") { Codigo = 2; Modificado = true; PropiedadCambiada(); return; }
-				if (_motivo != value) {
-					_motivo = value;
-					Modificado = true;
-					PropiedadCambiada();
-				}
-			}
-		}
+        private DateTime _fecha;
+        public DateTime Fecha {
+            get { return _fecha; }
+            set {
+                if (_fecha != value) {
+                    _fecha = value;
+                    Modificado = true;
+                    PropiedadCambiada();
+                }
+            }
+        }
 
 
-		#endregion
+        private TimeSpan _horas;
+        public TimeSpan Horas {
+            get { return _horas; }
+            set {
+                if (_horas != value) {
+                    _horas = value;
+                    Modificado = true;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
+        private decimal _descansos;
+        public decimal Descansos {
+            get { return _descansos; }
+            set {
+                if (_descansos != value) {
+                    _descansos = value;
+                    Modificado = true;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
+        private decimal _dnds;
+        public decimal Dnds {
+            get => _dnds;
+            set => SetValue(ref _dnds, value);
+        }
 
 
 
+        private string _motivo = "";
+        public string Motivo {
+            get { return _motivo; }
+            set {
+                if (value == "0") { Codigo = 0; Modificado = true; PropiedadCambiada(); return; }
+                if (value == "1") { Codigo = 1; Modificado = true; PropiedadCambiada(); return; }
+                if (value == "2") { Codigo = 2; Modificado = true; PropiedadCambiada(); return; }
+                if (_motivo != value) {
+                    _motivo = value;
+                    Modificado = true;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
+        #endregion
+
+
+
+        // ====================================================================================================
+        #region INTERFAZ SQL ITEM
+        // ====================================================================================================
+
+        public void FromReader(SQLiteDataReader lector) {
+            _id = lector.ToInt32("_id");
+            _idconductor = lector.ToInt32("IdConductor");
+            _codigo = lector.ToInt32("Codigo");
+            //_fecha = (lector["Fecha"] is DBNull) ? new DateTime(2001, 1, 2) : (DateTime)lector["Fecha"];
+            _fecha = lector.ToDateTime("Fecha");
+            _horas = lector.ToTimeSpan("Horas");
+            _descansos = lector.ToDecimal("Descansos");
+            _dnds = lector.ToDecimal("Dnds");
+            _motivo = lector.ToString("Motivo");
+        }
+
+
+        public IEnumerable<SQLiteParameter> Parametros {
+            get {
+                var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("idconductor", IdConductor));
+                lista.Add(new SQLiteParameter("codigo", Codigo));
+                lista.Add(new SQLiteParameter("fecha", Fecha.ToString("yyyy-MM-dd")));
+                lista.Add(new SQLiteParameter("horas", Horas.Ticks));
+                lista.Add(new SQLiteParameter("descansos", Descansos.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("dnds", Dnds.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("motivo", Motivo));
+                lista.Add(new SQLiteParameter("id", Id));
+                return lista;
+            }
+        }
+
+
+        public IEnumerable<ISQLItem> Lista { get; set; }
+
+
+        public int ForeignId {
+            get => IdConductor;
+            set => IdConductor = value;
+        }
+
+
+        public string ForeignName {
+            get => "IdConductor";
+        }
+
+
+        public string TableName {
+            get => "Regulaciones";
+        }
+
+
+        public string ComandoInsertar {
+            get => "INSERT INTO Regulaciones (" +
+                "IdConductor, " +
+                "Codigo, " +
+                "Fecha, " +
+                "Horas, " +
+                "Descansos, " +
+                "Dnds, " +
+                "Motivo) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?);";
+        }
+
+
+        public string ComandoActualizar {
+            get => "UPDATE Regulaciones SET " +
+                "IdConductor = ?, " +
+                "Codigo = ?, " +
+                "Fecha = ?, " +
+                "Horas = ?, " +
+                "Descansos = ?, " +
+                "Dnds = ?, " +
+                "Motivo = ? " +
+                "WHERE _id = ?;";
+        }
+        #endregion
+        // ====================================================================================================
 
 
 
 
-	}
+    }
 }

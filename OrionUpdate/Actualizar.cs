@@ -123,6 +123,30 @@ namespace OrionUpdate {
                     GenerarError();
                     return;
                 }
+                // Las siguientes son para Entity Framework (excel)
+                if (!CopiarArchivoRaiz("EntityFramework.dll")) {
+                    GenerarError();
+                    return;
+                }
+                if (!CopiarArchivoRaiz("EntityFramework.SqlServer.dll")) {
+                    GenerarError();
+                    return;
+                }
+                // Las siguientes son para SQLite (excel)
+                if (!CopiarArchivoRaiz("System.Data.SQLite.dll")) {
+                    GenerarError();
+                    return;
+                }
+                if (!CopiarArchivoRaiz("System.Data.SQLite.EF6.dll")) {
+                    GenerarError();
+                    return;
+                }
+                if (!CopiarArchivoRaiz("System.Data.SQLite.Linq.dll")) {
+                    GenerarError();
+                    return;
+                }
+
+
 
 
                 // CONFIGURACION

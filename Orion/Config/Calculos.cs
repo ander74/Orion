@@ -46,8 +46,6 @@ namespace Orion.Config {
                 TimeSpan partido = (finalpartido ?? TimeSpan.Zero) - (iniciopartido ?? TimeSpan.Zero);
                 // regulamos el tiempo partido
                 if (partido.TotalSeconds < 0) partido += new TimeSpan(1, 0, 0, 0);
-                // Si el tiempo partido es más del máximo, lo dejamos en el máximo
-                if (partido > App.Global.Convenio.MaxHorasParticionGraficoPartido) partido = App.Global.Convenio.MaxHorasParticionGraficoPartido;
                 // Devolvemos el tiempo trabajado.
                 return partido;
             }

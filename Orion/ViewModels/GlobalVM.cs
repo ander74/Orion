@@ -10,6 +10,7 @@ namespace Orion.ViewModels {
     using System;
     using System.ComponentModel;
     using System.Data.OleDb;
+    using System.Data.SQLite;
     using System.Diagnostics;
     using System.IO;
     using System.Windows;
@@ -75,6 +76,7 @@ namespace Orion.ViewModels {
             CentroActual = (Centros)Configuracion.CentroInicial;// == Centros.Desconocido ? Centros.Bilbao : (Centros)Configuracion.CentroInicial;
                                                                 // Activamos el botón de la calculadora.
             Configuracion.BotonCalculadoraActivo = true;
+
         }
 
 
@@ -117,6 +119,22 @@ namespace Orion.ViewModels {
             };
             string cadenaConexion = cadenaConexionB.ToString();
 
+            // Devolvemos la cadena de conexión.
+            return cadenaConexion;
+        }
+
+
+        public string GetCadenaConexionSQL(Centros centro) {
+            // Si no se ha establecido el centro, devolvemos null.
+            if (centro == Centros.Desconocido) return null;
+            // Definimos el archivo de base de datos
+            string archivo = Utils.CombinarCarpetas(Configuracion.CarpetaDatos, centro.ToString() + ".db3");
+            if (!File.Exists(archivo)) SQLiteConnection.CreateFile(archivo);
+            // Establecemos la cadena de conexión
+            SQLiteConnectionStringBuilder cadenaConexionBuilder = new SQLiteConnectionStringBuilder {
+                DataSource = archivo,
+            };
+            string cadenaConexion = cadenaConexionBuilder.ToString();
             // Devolvemos la cadena de conexión.
             return cadenaConexion;
         }
@@ -226,8 +244,13 @@ namespace Orion.ViewModels {
                     } else {
                         EnOtroCentro = true;
                     }
-                    // Si el centro actual no es desconocido, cargamos las opciones por centro.
-                    if (_centroactual != Centros.Desconocido) PorCentro.Cargar(ArchivoOpcionesPorCentro);
+                    // Si el centro actual no es desconocido...
+                    if (_centroactual != Centros.Desconocido) {
+                        // Cargamos las opciones por centro.
+                        PorCentro.Cargar(ArchivoOpcionesPorCentro);
+                        // Inicializamos el centro en la base de datos SQL
+                        App.SqlDb?.InicializarCentro();
+                    }
                     PropiedadCambiada();
                 }
             }
@@ -244,6 +267,13 @@ namespace Orion.ViewModels {
         public string CadenaConexion {
             get {
                 return GetCadenaConexion(_centroactual);
+            }
+        }
+
+
+        public string CadenaConexionSQL {
+            get {
+                return GetCadenaConexionSQL(_centroactual);
             }
         }
 
