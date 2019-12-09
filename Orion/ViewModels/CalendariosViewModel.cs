@@ -16,6 +16,7 @@ namespace Orion.ViewModels {
     using System.Windows.Data;
     using DataModels;
     using Models;
+    using Orion.Interfaces;
     using Servicios;
 
     public partial class CalendariosViewModel : NotifyBase {
@@ -29,6 +30,7 @@ namespace Orion.ViewModels {
         // SERVICIOS
         private IMensajes Mensajes;
         private InformesServicio Informes;
+        private IFileService FileService;
 
         #endregion
         // ====================================================================================================
@@ -37,9 +39,10 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         #region CONSTRUCTORES
         // ====================================================================================================
-        public CalendariosViewModel(IMensajes servicioMensajes, InformesServicio servicioInformes) {
+        public CalendariosViewModel(IMensajes servicioMensajes, InformesServicio servicioInformes, IFileService fileService) {
             Mensajes = servicioMensajes;
             Informes = servicioInformes;
+            FileService = fileService;
             _listacalendarios = new ObservableCollection<Calendario>();
             _listacalendarios.CollectionChanged += ListaCalendarios_CollectionChanged;
             FechaActual = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);

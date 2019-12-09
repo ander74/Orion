@@ -69,13 +69,6 @@ namespace Orion.DataModels {
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                //string SQLInsertar = "INSERT INTO Conductores (Nombre, Apellidos, Indefinido, Telefono, Email, Acumuladas, Descansos, " +
-                //				 "DescansosNoDisfrutados, PlusDistancia, Notas) " +
-                //				 "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-
-                //string SQLActualizar = "UPDATE Conductores SET Id=?, Nombre=?, Apellidos=?, Indefinido=?, " +
-                //					   "Telefono=?, Email=?, Acumuladas=?, Descansos=?, DescansosNoDisfrutados=?, PlusDistancia=?, Notas=? WHERE Id=?";
-
                 string SQLInsertar = DbService2.InsertarConductor;
                 string SQLActualizar = DbService2.ActualizarConductor;
 
@@ -83,7 +76,6 @@ namespace Orion.DataModels {
                     conexion.Open();
 
                     foreach (Conductor conductor in lista) {
-
                         if (conductor.Nuevo) {
                             // Si el conductor ya existe, saltarselo.
                             if (ExisteConductor(conductor.Id)) {

@@ -249,7 +249,7 @@ namespace Orion.ViewModels {
                         // Cargamos las opciones por centro.
                         PorCentro.Cargar(ArchivoOpcionesPorCentro);
                         // Inicializamos el centro en la base de datos SQL
-                        App.SqlDb?.InicializarCentro();
+                        repository = new OrionRepository(CadenaConexionSQL);
                     }
                     PropiedadCambiada();
                 }
@@ -396,6 +396,19 @@ namespace Orion.ViewModels {
         }
 
 
+        //====================================================================================================
+        // REPOSITORIO DE DATOS
+        //====================================================================================================
+
+        private OrionRepository repository;
+        public OrionRepository Reposritory {
+            get {
+                if (repository == null) repository = new OrionRepository(CadenaConexionSQL);
+                return repository;
+            }
+        }
+
+
 
         //====================================================================================================
         // VENTANA PROGRESO
@@ -471,7 +484,7 @@ namespace Orion.ViewModels {
 
         public CalendariosViewModel CalendariosVM {
             get {
-                _calendariosvm = _calendariosvm ?? new CalendariosViewModel(mensajes, Informes);
+                _calendariosvm = _calendariosvm ?? new CalendariosViewModel(mensajes, Informes, fileService);
                 return _calendariosvm;
             }
         }

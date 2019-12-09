@@ -322,6 +322,7 @@
     <Compile Include="PrintModel\PdfTools.cs" />
     <Compile Include="PrintModel\PijamaPrintModel.cs" />
     <Compile Include="PrintModel\ReclamacionPrintModel.cs" />
+    <Compile Include="Servicios\OrionRepository.cs" />
     <Compile Include="Servicios\SQLiteRepository.cs" />
     <Compile Include="Servicios\DbService2.cs" />
     <Compile Include="Servicios\ExcelService.cs" />

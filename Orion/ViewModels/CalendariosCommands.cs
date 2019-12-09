@@ -13,10 +13,7 @@ namespace Orion.ViewModels {
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-    using System.Windows.Controls;
     using System.Windows.Input;
-    using iText.Kernel.Pdf;
-    using Microsoft.Office.Interop.Excel;
     using Convertidores;
     using DataModels;
     using Models;
@@ -191,7 +188,7 @@ namespace Orion.ViewModels {
             IdConductorPijama = CalendarioSeleccionado.IdConductor;
             Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
         }
-    
+
         #endregion
 
 
@@ -786,10 +783,10 @@ namespace Orion.ViewModels {
                         doc.SetMargins(40, 40, 40, 40);
                         // Extraemos las reclamaciones.
                         List<Reclamacion> listaReclamaciones = new List<Reclamacion>();
-                        foreach(var dia in Pijama.ListaDias) {
+                        foreach (var dia in Pijama.ListaDias) {
                             // ACUMULADAS
                             if (dia.AcumuladasAlt.HasValue && dia.AcumuladasAlt.Value < dia.GraficoOriginal.Acumuladas) {
-                                listaReclamaciones.Add( new Reclamacion {
+                                listaReclamaciones.Add(new Reclamacion {
                                     Concepto = $"Horas acumuladas del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
                                     EnPijama = dia.AcumuladasAlt.ToTexto(),
                                     Real = dia.GraficoOriginal.Acumuladas.ToTexto(),
@@ -1095,6 +1092,82 @@ namespace Orion.ViewModels {
             }
         }
 
+        #endregion
+
+
+        #region COMANDO COMPARAR CALENDARIOS
+
+        // Comando
+        private ICommand _compararCalendarioexcel;
+        public ICommand cmdCompararCalendarioExcel {
+            get {
+                if (_compararCalendarioexcel == null) _compararCalendarioexcel = new RelayCommand(p => CompararCalendarioExcel(), p => PuedeCompararCalendarioExcel());
+                return _compararCalendarioexcel;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeCompararCalendarioExcel() {
+            return ListaCalendarios.Count > 0;
+        }
+
+        // Ejecución del comando
+        private void CompararCalendarioExcel() {
+
+            // Definir el nombre del excel de destino.
+            string nombreArchivo = $"Comparación Calendarios {FechaActual.ToString("MM - yyyy")} - {App.Global.CentroActual}.xlsx";
+            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
+            string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
+
+            // Pedimos el archivo excel que se va a comparar.
+            string titulo = "Seleccione el excel con los calendarios a comparar.";
+            string excel = FileService.FileDialog(titulo, @"C:\");
+            if (excel == "") return;
+
+            ExcelService.getInstance().GenerarComparacionCalendarios(rutaDestino, ListaCalendarios, excel, FechaActual.Year, FechaActual.Month);
+
+            if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
+        }
+        #endregion
+
+
+
+        #region COMANDO COMPARAR CALENDARIOS ANUAL
+
+        // Comando
+        private ICommand compararCalendariosExcelAnual;
+        public ICommand cmdCompararCalendariosExcelAnual {
+            get {
+                if (compararCalendariosExcelAnual == null) compararCalendariosExcelAnual = new RelayCommand(p => CompararCalendariosExcelAnual(), p => PuedeCompararCalendariosExcelAnual());
+                return compararCalendariosExcelAnual;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeCompararCalendariosExcelAnual() {
+            return true;
+        }
+
+        // Ejecución del comando
+        private void CompararCalendariosExcelAnual() {
+            // Definir el nombre del excel de destino.
+            string nombreArchivo = $"Comparación Calendarios {FechaActual.ToString("yyyy")} - {App.Global.CentroActual}.xlsx";
+            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
+            string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
+
+            // Pedimos el archivo excel que se va a comparar.
+            string titulo = "Seleccione el excel con los calendarios a comparar.";
+            string excel = FileService.FileDialog(titulo, @"C:\");
+            if (excel == "") return;
+
+            ExcelService.getInstance().GenerarComparacionCalendariosAnual(rutaDestino, excel, FechaActual.Year);
+
+            if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
+        }
         #endregion
 
 

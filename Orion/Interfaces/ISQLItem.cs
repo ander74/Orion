@@ -69,7 +69,7 @@ namespace Orion.Interfaces {
 
 
         /// <summary>
-        /// Cláusula ORDER BY (se puede omitir el ORDER BY) para recuperar los elementos.
+        /// Cláusula ORDER BY (sin el ORDER BY) para ordenar los elementos recuperados.
         /// </summary>
         string OrderBy { get; }
 

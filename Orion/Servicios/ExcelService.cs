@@ -8,11 +8,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using OfficeOpenXml;
+using Orion.Convertidores;
+using Orion.DataModels;
 using Orion.Models;
 
 namespace Orion.Servicios {
@@ -25,6 +28,8 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
         private static ExcelService instance;
+
+        private static string[] meses = { "Desconocido", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
 
         #endregion
         // ====================================================================================================
@@ -42,7 +47,6 @@ namespace Orion.Servicios {
 
         #endregion
         // ====================================================================================================
-
 
 
         // ====================================================================================================
@@ -111,6 +115,136 @@ namespace Orion.Servicios {
             }
             return "Desconocido";
         }
+
+
+        private List<Calendario> getCalendarios(string excelFile, int año, int mes) {
+            string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0; Data Source='{excelFile}';Excel 12.0 Xml;Extended Properties=\"HDR=YES;IMEX=1;\"";
+            List<Calendario> lista = new List<Calendario>();
+            ConvertidorNumeroGraficoCalendario converter = new ConvertidorNumeroGraficoCalendario();
+            using (OleDbConnection conexion = new OleDbConnection(connectionString)) {
+                OleDbCommand comando = new OleDbCommand();
+                comando.Connection = conexion;
+                comando.CommandText = $"SELECT * FROM [{meses[mes]}$] ORDER BY Matricula";
+                conexion.Open();
+                OleDbDataReader reader = comando.ExecuteReader();
+                while (reader.Read()) {
+                    Calendario calendario = new Calendario();
+                    calendario.Fecha = new DateTime(año, mes, 1);
+                    calendario.IdConductor = (int)reader.GetDouble(reader.GetOrdinal("Matricula"));
+                    calendario.ListaDias = new ObservableCollection<DiaCalendario>();
+                    for (int dia = 1; dia <= DateTime.DaysInMonth(año, mes); dia++) {
+                        DiaCalendario diaCalendario = new DiaCalendario();
+                        diaCalendario.ComboGrafico = (Tuple<int, int>)converter.ConvertBack(reader.GetValue(reader.GetOrdinal($"D{dia}")).ToString(), null, null, null);
+                        calendario.ListaDias.Add(diaCalendario);
+                    }
+                    lista.Add(calendario);
+                }
+            }
+            return lista;
+
+        }
+
+
+        private void rellenarHojaComparacionCalendarios(ref ExcelWorksheet hoja, IEnumerable<Calendario> listaCalendarios, IEnumerable<Calendario> listaExcel, int año, int mes) {
+
+            int diasMes = DateTime.DaysInMonth(año, mes);
+            ConvertidorNumeroGraficoCalendario converter = new ConvertidorNumeroGraficoCalendario();
+
+            // Título y Leyenda
+            hoja.Cells["A1"].Value = $"Comparación Calendarios ({meses[mes]} - {año})";
+            hoja.Cells["A1"].Style.Font.Size = 20;
+            hoja.Cells["L1:U1"].Merge = true;
+            hoja.Cells["L1"].Style.Font.Size = 10;
+            hoja.Cells["L1"].Style.WrapText = true;
+            hoja.Cells["L1"].Style.Indent = 1;
+            string texto1 = "Fila superior";
+            string texto2 = " = Calendarios en Orión.\r\n";
+            string texto3 = "Fila inferior";
+            string texto4 = " = Calendarios en el excel.";
+            hoja.Cells["L1"].IsRichText = true;
+            hoja.Cells["L1"].RichText.Add(texto1).Bold = true;
+            hoja.Cells["L1"].RichText.Add(texto2).Bold = false;
+            hoja.Cells["L1"].RichText.Add(texto3).Bold = true;
+            hoja.Cells["L1"].RichText.Add(texto4).Bold = false;
+
+            // Encabezados.
+            hoja.Cells["A3"].Value = "Nombre";
+            hoja.Cells["B3"].Value = "Matrícula";
+            for (int dia = 1; dia <= diasMes; dia++) {
+                hoja.Cells[3, dia + 2].Value = dia;
+            }
+
+            // Recorremos los gráficos.
+            int filas = 0;
+            int fila = 1;
+
+            foreach (var calendario in listaCalendarios) {
+                var calendarioExcel = listaExcel.FirstOrDefault(c => c.IdConductor == calendario.IdConductor);
+                if (calendarioExcel == null) continue;
+                Conductor conductor = App.Global.ConductoresVM.GetConductor(calendario.IdConductor);
+                string nombre = conductor == null ? "Desconocido" : $"{conductor.Nombre} {conductor.Apellidos}";
+                hoja.Cells[fila + 3, 1, fila + 4, 1].Merge = true;
+                hoja.Cells[fila + 3, 2, fila + 4, 2].Merge = true;
+                hoja.Cells[fila + 3, 1].Value = nombre;
+                hoja.Cells[fila + 3, 2].Value = calendario.IdConductor;
+                for (int dia = 1; dia <= diasMes; dia++) {
+                    string txtOrion = (string)converter.Convert(calendario.ListaDias[dia - 1].ComboGrafico, null, null, null);
+                    string txtExcel = (string)converter.Convert(calendarioExcel.ListaDias[dia - 1].ComboGrafico, null, null, null);
+                    if (int.TryParse(txtOrion, out int intOrion)) {
+                        hoja.Cells[fila + 3, dia + 2].Value = intOrion;
+                    } else {
+                        hoja.Cells[fila + 3, dia + 2].Value = txtOrion;
+                    }
+                    if (int.TryParse(txtExcel, out int intExcel)) {
+                        hoja.Cells[fila + 4, dia + 2].Value = intExcel;
+                    } else {
+                        hoja.Cells[fila + 4, dia + 2].Value = txtExcel;
+                    }
+                    if (!txtOrion.ToLower().Equals(txtExcel.ToLower())) {
+                        hoja.Cells[fila + 3, dia + 2, fila + 4, dia + 2].Style.Font.Color.SetColor(Color.Red);
+                    }
+                }
+                hoja.Cells[fila + 3, 1, fila + 4, diasMes + 2].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                if (filas % 2 == 0) {
+                    hoja.Cells[fila + 3, 1, fila + 4, diasMes + 2].Style.Fill.BackgroundColor.SetColor(Color.White);
+                } else {
+                    hoja.Cells[fila + 3, 1, fila + 4, diasMes + 2].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(226, 239, 218));
+                }
+
+
+                filas++;
+                fila = fila + 2;
+            }
+
+            // Formato Encabezados
+            hoja.Cells[3, 1, 3, diasMes + 2].Style.Font.Color.SetColor(Color.White);
+            hoja.Cells[3, 1, 3, diasMes + 2].Style.Font.Bold = true;
+            hoja.Cells[3, 1, 3, diasMes + 2].Style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+            hoja.Cells[3, 1, 3, diasMes + 2].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(84, 130, 53));
+
+            // Formato global
+            hoja.Cells[3, 1, 3 + (filas * 2), diasMes + 2].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+            hoja.Cells[3, 1, 3 + (filas * 2), diasMes + 2].Style.VerticalAlignment = OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+            hoja.Row(1).Height = 35;
+            hoja.Row(3).Height = 17;
+            for (int i = 3; i <= filas * 2 + 3; i++) hoja.Row(i).Height = 16;
+            hoja.Column(1).Width = 25;
+            hoja.Column(2).Width = 10;
+            for (int i = 1; i <= diasMes; i++) hoja.Column(i + 2).Width = 6;
+
+            // Bordes
+            hoja.Cells[3, 1, 3 + filas * 2, 2 + diasMes].Style.Border.Bottom.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            hoja.Cells[3, 1, 3 + filas * 2, 2 + diasMes].Style.Border.Top.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            hoja.Cells[3, 1, 3 + filas * 2, 2 + diasMes].Style.Border.Left.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            hoja.Cells[3, 1, 3 + filas * 2, 2 + diasMes].Style.Border.Right.Style = OfficeOpenXml.Style.ExcelBorderStyle.Thin;
+            hoja.Cells[3, 1, 3 + filas * 2, 2 + diasMes].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thick);
+            hoja.Cells[3, 1, 3, 2 + diasMes].Style.Border.BorderAround(OfficeOpenXml.Style.ExcelBorderStyle.Thick);
+
+
+        }
+
+
+
 
         #endregion
         // ====================================================================================================
@@ -266,6 +400,40 @@ namespace Orion.Servicios {
 
             }
         }
+
+
+
+        public void GenerarComparacionCalendarios(string destino, IEnumerable<Calendario> listaCalendarios, string excelCalendarios, int año, int mes) {
+            var listaExcel = getCalendarios(excelCalendarios, año, mes);
+
+            using (var excelApp = new ExcelPackage()) {
+                // Creamos la hoja del mes
+                var hoja = excelApp.Workbook.Worksheets.Add($"{meses[mes]}");
+                // Rellenamos la hoja
+                rellenarHojaComparacionCalendarios(ref hoja, listaCalendarios, listaExcel, año, mes);
+                // Guardamos el libro y cerramos la aplicación.
+                excelApp.SaveAs(new FileInfo(destino));
+            }
+        }
+
+
+        public void GenerarComparacionCalendariosAnual(string destino, string excelCalendarios, int año) {
+
+            using (var excelApp = new ExcelPackage()) {
+                for (int mes = 1; mes <= 12; mes++) {
+                    var listaCalendarios = BdCalendarios.GetCalendarios(año, mes);
+                    var listaExcel = getCalendarios(excelCalendarios, año, mes);
+                    // Creamos la hoja del mes
+                    var hoja = excelApp.Workbook.Worksheets.Add($"{meses[mes]}");
+                    // Rellenamos la hoja
+                    rellenarHojaComparacionCalendarios(ref hoja, listaCalendarios, listaExcel, año, mes);
+                }
+
+                // Guardamos el libro y cerramos la aplicación.
+                excelApp.SaveAs(new FileInfo(destino));
+            }
+        }
+
 
         #endregion
         // ====================================================================================================

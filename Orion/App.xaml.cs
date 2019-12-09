@@ -8,7 +8,6 @@
 using System.IO;
 using System.Reflection;
 using System.Windows;
-using Orion.Servicios;
 using Orion.ViewModels;
 using Orion.Views;
 
@@ -27,8 +26,6 @@ namespace Orion {
         /// ViewModel global para toda la aplicación.
         /// </summary>
         public static GlobalVM Global = new GlobalVM();
-
-        public static SQLiteRepository SqlDb = SQLiteRepository.GetInstance();
 
         // Ruta del programa.
         public static string RutaInicial = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);

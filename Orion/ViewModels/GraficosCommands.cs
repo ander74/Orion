@@ -864,8 +864,11 @@ namespace Orion.ViewModels {
             // Pedimos el archivo excel que se va a comparar.
             string titulo = "Seleccione un excel con las dietas de la empresa.";
             string excel = FileService.FileDialog(titulo, @"C:\");
+            if (excel == "") return;
 
             ExcelService.getInstance().GenerarComparacionGraficos(rutaDestino, ListaGraficos, excel);
+
+            if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
         }
         #endregion
 
