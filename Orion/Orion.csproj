@@ -47,6 +47,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -57,6 +58,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>true</Prefer32Bit>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Views\Imagenes\Iconos\OrionIcon_400x400.ico</ApplicationIcon>
@@ -70,6 +72,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Orion.App</StartupObject>
@@ -83,6 +86,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.5.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
@@ -303,6 +307,7 @@
     <Compile Include="Models\Pluses.cs" />
     <Compile Include="Models\Reclamacion.cs" />
     <Compile Include="Models\RegulacionConductor.cs" />
+    <Compile Include="Models\SQLiteItem.cs" />
     <Compile Include="Models\ValoracionGrafico.cs" />
     <Compile Include="Mvvm\CommandAsync.cs" />
     <Compile Include="Mvvm\ICommandAsync.cs" />
@@ -317,7 +322,7 @@
     <Compile Include="PrintModel\PdfTools.cs" />
     <Compile Include="PrintModel\PijamaPrintModel.cs" />
     <Compile Include="PrintModel\ReclamacionPrintModel.cs" />
-    <Compile Include="Servicios\DbService.cs" />
+    <Compile Include="Servicios\SQLiteRepository.cs" />
     <Compile Include="Servicios\DbService2.cs" />
     <Compile Include="Servicios\ExcelService.cs" />
     <Compile Include="Servicios\FileService.cs" />

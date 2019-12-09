@@ -27,6 +27,7 @@ namespace Orion.Models {
         // ====================================================================================================
         #region  CONSTRUCTORES
         // ====================================================================================================
+
         public Conductor() {
             //_regulaciones.CollectionChanged += ListaRegulaciones_CollectionChanged;
         }
@@ -129,7 +130,6 @@ namespace Orion.Models {
             conductor.Telefono = lector.ToString("Telefono");
             conductor.Email = lector.ToString("Email");
             conductor.Acumuladas = lector.ToTimeSpan("Acumuladas");
-            //conductor.Descansos = lector.ToInt16("Descansos");
             conductor.Descansos = lector.ToDecimal("Descansos");
             conductor.DescansosNoDisfrutados = lector.ToDecimal("DescansosNoDisfrutados");
             conductor.PlusDistancia = lector.ToDecimal("PlusDistancia");
@@ -145,7 +145,6 @@ namespace Orion.Models {
             Comando.Parameters.AddWithValue("@Telefono", conductor.Telefono);
             Comando.Parameters.AddWithValue("@Email", conductor.Email);
             Comando.Parameters.AddWithValue("@Acumuladas", conductor.Acumuladas.Ticks);
-            //Comando.Parameters.AddWithValue("@Descansos", conductor.Descansos);
             Comando.Parameters.AddWithValue("@Descansos", conductor.Descansos.ToString("0.0000"));
             Comando.Parameters.AddWithValue("@Descansosnodisfrutados", conductor.DescansosNoDisfrutados.ToString("0.0000"));
             Comando.Parameters.AddWithValue("@Plusdistancia", conductor.PlusDistancia.ToString("0.0000"));
@@ -198,10 +197,6 @@ namespace Orion.Models {
                 PropiedadCambiada(nameof(MatriculaApellidos));
             }
         }
-
-
-        // Propiedad no utilizada en esta clase, pero obligatoria por la interfaz IModelOleDB
-        public int IdRelacionado { get; set; }
 
 
         private string _nombre = "";
@@ -289,7 +284,7 @@ namespace Orion.Models {
         }
 
 
-        private decimal _descansos; // Cambiamos el tipo int por decimal
+        private decimal _descansos;
         public decimal Descansos {
             get { return _descansos; }
             set {
@@ -378,9 +373,11 @@ namespace Orion.Models {
         #endregion
 
 
+
         // ====================================================================================================
-        #region INTERFAZ SQL ITEM
+        #region PROPIEDADES Y MÉTODOS OVERRIDE
         // ====================================================================================================
+
 
         public void FromReader(SQLiteDataReader lector) {
             _id = lector.ToInt32("_id");
@@ -395,6 +392,8 @@ namespace Orion.Models {
             _plusdistancia = lector.ToDecimal("PlusDistancia");
             _reduccionjornada = lector.ToBool("ReduccionJornada");
             _notas = lector.ToString("Notas");
+            Nuevo = false;
+            Modificado = false;
         }
 
 
@@ -408,8 +407,8 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("@email", Email));
                 lista.Add(new SQLiteParameter("@acumuladas", Acumuladas.Ticks));
                 lista.Add(new SQLiteParameter("@descansos", Descansos.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@descansosnodisfrutados", DescansosNoDisfrutados.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@plusdistancia", PlusDistancia.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@descansosNoDisfrutados", DescansosNoDisfrutados.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@plusDistancia", PlusDistancia.ToString("0.0000")));
                 lista.Add(new SQLiteParameter("@reduccionJornada", ReduccionJornada ? 1 : 0));
                 lista.Add(new SQLiteParameter("@notas", Notas));
                 lista.Add(new SQLiteParameter("@id", Id));
@@ -418,21 +417,32 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLItem> Lista {
-            get => ListaRegulaciones;
-            set => ListaRegulaciones = new NotifyCollection<RegulacionConductor>(value as IEnumerable<RegulacionConductor>);
+        public IEnumerable<ISQLItem> Lista { get => ListaRegulaciones; }
+
+
+        public bool HasList { get => true; }
+
+
+        public void InicializarLista() {
+            ListaRegulaciones = new NotifyCollection<RegulacionConductor>();
+        }
+
+
+        public void AddItemToList(ISQLItem item) {
+            ListaRegulaciones.Add(item as RegulacionConductor);
         }
 
 
         public int ForeignId { get; set; }
 
 
-        public string ForeignName { get; }
+        public string ForeignIdName { get => "IdConductor"; }
 
 
-        public string TableName {
-            get => "Conductores";
-        }
+        public string OrderBy { get => $"_id ASC"; }
+
+
+        public string TableName { get => "Conductores"; }
 
 
         public string ComandoInsertar {
@@ -450,7 +460,19 @@ namespace Orion.Models {
                 "ReduccionJornada, " +
                 "Notas, " +
                 "_id) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+                "VALUES (" +
+                "@nombre, " +
+                "@apellidos, " +
+                "@indefinido, " +
+                "@telefono, " +
+                "@email, " +
+                "@acumuladas, " +
+                "@descansos, " +
+                "@descansosNoDisfrutados, " +
+                "@plusDistancia, " +
+                "@reduccionJornada, " +
+                "@notas, " +
+                "@id);";
         }
 
 

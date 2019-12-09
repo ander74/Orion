@@ -232,7 +232,7 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
-        #region INTERFAZ SQL ITEM
+        #region PROPIEDADES Y MÉTODOS OVERRIDE
         // ====================================================================================================
 
         public void FromReader(SQLiteDataReader lector) {
@@ -245,6 +245,8 @@ namespace Orion.Models {
             _descansos = lector.ToDecimal("Descansos");
             _dnds = lector.ToDecimal("Dnds");
             _motivo = lector.ToString("Motivo");
+            Nuevo = false;
+            Modificado = false;
         }
 
 
@@ -264,7 +266,16 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLItem> Lista { get; set; }
+        public IEnumerable<ISQLItem> Lista { get; }
+
+
+        public bool HasList { get => false; }
+
+
+        public void InicializarLista() { }
+
+
+        public void AddItemToList(ISQLItem item) { }
 
 
         public int ForeignId {
@@ -273,14 +284,13 @@ namespace Orion.Models {
         }
 
 
-        public string ForeignName {
-            get => "IdConductor";
-        }
+        public string ForeignIdName { get; }
 
 
-        public string TableName {
-            get => "Regulaciones";
-        }
+        public string OrderBy { get => $"Fecha ASC"; }
+
+
+        public string TableName { get => "Regulaciones"; }
 
 
         public string ComandoInsertar {

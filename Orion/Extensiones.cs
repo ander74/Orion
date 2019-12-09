@@ -302,13 +302,13 @@ namespace Orion {
 
         public static TimeSpan ToTimeSpan(this SQLiteDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return TimeSpan.Zero;
-            return TimeSpan.FromTicks((int)lector[campo]);
+            return TimeSpan.FromTicks(Convert.ToInt64(lector[campo]));
         }
 
 
         public static TimeSpan? ToTimeSpanNulable(this SQLiteDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return null;
-            return TimeSpan.FromTicks((int)lector[campo]);
+            return TimeSpan.FromTicks(Convert.ToInt64(lector[campo]));
         }
 
 
@@ -358,37 +358,43 @@ namespace Orion {
 
         public static Int16 ToInt16(this SQLiteDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return 0;
-            return (Int16)lector[campo];
+            return Convert.ToInt16(lector[campo]);
         }
 
 
         public static Int16? ToInt16Nulable(this SQLiteDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return null;
-            return (Int16?)lector[campo];
+            return Convert.ToInt16(lector[campo]);
         }
 
 
         public static Int32 ToInt32(this SQLiteDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return 0;
-            return (Int32)lector[campo];
+            return Convert.ToInt32(lector[campo]);
+        }
+
+
+        public static Int64 ToInt64(this SQLiteDataReader lector, string campo) {
+            if (lector == null || lector[campo] is DBNull) return 0;
+            return Convert.ToInt64(lector[campo]);
         }
 
 
         public static double ToDouble(this SQLiteDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return 0;
-            return (double)lector[campo];
+            return Convert.ToDouble(lector[campo]);
         }
 
 
         public static decimal ToDecimal(this SQLiteDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return 0;
-            return (decimal)lector[campo];
+            return Convert.ToDecimal(lector[campo]);
         }
 
 
         public static decimal? ToDecimalNulable(this SQLiteDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return null;
-            return (decimal)lector[campo];
+            return Convert.ToDecimal(lector[campo]);
         }
 
 

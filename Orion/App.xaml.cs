@@ -28,7 +28,7 @@ namespace Orion {
         /// </summary>
         public static GlobalVM Global = new GlobalVM();
 
-        public static DbService SqlDb = DbService.GetInstance();
+        public static SQLiteRepository SqlDb = SQLiteRepository.GetInstance();
 
         // Ruta del programa.
         public static string RutaInicial = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);

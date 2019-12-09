@@ -34,7 +34,26 @@ namespace Orion.Interfaces {
         /// <summary>
         /// Lista de los elementos hijo de este elemento. Null si no tiene elementos hijo.
         /// </summary>
-        IEnumerable<ISQLItem> Lista { get; set; }
+        IEnumerable<ISQLItem> Lista { get; }
+
+
+        /// <summary>
+        /// Devuelve true si el elemento contiene una lista de elementos hijo.
+        /// </summary>
+        bool HasList { get; }
+
+
+        /// <summary>
+        /// Inicializa la lista de elementos hijo borrando todos los que pudiera tener.
+        /// </summary>
+        void InicializarLista();
+
+
+        /// <summary>
+        /// Añade el item a la lista de elementos hijo.
+        /// </summary>
+        /// <param name="item"></param>
+        void AddItemToList(ISQLItem item);
 
 
         /// <summary>
@@ -46,7 +65,13 @@ namespace Orion.Interfaces {
         /// <summary>
         /// Nombre del campo que contiene el id foráneo para construir la clausula WHERE. Por defecto debe ser string.Empty.
         /// </summary>
-        string ForeignName { get; }
+        string ForeignIdName { get; }
+
+
+        /// <summary>
+        /// Cláusula ORDER BY (se puede omitir el ORDER BY) para recuperar los elementos.
+        /// </summary>
+        string OrderBy { get; }
 
 
         /// <summary>
@@ -65,6 +90,18 @@ namespace Orion.Interfaces {
         /// Comando SQL para actualizar un elemento.
         /// </summary>
         string ComandoActualizar { get; }
+
+
+        /// <summary>
+        /// Establece si el elemento es nuevo y se debe insertar. TODO: Cambiar por una enumeración.
+        /// </summary>
+        bool Nuevo { get; set; }
+
+
+        /// <summary>
+        /// Establece si el elemento está modificado y se debe actualizar. Cambiar por una enumeración.
+        /// </summary>
+        bool Modificado { get; set; }
 
 
     }
