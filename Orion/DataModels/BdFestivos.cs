@@ -24,6 +24,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GET FESTIVOS
+        * Ok
 		*================================================================================*/
         public static List<Festivo> GetFestivos() {
 
@@ -58,6 +59,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GET FESTIVOS POR MES
+        * Ok
 		*================================================================================*/
         public static ObservableCollection<Festivo> GetFestivosPorMes(int año, int mes) {
 
@@ -97,6 +99,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GET FESTIVOS POR AÑO
+        * Ok
 		*================================================================================*/
         public static ObservableCollection<Festivo> GetFestivosPorAño(int año) {
 
@@ -135,6 +138,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GUARDAR FESTIVOS
+        * Ok
 		*================================================================================*/
         public static void GuardarFestivos(IEnumerable<Festivo> lista) {
 
@@ -175,6 +179,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* BORRAR FESTIVOS
+        * Ok
 		*================================================================================*/
         public static void BorrarFestivos(IEnumerable<Festivo> lista) {
 

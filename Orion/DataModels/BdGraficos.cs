@@ -24,6 +24,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GET GRÁFICOS
+        * Ok
 		*================================================================================*/
         /// <summary>
         /// Devuelve una colección con los gráficos pertenecientes a un grupo
@@ -83,6 +84,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GUARDAR GRÁFICOS
+        * Ok
 		*================================================================================*/
         /// <summary>
         /// Guarda la lista de gráficos que se le pasa en la base de datos, actualizando los modificados e insertando los nuevos.
@@ -139,6 +141,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* INSERTAR GRÁFICO
+        * Ok
 		*================================================================================*/
         /// <summary>
         /// Guarda la lista de gráficos que se le pasa en la base de datos, actualizando los modificados e insertando los nuevos.
@@ -177,6 +180,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * BORRAR GRAFICOS
+         * Ok
 		 *================================================================================*/
         /// <summary>
         /// Elimina de la base de datos los gráficos pasados en la lista.
@@ -203,6 +207,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET GRÁFICOS GRUPO POR FECHA
+         * Ok
 		 *================================================================================*/
         public static ObservableCollection<Grafico> getGraficosGrupoPorFecha(DateTime fecha) {
 
@@ -240,6 +245,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GET ESTADISTICAS GRÁFICOS
+        * Ok
 		*================================================================================*/
         /// <summary>
         /// Devuelve una colección con los gráficos pertenecientes a un grupo
@@ -278,6 +284,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GET ESTADISTICAS GRÁFICOS
+        * Ok
 		*================================================================================*/
         /// <summary>
         /// Devuelve una colección con los gráficos pertenecientes a un grupo
@@ -314,6 +321,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GET GRÁFICO
+        * Ok
 		*================================================================================*/
         public static GraficoBase GetGrafico(int numero, DateTime fecha) {
 

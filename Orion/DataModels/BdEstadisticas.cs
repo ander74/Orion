@@ -18,6 +18,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
         * GET ESTADÍSTICAS ÚLTIMO GRUPO GRÁFICOS
+        * Ok
         *================================================================================*/
         public static EstadisticaGrupoGraficos GetEstadisticasUltimoGrupoGraficos(Centros centro) {
 
@@ -49,6 +50,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
         * GET ESTADÍSTICAS GRUPO GRÁFICOS
+        * Ok
         *================================================================================*/
         public static EstadisticaGrupoGraficos GetEstadisticasGrupoGraficos(long idGrupo, Centros centro) {
 
@@ -81,6 +83,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
         * GET GRÁFICOS FROM DÍA CALENDARIO
+        * Ok
         *================================================================================*/
         public static List<GraficoFecha> GetGraficosFromDiaCalendario(DateTime fecha) {
 
@@ -126,6 +129,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
         * GET ESTADÍSTICAS GRUPO GRÁFICOS
+        * Ok
         *================================================================================*/
         public static List<GraficosPorDia> GetGraficosByDia(DateTime fecha) {
 
@@ -208,6 +212,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
         * GET ESTADÍSTICAS GRUPO GRÁFICOS
+        * Ok
         *================================================================================*/
         public static List<DescansosPorDia> GetDescansosByDia(DateTime fecha) {
 

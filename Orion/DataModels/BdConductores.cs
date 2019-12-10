@@ -24,6 +24,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GET CONDUCTORES
+        * Ok
 		*================================================================================*/
         public static List<Conductor> GetConductores() {
 
@@ -61,6 +62,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GUARDAR CONDUCTORES
+        * Ok
 		*================================================================================*/
         public static void GuardarConductores(IEnumerable<Conductor> lista) {
 
@@ -107,6 +109,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * BORRAR CONDUCTORES
+         * Ok
 		 *================================================================================*/
         public static void BorrarConductores(IEnumerable<Conductor> lista) {
 
@@ -132,6 +135,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * EXISTE CONDUCTOR
+         * Ok
 		 *================================================================================*/
         public static bool ExisteConductor(int idconductor) {
 
@@ -159,6 +163,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * INSERTAR CONDUCTOR DESCONOCIDO
+         * Ok
 		 *================================================================================*/
         public static void InsertarConductorDesconocido(int idconductor) {
 
@@ -179,6 +184,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET CONDUCTOR
+         * Ok
 		 *================================================================================*/
         public static Conductor GetConductor(int idconductor) {
 

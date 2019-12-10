@@ -20,7 +20,8 @@ namespace Orion.DataModels {
     public static class BdCalendarios {
 
         /*================================================================================
-		 * GET CALENDARIOS
+		 * GET CALENDARIOS 
+         * Ok
 		 *================================================================================*/
         public static ObservableCollection<Calendario> GetCalendarios(int año, int mes) {
 
@@ -74,6 +75,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET CALENDARIOS CONDUCTOR
+         * Ok
 		 *================================================================================*/
         public static List<Calendario> GetCalendariosConductor(int año, int matricula) {
 
@@ -124,6 +126,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET CALENDARIO CONDUCTOR
+         * Ok
 		 *================================================================================*/
         public static Calendario GetCalendarioConductor(int año, int mes, int matricula) {
 
@@ -172,6 +175,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
  		 * GUARDAR CALENDARIOS
+         * Ok
 		 *================================================================================*/
         public static void GuardarCalendarios(IEnumerable<Calendario> lista) {
 
@@ -234,6 +238,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * BORRAR CALENDARIOS
+         * Ok
 		 *================================================================================*/
         public static void BorrarCalendarios(List<Calendario> lista) {
 
@@ -259,6 +264,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET DESCANSOS REGULADOS HASTA MES
+         * Ok
 		 *================================================================================*/
         public static int GetDescansosReguladosHastaMes(int año, int mes, int idconductor) {
 
@@ -294,6 +300,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET DESCANSOS REGULADOS AÑO
+         * Ok
 		 *================================================================================*/
         public static int GetDescansosReguladosAño(int año, int idconductor) {
 
@@ -325,6 +332,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET DESCANSOS DISFRUTADOS HASTA MES
+         * Ok
 		 *================================================================================*/
         public static int GetDescansosDisfrutadosHastaMes(int año, int mes, int idconductor) {
 
@@ -360,6 +368,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET DC DISFRUTADOS AÑO
+         * Ok
 		 *================================================================================*/
         public static int GetDCDisfrutadosAño(int idconductor, int año, int mes = 0) {
 
@@ -404,6 +413,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET DIAS F6 HASTA MES
+         * Ok
 		 *================================================================================*/
         public static int GetDiasF6HastaMes(int año, int mes, int idconductor) {
 
@@ -439,6 +449,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET HORAS REGULADAS HASTA MES
+         * Ok
 		 *================================================================================*/
         public static TimeSpan GetHorasReguladasHastaMes(int año, int mes, int idconductor) {
 
@@ -474,6 +485,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET HORAS REGULADAS MES
+         * Ok
 		 *================================================================================*/
         public static TimeSpan GetHorasReguladasMes(int año, int mes, int idconductor) {
 
@@ -507,6 +519,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET HORAS CAMBIADAS POR DCs MES
+         * Ok
 		 *================================================================================*/
         public static TimeSpan GetHorasCambiadasPorDCsMes(int año, int mes, int idconductor) {
 
@@ -540,6 +553,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET HORAS REGULADAS AÑO
+         * Ok
 		 *================================================================================*/
         public static TimeSpan GetHorasReguladasAño(int año, int idconductor) {
 
@@ -572,6 +586,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET HORAS COBRADAS MES
+         * Ok
 		 *================================================================================*/
         public static TimeSpan GetHorasCobradasMes(int año, int mes, int idconductor) {
 
@@ -605,6 +620,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET HORAS COBRADAS AÑO
+         * Ok
 		 *================================================================================*/
         public static TimeSpan GetHorasCobradasAño(int año, int mes, int idconductor) {
 
@@ -642,6 +658,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET EXCESO JORNADA COBRADA HASTA MES
+         * Ok
 		 *================================================================================*/
         public static TimeSpan GetExcesoJornadaCobradaHastaMes(int año, int mes, int idconductor) {
 
@@ -677,6 +694,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET ACUMULADAS HASTA MES
+         * Ok
 		 *================================================================================*/
         public static TimeSpan GetAcumuladasHastaMes(int año, int mes, int idconductor) {
 
@@ -746,6 +764,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET COMITE EN DESCANSO HASTA MES
+         * Ok
 		 *================================================================================*/
         public static int GetComiteEnDescansoHastaMes(int idconductor, int año, int mes) {
 
@@ -787,6 +806,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET TRABAJO EN DESCANSO HASTA MES
+         * Ok
 		 *================================================================================*/
         public static int GetTrabajoEnDescansoHastaMes(int idconductor, int año, int mes) {
 
@@ -826,6 +846,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET DND HASTA MES
+         * Ok
 		 *================================================================================*/
         public static int GetDNDHastaMes(int idconductor, int año, int mes) {
 
@@ -866,6 +887,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET DND DISFRUTADOS AÑO
+         * Ok
 		 *================================================================================*/
         public static int GetDNDDisfrutadosAño(int idconductor, int año, int mes = 0) {
 

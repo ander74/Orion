@@ -21,6 +21,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET DIAS CALENDARIO
+         * Ok
 		 *================================================================================*/
         public static ObservableCollection<DiaCalendario> GetDiasCalendario(int idcalendario) {
 
@@ -64,6 +65,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET DIA CALENDARIO
+         * Ok
 		 *================================================================================*/
         public static DiaCalendarioBase GetDiaCalendario(int idConductor, DateTime fecha) {
 
@@ -97,6 +99,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GUARDAR DIAS CALENDARIO
+        * Ok
 		*================================================================================*/
         public static void GuardarDiasCalendario(IEnumerable<DiaCalendario> lista) {
 
@@ -154,6 +157,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET HORAS DESCUADRE HASTA MES
+         * Ok
 		 *================================================================================*/
         public static int GetHorasDescuadreHastaMes(int año, int mes, int idconductor) {
 
@@ -193,6 +197,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET EXCESO JORNADA HASTA MES
+         * Ok
 		 *================================================================================*/
         public static TimeSpan GetExcesoJornadaHastaMes(int año, int mes, int idconductor) {
 
@@ -232,6 +237,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET DIAS CALENDARIO CON BLOQUEOS
+         * Ok
 		 *================================================================================*/
         public static ObservableCollection<DiaCalendario> GetDiasCalendarioConBloqueos(long idConductor) {
 
@@ -275,6 +281,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET EXCESO JORNADA PENDIENTE HASTA MES
+         * Ok
 		 *================================================================================*/
         public static TimeSpan GetExcesoJornadaPendienteHastaMes(int año, int mes, int idconductor) {
 
@@ -314,6 +321,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET DESCUADRE PENDIENTE HASTA MES
+         * Ok
 		 *================================================================================*/
         public static int GetDescuadrePendienteHastaMes(int año, int mes, int idconductor) {
 

@@ -153,6 +153,27 @@ namespace Orion.Servicios {
             return GuardarItemConLista(item, conexion);
         }
 
+
+        protected void GuardarItems<T>(IEnumerable<T> lista) where T : ISQLItem {
+            using var conexion = new SQLiteConnection(CadenaConexion);
+            conexion.Open();
+            foreach (var item in lista) {
+                GuardarItem(item, conexion);
+            }
+        }
+
+
+        protected void GuardarItemsConLista<T>(IEnumerable<T> lista) where T : ISQLItem {
+            using var conexion = new SQLiteConnection(CadenaConexion);
+            conexion.Open();
+            foreach (var item in lista) {
+                GuardarItemConLista(item, conexion);
+            }
+        }
+
+
+
+
         #endregion
         // ====================================================================================================
 
@@ -182,6 +203,8 @@ namespace Orion.Servicios {
             return borrado;
         }
 
+
+
         #endregion
         // ====================================================================================================
 
@@ -203,6 +226,29 @@ namespace Orion.Servicios {
             conexion.Open();
             return BorrarItemConLista(item, conexion);
         }
+
+
+        public bool BorrarItems<T>(IEnumerable<T> lista) where T : ISQLItem {
+            using var conexion = new SQLiteConnection(CadenaConexion);
+            conexion.Open();
+            int borrados = 0;
+            foreach (var item in lista) {
+                if (BorrarItem(item, conexion)) borrados++;
+            }
+            return borrados == lista.Count();
+        }
+
+
+        public bool BorrarItemsConLista<T>(IEnumerable<T> lista) where T : ISQLItem {
+            using var conexion = new SQLiteConnection(CadenaConexion);
+            conexion.Open();
+            int borrados = 0;
+            foreach (var item in lista) {
+                if (BorrarItemConLista(item, conexion)) borrados++;
+            }
+            return borrados == lista.Count();
+        }
+
 
 
         #endregion

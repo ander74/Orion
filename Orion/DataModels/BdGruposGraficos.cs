@@ -25,6 +25,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GET GRUPOS
+        * Ok
 		*================================================================================*/
         public static ObservableCollection<GrupoGraficos> getGrupos(OleDbConnection conexion = null) {
 
@@ -61,6 +62,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		* GUARDAR GRUPOS
+        * Ok
 		*================================================================================*/
         public static void GuardarGrupos(IEnumerable<GrupoGraficos> lista) {
 
@@ -100,6 +102,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * BORRAR GRUPO POR ID
+         * Ok
 		 *================================================================================*/
         public static void BorrarGrupoPorId(long idgrupo) {
 
@@ -121,6 +124,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * NUEVO GRUPO
+         * Ok
 		 *================================================================================*/
         public static int NuevoGrupo(DateTime fecha, string notas) {
 
@@ -149,6 +153,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * EXISTE GRUPO
+         * Ok
 		 *================================================================================*/
         public static bool ExisteGrupo(DateTime fecha) {
 
@@ -174,6 +179,7 @@ namespace Orion.DataModels {
 
         /*================================================================================
 		 * GET ÚLTIMO GRUPO
+         * Ok
 		 *================================================================================*/
         public static GrupoGraficos GetUltimoGrupo(OleDbConnection conexion = null) {
 
