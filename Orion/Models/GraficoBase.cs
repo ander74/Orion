@@ -6,13 +6,16 @@
 // ===============================================
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Data.SQLite;
 using Orion.Config;
+using Orion.Interfaces;
 
 namespace Orion.Models {
 
 
-    public class GraficoBase : NotifyBase {
+    public class GraficoBase : NotifyBase, ISQLItem {
 
 
         // ====================================================================================================
@@ -182,8 +185,8 @@ namespace Orion.Models {
         // ====================================================================================================
         #region  PROPIEDADES
         // ====================================================================================================
-        private long _id;
-        public long Id {
+        private int _id;
+        public int Id {
             get { return _id; }
             set {
                 if (value != _id) {
@@ -195,8 +198,8 @@ namespace Orion.Models {
         }
 
 
-        private long _idgrupo;
-        public long IdGrupo {
+        private int _idgrupo;
+        public int IdGrupo {
             get { return _idgrupo; }
             set {
                 if (value != _idgrupo) {
@@ -500,6 +503,166 @@ namespace Orion.Models {
         #endregion
 
 
+        // ====================================================================================================
+        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        // ====================================================================================================
+
+
+        public void FromReader(SQLiteDataReader lector) {
+            _id = lector.ToInt32("Id");
+            _idgrupo = lector.ToInt32("IdGrupo");
+            _nocalcular = lector.ToBool("NoCalcular");
+            _numero = lector.ToInt16("Numero");
+            _diasemana = lector.ToString("DiaSemana");
+            _turno = lector.ToInt16("Turno");
+            _inicio = lector.ToTimeSpanNulable("Inicio");
+            _final = lector.ToTimeSpanNulable("Final");
+            _iniciopartido = lector.ToTimeSpanNulable("InicioPartido");
+            _finalpartido = lector.ToTimeSpanNulable("FinalPartido");
+            _valoracion = lector.ToTimeSpan("Valoracion");
+            _trabajadas = lector.ToTimeSpan("Trabajadas");
+            _acumuladas = lector.ToTimeSpan("Acumuladas");
+            _nocturnas = lector.ToTimeSpan("Nocturnas");
+            _desayuno = lector.ToDecimal("Desayuno");
+            _comida = lector.ToDecimal("Comida");
+            _cena = lector.ToDecimal("Cena");
+            _pluscena = lector.ToDecimal("PlusCena");
+            _pluslimpieza = lector.ToBool("PlusLimpieza");
+            _pluspaqueteria = lector.ToBool("PlusPaqueteria");
+            Nuevo = false;
+            Modificado = false;
+        }
+
+
+        public IEnumerable<SQLiteParameter> Parametros {
+            get {
+                var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("@idGrupo", IdGrupo));
+                lista.Add(new SQLiteParameter("@noCalcular", NoCalcular));
+                lista.Add(new SQLiteParameter("@numero", Numero));
+                lista.Add(new SQLiteParameter("@diaSemana", DiaSemana));
+                lista.Add(new SQLiteParameter("@turno", Turno));
+                lista.Add(new SQLiteParameter("@inicio", Inicio.HasValue ? Inicio.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@inicioPartido", InicioPartido.HasValue ? InicioPartido.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@finalPartido", FinalPartido.HasValue ? FinalPartido.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@valoracion", Valoracion.Ticks));
+                lista.Add(new SQLiteParameter("@trabajadas", Trabajadas.Ticks));
+                lista.Add(new SQLiteParameter("@acumuladas", Acumuladas.Ticks));
+                lista.Add(new SQLiteParameter("@nocturnas", Nocturnas.Ticks));
+                lista.Add(new SQLiteParameter("@desayuno", Desayuno.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@comida", Comida.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@cena", Cena.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@plusCena", PlusCena.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@plusLimpieza", PlusLimpieza));
+                lista.Add(new SQLiteParameter("@plusPaqueteria", PlusPaqueteria));
+                lista.Add(new SQLiteParameter("@id", Id));
+                return lista;
+            }
+        }
+
+
+        public IEnumerable<ISQLItem> Lista { get; }
+
+
+        public bool HasList { get => false; }
+
+
+        public void InicializarLista() { }
+
+
+        public void AddItemToList(ISQLItem item) { }
+
+
+        public int ForeignId {
+            get => IdGrupo;
+            set => IdGrupo = value;
+        }
+
+
+        public string ForeignIdName { get => "IdGrafico"; }
+
+
+        public string OrderBy { get => $"Numero ASC"; }
+
+
+        public string TableName { get => "Graficos"; }
+
+
+        public string ComandoInsertar {
+            get => "INSERT INTO Graficos (" +
+                "IdGrupo, " +
+                "NoCalcular, " +
+                "Numero, " +
+                "Turno, " +
+                //"DescuadreInicio, " +
+                "Inicio, " +
+                "Final, " +
+                //"DescuadreFinal, " +
+                "InicioPartido, " +
+                "FinalPartido, " +
+                "Valoracion, " +
+                "Trabajadas, " +
+                "Acumuladas, " +
+                "Nocturnas, " +
+                "Desayuno, " +
+                "Comida, " +
+                "Cena, " +
+                "PlusCena, " +
+                "PlusLimpieza, " +
+                "PlusPaqueteria) " +
+                "VALUES (" +
+                "@idGrupo, " +
+                "@noCalcular, " +
+                "@numero, " +
+                "@turno, " +
+                "@descuadreInicio, " +
+                "@inicio, " +
+                "@final, " +
+                "@descuadreFinal, " +
+                "@inicioPartido, " +
+                "@finalPartido, " +
+                "@valoracion, " +
+                "@trabajadas, " +
+                "@acumuladas, " +
+                "@nocturnas, " +
+                "@desayuno, " +
+                "@comida, " +
+                "@cena, " +
+                "@plusCena, " +
+                "@plusLimpieza, " +
+                "@plusPaqueteria);";
+        }
+
+
+        public string ComandoActualizar {
+            get => "UPDATE Graficos SET " +
+                "IdGrupo = @idGrupo, " +
+                "NoCalcular = @noCalcular, " +
+                "Numero = @numero, " +
+                "Turno = @turno, " +
+                //"DescuadreInicio = @descuadreInicio, " +
+                "Inicio = @inicio, " +
+                "Final = @final, " +
+                //"DescuadreFinal = @descuadreFinal, " +
+                "InicioPartido = @inicioPartido, " +
+                "FinalPartido = @finalPartido, " +
+                "Valoracion = @valoracion, " +
+                "Trabajadas = @trabajadas, " +
+                "Acumuladas = @acumuladas, " +
+                "Nocturnas = @nocturnas, " +
+                "Desayuno = @desayuno, " +
+                "Comida = @comida, " +
+                "Cena = @cena, " +
+                "PlusCena = @plusCena, " +
+                "PlusLimpieza = @plusLimpieza, " +
+                "PlusPaqueteria = @plusPaqueteria " +
+                "WHERE _id=@id;";
+        }
+
+
+        #endregion
+        // ====================================================================================================
 
 
     }

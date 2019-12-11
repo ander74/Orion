@@ -8,9 +8,12 @@
 namespace Orion.Models {
 
     using System;
+    using System.Collections.Generic;
     using System.Data.OleDb;
+    using System.Data.SQLite;
+    using Orion.Interfaces;
 
-    public class EstadisticasGraficos {
+    public class EstadisticasGraficos : ISQLItem {
 
 
         // ====================================================================================================
@@ -161,6 +164,75 @@ namespace Orion.Models {
         }
 
 
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        // ====================================================================================================
+
+        // Propiedades que no se van a usar.
+        public int Id { get; set; }
+        public bool Nuevo { get; set; }
+        public bool Modificado { get; set; }
+
+
+
+        public void FromReader(SQLiteDataReader lector) {
+            _validez = lector.ToDateTime("xValidez");
+            _turno = lector.ToInt16("xTurno");
+            _numerograficos = lector.ToInt32("xNumero");
+            _valoracion = lector.ToTimeSpanNulable("xValoracion").Value;
+            _trabajadas = lector.ToTimeSpanNulable("xTrabajadas").Value;
+            _acumuladas = lector.ToTimeSpanNulable("xAcumuladas").Value;
+            _nocturnas = lector.ToTimeSpanNulable("xNocturnas").Value;
+            _desayuno = lector.ToDecimal("xDesayuno");
+            _comida = lector.ToDecimal("xComida");
+            _cena = lector.ToDecimal("xCena");
+            _pluscena = lector.ToDecimal("xPlusCena");
+            _limpieza = (int)lector.ToDouble("xLimpieza");
+            _paqueteria = (int)lector.ToDouble("xPaqueteria");
+        }
+
+
+        public IEnumerable<SQLiteParameter> Parametros { get; }
+
+
+        public IEnumerable<ISQLItem> Lista { get; }
+
+
+        public bool HasList { get => false; }
+
+
+        public void InicializarLista() { }
+
+
+        public void AddItemToList(ISQLItem item) { }
+
+
+        public int ForeignId { get; set; }
+
+
+        public string ForeignIdName { get => ""; }
+
+
+        public string OrderBy { get => $""; }
+
+
+        public string TableName { get => ""; }
+
+
+        public string ComandoInsertar {
+            get => "";
+        }
+
+
+        public string ComandoActualizar {
+            get => "";
+        }
 
 
         #endregion

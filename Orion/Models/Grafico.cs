@@ -6,11 +6,13 @@
 // ===============================================
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data.OleDb;
 using System.Linq;
+using Orion.Interfaces;
 
 namespace Orion.Models {
 
@@ -201,6 +203,36 @@ namespace Orion.Models {
             }
         }
         #endregion
+
+
+        // ====================================================================================================
+        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        // ====================================================================================================
+
+
+        public new IEnumerable<ISQLItem> Lista { get => ListaValoraciones; }
+
+
+        public new bool HasList { get => true; }
+
+
+        public new void InicializarLista() {
+            ListaValoraciones = new ObservableCollection<ValoracionGrafico>();
+        }
+
+
+        public new void AddItemToList(ISQLItem item) {
+            ListaValoraciones.Add(item as ValoracionGrafico);
+        }
+
+
+
+
+
+
+
+        #endregion
+        // ====================================================================================================
 
 
 

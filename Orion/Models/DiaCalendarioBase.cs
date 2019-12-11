@@ -8,9 +8,12 @@
 namespace Orion.Models {
 
     using System;
+    using System.Collections.Generic;
     using System.Data.OleDb;
+    using System.Data.SQLite;
+    using Orion.Interfaces;
 
-    public class DiaCalendarioBase : NotifyBase {
+    public class DiaCalendarioBase : NotifyBase, ISQLItem {
 
 
         // ====================================================================================================
@@ -500,6 +503,194 @@ namespace Orion.Models {
 
         #endregion
         // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        // ====================================================================================================
+
+
+        public void FromReader(SQLiteDataReader lector) {
+            _id = lector.ToInt32("Id");
+            _idcalendario = lector.ToInt32("IdCalendario");
+            _dia = lector.ToInt16("Dia");
+            _diafecha = lector.ToDateTime("DiaFecha");
+            _grafico = lector.ToInt16("Grafico");
+            _codigo = lector.ToInt16("Codigo");
+            _excesojornada = lector.ToTimeSpan("ExcesoJornada");
+            _facturadopaqueteria = lector.ToDecimal("FacturadoPaqueteria");
+            _limpieza = lector.ToBoolNulable("Limpieza");
+            _graficovinculado = lector.ToInt16("GraficoVinculado");
+            _notas = lector.ToString("Notas");
+            turnoalt = lector.ToInt16Nulable("TurnoAlt");
+            inicioalt = lector.ToTimeSpanNulable("InicioAlt");
+            finalalt = lector.ToTimeSpanNulable("FinalAlt");
+            iniciopartidoalt = lector.ToTimeSpanNulable("InicioPartidoAlt");
+            finalpartidoalt = lector.ToTimeSpanNulable("FinalPartidoAlt");
+            trabajadasalt = lector.ToTimeSpanNulable("TrabajadasAlt");
+            acumuladasalt = lector.ToTimeSpanNulable("AcumuladasAlt");
+            nocturnasalt = lector.ToTimeSpanNulable("NocturnasAlt");
+            desayunoalt = lector.ToDecimalNulable("DesayunoAlt");
+            comidaalt = lector.ToDecimalNulable("ComidaAlt");
+            cenaalt = lector.ToDecimalNulable("CenaAlt");
+            pluscenaalt = lector.ToDecimalNulable("PlusCenaAlt");
+            pluslimpiezaalt = lector.ToBoolNulable("PlusLimpiezaAlt");
+            pluspaqueteriaalt = lector.ToBoolNulable("PlusPaqueteriaAlt");
+            Nuevo = false;
+            Modificado = false;
+        }
+
+
+        public IEnumerable<SQLiteParameter> Parametros {
+            get {
+                var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("@idCalendario", IdCalendario));
+                lista.Add(new SQLiteParameter("@dia", Dia));
+                lista.Add(new SQLiteParameter("@diaFecha", DiaFecha.ToString("yyyy-MM-dd")));
+                lista.Add(new SQLiteParameter("@grafico", Grafico));
+                lista.Add(new SQLiteParameter("@codigo", Codigo));
+                lista.Add(new SQLiteParameter("@excesoJornada", ExcesoJornada.Ticks));
+                lista.Add(new SQLiteParameter("@facturadoPaqueteria", FacturadoPaqueteria.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@limpieza", Limpieza == null ? (object)DBNull.Value : Limpieza == true ? 1 : 0));
+                lista.Add(new SQLiteParameter("@graficoVinculado", GraficoVinculado));
+                lista.Add(new SQLiteParameter("@notas", Notas.TrimEnd(new char[] { ' ', '\n', '\r', '\t' })));
+                lista.Add(new SQLiteParameter("@turnoAlt", TurnoAlt.HasValue ? TurnoAlt : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@inicioAlt", InicioAlt.HasValue ? InicioAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@finalAlt", FinalAlt.HasValue ? FinalAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@inicioPartidoAlt", InicioPartidoAlt.HasValue ? InicioPartidoAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@finalPartidoAlt", FinalPartidoAlt.HasValue ? FinalPartidoAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@trabajadasAlt", TrabajadasAlt.HasValue ? TrabajadasAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@acumuladasAlt", AcumuladasAlt.HasValue ? AcumuladasAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@nocturnasAlt", NocturnasAlt.HasValue ? NocturnasAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@desayunoAlt", DesayunoAlt.HasValue ? DesayunoAlt.Value.ToString("0.0000") : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@comidaAlt", ComidaAlt.HasValue ? ComidaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@cenaAlt", CenaAlt.HasValue ? CenaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@plusCenaAlt", PlusCenaAlt.HasValue ? PlusCenaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@plusLimpiezaAlt", PlusLimpiezaAlt.HasValue ? PlusLimpiezaAlt.Value : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@plusPaqueteriaAlt", PlusPaqueteriaAlt.HasValue ? PlusPaqueteriaAlt.Value : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@id", Id));
+                return lista;
+            }
+        }
+
+
+        public IEnumerable<ISQLItem> Lista { get; }
+
+
+        public bool HasList { get => false; }
+
+
+        public void InicializarLista() { }
+
+
+        public void AddItemToList(ISQLItem item) { }
+
+
+        public int ForeignId {
+            get => IdCalendario;
+            set => IdCalendario = value;
+        }
+
+
+        public string ForeignIdName { get => "IdCalendario"; }
+
+
+        public string OrderBy { get => $"IdConductor ASC"; }
+
+
+        public string TableName { get => "DiasCalendario"; }
+
+
+        public string ComandoInsertar {
+            get => "INSERT INTO DiasCalendario (" +
+                "IdCalendario, " +
+                "Dia, " +
+                "DiaFecha, " +
+                "Grafico, " +
+                "Codigo, " +
+                "ExcesoJornada, " +
+                "FacturadoPaqueteria, " +
+                "Limpieza, " +
+                "GraficoVinculado, " +
+                "Notas" +
+                "TurnoAlt" +
+                "InicioAlt" +
+                "FinalAlt" +
+                "InicioPartidoAlt" +
+                "FinalPartidoAlt" +
+                "TrabajadasAlt" +
+                "AcumuladasAlt" +
+                "NocturnasAlt" +
+                "DesayunoAlt" +
+                "ComidaAlt" +
+                "CenaAlt" +
+                "PlusCenaAlt" +
+                "PlusLimpiezaAlt" +
+                "PlusPaqueteriaAlt) " +
+                "VALUES (" +
+                "@idCalendario, " +
+                "@dia, " +
+                "@diaFecha, " +
+                "@grafico, " +
+                "@codigo, " +
+                "@excesoJornada, " +
+                "@facturadoPaqueteria, " +
+                "@limpieza, " +
+                "@graficoVinculado, " +
+                "@notas, " +
+                "@turnoAlt, " +
+                "@inicioAlt, " +
+                "@finalAlt, " +
+                "@inicioPartidoAlt, " +
+                "@finalPartidoAlt, " +
+                "@trabajadasAlt, " +
+                "@acumuladasAlt, " +
+                "@nocturnasAlt, " +
+                "@desayunoAlt, " +
+                "@comidaAlt, " +
+                "@cenaAlt, " +
+                "@plusCenaAlt, " +
+                "@plusLimpiezaAlt, " +
+                "@plusPaqueteriaAlt);";
+        }
+
+
+        public string ComandoActualizar {
+            get => "UPDATE DiasCalendario SET " +
+                "IdCalendario = @idCalendario, " +
+                "Dia = @dia, " +
+                "DiaFecha = @diaFecha, " +
+                "Grafico = @grafico, " +
+                "Codigo = @codigo, " +
+                "ExcesoJornada = @excesoJornada, " +
+                "FacturadoPaqueteria = @facturadoPaqueteria, " +
+                "Limpieza = @limpieza, " +
+                "GraficoVinculado = @graficoVinculado, " +
+                "Notas = @notas, " +
+                "TurnoAlt = @turnoAlt, " +
+                "InicioAlt = @inicioAlt, " +
+                "FinalAlt = @finalAlt, " +
+                "InicioPartidoAlt = @inicioPartidoAlt, " +
+                "FinalPartidoAlt = @finalPartidoAlt, " +
+                "TrabajadasAlt = @trabajadasAlt, " +
+                "AcumuladasAlt = @acumuladasAlt, " +
+                "NocturnasAlt = @nocturnasAlt, " +
+                "DesayunoAlt = @desayunoAlt, " +
+                "ComidaAlt = @comidaAlt, " +
+                "CenaAlt = @cenaAlt, " +
+                "PlusCenaAlt = @plusCenaAlt, " +
+                "PlusLimpiezaAlt = @plusLimpiezaAlt, " +
+                "PlusPaqueteriaAlt = @plusPaqueteriaAlt " +
+                "WHERE __id=@id;";
+        }
+
+
+        #endregion
+        // ====================================================================================================
+
+
+
+
 
     }
 

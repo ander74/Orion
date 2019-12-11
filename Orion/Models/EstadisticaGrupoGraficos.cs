@@ -8,13 +8,12 @@
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SQLite;
+using Orion.Interfaces;
 
 namespace Orion.Models {
 
-    public class EstadisticaGrupoGraficos {
+    public class EstadisticaGrupoGraficos : ISQLItem {
 
         // ====================================================================================================
         #region CONSTRUCTOR
@@ -145,6 +144,82 @@ namespace Orion.Models {
 
         #endregion
         // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        // ====================================================================================================
+
+        // Propiedades que no se van a usar.
+        public int Id { get; set; }
+        public bool Nuevo { get; set; }
+        public bool Modificado { get; set; }
+
+
+
+        public void FromReader(SQLiteDataReader lector) {
+            Validez = lector.ToDateTime("Validez");
+            CantidadGraficos = lector.ToInt32("Cantidad");
+            CantidadTurnos1 = lector.ToInt32("Turnos1");
+            CantidadTurnos2 = lector.ToInt32("Turnos2");
+            CantidadTurnos3 = lector.ToInt32("Turnos3");
+            CantidadTurnos4 = lector.ToInt32("Turnos4");
+            Valoracion = lector.ToTimeSpan("Valoraciones");
+            Trabajadas = lector.ToTimeSpan("H_Trabajadas");
+            TrabajadasTurno1 = lector.ToTimeSpan("TrabajadasTurno1");
+            TrabajadasTurno2 = lector.ToTimeSpan("TrabajadasTurno2");
+            TrabajadasTurno3 = lector.ToTimeSpan("TrabajadasTurno3");
+            TrabajadasTurno4 = lector.ToTimeSpan("TrabajadasTurno4");
+            Acumuladas = lector.ToTimeSpan("H_Acumuladas");
+            Nocturnas = lector.ToTimeSpan("H_Nocturnas");
+            Desayuno = lector.ToDecimal("Desayunos");
+            Comida = lector.ToDecimal("Comidas");
+            Cena = lector.ToDecimal("Cenas");
+            PlusCena = lector.ToDecimal("PlusesCena");
+        }
+
+
+        public IEnumerable<SQLiteParameter> Parametros { get; }
+
+
+        public IEnumerable<ISQLItem> Lista { get; }
+
+
+        public bool HasList { get => false; }
+
+
+        public void InicializarLista() { }
+
+
+        public void AddItemToList(ISQLItem item) { }
+
+
+        public int ForeignId { get; set; }
+
+
+        public string ForeignIdName { get => ""; }
+
+
+        public string OrderBy { get => $""; }
+
+
+        public string TableName { get => ""; }
+
+
+        public string ComandoInsertar {
+            get => "";
+        }
+
+
+        public string ComandoActualizar {
+            get => "";
+        }
+
+
+        #endregion
+        // ====================================================================================================
+
+
 
 
     }

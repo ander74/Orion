@@ -239,7 +239,6 @@ namespace Orion.Models {
             _id = lector.ToInt32("_id");
             _idconductor = lector.ToInt32("IdConductor");
             _codigo = lector.ToInt32("Codigo");
-            //_fecha = (lector["Fecha"] is DBNull) ? new DateTime(2001, 1, 2) : (DateTime)lector["Fecha"];
             _fecha = lector.ToDateTime("Fecha");
             _horas = lector.ToTimeSpan("Horas");
             _descansos = lector.ToDecimal("Descansos");
@@ -253,14 +252,14 @@ namespace Orion.Models {
         public IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("idconductor", IdConductor));
-                lista.Add(new SQLiteParameter("codigo", Codigo));
-                lista.Add(new SQLiteParameter("fecha", Fecha.ToString("yyyy-MM-dd")));
-                lista.Add(new SQLiteParameter("horas", Horas.Ticks));
-                lista.Add(new SQLiteParameter("descansos", Descansos.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("dnds", Dnds.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("motivo", Motivo));
-                lista.Add(new SQLiteParameter("id", Id));
+                lista.Add(new SQLiteParameter("@idConductor", IdConductor));
+                lista.Add(new SQLiteParameter("@codigo", Codigo));
+                lista.Add(new SQLiteParameter("@fecha", Fecha.ToString("yyyy-MM-dd")));
+                lista.Add(new SQLiteParameter("@horas", Horas.Ticks));
+                lista.Add(new SQLiteParameter("@descansos", Descansos.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@dnds", Dnds.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@motivo", Motivo));
+                lista.Add(new SQLiteParameter("@id", Id));
                 return lista;
             }
         }
@@ -302,20 +301,27 @@ namespace Orion.Models {
                 "Descansos, " +
                 "Dnds, " +
                 "Motivo) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?);";
+                "VALUES (" +
+                "@idConductor, " +
+                "@codigo, " +
+                "@fecha, " +
+                "@horas, " +
+                "@descansos, " +
+                "@dnds, " +
+                "@motivo);";
         }
 
 
         public string ComandoActualizar {
             get => "UPDATE Regulaciones SET " +
-                "IdConductor = ?, " +
-                "Codigo = ?, " +
-                "Fecha = ?, " +
-                "Horas = ?, " +
-                "Descansos = ?, " +
-                "Dnds = ?, " +
-                "Motivo = ? " +
-                "WHERE _id = ?;";
+                "IdConductor = @IdConductor, " +
+                "Codigo = @Codigo, " +
+                "Fecha = @Fecha, " +
+                "Horas = @Horas, " +
+                "Descansos = @Descansos, " +
+                "Dnds = @Dnds, " +
+                "Motivo = @Motivo " +
+                "WHERE _id = @id;";
         }
         #endregion
         // ====================================================================================================

@@ -375,7 +375,7 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
-        #region PROPIEDADES Y MÉTODOS OVERRIDE
+        #region PROPIEDADES Y MÉTODOS ISQLITEM
         // ====================================================================================================
 
 
@@ -479,18 +479,18 @@ namespace Orion.Models {
         public string ComandoActualizar {
             //TODO: Corregir el _id añadiendo la matrícula.
             get => "UPDATE Conductores SET " +
-                "Nombre = ?, " +
-                "Apellidos = ?, " +
-                "Indefinido = ?, " +
-                "Telefono = ?, " +
-                "Email = ?, " +
-                "Acumuladas = ?, " +
-                "Descansos = ?, " +
-                "DescansosNoDisfrutados = ?, " +
-                "PlusDistancia = ?, " +
-                "ReduccionJornada = ?, " +
-                "Notas = ? " +
-                "WHERE _id = ?;";
+                "Nombre = @nombre, " +
+                "Apellidos = @apellidos, " +
+                "Indefinido = @indefinido, " +
+                "Telefono = @telefono, " +
+                "Email = @email, " +
+                "Acumuladas = @acumuladas, " +
+                "Descansos = @descansos, " +
+                "DescansosNoDisfrutados = @descansosNoDisfrutados, " +
+                "PlusDistancia = @plusDistancia, " +
+                "ReduccionJornada = @reduccionJornada, " +
+                "Notas = @notas " +
+                "WHERE _id = @id;";
         }
 
 

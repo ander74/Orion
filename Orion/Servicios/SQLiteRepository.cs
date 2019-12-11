@@ -11,6 +11,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using Orion.Interfaces;
+using Orion.Models;
 
 namespace Orion.Servicios {
 
@@ -32,8 +33,6 @@ namespace Orion.Servicios {
         #region CAMPOS PRIVADOS
         // ====================================================================================================
 
-        protected string CadenaConexion = "";
-
         #endregion
         // ====================================================================================================
 
@@ -53,30 +52,26 @@ namespace Orion.Servicios {
 
 
         // ====================================================================================================
-        #region MÉTODOS PRIVADOS
+        #region PROPIEDADES
+        // ====================================================================================================
+
+        public string CadenaConexion { get; set; }
+
+        #endregion
         // ====================================================================================================
 
 
+        // ====================================================================================================
+        #region MÉTODOS PRIVADOS
+        // ====================================================================================================
+
         protected int GetDbVersion() {
-            int version = 0;
-            using (var conexion = new SQLiteConnection(CadenaConexion)) {
-                using (var comando = new SQLiteCommand("PRAGMA user_version", conexion)) {
-                    conexion.Open();
-                    object resultado = comando.ExecuteScalar();
-                    version = resultado == DBNull.Value ? 0 : Convert.ToInt32(resultado);
-                }
-            }
-            return version;
+            return GetIntScalar(new SQLiteExpression("PRAGMA user_version")); ;
         }
 
 
         protected void SetDbVersion(int version) {
-            using (var conexion = new SQLiteConnection(CadenaConexion)) {
-                using (var comando = new SQLiteCommand($"PRAGMA user_version = {version}", conexion)) {
-                    conexion.Open();
-                    comando.ExecuteNonQuery();
-                }
-            }
+            ExecureNonQuery(new SQLiteExpression($"PRAGMA user_version = { version }"));
         }
 
 
@@ -98,11 +93,26 @@ namespace Orion.Servicios {
 
 
         // ====================================================================================================
+        #region MÉTODOS PÚBLICOS NON QUERY
+        // ====================================================================================================
+
+        public void ExecureNonQuery(SQLiteExpression consulta) {
+            using var conexion = new SQLiteConnection(CadenaConexion);
+            using var comando = consulta.GetCommand(conexion);
+            conexion.Open();
+            comando.ExecuteNonQuery();
+        }
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
         #region MÉTODOS PRIVADOS GUARDAR
         // ====================================================================================================
 
-        protected int GuardarItem<T>(T item, SQLiteConnection conexion) where T : ISQLItem {
-            if (conexion == null || conexion.State != ConnectionState.Open) return -1;
+        protected int GuardarItem<T>(SQLiteConnection conexion, T item, bool ignorarLista = false) where T : ISQLItem {
+            if (conexion == null || conexion.State != ConnectionState.Open || item == null) return -1;
             if (item.Nuevo) {
                 using var comando = new SQLiteCommand(item.ComandoInsertar, conexion);
                 comando.Parameters.AddRange(item.Parametros.ToArray());
@@ -115,17 +125,10 @@ namespace Orion.Servicios {
                 comando.Parameters.AddRange(item.Parametros.ToArray());
                 comando.ExecuteNonQuery();
             }
-            return item.Id;
-        }
-
-
-        protected int GuardarItemConLista<T>(T item, SQLiteConnection conexion) where T : ISQLItem {
-            if (conexion == null || conexion.State != ConnectionState.Open) return -1;
-            int id = GuardarItem(item, conexion);
-            if (item.Lista != null) {
+            if (!ignorarLista && item.HasList) {
                 foreach (var item2 in item.Lista) {
-                    item2.ForeignId = id;
-                    GuardarItemConLista(item2, conexion);
+                    item2.ForeignId = item.Id;
+                    GuardarItem(conexion, item2, ignorarLista);
                 }
             }
             return item.Id;
@@ -140,38 +143,22 @@ namespace Orion.Servicios {
         #region MÉTODOS PÚBLICOS GUARDAR
         // ====================================================================================================
 
-        public int GuardarItem<T>(T item) where T : ISQLItem {
+        public int GuardarItem<T>(T item, bool ignorarLista = false) where T : ISQLItem {
+            if (item == null) return -1;
             using var conexion = new SQLiteConnection(CadenaConexion);
             conexion.Open();
-            return GuardarItem(item, conexion);
+            return GuardarItem(conexion, item, ignorarLista);
         }
 
 
-        public int GuardarItemConLista<T>(T item) where T : ISQLItem {
-            using var conexion = new SQLiteConnection(CadenaConexion);
-            conexion.Open();
-            return GuardarItemConLista(item, conexion);
-        }
-
-
-        protected void GuardarItems<T>(IEnumerable<T> lista) where T : ISQLItem {
+        protected void GuardarItems<T>(IEnumerable<T> lista, bool ignorarLista = true) where T : ISQLItem {
+            if (lista == null) return;
             using var conexion = new SQLiteConnection(CadenaConexion);
             conexion.Open();
             foreach (var item in lista) {
-                GuardarItem(item, conexion);
+                GuardarItem(conexion, item, ignorarLista);
             }
         }
-
-
-        protected void GuardarItemsConLista<T>(IEnumerable<T> lista) where T : ISQLItem {
-            using var conexion = new SQLiteConnection(CadenaConexion);
-            conexion.Open();
-            foreach (var item in lista) {
-                GuardarItemConLista(item, conexion);
-            }
-        }
-
-
 
 
         #endregion
@@ -182,27 +169,19 @@ namespace Orion.Servicios {
         #region MÉTODOS PRIVADOS BORRAR
         // ====================================================================================================
 
-        protected bool BorrarItem<T>(T item, SQLiteConnection conexion) where T : ISQLItem {
-            if (conexion == null || conexion.State != ConnectionState.Open) return false;
+        protected bool BorrarItem<T>(SQLiteConnection conexion, T item, bool ignorarLista = false) where T : ISQLItem {
+            if (conexion == null || conexion.State != ConnectionState.Open || item == null) return false;
             int borrados = 0;
             using var comando = new SQLiteCommand($"DELETE * FROM {item.TableName} WHERE _id=@id;", conexion);
             comando.Parameters.AddWithValue("@id", item.Id);
             borrados = comando.ExecuteNonQuery();
-            return borrados == 1;
-        }
-
-
-        protected bool BorrarItemConLista<T>(T item, SQLiteConnection conexion) where T : ISQLItem {
-            if (conexion == null || conexion.State != ConnectionState.Open) return false;
-            bool borrado = BorrarItem(item, conexion);
-            if (item.Lista != null) {
+            if (!ignorarLista && item.HasList) {
                 foreach (var item2 in item.Lista) {
-                    BorrarItemConLista(item2, conexion);
+                    BorrarItem(conexion, item2, ignorarLista);
                 }
             }
-            return borrado;
+            return borrados == 1;
         }
-
 
 
         #endregion
@@ -214,41 +193,23 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
 
-        public bool BorrarItem<T>(T item) where T : ISQLItem {
+        public bool BorrarItem<T>(T item, bool ignorarLista = false) where T : ISQLItem {
             using var conexion = new SQLiteConnection(CadenaConexion);
             conexion.Open();
-            return BorrarItem(item, conexion);
+            return BorrarItem(conexion, item, ignorarLista);
         }
 
 
-        public bool BorrarItemConLista<T>(T item) where T : ISQLItem {
-            using var conexion = new SQLiteConnection(CadenaConexion);
-            conexion.Open();
-            return BorrarItemConLista(item, conexion);
-        }
-
-
-        public bool BorrarItems<T>(IEnumerable<T> lista) where T : ISQLItem {
+        public bool BorrarItems<T>(IEnumerable<T> lista, bool ignorarLista = false) where T : ISQLItem {
+            if (lista == null) return false;
             using var conexion = new SQLiteConnection(CadenaConexion);
             conexion.Open();
             int borrados = 0;
             foreach (var item in lista) {
-                if (BorrarItem(item, conexion)) borrados++;
+                if (BorrarItem(conexion, item, ignorarLista)) borrados++;
             }
             return borrados == lista.Count();
         }
-
-
-        public bool BorrarItemsConLista<T>(IEnumerable<T> lista) where T : ISQLItem {
-            using var conexion = new SQLiteConnection(CadenaConexion);
-            conexion.Open();
-            int borrados = 0;
-            foreach (var item in lista) {
-                if (BorrarItemConLista(item, conexion)) borrados++;
-            }
-            return borrados == lista.Count();
-        }
-
 
 
         #endregion
@@ -259,8 +220,7 @@ namespace Orion.Servicios {
         #region MÉTODOS PRIVADOS GET
         // ====================================================================================================
 
-
-        protected T GetItem<T>(int id, SQLiteConnection conexion) where T : ISQLItem, new() {
+        protected T GetItem<T>(SQLiteConnection conexion, int id, bool ignorarLista = false) where T : ISQLItem, new() {
             if (conexion == null || conexion.State != ConnectionState.Open) return default;
             T item = new T();
             using var comando = new SQLiteCommand($"SELECT * FROM {item.TableName} WHERE _id=@id;", conexion);
@@ -268,60 +228,49 @@ namespace Orion.Servicios {
             using var lector = comando.ExecuteReader();
             if (lector.Read()) {
                 item.FromReader(lector);
+                if (!ignorarLista && item.HasList) AddListaToItem(conexion, ref item);
                 return item;
             }
             return default;
         }
 
 
-        protected IEnumerable<T> GetItems<T>(SQLiteConnection conexion, string consulta, IEnumerable<SQLiteParameter> paramsWhere = null) where T : ISQLItem, new() {
+        protected T GetItem<T>(SQLiteConnection conexion, SQLiteExpression consulta, bool ignorarLista = false) where T : ISQLItem, new() {
+            if (conexion == null || conexion.State != ConnectionState.Open) return default;
+            using var comando = consulta.GetCommand(conexion);
+            using var lector = comando.ExecuteReader();
+            if (lector.Read()) {
+                T item = new T();
+                item.FromReader(lector);
+                if (!ignorarLista && item.HasList) AddListaToItem(conexion, ref item);
+                return item;
+            }
+            return default;
+        }
+
+
+        protected IEnumerable<T> GetItems<T>(SQLiteConnection conexion, SQLiteExpression consulta, bool ignorarLista = false) where T : ISQLItem, new() {
             if (conexion == null || conexion.State != ConnectionState.Open) return default;
             List<T> lista = new List<T>();
             T item = new T();
-            using var comando = new SQLiteCommand(consulta, conexion);
-            if (paramsWhere != null) comando.Parameters.AddRange(paramsWhere.ToArray());
+            using var comando = consulta.GetCommand(conexion);
             using var lector = comando.ExecuteReader();
             while (lector.Read()) {
                 item = new T();
                 item.FromReader(lector);
+                if (!ignorarLista && item.HasList) AddListaToItem(conexion, ref item);
                 lista.Add(item);
             }
             return lista;
         }
 
 
-        protected T GetItemConLista<T>(int id, SQLiteConnection conexion) where T : ISQLItem, new() {
-            if (conexion == null || conexion.State != ConnectionState.Open) return default;
-            T item = GetItem<T>(id, conexion);
-            if (item.HasList) AddListaToItem(ref item, conexion);
-            return item;
-        }
-
-
-        protected IEnumerable<T> GetItemsConLista<T>(SQLiteConnection conexion, string consulta, IEnumerable<SQLiteParameter> paramsWhere = null) where T : ISQLItem, new() {
-            if (conexion == null || conexion.State != ConnectionState.Open) return default;
-            List<T> lista = new List<T>();
-            T item = new T();
-            using var comando = new SQLiteCommand(consulta, conexion);
-            if (paramsWhere != null) comando.Parameters.AddRange(paramsWhere.ToArray());
-            using var lector = comando.ExecuteReader();
-            while (lector.Read()) {
-                item = new T();
-                item.FromReader(lector);
-                if (item.HasList) AddListaToItem(ref item, conexion);
-                lista.Add(item);
-            }
-            return lista;
-        }
-
-
-        protected void AddListaToItem<T>(ref T item, SQLiteConnection conexion) where T : ISQLItem {
+        protected void AddListaToItem<T>(SQLiteConnection conexion, ref T item) where T : ISQLItem {
+            if (item == null) return;
             var tipo = item.Lista.GetType().GetGenericArguments()[0];
             var item2 = (ISQLItem)Activator.CreateInstance(tipo);
-            string where = $"{item.ForeignIdName} = @id";
-            string order = item2.OrderBy.ToUpper().Replace("ORDER BY", "");
-            using var comando = new SQLiteCommand($"SELECT * FROM {item2.TableName} WHERE {where} ORDER BY {order};", conexion);
-            comando.Parameters.AddWithValue("@id", item.Id);
+            var consulta = new SQLiteExpression($"SELECT * FROM {item2.TableName} WHERE {item.ForeignIdName} = @id ORDER BY {item2.OrderBy};").AddParameter("@id", item.Id);
+            using var comando = consulta.GetCommand(conexion);
             using var lector = comando.ExecuteReader();
             item.InicializarLista();
             while (lector.Read()) {
@@ -341,39 +290,45 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
 
-        public T GetItem<T>(int id) where T : ISQLItem, new() {
+        public T GetItem<T>(int id, bool ignorarLista = false) where T : ISQLItem, new() {
             using var conexion = new SQLiteConnection(CadenaConexion);
             conexion.Open();
-            return GetItem<T>(id, conexion);
+            return GetItem<T>(conexion, id, ignorarLista);
         }
 
 
-        public IEnumerable<T> GetItems<T>(string whereCondition = "", string orderBy = "", IEnumerable<SQLiteParameter> paramsWhere = null) where T : ISQLItem, new() {
+        public T GetItem<T>(SQLiteExpression consulta, bool ignorarLista = false) where T : ISQLItem, new() {
+            using var conexion = new SQLiteConnection(CadenaConexion);
+            conexion.Open();
+            return GetItem<T>(conexion, consulta, ignorarLista);
+        }
+
+
+        public IEnumerable<T> GetItems<T>(bool ignorarLista = false) where T : ISQLItem, new() {
             using var conexion = new SQLiteConnection(CadenaConexion);
             conexion.Open();
             var item = new T();
-            string where = whereCondition == "" ? "" : $"WHERE {whereCondition}";
-            string order = orderBy == "" ? "" : $"ORDER BY {orderBy}";
-            string consulta = $"SELECT * FROM {item.TableName} {where} {order};";
-            return GetItems<T>(conexion, consulta, paramsWhere);
+            var consulta = new SQLiteExpression($"SELECT * FROM {item.TableName} ORDER BY {item.OrderBy};");
+            return GetItems<T>(conexion, consulta, ignorarLista);
         }
 
 
-        public T GetItemConLista<T>(int id) where T : ISQLItem, new() {
-            using var conexion = new SQLiteConnection(CadenaConexion);
-            conexion.Open();
-            return GetItemConLista<T>(id, conexion);
-        }
-
-
-        public IEnumerable<T> GetItemsConLista<T>(string whereCondition = "", string orderBy = "", IEnumerable<SQLiteParameter> paramsWhere = null) where T : ISQLItem, new() {
+        public IEnumerable<T> GetItems<T>(SQLiteExpression consulta, bool ignorarLista = false) where T : ISQLItem, new() {
             using var conexion = new SQLiteConnection(CadenaConexion);
             conexion.Open();
             var item = new T();
-            string where = whereCondition == "" ? "" : $"WHERE {whereCondition}";
+            return GetItems<T>(conexion, consulta, ignorarLista);
+        }
+
+
+        public IEnumerable<T> GetItemsWhere<T>(SQLiteExpression whereCondition = null, string orderBy = "", bool ignorarLista = false) where T : ISQLItem, new() {
+            using var conexion = new SQLiteConnection(CadenaConexion);
+            conexion.Open();
+            var item = new T();
+            string where = whereCondition == null ? "" : $"WHERE {whereCondition.Expresion}";
             string order = orderBy == "" ? "" : $"ORDER BY {orderBy}";
-            string consulta = $"SELECT * FROM {item.TableName} {where} {order};";
-            return GetItemsConLista<T>(conexion, consulta, paramsWhere);
+            var consulta = new SQLiteExpression($"SELECT * FROM {item.TableName} {where} {order};", whereCondition.Parametros);
+            return GetItems<T>(conexion, consulta, ignorarLista);
         }
 
 
@@ -386,13 +341,32 @@ namespace Orion.Servicios {
         #region MÉTODOS PRIVADOS ESCALAR
         // ====================================================================================================
 
-        protected object GetScalar(SQLiteConnection conexion, string consulta, IEnumerable<SQLiteParameter> parametros = null) {
+        protected object GetScalar(SQLiteConnection conexion, SQLiteExpression consulta) {
             if (conexion == null || conexion.State != ConnectionState.Open) return default;
-            using var comando = new SQLiteCommand(consulta, conexion);
-            if (parametros != null) comando.Parameters.AddRange(parametros.ToArray());
+            using var comando = consulta.GetCommand(conexion);
             var resultado = comando.ExecuteScalar();
             return resultado == DBNull.Value ? null : resultado;
         }
+
+
+        protected int GetIntScalar(SQLiteConnection conexion, SQLiteExpression consulta) {
+            var resultado = GetScalar(conexion, consulta);
+            return resultado == null ? 0 : Convert.ToInt32(resultado);
+        }
+
+
+        protected decimal GetDecimalScalar(SQLiteConnection conexion, SQLiteExpression consulta) {
+            var resultado = GetScalar(conexion, consulta);
+            return resultado == null ? 0 : Convert.ToDecimal(resultado);
+        }
+
+
+        protected TimeSpan GetTimeSpanScalar(SQLiteConnection conexion, SQLiteExpression consulta) {
+            if (conexion == null || conexion.State != ConnectionState.Open) return TimeSpan.Zero;
+            var resultado = GetIntScalar(conexion, consulta);
+            return new TimeSpan(resultado);
+        }
+
 
         #endregion
         // ====================================================================================================
@@ -402,36 +376,39 @@ namespace Orion.Servicios {
         #region MÉTODOS PÚBLICOS ESCALAR
         // ====================================================================================================
 
-        public object GetScalar(string consulta, IEnumerable<SQLiteParameter> parametros = null) {
+        public object GetScalar(SQLiteExpression consulta) {
             using var conexion = new SQLiteConnection(CadenaConexion);
             conexion.Open();
-            return GetScalar(conexion, consulta, parametros);
+            return GetScalar(conexion, consulta);
         }
 
 
-        public int GetIntScalar(string consulta, IEnumerable<SQLiteParameter> parametros = null) {
-            var resultado = GetScalar(consulta, parametros);
-            return resultado == null ? 0 : Convert.ToInt32(resultado);
+        public int GetIntScalar(SQLiteExpression consulta) {
+            using var conexion = new SQLiteConnection(CadenaConexion);
+            conexion.Open();
+            return GetIntScalar(conexion, consulta);
         }
 
 
-        public decimal GetDecimalScalar(string consulta, IEnumerable<SQLiteParameter> parametros = null) {
-            var resultado = GetScalar(consulta, parametros);
-            return resultado == null ? 0 : Convert.ToDecimal(resultado);
+        public decimal GetDecimalScalar(SQLiteExpression consulta) {
+            using var conexion = new SQLiteConnection(CadenaConexion);
+            conexion.Open();
+            return GetDecimalScalar(conexion, consulta);
         }
 
 
-        public TimeSpan GetTimeSpanScalar(string consulta, IEnumerable<SQLiteParameter> parametros = null) {
-            var resultado = GetIntScalar(consulta, parametros);
-            return new TimeSpan(resultado);
+        public TimeSpan GetTimeSpanScalar(SQLiteExpression consulta) {
+            using var conexion = new SQLiteConnection(CadenaConexion);
+            conexion.Open();
+            return GetTimeSpanScalar(conexion, consulta);
         }
 
 
-        public int GetCount<T>(string whereCondition = "", IEnumerable<SQLiteParameter> parametros = null) where T : ISQLItem, new() {
-            string where = whereCondition == "" ? "" : $"WHERE {whereCondition}";
+        public int GetCount<T>(SQLiteExpression whereCondition = null) where T : ISQLItem, new() {
+            string where = whereCondition == null ? "" : $"WHERE {whereCondition.Expresion}";
             var item = new T();
-            string consulta = $"SELECT Count(*) FROM {item.TableName} {where}";
-            return GetIntScalar(consulta, parametros);
+            var consulta = new SQLiteExpression($"SELECT Count(*) FROM {item.TableName} {where}", whereCondition.Parametros);
+            return GetIntScalar(consulta);
         }
 
 

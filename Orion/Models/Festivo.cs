@@ -5,125 +5,122 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Orion.Config;
-using Orion.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SQLite;
 using System.Windows.Input;
+using Orion.Interfaces;
+using Orion.ViewModels;
 
 namespace Orion.Models {
 
-	public class Festivo: NotifyBase {
+    public class Festivo : NotifyBase, ISQLItem {
 
 
-		// ====================================================================================================
-		#region CONSTRUCTOR
-		// ====================================================================================================
-		public Festivo() {
-		}
+        // ====================================================================================================
+        #region CONSTRUCTOR
+        // ====================================================================================================
+        public Festivo() {
+        }
 
-		public Festivo(OleDbDataReader lector) {
-			FromReader(lector);
-		}
+        public Festivo(OleDbDataReader lector) {
+            FromReader(lector);
+        }
 
-		#endregion
-
-
-		// ====================================================================================================
-		#region MÉTODOS PRIVADOS
-		// ====================================================================================================
-		private void FromReader(OleDbDataReader lector) {
-			_id = lector.ToInt32("Id");
-			_año = lector.ToInt16("Año");
-			_fecha = lector.ToDateTime("Fecha");
-		}
-
-		#endregion
-
-		
-		// ====================================================================================================
-		#region MÉTODOS PÚBLICOS
-		// ====================================================================================================
-		public void BorrarValorPorHeader(string header) {
-			switch (header) {
-				case "Año":
-					Año = 0; break;
-				case "Festivos":
-					Fecha = new DateTime(2001, 1, 2); break;
-			}
-		}
-
-		#endregion
+        #endregion
 
 
-		// ====================================================================================================
-		#region MÉTODOS ESTÁTICOS
-		// ====================================================================================================
+        // ====================================================================================================
+        #region MÉTODOS PRIVADOS
+        // ====================================================================================================
+        private void FromReader(OleDbDataReader lector) {
+            _id = lector.ToInt32("Id");
+            _año = lector.ToInt16("Año");
+            _fecha = lector.ToDateTime("Fecha");
+        }
 
-		public static void ParseFromReader(OleDbDataReader lector, Festivo festivo) {
-			festivo.Id = lector.ToInt32("Id");
-			festivo.Año = lector.ToInt16("Año");
-			festivo.Fecha = lector.ToDateTime("Fecha");
-		}
-
-
-		public static void ParseToCommand(OleDbCommand Comando, Festivo festivo) {
-			Comando.Parameters.AddWithValue("año", festivo.Año);
-			Comando.Parameters.AddWithValue("fecha", festivo.Fecha.ToString("yyyy-MM-dd"));
-			Comando.Parameters.AddWithValue("id", festivo.Id);
-		}
+        #endregion
 
 
-		#endregion
+        // ====================================================================================================
+        #region MÉTODOS PÚBLICOS
+        // ====================================================================================================
+        public void BorrarValorPorHeader(string header) {
+            switch (header) {
+                case "Año":
+                    Año = 0; break;
+                case "Festivos":
+                    Fecha = new DateTime(2001, 1, 2); break;
+            }
+        }
+
+        #endregion
 
 
-		// ====================================================================================================
-		#region PROPIEDADES
-		// ====================================================================================================
+        // ====================================================================================================
+        #region MÉTODOS ESTÁTICOS
+        // ====================================================================================================
 
-		private long _id;
-		public long Id {
-			get { return _id; }
-			set {
-				if (_id != value) {
-					_id = value;
-					Modificado = true;
-					PropiedadCambiada();
-				}
-			}
-		}
+        public static void ParseFromReader(OleDbDataReader lector, Festivo festivo) {
+            festivo.Id = lector.ToInt32("Id");
+            festivo.Año = lector.ToInt16("Año");
+            festivo.Fecha = lector.ToDateTime("Fecha");
+        }
 
 
-		private int _año;
-		public int Año {
-			get { return _año; }
-			set {
-				if (_año != value) {
-					_año = value;
-					Modificado = true;
-					PropiedadCambiada();
-				}
-			}
-		}
+        public static void ParseToCommand(OleDbCommand Comando, Festivo festivo) {
+            Comando.Parameters.AddWithValue("año", festivo.Año);
+            Comando.Parameters.AddWithValue("fecha", festivo.Fecha.ToString("yyyy-MM-dd"));
+            Comando.Parameters.AddWithValue("id", festivo.Id);
+        }
 
 
-		private DateTime _fecha;
-		public DateTime Fecha {
-			get { return _fecha; }
-			set {
-				if (_fecha != value) {
-					_fecha = value;
-					Modificado = true;
-					if (_fecha.Year != _año) _fecha = new DateTime(_año, _fecha.Month, _fecha.Day);
-					PropiedadCambiada();
-				}
-			}
-		}
+        #endregion
+
+
+        // ====================================================================================================
+        #region PROPIEDADES
+        // ====================================================================================================
+
+        private int _id;
+        public int Id {
+            get { return _id; }
+            set {
+                if (_id != value) {
+                    _id = value;
+                    Modificado = true;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
+        private int _año;
+        public int Año {
+            get { return _año; }
+            set {
+                if (_año != value) {
+                    _año = value;
+                    Modificado = true;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
+        private DateTime _fecha;
+        public DateTime Fecha {
+            get { return _fecha; }
+            set {
+                if (_fecha != value) {
+                    _fecha = value;
+                    Modificado = true;
+                    if (_fecha.Year != _año) _fecha = new DateTime(_año, _fecha.Month, _fecha.Day);
+                    PropiedadCambiada();
+                }
+            }
+        }
 
 
         #endregion
@@ -145,6 +142,78 @@ namespace Orion.Models {
             PropiedadCambiada(nameof(Borrado));
         }
         #endregion
+
+
+        // ====================================================================================================
+        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        // ====================================================================================================
+
+
+        public void FromReader(SQLiteDataReader lector) {
+            _id = lector.ToInt32("Id");
+            _año = lector.ToInt16("Año");
+            _fecha = lector.ToDateTime("Fecha");
+            Nuevo = false;
+            Modificado = false;
+        }
+
+
+        public IEnumerable<SQLiteParameter> Parametros {
+            get {
+                var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("@año", Año));
+                lista.Add(new SQLiteParameter("@fecha", Fecha.ToString("yyyy-MM-dd")));
+                lista.Add(new SQLiteParameter("@id", Id));
+                return lista;
+            }
+        }
+
+
+        public IEnumerable<ISQLItem> Lista { get; }
+
+
+        public bool HasList { get => false; }
+
+
+        public void InicializarLista() { }
+
+
+        public void AddItemToList(ISQLItem item) { }
+
+
+        public int ForeignId { get; set; }
+
+
+        public string ForeignIdName { get; }
+
+
+        public string OrderBy { get => $"Fecha ASC"; }
+
+
+        public string TableName { get => "Festivos"; }
+
+
+        public string ComandoInsertar {
+            get => "INSERT INTO Festivos (" +
+                "Año, " +
+                "Fecha) " +
+                "VALUES (" +
+                "@año, " +
+                "@fecha);";
+        }
+
+
+        public string ComandoActualizar {
+            get => "UPDATE Festivos SET " +
+                "Año = @año, " +
+                "Fecha = @fecha " +
+                "WHERE _id=@id;";
+        }
+
+
+        #endregion
+        // ====================================================================================================
+
 
 
     }

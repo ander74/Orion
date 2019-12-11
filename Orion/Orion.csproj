@@ -307,6 +307,7 @@
     <Compile Include="Models\Pluses.cs" />
     <Compile Include="Models\Reclamacion.cs" />
     <Compile Include="Models\RegulacionConductor.cs" />
+    <Compile Include="Models\SQLiteExpression.cs" />
     <Compile Include="Models\SQLiteItem.cs" />
     <Compile Include="Models\ValoracionGrafico.cs" />
     <Compile Include="Mvvm\CommandAsync.cs" />
