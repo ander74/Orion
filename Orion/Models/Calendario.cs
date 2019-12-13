@@ -14,7 +14,7 @@ namespace Orion.Models {
     using System.ComponentModel;
     using System.Data.OleDb;
     using System.Linq;
-    using Microsoft.Data.Sqlite;
+    using System.Data.SQLite;
     using Orion.Interfaces;
 
     public class Calendario : NotifyBase, ISQLItem {
@@ -328,7 +328,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SqliteDataReader lector) {
+        public void FromReader(SQLiteDataReader lector) {
             _id = lector.ToInt32("_id");
             _idconductor = lector.ToInt32("IdConductor");
             _fecha = lector.ToDateTime("Fecha");
@@ -338,13 +338,13 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SqliteParameter> Parametros {
+        public IEnumerable<SQLiteParameter> Parametros {
             get {
-                var lista = new List<SqliteParameter>();
-                lista.Add(new SqliteParameter("@idConductor", IdConductor));
-                lista.Add(new SqliteParameter("@fecha", Fecha.ToString("yyyy-MM-dd")));
-                lista.Add(new SqliteParameter("@notas", Notas));
-                lista.Add(new SqliteParameter("@id", Id));
+                var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("@idConductor", IdConductor));
+                lista.Add(new SQLiteParameter("@fecha", Fecha.ToString("yyyy-MM-dd")));
+                lista.Add(new SQLiteParameter("@notas", Notas));
+                lista.Add(new SQLiteParameter("@id", Id));
                 return lista;
             }
         }

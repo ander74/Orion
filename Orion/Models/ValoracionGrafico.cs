@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -250,7 +250,7 @@ namespace Orion.Models {
         #region PROPIEDADES Y MÉTODOS OVERRIDE
         // ====================================================================================================
 
-        public void FromReader(SqliteDataReader lector) {
+        public void FromReader(SQLiteDataReader lector) {
             _id = lector.ToInt32("_id");
             _idgrafico = lector.ToInt32("IdGrafico");
             _inicio = lector.ToTimeSpanNulable("Inicio");
@@ -263,16 +263,16 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SqliteParameter> Parametros {
+        public IEnumerable<SQLiteParameter> Parametros {
             get {
-                var lista = new List<SqliteParameter>();
-                lista.Add(new SqliteParameter("@idGrafico", IdGrafico));
-                lista.Add(new SqliteParameter("@inicio", Inicio.HasValue ? Inicio.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SqliteParameter("@linea", Linea.ToString("0.0000")));
-                lista.Add(new SqliteParameter("@descripcion", Descripcion));
-                lista.Add(new SqliteParameter("@final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SqliteParameter("@tiempo", Tiempo.Ticks));
-                lista.Add(new SqliteParameter("@id", Id));
+                var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("@idGrafico", IdGrafico));
+                lista.Add(new SQLiteParameter("@inicio", Inicio.HasValue ? Inicio.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@linea", Linea.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@descripcion", Descripcion));
+                lista.Add(new SQLiteParameter("@final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("@tiempo", Tiempo.Ticks));
+                lista.Add(new SQLiteParameter("@id", Id));
                 return lista;
             }
         }

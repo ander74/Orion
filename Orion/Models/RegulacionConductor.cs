@@ -10,7 +10,7 @@ namespace Orion.Models {
     using System;
     using System.Collections.Generic;
     using System.Data.OleDb;
-    using Microsoft.Data.Sqlite;
+    using System.Data.SQLite;
     using Orion.Interfaces;
 
     public class RegulacionConductor : NotifyBase, ISQLItem {
@@ -235,7 +235,7 @@ namespace Orion.Models {
         #region PROPIEDADES Y MÉTODOS OVERRIDE
         // ====================================================================================================
 
-        public void FromReader(SqliteDataReader lector) {
+        public void FromReader(SQLiteDataReader lector) {
             _id = lector.ToInt32("_id");
             _idconductor = lector.ToInt32("IdConductor");
             _codigo = lector.ToInt32("Codigo");
@@ -249,17 +249,17 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SqliteParameter> Parametros {
+        public IEnumerable<SQLiteParameter> Parametros {
             get {
-                var lista = new List<SqliteParameter>();
-                lista.Add(new SqliteParameter("@idConductor", IdConductor));
-                lista.Add(new SqliteParameter("@codigo", Codigo));
-                lista.Add(new SqliteParameter("@fecha", Fecha.ToString("yyyy-MM-dd")));
-                lista.Add(new SqliteParameter("@horas", Horas.Ticks));
-                lista.Add(new SqliteParameter("@descansos", Descansos.ToString("0.0000")));
-                lista.Add(new SqliteParameter("@dnds", Dnds.ToString("0.0000")));
-                lista.Add(new SqliteParameter("@motivo", Motivo));
-                lista.Add(new SqliteParameter("@id", Id));
+                var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("@idConductor", IdConductor));
+                lista.Add(new SQLiteParameter("@codigo", Codigo));
+                lista.Add(new SQLiteParameter("@fecha", Fecha.ToString("yyyy-MM-dd")));
+                lista.Add(new SQLiteParameter("@horas", Horas.Ticks));
+                lista.Add(new SQLiteParameter("@descansos", Descansos.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@dnds", Dnds.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@motivo", Motivo));
+                lista.Add(new SQLiteParameter("@id", Id));
                 return lista;
             }
         }

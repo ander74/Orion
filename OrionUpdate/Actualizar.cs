@@ -47,6 +47,12 @@ namespace OrionUpdate {
                     return;
                 }
 
+                // Si las carpetas x86 y x64 no existen, las creamos...
+                string x86 = Path.Combine(rutaOrigen, "x86");
+                string x64 = Path.Combine(rutaOrigen, "x64");
+                if (!Directory.Exists(x86)) Directory.CreateDirectory(x86);
+                if (!Directory.Exists(x64)) Directory.CreateDirectory(x64);
+
                 // PROGRAMA
                 if (!CopiarArchivoRaiz("Orion.exe")) {
                     GenerarError();
@@ -142,6 +148,14 @@ namespace OrionUpdate {
                     return;
                 }
                 if (!CopiarArchivoRaiz("System.Data.SQLite.Linq.dll")) {
+                    GenerarError();
+                    return;
+                }
+                if (!CopiarArchivoRaiz("x86\\SQLite.Interop.dll")) {
+                    GenerarError();
+                    return;
+                }
+                if (!CopiarArchivoRaiz("x64\\SQLite.Interop.dll")) {
                     GenerarError();
                     return;
                 }

@@ -7,7 +7,7 @@
 #endregion
 
 using System.Collections.Generic;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 
 namespace Orion.Models {
 
@@ -27,7 +27,7 @@ namespace Orion.Models {
         /// <summary>
         /// Devuelve los parámetros que se pasarán al comando correspondiente.
         /// </summary>
-        public abstract IEnumerable<SqliteParameter> Parametros { get; }
+        public abstract IEnumerable<SQLiteParameter> Parametros { get; }
 
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Orion.Models {
         /// <summary>
         /// Establece todas las propiedades de la base de datos en el objeto.
         /// </summary>
-        public abstract void FromReader(SqliteDataReader lector);
+        public abstract void FromReader(SQLiteDataReader lector);
 
 
         #endregion

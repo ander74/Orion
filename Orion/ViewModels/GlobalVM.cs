@@ -15,7 +15,7 @@ namespace Orion.ViewModels {
     using System.Windows;
     using Config;
     using DataModels;
-    using Microsoft.Data.Sqlite;
+    using System.Data.SQLite;
     using Models;
     using Orion.Interfaces;
     using Servicios;
@@ -129,9 +129,9 @@ namespace Orion.ViewModels {
             if (centro == Centros.Desconocido) return null;
             // Definimos el archivo de base de datos
             string archivo = Utils.CombinarCarpetas(Configuracion.CarpetaDatos, centro.ToString() + ".db3");
-            //if (!File.Exists(archivo)) SqliteConnection.CreateFile(archivo); //TODO: Comprobar que esto funciona bien.
+            //if (!File.Exists(archivo)) SQLiteConnection.CreateFile(archivo); //TODO: Comprobar que esto funciona bien.
             // Establecemos la cadena de conexión
-            SqliteConnectionStringBuilder cadenaConexionBuilder = new SqliteConnectionStringBuilder {
+            SQLiteConnectionStringBuilder cadenaConexionBuilder = new SQLiteConnectionStringBuilder {
                 DataSource = archivo,
             };
             string cadenaConexion = cadenaConexionBuilder.ToString();

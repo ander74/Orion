@@ -10,7 +10,7 @@ namespace Orion.Models {
     using System;
     using System.Collections.Generic;
     using System.Data.OleDb;
-    using Microsoft.Data.Sqlite;
+    using System.Data.SQLite;
     using Orion.Interfaces;
 
     public class EstadisticasGraficos : ISQLItem {
@@ -181,7 +181,7 @@ namespace Orion.Models {
 
 
 
-        public void FromReader(SqliteDataReader lector) {
+        public void FromReader(SQLiteDataReader lector) {
             _validez = lector.ToDateTime("xValidez");
             _turno = lector.ToInt16("xTurno");
             _numerograficos = lector.ToInt32("xNumero");
@@ -198,7 +198,7 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SqliteParameter> Parametros { get; }
+        public IEnumerable<SQLiteParameter> Parametros { get; }
 
 
         public IEnumerable<ISQLItem> Lista { get; }

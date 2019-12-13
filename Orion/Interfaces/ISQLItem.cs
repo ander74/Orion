@@ -7,7 +7,7 @@
 #endregion
 
 using System.Collections.Generic;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 
 namespace Orion.Interfaces {
     public interface ISQLItem {
@@ -22,13 +22,13 @@ namespace Orion.Interfaces {
         /// <summary>
         /// Establece todas las propiedades de la base de datos en el objeto.
         /// </summary>
-        void FromReader(SqliteDataReader lector);
+        void FromReader(SQLiteDataReader lector);
 
 
         /// <summary>
         /// Devuelve los parámetros que se pasarán al comando correspondiente.
         /// </summary>
-        IEnumerable<SqliteParameter> Parametros { get; }
+        IEnumerable<SQLiteParameter> Parametros { get; }
 
 
         /// <summary>

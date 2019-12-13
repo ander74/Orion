@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -157,7 +157,7 @@ namespace Orion.Models {
 
 
 
-        public void FromReader(SqliteDataReader lector) {
+        public void FromReader(SQLiteDataReader lector) {
             Validez = lector.ToDateTime("Validez");
             CantidadGraficos = lector.ToInt32("Cantidad");
             CantidadTurnos1 = lector.ToInt32("Turnos1");
@@ -179,7 +179,7 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SqliteParameter> Parametros { get; }
+        public IEnumerable<SQLiteParameter> Parametros { get; }
 
 
         public IEnumerable<ISQLItem> Lista { get; }

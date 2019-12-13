@@ -8,7 +8,7 @@
 namespace Orion.Models {
     using System.Collections.Generic;
     using System.Data.OleDb;
-    using Microsoft.Data.Sqlite;
+    using System.Data.SQLite;
     using Orion.Interfaces;
 
     public class Pluses : NotifyBase, ISQLItem {
@@ -177,7 +177,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SqliteDataReader lector) {
+        public void FromReader(SQLiteDataReader lector) {
             _id = lector.ToInt32("_id");
             _año = lector.ToInt16("Año");
             _importedietas = lector.ToDecimal("ImporteDietas");
@@ -193,19 +193,19 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SqliteParameter> Parametros {
+        public IEnumerable<SQLiteParameter> Parametros {
             get {
-                var lista = new List<SqliteParameter>();
-                lista.Add(new SqliteParameter("@año", Año));
-                lista.Add(new SqliteParameter("@importeDietas", ImporteDietas.ToString("0.0000")));
-                lista.Add(new SqliteParameter("@importeSabados", ImporteSabados.ToString("0.0000")));
-                lista.Add(new SqliteParameter("@importeFestivos", ImporteFestivos.ToString("0.0000")));
-                lista.Add(new SqliteParameter("@plusNocturnidad", PlusNocturnidad.ToString("0.0000")));
-                lista.Add(new SqliteParameter("@dietaMenorDescanso", DietaMenorDescanso.ToString("0.0000")));
-                lista.Add(new SqliteParameter("@plusLimpieza", PlusLimpieza.ToString("0.0000")));
-                lista.Add(new SqliteParameter("@plusPaqueteria", PlusPaqueteria.ToString("0.0000")));
-                lista.Add(new SqliteParameter("@plusNavidad", PlusNavidad.ToString("0.0000")));
-                lista.Add(new SqliteParameter("@id", Id));
+                var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("@año", Año));
+                lista.Add(new SQLiteParameter("@importeDietas", ImporteDietas.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@importeSabados", ImporteSabados.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@importeFestivos", ImporteFestivos.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@plusNocturnidad", PlusNocturnidad.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@dietaMenorDescanso", DietaMenorDescanso.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@plusLimpieza", PlusLimpieza.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@plusPaqueteria", PlusPaqueteria.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@plusNavidad", PlusNavidad.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("@id", Id));
                 return lista;
             }
         }

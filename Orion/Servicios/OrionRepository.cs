@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 using Orion.Config;
 using Orion.Models;
 
@@ -496,17 +496,17 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
         private void CrearDBs() {
-            using (var conexion = new SqliteConnection(CadenaConexion)) {
+            using (var conexion = new SQLiteConnection(CadenaConexion)) {
                 conexion.Open();
-                using (var comando = new SqliteCommand(CrearTablaCalendarios, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SqliteCommand(CrearTablaConductores, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SqliteCommand(CrearTablaDiasCalendario, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SqliteCommand(CrearTablaFestivos, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SqliteCommand(CrearTablaGraficos, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SqliteCommand(CrearTablaGruposGraficos, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SqliteCommand(CrearTablaPluses, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SqliteCommand(CrearTablaRegulaciones, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SqliteCommand(CrearTablaValoraciones, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SQLiteCommand(CrearTablaCalendarios, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SQLiteCommand(CrearTablaConductores, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SQLiteCommand(CrearTablaDiasCalendario, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SQLiteCommand(CrearTablaFestivos, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SQLiteCommand(CrearTablaGraficos, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SQLiteCommand(CrearTablaGruposGraficos, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SQLiteCommand(CrearTablaPluses, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SQLiteCommand(CrearTablaRegulaciones, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SQLiteCommand(CrearTablaValoraciones, conexion)) comando.ExecuteNonQuery();
             }
         }
 
@@ -816,7 +816,7 @@ namespace Orion.Servicios {
                                 "WHERE Numero = @numero";
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
             try {
-                using (var conexion = new SqliteConnection(CadenaConexion)) {
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
                     conexion.Open();
                     var consulta = new SQLiteExpression(comandoDias).AddParameter("@fecha", fecha).AddParameter("@matricula", idconductor);
                     using (var comando = consulta.GetCommand(conexion)) {
@@ -1039,7 +1039,7 @@ namespace Orion.Servicios {
                 //string comandoSQL = "SELECT * FROM Arr.Conductores;";
                 var consulta1 = new SQLiteExpression(comando1);
                 var consulta2 = new SQLiteExpression(comandoSQL);
-                using (var conexion = new SqliteConnection(CadenaConexion)) {
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
                     conexion.Open();
                     using (var comando = consulta1.GetCommand(conexion)) {
                         comando.ExecuteNonQuery();
