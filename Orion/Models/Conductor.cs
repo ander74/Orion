@@ -11,8 +11,8 @@ namespace Orion.Models {
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Data.OleDb;
-    using System.Data.SQLite;
     using Config;
+    using Microsoft.Data.Sqlite;
     using Orion.Interfaces;
 
     public class Conductor : NotifyBase, ISQLItem {
@@ -379,7 +379,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SQLiteDataReader lector) {
+        public void FromReader(SqliteDataReader lector) {
             _id = lector.ToInt32("_id");
             _nombre = lector.ToString("Nombre");
             _apellidos = lector.ToString("Apellidos");
@@ -397,21 +397,21 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        public IEnumerable<SqliteParameter> Parametros {
             get {
-                var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("@nombre", Nombre));
-                lista.Add(new SQLiteParameter("@apellidos", Apellidos));
-                lista.Add(new SQLiteParameter("@indefinido", Indefinido ? 1 : 0));
-                lista.Add(new SQLiteParameter("@telefono", Telefono));
-                lista.Add(new SQLiteParameter("@email", Email));
-                lista.Add(new SQLiteParameter("@acumuladas", Acumuladas.Ticks));
-                lista.Add(new SQLiteParameter("@descansos", Descansos.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@descansosNoDisfrutados", DescansosNoDisfrutados.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@plusDistancia", PlusDistancia.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@reduccionJornada", ReduccionJornada ? 1 : 0));
-                lista.Add(new SQLiteParameter("@notas", Notas));
-                lista.Add(new SQLiteParameter("@id", Id));
+                var lista = new List<SqliteParameter>();
+                lista.Add(new SqliteParameter("@nombre", Nombre));
+                lista.Add(new SqliteParameter("@apellidos", Apellidos));
+                lista.Add(new SqliteParameter("@indefinido", Indefinido ? 1 : 0));
+                lista.Add(new SqliteParameter("@telefono", Telefono));
+                lista.Add(new SqliteParameter("@email", Email));
+                lista.Add(new SqliteParameter("@acumuladas", Acumuladas.Ticks));
+                lista.Add(new SqliteParameter("@descansos", Descansos.ToString("0.0000")));
+                lista.Add(new SqliteParameter("@descansosNoDisfrutados", DescansosNoDisfrutados.ToString("0.0000")));
+                lista.Add(new SqliteParameter("@plusDistancia", PlusDistancia.ToString("0.0000")));
+                lista.Add(new SqliteParameter("@reduccionJornada", ReduccionJornada ? 1 : 0));
+                lista.Add(new SqliteParameter("@notas", Notas));
+                lista.Add(new SqliteParameter("@id", Id));
                 return lista;
             }
         }

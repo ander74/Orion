@@ -10,7 +10,7 @@ namespace Orion.Models {
     using System;
     using System.Collections.Generic;
     using System.Data.OleDb;
-    using System.Data.SQLite;
+    using Microsoft.Data.Sqlite;
     using Orion.Interfaces;
 
     public class DiaCalendarioBase : NotifyBase, ISQLItem {
@@ -510,7 +510,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SQLiteDataReader lector) {
+        public void FromReader(SqliteDataReader lector) {
             _id = lector.ToInt32("Id");
             _idcalendario = lector.ToInt32("IdCalendario");
             _dia = lector.ToInt16("Dia");
@@ -541,34 +541,34 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        public IEnumerable<SqliteParameter> Parametros {
             get {
-                var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("@idCalendario", IdCalendario));
-                lista.Add(new SQLiteParameter("@dia", Dia));
-                lista.Add(new SQLiteParameter("@diaFecha", DiaFecha.ToString("yyyy-MM-dd")));
-                lista.Add(new SQLiteParameter("@grafico", Grafico));
-                lista.Add(new SQLiteParameter("@codigo", Codigo));
-                lista.Add(new SQLiteParameter("@excesoJornada", ExcesoJornada.Ticks));
-                lista.Add(new SQLiteParameter("@facturadoPaqueteria", FacturadoPaqueteria.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@limpieza", Limpieza == null ? (object)DBNull.Value : Limpieza == true ? 1 : 0));
-                lista.Add(new SQLiteParameter("@graficoVinculado", GraficoVinculado));
-                lista.Add(new SQLiteParameter("@notas", Notas.TrimEnd(new char[] { ' ', '\n', '\r', '\t' })));
-                lista.Add(new SQLiteParameter("@turnoAlt", TurnoAlt.HasValue ? TurnoAlt : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@inicioAlt", InicioAlt.HasValue ? InicioAlt.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@finalAlt", FinalAlt.HasValue ? FinalAlt.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@inicioPartidoAlt", InicioPartidoAlt.HasValue ? InicioPartidoAlt.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@finalPartidoAlt", FinalPartidoAlt.HasValue ? FinalPartidoAlt.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@trabajadasAlt", TrabajadasAlt.HasValue ? TrabajadasAlt.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@acumuladasAlt", AcumuladasAlt.HasValue ? AcumuladasAlt.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@nocturnasAlt", NocturnasAlt.HasValue ? NocturnasAlt.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@desayunoAlt", DesayunoAlt.HasValue ? DesayunoAlt.Value.ToString("0.0000") : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@comidaAlt", ComidaAlt.HasValue ? ComidaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@cenaAlt", CenaAlt.HasValue ? CenaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@plusCenaAlt", PlusCenaAlt.HasValue ? PlusCenaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@plusLimpiezaAlt", PlusLimpiezaAlt.HasValue ? PlusLimpiezaAlt.Value : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@plusPaqueteriaAlt", PlusPaqueteriaAlt.HasValue ? PlusPaqueteriaAlt.Value : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@id", Id));
+                var lista = new List<SqliteParameter>();
+                lista.Add(new SqliteParameter("@idCalendario", IdCalendario));
+                lista.Add(new SqliteParameter("@dia", Dia));
+                lista.Add(new SqliteParameter("@diaFecha", DiaFecha.ToString("yyyy-MM-dd")));
+                lista.Add(new SqliteParameter("@grafico", Grafico));
+                lista.Add(new SqliteParameter("@codigo", Codigo));
+                lista.Add(new SqliteParameter("@excesoJornada", ExcesoJornada.Ticks));
+                lista.Add(new SqliteParameter("@facturadoPaqueteria", FacturadoPaqueteria.ToString("0.0000")));
+                lista.Add(new SqliteParameter("@limpieza", Limpieza == null ? (object)DBNull.Value : Limpieza == true ? 1 : 0));
+                lista.Add(new SqliteParameter("@graficoVinculado", GraficoVinculado));
+                lista.Add(new SqliteParameter("@notas", Notas.TrimEnd(new char[] { ' ', '\n', '\r', '\t' })));
+                lista.Add(new SqliteParameter("@turnoAlt", TurnoAlt.HasValue ? TurnoAlt : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@inicioAlt", InicioAlt.HasValue ? InicioAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@finalAlt", FinalAlt.HasValue ? FinalAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@inicioPartidoAlt", InicioPartidoAlt.HasValue ? InicioPartidoAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@finalPartidoAlt", FinalPartidoAlt.HasValue ? FinalPartidoAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@trabajadasAlt", TrabajadasAlt.HasValue ? TrabajadasAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@acumuladasAlt", AcumuladasAlt.HasValue ? AcumuladasAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@nocturnasAlt", NocturnasAlt.HasValue ? NocturnasAlt.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@desayunoAlt", DesayunoAlt.HasValue ? DesayunoAlt.Value.ToString("0.0000") : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@comidaAlt", ComidaAlt.HasValue ? ComidaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@cenaAlt", CenaAlt.HasValue ? CenaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@plusCenaAlt", PlusCenaAlt.HasValue ? PlusCenaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@plusLimpiezaAlt", PlusLimpiezaAlt.HasValue ? PlusLimpiezaAlt.Value : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@plusPaqueteriaAlt", PlusPaqueteriaAlt.HasValue ? PlusPaqueteriaAlt.Value : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("@id", Id));
                 return lista;
             }
         }

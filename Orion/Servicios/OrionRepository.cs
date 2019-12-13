@@ -9,8 +9,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.SQLite;
 using System.Linq;
+using Microsoft.Data.Sqlite;
 using Orion.Config;
 using Orion.Models;
 
@@ -496,17 +496,17 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
         private void CrearDBs() {
-            using (var conexion = new SQLiteConnection(CadenaConexion)) {
+            using (var conexion = new SqliteConnection(CadenaConexion)) {
                 conexion.Open();
-                using (var comando = new SQLiteCommand(CrearTablaCalendarios, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaConductores, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaDiasCalendario, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaFestivos, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaGraficos, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaGruposGraficos, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaPluses, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaRegulaciones, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaValoraciones, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(CrearTablaCalendarios, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(CrearTablaConductores, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(CrearTablaDiasCalendario, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(CrearTablaFestivos, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(CrearTablaGraficos, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(CrearTablaGruposGraficos, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(CrearTablaPluses, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(CrearTablaRegulaciones, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(CrearTablaValoraciones, conexion)) comando.ExecuteNonQuery();
             }
         }
 
@@ -816,23 +816,25 @@ namespace Orion.Servicios {
                                 "WHERE Numero = @numero";
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
             try {
-                using var conexion = new SQLiteConnection(CadenaConexion);
-                conexion.Open();
-                var consulta = new SQLiteExpression(comandoDias).AddParameter("@fecha", fecha).AddParameter("@matricula", idconductor);
-                using var comando = consulta.GetCommand(conexion);
-                using var lector = comando.ExecuteReader();
-                while (lector.Read()) {
-                    int dia = lector.ToInt32("Dia");
-                    int grafico = lector.ToInt32("Grafico");
-                    int graficoVinculado = lector.ToInt32("GraficoVinculado");
-                    DateTime fecha2 = lector.ToDateTime("Fecha");
-                    if (graficoVinculado != 0 && grafico == App.Global.PorCentro.Comodin) grafico = graficoVinculado;
-                    if (dia > DateTime.DaysInMonth(fecha2.Year, fecha2.Month)) continue;
-                    DateTime fechadia = new DateTime(fecha2.Year, fecha2.Month, dia);
-                    var consulta2 = new SQLiteExpression(comandoSQL).AddParameter("@validez", fechadia).AddParameter("@numero", grafico);
-                    acumuladas += GetTimeSpanScalar(conexion, consulta2);
+                using (var conexion = new SqliteConnection(CadenaConexion)) {
+                    conexion.Open();
+                    var consulta = new SQLiteExpression(comandoDias).AddParameter("@fecha", fecha).AddParameter("@matricula", idconductor);
+                    using (var comando = consulta.GetCommand(conexion)) {
+                        using (var lector = comando.ExecuteReader()) {
+                            while (lector.Read()) {
+                                int dia = lector.ToInt32("Dia");
+                                int grafico = lector.ToInt32("Grafico");
+                                int graficoVinculado = lector.ToInt32("GraficoVinculado");
+                                DateTime fecha2 = lector.ToDateTime("Fecha");
+                                if (graficoVinculado != 0 && grafico == App.Global.PorCentro.Comodin) grafico = graficoVinculado;
+                                if (dia > DateTime.DaysInMonth(fecha2.Year, fecha2.Month)) continue;
+                                DateTime fechadia = new DateTime(fecha2.Year, fecha2.Month, dia);
+                                var consulta2 = new SQLiteExpression(comandoSQL).AddParameter("@validez", fechadia).AddParameter("@numero", grafico);
+                                acumuladas += GetTimeSpanScalar(conexion, consulta2);
+                            }
+                        }
+                    }
                 }
-
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetAcumuladasHastaMes), ex);
             }
@@ -1026,6 +1028,32 @@ namespace Orion.Servicios {
 
         #endregion
         // ====================================================================================================
+
+
+
+        public List<Conductor> GetPrueba(string path) {
+
+            try {
+                string comando1 = $"ATTACH '{path}' AS Arr";
+                string comandoSQL = "SELECT * FROM Conductores UNION ALL SELECT * FROM Arr.Conductores ORDER BY _id ASC;";
+                //string comandoSQL = "SELECT * FROM Arr.Conductores;";
+                var consulta1 = new SQLiteExpression(comando1);
+                var consulta2 = new SQLiteExpression(comandoSQL);
+                using (var conexion = new SqliteConnection(CadenaConexion)) {
+                    conexion.Open();
+                    using (var comando = consulta1.GetCommand(conexion)) {
+                        comando.ExecuteNonQuery();
+                        var lista = GetItems<Conductor>(conexion, consulta2);
+                        return lista.ToList();
+                    }
+                }
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetPrueba), ex);
+            }
+            return new List<Conductor>();
+        }
+
+
 
 
 

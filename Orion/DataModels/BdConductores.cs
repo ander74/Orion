@@ -77,6 +77,8 @@ namespace Orion.DataModels {
                 try {
                     conexion.Open();
 
+                    App.Global.Reposritory.GuardarConductores(lista);
+
                     foreach (Conductor conductor in lista) {
                         if (conductor.Nuevo) {
                             // Si el conductor ya existe, saltarselo.

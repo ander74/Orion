@@ -7,7 +7,7 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 
 namespace Orion.Models {
 
@@ -38,7 +38,7 @@ namespace Orion.Models {
         /// Instancia un objeto <see cref="SQLiteExpression"/>
         /// </summary>
         public SQLiteExpression() {
-            Parametros = new List<SQLiteParameter>();
+            Parametros = new List<SqliteParameter>();
         }
 
 
@@ -53,7 +53,7 @@ namespace Orion.Models {
         /// <summary>
         /// Instancia un objeto <see cref="SQLiteExpression"/> y establece la expresión y la lista de parámetros.
         /// </summary>
-        public SQLiteExpression(string expresion, List<SQLiteParameter> parametros) {
+        public SQLiteExpression(string expresion, List<SqliteParameter> parametros) {
             this.Expresion = expresion;
             this.Parametros = parametros;
         }
@@ -71,7 +71,7 @@ namespace Orion.Models {
         /// Añade un parámetro a la lista de parámetros.
         /// </summary>
         public void AddParameter(string paramName, object paramValue) {
-            Parametros.Add(new SQLiteParameter(paramName, paramValue ?? DBNull.Value));
+            Parametros.Add(new SqliteParameter(paramName, paramValue ?? DBNull.Value));
         }
 
 
@@ -80,7 +80,7 @@ namespace Orion.Models {
         /// El DateTime se añade con formato 'yyyy-MM-dd'.
         /// </summary>
         public SQLiteExpression AddParameter(string paramName, DateTime paramValue) {
-            Parametros.Add(new SQLiteParameter(paramName, paramValue.ToString("yyyy-MM-dd")));
+            Parametros.Add(new SqliteParameter(paramName, paramValue.ToString("yyyy-MM-dd")));
             return this;
         }
 
@@ -89,7 +89,7 @@ namespace Orion.Models {
         /// Añade un long con los ticks del TimeSpan a la lista de parámetros y devuelve el propio objeto <see cref="SQLiteExpression"/> <br/>
         /// </summary>
         public SQLiteExpression AddParameter(string paramName, TimeSpan paramValue) {
-            Parametros.Add(new SQLiteParameter(paramName, paramValue.Ticks));
+            Parametros.Add(new SqliteParameter(paramName, paramValue.Ticks));
             return this;
         }
 
@@ -99,7 +99,7 @@ namespace Orion.Models {
         /// El decimal se añade con formato '0.0000'.
         /// </summary>
         public SQLiteExpression AddParameter(string paramName, decimal paramValue) {
-            Parametros.Add(new SQLiteParameter(paramName, paramValue.ToString("0.0000")));
+            Parametros.Add(new SqliteParameter(paramName, paramValue.ToString("0.0000")));
             return this;
         }
 
@@ -108,7 +108,7 @@ namespace Orion.Models {
         /// Añade un int a la lista de parámetros y devuelve el propio objeto <see cref="SQLiteExpression"/> <br/>
         /// </summary>
         public SQLiteExpression AddParameter(string paramName, int paramValue) {
-            Parametros.Add(new SQLiteParameter(paramName, paramValue));
+            Parametros.Add(new SqliteParameter(paramName, paramValue));
             return this;
         }
 
@@ -117,18 +117,18 @@ namespace Orion.Models {
         /// Añade un bool a la lista de parámetros y devuelve el propio objeto <see cref="SQLiteExpression"/> <br/>
         /// </summary>
         public SQLiteExpression AddParameter(string paramName, bool paramValue) {
-            Parametros.Add(new SQLiteParameter(paramName, paramValue ? 1 : 0));
+            Parametros.Add(new SqliteParameter(paramName, paramValue ? 1 : 0));
             return this;
         }
 
 
         /// <summary>
-        /// Devuelve un <see cref="SQLiteCommand"/> con la expresión como consulta y los parámetros. <br />
+        /// Devuelve un <see cref="SqliteCommand"/> con la expresión como consulta y los parámetros. <br />
         /// La conexión pasada se asocia al comando.
         /// </summary>
-        public SQLiteCommand GetCommand(SQLiteConnection conexion) {
-            var comando = new SQLiteCommand(Expresion, conexion);
-            comando.Parameters.AddRange(Parametros.ToArray());
+        public SqliteCommand GetCommand(SqliteConnection conexion) {
+            var comando = new SqliteCommand(Expresion, conexion);
+            comando.Parameters.AddRange(Parametros);
             return comando;
         }
 
@@ -152,7 +152,7 @@ namespace Orion.Models {
         /// <summary>
         /// Lista de parámetros que se añadirán al comando SQLite.
         /// </summary>
-        public List<SQLiteParameter> Parametros { get; set; }
+        public List<SqliteParameter> Parametros { get; set; }
 
 
 

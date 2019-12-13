@@ -117,7 +117,8 @@ namespace Orion.Servicios {
         }
 
 
-        private List<Calendario> getCalendarios(string excelFile, int año, int mes) {
+        [Obsolete("Esto usa el puto OLEDB de Microsoft y es una puta mierda. Quítalo ya.")]
+        private List<Calendario> getCalendarios2(string excelFile, int año, int mes) {
             string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0; Data Source='{excelFile}';Excel 12.0 Xml;Extended Properties=\"HDR=YES;IMEX=1;\"";
             List<Calendario> lista = new List<Calendario>();
             ConvertidorNumeroGraficoCalendario converter = new ConvertidorNumeroGraficoCalendario();
@@ -134,6 +135,8 @@ namespace Orion.Servicios {
                     calendario.ListaDias = new ObservableCollection<DiaCalendario>();
                     for (int dia = 1; dia <= DateTime.DaysInMonth(año, mes); dia++) {
                         DiaCalendario diaCalendario = new DiaCalendario();
+                        diaCalendario.Dia = dia;
+                        var valor = reader.GetValue(reader.GetOrdinal($"D{dia}"));
                         diaCalendario.ComboGrafico = (Tuple<int, int>)converter.ConvertBack(reader.GetValue(reader.GetOrdinal($"D{dia}")).ToString(), null, null, null);
                         calendario.ListaDias.Add(diaCalendario);
                     }
@@ -143,6 +146,36 @@ namespace Orion.Servicios {
             return lista;
 
         }
+
+
+        private List<Calendario> getCalendarios(string excelFile, int año, int mes) {
+
+            var fileInfo = new FileInfo(excelFile);
+            int diasMes = DateTime.DaysInMonth(año, mes);
+            List<Calendario> lista = new List<Calendario>();
+            ConvertidorNumeroGraficoCalendario converter = new ConvertidorNumeroGraficoCalendario();
+
+            using (var excel = new ExcelPackage(fileInfo)) {
+                var hoja = excel.Workbook.Worksheets[meses[mes]];
+                for (int fila = 2; fila <= hoja.Dimension.End.Row; fila++) {
+                    Calendario calendario = new Calendario();
+                    calendario.Fecha = new DateTime(año, mes, 1);
+                    calendario.IdConductor = hoja.Cells[fila, 1].GetValue<int>();
+                    calendario.ListaDias = new ObservableCollection<DiaCalendario>();
+                    for (int dia = 1; dia <= diasMes; dia++) {
+                        DiaCalendario diaCalendario = new DiaCalendario();
+                        diaCalendario.Dia = dia;
+                        var valor = hoja.Cells[fila, 1 + dia].GetValue<string>() ?? "";
+                        diaCalendario.ComboGrafico = (Tuple<int, int>)converter.ConvertBack(valor, null, null, null);
+                        calendario.ListaDias.Add(diaCalendario);
+                    }
+                    lista.Add(calendario);
+                }
+            }
+            return lista;
+        }
+
+
 
 
         private void rellenarHojaComparacionCalendarios(ref ExcelWorksheet hoja, IEnumerable<Calendario> listaCalendarios, IEnumerable<Calendario> listaExcel, int año, int mes) {
@@ -188,7 +221,8 @@ namespace Orion.Servicios {
                 hoja.Cells[fila + 3, 1].Value = nombre;
                 hoja.Cells[fila + 3, 2].Value = calendario.IdConductor;
                 for (int dia = 1; dia <= diasMes; dia++) {
-                    string txtOrion = (string)converter.Convert(calendario.ListaDias[dia - 1].ComboGrafico, null, null, null);
+                    //string txtOrion = (string)converter.Convert(calendario.ListaDias[dia - 1].ComboGrafico, null, null, null);
+                    string txtOrion = (string)converter.Convert(calendario.ListaDias.First(d => d.Dia == dia).ComboGrafico, null, null, null);
                     string txtExcel = (string)converter.Convert(calendarioExcel.ListaDias[dia - 1].ComboGrafico, null, null, null);
                     if (int.TryParse(txtOrion, out int intOrion)) {
                         hoja.Cells[fila + 3, dia + 2].Value = intOrion;

@@ -60,7 +60,7 @@ namespace Orion.ViewModels {
             if (ListaFestivos != null && ListaFestivos.Count > 0) {
                 BdFestivos.GuardarFestivos(ListaFestivos.Where(f => f.Nuevo || f.Modificado));
             }
-            if (ListaFestivos.Any(f => f.Borrado)) {
+            if (ListaFestivos != null && ListaFestivos.Any(f => f.Borrado)) {
                 BdFestivos.BorrarFestivos(ListaFestivos.Where(f => f.Borrado));
             }
         }
