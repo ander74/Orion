@@ -13,7 +13,7 @@ namespace Orion.Models {
     using System.Data.SQLite;
     using Orion.Interfaces;
 
-    public class DiaCalendarioBase : NotifyBase, ISQLItem {
+    public class DiaCalendarioBase : NotifyBase, ISQLiteItem {
 
 
         // ====================================================================================================
@@ -506,12 +506,12 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
-        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
 
         public void FromReader(SQLiteDataReader lector) {
-            _id = lector.ToInt32("Id");
+            _id = lector.ToInt32("_id");
             _idcalendario = lector.ToInt32("IdCalendario");
             _dia = lector.ToInt16("Dia");
             _diafecha = lector.ToDateTime("DiaFecha");
@@ -574,7 +574,7 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLItem> Lista { get; }
+        public IEnumerable<ISQLiteItem> Lista { get; }
 
 
         public bool HasList { get => false; }
@@ -583,7 +583,7 @@ namespace Orion.Models {
         public void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLItem item) { }
+        public void AddItemToList(ISQLiteItem item) { }
 
 
         public int ForeignId {
@@ -602,7 +602,7 @@ namespace Orion.Models {
 
 
         public string ComandoInsertar {
-            get => "INSERT INTO DiasCalendario (" +
+            get => "INSERT OR REPLACE INTO DiasCalendario (" +
                 "IdCalendario, " +
                 "Dia, " +
                 "DiaFecha, " +
@@ -612,21 +612,22 @@ namespace Orion.Models {
                 "FacturadoPaqueteria, " +
                 "Limpieza, " +
                 "GraficoVinculado, " +
-                "Notas" +
-                "TurnoAlt" +
-                "InicioAlt" +
-                "FinalAlt" +
-                "InicioPartidoAlt" +
-                "FinalPartidoAlt" +
-                "TrabajadasAlt" +
-                "AcumuladasAlt" +
-                "NocturnasAlt" +
-                "DesayunoAlt" +
-                "ComidaAlt" +
-                "CenaAlt" +
-                "PlusCenaAlt" +
-                "PlusLimpiezaAlt" +
-                "PlusPaqueteriaAlt) " +
+                "Notas, " +
+                "TurnoAlt, " +
+                "InicioAlt, " +
+                "FinalAlt, " +
+                "InicioPartidoAlt, " +
+                "FinalPartidoAlt, " +
+                "TrabajadasAlt, " +
+                "AcumuladasAlt, " +
+                "NocturnasAlt, " +
+                "DesayunoAlt, " +
+                "ComidaAlt, " +
+                "CenaAlt, " +
+                "PlusCenaAlt, " +
+                "PlusLimpiezaAlt, " +
+                "PlusPaqueteriaAlt, " +
+                "_id) " +
                 "VALUES (" +
                 "@idCalendario, " +
                 "@dia, " +
@@ -651,38 +652,39 @@ namespace Orion.Models {
                 "@cenaAlt, " +
                 "@plusCenaAlt, " +
                 "@plusLimpiezaAlt, " +
-                "@plusPaqueteriaAlt);";
+                "@plusPaqueteriaAlt, " +
+                "@id);";
         }
 
 
-        public string ComandoActualizar {
-            get => "UPDATE DiasCalendario SET " +
-                "IdCalendario = @idCalendario, " +
-                "Dia = @dia, " +
-                "DiaFecha = @diaFecha, " +
-                "Grafico = @grafico, " +
-                "Codigo = @codigo, " +
-                "ExcesoJornada = @excesoJornada, " +
-                "FacturadoPaqueteria = @facturadoPaqueteria, " +
-                "Limpieza = @limpieza, " +
-                "GraficoVinculado = @graficoVinculado, " +
-                "Notas = @notas, " +
-                "TurnoAlt = @turnoAlt, " +
-                "InicioAlt = @inicioAlt, " +
-                "FinalAlt = @finalAlt, " +
-                "InicioPartidoAlt = @inicioPartidoAlt, " +
-                "FinalPartidoAlt = @finalPartidoAlt, " +
-                "TrabajadasAlt = @trabajadasAlt, " +
-                "AcumuladasAlt = @acumuladasAlt, " +
-                "NocturnasAlt = @nocturnasAlt, " +
-                "DesayunoAlt = @desayunoAlt, " +
-                "ComidaAlt = @comidaAlt, " +
-                "CenaAlt = @cenaAlt, " +
-                "PlusCenaAlt = @plusCenaAlt, " +
-                "PlusLimpiezaAlt = @plusLimpiezaAlt, " +
-                "PlusPaqueteriaAlt = @plusPaqueteriaAlt " +
-                "WHERE __id=@id;";
-        }
+        //public string ComandoActualizar {
+        //    get => "UPDATE DiasCalendario SET " +
+        //        "IdCalendario = @idCalendario, " +
+        //        "Dia = @dia, " +
+        //        "DiaFecha = @diaFecha, " +
+        //        "Grafico = @grafico, " +
+        //        "Codigo = @codigo, " +
+        //        "ExcesoJornada = @excesoJornada, " +
+        //        "FacturadoPaqueteria = @facturadoPaqueteria, " +
+        //        "Limpieza = @limpieza, " +
+        //        "GraficoVinculado = @graficoVinculado, " +
+        //        "Notas = @notas, " +
+        //        "TurnoAlt = @turnoAlt, " +
+        //        "InicioAlt = @inicioAlt, " +
+        //        "FinalAlt = @finalAlt, " +
+        //        "InicioPartidoAlt = @inicioPartidoAlt, " +
+        //        "FinalPartidoAlt = @finalPartidoAlt, " +
+        //        "TrabajadasAlt = @trabajadasAlt, " +
+        //        "AcumuladasAlt = @acumuladasAlt, " +
+        //        "NocturnasAlt = @nocturnasAlt, " +
+        //        "DesayunoAlt = @desayunoAlt, " +
+        //        "ComidaAlt = @comidaAlt, " +
+        //        "CenaAlt = @cenaAlt, " +
+        //        "PlusCenaAlt = @plusCenaAlt, " +
+        //        "PlusLimpiezaAlt = @plusLimpiezaAlt, " +
+        //        "PlusPaqueteriaAlt = @plusPaqueteriaAlt " +
+        //        "WHERE _id=@id;";
+        //}
 
 
         #endregion

@@ -45,7 +45,7 @@ namespace Orion.Models {
                 Trabajador = App.Global.ConductoresVM.GetConductor(calendario.IdConductor);
                 if (Trabajador != null) {
                     // Extraemos la lista de los días del calendario.
-                    ListaDias = BdPijamas.GetDiasPijama(Fecha, calendario.ListaDias, Trabajador.ReduccionJornada);
+                    ListaDias = BdPijamas.GetDiasPijama(Fecha, calendario.ListaDias, Trabajador.ReduccionJornada);//TODO: Esto es uno.
                     // Extraemos la lista de festivos del mes del calendario.
                     //ListaFestivos = BdFestivos.GetFestivosPorMes(Fecha.Year, Fecha.Month).ToList();
 

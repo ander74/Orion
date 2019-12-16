@@ -17,7 +17,7 @@ namespace Orion.Models {
     /// Contiene una valoración de un gráfico concreto.
     /// Esta instancia determina valores nulos para los objetos de hora.
     /// </summary>
-    public class ValoracionGrafico : NotifyBase, ISQLItem {
+    public class ValoracionGrafico : NotifyBase, ISQLiteItem {
 
         // ====================================================================================================
         #region CAMPOS PRIVADOS
@@ -247,7 +247,7 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
-        #region PROPIEDADES Y MÉTODOS OVERRIDE
+        #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
         public void FromReader(SQLiteDataReader lector) {
@@ -278,7 +278,7 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLItem> Lista { get; }
+        public IEnumerable<ISQLiteItem> Lista { get; }
 
 
         public bool HasList { get => false; }
@@ -287,7 +287,7 @@ namespace Orion.Models {
         public void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLItem item) { }
+        public void AddItemToList(ISQLiteItem item) { }
 
 
         public int ForeignId {
@@ -306,33 +306,37 @@ namespace Orion.Models {
 
 
         public string ComandoInsertar {
-            get => "INSERT INTO Valoraciones (" +
+            get => "INSERT OR REPLACE INTO Valoraciones (" +
                 "IdGrafico, " +
                 "Inicio, " +
                 "Linea, " +
                 "Descripcion, " +
                 "Final, " +
-                "Tiempo) " +
+                "Tiempo, " +
+                "_id) " +
                 "VALUES (" +
                 "@idGrafico, " +
                 "@inicio, " +
                 "@linea, " +
                 "@descripcion, " +
                 "@final, " +
-                "@tiempo);";
+                "@tiempo, " +
+                "@id);";
         }
 
 
-        public string ComandoActualizar {
-            get => "UPDATE Valoraciones SET " +
-                "IdGrafico = @idGrafico, " +
-                "Inicio = @inicio, " +
-                "Linea = @linea, " +
-                "Descripcion = @descripcion, " +
-                "Final = @final, " +
-                "Tiempo = @tiempo " +
-                "WHERE _id=@id;";
-        }
+        //public string ComandoActualizar {
+        //    get => "UPDATE Valoraciones SET " +
+        //        "IdGrafico = @idGrafico, " +
+        //        "Inicio = @inicio, " +
+        //        "Linea = @linea, " +
+        //        "Descripcion = @descripcion, " +
+        //        "Final = @final, " +
+        //        "Tiempo = @tiempo " +
+        //        "WHERE _id=@id;";
+        //}
+
+
         #endregion
         // ====================================================================================================
 

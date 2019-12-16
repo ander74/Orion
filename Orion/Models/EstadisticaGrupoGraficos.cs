@@ -13,7 +13,7 @@ using Orion.Interfaces;
 
 namespace Orion.Models {
 
-    public class EstadisticaGrupoGraficos : ISQLItem {
+    public class EstadisticaGrupoGraficos : ISQLiteItem {
 
         // ====================================================================================================
         #region CONSTRUCTOR
@@ -182,7 +182,7 @@ namespace Orion.Models {
         public IEnumerable<SQLiteParameter> Parametros { get; }
 
 
-        public IEnumerable<ISQLItem> Lista { get; }
+        public IEnumerable<ISQLiteItem> Lista { get; }
 
 
         public bool HasList { get => false; }
@@ -191,7 +191,7 @@ namespace Orion.Models {
         public void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLItem item) { }
+        public void AddItemToList(ISQLiteItem item) { }
 
 
         public int ForeignId { get; set; }

@@ -15,7 +15,7 @@ using Orion.Interfaces;
 namespace Orion.Models {
 
 
-    public class GraficoBase : NotifyBase, ISQLItem {
+    public class GraficoBase : NotifyBase, ISQLiteItem {
 
 
         // ====================================================================================================
@@ -504,12 +504,12 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
-        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
 
         public void FromReader(SQLiteDataReader lector) {
-            _id = lector.ToInt32("Id");
+            _id = lector.ToInt32("_id");
             _idgrupo = lector.ToInt32("IdGrupo");
             _nocalcular = lector.ToBool("NoCalcular");
             _numero = lector.ToInt16("Numero");
@@ -562,7 +562,7 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLItem> Lista { get; }
+        public IEnumerable<ISQLiteItem> Lista { get; }
 
 
         public bool HasList { get => false; }
@@ -571,7 +571,7 @@ namespace Orion.Models {
         public void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLItem item) { }
+        public void AddItemToList(ISQLiteItem item) { }
 
 
         public int ForeignId {
@@ -590,15 +590,13 @@ namespace Orion.Models {
 
 
         public string ComandoInsertar {
-            get => "INSERT INTO Graficos (" +
+            get => "INSERT OR REPLACE INTO Graficos (" +
                 "IdGrupo, " +
                 "NoCalcular, " +
                 "Numero, " +
                 "Turno, " +
-                //"DescuadreInicio, " +
                 "Inicio, " +
                 "Final, " +
-                //"DescuadreFinal, " +
                 "InicioPartido, " +
                 "FinalPartido, " +
                 "Valoracion, " +
@@ -610,16 +608,15 @@ namespace Orion.Models {
                 "Cena, " +
                 "PlusCena, " +
                 "PlusLimpieza, " +
-                "PlusPaqueteria) " +
+                "PlusPaqueteria, " +
+                "_id) " +
                 "VALUES (" +
                 "@idGrupo, " +
                 "@noCalcular, " +
                 "@numero, " +
                 "@turno, " +
-                "@descuadreInicio, " +
                 "@inicio, " +
                 "@final, " +
-                "@descuadreFinal, " +
                 "@inicioPartido, " +
                 "@finalPartido, " +
                 "@valoracion, " +
@@ -631,34 +628,35 @@ namespace Orion.Models {
                 "@cena, " +
                 "@plusCena, " +
                 "@plusLimpieza, " +
-                "@plusPaqueteria);";
+                "@plusPaqueteria, " +
+                "@id);";
         }
 
 
-        public string ComandoActualizar {
-            get => "UPDATE Graficos SET " +
-                "IdGrupo = @idGrupo, " +
-                "NoCalcular = @noCalcular, " +
-                "Numero = @numero, " +
-                "Turno = @turno, " +
-                //"DescuadreInicio = @descuadreInicio, " +
-                "Inicio = @inicio, " +
-                "Final = @final, " +
-                //"DescuadreFinal = @descuadreFinal, " +
-                "InicioPartido = @inicioPartido, " +
-                "FinalPartido = @finalPartido, " +
-                "Valoracion = @valoracion, " +
-                "Trabajadas = @trabajadas, " +
-                "Acumuladas = @acumuladas, " +
-                "Nocturnas = @nocturnas, " +
-                "Desayuno = @desayuno, " +
-                "Comida = @comida, " +
-                "Cena = @cena, " +
-                "PlusCena = @plusCena, " +
-                "PlusLimpieza = @plusLimpieza, " +
-                "PlusPaqueteria = @plusPaqueteria " +
-                "WHERE _id=@id;";
-        }
+        //public string ComandoActualizar {
+        //    get => "UPDATE Graficos SET " +
+        //        "IdGrupo = @idGrupo, " +
+        //        "NoCalcular = @noCalcular, " +
+        //        "Numero = @numero, " +
+        //        "Turno = @turno, " +
+        //        //"DescuadreInicio = @descuadreInicio, " +
+        //        "Inicio = @inicio, " +
+        //        "Final = @final, " +
+        //        //"DescuadreFinal = @descuadreFinal, " +
+        //        "InicioPartido = @inicioPartido, " +
+        //        "FinalPartido = @finalPartido, " +
+        //        "Valoracion = @valoracion, " +
+        //        "Trabajadas = @trabajadas, " +
+        //        "Acumuladas = @acumuladas, " +
+        //        "Nocturnas = @nocturnas, " +
+        //        "Desayuno = @desayuno, " +
+        //        "Comida = @comida, " +
+        //        "Cena = @cena, " +
+        //        "PlusCena = @plusCena, " +
+        //        "PlusLimpieza = @plusLimpieza, " +
+        //        "PlusPaqueteria = @plusPaqueteria " +
+        //        "WHERE _id=@id;";
+        //}
 
 
         #endregion

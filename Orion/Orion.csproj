@@ -202,7 +202,7 @@
     <Compile Include="DataModels\Respaldo.cs" />
     <Compile Include="Extensiones.cs" />
     <Compile Include="Interfaces\IFileService.cs" />
-    <Compile Include="Interfaces\ISQLItem.cs" />
+    <Compile Include="Interfaces\ISQLiteItem.cs" />
     <Compile Include="Models\DescansosPorDia.cs" />
     <Compile Include="Models\EstadisticaCalendario.cs" />
     <Compile Include="Models\EstadisticaGrupoGraficos.cs" />
@@ -233,7 +233,6 @@
     <Compile Include="Models\Reclamacion.cs" />
     <Compile Include="Models\RegulacionConductor.cs" />
     <Compile Include="Models\SQLiteExpression.cs" />
-    <Compile Include="Models\SQLiteItem.cs" />
     <Compile Include="Models\ValoracionGrafico.cs" />
     <Compile Include="Mvvm\CommandAsync.cs" />
     <Compile Include="Mvvm\ICommandAsync.cs" />

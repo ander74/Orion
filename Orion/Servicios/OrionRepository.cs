@@ -9,8 +9,8 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using System.Data.SQLite;
+using System.Linq;
 using Orion.Config;
 using Orion.Models;
 
@@ -1028,6 +1028,322 @@ namespace Orion.Servicios {
 
         #endregion
         // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BD FESTIVOS
+        // ====================================================================================================
+
+        public IEnumerable<Festivo> GetFestivos() {
+            try {
+                return GetItems<Festivo>();
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetFestivos), ex);
+            }
+            return new List<Festivo>();
+        }
+
+
+        public void GuardarFestivos(IEnumerable<Festivo> lista) {
+            try {
+                GuardarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GuardarFestivos), ex);
+            }
+        }
+
+
+        public void BorrarFestivos(IEnumerable<Festivo> lista) {
+            try {
+                BorrarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.BorrarFestivos), ex);
+            }
+        }
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BD GRÁFICOS
+        // ====================================================================================================
+
+        public IEnumerable<Grafico> GetGraficos() {
+            try {
+                return GetItems<Grafico>();
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetGraficos), ex);
+            }
+            return new List<Grafico>();
+        }
+
+
+        public void GuardarGraficos(IEnumerable<Grafico> lista) {
+            try {
+                GuardarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GuardarGraficos), ex);
+            }
+        }
+
+
+        public int InsertarGrafico(Grafico item) {
+            try {
+                return GuardarItem(item);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.InsertarGrafico), ex);
+            }
+            return -1;
+        }
+
+
+        public void BorrarGraficos(IEnumerable<Grafico> lista) {
+            try {
+                BorrarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.BorrarGraficos), ex);
+            }
+        }
+
+
+        public IEnumerable<Grafico> GetGraficosGrupoPorFecha(DateTime fecha) {
+            try {
+                var consulta = new SQLiteExpression("SELECT * FROM Graficos WHERE IdGrupo = (SELECT Id FROM GruposGraficos WHERE Validez = @validez)");
+                consulta.AddParameter("@validez", fecha);
+                return GetItems<Grafico>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetGraficosGrupoPorFecha), ex);
+            }
+            return new List<Grafico>();
+        }
+
+
+        public IEnumerable<EstadisticasGraficos> GetEstadisticasGrupoGraficos(long IdGrupo, TimeSpan jornadaMedia) {
+            try {
+                var consulta = new SQLiteExpression(SqlGetEstadisticasGraficos); //TODO: Cambiar los IIF
+                consulta.AddParameter("@jornadaMedia", jornadaMedia);
+                consulta.AddParameter("@idGrupo", IdGrupo);
+                return GetItems<EstadisticasGraficos>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetEstadisticasGrupoGraficos), ex);
+            }
+            return new List<EstadisticasGraficos>();
+        }
+
+
+        public IEnumerable<EstadisticasGraficos> GetEstadisticasGraficosDesdeFecha(DateTime fecha, TimeSpan jornadaMedia) {
+            try {
+                var consulta = new SQLiteExpression(SqlGetEstadisticasGraficosDesdeFecha); //TODO: Cambiar referencia a fechas en la consulta y los IIF
+                consulta.AddParameter("@jornadaMedia", jornadaMedia);
+                consulta.AddParameter("@idGrupo", fecha);
+                return GetItems<EstadisticasGraficos>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetEstadisticasGraficosDesdeFecha), ex);
+            }
+            return new List<EstadisticasGraficos>();
+        }
+
+
+        public GraficoBase GetGrafico(int numero, DateTime fecha) {
+            try {
+                var consulta = new SQLiteExpression("SELECT * " +
+                                    "FROM (SELECT * " +
+                                    "      FROM Graficos" +
+                                    "      WHERE IdGrupo = (SELECT Id " +
+                                    "                       FROM GruposGraficos " +
+                                    "                       WHERE Validez = (SELECT Max(Validez) " +
+                                    "                                        FROM GruposGraficos " +
+                                    "                                        WHERE Validez <= @validez)))" +
+                                    "WHERE Numero = @idConductor");
+                consulta.AddParameter("@validez", fecha);
+                consulta.AddParameter("@idConductor", numero);
+                return GetItem<GraficoBase>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetEstadisticasGraficosDesdeFecha), ex);
+            }
+            return new GraficoBase();
+        }
+
+
+
+
+
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BD GRUPOS GRÁFICOS
+        // ====================================================================================================
+
+        public IEnumerable<GrupoGraficos> GetGrupos() {
+            try {
+                return GetItems<GrupoGraficos>();
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetGrupos), ex);
+            }
+            return new List<GrupoGraficos>();
+        }
+
+
+        public void GuardarGrupos(IEnumerable<GrupoGraficos> lista) {
+            try {
+                GuardarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GuardarGrupos), ex);
+            }
+        }
+
+
+        public void BorrarGrupoPorId(int idGrupo) {
+            try {
+                var consulta = new SQLiteExpression("DELETE FROM GruposGraficos WHERE _id=@id");
+                consulta.AddParameter("@id", idGrupo);
+                ExecureNonQuery(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.BorrarGrupoPorId), ex);
+            }
+        }
+
+
+        public int NuevoGrupo(DateTime fecha, string notas) {
+            try {
+                var nuevoGrupo = new GrupoGraficos();
+                nuevoGrupo.Validez = fecha;
+                nuevoGrupo.Notas = notas;
+                return GuardarItem(nuevoGrupo);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.NuevoGrupo), ex);
+            }
+            return -1;
+        }
+
+
+        public bool ExisteGrupo(DateTime fecha) {
+            try {
+                var whereCondition = new SQLiteExpression("Validez = @validez").AddParameter("@validez", fecha);
+                return GetCount<GrupoGraficos>(whereCondition) > 0;
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.ExisteConductor), ex);
+            }
+            return false;
+        }
+
+
+        public GrupoGraficos GetUltimoGrupo() {
+            try {
+                var consulta = new SQLiteExpression("SELECT * FROM GruposGraficos WHERE Validez=(SELECT Max(Validez) FROM GruposGraficos);");
+                return GetItem<GrupoGraficos>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.BorrarGrupoPorId), ex);
+            }
+            return null;
+        }
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BD PLUSES
+        // ====================================================================================================
+
+        public IEnumerable<Pluses> GetPluses() {
+            try {
+                return GetItems<Pluses>();
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetPluses), ex);
+            }
+            return new List<Pluses>();
+        }
+
+
+        public void GuardarPluses(IEnumerable<Pluses> lista) {
+            try {
+                GuardarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GuardarPluses), ex);
+            }
+        }
+
+
+
+
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BD REGULACIONES CONDUCTOR
+        // ====================================================================================================
+
+        public void BorrarRegulaciones(IEnumerable<RegulacionConductor> lista) {
+            try {
+                BorrarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.BorrarRegulaciones), ex);
+            }
+        }
+
+
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BD VALORACIONES GRÁFICOS
+        // ====================================================================================================
+
+        public IEnumerable<ValoracionGrafico> GetValoraciones(int idGrafico) {
+            try {
+                var consulta = new SQLiteExpression("SELECT * FROM Valoraciones WHERE IdGrafico=@idGrafico ORDER BY Inicio, Id");
+                consulta.AddParameter("@idGrafico", idGrafico);
+                return GetItems<ValoracionGrafico>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetValoraciones), ex);
+            }
+            return new List<ValoracionGrafico>();
+        }
+
+
+        public void InsertarValoracion(ValoracionGrafico valoracion) {
+            try {
+                GuardarItem(valoracion);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.InsertarValoracion), ex);
+            }
+        }
+
+
+        public void BorrarValoraciones(IEnumerable<ValoracionGrafico> lista) {
+            try {
+                BorrarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.BorrarValoraciones), ex);
+            }
+        }
+
+
+
+
+
+
+
+        #endregion
+        // ====================================================================================================
+
+
+
+
 
 
 

@@ -13,7 +13,7 @@ namespace Orion.Models {
     using System.Data.SQLite;
     using Orion.Interfaces;
 
-    public class EstadisticasGraficos : ISQLItem {
+    public class EstadisticasGraficos : ISQLiteItem {
 
 
         // ====================================================================================================
@@ -201,7 +201,7 @@ namespace Orion.Models {
         public IEnumerable<SQLiteParameter> Parametros { get; }
 
 
-        public IEnumerable<ISQLItem> Lista { get; }
+        public IEnumerable<ISQLiteItem> Lista { get; }
 
 
         public bool HasList { get => false; }
@@ -210,7 +210,7 @@ namespace Orion.Models {
         public void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLItem item) { }
+        public void AddItemToList(ISQLiteItem item) { }
 
 
         public int ForeignId { get; set; }

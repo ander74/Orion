@@ -34,6 +34,15 @@ namespace Orion.ViewModels {
             mensajes = servicioMensajes;
             CargarDatos();
             AñoActual = DateTime.Now.Year;
+
+
+            // PASO DE ACCESS A SQLITE
+            //if (App.Global.Reposritory.GetCount<Festivo>() == 0) {
+            //    var listaSQLite = BdFestivos.GetFestivos();
+            //    App.Global.Reposritory.GuardarFestivos(listaSQLite);
+            //}
+
+
         }
 
 

@@ -81,6 +81,55 @@ namespace Orion.DataModels {
         }
 
 
+        public static List<Grafico> getGraficosSinLista() {
+
+            List<Grafico> lista = new List<Grafico>();
+
+            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+                OleDbDataReader lector = null;
+                //OleDbDataReader lectorValoraciones = null;
+
+                try {
+
+                    // Ejecutamos el comando y extraemos los gráficos del lector a la lista.
+                    conexion.Open();
+                    //OleDbTransaction transaccion = conexion.BeginTransaction();
+
+                    string comandoSQL = "SELECT * FROM Graficos";
+                    OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
+
+                    lector = Comando.ExecuteReader();
+
+                    while (lector.Read()) {
+                        Grafico grafico = new Grafico(lector);
+                        //grafico.ListaValoraciones = new ObservableCollection<ValoracionGrafico>();
+                        //string comandoSQLValoraciones = "SELECT * FROM Valoraciones WHERE IdGrafico=? ORDER BY Inicio, Id";
+                        //OleDbCommand ComandoValoraciones = new OleDbCommand(comandoSQLValoraciones, conexion, transaccion);
+                        //ComandoValoraciones.Parameters.AddWithValue("idgrafico", grafico.Id);
+                        //lectorValoraciones = ComandoValoraciones.ExecuteReader();
+                        //while (lectorValoraciones.Read()) {
+                        //    ValoracionGrafico valoracion = new ValoracionGrafico(lectorValoraciones);
+                        //    grafico.ListaValoraciones.Add(valoracion);
+                        //    valoracion.Nuevo = false;
+                        //    valoracion.Modificado = false;
+                        //}
+                        //grafico.ListaValoraciones = BdValoracionesGraficos.getValoraciones(grafico.Id);
+                        lista.Add(grafico);
+                        grafico.Nuevo = false;
+                        grafico.Modificado = false;
+                    }
+                } catch (Exception ex) {
+                    Utils.VerError("BdGraficos.getGraficos", ex);
+                } finally {
+                    lector.Close();
+                }
+            }
+            return lista;
+
+        }
+
+
 
         /*================================================================================
 		* GUARDAR GRÁFICOS
@@ -280,6 +329,7 @@ namespace Orion.DataModels {
             }
             return lista;
         }
+
 
 
         /*================================================================================

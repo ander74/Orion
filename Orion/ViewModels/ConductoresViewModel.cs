@@ -11,7 +11,6 @@ namespace Orion.ViewModels {
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Linq;
-    using System.Windows;
     using System.Windows.Data;
     using Config;
     using DataModels;
@@ -40,6 +39,15 @@ namespace Orion.ViewModels {
         public ConductoresViewModel(IMensajes servicioMensajes) {
             mensajes = servicioMensajes;
             CargarConductores();
+
+
+            // PASO DE ACCESS A SQLITE
+            //if (App.Global.Reposritory.GetCount<Conductor>() == 0) {
+            //    var listaSQLite = BdConductores.GetConductores();
+            //    App.Global.Reposritory.GuardarConductores(listaSQLite);
+            //    listaSQLite = null;
+            //}
+
         }
 
         #endregion

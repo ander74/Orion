@@ -8,14 +8,14 @@
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Windows.Input;
 using System.Data.SQLite;
+using System.Windows.Input;
 using Orion.Interfaces;
 using Orion.ViewModels;
 
 namespace Orion.Models {
 
-    public class Festivo : NotifyBase, ISQLItem {
+    public class Festivo : NotifyBase, ISQLiteItem {
 
 
         // ====================================================================================================
@@ -145,12 +145,12 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
-        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
 
         public void FromReader(SQLiteDataReader lector) {
-            _id = lector.ToInt32("Id");
+            _id = lector.ToInt32("_id");
             _año = lector.ToInt16("Año");
             _fecha = lector.ToDateTime("Fecha");
             Nuevo = false;
@@ -169,7 +169,7 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLItem> Lista { get; }
+        public IEnumerable<ISQLiteItem> Lista { get; }
 
 
         public bool HasList { get => false; }
@@ -178,7 +178,7 @@ namespace Orion.Models {
         public void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLItem item) { }
+        public void AddItemToList(ISQLiteItem item) { }
 
 
         public int ForeignId { get; set; }
@@ -194,21 +194,23 @@ namespace Orion.Models {
 
 
         public string ComandoInsertar {
-            get => "INSERT INTO Festivos (" +
+            get => "INSERT OR REPLACE INTO Festivos (" +
                 "Año, " +
-                "Fecha) " +
+                "Fecha, " +
+                "_id) " +
                 "VALUES (" +
                 "@año, " +
-                "@fecha);";
+                "@fecha, " +
+                "@id);";
         }
 
 
-        public string ComandoActualizar {
-            get => "UPDATE Festivos SET " +
-                "Año = @año, " +
-                "Fecha = @fecha " +
-                "WHERE _id=@id;";
-        }
+        //public string ComandoActualizar {
+        //    get => "UPDATE Festivos SET " +
+        //        "Año = @año, " +
+        //        "Fecha = @fecha " +
+        //        "WHERE _id=@id;";
+        //}
 
 
         #endregion

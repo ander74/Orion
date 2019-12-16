@@ -13,11 +13,11 @@ namespace Orion.Models {
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Data.OleDb;
-    using System.Linq;
     using System.Data.SQLite;
+    using System.Linq;
     using Orion.Interfaces;
 
-    public class Calendario : NotifyBase, ISQLItem {
+    public class Calendario : NotifyBase, ISQLiteItem {
 
 
         // ====================================================================================================
@@ -324,7 +324,7 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
-        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
 
@@ -350,7 +350,7 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLItem> Lista { get => ListaDias; }
+        public IEnumerable<ISQLiteItem> Lista { get => ListaDias; }
 
 
         public bool HasList { get => true; }
@@ -361,7 +361,7 @@ namespace Orion.Models {
         }
 
 
-        public void AddItemToList(ISQLItem item) {
+        public void AddItemToList(ISQLiteItem item) {
             ListaDias.Add(item as DiaCalendario);
         }
 
@@ -379,24 +379,26 @@ namespace Orion.Models {
 
 
         public string ComandoInsertar {
-            get => "INSERT INTO Calendarios (" +
+            get => "INSERT OR REPLACE INTO Calendarios (" +
                 "IdConductor, " +
                 "Fecha, " +
-                "Notas) " +
+                "Notas, " +
+                "_id) " +
                 "VALUES (" +
                 "@idConductor, " +
                 "@fecha, " +
-                "@notas);";
+                "@notas, " +
+                "@id);";
         }
 
 
-        public string ComandoActualizar {
-            get => "UPDATE Calendarios SET " +
-                "IdConductor = @idConductor, " +
-                "Fecha = @fecha, " +
-                "Notas = @notas " +
-                "WHERE _id = @id;";
-        }
+        //public string ComandoActualizar {
+        //    get => "UPDATE Calendarios SET " +
+        //        "IdConductor = @idConductor, " +
+        //        "Fecha = @fecha, " +
+        //        "Notas = @notas " +
+        //        "WHERE _id = @id;";
+        //}
 
 
         #endregion

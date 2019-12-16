@@ -63,6 +63,46 @@ namespace Orion.DataModels {
         }
 
 
+        public static List<DiaCalendario> GetDiasCalendario() {
+
+            // Creamos la lista y el comando que extrae los gráficos.
+            List<DiaCalendario> lista = new List<DiaCalendario>();
+
+            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+                string comandoSQL = "SELECT * FROM DiasCalendario";
+                //string comandoSQL = DbService2.GetDiasCalendario;
+
+                // Elementos para la consulta de calendarios y días de calendario.
+                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+                //comando.Parameters.AddWithValue("id", idcalendario);
+                OleDbDataReader lector = null;
+
+                try {
+                    conexion.Open();
+                    // Extraemos los calendarios.
+                    lector = comando.ExecuteReader();
+
+                    // Por cada dia extraido...
+                    while (lector.Read()) {
+                        DiaCalendario dia = new DiaCalendario(lector);
+                        // Añadimos el calendario a la lista.
+                        lista.Add(dia);
+                        dia.Nuevo = false;
+                        dia.Modificado = false;
+                    }
+
+                } catch (OleDbException ex) {
+                    Utils.VerError("BdDiasCalendarios.GetDiasCalendario(idcalendario)", ex);
+                } finally {
+                    lector.Close();
+                }
+            }
+            // Devolvemos la lista.
+            return lista;
+        }
+
+
         /*================================================================================
 		 * GET DIA CALENDARIO
          * Ok

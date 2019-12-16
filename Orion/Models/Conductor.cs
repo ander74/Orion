@@ -11,11 +11,11 @@ namespace Orion.Models {
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Data.OleDb;
-    using Config;
     using System.Data.SQLite;
+    using Config;
     using Orion.Interfaces;
 
-    public class Conductor : NotifyBase, ISQLItem {
+    public class Conductor : NotifyBase, ISQLiteItem {
 
 
         // ====================================================================================================
@@ -375,7 +375,7 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
-        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
 
@@ -417,7 +417,7 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLItem> Lista { get => ListaRegulaciones; }
+        public IEnumerable<ISQLiteItem> Lista { get => ListaRegulaciones; }
 
 
         public bool HasList { get => true; }
@@ -428,7 +428,7 @@ namespace Orion.Models {
         }
 
 
-        public void AddItemToList(ISQLItem item) {
+        public void AddItemToList(ISQLiteItem item) {
             ListaRegulaciones.Add(item as RegulacionConductor);
         }
 
@@ -447,7 +447,7 @@ namespace Orion.Models {
 
         public string ComandoInsertar {
             //TODO: Corregir el _id añadiendo la matrícula.
-            get => "INSERT INTO Conductores (" +
+            get => "INSERT OR REPLACE INTO Conductores (" +
                 "Nombre, " +
                 "Apellidos, " +
                 "Indefinido, " +
@@ -476,22 +476,22 @@ namespace Orion.Models {
         }
 
 
-        public string ComandoActualizar {
-            //TODO: Corregir el _id añadiendo la matrícula.
-            get => "UPDATE Conductores SET " +
-                "Nombre = @nombre, " +
-                "Apellidos = @apellidos, " +
-                "Indefinido = @indefinido, " +
-                "Telefono = @telefono, " +
-                "Email = @email, " +
-                "Acumuladas = @acumuladas, " +
-                "Descansos = @descansos, " +
-                "DescansosNoDisfrutados = @descansosNoDisfrutados, " +
-                "PlusDistancia = @plusDistancia, " +
-                "ReduccionJornada = @reduccionJornada, " +
-                "Notas = @notas " +
-                "WHERE _id = @id;";
-        }
+        //public string ComandoActualizar {
+        //    //TODO: Corregir el _id añadiendo la matrícula.
+        //    get => "UPDATE Conductores SET " +
+        //        "Nombre = @nombre, " +
+        //        "Apellidos = @apellidos, " +
+        //        "Indefinido = @indefinido, " +
+        //        "Telefono = @telefono, " +
+        //        "Email = @email, " +
+        //        "Acumuladas = @acumuladas, " +
+        //        "Descansos = @descansos, " +
+        //        "DescansosNoDisfrutados = @descansosNoDisfrutados, " +
+        //        "PlusDistancia = @plusDistancia, " +
+        //        "ReduccionJornada = @reduccionJornada, " +
+        //        "Notas = @notas " +
+        //        "WHERE _id = @id;";
+        //}
 
 
         #endregion

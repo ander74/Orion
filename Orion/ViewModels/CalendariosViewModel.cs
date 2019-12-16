@@ -46,6 +46,19 @@ namespace Orion.ViewModels {
             _listacalendarios = new ObservableCollection<Calendario>();
             _listacalendarios.CollectionChanged += ListaCalendarios_CollectionChanged;
             FechaActual = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+
+            // PASO DE ACCESS A SQLITE
+            //if (App.Global.Reposritory.GetCount<Calendario>() == 0) {
+            //    var listaSQLite = BdCalendarios.GetCalendariosSinLista();
+            //    App.Global.Reposritory.GuardarCalendarios(listaSQLite);
+            //    listaSQLite = null;
+            //}
+            //if (App.Global.Reposritory.GetCount<DiaCalendario>() == 0) {
+            //    var listaSQLite2 = BdDiasCalendario.GetDiasCalendario();
+            //    App.Global.Reposritory.GuardarItems(listaSQLite2);
+            //    listaSQLite2 = null;
+            //}
+
         }
         #endregion
         // ====================================================================================================

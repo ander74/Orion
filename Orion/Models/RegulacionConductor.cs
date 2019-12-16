@@ -13,7 +13,7 @@ namespace Orion.Models {
     using System.Data.SQLite;
     using Orion.Interfaces;
 
-    public class RegulacionConductor : NotifyBase, ISQLItem {
+    public class RegulacionConductor : NotifyBase, ISQLiteItem {
 
 
         // ====================================================================================================
@@ -232,7 +232,7 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
-        #region PROPIEDADES Y MÉTODOS OVERRIDE
+        #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
         public void FromReader(SQLiteDataReader lector) {
@@ -265,7 +265,7 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLItem> Lista { get; }
+        public IEnumerable<ISQLiteItem> Lista { get; }
 
 
         public bool HasList { get => false; }
@@ -274,7 +274,7 @@ namespace Orion.Models {
         public void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLItem item) { }
+        public void AddItemToList(ISQLiteItem item) { }
 
 
         public int ForeignId {
@@ -293,14 +293,15 @@ namespace Orion.Models {
 
 
         public string ComandoInsertar {
-            get => "INSERT INTO Regulaciones (" +
+            get => "INSERT OR REPLACE INTO Regulaciones (" +
                 "IdConductor, " +
                 "Codigo, " +
                 "Fecha, " +
                 "Horas, " +
                 "Descansos, " +
                 "Dnds, " +
-                "Motivo) " +
+                "Motivo, " +
+                "_id) " +
                 "VALUES (" +
                 "@idConductor, " +
                 "@codigo, " +
@@ -308,21 +309,24 @@ namespace Orion.Models {
                 "@horas, " +
                 "@descansos, " +
                 "@dnds, " +
-                "@motivo);";
+                "@motivo, " +
+                "@id);";
         }
 
 
-        public string ComandoActualizar {
-            get => "UPDATE Regulaciones SET " +
-                "IdConductor = @IdConductor, " +
-                "Codigo = @Codigo, " +
-                "Fecha = @Fecha, " +
-                "Horas = @Horas, " +
-                "Descansos = @Descansos, " +
-                "Dnds = @Dnds, " +
-                "Motivo = @Motivo " +
-                "WHERE _id = @id;";
-        }
+        //public string ComandoActualizar {
+        //    get => "UPDATE Regulaciones SET " +
+        //        "IdConductor = @IdConductor, " +
+        //        "Codigo = @Codigo, " +
+        //        "Fecha = @Fecha, " +
+        //        "Horas = @Horas, " +
+        //        "Descansos = @Descansos, " +
+        //        "Dnds = @Dnds, " +
+        //        "Motivo = @Motivo " +
+        //        "WHERE _id = @id;";
+        //}
+
+
         #endregion
         // ====================================================================================================
 

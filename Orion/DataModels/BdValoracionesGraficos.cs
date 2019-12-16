@@ -63,6 +63,40 @@ namespace Orion.DataModels {
         }
 
 
+        public static List<ValoracionGrafico> getValoraciones() {
+
+            // Creamos la lista y el comando que extrae los gráficos.
+            List<ValoracionGrafico> lista = new List<ValoracionGrafico>();
+
+            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+                OleDbDataReader lector = null;
+
+                // Ejecutamos el comando y extraemos los gráficos del lector a la lista.
+                try {
+
+                    if (conexion.State != System.Data.ConnectionState.Open) conexion.Open();
+
+                    string comandoSQL = "SELECT * FROM Valoraciones";
+                    OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
+
+                    lector = Comando.ExecuteReader();
+
+                    while (lector.Read()) {
+                        ValoracionGrafico valoracion = new ValoracionGrafico(lector);
+                        lista.Add(valoracion);
+                        valoracion.Nuevo = false;
+                        valoracion.Modificado = false;
+                    }
+                } catch (Exception ex) {
+                    Utils.VerError("BdValoracionesGraficos.GetValoraciones", ex);
+                } finally {
+                    lector.Close();
+                }
+            }
+            return lista;
+        }
+
+
         /*================================================================================
 		* GUARDAR VALORACIONES
         * Ok

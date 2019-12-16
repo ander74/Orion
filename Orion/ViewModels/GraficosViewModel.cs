@@ -52,6 +52,24 @@ namespace Orion.ViewModels {
             _listagrupos.CollectionChanged += ListaGrupos_CollectionChanged;
             // Cargamos los grupos de gráficos.
             CargarGrupos();
+
+
+
+            // PASO DE ACCESS A SQLITE
+            //if (App.Global.Reposritory.GetCount<GrupoGraficos>() == 0) {
+            //    var listaSQLite = BdGruposGraficos.getGrupos();
+            //    App.Global.Reposritory.GuardarGrupos(listaSQLite);
+            //}
+            //if (App.Global.Reposritory.GetCount<Grafico>() == 0) {
+            //    var listaSQLite = BdGraficos.getGraficosSinLista();
+            //    App.Global.Reposritory.GuardarGraficos(listaSQLite);
+            //}
+            //if (App.Global.Reposritory.GetCount<ValoracionGrafico>() == 0) {
+            //    var listaSQLite = BdValoracionesGraficos.getValoraciones();
+            //    App.Global.Reposritory.GuardarItems(listaSQLite);
+            //}
+
+
         }
         #endregion
 

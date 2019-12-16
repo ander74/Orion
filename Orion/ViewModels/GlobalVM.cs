@@ -10,12 +10,12 @@ namespace Orion.ViewModels {
     using System;
     using System.ComponentModel;
     using System.Data.OleDb;
+    using System.Data.SQLite;
     using System.Diagnostics;
     using System.IO;
     using System.Windows;
     using Config;
     using DataModels;
-    using System.Data.SQLite;
     using Models;
     using Orion.Interfaces;
     using Servicios;
@@ -249,7 +249,7 @@ namespace Orion.ViewModels {
                         // Cargamos las opciones por centro.
                         PorCentro.Cargar(ArchivoOpcionesPorCentro);
                         // Inicializamos el centro en la base de datos SQL
-                        repository = new OrionRepository(CadenaConexionSQL); //TODO: Repositorio
+                        repository = new OrionRepository(CadenaConexionSQL);
                     }
                     PropiedadCambiada();
                 }

@@ -210,7 +210,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public new IEnumerable<ISQLItem> Lista { get => ListaValoraciones; }
+        public new IEnumerable<ISQLiteItem> Lista { get => ListaValoraciones; }
 
 
         public new bool HasList { get => true; }
@@ -221,7 +221,7 @@ namespace Orion.Models {
         }
 
 
-        public new void AddItemToList(ISQLItem item) {
+        public new void AddItemToList(ISQLiteItem item) {
             ListaValoraciones.Add(item as ValoracionGrafico);
         }
 

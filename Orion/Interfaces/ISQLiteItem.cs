@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Data.SQLite;
 
 namespace Orion.Interfaces {
-    public interface ISQLItem {
+    public interface ISQLiteItem {
 
 
         /// <summary>
@@ -34,7 +34,7 @@ namespace Orion.Interfaces {
         /// <summary>
         /// Lista de los elementos hijo de este elemento. Null si no tiene elementos hijo.
         /// </summary>
-        IEnumerable<ISQLItem> Lista { get; }
+        IEnumerable<ISQLiteItem> Lista { get; }
 
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Orion.Interfaces {
         /// Añade el item a la lista de elementos hijo.
         /// </summary>
         /// <param name="item"></param>
-        void AddItemToList(ISQLItem item);
+        void AddItemToList(ISQLiteItem item);
 
 
         /// <summary>
@@ -89,19 +89,19 @@ namespace Orion.Interfaces {
         /// <summary>
         /// Comando SQL para actualizar un elemento.
         /// </summary>
-        string ComandoActualizar { get; }
+        //string ComandoActualizar { get; }
 
 
         /// <summary>
         /// Establece si el elemento es nuevo y se debe insertar. TODO: Cambiar por una enumeración.
         /// </summary>
-        bool Nuevo { get; set; }
+        //bool Nuevo { get; set; }
 
 
         /// <summary>
         /// Establece si el elemento está modificado y se debe actualizar. Cambiar por una enumeración.
         /// </summary>
-        bool Modificado { get; set; }
+        //bool Modificado { get; set; }
 
 
     }

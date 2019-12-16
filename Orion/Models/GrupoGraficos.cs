@@ -13,7 +13,7 @@ using Orion.Interfaces;
 
 namespace Orion.Models {
 
-    public class GrupoGraficos : NotifyBase, ISQLItem {
+    public class GrupoGraficos : NotifyBase, ISQLiteItem {
 
 
         // ====================================================================================================
@@ -116,7 +116,7 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
-        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
 
@@ -140,7 +140,7 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLItem> Lista { get; }
+        public IEnumerable<ISQLiteItem> Lista { get; }
 
 
         public bool HasList { get => false; }
@@ -149,7 +149,7 @@ namespace Orion.Models {
         public void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLItem item) { }
+        public void AddItemToList(ISQLiteItem item) { }
 
 
         public int ForeignId { get; set; }
@@ -165,21 +165,23 @@ namespace Orion.Models {
 
 
         public string ComandoInsertar {
-            get => "INSERT INTO GruposGraficos (" +
+            get => "INSERT OR REPLACE INTO GruposGraficos (" +
                 "Validez, " +
-                "Notas) " +
+                "Notas, " +
+                "_id) " +
                 "VALUES (" +
                 "@validez, " +
-                "@notas);";
+                "@notas, " +
+                "@id);";
         }
 
 
-        public string ComandoActualizar {
-            get => "UPDATE GruposGraficos SET " +
-                "Validez = @validez, " +
-                "Notas = @notas " +
-                "WHERE _id=@id;";
-        }
+        //public string ComandoActualizar {
+        //    get => "UPDATE GruposGraficos SET " +
+        //        "Validez = @validez, " +
+        //        "Notas = @notas " +
+        //        "WHERE _id=@id;";
+        //}
 
 
         #endregion

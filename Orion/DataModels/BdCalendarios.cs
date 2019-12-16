@@ -73,6 +73,94 @@ namespace Orion.DataModels {
         }
 
 
+        public static List<Calendario> GetCalendarios() {
+
+            // Creamos la lista y el comando que extrae los gráficos.
+            List<Calendario> lista = new List<Calendario>();
+
+            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+                // Creamos el comando SQL.
+                string comandoSQL = "SELECT * FROM Calendarios;";
+
+                // Elementos para la consulta de calendarios y días de calendario.
+                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+                OleDbDataReader lector = null;
+
+                try {
+                    // Extraemos los calendarios.
+                    conexion.Open();
+                    lector = comando.ExecuteReader();
+
+                    // Por cada calendario extraido...
+                    while (lector.Read()) {
+                        // Extraemos el calendario y sus días
+                        Calendario calendario = new Calendario(lector);
+                        calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
+                        // Extraemos los datos del conductor.
+                        //calendario.ConductorIndefinido = lector.ToBool("Indefinido");
+                        // Añadimos el calendario a la lista.
+                        lista.Add(calendario);
+                        calendario.Nuevo = false;
+                        calendario.Modificado = false;
+                        if (calendario.HayDiasNuevos) calendario.Modificado = true;
+                    }
+                } catch (Exception ex) {
+                    Utils.VerError("BdCalendarios.GetCalendarios", ex);
+                } finally {
+                    lector.Close();
+                }
+
+            }
+            // Devolvemos la lista.
+            return lista;
+        }
+
+
+        public static List<Calendario> GetCalendariosSinLista() {
+
+            // Creamos la lista y el comando que extrae los gráficos.
+            List<Calendario> lista = new List<Calendario>();
+
+            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+
+                // Creamos el comando SQL.
+                string comandoSQL = "SELECT * FROM Calendarios;";
+
+                // Elementos para la consulta de calendarios y días de calendario.
+                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+                OleDbDataReader lector = null;
+
+                try {
+                    // Extraemos los calendarios.
+                    conexion.Open();
+                    lector = comando.ExecuteReader();
+
+                    // Por cada calendario extraido...
+                    while (lector.Read()) {
+                        // Extraemos el calendario y sus días
+                        Calendario calendario = new Calendario(lector);
+                        //calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
+                        // Extraemos los datos del conductor.
+                        //calendario.ConductorIndefinido = lector.ToBool("Indefinido");
+                        // Añadimos el calendario a la lista.
+                        lista.Add(calendario);
+                        calendario.Nuevo = false;
+                        calendario.Modificado = false;
+                        if (calendario.HayDiasNuevos) calendario.Modificado = true;
+                    }
+                } catch (Exception ex) {
+                    Utils.VerError("BdCalendarios.GetCalendarios", ex);
+                } finally {
+                    lector.Close();
+                }
+
+            }
+            // Devolvemos la lista.
+            return lista;
+        }
+
+
         /*================================================================================
 		 * GET CALENDARIOS CONDUCTOR
          * Ok

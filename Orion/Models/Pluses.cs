@@ -11,7 +11,7 @@ namespace Orion.Models {
     using System.Data.SQLite;
     using Orion.Interfaces;
 
-    public class Pluses : NotifyBase, ISQLItem {
+    public class Pluses : NotifyBase, ISQLiteItem {
 
         // ====================================================================================================
         #region CONSTRUCTORES
@@ -173,7 +173,7 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
-        #region PROPIEDADES Y MÉTODOS ISQLITEM
+        #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
 
@@ -211,7 +211,7 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLItem> Lista { get; }
+        public IEnumerable<ISQLiteItem> Lista { get; }
 
 
         public bool HasList { get => false; }
@@ -220,7 +220,7 @@ namespace Orion.Models {
         public void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLItem item) { }
+        public void AddItemToList(ISQLiteItem item) { }
 
 
         public int ForeignId { get; set; }
@@ -236,7 +236,7 @@ namespace Orion.Models {
 
 
         public string ComandoInsertar {
-            get => "INSERT INTO Pluses (" +
+            get => "INSERT OR REPLACE INTO Pluses (" +
                 "Año, " +
                 "ImporteDietas, " +
                 "ImporteSabados, " +
@@ -245,7 +245,8 @@ namespace Orion.Models {
                 "DietaMenorDescanso, " +
                 "PlusLimpieza, " +
                 "PlusPaqueteria, " +
-                "PlusNavidad) " +
+                "PlusNavidad, " +
+                "_id) " +
                 "VALUES (" +
                 "@año, " +
                 "@importeDietas, " +
@@ -255,23 +256,24 @@ namespace Orion.Models {
                 "@dietaMenorDescanso, " +
                 "@plusLimpieza, " +
                 "@plusPaqueteria, " +
-                "@plusNavidad);";
+                "@plusNavidad, " +
+                "@id);";
         }
 
 
-        public string ComandoActualizar {
-            get => "UPDATE Pluses SET " +
-                "Año = @año, " +
-                "ImporteDietas = @importeDietas, " +
-                "ImporteSabados = @importeSabados, " +
-                "ImporteFestivos = @importeFestivos, " +
-                "PlusNocturnidad = @plusNocturnidad, " +
-                "DietaMenorDescanso = @dietaMenorDescanso, " +
-                "PlusLimpieza = @plusLimpieza, " +
-                "PlusPaqueteria = @plusPaqueteria, " +
-                "PlusNavidad = @plusNavidad " +
-                "WHERE _id = @id;";
-        }
+        //public string ComandoActualizar {
+        //    get => "UPDATE Pluses SET " +
+        //        "Año = @año, " +
+        //        "ImporteDietas = @importeDietas, " +
+        //        "ImporteSabados = @importeSabados, " +
+        //        "ImporteFestivos = @importeFestivos, " +
+        //        "PlusNocturnidad = @plusNocturnidad, " +
+        //        "DietaMenorDescanso = @dietaMenorDescanso, " +
+        //        "PlusLimpieza = @plusLimpieza, " +
+        //        "PlusPaqueteria = @plusPaqueteria, " +
+        //        "PlusNavidad = @plusNavidad " +
+        //        "WHERE _id = @id;";
+        //}
 
 
         #endregion
