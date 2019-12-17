@@ -194,7 +194,6 @@
     <Compile Include="DataModels\BdItinerarios.cs" />
     <Compile Include="DataModels\BdLineas.cs" />
     <Compile Include="DataModels\BdParadas.cs" />
-    <Compile Include="DataModels\BdPijamas.cs" />
     <Compile Include="DataModels\BdPluses.cs" />
     <Compile Include="DataModels\BdRegulacionConductor.cs" />
     <Compile Include="DataModels\BdValoracionesGraficos.cs" />
@@ -222,8 +221,6 @@
     <Compile Include="Config\Calculos.cs" />
     <Compile Include="Config\Utils.cs" />
     <Compile Include="Models\Calendario.cs" />
-    <Compile Include="Models\HojaPijama.cs" />
-    <Compile Include="Models\HorasHojaPijamaHastaMes.cs" />
     <Compile Include="Models\Indexer.cs" />
     <Compile Include="Models\Itinerario.cs" />
     <Compile Include="Models\Linea.cs" />

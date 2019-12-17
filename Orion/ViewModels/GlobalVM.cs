@@ -285,6 +285,13 @@ namespace Orion.ViewModels {
         }
 
 
+        public string CadenaConexionLineasSQL {
+            get {
+                return GetCadenaConexionSQL(Centros.Lineas);
+            }
+        }
+
+
 
         public string TextoEstado {
             get { return _textoestado; }
@@ -405,6 +412,16 @@ namespace Orion.ViewModels {
             get {
                 if (repository == null) repository = new OrionRepository(CadenaConexionSQL);
                 return repository;
+            }
+        }
+
+
+
+        private OrionRepository lineasRepository;
+        public OrionRepository LineasRepository {
+            get {
+                if (lineasRepository == null) lineasRepository = new OrionRepository(CadenaConexionLineasSQL);
+                return lineasRepository;
             }
         }
 

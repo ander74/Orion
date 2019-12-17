@@ -48,16 +48,10 @@ namespace OrionUpdate {
                 }
 
                 // Si las carpetas x86 y x64 no existen, las creamos...
-                string x86 = Path.Combine(rutaOrigen, "x86");
-                string x64 = Path.Combine(rutaOrigen, "x64");
+                string x86 = Path.Combine(rutaDestino, "x86");
+                string x64 = Path.Combine(rutaDestino, "x64");
                 if (!Directory.Exists(x86)) Directory.CreateDirectory(x86);
                 if (!Directory.Exists(x64)) Directory.CreateDirectory(x64);
-
-                // PROGRAMA
-                if (!CopiarArchivoRaiz("Orion.exe")) {
-                    GenerarError();
-                    return;
-                }
 
                 // BIBLIOTECAS
                 if (!CopiarArchivoRaiz("Xceed.Wpf.Toolkit.dll")) {
@@ -206,6 +200,12 @@ namespace OrionUpdate {
                     GenerarError();
                     return;
                 }
+                // PROGRAMA
+                if (!CopiarArchivoRaiz("Orion.exe")) {
+                    GenerarError();
+                    return;
+                }
+
 
 
 

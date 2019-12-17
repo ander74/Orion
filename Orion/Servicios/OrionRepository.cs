@@ -13,6 +13,7 @@ using System.Data.SQLite;
 using System.Linq;
 using Orion.Config;
 using Orion.Models;
+using Orion.Pijama;
 
 namespace Orion.Servicios {
 
@@ -33,6 +34,13 @@ namespace Orion.Servicios {
             CAST(strftime('%m', Fecha) AS INTEGER) <= @mes  --->  Compara el mes de la fecha con un mes.
             
             CAST(strftime('%Y', Fecha) AS INTEGER) <= @año  --->  Compara el año de la fecha con un año.
+
+            CASE Turno WHEN 1 THEN 'Turno1' ELSE 'Turno2' END MiTurno  --->  Condicional (MiTurno sería el AS MiTurno)
+
+            CASE WHEN G.Turno = 1 AND Indefinido THEN 'Turno1' ELSE 'Turno2' END MiTurno  --->  Otra forma de condicional (MiTurno sería el AS MiTurno)
+                                                                                                Esta se debe usar cuando entran en juego más de un campo.
+
+
         */
 
 
@@ -210,250 +218,250 @@ namespace Orion.Servicios {
         #region CONSULTAS SQLITE
         // ====================================================================================================
 
-        public const string SqlActualizarCalendario = "UPDATE Calendarios SET IdConductor = @idConductor, Fecha = @fecha, Notas = @notas WHERE __id=@id;";
+        //public const string SqlActualizarCalendario = "UPDATE Calendarios SET IdConductor = @idConductor, Fecha = @fecha, Notas = @notas WHERE __id=@id;";
 
 
-        public const string SqlActualizarConductor = "UPDATE Conductores SET " +
-            "Nombre = @nombre, Apellidos = @apellidos, Indefinido = @indefinido, Telefono = @telefono, Email = @email, " +
-            "Acumuladas = @acumuladas, Descansos = @descansos, DescansosNoDisfrutados = @descansosNoDisfrutados, PlusDistancia = @plusDistancia, " +
-            "ReduccionJornada = @reduccionJornada, Notas = @notas WHERE __id=@id;";
+        //public const string SqlActualizarConductor = "UPDATE Conductores SET " +
+        //    "Nombre = @nombre, Apellidos = @apellidos, Indefinido = @indefinido, Telefono = @telefono, Email = @email, " +
+        //    "Acumuladas = @acumuladas, Descansos = @descansos, DescansosNoDisfrutados = @descansosNoDisfrutados, PlusDistancia = @plusDistancia, " +
+        //    "ReduccionJornada = @reduccionJornada, Notas = @notas WHERE __id=@id;";
 
 
-        public const string SqlActualizarDiaCalendario = "UPDATE DiasCalendario SET " +
-            "IdCalendario = @idCalendario, Dia = @dia, DiaFecha = @diaFecha, Grafico = @grafico, Codigo = @codigo, ExcesoJornada = @excesoJornada, " +
-            "FacturadoPaqueteria = @facturadoPaqueteria, Limpieza = @limpieza, GraficoVinculado = @graficoVinculado, Notas = @notas WHERE __id=@id;";
+        //public const string SqlActualizarDiaCalendario = "UPDATE DiasCalendario SET " +
+        //    "IdCalendario = @idCalendario, Dia = @dia, DiaFecha = @diaFecha, Grafico = @grafico, Codigo = @codigo, ExcesoJornada = @excesoJornada, " +
+        //    "FacturadoPaqueteria = @facturadoPaqueteria, Limpieza = @limpieza, GraficoVinculado = @graficoVinculado, Notas = @notas WHERE __id=@id;";
 
 
-        public const string SqlActualizarFestivo = "UPDATE Festivos SET Año = @año, Fecha = @fecha WHERE __id=@id;";
+        //public const string SqlActualizarFestivo = "UPDATE Festivos SET Año = @año, Fecha = @fecha WHERE __id=@id;";
 
 
-        public const string SqlActualizarGrafico = "UPDATE Graficos SET " +
-            "IdGrupo = @idGrupo, NoCalcular = @noCalcular, Numero = @numero, Turno = @turno, DescuadreInicio = @descuadreInicio, Inicio = @inicio, " +
-            "Final = @final, DescuadreFinal = @descuadreFinal, InicioPartido = @inicioPartido, FinalPartido = @finalPartido, Valoracion = @valoracion, " +
-            "Trabajadas = @trabajadas, Acumuladas = @acumuladas, Nocturnas = @nocturnas, Desayuno = @desayuno, Comida = @comida, Cena = @cena, " +
-            "PlusCena = @plusCena, PlusLimpieza = @plusLimpieza, PlusPaqueteria = @plusPaqueteria WHERE _id=@id;";
+        //public const string SqlActualizarGrafico = "UPDATE Graficos SET " +
+        //    "IdGrupo = @idGrupo, NoCalcular = @noCalcular, Numero = @numero, Turno = @turno, DescuadreInicio = @descuadreInicio, Inicio = @inicio, " +
+        //    "Final = @final, DescuadreFinal = @descuadreFinal, InicioPartido = @inicioPartido, FinalPartido = @finalPartido, Valoracion = @valoracion, " +
+        //    "Trabajadas = @trabajadas, Acumuladas = @acumuladas, Nocturnas = @nocturnas, Desayuno = @desayuno, Comida = @comida, Cena = @cena, " +
+        //    "PlusCena = @plusCena, PlusLimpieza = @plusLimpieza, PlusPaqueteria = @plusPaqueteria WHERE _id=@id;";
 
 
-        public const string SqlActualizarGrupo = "UPDATE GruposGraficos SET Validez = @validez, Notas = @notas WHERE _id=@id;";
+        //public const string SqlActualizarGrupo = "UPDATE GruposGraficos SET Validez = @validez, Notas = @notas WHERE _id=@id;";
 
 
-        public const string SqlActualizarItinerario = "UPDATE Itinerarios SET " +
-            "IdLinea = @idLinea, Nombre = @nombre, Descripcion = @descripcion, TiempoReal = @tiempoReal, TiempoPago = @tiempoPago WHERE _id=@id;";
+        //public const string SqlActualizarItinerario = "UPDATE Itinerarios SET " +
+        //    "IdLinea = @idLinea, Nombre = @nombre, Descripcion = @descripcion, TiempoReal = @tiempoReal, TiempoPago = @tiempoPago WHERE _id=@id;";
 
 
-        public const string SqlActualizarLinea = "UPDATE Lineas SET Nombre = @nombre, Descripcion = @descripcion WHERE _id=@id;";
+        //public const string SqlActualizarLinea = "UPDATE Lineas SET Nombre = @nombre, Descripcion = @descripcion WHERE _id=@id;";
 
 
-        public const string SqlActualizarParada = "UPDATE Paradas SET " +
-            "IdItinerario = @idItinerario, Orden = @orden, Descripcion = @descripcion, Tiempo = @tiempo WHERE _id=@id;";
+        //public const string SqlActualizarParada = "UPDATE Paradas SET " +
+        //    "IdItinerario = @idItinerario, Orden = @orden, Descripcion = @descripcion, Tiempo = @tiempo WHERE _id=@id;";
 
 
-        public const string SqlActualizarRegulacion = "UPDATE Regulaciones SET " +
-            "IdConductor = @idConductor, Codigo = @codigo, Fecha = @fecha, Horas = @horas, Descansos = @descansos, Motivo = @motivo WHERE _id=@id;";
+        //public const string SqlActualizarRegulacion = "UPDATE Regulaciones SET " +
+        //    "IdConductor = @idConductor, Codigo = @codigo, Fecha = @fecha, Horas = @horas, Descansos = @descansos, Motivo = @motivo WHERE _id=@id;";
 
 
-        public const string SqlActualizarValoracion = "UPDATE Valoraciones SET " +
-            "IdGrafico = @idGrafico, Inicio = @inicio, Linea = @linea, Descripcion = @descripcion, Final = @final, Tiempo = @tiempo WHERE _id=@id;";
+        //public const string SqlActualizarValoracion = "UPDATE Valoraciones SET " +
+        //    "IdGrafico = @idGrafico, Inicio = @inicio, Linea = @linea, Descripcion = @descripcion, Final = @final, Tiempo = @tiempo WHERE _id=@id;";
 
 
         // CONSULTA NO FUNCIONAL
-        public const string SqlCambiarFechasDiasCalendario = "UPDATE (SELECT DiasCalendario.DiaFecha AS F, DateSerial(Year(Calendarios.Fecha),Month(Calendarios.Fecha),DiasCalendario.Dia) AS FF FROM Calendarios LEFT JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario) SET F = FF;";
+        //public const string SqlCambiarFechasDiasCalendario = "UPDATE (SELECT DiasCalendario.DiaFecha AS F, DateSerial(Year(Calendarios.Fecha),Month(Calendarios.Fecha),DiasCalendario.Dia) AS FF FROM Calendarios LEFT JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario) SET F = FF;";
 
 
-        public const string SqlInsertarCalendario = "INSERT INTO Calendarios (IdConductor, Fecha, Notas) VALUES (@idConductor, @fecha, @notas);";
+        //public const string SqlInsertarCalendario = "INSERT INTO Calendarios (IdConductor, Fecha, Notas) VALUES (@idConductor, @fecha, @notas);";
 
 
-        public const string SqlInsertarConductor = "INSERT INTO Conductores " +
-            "(Nombre, Apellidos, Indefinido, Telefono, Email, Acumuladas, Descansos, DescansosNoDisfrutados, PlusDistancia, ReduccionJornada, Notas, _id ) " +
-            "VALUES " +
-            "(@nombre, @apellidos, @indefinido, @telefono, @email, @acumuladas, @descansos, @descansosNoDisfrutados, @plusDistancia, @reduccionJornada, " +
-            "@notas, @id);";
+        //public const string SqlInsertarConductor = "INSERT INTO Conductores " +
+        //    "(Nombre, Apellidos, Indefinido, Telefono, Email, Acumuladas, Descansos, DescansosNoDisfrutados, PlusDistancia, ReduccionJornada, Notas, _id ) " +
+        //    "VALUES " +
+        //    "(@nombre, @apellidos, @indefinido, @telefono, @email, @acumuladas, @descansos, @descansosNoDisfrutados, @plusDistancia, @reduccionJornada, " +
+        //    "@notas, @id);";
 
 
-        public const string SqlInsertarConductorDesconocido = "INSERT INTO Conductores (_id, Nombre) VALUES (@id, 'Desconocido');";
+        //public const string SqlInsertarConductorDesconocido = "INSERT INTO Conductores (_id, Nombre) VALUES (@id, 'Desconocido');";
 
 
-        public const string SqlInsertarDiaCalendario = "INSERT INTO DiasCalendario " +
-            "(IdCalendario, Dia, DiaFecha, Grafico, Codigo, ExcesoJornada, FacturadoPaqueteria, Limpieza, GraficoVinculado, Notas) " +
-            "VALUES " +
-            "(@idCalendario, @dia, @diaFecha, @grafico, @codigo, @excesoJornada, @facturadoPaqueteria, @limpieza, @graficoVinculado, @notas);";
+        //public const string SqlInsertarDiaCalendario = "INSERT INTO DiasCalendario " +
+        //    "(IdCalendario, Dia, DiaFecha, Grafico, Codigo, ExcesoJornada, FacturadoPaqueteria, Limpieza, GraficoVinculado, Notas) " +
+        //    "VALUES " +
+        //    "(@idCalendario, @dia, @diaFecha, @grafico, @codigo, @excesoJornada, @facturadoPaqueteria, @limpieza, @graficoVinculado, @notas);";
 
 
-        public const string SqlInsertarFestivo = "INSERT INTO Festivos (Año, Fecha) VALUES (@año, @fecha);";
+        //public const string SqlInsertarFestivo = "INSERT INTO Festivos (Año, Fecha) VALUES (@año, @fecha);";
 
 
-        public const string SqlInsertarGrafico = "INSERT INTO Graficos " +
-            "(IdGrupo, NoCalcular, Numero, Turno, DescuadreInicio, Inicio, Final, DescuadreFinal, InicioPartido, FinalPartido, " +
-            "Valoracion, Trabajadas, Acumuladas, Nocturnas, Desayuno, Comida, Cena, PlusCena, PlusLimpieza, PlusPaqueteria) " +
-            "VALUES " +
-            "(@idGrupo, @noCalcular, @numero, @turno, @descuadreInicio, @inicio, @final, @descuadreFinal, @inicioPartido, @finalPartido, " +
-            "@valoracion, @trabajadas, @acumuladas, @nocturnas, @desayuno, @comida, @cena, @plusCena, @plusLimpieza, @plusPaqueteria);";
+        //public const string SqlInsertarGrafico = "INSERT INTO Graficos " +
+        //    "(IdGrupo, NoCalcular, Numero, Turno, DescuadreInicio, Inicio, Final, DescuadreFinal, InicioPartido, FinalPartido, " +
+        //    "Valoracion, Trabajadas, Acumuladas, Nocturnas, Desayuno, Comida, Cena, PlusCena, PlusLimpieza, PlusPaqueteria) " +
+        //    "VALUES " +
+        //    "(@idGrupo, @noCalcular, @numero, @turno, @descuadreInicio, @inicio, @final, @descuadreFinal, @inicioPartido, @finalPartido, " +
+        //    "@valoracion, @trabajadas, @acumuladas, @nocturnas, @desayuno, @comida, @cena, @plusCena, @plusLimpieza, @plusPaqueteria);";
 
 
-        public const string SqlInsertarGrupo = "INSERT INTO GruposGraficos (Validez, Notas) VALUES (@validez, @notas);";
+        //public const string SqlInsertarGrupo = "INSERT INTO GruposGraficos (Validez, Notas) VALUES (@validez, @notas);";
 
 
-        public const string SqlInsertarItinerario = "INSERT INTO Itinerarios " +
-            "(IdLinea, Nombre, Descripcion, TiempoReal, TiempoPago) " +
-            "VALUES " +
-            "(@idLinea, @nombre, @descripcion, @tiempoReal, @tiempoPago);";
+        //public const string SqlInsertarItinerario = "INSERT INTO Itinerarios " +
+        //    "(IdLinea, Nombre, Descripcion, TiempoReal, TiempoPago) " +
+        //    "VALUES " +
+        //    "(@idLinea, @nombre, @descripcion, @tiempoReal, @tiempoPago);";
 
 
-        public const string SqlInsertarLinea = "INSERT INTO Lineas (Nombre, Descripcion) VALUES (@nombre, @descripcion);";
+        //public const string SqlInsertarLinea = "INSERT INTO Lineas (Nombre, Descripcion) VALUES (@nombre, @descripcion);";
 
 
-        public const string SqlInsertarParada = "INSERT INTO Paradas " +
-            "(IdItinerario, Orden, Descripcion, Tiempo) " +
-            "VALUES " +
-            "(@idItinerario, @orden, @descripcion, @tiempo);";
+        //public const string SqlInsertarParada = "INSERT INTO Paradas " +
+        //    "(IdItinerario, Orden, Descripcion, Tiempo) " +
+        //    "VALUES " +
+        //    "(@idItinerario, @orden, @descripcion, @tiempo);";
 
 
-        public const string SqlInsertarRegulacion = "INSERT INTO Regulaciones " +
-            "(IdConductor, Codigo, Fecha, Horas, Descansos, Motivo) " +
-            "VALUES " +
-            "(@idConductor, @codigo, @fecha, @horas, @descansos, @motivo);";
+        //public const string SqlInsertarRegulacion = "INSERT INTO Regulaciones " +
+        //    "(IdConductor, Codigo, Fecha, Horas, Descansos, Motivo) " +
+        //    "VALUES " +
+        //    "(@idConductor, @codigo, @fecha, @horas, @descansos, @motivo);";
 
 
-        public const string SqlInsertarValoracion = "INSERT INTO Valoraciones " +
-            "(IdGrafico, Inicio, Linea, Descripcion, Final, Tiempo) " +
-            "VALUES " +
-            "(@idGrafico, @inicio, @linea, @descripcion, @final, @tiempo);";
+        //public const string SqlInsertarValoracion = "INSERT INTO Valoraciones " +
+        //    "(IdGrafico, Inicio, Linea, Descripcion, Final, Tiempo) " +
+        //    "VALUES " +
+        //    "(@idGrafico, @inicio, @linea, @descripcion, @final, @tiempo);";
 
 
-        public const string SqlBorrarCalendario = "DELETE * FROM Calendarios WHERE _id=@id;";
+        //public const string SqlBorrarCalendario = "DELETE * FROM Calendarios WHERE _id=@id;";
 
 
-        public const string SqlBorrarConductor = "DELETE * FROM Conductores WHERE _id=@id;";
+        //public const string SqlBorrarConductor = "DELETE * FROM Conductores WHERE _id=@id;";
 
 
-        public const string SqlBorrarDiaCalendario = "DELETE * FROM DiasCalendario WHERE _id=@id;";
+        //public const string SqlBorrarDiaCalendario = "DELETE * FROM DiasCalendario WHERE _id=@id;";
 
 
-        public const string SqlBorrarFestivo = "DELETE * FROM Festivos WHERE _id=@id;";
+        //public const string SqlBorrarFestivo = "DELETE * FROM Festivos WHERE _id=@id;";
 
 
-        public const string SqlBorrarGrafico = "DELETE * FROM Graficos WHERE _id=@id;";
+        //public const string SqlBorrarGrafico = "DELETE * FROM Graficos WHERE _id=@id;";
 
 
-        public const string SqlBorrarGrupo = "DELETE * FROM GruposGraficos WHERE _id=@id;";
+        //public const string SqlBorrarGrupo = "DELETE * FROM GruposGraficos WHERE _id=@id;";
 
 
-        public const string SqlBorrarItinerario = "DELETE * FROM Itinerarios WHERE _id=@id;";
+        //public const string SqlBorrarItinerario = "DELETE * FROM Itinerarios WHERE _id=@id;";
 
 
-        public const string SqlBorrarLinea = "DELETE * FROM Lineas WHERE _id=@id;";
+        //public const string SqlBorrarLinea = "DELETE * FROM Lineas WHERE _id=@id;";
 
 
-        public const string SqlBorrarParada = "DELETE * FROM Paradas WHERE _id=@id;";
+        //public const string SqlBorrarParada = "DELETE * FROM Paradas WHERE _id=@id;";
 
 
-        public const string SqlBorrarRegulacion = "DELETE * FROM Regulaciones WHERE _id=@id;";
+        //public const string SqlBorrarRegulacion = "DELETE * FROM Regulaciones WHERE _id=@id;";
 
 
-        public const string SqlBorrarValoracion = "DELETE * FROM Valoraciones WHERE _id=@id;";
-
-
-        // CONSULTA NO FUNCIONAL
-        public const string SqlConsultaPrueba = "SELECT (Sum(Graficos.Inicio) + Sum(Calendarios._id)) AS Resultado FROM Graficos, Calendarios WHERE Graficos._id = 123 AND Calendarios._id = 190;";
-
-
-        public const string SqlExisteConductor = "SELECT Count(_id) FROM Conductores WHERE _id=@id;";
-
-
-        public const string SqlExisteGrupo = "SELECT Count(*) FROM GruposGraficos WHERE Validez=@validez;";
-
-
-        public const string SqlGetCalendarios = "SELECT Calendarios.*, Conductores.Indefinido " +
-            "FROM Calendarios " +
-            "LEFT JOIN Conductores " +
-            "ON Calendarios.IdConductor = Conductores._id " +
-            "WHERE Year(Calendarios.Fecha)=@año And Month(Calendarios.Fecha)=@mes ORDER BY Calendarios.IdConductor;";
-
-
-        public const string SqlGetConductor = "SELECT * FROM Conductores WHERE _id=@id;";
-
-
-        public const string SqlGetConductores = "SELECT * FROM Conductores ORDER BY _id;";
+        //public const string SqlBorrarValoracion = "DELETE * FROM Valoraciones WHERE _id=@id;";
 
 
         // CONSULTA NO FUNCIONAL
-        public const string SqlGetConsultas = "SELECT Name FROM MSysObjects WHERE Type = 5 ORDER BY Name;";
+        //public const string SqlConsultaPrueba = "SELECT (Sum(Graficos.Inicio) + Sum(Calendarios._id)) AS Resultado FROM Graficos, Calendarios WHERE Graficos._id = 123 AND Calendarios._id = 190;";
 
 
-        public const string SqlGetDiasCalendario = "SELECT * FROM DiasCalendario WHERE IdCalendario=@idCalendario ORDER BY Dia;";
+        //public const string SqlExisteConductor = "SELECT Count(_id) FROM Conductores WHERE _id=@id;";
 
 
-        public const string SqlGetDiasCalendarioAño = "SELECT * FROM DiasCalendario " +
-            "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE IdConductor = @idConductor AND Year(Fecha) = @año);";
+        //public const string SqlExisteGrupo = "SELECT Count(*) FROM GruposGraficos WHERE Validez=@validez;";
 
 
-        public const string SqlGetDiasCalendarioConBloqueos = "SELECT * FROM DiasCalendario " +
-            "WHERE (ExcesoJornada <> 0 OR Descuadre <> 0) AND IdCalendario IN (SELECT _id FROM Calendarios WHERE IdConductor = @idConductor);";
+        //public const string SqlGetCalendarios = "SELECT Calendarios.*, Conductores.Indefinido " +
+        //    "FROM Calendarios " +
+        //    "LEFT JOIN Conductores " +
+        //    "ON Calendarios.IdConductor = Conductores._id " +
+        //    "WHERE Year(Calendarios.Fecha)=@año And Month(Calendarios.Fecha)=@mes ORDER BY Calendarios.IdConductor;";
 
 
-        public const string SqlGetDiasPijama = "SELECT * FROM " +
-            "(SELECT * FROM Graficos WHERE IdGrupo = " +
-            "(SELECT _id FROM GruposGraficos WHERE Validez = " +
-            "(SELECT Max(Validez) FROM GruposGraficos WHERE Validez <= @validez))) " +
-            "WHERE Numero=@numero;";
+        //public const string SqlGetConductor = "SELECT * FROM Conductores WHERE _id=@id;";
 
 
-        public const string SqlGetEstadisticasGraficos = "SELECT GruposGraficos.Validez AS xValidez, Turno AS xTurno, Count(Numero) AS xNumero, " +
-            "Sum(Valoracion) AS xValoracion, Sum(IIf(Trabajadas<@jornadaMedia AND NOT NoCalcular,@jornadaMedia,Trabajadas)) AS xTrabajadas, " +
-            "Sum(Acumuladas) AS xAcumuladas, Sum(Nocturnas) AS xNocturnas, Sum(Desayuno) AS xDesayuno, Sum(Comida) AS xComida, Sum(Cena) AS xCena, " +
-            "Sum(PlusCena) AS xPlusCena, Sum(iif(PlusLimpieza=True,1,0)) AS xLimpieza, Sum(iif(PlusPaqueteria=True,1,0)) AS xPaqueteria " +
-            "FROM GruposGraficos " +
-            "LEFT JOIN Graficos ON GruposGraficos._id = Graficos.IdGrupo " +
-            "WHERE IdGrupo=@idGrupo GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;";
-
-
-        public const string SqlGetEstadisticasGraficosDesdeFecha = "SELECT GruposGraficos.Validez AS xValidez, Turno AS xTurno, Count(Numero) AS xNumero, " +
-            "Sum(Valoracion) AS xValoracion, Sum(IIf(Trabajadas<@jornadaMedia AND NOT NoCalcular,@jornadaMedia,Trabajadas)) AS xTrabajadas, " +
-            "Sum(Acumuladas) AS xAcumuladas, Sum(Nocturnas) AS xNocturnas, Sum(Desayuno) AS xDesayuno, Sum(Comida) AS xComida, Sum(Cena) AS xCena, " +
-            "Sum(PlusCena) AS xPlusCena, Sum(iif(PlusLimpieza=True,1,0)) AS xLimpieza, Sum(iif(PlusPaqueteria=True,1,0)) AS xPaqueteria " +
-            "FROM GruposGraficos " +
-            "LEFT JOIN Graficos ON GruposGraficos._id = Graficos.IdGrupo " +
-            "WHERE GruposGraficos.Validez >= @fecha GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;";
-
-
-        public const string SqlGetFestivos = "SELECT * FROM Festivos ORDER BY Fecha;";
-
-
-        public const string SqlGetFestivosPorAño = "SELECT * FROM Festivos WHERE Año=@año ORDER BY Fecha;";
-
-
-        public const string SqlGetFestivosPorMes = "SELECT * FROM Festivos WHERE Año=@año And Month(Fecha)=@mes ORDER BY Fecha;";
-
-
-        public const string SqlGetGraficos = "SELECT * FROM Graficos WHERE IdGrupo=@idGrupo ORDER BY Numero;";
-
-
-        public const string SqlGetGraficosGrupoPorFecha = "SELECT * FROM Graficos WHERE IdGrupo = (SELECT _id FROM GruposGraficos WHERE Validez = @validez);";
-
-
-        public const string SqlGetGrupos = "SELECT * FROM GruposGraficos ORDER BY Validez DESC;";
-
-
-        public const string SqlGetItinerarioPorNombre = "SELECT * FROM Itinerarios WHERE Name=@nombre;";
-
-
-        public const string SqlGetItinerarios = "SELECT * FROM Itinerarios WHERE IdLinea=@ ORDER BY Nombre;";
-
-
-        public const string SqlGetLineas = "SELECT * FROM Lineas ORDER BY Nombre;";
-
-
-        public const string SqlGetParadas = "SELECT * FROM Paradas WHERE IdItinerario=@idItinerario ORDER BY Orden;";
-
-
-        public const string SqlGetRegulaciones = "SELECT * FROM Regulaciones WHERE IdConductor=@idConductor ORDER BY Fecha, _id;";
-
-
-        public const string SqlGetValoraciones = "SELECT * FROM Valoraciones WHERE IdGrafico=@idGrafico ORDER BY Inicio, _id;";
+        //public const string SqlGetConductores = "SELECT * FROM Conductores ORDER BY _id;";
 
 
         // CONSULTA NO FUNCIONAL
-        public const string SqlTemporal = "SELECT DiasCalendario.Dia, Calendarios.IdConductor, DiasCalendario.Fecha, DiasCalendario.ExcesoJornada FROM Calendarios LEFT JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario WHERE Calendarios.IdConductor = 450 AND ExcesoJornada > 0;";
+        //public const string SqlGetConsultas = "SELECT Name FROM MSysObjects WHERE Type = 5 ORDER BY Name;";
+
+
+        //public const string SqlGetDiasCalendario = "SELECT * FROM DiasCalendario WHERE IdCalendario=@idCalendario ORDER BY Dia;";
+
+
+        //public const string SqlGetDiasCalendarioAño = "SELECT * FROM DiasCalendario " +
+        //    "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE IdConductor = @idConductor AND Year(Fecha) = @año);";
+
+
+        //public const string SqlGetDiasCalendarioConBloqueos = "SELECT * FROM DiasCalendario " +
+        //    "WHERE (ExcesoJornada <> 0 OR Descuadre <> 0) AND IdCalendario IN (SELECT _id FROM Calendarios WHERE IdConductor = @idConductor);";
+
+
+        //public const string SqlGetDiasPijama = "SELECT * FROM " +
+        //    "(SELECT * FROM Graficos WHERE IdGrupo = " +
+        //    "(SELECT _id FROM GruposGraficos WHERE Validez = " +
+        //    "(SELECT Max(Validez) FROM GruposGraficos WHERE Validez <= @validez))) " +
+        //    "WHERE Numero=@numero;";
+
+
+        //public const string SqlGetEstadisticasGraficos = "SELECT GruposGraficos.Validez AS xValidez, Turno AS xTurno, Count(Numero) AS xNumero, " +
+        //    "Sum(Valoracion) AS xValoracion, Sum(IIf(Trabajadas<@jornadaMedia AND NOT NoCalcular,@jornadaMedia,Trabajadas)) AS xTrabajadas, " +
+        //    "Sum(Acumuladas) AS xAcumuladas, Sum(Nocturnas) AS xNocturnas, Sum(Desayuno) AS xDesayuno, Sum(Comida) AS xComida, Sum(Cena) AS xCena, " +
+        //    "Sum(PlusCena) AS xPlusCena, Sum(iif(PlusLimpieza=True,1,0)) AS xLimpieza, Sum(iif(PlusPaqueteria=True,1,0)) AS xPaqueteria " +
+        //    "FROM GruposGraficos " +
+        //    "LEFT JOIN Graficos ON GruposGraficos._id = Graficos.IdGrupo " +
+        //    "WHERE IdGrupo=@idGrupo GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;";
+
+
+        //public const string SqlGetEstadisticasGraficosDesdeFecha = "SELECT GruposGraficos.Validez AS xValidez, Turno AS xTurno, Count(Numero) AS xNumero, " +
+        //    "Sum(Valoracion) AS xValoracion, Sum(IIf(Trabajadas<@jornadaMedia AND NOT NoCalcular,@jornadaMedia,Trabajadas)) AS xTrabajadas, " +
+        //    "Sum(Acumuladas) AS xAcumuladas, Sum(Nocturnas) AS xNocturnas, Sum(Desayuno) AS xDesayuno, Sum(Comida) AS xComida, Sum(Cena) AS xCena, " +
+        //    "Sum(PlusCena) AS xPlusCena, Sum(iif(PlusLimpieza=True,1,0)) AS xLimpieza, Sum(iif(PlusPaqueteria=True,1,0)) AS xPaqueteria " +
+        //    "FROM GruposGraficos " +
+        //    "LEFT JOIN Graficos ON GruposGraficos._id = Graficos.IdGrupo " +
+        //    "WHERE GruposGraficos.Validez >= @fecha GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;";
+
+
+        //public const string SqlGetFestivos = "SELECT * FROM Festivos ORDER BY Fecha;";
+
+
+        //public const string SqlGetFestivosPorAño = "SELECT * FROM Festivos WHERE Año=@año ORDER BY Fecha;";
+
+
+        //public const string SqlGetFestivosPorMes = "SELECT * FROM Festivos WHERE Año=@año And Month(Fecha)=@mes ORDER BY Fecha;";
+
+
+        //public const string SqlGetGraficos = "SELECT * FROM Graficos WHERE IdGrupo=@idGrupo ORDER BY Numero;";
+
+
+        //public const string SqlGetGraficosGrupoPorFecha = "SELECT * FROM Graficos WHERE IdGrupo = (SELECT _id FROM GruposGraficos WHERE Validez = @validez);";
+
+
+        //public const string SqlGetGrupos = "SELECT * FROM GruposGraficos ORDER BY Validez DESC;";
+
+
+        //public const string SqlGetItinerarioPorNombre = "SELECT * FROM Itinerarios WHERE Name=@nombre;";
+
+
+        //public const string SqlGetItinerarios = "SELECT * FROM Itinerarios WHERE IdLinea=@ ORDER BY Nombre;";
+
+
+        //public const string SqlGetLineas = "SELECT * FROM Lineas ORDER BY Nombre;";
+
+
+        //public const string SqlGetParadas = "SELECT * FROM Paradas WHERE IdItinerario=@idItinerario ORDER BY Orden;";
+
+
+        //public const string SqlGetRegulaciones = "SELECT * FROM Regulaciones WHERE IdConductor=@idConductor ORDER BY Fecha, _id;";
+
+
+        //public const string SqlGetValoraciones = "SELECT * FROM Valoraciones WHERE IdGrafico=@idGrafico ORDER BY Inicio, _id;";
+
+
+        // CONSULTA NO FUNCIONAL
+        //public const string SqlTemporal = "SELECT DiasCalendario.Dia, Calendarios.IdConductor, DiasCalendario.Fecha, DiasCalendario.ExcesoJornada FROM Calendarios LEFT JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario WHERE Calendarios.IdConductor = 450 AND ExcesoJornada > 0;";
 
 
 
@@ -548,7 +556,9 @@ namespace Orion.Servicios {
         public ObservableCollection<Calendario> GetCalendarios(int año, int mes) {
 
             try {
-                var consulta = new SQLiteExpression(SqlGetCalendarios).AddParameter("@año", año).AddParameter("@mes", mes);
+                DateTime fecha = new DateTime(año, mes, 1);
+                var consulta = new SQLiteExpression("SELECT * FROM Calendarios WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) ORDER BY IdConductor;");
+                consulta.AddParameter("@fecha", fecha);
                 var lista = GetItems<Calendario>(consulta);
                 //TODO: Añadir si el conductor es o no indefinido y quitar la parte Indefinido de la consulta.
                 return new ObservableCollection<Calendario>(lista);
@@ -563,8 +573,7 @@ namespace Orion.Servicios {
 
             try {
                 DateTime fecha = new DateTime(año, 1, 1);
-                string comandoSQL = "SELECT Calendarios.*, Conductores.Indefinido " +
-                    "FROM Calendarios LEFT JOIN Conductores ON Calendarios.IdConductor = Conductores._id " +
+                string comandoSQL = "SELECT * FROM Calendarios " +
                     "WHERE strftime('%Y', Calendarios.Fecha) = strftime('%Y', @fecha) AND Calendarios.IdConductor = @matricula " +
                     "ORDER BY Calendarios.Fecha;";
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
@@ -582,8 +591,7 @@ namespace Orion.Servicios {
 
             try {
                 DateTime fecha = new DateTime(año, mes, 1);
-                string comandoSQL = "SELECT Calendarios.*, Conductores.Indefinido " +
-                                    "FROM Calendarios LEFT JOIN Conductores ON Calendarios.IdConductor = Conductores._id " +
+                string comandoSQL = "SELECT Calendarios.* FROM Calendarios " +
                                     "WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Calendarios.IdConductor = @matricula ;";
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                 var lista = GetItems<Calendario>(consulta);
@@ -797,7 +805,7 @@ namespace Orion.Servicios {
         }
 
 
-        public TimeSpan GetAcumuladasHastaMes(int año, int mes, int idconductor) {
+        public TimeSpan GetAcumuladasHastaMes(int año, int mes, int idconductor, int comodin) {
             TimeSpan acumuladas = TimeSpan.Zero;
             string comandoDias = "SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha " +
                  "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios._id " +
@@ -826,7 +834,7 @@ namespace Orion.Servicios {
                                 int grafico = lector.ToInt32("Grafico");
                                 int graficoVinculado = lector.ToInt32("GraficoVinculado");
                                 DateTime fecha2 = lector.ToDateTime("Fecha");
-                                if (graficoVinculado != 0 && grafico == App.Global.PorCentro.Comodin) grafico = graficoVinculado;
+                                if (graficoVinculado != 0 && grafico == comodin) grafico = graficoVinculado;
                                 if (dia > DateTime.DaysInMonth(fecha2.Year, fecha2.Month)) continue;
                                 DateTime fechadia = new DateTime(fecha2.Year, fecha2.Month, dia);
                                 var consulta2 = new SQLiteExpression(comandoSQL).AddParameter("@validez", fechadia).AddParameter("@numero", grafico);
@@ -1015,7 +1023,7 @@ namespace Orion.Servicios {
 
         public DiaCalendarioBase GetDiaCalendario(int idConductor, DateTime fecha) {
 
-            string comandoSQL = "SELECT * FROM DiasCalendario WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE IdConductor = @matricula) AND DiaFecha = @fecha;";
+            string comandoSQL = "SELECT * FROM DiasCalendario WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE IdConductor = @matricula) AND strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha);";
             var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idConductor).AddParameter("@fecha", fecha);
             try {
                 return GetItem<DiaCalendario>(consulta);
@@ -1110,7 +1118,7 @@ namespace Orion.Servicios {
 
         public IEnumerable<Grafico> GetGraficosGrupoPorFecha(DateTime fecha) {
             try {
-                var consulta = new SQLiteExpression("SELECT * FROM Graficos WHERE IdGrupo = (SELECT Id FROM GruposGraficos WHERE Validez = @validez)");
+                var consulta = new SQLiteExpression("SELECT * FROM Graficos WHERE IdGrupo = (SELECT _id FROM GruposGraficos WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', @validez))");
                 consulta.AddParameter("@validez", fecha);
                 return GetItems<Grafico>(consulta);
             } catch (Exception ex) {
@@ -1122,7 +1130,23 @@ namespace Orion.Servicios {
 
         public IEnumerable<EstadisticasGraficos> GetEstadisticasGrupoGraficos(long IdGrupo, TimeSpan jornadaMedia) {
             try {
-                var consulta = new SQLiteExpression(SqlGetEstadisticasGraficos); //TODO: Cambiar los IIF
+                var consulta = new SQLiteExpression("SELECT " +
+                    "GruposGraficos.Validez AS xValidez, " +
+                    "Turno AS xTurno, " +
+                    "Count(Numero) AS xNumero, " +
+                    "Sum(Valoracion) AS xValoracion, " +
+                    //"Sum(IIf(Trabajadas<@jornadaMedia AND NOT NoCalcular,@jornadaMedia,Trabajadas)) AS xTrabajadas, " +
+                    "Sum(CASE WHEN Trabajadas<@jornadaMedia AND NOT NoCalcular THEN @jornadaMedia ELSE Trabajadas END) AS xTrabajadas, " + //Si no va, probar 'END xx'
+                    "Sum(Acumuladas) AS xAcumuladas, " +
+                    "Sum(Nocturnas) AS xNocturnas, " +
+                    "Sum(Desayuno) AS xDesayuno, " +
+                    "Sum(Comida) AS xComida, " +
+                    "Sum(Cena) AS xCena, " +
+                    "Sum(PlusCena) AS xPlusCena, " +
+                    "Sum(PlusLimpieza) AS xLimpieza, " +
+                    "Sum(PlusPaqueteria) AS xPaqueteria " +
+                    "FROM GruposGraficos LEFT JOIN Graficos ON GruposGraficos._id = Graficos.IdGrupo " +
+                    "WHERE IdGrupo=@idGrupo GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;");
                 consulta.AddParameter("@jornadaMedia", jornadaMedia);
                 consulta.AddParameter("@idGrupo", IdGrupo);
                 return GetItems<EstadisticasGraficos>(consulta);
@@ -1135,7 +1159,24 @@ namespace Orion.Servicios {
 
         public IEnumerable<EstadisticasGraficos> GetEstadisticasGraficosDesdeFecha(DateTime fecha, TimeSpan jornadaMedia) {
             try {
-                var consulta = new SQLiteExpression(SqlGetEstadisticasGraficosDesdeFecha); //TODO: Cambiar referencia a fechas en la consulta y los IIF
+                var consulta = new SQLiteExpression("SELECT " +
+                    "GruposGraficos.Validez AS xValidez, " +
+                    "Turno AS xTurno, " +
+                    "Count(Numero) AS xNumero, " +
+                    "Sum(Valoracion) AS xValoracion, " +
+                    //"Sum(IIf(Trabajadas<@jornadaMedia AND NOT NoCalcular,@jornadaMedia,Trabajadas)) AS xTrabajadas, " +
+                    "Sum(CASE WHEN Trabajadas<@jornadaMedia AND NOT NoCalcular THEN @jornadaMedia ELSE Trabajadas END) AS xTrabajadas, " + //Si no va, probar 'END xx'
+                    "Sum(Acumuladas) AS xAcumuladas, " +
+                    "Sum(Nocturnas) AS xNocturnas, " +
+                    "Sum(Desayuno) AS xDesayuno, " +
+                    "Sum(Comida) AS xComida, " +
+                    "Sum(Cena) AS xCena, " +
+                    "Sum(PlusCena) AS xPlusCena, " +
+                    "Sum(PlusLimpieza) AS xLimpieza, " +
+                    "Sum(PlusPaqueteria) AS xPaqueteria " +
+                    "FROM GruposGraficos LEFT JOIN Graficos ON GruposGraficos._id = Graficos.IdGrupo " +
+                    "WHERE strftime('%Y-%m-%d', GruposGraficos.Validez) = strftime('%Y-%m-%d', @fecha) " +
+                    "GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;");
                 consulta.AddParameter("@jornadaMedia", jornadaMedia);
                 consulta.AddParameter("@idGrupo", fecha);
                 return GetItems<EstadisticasGraficos>(consulta);
@@ -1151,11 +1192,11 @@ namespace Orion.Servicios {
                 var consulta = new SQLiteExpression("SELECT * " +
                                     "FROM (SELECT * " +
                                     "      FROM Graficos" +
-                                    "      WHERE IdGrupo = (SELECT Id " +
+                                    "      WHERE IdGrupo = (SELECT _id " +
                                     "                       FROM GruposGraficos " +
-                                    "                       WHERE Validez = (SELECT Max(Validez) " +
+                                    "                       WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) " +
                                     "                                        FROM GruposGraficos " +
-                                    "                                        WHERE Validez <= @validez)))" +
+                                    "                                        WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @validez)))))" +
                                     "WHERE Numero = @idConductor");
                 consulta.AddParameter("@validez", fecha);
                 consulta.AddParameter("@idConductor", numero);
@@ -1225,7 +1266,7 @@ namespace Orion.Servicios {
 
         public bool ExisteGrupo(DateTime fecha) {
             try {
-                var whereCondition = new SQLiteExpression("Validez = @validez").AddParameter("@validez", fecha);
+                var whereCondition = new SQLiteExpression("strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', @validez)").AddParameter("@validez", fecha);
                 return GetCount<GrupoGraficos>(whereCondition) > 0;
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.ExisteConductor), ex);
@@ -1236,7 +1277,7 @@ namespace Orion.Servicios {
 
         public GrupoGraficos GetUltimoGrupo() {
             try {
-                var consulta = new SQLiteExpression("SELECT * FROM GruposGraficos WHERE Validez=(SELECT Max(Validez) FROM GruposGraficos);");
+                var consulta = new SQLiteExpression("SELECT * FROM GruposGraficos WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) FROM GruposGraficos));");
                 return GetItem<GrupoGraficos>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.BorrarGrupoPorId), ex);
@@ -1305,7 +1346,7 @@ namespace Orion.Servicios {
 
         public IEnumerable<ValoracionGrafico> GetValoraciones(int idGrafico) {
             try {
-                var consulta = new SQLiteExpression("SELECT * FROM Valoraciones WHERE IdGrafico=@idGrafico ORDER BY Inicio, Id");
+                var consulta = new SQLiteExpression("SELECT * FROM Valoraciones WHERE IdGrafico=@idGrafico ORDER BY Inicio, _id");
                 consulta.AddParameter("@idGrafico", idGrafico);
                 return GetItems<ValoracionGrafico>(consulta);
             } catch (Exception ex) {
@@ -1342,11 +1383,610 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
 
+        // ====================================================================================================
+        #region BD LINEAS
+        // ====================================================================================================
+
+        public IEnumerable<Linea> GetLineas() {
+            try {
+                return GetItems<Linea>();
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetLineas), ex);
+            }
+            return new List<Linea>();
+        }
+
+
+        public void GuardarLineas(IEnumerable<Linea> lista) {
+            try {
+                GuardarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GuardarLineas), ex);
+            }
+        }
+
+
+        public void BorrarLineas(IEnumerable<Linea> lista) {
+            try {
+                BorrarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.BorrarLineas), ex);
+            }
+        }
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region ITINERARIOS
+        // ====================================================================================================
+
+        public Itinerario GetItinerarioByNombre(decimal nombre) {
+            try {
+                var consulta = new SQLiteExpression("SELECT * FROM Itinerarios WHERE Nombre = @nombre").AddParameter("@nombre", nombre);
+                return GetItem<Itinerario>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetItinerarioByNombre), ex);
+            }
+            return new Itinerario();
+        }
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BD PARADAS
+        // ====================================================================================================
+
+        // Al gestionarse las paradas desde los itinerarios, no son necesarios métodos en este apartado.
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BD ESTADÍSTICAS
+        // ====================================================================================================
+
+        public EstadisticaGrupoGraficos GetEstadisticasUltimoGrupoGraficos(Centros centro) {
+
+            try {
+                var consulta = new SQLiteExpression("SELECT  " +
+                    "GG.Validez, " +
+                    "Count(G._id) as Cantidad, " +
+
+                    //"Count(IIf(G.Turno = 1, 1, null)) as Turnos1, " +
+                    "Sum(CASE G.Turno WHEN 1 THEN 1 ELSE null END) AS Turnos1, " + //Si no va, probar 'END t1'
+                                                                                   //"Count(IIf(G.Turno = 2, 1, null)) as Turnos2, " +
+                    "Sum(CASE G.Turno WHEN 2 THEN 1 ELSE null END) AS Turnos2, " + //Si no va, probar 'END t2'
+                                                                                   //"Count(IIf(G.Turno = 3, 1, null)) as Turnos3, " +
+                    "Sum(CASE G.Turno WHEN 3 THEN 1 ELSE null END) AS Turnos3, " + //Si no va, probar 'END t3'
+                                                                                   //"Count(IIf(G.Turno = 4, 1, null)) as Turnos4, " +
+                    "Sum(CASE G.Turno WHEN 4 THEN 1 ELSE null END) AS Turnos4, " + //Si no va, probar 'END t4'
+
+                    "Sum(G.Valoracion) As Valoraciones, " +
+                    "Sum(G.Trabajadas) As H_Trabajadas, " +
+
+                    //"Sum(IIf(G.Turno = 1, G.Trabajadas, 0)) As TrabajadasTurno1, " +
+                    "Sum(CASE G.Turno WHEN 1 THEN G.Trabajadas ELSE 0 END) AS TrabajadasTurno1, " + //Si no va, probar 'END tt1'
+                                                                                                    //"Sum(IIf(G.Turno = 2, G.Trabajadas, 0)) As TrabajadasTurno2, " +
+                    "Sum(CASE G.Turno WHEN 2 THEN G.Trabajadas ELSE 0 END) AS TrabajadasTurno2, " + //Si no va, probar 'END tt2'
+                                                                                                    //"Sum(IIf(G.Turno = 3, G.Trabajadas, 0)) As TrabajadasTurno3, " +
+                    "Sum(CASE G.Turno WHEN 3 THEN G.Trabajadas ELSE 0 END) AS TrabajadasTurno3, " + //Si no va, probar 'END tt3'
+                                                                                                    //"Sum(IIf(G.Turno = 4, G.Trabajadas, 0)) As TrabajadasTurno4, " +
+                    "Sum(CASE G.Turno WHEN 4 THEN G.Trabajadas ELSE 0 END) AS TrabajadasTurno4, " + //Si no va, probar 'END tt4'
+
+                    "Sum(G.Acumuladas) As H_Acumuladas, " +
+                    "Sum(G.Nocturnas) As H_Nocturnas, " +
+                    "Sum(G.Desayuno) As Desayunos, " +
+                    "Sum(G.Comida) As Comidas, " +
+                    "Sum(G.Cena) As Cenas, " +
+                    "Sum(G.PlusCena) As PlusesCena " +
+                    "FROM Graficos G LEFT JOIN GruposGraficos GG ON G.IdGrupo = GG._id " +
+                    "WHERE strftime('%Y-%m-%d', GG.Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) FROM GruposGraficos))" +
+                    "GROUP BY GG.Validez " +
+                    "ORDER BY GG.Validez");
+                return GetItem<EstadisticaGrupoGraficos>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetEstadisticasUltimoGrupoGraficos), ex);
+            }
+            return new EstadisticaGrupoGraficos();
+        }
+
+
+        public EstadisticaGrupoGraficos GetEstadisticasGrupoGraficos(long idGrupo, Centros centro) {
+
+            try {
+                var consulta = new SQLiteExpression("SELECT " +
+                    "GG.Validez, " +
+                    "Count(G._id) as Cantidad, " +
+
+                    //"Count(IIf(G.Turno = 1, 1, null)) as Turnos1, " +
+                    "Sum(CASE G.Turno WHEN 1 THEN 1 ELSE null END) AS Turnos1, " + //Si no va, probar 'END t1'
+                                                                                   //"Count(IIf(G.Turno = 2, 1, null)) as Turnos2, " +
+                    "Sum(CASE G.Turno WHEN 2 THEN 1 ELSE null END) AS Turnos2, " + //Si no va, probar 'END t2'
+                                                                                   //"Count(IIf(G.Turno = 3, 1, null)) as Turnos3, " +
+                    "Sum(CASE G.Turno WHEN 3 THEN 1 ELSE null END) AS Turnos3, " + //Si no va, probar 'END t3'
+                                                                                   //"Count(IIf(G.Turno = 4, 1, null)) as Turnos4, " +
+                    "Sum(CASE G.Turno WHEN 4 THEN 1 ELSE null END) AS Turnos4, " + //Si no va, probar 'END t4'
+
+                    "Sum(G.Valoracion) As Valoraciones, " +
+                    "Sum(G.Trabajadas) As H_Trabajadas, " +
+
+                    //"Sum(IIf(G.Turno = 1, G.Trabajadas, 0)) As TrabajadasTurno1, " +
+                    "Sum(CASE G.Turno WHEN 1 THEN G.Trabajadas ELSE 0 END) AS TrabajadasTurno1, " + //Si no va, probar 'END tt1'
+                                                                                                    //"Sum(IIf(G.Turno = 2, G.Trabajadas, 0)) As TrabajadasTurno2, " +
+                    "Sum(CASE G.Turno WHEN 2 THEN G.Trabajadas ELSE 0 END) AS TrabajadasTurno2, " + //Si no va, probar 'END tt2'
+                                                                                                    //"Sum(IIf(G.Turno = 3, G.Trabajadas, 0)) As TrabajadasTurno3, " +
+                    "Sum(CASE G.Turno WHEN 3 THEN G.Trabajadas ELSE 0 END) AS TrabajadasTurno3, " + //Si no va, probar 'END tt3'
+                                                                                                    //"Sum(IIf(G.Turno = 4, G.Trabajadas, 0)) As TrabajadasTurno4, " +
+                    "Sum(CASE G.Turno WHEN 4 THEN G.Trabajadas ELSE 0 END) AS TrabajadasTurno4, " + //Si no va, probar 'END tt4'
+
+                    "Sum(G.Acumuladas) As H_Acumuladas, " +
+                    "Sum(G.Nocturnas) As H_Nocturnas, " +
+                    "Sum(G.Desayuno) As Desayunos, " +
+                    "Sum(G.Comida) As Comidas, " +
+                    "Sum(G.Cena) As Cenas, " +
+                    "Sum(G.PlusCena) As PlusesCena " +
+                    "FROM Graficos G LEFT JOIN GruposGraficos GG ON G.IdGrupo = GG._id " +
+                    "WHERE GG._id = @id " +
+                    "GROUP BY GG.Validez " +
+                    "ORDER BY GG.Validez");
+                consulta.AddParameter("@id", idGrupo);
+                return GetItem<EstadisticaGrupoGraficos>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetEstadisticasGrupoGraficos), ex);
+            }
+            return new EstadisticaGrupoGraficos();
+        }
+
+
+        //TODO: Este método no se puede procesar, porque se añade un campo no previsto (campo fecha). Modificar Model GraficoFecha.
+        public IEnumerable<GraficoFecha> GetGraficosFromDiaCalendario(DateTime fecha, int comodin) {
+            try {
+                var consulta = new SQLiteExpression("SELECT @fecha AS Fecha, * " +
+                                    "FROM(SELECT * " +
+                                    "     FROM Graficos " +
+                                    "     WHERE IdGrupo = (SELECT _id " +
+                                    "                      FROM GruposGraficos " +
+                                    "                      WHERE Validez = (SELECT Max(Validez) " +
+                                    "                                       FROM GruposGraficos " +
+                                    "                                       WHERE Validez <= @fecha))) " +
+                                    "WHERE(Numero IN(SELECT Grafico " +
+                                    "                FROM DiasCalendario " +
+                                    "                WHERE DiaFecha = @fecha AND Grafico > 0) " +
+                                    "OR Numero IN(SELECT GraficoVinculado " +
+                                    "             FROM DiasCalendario " +
+                                    "             WHERE DiaFecha = @fecha AND GraficoVinculado > 0)) " +
+                                    "AND Numero <> @comodin " +
+                                    "ORDER BY Numero");
+                consulta.AddParameter("@fecha", fecha);
+                consulta.AddParameter("@comodin", comodin);
+                return GetItems<GraficoFecha>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetGraficosFromDiaCalendario), ex);
+            }
+            return new List<GraficoFecha>();
+        }
+
+
+        public IEnumerable<GraficosPorDia> GetGraficosByDia(DateTime fecha) {
+            try {
+                var consulta = new SQLiteExpression("SELECT Numero " +
+                                    "FROM Graficos " +
+                                    "WHERE IdGrupo = (SELECT _id " +
+                                    "                 FROM GruposGraficos " +
+                                    "                 WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) " +
+                                    "                                  FROM GruposGraficos " +
+                                    "                                  WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @fecha)))) " +
+                                    "AND DiaSemana = @diaSemana " +
+                                    "ORDER BY Numero");
+
+                List<GraficosPorDia> lista = new List<GraficosPorDia>();
+
+                for (int dia = 1; dia <= DateTime.DaysInMonth(fecha.Year, fecha.Month); dia++) {
+                    DateTime fechaDia = new DateTime(fecha.Year, fecha.Month, dia);
+                    string diasemana;
+                    switch (fechaDia.DayOfWeek) {
+                        case DayOfWeek.Sunday:
+                            diasemana = "F";
+                            break;
+                        case DayOfWeek.Saturday:
+                            diasemana = "S";
+                            break;
+                        case DayOfWeek.Friday:
+                            diasemana = "V";
+                            break;
+                        default:
+                            diasemana = "L";
+                            if (App.Global.CalendariosVM.EsFestivo(fechaDia.AddDays(1))) diasemana = "V";
+                            break;
+                    }
+                    if (App.Global.CalendariosVM.EsFestivo(fechaDia)) {
+                        diasemana = "F";
+                    }
+                    consulta.AddParameter("@fecha", fechaDia);
+                    consulta.AddParameter("@diaSemana", diasemana);
+                    var Gpd = new GraficosPorDia();
+                    Gpd.Fecha = fechaDia;
+                    Gpd.Lista.Add(GetIntScalar(consulta));
+                    lista.Add(Gpd);
+                }
+                return lista;
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetGraficosByDia), ex);
+            }
+            return new List<GraficosPorDia>();
+        }
+
+
+        public List<DescansosPorDia> GetDescansosByDia(DateTime fecha) {
+            try {
+                var consulta = new SQLiteExpression("SELECT Count(*) " +
+                                    "FROM DiasCalendario " +
+                                    "WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND (Grafico = -2 OR Grafico = -3)");
+
+                List<DescansosPorDia> lista = new List<DescansosPorDia>();
+
+                for (int dia = 1; dia <= DateTime.DaysInMonth(fecha.Year, fecha.Month); dia++) {
+                    DateTime fechaDia = new DateTime(fecha.Year, fecha.Month, dia);
+                    consulta.AddParameter("@fecha", fechaDia);
+                    var Dpd = new DescansosPorDia();
+                    Dpd.Fecha = fechaDia;
+                    Dpd.Descansos = GetIntScalar(consulta);
+                    lista.Add(Dpd);
+                }
+                return lista;
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDescansosByDia), ex);
+            }
+            return new List<DescansosPorDia>();
+        }
 
 
 
 
 
+
+
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BD PIJAMAS
+        // ====================================================================================================
+
+        public IEnumerable<Pijama.DiaPijama> GetDiasPijama(IEnumerable<DiaCalendarioBase> listadias, int comodin) {
+            // Creamos la lista que se devolverá.
+            var lista = new List<Pijama.DiaPijama>();
+            try {
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                    conexion.Open();
+                    foreach (var dia in listadias) {
+                        // Creamos el día pijama a añadir a la lista.
+                        Pijama.DiaPijama diaPijama = new Pijama.DiaPijama(dia);
+                        // Si el día no pertenece al mes, continuamos el bucle al siguiente día.
+                        if (dia.Dia > DateTime.DaysInMonth(dia.DiaFecha.Year, dia.DiaFecha.Month)) continue;
+                        // Establecemos el gráfico a buscar, por si está seleccionado el comodín.
+                        int GraficoBusqueda = dia.Grafico;
+                        if (dia.GraficoVinculado != 0 && dia.Grafico == comodin) GraficoBusqueda = dia.GraficoVinculado;
+                        // Creamos el comando SQL y añadimos los parámetros
+                        var consulta = new SQLiteExpression("SELECT * " +
+                                                  "FROM (SELECT * " +
+                                                  "      FROM Graficos" +
+                                                  "      WHERE IdGrupo = (SELECT _id " +
+                                                  "                       FROM GruposGraficos " +
+                                                  "                       WHERE Validez = (SELECT Max(Validez) " +
+                                                  "                                        FROM GruposGraficos " +
+                                                  "                                        WHERE Validez <= @validez)))" +
+                                                  "WHERE Numero = @numero");
+                        consulta.AddParameter("@validez", dia.DiaFecha);
+                        consulta.AddParameter("@numero", GraficoBusqueda);
+                        // Ejecutamos el comando y extraemos el gráfico.
+                        var grafico = GetItem<GraficoBase>(conexion, consulta, true);
+                        if (grafico == null) grafico = new GraficoBase() { Numero = GraficoBusqueda };
+                        diaPijama.GraficoTrabajado = new GraficoBase(grafico);
+                        diaPijama.GraficoOriginal = new GraficoBase(grafico);
+                        // Modificamos los parámetros del gráfico trabajado en función de si existen en el DiaCalendarioBase.
+                        if (dia.TurnoAlt.HasValue) diaPijama.GraficoTrabajado.Turno = dia.TurnoAlt.Value;
+                        if (dia.InicioAlt.HasValue) diaPijama.GraficoTrabajado.Inicio = new TimeSpan(dia.InicioAlt.Value.Ticks);
+                        if (dia.FinalAlt.HasValue) diaPijama.GraficoTrabajado.Final = new TimeSpan(dia.FinalAlt.Value.Ticks);
+                        if (dia.InicioPartidoAlt.HasValue) diaPijama.GraficoTrabajado.InicioPartido = new TimeSpan(dia.InicioPartidoAlt.Value.Ticks);
+                        if (dia.FinalPartidoAlt.HasValue) diaPijama.GraficoTrabajado.FinalPartido = new TimeSpan(dia.FinalPartidoAlt.Value.Ticks);
+                        if (dia.TrabajadasAlt.HasValue) diaPijama.GraficoTrabajado.Trabajadas = new TimeSpan(dia.TrabajadasAlt.Value.Ticks);
+                        if (dia.AcumuladasAlt.HasValue) diaPijama.GraficoTrabajado.Acumuladas = new TimeSpan(dia.AcumuladasAlt.Value.Ticks);
+                        if (dia.NocturnasAlt.HasValue) diaPijama.GraficoTrabajado.Nocturnas = new TimeSpan(dia.NocturnasAlt.Value.Ticks);
+                        if (dia.DesayunoAlt.HasValue) diaPijama.GraficoTrabajado.Desayuno = dia.DesayunoAlt.Value;
+                        if (dia.ComidaAlt.HasValue) diaPijama.GraficoTrabajado.Comida = dia.ComidaAlt.Value;
+                        if (dia.CenaAlt.HasValue) diaPijama.GraficoTrabajado.Cena = dia.CenaAlt.Value;
+                        if (dia.PlusCenaAlt.HasValue) diaPijama.GraficoTrabajado.PlusCena = dia.PlusCenaAlt.Value;
+                        if (dia.PlusLimpiezaAlt.HasValue) diaPijama.GraficoTrabajado.PlusLimpieza = dia.PlusLimpiezaAlt.Value;
+                        if (dia.PlusPaqueteriaAlt.HasValue) diaPijama.GraficoTrabajado.PlusPaqueteria = dia.PlusPaqueteriaAlt.Value;
+                        // Añadimos el día pijama a la lista.
+                        lista.Add(diaPijama);
+
+                    }
+                }
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasPijama), ex);
+            }
+            return lista;
+        }
+
+
+        public ResumenPijama GetResumenHastaMes(int año, int mes, int idconductor, int comodin) {
+            // Inicializamos el resultado.
+            ResumenPijama resultado = new ResumenPijama();
+            // Establecemos la fecha del día 1 del siguiente mes al indicado.
+            DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
+            try {
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                    conexion.Open();
+                    //----------------------------------------------------------------------------------------------------
+                    // HORAS ACUMULADAS
+                    //----------------------------------------------------------------------------------------------------
+                    var consulta = new SQLiteExpression("SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha, " +
+                                                      "DiasCalendario.ExcesoJornada, DiasCalendario.AcumuladasAlt " +
+                                                      "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios._id " +
+                                                      "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND IdConductor = @idConductor) " +
+                                                      "      AND Grafico > 0 " +
+                                                      "ORDER BY Calendarios.Fecha, DiasCalendario.Dia;");
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@idConductor", idconductor);
+                    using (var lector = consulta.GetCommand(conexion).ExecuteReader()) {
+                        // Por cada día, sumamos las horas acumuladas.
+                        while (lector.Read()) {
+                            int d = (lector["Dia"] is DBNull) ? 0 : (Int16)lector["Dia"];
+                            int g = (lector["Grafico"] is DBNull) ? 0 : (Int16)lector["Grafico"];
+                            int v = (lector["GraficoVinculado"] is DBNull) ? 0 : (Int16)lector["GraficoVinculado"];
+                            TimeSpan? acumuladasAlt = lector.ToTimeSpanNulable("AcumuladasAlt");
+                            TimeSpan ej = lector.ToTimeSpan("ExcesoJornada");
+                            if (v != 0 && g == comodin) g = v;
+                            DateTime f = (lector["Fecha"] is DBNull) ? new DateTime(0) : (DateTime)lector["Fecha"];
+                            if (d > DateTime.DaysInMonth(f.Year, f.Month)) continue;
+                            DateTime fechadia = new DateTime(f.Year, f.Month, d);
+                            var consulta2 = new SQLiteExpression("SELECT * " +
+                                                  "FROM (SELECT * FROM Graficos WHERE IdGrupo = (SELECT _id " +
+                                                  "										         FROM GruposGraficos " +
+                                                  "												 WHERE Validez = (SELECT Max(Validez) " +
+                                                  "																  FROM GruposGraficos " +
+                                                  "														          WHERE Validez <= @validez)))" +
+                                                  "WHERE Numero = @numero");
+                            consulta2.AddParameter("validez", fechadia);
+                            consulta2.AddParameter("numero", g);
+                            var grafico = GetItem<GraficoBase>(conexion, consulta2, true);
+                            if (grafico == null) {
+                                grafico = new GraficoBase();
+                            } else {
+                                grafico.Final += ej;
+                            }
+                            if (acumuladasAlt.HasValue) grafico.Acumuladas = acumuladasAlt.Value;
+                            resultado.HorasAcumuladas += grafico.Acumuladas;
+                        }
+                    }
+
+                    //----------------------------------------------------------------------------------------------------
+                    // HORAS REGULADAS
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idConductor AND Fecha < @fecha");
+                    consulta.AddParameter("idconductor", idconductor);
+                    consulta.AddParameter("fecha", fecha);
+                    resultado.HorasReguladas = GetTimeSpanScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DIAS F6
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
+                                              "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND IdConductor = @idConductor)" +
+                                              "      AND Grafico = -7;");
+                    consulta.AddParameter("fecha", fecha);
+                    consulta.AddParameter("idconductor", idconductor);
+                    resultado.DiasLibreDisposicionF6 = GetDecimalScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DIAS F6DC
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
+                                              "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND IdConductor = @idConductor)" +
+                                              "      AND Grafico = -14;");
+                    consulta.AddParameter("fecha", fecha);
+                    consulta.AddParameter("idconductor", idconductor);
+                    resultado.DiasF6DC = GetDecimalScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DCS REGULADOS 
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Sum(Descansos) FROM Regulaciones WHERE IdConductor = @idConductor AND Fecha < @fecha");
+                    consulta.AddParameter("idconductor", idconductor);
+                    consulta.AddParameter("fecha", fecha);
+                    resultado.DCsRegulados = GetDecimalScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DCS DISFRUTADOS
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
+                                                      "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND IdConductor = @idConductor)" +
+                                                      "      AND Grafico = -6;");
+                    consulta.AddParameter("fecha", fecha);
+                    consulta.AddParameter("idconductor", idconductor);
+                    resultado.DCsDisfrutados = GetDecimalScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DNDs REGULADOS 
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Sum(Dnds) FROM Regulaciones WHERE IdConductor = @idConductor AND Fecha < @fecha");
+                    consulta.AddParameter("idconductor", idconductor);
+                    consulta.AddParameter("fecha", fecha);
+                    resultado.DNDsRegulados = GetDecimalScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DNDS DISFRUTADOS
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                       "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                       "WHERE Calendarios.IdConductor = @idConductor AND DiasCalendario.Grafico = -8 AND Fecha < @fecha");
+                    consulta.AddParameter("idconductor", idconductor);
+                    consulta.AddParameter("fecha", fecha);
+                    resultado.DNDsDisfrutados = GetDecimalScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DÍAS COMITÉ EN DESCANSO
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                      "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                      "WHERE Calendarios.IdConductor = @idConductor AND " +
+                                                      "      (DiasCalendario.Grafico = -2 OR DiasCalendario.Grafico = -3 OR DiasCalendario.Grafico = -5 OR " +
+                                                      "       DiasCalendario.Grafico = -6 OR DiasCalendario.Grafico = -1) AND " +
+                                                      "	   (DiasCalendario.Codigo = 1 OR DiasCalendario.Codigo = 2) AND " +
+                                                      "      Fecha < @fecha");
+                    consulta.AddParameter("idconductor", idconductor);
+                    consulta.AddParameter("fecha", fecha);
+                    resultado.DiasComiteEnDescanso = GetDecimalScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DÍAS TRABAJO EN DESCANSO
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                       "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                       "WHERE Calendarios.IdConductor = @idConductor AND " +
+                                                       "      DiasCalendario.Grafico > 0 AND DiasCalendario.Codigo = 3 AND Fecha < @fecha");
+                    consulta.AddParameter("idconductor", idconductor);
+                    consulta.AddParameter("fecha", fecha);
+                    resultado.DiasTrabajoEnDescanso = GetDecimalScalar(conexion, consulta);
+
+                }
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetResumenHastaMes), ex);
+            }
+            return resultado;
+        }
+
+
+        [Obsolete("Ya hay un método que hace esto en el apartado Calendarios.")]
+        public TimeSpan GetHorasCobradasMes2(int año, int mes, int idconductor) {
+            //Referirse al GetHorasCobradasMes de Calendarios
+            return TimeSpan.Zero;
+        }
+
+
+        [Obsolete("Ya hay un método que hace esto en el apartado Calendarios.")]
+        public TimeSpan GetHorasCobradasAño2(int año, int mes, int idconductor) {
+            //Referirse al GetHorasCobradasAño de Calendarios
+            return TimeSpan.Zero;
+        }
+
+
+        [Obsolete("Ya hay un método que hace esto en el apartado Calendarios.")]
+        public static TimeSpan GetHorasCambiadasPorDCsMes2(int año, int mes, int idconductor) {
+            //Referirse al GetHorasCambiadasPorDCsMes de Calendarios
+            return TimeSpan.Zero;
+        }
+
+
+        [Obsolete("Ya hay un método que hace esto en el apartado Calendarios.")]
+        public TimeSpan GetHorasReguladasMes2(int año, int mes, int idconductor) {
+            //Referirse al GetHorasReguladasMes de Calendarios
+            return TimeSpan.Zero;
+        }
+
+
+        [Obsolete("Ya hay un método que hace esto en el apartado Calendarios.")]
+        public GraficoBase GetGrafico2(int numero, DateTime validez) {
+            //Referirse al GetGrafico de Calendarios
+            return null;
+        }
+
+
+        public int GetDiasTrabajadosHastaMesEnAño(int año, int mes, int idconductor) {
+            try {
+                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+                var consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
+                                    "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) > strftime('%Y-%m-%d', @fechaInicio) AND " +
+                                    "                                                        strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fechaFinal) AND " +
+                                    "                                                        IdConductor = @idConductor) " +
+                                    "      AND Grafico > 0;");
+                consulta.AddParameter("@fechaInicio", fechainicio);
+                consulta.AddParameter("@fechaFinal", fechafinal);
+                consulta.AddParameter("@idConductor", idconductor);
+                return GetIntScalar(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasTrabajadosHastaMesEnAño), ex);
+            }
+            return 0;
+        }
+
+
+        public int GetDiasDescansoHastaMesEnAño(int año, int mes, int idconductor) {
+            try {
+                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+                var consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
+                                    "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) > strftime('%Y-%m-%d', @fechaInicio) AND " +
+                                    "                                                        strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fechaFinal) AND " +
+                                    "                                                        IdConductor = @idConductor) " +
+                                    "      AND (Grafico = -2 OR Grafico = -10 OR Grafico = -12);");
+                consulta.AddParameter("@fechaInicio", fechainicio);
+                consulta.AddParameter("@fechaFinal", fechafinal);
+                consulta.AddParameter("@idConductor", idconductor);
+                return GetIntScalar(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasDescansoHastaMesEnAño), ex);
+            }
+            return 0;
+        }
+
+
+        public int GetDiasVacacionesHastaMesEnAño(int año, int mes, int idconductor) {
+            try {
+                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+                var consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
+                                    "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) > strftime('%Y-%m-%d', @fechaInicio) AND " +
+                                    "                                                        strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fechaFinal) AND " +
+                                    "                                                        IdConductor = @idConductor) " +
+                                    "      AND Grafico = -1;");
+                consulta.AddParameter("@fechaInicio", fechainicio);
+                consulta.AddParameter("@fechaFinal", fechafinal);
+                consulta.AddParameter("@idConductor", idconductor);
+                return GetIntScalar(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasVacacionesHastaMesEnAño), ex);
+            }
+            return 0;
+        }
+
+
+        public int GetDiasInactivoHastaMesEnAño(int año, int mes, int idconductor) {
+            try {
+                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+                var consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
+                                    "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) > strftime('%Y-%m-%d', @fechaInicio) AND " +
+                                    "                                                        strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fechaFinal) AND " +
+                                    "                                                        IdConductor = @idConductor) " +
+                                    "      AND Grafico = 0;");
+                consulta.AddParameter("@fechaInicio", fechainicio);
+                consulta.AddParameter("@fechaFinal", fechafinal);
+                consulta.AddParameter("@idConductor", idconductor);
+                return GetIntScalar(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasInactivoHastaMesEnAño), ex);
+            }
+            return 0;
+        }
+
+
+
+        #endregion
+        // ====================================================================================================
+
+
+
+
+
+
+
+        /// <summary>
+        /// Prueba de cómo se pueden acceder a dos bases de datos diferentes a la vez.
+        /// </summary>
         public List<Conductor> GetPrueba(string path) {
 
             try {
