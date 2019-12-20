@@ -364,6 +364,7 @@ namespace Orion {
 
         public static Int16? ToInt16Nulable(this SQLiteDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return null;
+            object x = lector[campo];
             return Convert.ToInt16(lector[campo]);
         }
 

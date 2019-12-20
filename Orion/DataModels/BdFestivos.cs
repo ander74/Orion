@@ -28,6 +28,8 @@ namespace Orion.DataModels {
 		*================================================================================*/
         public static List<Festivo> GetFestivos() {
 
+            return App.Global.Repository.GetFestivos().ToList();
+
             // Creamos la lista y el comando que extrae las líneas.
             List<Festivo> lista = new List<Festivo>();
 
@@ -60,6 +62,7 @@ namespace Orion.DataModels {
         /*================================================================================
 		* GET FESTIVOS POR MES
         * Ok
+        * No tiene referencias
 		*================================================================================*/
         public static ObservableCollection<Festivo> GetFestivosPorMes(int año, int mes) {
 
@@ -100,6 +103,7 @@ namespace Orion.DataModels {
         /*================================================================================
 		* GET FESTIVOS POR AÑO
         * Ok
+        * No tiene referencias
 		*================================================================================*/
         public static ObservableCollection<Festivo> GetFestivosPorAño(int año) {
 
@@ -142,6 +146,9 @@ namespace Orion.DataModels {
 		*================================================================================*/
         public static void GuardarFestivos(IEnumerable<Festivo> lista) {
 
+            App.Global.Repository.GuardarFestivos(lista);
+            return;
+
             // Si la lista está vacía, salimos.
             if (lista == null || lista.Count() == 0) return;
 
@@ -182,6 +189,8 @@ namespace Orion.DataModels {
         * Ok
 		*================================================================================*/
         public static void BorrarFestivos(IEnumerable<Festivo> lista) {
+
+            App.Global.Repository.BorrarFestivos(lista);
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 

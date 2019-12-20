@@ -33,6 +33,8 @@ namespace Orion.DataModels {
         /// <returns>Colección de gráficos.</returns>
         public static ObservableCollection<Grafico> getGraficos(long IdGrupo) {
 
+            return new ObservableCollection<Grafico>(App.Global.Repository.GetGraficos(Convert.ToInt32(IdGrupo)));
+
             ObservableCollection<Grafico> lista = new ObservableCollection<Grafico>();
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -81,6 +83,7 @@ namespace Orion.DataModels {
         }
 
 
+        [Obsolete("Para efectos de comprobación")]
         public static List<Grafico> getGraficosSinLista() {
 
             List<Grafico> lista = new List<Grafico>();
@@ -141,6 +144,9 @@ namespace Orion.DataModels {
         /// <param name="lista">Lista con los gráficos a guardar.</param>
         public static void GuardarGraficos(IEnumerable<Grafico> lista) {
 
+            App.Global.Repository.GuardarGraficos(lista);
+            return;
+
             // Si la lista está vacía, salimos.
             if (lista == null || lista.Count() == 0) return;
 
@@ -198,6 +204,8 @@ namespace Orion.DataModels {
         /// <param name="lista">Lista con los gráficos a guardar.</param>
         public static int InsertarGrafico(Grafico grafico) {
 
+            return App.Global.Repository.InsertarGrafico(grafico);
+
             int idgraficonuevo = -1;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -237,6 +245,9 @@ namespace Orion.DataModels {
         /// <param name="lista">Lista con los gráficos a borrar.</param>
         public static void BorrarGraficos(List<Grafico> lista) {
 
+            App.Global.Repository.BorrarGraficos(lista);
+            return;
+
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
                 string SQLBorrar = "DELETE FROM Graficos WHERE Id=?";
                 try {
@@ -259,6 +270,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static ObservableCollection<Grafico> getGraficosGrupoPorFecha(DateTime fecha) {
+
+            return new ObservableCollection<Grafico>(App.Global.Repository.GetGraficosGrupoPorFecha(fecha));
 
             // Creamos la lista y el comando que extrae los gráficos.
             ObservableCollection<Grafico> lista = new ObservableCollection<Grafico>();
@@ -303,6 +316,8 @@ namespace Orion.DataModels {
         /// <returns>Colección de gráficos.</returns>
         public static List<EstadisticasGraficos> GetEstadisticasGrupoGraficos(long IdGrupo, OleDbConnection conexion = null) {
 
+            return App.Global.Repository.GetEstadisticasGrupoGraficos(IdGrupo, App.Global.Convenio.JornadaMedia).ToList();
+
             List<EstadisticasGraficos> lista = new List<EstadisticasGraficos>();
 
             if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
@@ -343,6 +358,8 @@ namespace Orion.DataModels {
         /// <returns>Colección de gráficos.</returns>
         public static List<EstadisticasGraficos> GetEstadisticasGraficosDesdeFecha(DateTime fecha) {
 
+            return App.Global.Repository.GetEstadisticasGraficosDesdeFecha(fecha, App.Global.Convenio.JornadaMedia).ToList();
+
             List<EstadisticasGraficos> lista = new List<EstadisticasGraficos>();
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
                 OleDbDataReader lector = null;
@@ -374,6 +391,8 @@ namespace Orion.DataModels {
         * Ok
 		*================================================================================*/
         public static GraficoBase GetGrafico(int numero, DateTime fecha) {
+
+            return App.Global.Repository.GetGrafico(numero, fecha);
 
             GraficoBase resultado = null;
 

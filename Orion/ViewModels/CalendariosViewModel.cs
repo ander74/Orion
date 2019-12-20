@@ -76,6 +76,8 @@ namespace Orion.ViewModels {
             if (ListaCalendarios.Any(x => x.HayDiasNuevos)) HayCambios = true;
             foreach (Calendario c in ListaCalendarios) {
                 c.ObjetoCambiado += ObjetoCambiadoEventHandler;
+                // Añadimos el campo indefinido.
+                c.ConductorIndefinido = App.Global.ConductoresVM.IsIndefinido(c.IdConductor);
             }
             CalendarioSeleccionado = null;
             PropiedadCambiada(nameof(Detalle));

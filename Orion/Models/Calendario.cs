@@ -369,7 +369,7 @@ namespace Orion.Models {
         public int ForeignId { get; set; }
 
 
-        public string ForeignIdName { get => "IdConductor"; }
+        public string ForeignIdName { get => "IdCalendario"; }
 
 
         public string OrderBy { get => $"IdConductor ASC"; }

@@ -29,6 +29,8 @@ namespace Orion.DataModels {
 		*================================================================================*/
         public static ObservableCollection<GrupoGraficos> getGrupos(OleDbConnection conexion = null) {
 
+            return new ObservableCollection<GrupoGraficos>(App.Global.Repository.GetGrupos());
+
             // Creamos la lista.
             ObservableCollection<GrupoGraficos> lista = new ObservableCollection<GrupoGraficos>();
 
@@ -65,6 +67,9 @@ namespace Orion.DataModels {
         * Ok
 		*================================================================================*/
         public static void GuardarGrupos(IEnumerable<GrupoGraficos> lista) {
+
+            App.Global.Repository.GuardarGrupos(lista);
+            return;
 
             // Si la lista está vacía, salimos.
             if (lista == null || lista.Count() == 0) return;
@@ -106,6 +111,10 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static void BorrarGrupoPorId(long idgrupo) {
 
+            App.Global.Repository.BorrarGrupoPorId(Convert.ToInt32(idgrupo));
+            return;
+
+
             string SQLBorrar = "DELETE FROM GruposGraficos WHERE Id=?";
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -127,6 +136,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static int NuevoGrupo(DateTime fecha, string notas) {
+
+            return App.Global.Repository.NuevoGrupo(fecha, notas);
 
             int idgruponuevo = -1;
 
@@ -157,6 +168,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static bool ExisteGrupo(DateTime fecha) {
 
+            return App.Global.Repository.ExisteGrupo(fecha);
+
             Int32 numero = 0;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -182,6 +195,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static GrupoGraficos GetUltimoGrupo(OleDbConnection conexion = null) {
+
+            return App.Global.Repository.GetUltimoGrupo();
 
             GrupoGraficos grupo = null;
 

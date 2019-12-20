@@ -25,6 +25,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static ObservableCollection<Calendario> GetCalendarios(int año, int mes) {
 
+            return new ObservableCollection<Calendario>(App.Global.Repository.GetCalendarios(año, mes));
+
             // Creamos la lista y el comando que extrae los gráficos.
             ObservableCollection<Calendario> lista = new ObservableCollection<Calendario>();
 
@@ -73,6 +75,7 @@ namespace Orion.DataModels {
         }
 
 
+        [Obsolete("Solo para efectos de comprobacion")]
         public static List<Calendario> GetCalendarios() {
 
             // Creamos la lista y el comando que extrae los gráficos.
@@ -117,6 +120,7 @@ namespace Orion.DataModels {
         }
 
 
+        [Obsolete("Solo para efectos de comprobacion")]
         public static List<Calendario> GetCalendariosSinLista() {
 
             // Creamos la lista y el comando que extrae los gráficos.
@@ -167,6 +171,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static List<Calendario> GetCalendariosConductor(int año, int matricula) {
 
+            return App.Global.Repository.GetCalendariosConductor(año, matricula).ToList();
+
             // Creamos la lista y el comando que extrae los gráficos.
             List<Calendario> lista = new List<Calendario>();
 
@@ -215,6 +221,7 @@ namespace Orion.DataModels {
         /*================================================================================
 		 * GET CALENDARIO CONDUCTOR
          * Ok
+         * No Tiene referencias.
 		 *================================================================================*/
         public static Calendario GetCalendarioConductor(int año, int mes, int matricula) {
 
@@ -266,6 +273,9 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static void GuardarCalendarios(IEnumerable<Calendario> lista) {
+
+            App.Global.Repository.GuardarCalendarios(lista);
+            return;
 
             // Si la lista está vacía, salimos.
             if (lista == null || lista.Count() == 0) return;
@@ -330,6 +340,9 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static void BorrarCalendarios(List<Calendario> lista) {
 
+            App.Global.Repository.BorrarCalendarios(lista);
+            return;
+
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
                 // Creamos el comando SQL
                 //string SQLBorrar = "DELETE FROM Calendarios WHERE Id=?;";
@@ -355,6 +368,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static int GetDescansosReguladosHastaMes(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetDescansosReguladosHastaMes(año, mes, idconductor);
 
             object resultado = null;
 
@@ -392,6 +407,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static int GetDescansosReguladosAño(int año, int idconductor) {
 
+            return App.Global.Repository.GetDescansosReguladosAño(año, idconductor);
+
             object resultado = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -423,6 +440,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static int GetDescansosDisfrutadosHastaMes(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetDescansosDisfrutadosHastaMes(año, mes, idconductor);
 
             object resultado = null;
 
@@ -459,6 +478,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static int GetDCDisfrutadosAño(int idconductor, int año, int mes = 0) {
+
+            return App.Global.Repository.GetDCDisfrutadosAño(idconductor, año, mes);
 
             object resultado = null;
 
@@ -505,6 +526,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static int GetDiasF6HastaMes(int año, int mes, int idconductor) {
 
+            return App.Global.Repository.GetDiasF6HastaMes(año, mes, idconductor);
+
             object resultado = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -540,6 +563,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static TimeSpan GetHorasReguladasHastaMes(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetHorasReguladasHastaMes(año, mes, idconductor);
 
             object resultado = null;
 
@@ -577,6 +602,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static TimeSpan GetHorasReguladasMes(int año, int mes, int idconductor) {
 
+            return App.Global.Repository.GetHorasReguladasMes(año, mes, idconductor);
+
             object resultado = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -610,6 +637,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static TimeSpan GetHorasCambiadasPorDCsMes(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetHorasCambiadasPorDCsMes(año, mes, idconductor);
 
             object resultado = null;
 
@@ -645,6 +674,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static TimeSpan GetHorasReguladasAño(int año, int idconductor) {
 
+            return App.Global.Repository.GetHorasReguladasAño(año, idconductor);
+
             object resultado = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -677,6 +708,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static TimeSpan GetHorasCobradasMes(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetHorasCobradasMes(año, mes, idconductor);
 
             object resultado = null;
 
@@ -711,6 +744,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static TimeSpan GetHorasCobradasAño(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetHorasCobradasAño(año, mes, idconductor);
 
             object resultado = null;
 
@@ -750,6 +785,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static TimeSpan GetExcesoJornadaCobradaHastaMes(int año, int mes, int idconductor) {
 
+            return App.Global.Repository.GetExcesoJornadaCobradaHastaMes(año, mes, idconductor);
+
             object resultado = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -785,6 +822,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static TimeSpan GetAcumuladasHastaMes(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetAcumuladasHastaMes(año, mes, idconductor, App.Global.PorCentro.Comodin);
 
             // Inicializamos las horas acumuladas.
             TimeSpan acumuladas = TimeSpan.Zero;
@@ -856,6 +895,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static int GetComiteEnDescansoHastaMes(int idconductor, int año, int mes) {
 
+            return App.Global.Repository.GetComiteEnDescansoHastaMes(idconductor, año, mes);
+
             // Inicializamos el resultado.
             int resultado = 0;
             // Establecemos la fecha del día 1 del siguiente mes al indicado.
@@ -898,6 +939,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static int GetTrabajoEnDescansoHastaMes(int idconductor, int año, int mes) {
 
+            return App.Global.Repository.GetTrabajoEnDescansoHastaMes(idconductor, año, mes);
+
             // Inicializamos el resultado.
             int resultado = 0;
             // Establecemos la fecha del día 1 del siguiente mes al indicado.
@@ -937,6 +980,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static int GetDNDHastaMes(int idconductor, int año, int mes) {
+
+            return App.Global.Repository.GetDNDHastaMes(idconductor, año, mes);
 
             // Inicializamos el resultado.
             int resultado = 0;
@@ -978,6 +1023,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static int GetDNDDisfrutadosAño(int idconductor, int año, int mes = 0) {
+
+            return App.Global.Repository.GetDNDDisfrutadosAño(idconductor, año, mes);
 
             object resultado = null;
 

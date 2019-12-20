@@ -27,6 +27,8 @@ namespace Orion.DataModels {
 		*================================================================================*/
         public static ObservableCollection<Linea> GetLineas() {
 
+            return new ObservableCollection<Linea>(App.Global.LineasRepo.GetLineas());
+
             // Creamos la lista y el comando que extrae las líneas.
             ObservableCollection<Linea> lista = new ObservableCollection<Linea>();
 
@@ -63,6 +65,9 @@ namespace Orion.DataModels {
         * Ok
 		*================================================================================*/
         public static void GuardarLineas(IEnumerable<Linea> lista) {
+
+            App.Global.LineasRepo.GuardarLineas(lista);
+            return;
 
             // Si la lista está vacía, salimos.
             if (lista == null || lista.Count() == 0) return;
@@ -112,6 +117,9 @@ namespace Orion.DataModels {
         * Ok
 		*================================================================================*/
         public static void BorrarLineas(List<Linea> lista) {
+
+            App.Global.LineasRepo.BorrarLineas(lista);
+            return;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas)) {
                 string SQLBorrar = "DELETE FROM Lineas WHERE Id=?";

@@ -21,6 +21,9 @@ namespace Orion.DataModels {
         * Ok
 		*================================================================================*/
         public static FullObservableCollection<Pluses> GetPluses() {
+
+            return new FullObservableCollection<Pluses>(App.Global.Repository.GetPluses());
+
             // Creamos la lista y el comando que extrae las líneas.
             FullObservableCollection<Pluses> lista = new FullObservableCollection<Pluses>();
 
@@ -58,6 +61,9 @@ namespace Orion.DataModels {
         * Ok
 		*================================================================================*/
         public static void GuardarPluses(IEnumerable<Pluses> lista) {
+
+            App.Global.Repository.GuardarPluses(lista);
+            return;
 
             // Si la lista está vacía, salimos.
             if (lista == null || lista.Count() == 0) return;

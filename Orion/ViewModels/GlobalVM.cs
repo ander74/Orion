@@ -266,7 +266,9 @@ namespace Orion.ViewModels {
 
         public string CadenaConexion {
             get {
-                return GetCadenaConexion(_centroactual);
+                //return GetCadenaConexion(_centroactual);
+                // Si volvemos a Access, recuperar la línea anterior y eliminar la siguiente.
+                return GetCadenaConexionSQL(_centroactual);
             }
         }
 
@@ -280,7 +282,9 @@ namespace Orion.ViewModels {
 
         public string CadenaConexionLineas {
             get {
-                return GetCadenaConexion(Centros.Lineas);
+                //return GetCadenaConexion(Centros.Lineas);
+                // Si volvemos a Access, recuperar la línea anterior y eliminar la siguiente.
+                return GetCadenaConexionSQL(Centros.Lineas);
             }
         }
 
@@ -408,7 +412,7 @@ namespace Orion.ViewModels {
         //====================================================================================================
 
         private OrionRepository repository;
-        public OrionRepository Reposritory {
+        public OrionRepository Repository {
             get {
                 if (repository == null) repository = new OrionRepository(CadenaConexionSQL);
                 return repository;
@@ -417,11 +421,11 @@ namespace Orion.ViewModels {
 
 
 
-        private OrionRepository lineasRepository;
-        public OrionRepository LineasRepository {
+        private LineasRepository lineasRepo;
+        public LineasRepository LineasRepo {
             get {
-                if (lineasRepository == null) lineasRepository = new OrionRepository(CadenaConexionLineasSQL);
-                return lineasRepository;
+                if (lineasRepo == null) lineasRepo = new LineasRepository(CadenaConexionLineasSQL);
+                return lineasRepo;
             }
         }
 

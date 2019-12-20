@@ -30,6 +30,8 @@ namespace Orion.DataModels {
         /// <returns>Colección de valoraciones.</returns>
         public static ObservableCollection<ValoracionGrafico> getValoraciones(long IdGrafico) {
 
+            return new ObservableCollection<ValoracionGrafico>(App.Global.Repository.GetValoraciones(Convert.ToInt32(IdGrafico)));
+
             // Creamos la lista y el comando que extrae los gráficos.
             ObservableCollection<ValoracionGrafico> lista = new ObservableCollection<ValoracionGrafico>();
 
@@ -152,6 +154,9 @@ namespace Orion.DataModels {
         /// <param name="lista">Lista con las valoraciones a guardar.</param>
         public static void InsertarValoracion(ValoracionGrafico valoracion) {
 
+            App.Global.Repository.InsertarValoracion(valoracion);
+            return;
+
             // Si la conexión no existe o la valoracion es nula, devolvemos nulo.
             if (App.Global.CadenaConexion == null || valoracion == null) return;
 
@@ -183,6 +188,9 @@ namespace Orion.DataModels {
         /// </summary>
         /// <param name="lista">Lista con las valoraciones a borrar.</param>
         public static void BorrarValoraciones(List<ValoracionGrafico> lista) {
+
+            App.Global.Repository.BorrarValoraciones(lista);
+            return;
 
             string SQLBorrar = "DELETE FROM Valoraciones WHERE Id=?";
 

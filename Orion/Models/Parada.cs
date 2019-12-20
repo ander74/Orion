@@ -244,18 +244,33 @@ namespace Orion.Models {
 
 
         public string ComandoInsertar {
-            get => "INSERT OR REPLACE INTO Itinerarios (" +
-                "IdItinerario, " +
-                "Orden, " +
-                "Descripcion, " +
-                "Tiempo, " +
-                "_id) " +
-                "VALUES (" +
-                "@idItinerario, " +
-                "@orden, " +
-                "@descripcion, " +
-                "@tiempo, " +
-                "@id);";
+            get {
+                if (Id == 0) {
+                    return "INSERT OR REPLACE INTO Paradas (" +
+                        "IdItinerario, " +
+                        "Orden, " +
+                        "Descripcion, " +
+                        "Tiempo) " +
+                        "VALUES (" +
+                        "@idItinerario, " +
+                        "@orden, " +
+                        "@descripcion, " +
+                        "@tiempo);";
+                } else {
+                    return "INSERT OR REPLACE INTO Paradas (" +
+                        "IdItinerario, " +
+                        "Orden, " +
+                        "Descripcion, " +
+                        "Tiempo, " +
+                        "_id) " +
+                        "VALUES (" +
+                        "@idItinerario, " +
+                        "@orden, " +
+                        "@descripcion, " +
+                        "@tiempo, " +
+                        "@id);";
+                }
+            }
         }
 
 

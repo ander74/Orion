@@ -129,6 +129,12 @@ namespace Orion.ViewModels {
             conductor.ListaRegulaciones.Add(regulacion);
         }
 
+
+        public bool IsIndefinido(int matricula) {
+            return ListaConductores.FirstOrDefault(c => c.Id == matricula)?.Indefinido ?? false;
+        }
+
+
         #endregion
 
 

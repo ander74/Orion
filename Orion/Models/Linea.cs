@@ -262,14 +262,25 @@ namespace Orion.Models {
 
 
         public string ComandoInsertar {
-            get => "INSERT OR REPLACE INTO Lineas (" +
-                "Nombre, " +
-                "Descripcion, " +
-                "_id) " +
-                "VALUES (" +
-                "@nombre, " +
-                "@descripcion, " +
-                "@id);";
+            get {
+                if (Id == 0) {
+                    return "INSERT OR REPLACE INTO Lineas (" +
+                        "Nombre, " +
+                        "Descripcion) " +
+                        "VALUES (" +
+                        "@nombre, " +
+                        "@descripcion);";
+                } else {
+                    return "INSERT OR REPLACE INTO Lineas (" +
+                        "Nombre, " +
+                        "Descripcion, " +
+                        "_id) " +
+                        "VALUES (" +
+                        "@nombre, " +
+                        "@descripcion, " +
+                        "@id);";
+                }
+            }
         }
 
 

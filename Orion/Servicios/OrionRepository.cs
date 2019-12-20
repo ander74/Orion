@@ -8,7 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data.SQLite;
 using System.Linq;
 using Orion.Config;
@@ -87,22 +86,22 @@ namespace Orion.Servicios {
             "Descuadre INTEGER DEFAULT 0, " +
             "BloquearDescuadre INTEGER DEFAULT 0, " +
             "FacturadoPaqueteria REAL DEFAULT 0, " +
-            "Limpieza INTEGER DEFAULT 0, " +
+            "Limpieza INTEGER DEFAULT NULL, " +
             "GraficoVinculado INTEGER DEFAULT 0, " +
-            "TurnoAlt INTEGER DEFAULT 0, " +
-            "InicioAlt INTEGER DEFAULT 0, " +
-            "FinalAlt INTEGER DEFAULT 0, " +
-            "InicioPartidoAlt INTEGER DEFAULT 0, " +
-            "FinalPartidoAlt INTEGER DEFAULT 0, " +
-            "TrabajadasAlt INTEGER DEFAULT 0, " +
-            "AcumuladasAlt INTEGER DEFAULT 0, " +
-            "NocturnasAlt INTEGER DEFAULT 0, " +
-            "DesayunoAlt REAL DEFAULT 0, " +
-            "ComidaAlt REAL DEFAULT 0, " +
-            "CenaAlt REAL DEFAULT 0, " +
-            "PlusCenaAlt REAL DEFAULT 0, " +
-            "PlusLimpiezaAlt INTEGER DEFAULT 0, " +
-            "PlusPaqueteriaAlt INTEGER DEFAULT 0, " +
+            "TurnoAlt INTEGER DEFAULT NULL, " +
+            "InicioAlt INTEGER DEFAULT NULL, " +
+            "FinalAlt INTEGER DEFAULT NULL, " +
+            "InicioPartidoAlt INTEGER DEFAULT NULL, " +
+            "FinalPartidoAlt INTEGER DEFAULT NULL, " +
+            "TrabajadasAlt INTEGER DEFAULT NULL, " +
+            "AcumuladasAlt INTEGER DEFAULT NULL, " +
+            "NocturnasAlt INTEGER DEFAULT NULL, " +
+            "DesayunoAlt REAL DEFAULT NULL, " +
+            "ComidaAlt REAL DEFAULT NULL, " +
+            "CenaAlt REAL DEFAULT NULL, " +
+            "PlusCenaAlt REAL DEFAULT NULL, " +
+            "PlusLimpiezaAlt INTEGER DEFAULT NULL, " +
+            "PlusPaqueteriaAlt INTEGER DEFAULT NULL, " +
             "Notas TEXT DEFAULT ''" +
             ");";
 
@@ -122,11 +121,11 @@ namespace Orion.Servicios {
             "DiaSemana TEXT DEFAULT '', " +
             "Turno INTEGER DEFAULT 0, " +
             "DescuadreInicio INTEGER DEFAULT 0, " +
-            "Inicio INTEGER, " +
-            "Final INTEGER, " +
+            "Inicio INTEGER DEFAULT NULL, " +
+            "Final INTEGER DEFAULT NULL, " +
             "DescuadreFinal INTEGER DEFAULT 0, " +
-            "InicioPartido, " +
-            "FinalPartido, " +
+            "InicioPartido DEFAULT NULL, " +
+            "FinalPartido DEFAULT NULL, " +
             "Valoracion INTEGER DEFAULT 0, " +
             "Trabajadas INTEGER DEFAULT 0, " +
             "Acumuladas INTEGER DEFAULT 0, " +
@@ -176,10 +175,10 @@ namespace Orion.Servicios {
         public const string CrearTablaValoraciones = "CREATE TABLE IF NOT EXISTS Valoraciones (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "IdGrafico INTEGER DEFAULT 0, " +
-            "Inicio INTEGER DEFAULT 0, " +
+            "Inicio INTEGER DEFAULT NULL, " +
             "Linea REAL DEFAULT 0, " +
             "Descripcion TEXT DEFAULT '', " +
-            "Final INTEGER DEFAULT 0, " +
+            "Final INTEGER DEFAULT NULL, " +
             "Tiempo INTEGER DEFAULT 0 " +
             ");";
 
@@ -553,7 +552,7 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
 
-        public ObservableCollection<Calendario> GetCalendarios(int año, int mes) {
+        public IEnumerable<Calendario> GetCalendarios(int año, int mes) {
 
             try {
                 DateTime fecha = new DateTime(año, mes, 1);
@@ -561,15 +560,15 @@ namespace Orion.Servicios {
                 consulta.AddParameter("@fecha", fecha);
                 var lista = GetItems<Calendario>(consulta);
                 //TODO: Añadir si el conductor es o no indefinido y quitar la parte Indefinido de la consulta.
-                return new ObservableCollection<Calendario>(lista);
+                return lista;
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetCalendarios), ex);
             }
-            return new ObservableCollection<Calendario>();
+            return new List<Calendario>();
         }
 
 
-        public List<Calendario> GetCalendariosConductor(int año, int matricula) {
+        public IEnumerable<Calendario> GetCalendariosConductor(int año, int matricula) {
 
             try {
                 DateTime fecha = new DateTime(año, 1, 1);
@@ -579,7 +578,7 @@ namespace Orion.Servicios {
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                 var lista = GetItems<Calendario>(consulta);
                 //TODO: Añadir si el conductor es o no indefinido y quitar la parte Indefinido de la consulta.
-                return lista.ToList();
+                return lista;
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetCalendariosConductor), ex);
             }
@@ -1078,9 +1077,11 @@ namespace Orion.Servicios {
         #region BD GRÁFICOS
         // ====================================================================================================
 
-        public IEnumerable<Grafico> GetGraficos() {
+        public IEnumerable<Grafico> GetGraficos(int idGrupo) {
             try {
-                return GetItems<Grafico>();
+                var consulta = new SQLiteExpression("SELECT * FROM Graficos WHERE IdGrupo = @idGrupo ORDER BY Numero");
+                consulta.AddParameter("@idGrupo", idGrupo);
+                return GetItems<Grafico>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetGraficos), ex);
             }
@@ -1384,69 +1385,6 @@ namespace Orion.Servicios {
 
 
         // ====================================================================================================
-        #region BD LINEAS
-        // ====================================================================================================
-
-        public IEnumerable<Linea> GetLineas() {
-            try {
-                return GetItems<Linea>();
-            } catch (Exception ex) {
-                Utils.VerError(nameof(this.GetLineas), ex);
-            }
-            return new List<Linea>();
-        }
-
-
-        public void GuardarLineas(IEnumerable<Linea> lista) {
-            try {
-                GuardarItems(lista);
-            } catch (Exception ex) {
-                Utils.VerError(nameof(this.GuardarLineas), ex);
-            }
-        }
-
-
-        public void BorrarLineas(IEnumerable<Linea> lista) {
-            try {
-                BorrarItems(lista);
-            } catch (Exception ex) {
-                Utils.VerError(nameof(this.BorrarLineas), ex);
-            }
-        }
-
-        #endregion
-        // ====================================================================================================
-
-
-        // ====================================================================================================
-        #region ITINERARIOS
-        // ====================================================================================================
-
-        public Itinerario GetItinerarioByNombre(decimal nombre) {
-            try {
-                var consulta = new SQLiteExpression("SELECT * FROM Itinerarios WHERE Nombre = @nombre").AddParameter("@nombre", nombre);
-                return GetItem<Itinerario>(consulta);
-            } catch (Exception ex) {
-                Utils.VerError(nameof(this.GetItinerarioByNombre), ex);
-            }
-            return new Itinerario();
-        }
-
-        #endregion
-        // ====================================================================================================
-
-
-        // ====================================================================================================
-        #region BD PARADAS
-        // ====================================================================================================
-
-        // Al gestionarse las paradas desde los itinerarios, no son necesarios métodos en este apartado.
-
-        #endregion
-        // ====================================================================================================
-
-
-        // ====================================================================================================
         #region BD ESTADÍSTICAS
         // ====================================================================================================
 
@@ -1741,13 +1679,13 @@ namespace Orion.Servicios {
                     using (var lector = consulta.GetCommand(conexion).ExecuteReader()) {
                         // Por cada día, sumamos las horas acumuladas.
                         while (lector.Read()) {
-                            int d = (lector["Dia"] is DBNull) ? 0 : (Int16)lector["Dia"];
-                            int g = (lector["Grafico"] is DBNull) ? 0 : (Int16)lector["Grafico"];
-                            int v = (lector["GraficoVinculado"] is DBNull) ? 0 : (Int16)lector["GraficoVinculado"];
+                            int d = lector.ToInt32("Dia");//  (lector["Dia"] is DBNull) ? 0 : (Int32)lector["Dia"];
+                            int g = lector.ToInt32("Grafico");//  (lector["Grafico"] is DBNull) ? 0 : (Int32)lector["Grafico"];
+                            int v = lector.ToInt32("GraficoVinculado");//  (lector["GraficoVinculado"] is DBNull) ? 0 : (Int32)lector["GraficoVinculado"];
                             TimeSpan? acumuladasAlt = lector.ToTimeSpanNulable("AcumuladasAlt");
                             TimeSpan ej = lector.ToTimeSpan("ExcesoJornada");
                             if (v != 0 && g == comodin) g = v;
-                            DateTime f = (lector["Fecha"] is DBNull) ? new DateTime(0) : (DateTime)lector["Fecha"];
+                            DateTime f = lector.ToDateTime("Fecha");//  (lector["Fecha"] is DBNull) ? new DateTime(0) : (DateTime)lector["Fecha"];
                             if (d > DateTime.DaysInMonth(f.Year, f.Month)) continue;
                             DateTime fechadia = new DateTime(f.Year, f.Month, d);
                             var consulta2 = new SQLiteExpression("SELECT * " +

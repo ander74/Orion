@@ -136,6 +136,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static Itinerario GetItinerarioByNombre(decimal nombre) {
 
+            return App.Global.LineasRepo.GetItinerarioByNombre(nombre);
+
             Itinerario itinerario = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexionLineas)) {

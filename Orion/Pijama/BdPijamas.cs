@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Linq;
 using Orion.Config;
 using Orion.Models;
 
@@ -127,6 +128,8 @@ namespace Orion.Pijama {
         //================================================================================
         public static List<DiaPijama> GetDiasPijama(IEnumerable<DiaCalendarioBase> listadias) {
 
+            return App.Global.Repository.GetDiasPijama(listadias, App.Global.PorCentro.Comodin).ToList();
+
             // Creamos la lista que se devolverá.
             List<DiaPijama> lista = new List<DiaPijama>();
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -187,6 +190,8 @@ namespace Orion.Pijama {
         // GET RESUMEN HASTA MES
         //================================================================================
         public static ResumenPijama GetResumenHastaMes(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetResumenHastaMes(año, mes, idconductor, App.Global.PorCentro.Comodin);
 
             // Inicializamos las horas acumuladas.
             ResumenPijama resultado = new ResumenPijama();
@@ -370,6 +375,8 @@ namespace Orion.Pijama {
         //================================================================================
         public static TimeSpan GetHorasCobradasMes(int año, int mes, int idconductor) {
 
+            return App.Global.Repository.GetHorasCobradasMes(año, mes, idconductor);
+
             object resultado = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -402,6 +409,8 @@ namespace Orion.Pijama {
         // GET HORAS COBRADAS AÑO
         //================================================================================
         public static TimeSpan GetHorasCobradasAño(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetHorasCobradasAño(año, mes, idconductor);
 
             object resultado = null;
 
@@ -440,6 +449,8 @@ namespace Orion.Pijama {
         //================================================================================
         public static TimeSpan GetHorasCambiadasPorDCsMes(int año, int mes, int idconductor) {
 
+            return App.Global.Repository.GetHorasCambiadasPorDCsMes(año, mes, idconductor);
+
             object resultado = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -472,6 +483,8 @@ namespace Orion.Pijama {
         // GET HORAS REGULADAS MES
         //================================================================================
         public static TimeSpan GetHorasReguladasMes(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetHorasReguladasMes(año, mes, idconductor);
 
             object resultado = null;
 
@@ -506,6 +519,8 @@ namespace Orion.Pijama {
         //================================================================================
         public static GraficoBase GetGrafico(int numero, DateTime validez) {
 
+            return App.Global.Repository.GetGrafico(numero, validez);
+
             GraficoBase grafico = null;
             OleDbDataReader lector = null;
 
@@ -535,6 +550,8 @@ namespace Orion.Pijama {
         // GET DIAS TRABAJADOS HASTA MES EN AÑO
         //================================================================================
         public static int GetDiasTrabajadosHastaMesEnAño(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetDiasTrabajadosHastaMesEnAño(año, mes, idconductor);
 
             object resultado = null;
 
@@ -577,6 +594,8 @@ namespace Orion.Pijama {
         //================================================================================
         public static int GetDiasDescansoHastaMesEnAño(int año, int mes, int idconductor) {
 
+            return App.Global.Repository.GetDiasDescansoHastaMesEnAño(año, mes, idconductor);
+
             object resultado = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -618,6 +637,8 @@ namespace Orion.Pijama {
         //================================================================================
         public static int GetDiasVacacionesHastaMesEnAño(int año, int mes, int idconductor) {
 
+            return App.Global.Repository.GetDiasVacacionesHastaMesEnAño(año, mes, idconductor);
+
             object resultado = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
@@ -658,6 +679,8 @@ namespace Orion.Pijama {
         // GET DIAS INACTIVO HASTA MES EN AÑO
         //================================================================================
         public static int GetDiasInactivoHastaMesEnAño(int año, int mes, int idconductor) {
+
+            return App.Global.Repository.GetDiasInactivoHastaMesEnAño(año, mes, idconductor);
 
             object resultado = null;
 

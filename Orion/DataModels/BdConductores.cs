@@ -28,6 +28,8 @@ namespace Orion.DataModels {
 		*================================================================================*/
         public static List<Conductor> GetConductores() {
 
+            return App.Global.Repository.GetConductores().ToList();
+
             // Creamos la lista y el comando que extrae los gráficos.
             List<Conductor> lista = new List<Conductor>();
 
@@ -66,6 +68,9 @@ namespace Orion.DataModels {
 		*================================================================================*/
         public static void GuardarConductores(IEnumerable<Conductor> lista) {
 
+            App.Global.Repository.GuardarConductores(lista);
+            return;
+
             // Si la lista está vacía, salimos.
             if (lista == null || lista.Count() == 0) return;
 
@@ -77,7 +82,7 @@ namespace Orion.DataModels {
                 try {
                     conexion.Open();
 
-                    App.Global.Reposritory.GuardarConductores(lista);
+                    App.Global.Repository.GuardarConductores(lista);
 
                     foreach (Conductor conductor in lista) {
                         if (conductor.Nuevo) {
@@ -115,6 +120,9 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static void BorrarConductores(IEnumerable<Conductor> lista) {
 
+            App.Global.Repository.BorrarConductores(lista);
+            return;
+
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
                 //string SQLBorrar = "DELETE FROM Conductores WHERE Id=?";
@@ -140,6 +148,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static bool ExisteConductor(int idconductor) {
+
+            return App.Global.Repository.ExisteConductor(idconductor);
 
             int numero = 0;
 
@@ -169,6 +179,9 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static void InsertarConductorDesconocido(int idconductor) {
 
+            App.Global.Repository.InsertarConductorDesconocido(idconductor);
+            return;
+
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
                 //string SQLInsertar = "INSERT INTO Conductores (Id, Nombre) VALUES (?, 'Desconocido')";
                 string SQLInsertar = DbService2.InsertarConductorDesconocido;
@@ -189,6 +202,8 @@ namespace Orion.DataModels {
          * Ok
 		 *================================================================================*/
         public static Conductor GetConductor(int idconductor) {
+
+            return App.Global.Repository.GetConductor(idconductor);
 
             Conductor conductor = null;
 

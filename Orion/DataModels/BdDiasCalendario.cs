@@ -109,6 +109,8 @@ namespace Orion.DataModels {
 		 *================================================================================*/
         public static DiaCalendarioBase GetDiaCalendario(int idConductor, DateTime fecha) {
 
+            return App.Global.Repository.GetDiaCalendario(idConductor, fecha);
+
             DiaCalendarioBase resultado = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {

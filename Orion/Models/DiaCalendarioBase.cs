@@ -595,7 +595,7 @@ namespace Orion.Models {
         public string ForeignIdName { get => "IdCalendario"; }
 
 
-        public string OrderBy { get => $"IdConductor ASC"; }
+        public string OrderBy { get => $"Dia ASC"; }
 
 
         public string TableName { get => "DiasCalendario"; }

@@ -199,7 +199,7 @@ namespace Orion.Servicios {
         protected bool BorrarItem<T>(SQLiteConnection conexion, T item, bool ignorarLista = false) where T : ISQLiteItem {
             if (conexion == null || conexion.State != ConnectionState.Open || item == null) return false;
             int borrados = 0;
-            using (var comando = new SQLiteCommand($"DELETE * FROM {item.TableName} WHERE _id=@id;", conexion)) {
+            using (var comando = new SQLiteCommand($"DELETE FROM {item.TableName} WHERE _id=@id;", conexion)) {
                 comando.Parameters.AddWithValue("@id", item.Id);
                 borrados = comando.ExecuteNonQuery();
                 if (!ignorarLista && item.HasList) {
@@ -303,6 +303,7 @@ namespace Orion.Servicios {
 
         protected void AddListaToItem<T>(SQLiteConnection conexion, ref T item) where T : ISQLiteItem {
             if (item == null) return;
+            item.InicializarLista();
             var tipo = item.Lista.GetType().GetGenericArguments()[0];
             var item2 = (ISQLiteItem)Activator.CreateInstance(tipo);
             var consulta = new SQLiteExpression($"SELECT * FROM {item2.TableName} WHERE {item.ForeignIdName} = @id ORDER BY {item2.OrderBy};").AddParameter("@id", item.Id);
@@ -312,6 +313,7 @@ namespace Orion.Servicios {
                     while (lector.Read()) {
                         item2 = (ISQLiteItem)Activator.CreateInstance(tipo);
                         item2.FromReader(lector);
+                        if (item2.HasList) AddListaToItem(conexion, ref item2);
                         item.AddItemToList(item2);
                     }
                 }
@@ -399,6 +401,12 @@ namespace Orion.Servicios {
         }
 
 
+        protected long GetLongScalar(SQLiteConnection conexion, SQLiteExpression consulta) {
+            var resultado = GetScalar(conexion, consulta);
+            return resultado == null ? 0 : Convert.ToInt64(resultado);
+        }
+
+
         protected decimal GetDecimalScalar(SQLiteConnection conexion, SQLiteExpression consulta) {
             var resultado = GetScalar(conexion, consulta);
             return resultado == null ? 0 : Convert.ToDecimal(resultado);
@@ -407,7 +415,7 @@ namespace Orion.Servicios {
 
         protected TimeSpan GetTimeSpanScalar(SQLiteConnection conexion, SQLiteExpression consulta) {
             if (conexion == null || conexion.State != ConnectionState.Open) return TimeSpan.Zero;
-            var resultado = GetIntScalar(conexion, consulta);
+            var resultado = GetLongScalar(conexion, consulta);
             return new TimeSpan(resultado);
         }
 
@@ -432,6 +440,14 @@ namespace Orion.Servicios {
             using (var conexion = new SQLiteConnection(CadenaConexion)) {
                 conexion.Open();
                 return GetIntScalar(conexion, consulta);
+            }
+        }
+
+
+        public long GetLongScalar(SQLiteExpression consulta) {
+            using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                conexion.Open();
+                return GetLongScalar(conexion, consulta);
             }
         }
 

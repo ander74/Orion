@@ -8,6 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
+using System.Linq;
 using Orion.Models;
 
 namespace Orion.DataModels {
@@ -21,6 +22,8 @@ namespace Orion.DataModels {
         * Ok
         *================================================================================*/
         public static EstadisticaGrupoGraficos GetEstadisticasUltimoGrupoGraficos(Centros centro) {
+
+            return App.Global.Repository.GetEstadisticasUltimoGrupoGraficos(centro);
 
             EstadisticaGrupoGraficos resultado = null;
 
@@ -54,6 +57,8 @@ namespace Orion.DataModels {
         *================================================================================*/
         public static EstadisticaGrupoGraficos GetEstadisticasGrupoGraficos(long idGrupo, Centros centro) {
 
+            return App.Global.Repository.GetEstadisticasGrupoGraficos(idGrupo, centro);
+
             EstadisticaGrupoGraficos resultado = null;
 
             using (OleDbConnection conexion = new OleDbConnection(App.Global.GetCadenaConexion(centro))) {
@@ -86,6 +91,8 @@ namespace Orion.DataModels {
         * Ok
         *================================================================================*/
         public static List<GraficoFecha> GetGraficosFromDiaCalendario(DateTime fecha) {
+
+            return App.Global.Repository.GetGraficosFromDiaCalendario(fecha, App.Global.PorCentro.Comodin).ToList();
 
             List<GraficoFecha> lista = new List<GraficoFecha>();
 
@@ -132,6 +139,8 @@ namespace Orion.DataModels {
         * Ok
         *================================================================================*/
         public static List<GraficosPorDia> GetGraficosByDia(DateTime fecha) {
+
+            return App.Global.Repository.GetGraficosByDia(fecha).ToList();
 
             List<GraficosPorDia> lista = new List<GraficosPorDia>();
 
@@ -215,6 +224,8 @@ namespace Orion.DataModels {
         * Ok
         *================================================================================*/
         public static List<DescansosPorDia> GetDescansosByDia(DateTime fecha) {
+
+            return App.Global.Repository.GetDescansosByDia(fecha).ToList();
 
             List<DescansosPorDia> lista = new List<DescansosPorDia>();
 

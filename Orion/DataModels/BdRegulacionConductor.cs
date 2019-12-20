@@ -153,6 +153,9 @@ namespace Orion.DataModels {
         /// <param name="lista">Lista con las regulaciones a borrar.</param>
         public static void BorrarRegulaciones(IEnumerable<RegulacionConductor> lista) {
 
+            App.Global.Repository.BorrarRegulaciones(lista);
+            return;
+
             using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
                 string SQLBorrar = "DELETE FROM Regulaciones WHERE Id=@Id";

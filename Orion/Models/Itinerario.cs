@@ -323,20 +323,37 @@ namespace Orion.Models {
 
 
         public string ComandoInsertar {
-            get => "INSERT OR REPLACE INTO Itinerarios (" +
-                "IdLinea, " +
-                "Nombre, " +
-                "Descripcion, " +
-                "TiempoReal, " +
-                "TiempoPago, " +
-                "_id) " +
-                "VALUES (" +
-                "@idLinea, " +
-                "@nombre, " +
-                "@descripcion, " +
-                "@tiempoReal, " +
-                "@tiempoPago, " +
-                "@id);";
+            get {
+                if (Id == 0) {
+                    return "INSERT OR REPLACE INTO Itinerarios (" +
+                        "IdLinea, " +
+                        "Nombre, " +
+                        "Descripcion, " +
+                        "TiempoReal, " +
+                        "TiempoPago) " +
+                        "VALUES (" +
+                        "@idLinea, " +
+                        "@nombre, " +
+                        "@descripcion, " +
+                        "@tiempoReal, " +
+                        "@tiempoPago);";
+                } else {
+                    return "INSERT OR REPLACE INTO Itinerarios (" +
+                        "IdLinea, " +
+                        "Nombre, " +
+                        "Descripcion, " +
+                        "TiempoReal, " +
+                        "TiempoPago, " +
+                        "_id) " +
+                        "VALUES (" +
+                        "@idLinea, " +
+                        "@nombre, " +
+                        "@descripcion, " +
+                        "@tiempoReal, " +
+                        "@tiempoPago, " +
+                        "@id);";
+                }
+            }
         }
 
 
