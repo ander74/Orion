@@ -57,7 +57,7 @@ namespace Orion.Models {
         // ====================================================================================================
         private void FromReader(OleDbDataReader lector) {
             _id = lector.ToInt32("Id");
-            _idconductor = lector.ToInt32("IdConductor");
+            matriculaConductor = lector.ToInt32("IdConductor");
             _fecha = lector.ToDateTime("Fecha");
             _notas = lector.ToString("Notas");
         }
@@ -71,7 +71,7 @@ namespace Orion.Models {
         public void BorrarValorPorHeader(string header) {
             switch (header) {
                 case "Conductor":
-                    IdConductor = 0; break;
+                    MatriculaConductor = 0; break;
                 case "01":
                 case "02":
                 case "03":
@@ -131,14 +131,14 @@ namespace Orion.Models {
 
         public static void ParseFromReader(OleDbDataReader lector, Calendario calendario) {
             calendario.Id = lector.ToInt32("Id");
-            calendario.IdConductor = lector.ToInt32("IdConductor");
+            calendario.MatriculaConductor = lector.ToInt32("IdConductor");
             calendario.Fecha = lector.ToDateTime("Fecha");
             calendario.Notas = lector.ToString("Notas");
         }
 
 
         public static void ParseToCommand(OleDbCommand Comando, Calendario calendario) {
-            Comando.Parameters.AddWithValue("@Idconductor", calendario.IdConductor);
+            Comando.Parameters.AddWithValue("@Idconductor", calendario.MatriculaConductor);
             Comando.Parameters.AddWithValue("@Fecha", calendario.Fecha.ToString("yyyy-MM-dd"));
             Comando.Parameters.AddWithValue("@Notas", calendario.Notas);
             Comando.Parameters.AddWithValue("@Id", calendario.Id);
@@ -199,12 +199,12 @@ namespace Orion.Models {
         }
 
 
-        private int _idconductor;
-        public int IdConductor {
-            get { return _idconductor; }
+        private int matriculaConductor;
+        public int MatriculaConductor {
+            get { return matriculaConductor; }
             set {
-                if (_idconductor != value) {
-                    _idconductor = value;
+                if (matriculaConductor != value) {
+                    matriculaConductor = value;
                     Modificado = true;
                     PropiedadCambiada();
                 }
@@ -330,7 +330,7 @@ namespace Orion.Models {
 
         public void FromReader(SQLiteDataReader lector) {
             _id = lector.ToInt32("_id");
-            _idconductor = lector.ToInt32("IdConductor");
+            matriculaConductor = lector.ToInt32("MatriculaConductor");
             _fecha = lector.ToDateTime("Fecha");
             _notas = lector.ToString("Notas");
             Nuevo = false;
@@ -341,10 +341,10 @@ namespace Orion.Models {
         public IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("@idConductor", IdConductor));
-                lista.Add(new SQLiteParameter("@fecha", Fecha.ToString("yyyy-MM-dd")));
-                lista.Add(new SQLiteParameter("@notas", Notas));
-                lista.Add(new SQLiteParameter("@id", Id));
+                lista.Add(new SQLiteParameter("MatriculaConductor", MatriculaConductor));
+                lista.Add(new SQLiteParameter("Fecha", Fecha.ToString("yyyy-MM-dd")));
+                lista.Add(new SQLiteParameter("Notas", Notas));
+                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }
@@ -372,7 +372,7 @@ namespace Orion.Models {
         public string ForeignIdName { get => "IdCalendario"; }
 
 
-        public string OrderBy { get => $"IdConductor ASC"; }
+        public string OrderBy { get => $"MatriculaConductor ASC"; }
 
 
         public string TableName { get => "Calendarios"; }
@@ -380,12 +380,12 @@ namespace Orion.Models {
 
         public string ComandoInsertar {
             get => "INSERT OR REPLACE INTO Calendarios (" +
-                "IdConductor, " +
+                "MatriculaConductor, " +
                 "Fecha, " +
                 "Notas, " +
                 "_id) " +
                 "VALUES (" +
-                "@idConductor, " +
+                "@matriculaConductor, " +
                 "@fecha, " +
                 "@notas, " +
                 "@id);";
@@ -394,7 +394,7 @@ namespace Orion.Models {
 
         //public string ComandoActualizar {
         //    get => "UPDATE Calendarios SET " +
-        //        "IdConductor = @idConductor, " +
+        //        "MatriculaConductor = @matriculaConductor, " +
         //        "Fecha = @fecha, " +
         //        "Notas = @notas " +
         //        "WHERE _id = @id;";

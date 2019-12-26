@@ -6,15 +6,12 @@
 // ===============================================
 #endregion
 using System;
-using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Data.SQLite;
 
 namespace Orion.Models {
 
-    public class GraficoFecha: GraficoBase {
+    public class GraficoFecha : GraficoBase {
 
 
         // ====================================================================================================
@@ -62,6 +59,22 @@ namespace Orion.Models {
         #endregion
         // ====================================================================================================
 
+
+        // ====================================================================================================
+        #region INTERFAZ SQLITE ITEM
+        // ====================================================================================================
+
+
+        public override void FromReader(SQLiteDataReader lector) {
+            base.FromReader(lector);
+            _fecha = lector.ToDateTime("Fecha");
+            Nuevo = false;
+            Modificado = false;
+        }
+
+
+        #endregion
+        // ====================================================================================================
 
     }
 }

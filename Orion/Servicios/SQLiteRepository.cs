@@ -75,6 +75,56 @@ namespace Orion.Servicios {
         }
 
 
+        protected string GetInsertCommand(string tableName, IEnumerable<SQLiteParameter> parametros) {
+            if (parametros == null || parametros.Count() == 0) return "";
+            string campos = "";
+            string valores = "";
+            foreach (var parametro in parametros) {
+                campos += $"{parametro.ParameterName}, ";
+                valores += $"@{parametro.ParameterName.ToLower()}, ";
+            }
+            campos = campos.Substring(0, campos.Length - 2);
+            valores = valores.Substring(0, valores.Length - 2);
+            return $"INSERT INTO {tableName} ({campos}) VALUES ({valores});";
+        }
+
+
+        protected string GetInsertCommand<T>(T item) where T : ISQLiteItem {
+            if (item.Parametros == null || item.Parametros.Count() == 0) return "";
+            string campos = "";
+            string valores = "";
+            foreach (var parametro in item.Parametros) {
+                campos += $"{parametro.ParameterName}, ";
+                valores += $"@{parametro.ParameterName.ToLower()}, ";
+            }
+            campos = campos.Substring(0, campos.Length - 2);
+            valores = valores.Substring(0, valores.Length - 2);
+            return $"INSERT INTO {item.TableName} ({campos}) VALUES ({valores});";
+        }
+
+
+        protected string GetUpdateCommand(string tableName, IEnumerable<SQLiteParameter> parametros) {
+            if (parametros == null || parametros.Count() == 0) return "";
+            string datos = "";
+            foreach (var parametro in parametros) {
+                datos += $"{parametro.ParameterName} = @{parametro.ParameterName.ToLower()}, ";
+            }
+            datos = datos.Substring(0, datos.Length - 2);
+            return $"UPDATE {tableName} SET {datos} WHERE _id = @id;";
+        }
+
+
+        protected string GetUpdateCommand<T>(T item) where T : ISQLiteItem {
+            if (item.Parametros == null || item.Parametros.Count() == 0) return "";
+            string datos = "";
+            foreach (var parametro in item.Parametros) {
+                datos += $"{parametro.ParameterName} = @{parametro.ParameterName.ToLower()}, ";
+            }
+            datos = datos.Substring(0, datos.Length - 2);
+            return $"UPDATE {item.TableName} SET {datos} WHERE _id = @id;";
+        }
+
+
         #endregion
         // ====================================================================================================
 
@@ -113,44 +163,25 @@ namespace Orion.Servicios {
         #region MÉTODOS PRIVADOS GUARDAR
         // ====================================================================================================
 
-        //protected int GuardarItem<T>(SQLiteConnection conexion, T item, bool ignorarLista = false) where T : ISQLItem {
-        //    if (conexion == null || conexion.State != ConnectionState.Open || item == null) return -1;
-        //    if (item.Nuevo) {
-        //        using (var comando = new SQLiteCommand(item.ComandoInsertar, conexion)) {
-        //            comando.Parameters.AddRange(item.Parametros.ToArray());
-        //            comando.ExecuteNonQuery();
-        //            using (var comando2 = new SQLiteCommand(Identity, conexion)) {
-        //                int id = Convert.ToInt32(comando2.ExecuteScalar());
-        //                item.Id = id < 0 ? 0 : id;
-        //            }
-        //        }
-        //    } else if (item.Modificado) {
-        //        using (var comando = new SQLiteCommand(item.ComandoActualizar, conexion)) {
-        //            comando.Parameters.AddRange(item.Parametros.ToArray());
-        //            comando.ExecuteNonQuery();
-        //        }
-        //    }
-        //    if (!ignorarLista && item.HasList) {
-        //        foreach (var item2 in item.Lista) {
-        //            item2.ForeignId = item.Id;
-        //            GuardarItem(conexion, item2, ignorarLista);
-        //        }
-        //    }
-        //    return item.Id;
-        //}
-
-
         protected int GuardarItem<T>(SQLiteConnection conexion, T item, bool ignorarLista = false) where T : ISQLiteItem {
             if (conexion == null || conexion.State != ConnectionState.Open || item == null) return -1;
-            using (var comando = new SQLiteCommand(item.ComandoInsertar, conexion)) {
-                comando.Parameters.AddRange(item.Parametros.ToArray());
-                comando.ExecuteNonQuery();
+            if (item.Id == 0) {
+                using (var comando = new SQLiteCommand(GetInsertCommand(item), conexion)) {
+                    comando.Parameters.AddRange(item.Parametros.ToArray());
+                    comando.ExecuteNonQuery();
+                    using (var comando2 = new SQLiteCommand(Identity, conexion)) {
+                        int id = Convert.ToInt32(comando2.ExecuteScalar());
+                        item.Id = id < 0 ? 0 : id;
+                    }
+                }
+            } else {
+                using (var comando = new SQLiteCommand(GetUpdateCommand(item), conexion)) {
+                    comando.Parameters.AddRange(item.Parametros.ToArray());
+                    comando.Parameters.AddWithValue("@id", item.Id);
+                    comando.ExecuteNonQuery();
+                }
             }
-            using (var comando2 = new SQLiteCommand(Identity, conexion)) {
-                int id = Convert.ToInt32(comando2.ExecuteScalar());
-                item.Id = id < 0 ? 0 : id;
-            }
-            if (!ignorarLista && item.HasList && item.Lista != null) {
+            if (!ignorarLista && item.HasList) {
                 foreach (var item2 in item.Lista) {
                     item2.ForeignId = item.Id;
                     GuardarItem(conexion, item2, ignorarLista);
@@ -158,6 +189,27 @@ namespace Orion.Servicios {
             }
             return item.Id;
         }
+
+
+        //protected int GuardarItem<T>(SQLiteConnection conexion, T item, bool ignorarLista = false) where T : ISQLiteItem {
+        //    if (conexion == null || conexion.State != ConnectionState.Open || item == null) return -1;
+        //    //var consulta = GetUpdateCommand(item.TableName, item.Parametros);
+        //    using (var comando = new SQLiteCommand(item.ComandoInsertar, conexion)) {
+        //        comando.Parameters.AddRange(item.Parametros.ToArray());
+        //        comando.ExecuteNonQuery();
+        //    }
+        //    using (var comando2 = new SQLiteCommand(Identity, conexion)) {
+        //        int id = Convert.ToInt32(comando2.ExecuteScalar());
+        //        item.Id = id < 0 ? 0 : id;
+        //    }
+        //    if (!ignorarLista && item.HasList && item.Lista != null) {
+        //        foreach (var item2 in item.Lista) {
+        //            item2.ForeignId = item.Id;
+        //            GuardarItem(conexion, item2, ignorarLista);
+        //        }
+        //    }
+        //    return item.Id;
+        //}
 
 
         #endregion
@@ -178,6 +230,7 @@ namespace Orion.Servicios {
 
 
         public void GuardarItems<T>(IEnumerable<T> lista, bool ignorarLista = false) where T : ISQLiteItem {
+            DateTime d1 = DateTime.Now;
             if (lista == null) return;
             using (var conexion = new SQLiteConnection(CadenaConexion)) {
                 conexion.Open();
@@ -185,6 +238,8 @@ namespace Orion.Servicios {
                     GuardarItem(conexion, item, ignorarLista);
                 }
             }
+            DateTime d2 = DateTime.Now;
+            var tiempo = d2 - d1;
         }
 
 
@@ -259,6 +314,8 @@ namespace Orion.Servicios {
                     if (lector.Read()) {
                         item.FromReader(lector);
                         if (!ignorarLista && item.HasList) AddListaToItem(conexion, ref item);
+                        item.Nuevo = false;
+                        item.Modificado = false;
                         return item;
                     }
                 }
@@ -275,6 +332,8 @@ namespace Orion.Servicios {
                         T item = new T();
                         item.FromReader(lector);
                         if (!ignorarLista && item.HasList) AddListaToItem(conexion, ref item);
+                        item.Nuevo = false;
+                        item.Modificado = false;
                         return item;
                     }
                 }
@@ -293,6 +352,8 @@ namespace Orion.Servicios {
                         item = new T();
                         item.FromReader(lector);
                         if (!ignorarLista && item.HasList) AddListaToItem(conexion, ref item);
+                        item.Nuevo = false;
+                        item.Modificado = false;
                         lista.Add(item);
                     }
                 }
@@ -314,6 +375,8 @@ namespace Orion.Servicios {
                         item2 = (ISQLiteItem)Activator.CreateInstance(tipo);
                         item2.FromReader(lector);
                         if (item2.HasList) AddListaToItem(conexion, ref item2);
+                        item2.Nuevo = false;
+                        item2.Modificado = false;
                         item.AddItemToList(item2);
                     }
                 }
@@ -359,7 +422,7 @@ namespace Orion.Servicios {
         public IEnumerable<T> GetItems<T>(SQLiteExpression consulta, bool ignorarLista = false) where T : ISQLiteItem, new() {
             using (var conexion = new SQLiteConnection(CadenaConexion)) {
                 conexion.Open();
-                var item = new T();
+                //var item = new T();
                 return GetItems<T>(conexion, consulta, ignorarLista);
             }
         }

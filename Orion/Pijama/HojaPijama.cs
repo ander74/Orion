@@ -34,7 +34,7 @@ namespace Orion.Pijama {
                 Fecha = calendario.Fecha;
                 // Extraemos el conductor del calendario.
                 //Trabajador = BdConductores.GetConductor(calendario.IdConductor);
-                Trabajador = App.Global.ConductoresVM.GetConductor(calendario.IdConductor);
+                Trabajador = App.Global.ConductoresVM.GetConductor(calendario.MatriculaConductor);
                 // Si el trabajador no existe, salimos.
                 if (Trabajador == null) return;
                 // Extraemos la lista de los días pijama.
@@ -42,7 +42,7 @@ namespace Orion.Pijama {
                 // Definimos el final anterior y lo establecemos al día anterior del primer día del mes.
                 TimeSpan? finalAnterior = null;
                 DateTime fecha = new DateTime(calendario.Fecha.Year, calendario.Fecha.Month, 1).AddDays(-1);
-                DiaCalendarioBase diaAnterior = BdDiasCalendario.GetDiaCalendario(calendario.IdConductor, fecha);
+                DiaCalendarioBase diaAnterior = BdDiasCalendario.GetDiaCalendario(calendario.MatriculaConductor, fecha);
                 if (diaAnterior != null) {
                     GraficoBase graficoanterior = BdGraficos.GetGrafico(diaAnterior.Grafico, fecha);
                     if (graficoanterior != null && graficoanterior.Final.HasValue) finalAnterior = graficoanterior.Final.Value;
@@ -458,7 +458,7 @@ namespace Orion.Pijama {
         /// </summary>
         public string TextoTrabajador {
             get {
-                return $"{Trabajador.Id:000}: {Trabajador.Apellidos}";
+                return $"{Trabajador.Matricula:000}: {Trabajador.Apellidos}";
             }
         }
 

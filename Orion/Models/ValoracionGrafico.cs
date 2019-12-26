@@ -266,13 +266,13 @@ namespace Orion.Models {
         public IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("@idGrafico", IdGrafico));
-                lista.Add(new SQLiteParameter("@inicio", Inicio.HasValue ? Inicio.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@linea", Linea.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@descripcion", Descripcion));
-                lista.Add(new SQLiteParameter("@final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@tiempo", Tiempo.Ticks));
-                lista.Add(new SQLiteParameter("@id", Id));
+                lista.Add(new SQLiteParameter("IdGrafico", IdGrafico));
+                lista.Add(new SQLiteParameter("Inicio", Inicio.HasValue ? Inicio.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("Linea", Linea.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("Descripcion", Descripcion));
+                lista.Add(new SQLiteParameter("Final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("Tiempo", Tiempo.Ticks));
+                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }

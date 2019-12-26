@@ -225,9 +225,9 @@ namespace Orion.Models {
         public IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("@nombre", Nombre));
-                lista.Add(new SQLiteParameter("@descripcion", Descripcion));
-                lista.Add(new SQLiteParameter("@id", Id));
+                lista.Add(new SQLiteParameter("Nombre", Nombre));
+                lista.Add(new SQLiteParameter("Descripcion", Descripcion));
+                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }

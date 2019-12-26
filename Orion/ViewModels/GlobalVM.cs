@@ -56,16 +56,47 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         public GlobalVM() {
 
+            // Definimos la carpeta 'Configuracion Orion' en la carpeta 'Documentos' del usuario. Si no existe, la creamos.
+            CarpetaConfiguracion = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Configuracion Orion");
+            if (!Directory.Exists(CarpetaConfiguracion)) Directory.CreateDirectory(CarpetaConfiguracion);
+
+            // Definimos la carpeta 'Datos Orion' en la carpeta 'Documentos' del usuario. Si no existe, la creamos.
+            CarpetaDatos = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Datos Orion");
+            if (!Directory.Exists(CarpetaDatos)) Directory.CreateDirectory(CarpetaDatos);
+
+            // ----------------------------------------------------------------------------------------------------------------------------
+            // Si los archivos no existen y sí existen en la raiz, copiarlos.
+            //
+            // El siguiente bloque se puede eliminar una vez que ya llevemos un tiempo usando las nuevas ubicaciones de los archivos.
+            // ----------------------------------------------------------------------------------------------------------------------------
+            if (!File.Exists(ArchivoOpcionesConfiguracion) && File.Exists("Config.json"))
+                File.Copy("Config.json", ArchivoOpcionesConfiguracion);
+            if (!File.Exists(ArchivoOpcionesConvenio) && File.Exists("Convenio.json"))
+                File.Copy("Convenio.json", ArchivoOpcionesConvenio);
+            // ARRASATE
+            if (!File.Exists(GetArchivoPorCentroPath(Centros.Arrasate)) && File.Exists($"PorCentro{Centros.Arrasate}.json"))
+                File.Copy($"PorCentro{Centros.Arrasate}.json", GetArchivoPorCentroPath(Centros.Arrasate));
+            // DONOSTI
+            if (!File.Exists(GetArchivoPorCentroPath(Centros.Donosti)) && File.Exists($"PorCentro{Centros.Donosti}.json"))
+                File.Copy($"PorCentro{Centros.Donosti}.json", GetArchivoPorCentroPath(Centros.Donosti));
+            // BILBAO
+            if (!File.Exists(GetArchivoPorCentroPath(Centros.Bilbao)) && File.Exists($"PorCentro{Centros.Bilbao}.json"))
+                File.Copy($"PorCentro{Centros.Bilbao}.json", GetArchivoPorCentroPath(Centros.Bilbao));
+            // VITORIA
+            if (!File.Exists(GetArchivoPorCentroPath(Centros.Vitoria)) && File.Exists($"PorCentro{Centros.Vitoria}.json"))
+                File.Copy($"PorCentro{Centros.Vitoria}.json", GetArchivoPorCentroPath(Centros.Vitoria));
+            // ----------------------------------------------------------------------------------------------------------------------------
+
             // Cargamos la configuracion
             Configuracion.Cargar(ArchivoOpcionesConfiguracion);
             Convenio.Cargar(ArchivoOpcionesConvenio);
 
-            // Si las carpetas de configuracion están en blanco, rellenarlas.
-            if (Configuracion.CarpetaDatos == "") Configuracion.CarpetaDatos = Path.Combine(Directory.GetCurrentDirectory(), "Datos");
-            if (Configuracion.CarpetaDropbox == "") Configuracion.CarpetaDropbox = Path.Combine(Directory.GetCurrentDirectory(), "Dropbox");
-            if (Configuracion.CarpetaInformes == "") Configuracion.CarpetaInformes = Path.Combine(Directory.GetCurrentDirectory(), "Informes");
-            if (Configuracion.CarpetaAyuda == "") Configuracion.CarpetaAyuda = Path.Combine(Directory.GetCurrentDirectory(), "Ayuda");
-            if (Configuracion.CarpetaCopiasSeguridad == "") Configuracion.CarpetaCopiasSeguridad = Path.Combine(Directory.GetCurrentDirectory(), "CopiasSeguridad");
+            // Si las carpetas de configuracion están en blanco, crearlas y rellenarlas.
+            if (Configuracion.CarpetaDatos == "") Configuracion.CarpetaDatos = CreateAndGetCarpetaEnDatos("Datos");
+            if (Configuracion.CarpetaDropbox == "") Configuracion.CarpetaDropbox = CreateAndGetCarpetaEnDatos("Dropbox");
+            if (Configuracion.CarpetaInformes == "") Configuracion.CarpetaInformes = CreateAndGetCarpetaEnDatos("Informes");
+            if (Configuracion.CarpetaAyuda == "") Configuracion.CarpetaAyuda = CreateAndGetCarpetaEnDatos("Ayuda");
+            if (Configuracion.CarpetaCopiasSeguridad == "") Configuracion.CarpetaCopiasSeguridad = CreateAndGetCarpetaEnDatos("CopiasSeguridad");
             if (Configuracion.CarpetaOrigenActualizar == "") Configuracion.CarpetaOrigenActualizar = App.RutaInicial;
             // Creamos los servicios
             mensajes = new MensajesServicio();
@@ -73,8 +104,9 @@ namespace Orion.ViewModels {
             fileService = new FileService();
 
             // Asignamos el centro actual.
-            CentroActual = (Centros)Configuracion.CentroInicial;// == Centros.Desconocido ? Centros.Bilbao : (Centros)Configuracion.CentroInicial;
-                                                                // Activamos el botón de la calculadora.
+            CentroActual = (Centros)Configuracion.CentroInicial;
+
+            // Activamos el botón de la calculadora.
             Configuracion.BotonCalculadoraActivo = true;
 
         }
@@ -87,21 +119,6 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         #region MÉTODOS PÚBLICOS
         // ====================================================================================================
-
-        //      public string GetCadenaConexion(Centros centro) {
-        //	// Si no se ha establecido el centro, devolvemos null.
-        //	if (centro == Centros.Desconocido) return null;
-        //	// Definimos el archivo de base de datos
-        //	string archivo = Utils.CombinarCarpetas(Configuracion.CarpetaDatos, centro.ToString() + ".accdb");
-        //	// Si no existe el archivo, devolvemos null
-        //	if (!File.Exists(archivo)) return null;
-        //	// Establecemos la cadena de conexión
-        //	string cadenaConexion = "Provider=Microsoft.ACE.OLEDB.12.0;Persist Security Info=False;";
-        //	cadenaConexion += "Data Source=" + archivo + ";";
-        //	// Devolvemos la cadena de conexión.
-        //	return cadenaConexion;
-        //}
-
 
         public string GetCadenaConexion(Centros centro) {
             // Si no se ha establecido el centro, devolvemos null.
@@ -159,6 +176,18 @@ namespace Orion.ViewModels {
 
         protected virtual void Dispose(bool disposing) {
             if (disposing) Informes.Dispose();
+        }
+
+
+        public string GetArchivoPorCentroPath(Centros centro) {
+            return Path.Combine(CarpetaConfiguracion, $"PorCentro{centro}.json");
+        }
+
+
+        public string CreateAndGetCarpetaEnDatos(string carpeta) {
+            var resultado = Path.Combine(CarpetaDatos, carpeta);
+            if (!Directory.Exists(resultado)) Directory.CreateDirectory(resultado);
+            return resultado;
         }
 
 
@@ -566,23 +595,29 @@ namespace Orion.ViewModels {
         // ====================================================================================================
 
 
+        public string CarpetaConfiguracion { get; set; }
+
+
+        public string CarpetaDatos { get; set; }
+
+
         public string ArchivoOpcionesConfiguracion {
             get {
-                return "Config.json";
+                return Path.Combine(CarpetaConfiguracion, "Config.json");
             }
         }
 
 
         public string ArchivoOpcionesConvenio {
             get {
-                return "Convenio.json";
+                return Path.Combine(CarpetaConfiguracion, "Convenio.json");
             }
         }
 
 
         public string ArchivoOpcionesPorCentro {
             get {
-                return $"PorCentro{CentroActual}.json";
+                return GetArchivoPorCentroPath(CentroActual);
             }
         }
 

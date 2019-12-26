@@ -7,13 +7,9 @@
 #endregion
 namespace Orion.ViewModels {
 
-    using Models;
-    using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Globalization;
-    using System.Windows.Controls;
-    using System.Windows.Data;
     using System.Windows.Input;
+    using Models;
 
     public partial class ConductoresViewModel {
 
@@ -34,7 +30,7 @@ namespace Orion.ViewModels {
 
         private void BorrarConductor() {
             if (ConductorSeleccionado == null) return;
-            if (mensajes.VerMensaje($"Vas a borrar al conductor:\n\n{ConductorSeleccionado.Id:000}: {ConductorSeleccionado.Apellidos}\n\n" +
+            if (mensajes.VerMensaje($"Vas a borrar al conductor:\n\n{ConductorSeleccionado.Matricula:000}: {ConductorSeleccionado.Apellidos}\n\n" +
                                     $"Esto hará que se borren todos sus calendarios.\n\n" +
                                     $"¿Deseas continuar?", "ATENCIÓN", true) == false) return;
             _listaborrados.Add(ConductorSeleccionado);

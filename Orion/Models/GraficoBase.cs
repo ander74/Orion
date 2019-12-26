@@ -508,7 +508,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SQLiteDataReader lector) {
+        public virtual void FromReader(SQLiteDataReader lector) {
             _id = lector.ToInt32("_id");
             _idgrupo = lector.ToInt32("IdGrupo");
             _nocalcular = lector.ToBool("NoCalcular");
@@ -537,26 +537,26 @@ namespace Orion.Models {
         public IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("@idGrupo", IdGrupo));
-                lista.Add(new SQLiteParameter("@noCalcular", NoCalcular));
-                lista.Add(new SQLiteParameter("@numero", Numero));
-                lista.Add(new SQLiteParameter("@diaSemana", DiaSemana));
-                lista.Add(new SQLiteParameter("@turno", Turno));
-                lista.Add(new SQLiteParameter("@inicio", Inicio.HasValue ? Inicio.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@inicioPartido", InicioPartido.HasValue ? InicioPartido.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@finalPartido", FinalPartido.HasValue ? FinalPartido.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("@valoracion", Valoracion.Ticks));
-                lista.Add(new SQLiteParameter("@trabajadas", Trabajadas.Ticks));
-                lista.Add(new SQLiteParameter("@acumuladas", Acumuladas.Ticks));
-                lista.Add(new SQLiteParameter("@nocturnas", Nocturnas.Ticks));
-                lista.Add(new SQLiteParameter("@desayuno", Desayuno.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@comida", Comida.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@cena", Cena.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@plusCena", PlusCena.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@plusLimpieza", PlusLimpieza));
-                lista.Add(new SQLiteParameter("@plusPaqueteria", PlusPaqueteria));
-                lista.Add(new SQLiteParameter("@id", Id));
+                lista.Add(new SQLiteParameter("IdGrupo", IdGrupo));
+                lista.Add(new SQLiteParameter("NoCalcular", NoCalcular));
+                lista.Add(new SQLiteParameter("Numero", Numero));
+                lista.Add(new SQLiteParameter("DiaSemana", DiaSemana));
+                lista.Add(new SQLiteParameter("Turno", Turno));
+                lista.Add(new SQLiteParameter("Inicio", Inicio.HasValue ? Inicio.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("Final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("InicioPartido", InicioPartido.HasValue ? InicioPartido.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("FinalPartido", FinalPartido.HasValue ? FinalPartido.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("Valoracion", Valoracion.Ticks));
+                lista.Add(new SQLiteParameter("Trabajadas", Trabajadas.Ticks));
+                lista.Add(new SQLiteParameter("Acumuladas", Acumuladas.Ticks));
+                lista.Add(new SQLiteParameter("Nocturnas", Nocturnas.Ticks));
+                lista.Add(new SQLiteParameter("Desayuno", Desayuno.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("Comida", Comida.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("Cena", Cena.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("PlusCena", PlusCena.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza));
+                lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria));
+                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }

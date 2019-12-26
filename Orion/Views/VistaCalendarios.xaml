@@ -777,7 +777,7 @@
 
             <!-- COLUMNAS -->
             <controls:QDataGrid.Columns>
-                <DataGridTextColumn Header="Conductor" Width="2*" Binding="{Binding IdConductor}" CanUserSort="True">
+                <DataGridTextColumn Header="Conductor" Width="2*" Binding="{Binding MatriculaConductor}" CanUserSort="True">
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
                             <Setter Property="Foreground" Value="{Binding HayInforme, Converter={StaticResource cnvRojoSiTrue}}"/>

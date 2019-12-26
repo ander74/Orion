@@ -55,7 +55,7 @@ namespace Orion.ViewModels {
                     Pijama.HojaPijama pijama = new Pijama.HojaPijama(calendario, mensajes);
                     EstadisticaPorTurnos estadistica = new EstadisticaPorTurnos();
                     // CONDUCTOR
-                    estadistica.Conductor = App.Global.ConductoresVM.GetConductor(calendario.IdConductor);
+                    estadistica.Conductor = App.Global.ConductoresVM.GetConductor(calendario.MatriculaConductor);
                     // TURNO 1
                     estadistica.Dias[1] = pijama.ListaDias.Count(d => (d.Grafico > 0) && (d.TurnoAlt.HasValue ? d.TurnoAlt == 1 : d.GraficoTrabajado.Turno == 1)).ToString("00");
                     estadistica.Trabajadas[1] = new TimeSpan(pijama.ListaDias.Where(d => d.TurnoAlt.HasValue ? d.TurnoAlt == 1 : d.GraficoTrabajado.Turno == 1)

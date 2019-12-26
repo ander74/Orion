@@ -38,7 +38,11 @@ namespace Orion.Views {
 
             // Establecemos la versión del ensamblado.
             Version ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            App.Global.TextoEstado = $"Versión {ver.Major}.{ver.Minor}.{ver.Build}";
+            DateTime fechaReferencia = new DateTime(2019, 12, 23); // Fecha del cambio de versión a la 1.1
+            //DateTime fechaHoy = DateTime.Now.Date;
+            int diasFromReferencia = Convert.ToInt32(Math.Round((DateTime.Now.Date - fechaReferencia).TotalDays, 0));
+            //App.Global.TextoEstado = $"Versión {ver.Major}.{ver.Minor}.{ver.Build}";
+            App.Global.TextoEstado = $"Versión {ver.Major}.{ver.Minor}.{diasFromReferencia}";
 
             // Registramos el evento cerrar en el viewmodel.
             this.Closing += App.Global.CerrandoVentanaEventHandler;

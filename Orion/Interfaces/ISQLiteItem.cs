@@ -95,13 +95,13 @@ namespace Orion.Interfaces {
         /// <summary>
         /// Establece si el elemento es nuevo y se debe insertar. TODO: Cambiar por una enumeración.
         /// </summary>
-        //bool Nuevo { get; set; }
+        bool Nuevo { get; set; }
 
 
         /// <summary>
         /// Establece si el elemento está modificado y se debe actualizar. Cambiar por una enumeración.
         /// </summary>
-        //bool Modificado { get; set; }
+        bool Modificado { get; set; }
 
 
     }

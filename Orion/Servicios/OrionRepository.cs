@@ -50,7 +50,7 @@ namespace Orion.Servicios {
 
         public const string CrearTablaCalendarios = "CREATE TABLE IF NOT EXISTS Calendarios (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "IdConductor INTEGER DEFAULT 0, " +
+            "MatriculaConductor INTEGER DEFAULT 0, " +
             "Fecha TEXT, " +
             "Descuadre INTEGER DEFAULT 0, " +
             "ExcesoJornadaCobrada REAL DEFAULT 0, " +
@@ -60,6 +60,7 @@ namespace Orion.Servicios {
 
         public const string CrearTablaConductores = "CREATE TABLE IF NOT EXISTS Conductores (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "Matricula INTEGER DEFAULT 0, " +
             "Nombre TEXT DEFAULT '', " +
             "Apellidos TEXT DEFAULT '', " +
             "Indefinido INTEGER DEFAULT 0, " +
@@ -556,7 +557,7 @@ namespace Orion.Servicios {
 
             try {
                 DateTime fecha = new DateTime(año, mes, 1);
-                var consulta = new SQLiteExpression("SELECT * FROM Calendarios WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) ORDER BY IdConductor;");
+                var consulta = new SQLiteExpression("SELECT * FROM Calendarios WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) ORDER BY MatriculaConductor;");
                 consulta.AddParameter("@fecha", fecha);
                 var lista = GetItems<Calendario>(consulta);
                 //TODO: Añadir si el conductor es o no indefinido y quitar la parte Indefinido de la consulta.
@@ -573,7 +574,7 @@ namespace Orion.Servicios {
             try {
                 DateTime fecha = new DateTime(año, 1, 1);
                 string comandoSQL = "SELECT * FROM Calendarios " +
-                    "WHERE strftime('%Y', Calendarios.Fecha) = strftime('%Y', @fecha) AND Calendarios.IdConductor = @matricula " +
+                    "WHERE strftime('%Y', Calendarios.Fecha) = strftime('%Y', @fecha) AND Calendarios.MatriculaConductor = @matricula " +
                     "ORDER BY Calendarios.Fecha;";
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                 var lista = GetItems<Calendario>(consulta);
@@ -591,7 +592,7 @@ namespace Orion.Servicios {
             try {
                 DateTime fecha = new DateTime(año, mes, 1);
                 string comandoSQL = "SELECT Calendarios.* FROM Calendarios " +
-                                    "WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Calendarios.IdConductor = @matricula ;";
+                                    "WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Calendarios.MatriculaConductor = @matricula ;";
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                 var lista = GetItems<Calendario>(consulta);
                 //TODO: Añadir si el conductor es o no indefinido y quitar la parte Indefinido de la consulta.
@@ -621,10 +622,11 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDescansosReguladosHastaMes(int año, int mes, int idconductor) {
-            string comandoSQL = "SELECT Sum(Descansos) FROM Regulaciones WHERE IdConductor = @matricula AND strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)";
+        public int GetDescansosReguladosHastaMes(int año, int mes, int matricula) {
+            string comandoSQL = "SELECT Sum(Descansos) FROM Regulaciones WHERE IdConductor = @idConductor AND strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)";
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor).AddParameter("@fecha", fecha);
+            int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@idConductor", idConductor).AddParameter("@fecha", fecha);
             try {
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
@@ -634,10 +636,11 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDescansosReguladosAño(int año, int idconductor) {
-            string comandoSQL = "SELECT Sum(Descansos) FROM Regulaciones WHERE IdConductor = @matricula AND strftime('%Y', Fecha) = strftime('%Y', @fecha) AND Codigo = 2;";
+        public int GetDescansosReguladosAño(int año, int matricula) {
+            string comandoSQL = "SELECT Sum(Descansos) FROM Regulaciones WHERE IdConductor = @idConductor AND strftime('%Y', Fecha) = strftime('%Y', @fecha) AND Codigo = 2;";
             DateTime fecha = new DateTime(año, 1, 1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor).AddParameter("@fecha", fecha);
+            int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@idConductor", idConductor).AddParameter("@fecha", fecha);
             try {
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
@@ -647,12 +650,12 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDescansosDisfrutadosHastaMes(int año, int mes, int idconductor) {
+        public int GetDescansosDisfrutadosHastaMes(int año, int mes, int matricula) {
             string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
-                                "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha) AND IdConductor = @matricula)" +
+                                "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha) AND MatriculaConductor = @matricula)" +
                                 "      AND Grafico = -6 AND (Codigo = 0 OR Codigo Is Null);";
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", idconductor);
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
             try {
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
@@ -662,13 +665,13 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDCDisfrutadosAño(int idconductor, int año) {
+        public int GetDCDisfrutadosAño(int matricula, int año) {
             string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
-                                "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y', Fecha) = strftime('%Y', @fecha) AND IdConductor = @matricula)" +
+                                "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y', Fecha) = strftime('%Y', @fecha) AND MatriculaConductor = @matricula)" +
                                 "      AND Grafico = -6 AND (Codigo = 0 OR Codigo Is Null);";
 
             DateTime fecha = new DateTime(año, 1, 1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", idconductor);
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
             try {
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
@@ -678,13 +681,13 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDCDisfrutadosAño(int idconductor, int año, int mes) {
+        public int GetDCDisfrutadosAño(int matricula, int año, int mes) {
             string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
                                       "WHERE IdCalendario IN (SELECT _id FROM Calendarios " +
-                                      "WHERE strftime('%Y', Fecha) = strftime('%Y', @fecha) AND strftime('%m', Fecha) <= strftime('%m', @fecha) AND IdConductor = @matricula)" +
+                                      "WHERE strftime('%Y', Fecha) = strftime('%Y', @fecha) AND strftime('%m', Fecha) <= strftime('%m', @fecha) AND MatriculaConductor = @matricula)" +
                                       "      AND Grafico = -6 AND (Codigo = 0 OR Codigo Is Null);";
             DateTime fecha = new DateTime(año, mes, 1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", idconductor);
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
             //TODO: Comprobar que no se necesita meter otro parámetro fecha, al haber dos en la consulta. Yo creo que si.
             try {
                 return GetIntScalar(consulta);
@@ -695,12 +698,12 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDiasF6HastaMes(int año, int mes, int idconductor) {
+        public int GetDiasF6HastaMes(int año, int mes, int matricula) {
             string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
-                            "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha) AND IdConductor = @matricula)" +
+                            "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha) AND MatriculaConductor = @matricula)" +
                             "      AND Grafico = -7; ";
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", idconductor);
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
             try {
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
@@ -710,10 +713,11 @@ namespace Orion.Servicios {
         }
 
 
-        public TimeSpan GetHorasReguladasHastaMes(int año, int mes, int idconductor) {
-            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @matricula AND strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)";
+        public TimeSpan GetHorasReguladasHastaMes(int año, int mes, int matricula) {
+            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idConductor AND strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)";
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor).AddParameter("@fecha", fecha);
+            int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@idConductor", idConductor).AddParameter("@fecha", fecha);
             try {
                 return GetTimeSpanScalar(consulta);
             } catch (Exception ex) {
@@ -723,10 +727,11 @@ namespace Orion.Servicios {
         }
 
 
-        public TimeSpan GetHorasReguladasMes(int año, int mes, int idconductor) {
-            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @matricula AND strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Codigo = 0;";
+        public TimeSpan GetHorasReguladasMes(int año, int mes, int matricula) {
+            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idConductor AND strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Codigo = 0;";
             DateTime fecha = new DateTime(año, mes, 1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor).AddParameter("@fecha", fecha);
+            int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@idConductor", idConductor).AddParameter("@fecha", fecha);
             try {
                 return GetTimeSpanScalar(consulta);
             } catch (Exception ex) {
@@ -736,10 +741,11 @@ namespace Orion.Servicios {
         }
 
 
-        public TimeSpan GetHorasCambiadasPorDCsMes(int año, int mes, int idconductor) {
-            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @matricula AND strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Codigo = 2;";
+        public TimeSpan GetHorasCambiadasPorDCsMes(int año, int mes, int matricula) {
+            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idConductor AND strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Codigo = 2;";
             DateTime fecha = new DateTime(año, mes, 1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor).AddParameter("@fecha", fecha);
+            int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@idConductor", idConductor).AddParameter("@fecha", fecha);
             try {
                 return GetTimeSpanScalar(consulta);
             } catch (Exception ex) {
@@ -749,10 +755,11 @@ namespace Orion.Servicios {
         }
 
 
-        public TimeSpan GetHorasReguladasAño(int año, int idconductor) {
-            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @matricula AND strftime('%Y', Fecha) = strftime('%Y', @fecha) AND Codigo = 2;";
+        public TimeSpan GetHorasReguladasAño(int año, int matricula) {
+            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idConductor AND strftime('%Y', Fecha) = strftime('%Y', @fecha) AND Codigo = 2;";
             DateTime fecha = new DateTime(año, 1, 1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor).AddParameter("@fecha", fecha);
+            int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@idConductor", idConductor).AddParameter("@fecha", fecha);
             try {
                 return GetTimeSpanScalar(consulta);
             } catch (Exception ex) {
@@ -762,10 +769,11 @@ namespace Orion.Servicios {
         }
 
 
-        public TimeSpan GetHorasCobradasMes(int año, int mes, int idconductor) {
-            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @matricula AND strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Codigo = 1;";
+        public TimeSpan GetHorasCobradasMes(int año, int mes, int matricula) {
+            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idConductor AND strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Codigo = 1;";
             DateTime fecha = new DateTime(año, mes, 1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor).AddParameter("@fecha", fecha);
+            int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@idCOnductor", idConductor).AddParameter("@fecha", fecha);
             try {
                 return GetTimeSpanScalar(consulta);
             } catch (Exception ex) {
@@ -775,11 +783,12 @@ namespace Orion.Servicios {
         }
 
 
-        public TimeSpan GetHorasCobradasAño(int año, int mes, int idconductor) {
-            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @matricula AND strftime('%Y-%m-%d', Fecha) > strftime('%Y-%m-%d', @fechaInicio) AND strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fechaFinal) AND Codigo = 1;";
+        public TimeSpan GetHorasCobradasAño(int año, int mes, int matricula) {
+            string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idConductor AND strftime('%Y-%m-%d', Fecha) > strftime('%Y-%m-%d', @fechaInicio) AND strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fechaFinal) AND Codigo = 1;";
             DateTime fechainicio = mes == 12 ? new DateTime(año, 11, 30) : new DateTime(año - 1, 11, 30);
             DateTime fechafinal = mes == 12 ? new DateTime(año + 1, 12, 1) : new DateTime(año, 12, 1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor)
+            int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@idConductor", idConductor)
                 .AddParameter("@fechaInicio", fechainicio)
                 .AddParameter("@fechaFinal", fechafinal);
             try {
@@ -791,10 +800,10 @@ namespace Orion.Servicios {
         }
 
 
-        public TimeSpan GetExcesoJornadaCobradaHastaMes(int año, int mes, int idconductor) {
-            string comandoSQL = "SELECT Sum(ExcesoJornadaCobrada) FROM Calendarios WHERE IdConductor = @matricula AND strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha);";
+        public TimeSpan GetExcesoJornadaCobradaHastaMes(int año, int mes, int matricula) {
+            string comandoSQL = "SELECT Sum(ExcesoJornadaCobrada) FROM Calendarios WHERE MatriculaConductor = @matricula AND strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha);";
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor).AddParameter("@fecha", fecha);
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", matricula).AddParameter("@fecha", fecha);
             try {
                 return GetTimeSpanScalar(consulta);
             } catch (Exception ex) {
@@ -804,11 +813,11 @@ namespace Orion.Servicios {
         }
 
 
-        public TimeSpan GetAcumuladasHastaMes(int año, int mes, int idconductor, int comodin) {
+        public TimeSpan GetAcumuladasHastaMes(int año, int mes, int matricula, int comodin) {
             TimeSpan acumuladas = TimeSpan.Zero;
             string comandoDias = "SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha " +
                  "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios._id " +
-                 "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha) AND IdConductor = @matricula) " +
+                 "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha) AND MatriculaConductor = @matricula) " +
                  "      AND Grafico > 0 " +
                  "ORDER BY Calendarios.Fecha, DiasCalendario.Dia;";
 
@@ -825,7 +834,7 @@ namespace Orion.Servicios {
             try {
                 using (var conexion = new SQLiteConnection(CadenaConexion)) {
                     conexion.Open();
-                    var consulta = new SQLiteExpression(comandoDias).AddParameter("@fecha", fecha).AddParameter("@matricula", idconductor);
+                    var consulta = new SQLiteExpression(comandoDias).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                     using (var comando = consulta.GetCommand(conexion)) {
                         using (var lector = comando.ExecuteReader()) {
                             while (lector.Read()) {
@@ -849,16 +858,16 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetComiteEnDescansoHastaMes(int idconductor, int año, int mes) {
+        public int GetComiteEnDescansoHastaMes(int matricula, int año, int mes) {
             string comandoSQL = "SELECT Count(DiasCalendario.Grafico) " +
                                 "FROM Calendarios INNER JOIN DiasCalendario " +
                                 "ON Calendarios._id = DiasCalendario.IdCalendario " +
-                                "WHERE Calendarios.IdConductor = @matricula AND " +
+                                "WHERE Calendarios.MatriculaConductor = @matricula AND " +
                                 "      (DiasCalendario.Grafico = -2 OR DiasCalendario.Grafico = -3 OR DiasCalendario.Grafico = -5) AND " +
                                 "	   (DiasCalendario.Codigo = 1 OR DiasCalendario.Codigo = 2) AND " +
                                 "      strftime('%Y-%m-%d', Validez) < strftime('%Y-%m-%d', @fecha);";
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor).AddParameter("@fecha", fecha);
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", matricula).AddParameter("@fecha", fecha);
             try {
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
@@ -868,14 +877,14 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetTrabajoEnDescansoHastaMes(int idconductor, int año, int mes) {
+        public int GetTrabajoEnDescansoHastaMes(int matricula, int año, int mes) {
             string comandoSQL = "SELECT Count(DiasCalendario.Grafico) " +
                                 "FROM Calendarios INNER JOIN DiasCalendario " +
                                 "ON Calendarios._id = DiasCalendario.IdCalendario " +
-                                "WHERE Calendarios.IdConductor = @matricula AND " +
+                                "WHERE Calendarios.MatriculaConductor = @matricula AND " +
                                 "      DiasCalendario.Grafico > 0 AND DiasCalendario.Codigo = 3 AND strftime('%Y-%m-%d', Validez) < strftime('%Y-%m-%d', @validez)";
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor).AddParameter("@fecha", fecha);
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", matricula).AddParameter("@fecha", fecha);
             try {
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
@@ -885,15 +894,15 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDNDHastaMes(int idconductor, int año, int mes) {
+        public int GetDNDHastaMes(int matricula, int año, int mes) {
             string comandoSQL = "SELECT Count(DiasCalendario.Grafico) " +
                                 "FROM Calendarios INNER JOIN DiasCalendario " +
                                 "ON Calendarios._id = DiasCalendario.IdCalendario " +
-                                "WHERE Calendarios.IdConductor = @matricula AND " +
+                                "WHERE Calendarios.MatriculaConductor = @matricula AND " +
                                 "      DiasCalendario.Grafico = -8 AND " +
                                 "      WHERE strftime('%Y-%m-%d', Validez) < strftime('%Y-%m-%d', @validez)";
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idconductor).AddParameter("@fecha", fecha);
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", matricula).AddParameter("@fecha", fecha);
             try {
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
@@ -903,12 +912,12 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDNDDisfrutadosAño(int idconductor, int año) {
+        public int GetDNDDisfrutadosAño(int matricula, int año) {
             string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
-                                "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y', Fecha) = strftime('%Y', @fecha) AND IdConductor = @matricula)" +
+                                "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y', Fecha) = strftime('%Y', @fecha) AND MatriculaConductor = @matricula)" +
                                 "      AND Grafico = -8 AND (Codigo = 0 OR Codigo Is Null);";
             DateTime fecha = new DateTime(año, 1, 1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", idconductor);
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
             try {
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
@@ -918,13 +927,13 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDNDDisfrutadosAño(int idconductor, int año, int mes) {
+        public int GetDNDDisfrutadosAño(int matricula, int año, int mes) {
             string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
                                       "WHERE IdCalendario IN (SELECT _id FROM Calendarios " +
-                                      "WHERE strftime('%Y', Fecha) = strftime('%Y', @fecha) AND strftime('%m', Fecha) <= strftime('%m', Fecha) AND IdConductor = @matricula)" +
+                                      "WHERE strftime('%Y', Fecha) = strftime('%Y', @fecha) AND strftime('%m', Fecha) <= strftime('%m', Fecha) AND MatriculaConductor = @matricula)" +
                                       "      AND Grafico = -8 AND (Codigo = 0 OR Codigo Is Null);";
             DateTime fecha = new DateTime(año, mes, 1);
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", idconductor);
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
             //TODO: Comprobar que no se necesita un segundo parámetro fecha, ya que hay dos en la consulta. Yo creo que si.
             try {
                 return GetIntScalar(consulta);
@@ -1020,10 +1029,10 @@ namespace Orion.Servicios {
         #region BD DÍAS CALENDARIO
         // ====================================================================================================
 
-        public DiaCalendarioBase GetDiaCalendario(int idConductor, DateTime fecha) {
+        public DiaCalendarioBase GetDiaCalendario(int matricula, DateTime fecha) {
 
-            string comandoSQL = "SELECT * FROM DiasCalendario WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE IdConductor = @matricula) AND strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha);";
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", idConductor).AddParameter("@fecha", fecha);
+            string comandoSQL = "SELECT * FROM DiasCalendario WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE MatriculaConductor = @matricula) AND strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha);";
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@matricula", matricula).AddParameter("@fecha", fecha);
             try {
                 return GetItem<DiaCalendario>(consulta);
             } catch (Exception ex) {
@@ -1150,6 +1159,7 @@ namespace Orion.Servicios {
                     "WHERE IdGrupo=@idGrupo GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;");
                 consulta.AddParameter("@jornadaMedia", jornadaMedia);
                 consulta.AddParameter("@idGrupo", IdGrupo);
+                var xxx = GetItems<EstadisticasGraficos>(consulta);
                 return GetItems<EstadisticasGraficos>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetEstadisticasGrupoGraficos), ex);
@@ -1165,8 +1175,7 @@ namespace Orion.Servicios {
                     "Turno AS xTurno, " +
                     "Count(Numero) AS xNumero, " +
                     "Sum(Valoracion) AS xValoracion, " +
-                    //"Sum(IIf(Trabajadas<@jornadaMedia AND NOT NoCalcular,@jornadaMedia,Trabajadas)) AS xTrabajadas, " +
-                    "Sum(CASE WHEN Trabajadas<@jornadaMedia AND NOT NoCalcular THEN @jornadaMedia ELSE Trabajadas END) AS xTrabajadas, " + //Si no va, probar 'END xx'
+                    "Sum(CASE WHEN Trabajadas<@jornadaMedia AND NOT NoCalcular THEN @jornadaMedia ELSE Trabajadas END) AS xTrabajadas, " +
                     "Sum(Acumuladas) AS xAcumuladas, " +
                     "Sum(Nocturnas) AS xNocturnas, " +
                     "Sum(Desayuno) AS xDesayuno, " +
@@ -1176,10 +1185,10 @@ namespace Orion.Servicios {
                     "Sum(PlusLimpieza) AS xLimpieza, " +
                     "Sum(PlusPaqueteria) AS xPaqueteria " +
                     "FROM GruposGraficos LEFT JOIN Graficos ON GruposGraficos._id = Graficos.IdGrupo " +
-                    "WHERE strftime('%Y-%m-%d', GruposGraficos.Validez) = strftime('%Y-%m-%d', @fecha) " +
+                    "WHERE strftime('%Y-%m-%d', GruposGraficos.Validez) >= strftime('%Y-%m-%d', @fecha) " +
                     "GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;");
                 consulta.AddParameter("@jornadaMedia", jornadaMedia);
-                consulta.AddParameter("@idGrupo", fecha);
+                consulta.AddParameter("@fecha", fecha);
                 return GetItems<EstadisticasGraficos>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetEstadisticasGraficosDesdeFecha), ex);
@@ -1198,9 +1207,9 @@ namespace Orion.Servicios {
                                     "                       WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) " +
                                     "                                        FROM GruposGraficos " +
                                     "                                        WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @validez)))))" +
-                                    "WHERE Numero = @idConductor");
+                                    "WHERE Numero = @numero");
                 consulta.AddParameter("@validez", fecha);
-                consulta.AddParameter("@idConductor", numero);
+                consulta.AddParameter("@numero", numero);
                 return GetItem<GraficoBase>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetEstadisticasGraficosDesdeFecha), ex);
@@ -1481,46 +1490,47 @@ namespace Orion.Servicios {
         }
 
 
-        //TODO: Este método no se puede procesar, porque se añade un campo no previsto (campo fecha). Modificar Model GraficoFecha.
         public IEnumerable<GraficoFecha> GetGraficosFromDiaCalendario(DateTime fecha, int comodin) {
+            var lista = new List<GraficoFecha>();
             try {
-                var consulta = new SQLiteExpression("SELECT @fecha AS Fecha, * " +
-                                    "FROM(SELECT * " +
-                                    "     FROM Graficos " +
-                                    "     WHERE IdGrupo = (SELECT _id " +
-                                    "                      FROM GruposGraficos " +
-                                    "                      WHERE Validez = (SELECT Max(Validez) " +
-                                    "                                       FROM GruposGraficos " +
-                                    "                                       WHERE Validez <= @fecha))) " +
-                                    "WHERE(Numero IN(SELECT Grafico " +
-                                    "                FROM DiasCalendario " +
-                                    "                WHERE DiaFecha = @fecha AND Grafico > 0) " +
-                                    "OR Numero IN(SELECT GraficoVinculado " +
-                                    "             FROM DiasCalendario " +
-                                    "             WHERE DiaFecha = @fecha AND GraficoVinculado > 0)) " +
-                                    "AND Numero <> @comodin " +
-                                    "ORDER BY Numero");
-                consulta.AddParameter("@fecha", fecha);
-                consulta.AddParameter("@comodin", comodin);
-                return GetItems<GraficoFecha>(consulta);
+                var consultaSQL = "" +
+                    "WITH " +
+                    "maxValidez AS (SELECT Max(Validez) FROM GruposGraficos WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @fecha)), " +
+                    "idGrupo AS (SELECT _id FROM GruposGraficos WHERE Validez in maxValidez), " +
+                    "graficos1 AS (SELECT Grafico FROM DiasCalendario WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND Grafico > 0)," +
+                    "graficos2 AS(SELECT GraficoVinculado FROM DiasCalendario WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND GraficoVinculado > 0) " +
+                    "" +
+                    "SELECT @fecha as Fecha, * FROM (SELECT * FROM Graficos WHERE (IdGrupo in idGrupo))" +
+                    "WHERE (Numero IN graficos1 OR Numero IN graficos2) AND Numero != @comodin " +
+                    "ORDER BY Numero; ";
+
+
+                for (int dia = 1; dia <= DateTime.DaysInMonth(fecha.Year, fecha.Month); dia++) {
+                    DateTime fechaDia = new DateTime(fecha.Year, fecha.Month, dia);
+                    var consulta = new SQLiteExpression(consultaSQL);
+                    consulta.AddParameter("@fecha", fechaDia);
+                    consulta.AddParameter("@comodin", comodin);
+                    var items = GetItems<GraficoFecha>(consulta);
+                    lista.AddRange(items);
+                }
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetGraficosFromDiaCalendario), ex);
             }
-            return new List<GraficoFecha>();
+            return lista;
         }
 
 
         public IEnumerable<GraficosPorDia> GetGraficosByDia(DateTime fecha) {
             try {
-                var consulta = new SQLiteExpression("SELECT Numero " +
-                                    "FROM Graficos " +
-                                    "WHERE IdGrupo = (SELECT _id " +
-                                    "                 FROM GruposGraficos " +
-                                    "                 WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) " +
-                                    "                                  FROM GruposGraficos " +
-                                    "                                  WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @fecha)))) " +
-                                    "AND DiaSemana = @diaSemana " +
-                                    "ORDER BY Numero");
+                var consultaSQL = "" +
+                    "WITH " +
+                    "maxValidez AS(SELECT Max(Validez) FROM GruposGraficos WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @fecha)), " +
+                    "idGrupo AS(SELECT _id FROM GruposGraficos WHERE Validez in maxValidez) " +
+                    "" +
+                    "SELECT Numero " +
+                    "FROM Graficos " +
+                    "WHERE IdGrupo in idGrupo AND DiaSemana = @diaSemana " +
+                    "ORDER BY Numero; ";
 
                 List<GraficosPorDia> lista = new List<GraficosPorDia>();
 
@@ -1545,11 +1555,21 @@ namespace Orion.Servicios {
                     if (App.Global.CalendariosVM.EsFestivo(fechaDia)) {
                         diasemana = "F";
                     }
+                    var consulta = new SQLiteExpression(consultaSQL);
                     consulta.AddParameter("@fecha", fechaDia);
                     consulta.AddParameter("@diaSemana", diasemana);
                     var Gpd = new GraficosPorDia();
                     Gpd.Fecha = fechaDia;
-                    Gpd.Lista.Add(GetIntScalar(consulta));
+                    using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                        conexion.Open();
+                        using (var comando = consulta.GetCommand(conexion)) {
+                            using (var lector = comando.ExecuteReader()) {
+                                while (lector.Read()) {
+                                    Gpd.Lista.Add(lector.ToInt32("Numero"));
+                                }
+                            }
+                        }
+                    }
                     lista.Add(Gpd);
                 }
                 return lista;
@@ -1657,11 +1677,13 @@ namespace Orion.Servicios {
         }
 
 
-        public ResumenPijama GetResumenHastaMes(int año, int mes, int idconductor, int comodin) {
+        public ResumenPijama GetResumenHastaMes(int año, int mes, int matricula, int comodin) {
             // Inicializamos el resultado.
             ResumenPijama resultado = new ResumenPijama();
             // Establecemos la fecha del día 1 del siguiente mes al indicado.
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
+            // Establecemos el id del conductor
+            int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
             try {
                 using (var conexion = new SQLiteConnection(CadenaConexion)) {
                     conexion.Open();
@@ -1671,11 +1693,11 @@ namespace Orion.Servicios {
                     var consulta = new SQLiteExpression("SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha, " +
                                                       "DiasCalendario.ExcesoJornada, DiasCalendario.AcumuladasAlt " +
                                                       "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios._id " +
-                                                      "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND IdConductor = @idConductor) " +
+                                                      "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND MatriculaConductor = @matricula) " +
                                                       "      AND Grafico > 0 " +
                                                       "ORDER BY Calendarios.Fecha, DiasCalendario.Dia;");
                     consulta.AddParameter("@fecha", fecha);
-                    consulta.AddParameter("@idConductor", idconductor);
+                    consulta.AddParameter("@matricula", matricula);
                     using (var lector = consulta.GetCommand(conexion).ExecuteReader()) {
                         // Por cada día, sumamos las horas acumuladas.
                         while (lector.Read()) {
@@ -1712,81 +1734,81 @@ namespace Orion.Servicios {
                     // HORAS REGULADAS
                     //----------------------------------------------------------------------------------------------------
                     consulta = new SQLiteExpression("SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idConductor AND Fecha < @fecha");
-                    consulta.AddParameter("idconductor", idconductor);
-                    consulta.AddParameter("fecha", fecha);
+                    consulta.AddParameter("@idConductor", idConductor);
+                    consulta.AddParameter("@fecha", fecha);
                     resultado.HorasReguladas = GetTimeSpanScalar(conexion, consulta);
                     //----------------------------------------------------------------------------------------------------
                     // DIAS F6
                     //----------------------------------------------------------------------------------------------------
                     consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
-                                              "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND IdConductor = @idConductor)" +
+                                              "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND MatriculaConductor = @matricula)" +
                                               "      AND Grafico = -7;");
-                    consulta.AddParameter("fecha", fecha);
-                    consulta.AddParameter("idconductor", idconductor);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@matricula", matricula);
                     resultado.DiasLibreDisposicionF6 = GetDecimalScalar(conexion, consulta);
                     //----------------------------------------------------------------------------------------------------
                     // DIAS F6DC
                     //----------------------------------------------------------------------------------------------------
                     consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
-                                              "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND IdConductor = @idConductor)" +
+                                              "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND MatriculaConductor = @matricula)" +
                                               "      AND Grafico = -14;");
-                    consulta.AddParameter("fecha", fecha);
-                    consulta.AddParameter("idconductor", idconductor);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@matricula", matricula);
                     resultado.DiasF6DC = GetDecimalScalar(conexion, consulta);
                     //----------------------------------------------------------------------------------------------------
                     // DCS REGULADOS 
                     //----------------------------------------------------------------------------------------------------
-                    consulta = new SQLiteExpression("SELECT Sum(Descansos) FROM Regulaciones WHERE IdConductor = @idConductor AND Fecha < @fecha");
-                    consulta.AddParameter("idconductor", idconductor);
-                    consulta.AddParameter("fecha", fecha);
+                    consulta = new SQLiteExpression("SELECT Sum(Descansos) FROM Regulaciones WHERE idConductor = @idConductor AND Fecha < @fecha");
+                    consulta.AddParameter("@idConductor", idConductor);
+                    consulta.AddParameter("@fecha", fecha);
                     resultado.DCsRegulados = GetDecimalScalar(conexion, consulta);
                     //----------------------------------------------------------------------------------------------------
                     // DCS DISFRUTADOS
                     //----------------------------------------------------------------------------------------------------
                     consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
-                                                      "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND IdConductor = @idConductor)" +
+                                                      "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND MatriculaConductor = @matricula)" +
                                                       "      AND Grafico = -6;");
-                    consulta.AddParameter("fecha", fecha);
-                    consulta.AddParameter("idconductor", idconductor);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@matricula", matricula);
                     resultado.DCsDisfrutados = GetDecimalScalar(conexion, consulta);
                     //----------------------------------------------------------------------------------------------------
                     // DNDs REGULADOS 
                     //----------------------------------------------------------------------------------------------------
                     consulta = new SQLiteExpression("SELECT Sum(Dnds) FROM Regulaciones WHERE IdConductor = @idConductor AND Fecha < @fecha");
-                    consulta.AddParameter("idconductor", idconductor);
-                    consulta.AddParameter("fecha", fecha);
+                    consulta.AddParameter("@idConductor", idConductor);
+                    consulta.AddParameter("@fecha", fecha);
                     resultado.DNDsRegulados = GetDecimalScalar(conexion, consulta);
                     //----------------------------------------------------------------------------------------------------
                     // DNDS DISFRUTADOS
                     //----------------------------------------------------------------------------------------------------
                     consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
                                                        "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
-                                                       "WHERE Calendarios.IdConductor = @idConductor AND DiasCalendario.Grafico = -8 AND Fecha < @fecha");
-                    consulta.AddParameter("idconductor", idconductor);
-                    consulta.AddParameter("fecha", fecha);
+                                                       "WHERE Calendarios.MatriculaConductor = @matricula AND DiasCalendario.Grafico = -8 AND Fecha < @fecha");
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
                     resultado.DNDsDisfrutados = GetDecimalScalar(conexion, consulta);
                     //----------------------------------------------------------------------------------------------------
                     // DÍAS COMITÉ EN DESCANSO
                     //----------------------------------------------------------------------------------------------------
                     consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
                                                       "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
-                                                      "WHERE Calendarios.IdConductor = @idConductor AND " +
+                                                      "WHERE Calendarios.MatriculaConductor = @matricula AND " +
                                                       "      (DiasCalendario.Grafico = -2 OR DiasCalendario.Grafico = -3 OR DiasCalendario.Grafico = -5 OR " +
                                                       "       DiasCalendario.Grafico = -6 OR DiasCalendario.Grafico = -1) AND " +
                                                       "	   (DiasCalendario.Codigo = 1 OR DiasCalendario.Codigo = 2) AND " +
                                                       "      Fecha < @fecha");
-                    consulta.AddParameter("idconductor", idconductor);
-                    consulta.AddParameter("fecha", fecha);
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
                     resultado.DiasComiteEnDescanso = GetDecimalScalar(conexion, consulta);
                     //----------------------------------------------------------------------------------------------------
                     // DÍAS TRABAJO EN DESCANSO
                     //----------------------------------------------------------------------------------------------------
                     consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
                                                        "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
-                                                       "WHERE Calendarios.IdConductor = @idConductor AND " +
+                                                       "WHERE Calendarios.MatriculaConductor = @matricula AND " +
                                                        "      DiasCalendario.Grafico > 0 AND DiasCalendario.Codigo = 3 AND Fecha < @fecha");
-                    consulta.AddParameter("idconductor", idconductor);
-                    consulta.AddParameter("fecha", fecha);
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
                     resultado.DiasTrabajoEnDescanso = GetDecimalScalar(conexion, consulta);
 
                 }
@@ -1832,18 +1854,18 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDiasTrabajadosHastaMesEnAño(int año, int mes, int idconductor) {
+        public int GetDiasTrabajadosHastaMesEnAño(int año, int mes, int matricula) {
             try {
                 DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
                 DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
                 var consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
                                     "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) > strftime('%Y-%m-%d', @fechaInicio) AND " +
                                     "                                                        strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fechaFinal) AND " +
-                                    "                                                        IdConductor = @idConductor) " +
+                                    "                                                        MatriculaConductor = @matricula) " +
                                     "      AND Grafico > 0;");
                 consulta.AddParameter("@fechaInicio", fechainicio);
                 consulta.AddParameter("@fechaFinal", fechafinal);
-                consulta.AddParameter("@idConductor", idconductor);
+                consulta.AddParameter("@matricula", matricula);
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetDiasTrabajadosHastaMesEnAño), ex);
@@ -1852,18 +1874,18 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDiasDescansoHastaMesEnAño(int año, int mes, int idconductor) {
+        public int GetDiasDescansoHastaMesEnAño(int año, int mes, int matricula) {
             try {
                 DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
                 DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
                 var consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
                                     "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) > strftime('%Y-%m-%d', @fechaInicio) AND " +
                                     "                                                        strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fechaFinal) AND " +
-                                    "                                                        IdConductor = @idConductor) " +
+                                    "                                                        MatriculaConductor = @matricula) " +
                                     "      AND (Grafico = -2 OR Grafico = -10 OR Grafico = -12);");
                 consulta.AddParameter("@fechaInicio", fechainicio);
                 consulta.AddParameter("@fechaFinal", fechafinal);
-                consulta.AddParameter("@idConductor", idconductor);
+                consulta.AddParameter("@matricula", matricula);
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetDiasDescansoHastaMesEnAño), ex);
@@ -1872,18 +1894,18 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDiasVacacionesHastaMesEnAño(int año, int mes, int idconductor) {
+        public int GetDiasVacacionesHastaMesEnAño(int año, int mes, int matricula) {
             try {
                 DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
                 DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
                 var consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
                                     "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) > strftime('%Y-%m-%d', @fechaInicio) AND " +
                                     "                                                        strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fechaFinal) AND " +
-                                    "                                                        IdConductor = @idConductor) " +
+                                    "                                                        MatriculaConductor = @matricula) " +
                                     "      AND Grafico = -1;");
                 consulta.AddParameter("@fechaInicio", fechainicio);
                 consulta.AddParameter("@fechaFinal", fechafinal);
-                consulta.AddParameter("@idConductor", idconductor);
+                consulta.AddParameter("@matricula", matricula);
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetDiasVacacionesHastaMesEnAño), ex);
@@ -1892,18 +1914,18 @@ namespace Orion.Servicios {
         }
 
 
-        public int GetDiasInactivoHastaMesEnAño(int año, int mes, int idconductor) {
+        public int GetDiasInactivoHastaMesEnAño(int año, int mes, int matricula) {
             try {
                 DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
                 DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
                 var consulta = new SQLiteExpression("SELECT Count(Grafico) FROM DiasCalendario " +
                                     "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) > strftime('%Y-%m-%d', @fechaInicio) AND " +
                                     "                                                        strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fechaFinal) AND " +
-                                    "                                                        IdConductor = @idConductor) " +
+                                    "                                                        MatriculaConductor = @matricula) " +
                                     "      AND Grafico = 0;");
                 consulta.AddParameter("@fechaInicio", fechainicio);
                 consulta.AddParameter("@fechaFinal", fechafinal);
-                consulta.AddParameter("@idConductor", idconductor);
+                consulta.AddParameter("@matricula", matricula);
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetDiasInactivoHastaMesEnAño), ex);

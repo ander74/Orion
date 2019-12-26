@@ -68,7 +68,7 @@ namespace Orion.PrintModel {
         private static void LlenarExcelCalendario(Worksheet Hoja, int fila, Calendario calendario) {
 
             // Conductor
-            Hoja.Cells[fila, 1].Value = calendario.IdConductor;
+            Hoja.Cells[fila, 1].Value = calendario.MatriculaConductor;
 
             // Días
             int diasEnMes = DateTime.DaysInMonth(calendario.Fecha.Year, calendario.Fecha.Month);
@@ -92,7 +92,7 @@ namespace Orion.PrintModel {
             //Hoja.Range[Hoja.Cells[fila, 1], Hoja.Cells[fila + 1, 1]].MergeCells = true;
             Hoja.Cells[fila, 1].BorderAround(XlLineStyle.xlContinuous, XlBorderWeight.xlMedium,
                                              XlColorIndex.xlColorIndexNone, XlRgbColor.rgbBlack);
-            Hoja.Cells[fila, 1].Value = calendario.IdConductor;
+            Hoja.Cells[fila, 1].Value = calendario.MatriculaConductor;
 
             // Días
             //int diasEnMes = DateTime.DaysInMonth(calendario.Fecha.Year, calendario.Fecha.Month);
@@ -205,7 +205,7 @@ namespace Orion.PrintModel {
                 Calendario cal = obj as Calendario;
                 if (cal == null) continue;
                 // Escribimos el conductor.
-                tabla.AddCell(new Cell().Add(new Paragraph($"{cal.IdConductor:000}")).AddStyle(estiloConductor).AddStyle(estiloFondo));
+                tabla.AddCell(new Cell().Add(new Paragraph($"{cal.MatriculaConductor:000}")).AddStyle(estiloConductor).AddStyle(estiloFondo));
                 // Escribimos los días.
                 for (int i = 1; i <= diasMes; i++) {
                     // Definimos el estilo para la última celda.
@@ -281,7 +281,7 @@ namespace Orion.PrintModel {
                     // Estilo Fondo Alternativo
                     iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
                     if (indice % 2 == 0) estiloFondo.SetBackgroundColor(new DeviceRgb(252, 228, 214));
-                    tabla.AddCell(new Cell().Add(new Paragraph($"{cal.IdConductor:000}")).AddStyle(estiloConductor).AddStyle(estiloFondo));
+                    tabla.AddCell(new Cell().Add(new Paragraph($"{cal.MatriculaConductor:000}")).AddStyle(estiloConductor).AddStyle(estiloFondo));
                     tabla.AddCell(new Cell().Add(new Paragraph($"{cal.Informe}")).AddStyle(estiloFallos).AddStyle(estiloFondo));
                     indice++;
                 }

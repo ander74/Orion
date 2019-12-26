@@ -196,16 +196,16 @@ namespace Orion.Models {
         public IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("@año", Año));
-                lista.Add(new SQLiteParameter("@importeDietas", ImporteDietas.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@importeSabados", ImporteSabados.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@importeFestivos", ImporteFestivos.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@plusNocturnidad", PlusNocturnidad.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@dietaMenorDescanso", DietaMenorDescanso.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@plusLimpieza", PlusLimpieza.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@plusPaqueteria", PlusPaqueteria.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@plusNavidad", PlusNavidad.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@id", Id));
+                lista.Add(new SQLiteParameter("Año", Año));
+                lista.Add(new SQLiteParameter("ImporteDietas", ImporteDietas.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("ImporteSabados", ImporteSabados.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("ImporteFestivos", ImporteFestivos.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("PlusNocturnidad", PlusNocturnidad.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("DietaMenorDescanso", DietaMenorDescanso.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("PlusNavidad", PlusNavidad.ToString("0.0000")));
+                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }

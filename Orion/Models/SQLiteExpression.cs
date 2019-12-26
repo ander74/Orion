@@ -114,6 +114,15 @@ namespace Orion.Models {
 
 
         /// <summary>
+        /// Añade un long a la lista de parámetros y devuelve el propio objeto <see cref="SQLiteExpression"/> <br/>
+        /// </summary>
+        public SQLiteExpression AddParameter(string paramName, long paramValue) {
+            Parametros.Add(new SQLiteParameter(paramName, paramValue));
+            return this;
+        }
+
+
+        /// <summary>
         /// Añade un bool a la lista de parámetros y devuelve el propio objeto <see cref="SQLiteExpression"/> <br/>
         /// </summary>
         public SQLiteExpression AddParameter(string paramName, bool paramValue) {

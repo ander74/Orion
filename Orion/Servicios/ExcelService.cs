@@ -131,7 +131,7 @@ namespace Orion.Servicios {
                 while (reader.Read()) {
                     Calendario calendario = new Calendario();
                     calendario.Fecha = new DateTime(año, mes, 1);
-                    calendario.IdConductor = (int)reader.GetDouble(reader.GetOrdinal("Matricula"));
+                    calendario.MatriculaConductor = (int)reader.GetDouble(reader.GetOrdinal("Matricula"));
                     calendario.ListaDias = new ObservableCollection<DiaCalendario>();
                     for (int dia = 1; dia <= DateTime.DaysInMonth(año, mes); dia++) {
                         DiaCalendario diaCalendario = new DiaCalendario();
@@ -156,20 +156,22 @@ namespace Orion.Servicios {
             ConvertidorNumeroGraficoCalendario converter = new ConvertidorNumeroGraficoCalendario();
 
             using (var excel = new ExcelPackage(fileInfo)) {
-                var hoja = excel.Workbook.Worksheets[meses[mes]];
-                for (int fila = 2; fila <= hoja.Dimension.End.Row; fila++) {
-                    Calendario calendario = new Calendario();
-                    calendario.Fecha = new DateTime(año, mes, 1);
-                    calendario.IdConductor = hoja.Cells[fila, 1].GetValue<int>();
-                    calendario.ListaDias = new ObservableCollection<DiaCalendario>();
-                    for (int dia = 1; dia <= diasMes; dia++) {
-                        DiaCalendario diaCalendario = new DiaCalendario();
-                        diaCalendario.Dia = dia;
-                        var valor = hoja.Cells[fila, 1 + dia].GetValue<string>() ?? "";
-                        diaCalendario.ComboGrafico = (Tuple<int, int>)converter.ConvertBack(valor, null, null, null);
-                        calendario.ListaDias.Add(diaCalendario);
+                if (excel.Workbook.Worksheets.Any(h => h.Name == meses[mes])) {
+                    var hoja = excel.Workbook.Worksheets[meses[mes]];
+                    for (int fila = 2; fila <= hoja.Dimension.End.Row; fila++) {
+                        Calendario calendario = new Calendario();
+                        calendario.Fecha = new DateTime(año, mes, 1);
+                        calendario.MatriculaConductor = hoja.Cells[fila, 1].GetValue<int>();
+                        calendario.ListaDias = new ObservableCollection<DiaCalendario>();
+                        for (int dia = 1; dia <= diasMes; dia++) {
+                            DiaCalendario diaCalendario = new DiaCalendario();
+                            diaCalendario.Dia = dia;
+                            var valor = hoja.Cells[fila, 1 + dia].GetValue<string>() ?? "";
+                            diaCalendario.ComboGrafico = (Tuple<int, int>)converter.ConvertBack(valor, null, null, null);
+                            calendario.ListaDias.Add(diaCalendario);
+                        }
+                        lista.Add(calendario);
                     }
-                    lista.Add(calendario);
                 }
             }
             return lista;
@@ -212,14 +214,14 @@ namespace Orion.Servicios {
             int fila = 1;
 
             foreach (var calendario in listaCalendarios) {
-                var calendarioExcel = listaExcel.FirstOrDefault(c => c.IdConductor == calendario.IdConductor);
+                var calendarioExcel = listaExcel.FirstOrDefault(c => c.MatriculaConductor == calendario.MatriculaConductor);
                 if (calendarioExcel == null) continue;
-                Conductor conductor = App.Global.ConductoresVM.GetConductor(calendario.IdConductor);
+                Conductor conductor = App.Global.ConductoresVM.GetConductor(calendario.MatriculaConductor);
                 string nombre = conductor == null ? "Desconocido" : $"{conductor.Nombre} {conductor.Apellidos}";
                 hoja.Cells[fila + 3, 1, fila + 4, 1].Merge = true;
                 hoja.Cells[fila + 3, 2, fila + 4, 2].Merge = true;
                 hoja.Cells[fila + 3, 1].Value = nombre;
-                hoja.Cells[fila + 3, 2].Value = calendario.IdConductor;
+                hoja.Cells[fila + 3, 2].Value = calendario.MatriculaConductor;
                 for (int dia = 1; dia <= diasMes; dia++) {
                     //string txtOrion = (string)converter.Convert(calendario.ListaDias[dia - 1].ComboGrafico, null, null, null);
                     string txtOrion = (string)converter.Convert(calendario.ListaDias.First(d => d.Dia == dia).ComboGrafico, null, null, null);
@@ -354,6 +356,7 @@ namespace Orion.Servicios {
                 int filas = 0;
 
                 foreach (var grafico in listaGraficos) {
+                    grafico.Recalcular();
                     hoja.Cells[filas + 5, 1].Value = App.Global.CentroActual.ToString();
                     hoja.Cells[filas + 5, 2].Value = parseDiaSemana(grafico.DiaSemana);
                     hoja.Cells[filas + 5, 3].Value = grafico.Numero;

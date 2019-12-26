@@ -161,9 +161,9 @@ namespace Orion.Models {
         public IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("@año", Año));
-                lista.Add(new SQLiteParameter("@fecha", Fecha.ToString("yyyy-MM-dd")));
-                lista.Add(new SQLiteParameter("@id", Id));
+                lista.Add(new SQLiteParameter("Año", Año));
+                lista.Add(new SQLiteParameter("Fecha", Fecha.ToString("yyyy-MM-dd")));
+                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }

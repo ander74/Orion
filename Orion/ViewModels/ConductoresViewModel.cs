@@ -78,14 +78,11 @@ namespace Orion.ViewModels {
                     _regulacionesborradas.Clear();
                 }
                 if (ListaConductores != null && ListaConductores.Count > 0) {
-                    //TODO: QUitar
-                    var x = ListaConductores.Count(c => c.Nuevo || c.Modificado);
-
                     BdConductores.GuardarConductores(ListaConductores.Where(c => c.Nuevo || c.Modificado));
                 }
-                // Si hay conductores con el id cero, avisamos.
-                if (ListaConductores.Count(item => item.Id == 0) > 0) {
-                    mensajes.VerMensaje("Hay conductores no válidos que no han sido guardados.", "ATENCIÓN");
+                // Si hay conductores con la matrícula cero, avisamos.
+                if (ListaConductores.Count(item => item.Matricula == 0) > 0) {
+                    mensajes.VerMensaje("Hay conductores no válidos que podrían no haberse guardado.", "ATENCIÓN");
                 }
             } catch (Exception ex) {
                 mensajes.VerError("ConductoresViewModel.GuardarConductores", ex);
@@ -107,32 +104,39 @@ namespace Orion.ViewModels {
         }
 
 
-        public Conductor GetConductor(int idconductor) {
-            return ListaConductores.FirstOrDefault(c => c.Id == idconductor);
+        public Conductor GetConductor(int matricula) {
+            return ListaConductores.FirstOrDefault(c => c.Matricula == matricula);
         }
 
 
-        public bool ExisteConductor(int idConductor) {
-            return ListaConductores.Any(c => c.Id == idConductor);
+        public bool ExisteConductor(int matricula) {
+            return ListaConductores.Any(c => c.Matricula == matricula);
         }
 
 
-        public void CrearConductorDesconocido(int idConductor) {
-            if (ExisteConductor(idConductor)) return;
-            Conductor desconocido = new Conductor { Id = idConductor, Nombre = "Desconocido", Notas = "Conductor insertado automáticamente por el sistema." };
+        public void CrearConductorDesconocido(int matricula) {
+            if (ExisteConductor(matricula)) return;
+            Conductor desconocido = new Conductor { Matricula = matricula, Nombre = "Desconocido", Notas = "Conductor insertado automáticamente por el sistema." };
             ListaConductores.Add(desconocido);
         }
 
 
         public void InsertarRegulacion(RegulacionConductor regulacion) {
+            //TODO: Revisar
             Conductor conductor = ListaConductores.First(c => c.Id == regulacion.IdConductor);
             conductor.ListaRegulaciones.Add(regulacion);
         }
 
 
-        public bool IsIndefinido(int matricula) {
-            return ListaConductores.FirstOrDefault(c => c.Id == matricula)?.Indefinido ?? false;
+        public bool IsIndefinidoById(int idConductor) {
+            return ListaConductores.FirstOrDefault(c => c.Id == idConductor)?.Indefinido ?? false;
         }
+
+
+        public bool IsIndefinido(int matricula) {
+            return ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Indefinido ?? false;
+        }
+
 
 
         #endregion

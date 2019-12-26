@@ -194,7 +194,15 @@ namespace Orion.Models {
                 _id = value;
                 Modificado = true;
                 PropiedadCambiada();
-                PropiedadCambiada(nameof(MatriculaApellidos));
+            }
+        }
+
+
+        private int matricula;
+        public int Matricula {
+            get => matricula;
+            set {
+                if (SetValue(ref matricula, value)) PropiedadCambiada(nameof(MatriculaApellidos));
             }
         }
 
@@ -227,7 +235,7 @@ namespace Orion.Models {
 
 
         public string MatriculaApellidos {
-            get => $"{Id}: {Apellidos}";
+            get => $"{Matricula:000}: {Apellidos}";
         }
 
 
@@ -373,7 +381,6 @@ namespace Orion.Models {
         #endregion
 
 
-
         // ====================================================================================================
         #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
@@ -381,6 +388,7 @@ namespace Orion.Models {
 
         public void FromReader(SQLiteDataReader lector) {
             _id = lector.ToInt32("_id");
+            matricula = lector.ToInt32("Matricula");
             _nombre = lector.ToString("Nombre");
             _apellidos = lector.ToString("Apellidos");
             _indefinido = lector.ToBool("Indefinido");
@@ -400,18 +408,19 @@ namespace Orion.Models {
         public IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("@nombre", Nombre));
-                lista.Add(new SQLiteParameter("@apellidos", Apellidos));
-                lista.Add(new SQLiteParameter("@indefinido", Indefinido ? 1 : 0));
-                lista.Add(new SQLiteParameter("@telefono", Telefono));
-                lista.Add(new SQLiteParameter("@email", Email));
-                lista.Add(new SQLiteParameter("@acumuladas", Acumuladas.Ticks));
-                lista.Add(new SQLiteParameter("@descansos", Descansos.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@descansosNoDisfrutados", DescansosNoDisfrutados.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@plusDistancia", PlusDistancia.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("@reduccionJornada", ReduccionJornada ? 1 : 0));
-                lista.Add(new SQLiteParameter("@notas", Notas));
-                lista.Add(new SQLiteParameter("@id", Id));
+                lista.Add(new SQLiteParameter("Matricula", Matricula));
+                lista.Add(new SQLiteParameter("Nombre", Nombre));
+                lista.Add(new SQLiteParameter("Apellidos", Apellidos));
+                lista.Add(new SQLiteParameter("Indefinido", Indefinido ? 1 : 0));
+                lista.Add(new SQLiteParameter("Telefono", Telefono));
+                lista.Add(new SQLiteParameter("Email", Email));
+                lista.Add(new SQLiteParameter("Acumuladas", Acumuladas.Ticks));
+                lista.Add(new SQLiteParameter("Descansos", Descansos.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("DescansosNoDisfrutados", DescansosNoDisfrutados.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("PlusDistancia", PlusDistancia.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("ReduccionJornada", ReduccionJornada ? 1 : 0));
+                lista.Add(new SQLiteParameter("Notas", Notas));
+                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }
@@ -439,7 +448,7 @@ namespace Orion.Models {
         public string ForeignIdName { get => "IdConductor"; }
 
 
-        public string OrderBy { get => $"_id ASC"; }
+        public string OrderBy { get => $"Matricula ASC"; }
 
 
         public string TableName { get => "Conductores"; }
@@ -448,6 +457,7 @@ namespace Orion.Models {
         public string ComandoInsertar {
             //TODO: Corregir el _id añadiendo la matrícula.
             get => "INSERT OR REPLACE INTO Conductores (" +
+                "Matricula, " +
                 "Nombre, " +
                 "Apellidos, " +
                 "Indefinido, " +
@@ -461,6 +471,7 @@ namespace Orion.Models {
                 "Notas, " +
                 "_id) " +
                 "VALUES (" +
+                "@matricula, " +
                 "@nombre, " +
                 "@apellidos, " +
                 "@indefinido, " +
@@ -479,6 +490,7 @@ namespace Orion.Models {
         //public string ComandoActualizar {
         //    //TODO: Corregir el _id añadiendo la matrícula.
         //    get => "UPDATE Conductores SET " +
+        //        "Matricula = @matricula, " +
         //        "Nombre = @nombre, " +
         //        "Apellidos = @apellidos, " +
         //        "Indefinido = @indefinido, " +

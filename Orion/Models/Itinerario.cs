@@ -280,12 +280,12 @@ namespace Orion.Models {
             get {
                 var lista = new List<SQLiteParameter>();
 
-                lista.Add(new SQLiteParameter("@idlinea", IdLinea));
-                lista.Add(new SQLiteParameter("@nombre", Nombre));
-                lista.Add(new SQLiteParameter("@descripcion", Descripcion));
-                lista.Add(new SQLiteParameter("@tiempoReal", TiempoReal));
-                lista.Add(new SQLiteParameter("@tiempoPago", TiempoPago));
-                lista.Add(new SQLiteParameter("@id", Id));
+                lista.Add(new SQLiteParameter("IdLinea", IdLinea));
+                lista.Add(new SQLiteParameter("Nombre", Nombre));
+                lista.Add(new SQLiteParameter("Descripcion", Descripcion));
+                lista.Add(new SQLiteParameter("TiempoReal", TiempoReal));
+                lista.Add(new SQLiteParameter("TiempoPago", TiempoPago));
+                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }

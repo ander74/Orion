@@ -77,7 +77,7 @@ namespace Orion.ViewModels {
             foreach (Calendario c in ListaCalendarios) {
                 c.ObjetoCambiado += ObjetoCambiadoEventHandler;
                 // Añadimos el campo indefinido.
-                c.ConductorIndefinido = App.Global.ConductoresVM.IsIndefinido(c.IdConductor);
+                c.ConductorIndefinido = App.Global.ConductoresVM.IsIndefinido(c.MatriculaConductor);
             }
             CalendarioSeleccionado = null;
             PropiedadCambiada(nameof(Detalle));
@@ -111,8 +111,8 @@ namespace Orion.ViewModels {
         public bool AñadirConductoresDesconocidos() {
             bool hayDesconocidos = false;
             foreach (Calendario calendario in ListaCalendarios) {
-                if (!App.Global.ConductoresVM.ExisteConductor(calendario.IdConductor)) {
-                    App.Global.ConductoresVM.CrearConductorDesconocido(calendario.IdConductor);
+                if (!App.Global.ConductoresVM.ExisteConductor(calendario.MatriculaConductor)) {
+                    App.Global.ConductoresVM.CrearConductorDesconocido(calendario.MatriculaConductor);
                     hayDesconocidos = true;
                 }
 
@@ -120,8 +120,8 @@ namespace Orion.ViewModels {
             return hayDesconocidos;
         }
 
-        public void BorrarCalendariosPorConductor(int idConductor) {
-            List<Calendario> lista = ListaCalendarios.Where(c => c.IdConductor == idConductor).ToList();
+        public void BorrarCalendariosPorConductor(int matricula) {
+            List<Calendario> lista = ListaCalendarios.Where(c => c.MatriculaConductor == matricula).ToList();
             foreach (Calendario c in lista) {
                 _listaborrados.Add(c);
                 ListaCalendarios.Remove(c);
@@ -129,10 +129,10 @@ namespace Orion.ViewModels {
             }
         }
 
-        public void DeshacerBorrarPorConductor(int idConductor) {
+        public void DeshacerBorrarPorConductor(int matricula) {
             if (_listaborrados == null) return;
             List<Calendario> lista = new List<Calendario>();
-            foreach (Calendario c in _listaborrados.Where(c => c.IdConductor == idConductor)) {
+            foreach (Calendario c in _listaborrados.Where(c => c.MatriculaConductor == matricula)) {
                 lista.Add(c);
             }
             foreach (Calendario calendario in lista) {
@@ -360,7 +360,7 @@ namespace Orion.ViewModels {
             get {
                 string texto = $"Calendarios: {ListaCalendarios.Count.ToString()}";
                 if (CalendarioSeleccionado != null) {
-                    texto += $" => {CalendarioSeleccionado.IdConductor}" +
+                    texto += $" => {CalendarioSeleccionado.MatriculaConductor}" +
                              $"  |  Exceso = {ExcesoJornada.ToTexto()}";
                 }
                 return texto;

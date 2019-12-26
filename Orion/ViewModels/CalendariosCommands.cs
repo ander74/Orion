@@ -184,8 +184,8 @@ namespace Orion.ViewModels {
         }
 
         private void AbrirPijama() {
-            GuardarCalendarios();
-            IdConductorPijama = CalendarioSeleccionado.IdConductor;
+            if (HayCambios) GuardarCalendarios();
+            IdConductorPijama = CalendarioSeleccionado.MatriculaConductor;
             Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
         }
 
@@ -229,7 +229,7 @@ namespace Orion.ViewModels {
                 if (ruta != "") {
                     iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
                     doc.GetPdfDocument().GetDocumentInfo().SetTitle("Hoja Pijama");
-                    doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{Pijama.Trabajador.Id} - {Pijama.Fecha.ToString("MMMM-yyyy").ToUpper()}");
+                    doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{Pijama.Trabajador.Matricula} - {Pijama.Fecha.ToString("MMMM-yyyy").ToUpper()}");
                     doc.SetMargins(25, 25, 25, 25);
                     await PijamaPrintModel.CrearPijamaEnPdf_7(doc, Pijama);
                     doc.Close();
@@ -334,7 +334,7 @@ namespace Orion.ViewModels {
                     if (ruta != "") {
                         iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
                         doc.GetPdfDocument().GetDocumentInfo().SetTitle("Hoja Pijama");
-                        doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{hojaPijama.Trabajador.Id} - {hojaPijama.Fecha.ToString("MMMM-yyyy").ToUpper()}");
+                        doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{hojaPijama.Trabajador.Matricula} - {hojaPijama.Fecha.ToString("MMMM-yyyy").ToUpper()}");
                         doc.SetMargins(25, 25, 25, 25);
                         await PijamaPrintModel.CrearPijamaEnPdf_7(doc, hojaPijama);
                         doc.Close();
@@ -367,7 +367,7 @@ namespace Orion.ViewModels {
 
         private void MostrarResumenAño() {
             // Cargamos los calendarios del año del conductor.
-            List<Calendario> listaCalendarios = BdCalendarios.GetCalendariosConductor(FechaActual.Year, CalendarioSeleccionado.IdConductor);
+            List<Calendario> listaCalendarios = BdCalendarios.GetCalendariosConductor(FechaActual.Year, CalendarioSeleccionado.MatriculaConductor);
             // Creamos el diccionario que contendrá las hojas pijama.
             Dictionary<int, Pijama.HojaPijama> pijamasAño = new Dictionary<int, Pijama.HojaPijama>();
             // Cargamos las hojas pijama disponibles.
@@ -479,7 +479,8 @@ namespace Orion.ViewModels {
                 regulacion.IdConductor = Pijama.Trabajador.Id;
                 regulacion.Fecha = new DateTime(Pijama.Fecha.Year, 11, 30);
                 regulacion.Motivo = $"Horas reguladas del año {Pijama.Fecha.Year}";
-                App.Global.ConductoresVM.InsertarRegulacion(regulacion);
+                //App.Global.ConductoresVM.InsertarRegulacion(regulacion);
+                Pijama.Trabajador.ListaRegulaciones.Add(regulacion);
                 App.Global.ConductoresVM.GuardarTodo();
                 ActualizarPijama();
             }
@@ -528,7 +529,8 @@ namespace Orion.ViewModels {
                     regulacion.Codigo = 1;
                     regulacion.Horas = new TimeSpan(contexto.HorasACobrar.Value.Ticks * -1);
                     //BdRegulacionConductor.InsertarRegulacion(regulacion);
-                    App.Global.ConductoresVM.InsertarRegulacion(regulacion);
+                    //App.Global.ConductoresVM.InsertarRegulacion(regulacion);
+                    Pijama.Trabajador.ListaRegulaciones.Add(regulacion);
                     App.Global.ConductoresVM.GuardarTodo();
                     ActualizarPijama();
                 } else {
@@ -771,7 +773,7 @@ namespace Orion.ViewModels {
                 // Activamos la barra de progreso.
                 App.Global.IniciarProgreso("Creando PDF...");
                 // Pedimos el archivo donde guardarlo.
-                string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}.pdf", Pijama.Fecha, Pijama.Trabajador.Id);
+                string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}.pdf", Pijama.Fecha, Pijama.Trabajador.Matricula);
                 string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, Pijama.TextoTrabajador.Replace(":", " -"));
                 if (ruta != "") {
                     if (File.Exists(ruta)) {
@@ -1035,7 +1037,7 @@ namespace Orion.ViewModels {
         private void PijamaMesMenos() {
             int conductor = IdConductorPijama;
             FechaActual = FechaActual.AddMonths(-1);
-            CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.IdConductor == conductor);
+            CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.MatriculaConductor == conductor);
             if (CalendarioSeleccionado != null) {
                 Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
                 Pijama.PropiedadCambiada("");
@@ -1060,7 +1062,7 @@ namespace Orion.ViewModels {
         private void PijamaMesMas() {
             int conductor = IdConductorPijama;
             FechaActual = FechaActual.AddMonths(1);
-            CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.IdConductor == conductor);
+            CalendarioSeleccionado = ListaCalendarios.FirstOrDefault(c => c.MatriculaConductor == conductor);
             if (CalendarioSeleccionado != null) {
                 Pijama = new Pijama.HojaPijama(CalendarioSeleccionado, Mensajes);
                 Pijama.PropiedadCambiada("");
@@ -1131,7 +1133,6 @@ namespace Orion.ViewModels {
             if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
         }
         #endregion
-
 
 
         #region COMANDO COMPARAR CALENDARIOS ANUAL
