@@ -117,6 +117,7 @@ namespace Orion.Servicios {
         public const string CrearTablaGraficos = "CREATE TABLE IF NOT EXISTS Graficos (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "IdGrupo INTEGER DEFAULT 0, " +
+            "Validez TEXT DEFAULT '', " +
             "NoCalcular INTEGER DEFAULT 0, " +
             "Numero INTEGER DEFAULT 0, " +
             "DiaSemana TEXT DEFAULT '', " +
@@ -535,7 +536,8 @@ namespace Orion.Servicios {
         /// En caso de que la versión de la base de datos no sea correcta, crea o modifica las tablas en consecuencia.
         /// </summary>
         public void InicializarBasesDatos() {
-            switch (GetDbVersion()) {
+            int version = GetDbVersion();
+            switch (version) {
                 case 0: // BASE DE DATOS NUEVA: Creamos las tablas y actualizamos el número de versión al correcto.
                     CrearDBs();
                     SetDbVersion(DB_VERSION);
@@ -1086,10 +1088,23 @@ namespace Orion.Servicios {
         #region BD GRÁFICOS
         // ====================================================================================================
 
+        [Obsolete("Ya no hay grupos de gráficos.")]
         public IEnumerable<Grafico> GetGraficos(int idGrupo) {
             try {
                 var consulta = new SQLiteExpression("SELECT * FROM Graficos WHERE IdGrupo = @idGrupo ORDER BY Numero");
                 consulta.AddParameter("@idGrupo", idGrupo);
+                return GetItems<Grafico>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetGraficos), ex);
+            }
+            return new List<Grafico>();
+        }
+
+
+        public IEnumerable<Grafico> GetGraficos(DateTime fecha) {
+            try {
+                var consulta = new SQLiteExpression("SELECT * FROM Graficos WHERE Validez = @validez AND Numero <> 0 ORDER BY Numero");
+                consulta.AddParameter("@validez", fecha);
                 return GetItems<Grafico>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetGraficos), ex);
@@ -1126,9 +1141,21 @@ namespace Orion.Servicios {
         }
 
 
+        public void BorrarGraficosPorFecha(DateTime fecha) {
+            try {
+                var consulta = new SQLiteExpression("DELETE FROM Graficos WHERE Validez = @validez");
+                consulta.AddParameter("@validez", fecha);
+                ExecureNonQuery(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.BorrarGraficos), ex);
+            }
+        }
+
+
         public IEnumerable<Grafico> GetGraficosGrupoPorFecha(DateTime fecha) {
             try {
-                var consulta = new SQLiteExpression("SELECT * FROM Graficos WHERE IdGrupo = (SELECT _id FROM GruposGraficos WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', @validez))");
+                //var consulta = new SQLiteExpression("SELECT * FROM Graficos WHERE IdGrupo = (SELECT _id FROM GruposGraficos WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', @validez))");
+                var consulta = new SQLiteExpression("SELECT * FROM Graficos WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', @validez)");
                 consulta.AddParameter("@validez", fecha);
                 return GetItems<Grafico>(consulta);
             } catch (Exception ex) {
@@ -1138,7 +1165,8 @@ namespace Orion.Servicios {
         }
 
 
-        public IEnumerable<EstadisticasGraficos> GetEstadisticasGrupoGraficos(long IdGrupo, TimeSpan jornadaMedia) {
+        [Obsolete("Ya no hay grupos de gráficos.")]
+        public IEnumerable<EstadisticasGraficos> GetEstadisticasGrupoGraficos2(long IdGrupo, TimeSpan jornadaMedia) {
             try {
                 var consulta = new SQLiteExpression("SELECT " +
                     "GruposGraficos.Validez AS xValidez, " +
@@ -1168,10 +1196,69 @@ namespace Orion.Servicios {
         }
 
 
+        public IEnumerable<EstadisticasGraficos> GetEstadisticasGrupoGraficos(DateTime fecha, TimeSpan jornadaMedia) {
+            try {
+                var consulta = new SQLiteExpression("SELECT " +
+                    "Validez AS xValidez, " +
+                    "Turno AS xTurno, " +
+                    "Count(Numero) AS xNumero, " +
+                    "Sum(Valoracion) AS xValoracion, " +
+                    //"Sum(IIf(Trabajadas<@jornadaMedia AND NOT NoCalcular,@jornadaMedia,Trabajadas)) AS xTrabajadas, " +
+                    "Sum(CASE WHEN Trabajadas<@jornadaMedia AND NOT NoCalcular THEN @jornadaMedia ELSE Trabajadas END) AS xTrabajadas, " + //Si no va, probar 'END xx'
+                    "Sum(Acumuladas) AS xAcumuladas, " +
+                    "Sum(Nocturnas) AS xNocturnas, " +
+                    "Sum(Desayuno) AS xDesayuno, " +
+                    "Sum(Comida) AS xComida, " +
+                    "Sum(Cena) AS xCena, " +
+                    "Sum(PlusCena) AS xPlusCena, " +
+                    "Sum(PlusLimpieza) AS xLimpieza, " +
+                    "Sum(PlusPaqueteria) AS xPaqueteria " +
+                    "FROM Graficos " +
+                    "WHERE Validez=@validez GROUP BY Validez, Turno ORDER BY Validez, Turno;");
+                consulta.AddParameter("@jornadaMedia", jornadaMedia);
+                consulta.AddParameter("@validez", fecha);
+                return GetItems<EstadisticasGraficos>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetEstadisticasGrupoGraficos), ex);
+            }
+            return new List<EstadisticasGraficos>();
+        }
+
+
+        //[Obsolete("Ya no hay grupos de gráficos.")]
+        //public IEnumerable<EstadisticasGraficos> GetEstadisticasGraficosDesdeFecha(DateTime fecha, TimeSpan jornadaMedia) {
+        //    try {
+        //        var consulta = new SQLiteExpression("SELECT " +
+        //            "GruposGraficos.Validez AS xValidez, " +
+        //            "Turno AS xTurno, " +
+        //            "Count(Numero) AS xNumero, " +
+        //            "Sum(Valoracion) AS xValoracion, " +
+        //            "Sum(CASE WHEN Trabajadas<@jornadaMedia AND NOT NoCalcular THEN @jornadaMedia ELSE Trabajadas END) AS xTrabajadas, " +
+        //            "Sum(Acumuladas) AS xAcumuladas, " +
+        //            "Sum(Nocturnas) AS xNocturnas, " +
+        //            "Sum(Desayuno) AS xDesayuno, " +
+        //            "Sum(Comida) AS xComida, " +
+        //            "Sum(Cena) AS xCena, " +
+        //            "Sum(PlusCena) AS xPlusCena, " +
+        //            "Sum(PlusLimpieza) AS xLimpieza, " +
+        //            "Sum(PlusPaqueteria) AS xPaqueteria " +
+        //            "FROM GruposGraficos LEFT JOIN Graficos ON GruposGraficos._id = Graficos.IdGrupo " +
+        //            "WHERE strftime('%Y-%m-%d', GruposGraficos.Validez) >= strftime('%Y-%m-%d', @fecha) " +
+        //            "GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;");
+        //        consulta.AddParameter("@jornadaMedia", jornadaMedia);
+        //        consulta.AddParameter("@fecha", fecha);
+        //        return GetItems<EstadisticasGraficos>(consulta);
+        //    } catch (Exception ex) {
+        //        Utils.VerError(nameof(this.GetEstadisticasGraficosDesdeFecha), ex);
+        //    }
+        //    return new List<EstadisticasGraficos>();
+        //}
+
+
         public IEnumerable<EstadisticasGraficos> GetEstadisticasGraficosDesdeFecha(DateTime fecha, TimeSpan jornadaMedia) {
             try {
                 var consulta = new SQLiteExpression("SELECT " +
-                    "GruposGraficos.Validez AS xValidez, " +
+                    "Validez AS xValidez, " +
                     "Turno AS xTurno, " +
                     "Count(Numero) AS xNumero, " +
                     "Sum(Valoracion) AS xValoracion, " +
@@ -1184,9 +1271,9 @@ namespace Orion.Servicios {
                     "Sum(PlusCena) AS xPlusCena, " +
                     "Sum(PlusLimpieza) AS xLimpieza, " +
                     "Sum(PlusPaqueteria) AS xPaqueteria " +
-                    "FROM GruposGraficos LEFT JOIN Graficos ON GruposGraficos._id = Graficos.IdGrupo " +
-                    "WHERE strftime('%Y-%m-%d', GruposGraficos.Validez) >= strftime('%Y-%m-%d', @fecha) " +
-                    "GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;");
+                    "FROM Graficos " +
+                    "WHERE strftime('%Y-%m-%d', Validez) >= strftime('%Y-%m-%d', @fecha) " +
+                    "GROUP BY Validez, Turno ORDER BY Validez, Turno;");
                 consulta.AddParameter("@jornadaMedia", jornadaMedia);
                 consulta.AddParameter("@fecha", fecha);
                 return GetItems<EstadisticasGraficos>(consulta);
@@ -1197,16 +1284,36 @@ namespace Orion.Servicios {
         }
 
 
+        //[Obsolete("Ya no hay grupos de gráficos.")]
+        //public GraficoBase GetGrafico(int numero, DateTime fecha) {
+        //    try {
+        //        var consulta = new SQLiteExpression("SELECT * " +
+        //                            "FROM (SELECT * " +
+        //                            "      FROM Graficos" +
+        //                            "      WHERE IdGrupo = (SELECT _id " +
+        //                            "                       FROM GruposGraficos " +
+        //                            "                       WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) " +
+        //                            "                                        FROM GruposGraficos " +
+        //                            "                                        WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @validez)))))" +
+        //                            "WHERE Numero = @numero");
+        //        consulta.AddParameter("@validez", fecha);
+        //        consulta.AddParameter("@numero", numero);
+        //        return GetItem<GraficoBase>(consulta);
+        //    } catch (Exception ex) {
+        //        Utils.VerError(nameof(this.GetEstadisticasGraficosDesdeFecha), ex);
+        //    }
+        //    return new GraficoBase();
+        //}
+
+
         public GraficoBase GetGrafico(int numero, DateTime fecha) {
             try {
                 var consulta = new SQLiteExpression("SELECT * " +
                                     "FROM (SELECT * " +
                                     "      FROM Graficos" +
-                                    "      WHERE IdGrupo = (SELECT _id " +
-                                    "                       FROM GruposGraficos " +
-                                    "                       WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) " +
-                                    "                                        FROM GruposGraficos " +
-                                    "                                        WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @validez)))))" +
+                                    "      WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) " +
+                                    "                                                                  FROM Graficos" +
+                                    "                                                                  WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @validez))))" +
                                     "WHERE Numero = @numero");
                 consulta.AddParameter("@validez", fecha);
                 consulta.AddParameter("@numero", numero);
@@ -1233,7 +1340,8 @@ namespace Orion.Servicios {
 
         public IEnumerable<GrupoGraficos> GetGrupos() {
             try {
-                return GetItems<GrupoGraficos>();
+                var consulta = new SQLiteExpression("SELECT DISTINCT Validez FROM Graficos ORDER BY Validez DESC");
+                return GetItems<GrupoGraficos>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetGrupos), ex);
             }
@@ -1250,6 +1358,7 @@ namespace Orion.Servicios {
         }
 
 
+        [Obsolete("Ya no hay grupos.")]
         public void BorrarGrupoPorId(int idGrupo) {
             try {
                 var consulta = new SQLiteExpression("DELETE FROM GruposGraficos WHERE _id=@id");
@@ -1261,6 +1370,16 @@ namespace Orion.Servicios {
         }
 
 
+        public void BorrarGrupoPorFecha(DateTime fecha) {
+            try {
+                BorrarGraficosPorFecha(fecha);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.BorrarGrupoPorId), ex);
+            }
+        }
+
+
+        [Obsolete("Ya no hay grupos.")]
         public int NuevoGrupo(DateTime fecha, string notas) {
             try {
                 var nuevoGrupo = new GrupoGraficos();
@@ -1274,10 +1393,25 @@ namespace Orion.Servicios {
         }
 
 
+        public int NuevoGrupo(DateTime fecha) {
+            try {
+                var graficoCero = new Grafico();
+                graficoCero.Validez = fecha;
+                graficoCero.Numero = 0;
+                return GuardarItem(graficoCero);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.NuevoGrupo), ex);
+            }
+            return -1;
+        }
+
+
         public bool ExisteGrupo(DateTime fecha) {
             try {
-                var whereCondition = new SQLiteExpression("strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', @validez)").AddParameter("@validez", fecha);
-                return GetCount<GrupoGraficos>(whereCondition) > 0;
+                //var whereCondition = new SQLiteExpression("strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', @validez)").AddParameter("@validez", fecha);
+                var consulta = new SQLiteExpression("SELECT Count(*) FROM Graficos WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', @validez)");
+                consulta.AddParameter("@validez", fecha);
+                return GetIntScalar(consulta) > 0;
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.ExisteConductor), ex);
             }
@@ -1287,7 +1421,8 @@ namespace Orion.Servicios {
 
         public GrupoGraficos GetUltimoGrupo() {
             try {
-                var consulta = new SQLiteExpression("SELECT * FROM GruposGraficos WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) FROM GruposGraficos));");
+                //var consulta = new SQLiteExpression("SELECT * FROM GruposGraficos WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) FROM GruposGraficos));");
+                var consulta = new SQLiteExpression("SELECT Max(Validez) AS Validez FROM Graficos;");
                 return GetItem<GrupoGraficos>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.BorrarGrupoPorId), ex);
@@ -1401,7 +1536,7 @@ namespace Orion.Servicios {
 
             try {
                 var consulta = new SQLiteExpression("SELECT  " +
-                    "GG.Validez, " +
+                    "G.Validez, " +
                     "Count(G._id) as Cantidad, " +
 
                     //"Count(IIf(G.Turno = 1, 1, null)) as Turnos1, " +
@@ -1431,10 +1566,10 @@ namespace Orion.Servicios {
                     "Sum(G.Comida) As Comidas, " +
                     "Sum(G.Cena) As Cenas, " +
                     "Sum(G.PlusCena) As PlusesCena " +
-                    "FROM Graficos G LEFT JOIN GruposGraficos GG ON G.IdGrupo = GG._id " +
-                    "WHERE strftime('%Y-%m-%d', GG.Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) FROM GruposGraficos))" +
-                    "GROUP BY GG.Validez " +
-                    "ORDER BY GG.Validez");
+                    "FROM Graficos G " +
+                    "WHERE strftime('%Y-%m-%d', G.Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) FROM Graficos))" +
+                    "GROUP BY G.Validez " +
+                    "ORDER BY G.Validez");
                 return GetItem<EstadisticaGrupoGraficos>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetEstadisticasUltimoGrupoGraficos), ex);
@@ -1443,11 +1578,11 @@ namespace Orion.Servicios {
         }
 
 
-        public EstadisticaGrupoGraficos GetEstadisticasGrupoGraficos(long idGrupo, Centros centro) {
+        public EstadisticaGrupoGraficos GetEstadisticasGrupoGraficos(DateTime fecha, Centros centro) {
 
             try {
                 var consulta = new SQLiteExpression("SELECT " +
-                    "GG.Validez, " +
+                    "G.Validez, " +
                     "Count(G._id) as Cantidad, " +
 
                     //"Count(IIf(G.Turno = 1, 1, null)) as Turnos1, " +
@@ -1477,11 +1612,11 @@ namespace Orion.Servicios {
                     "Sum(G.Comida) As Comidas, " +
                     "Sum(G.Cena) As Cenas, " +
                     "Sum(G.PlusCena) As PlusesCena " +
-                    "FROM Graficos G LEFT JOIN GruposGraficos GG ON G.IdGrupo = GG._id " +
-                    "WHERE GG._id = @id " +
-                    "GROUP BY GG.Validez " +
-                    "ORDER BY GG.Validez");
-                consulta.AddParameter("@id", idGrupo);
+                    "FROM Graficos G " +
+                    "WHERE G.Validez = @validez " +
+                    "GROUP BY G.Validez " +
+                    "ORDER BY G.Validez");
+                consulta.AddParameter("@validez", fecha);
                 return GetItem<EstadisticaGrupoGraficos>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetEstadisticasGrupoGraficos), ex);
@@ -1495,12 +1630,11 @@ namespace Orion.Servicios {
             try {
                 var consultaSQL = "" +
                     "WITH " +
-                    "maxValidez AS (SELECT Max(Validez) FROM GruposGraficos WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @fecha)), " +
-                    "idGrupo AS (SELECT _id FROM GruposGraficos WHERE Validez in maxValidez), " +
+                    "maxValidez AS (SELECT Max(Validez) FROM Graficos WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @fecha)), " +
                     "graficos1 AS (SELECT Grafico FROM DiasCalendario WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND Grafico > 0)," +
                     "graficos2 AS(SELECT GraficoVinculado FROM DiasCalendario WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND GraficoVinculado > 0) " +
                     "" +
-                    "SELECT @fecha as Fecha, * FROM (SELECT * FROM Graficos WHERE (IdGrupo in idGrupo))" +
+                    "SELECT @fecha as Fecha, * FROM (SELECT * FROM Graficos WHERE (Validez in maxValidez))" +
                     "WHERE (Numero IN graficos1 OR Numero IN graficos2) AND Numero != @comodin " +
                     "ORDER BY Numero; ";
 
@@ -1524,12 +1658,11 @@ namespace Orion.Servicios {
             try {
                 var consultaSQL = "" +
                     "WITH " +
-                    "maxValidez AS(SELECT Max(Validez) FROM GruposGraficos WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @fecha)), " +
-                    "idGrupo AS(SELECT _id FROM GruposGraficos WHERE Validez in maxValidez) " +
+                    "maxValidez AS(SELECT Max(Validez) FROM Graficos WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @fecha)) " +
                     "" +
                     "SELECT Numero " +
                     "FROM Graficos " +
-                    "WHERE IdGrupo in idGrupo AND DiaSemana = @diaSemana " +
+                    "WHERE Validez in maxValidez AND (DiaSemana = @diaSemana OR DiaSemana = '' OR DiaSemana IS NULL) " +
                     "ORDER BY Numero; ";
 
                 List<GraficosPorDia> lista = new List<GraficosPorDia>();
@@ -1677,6 +1810,31 @@ namespace Orion.Servicios {
         }
 
 
+        public IEnumerable<Pijama.DiaPijama> GetDiasPijama(DateTime fecha, int matriculaConductor) {
+            var consulta = new SQLiteExpression("" +
+                "SELECT " +
+                "DiasCalendario.*, " +
+                "Graficos.* " +
+                "FROM DiasCalendario LEFT JOIN Graficos " +
+                "ON DiasCalendario.Grafico = Graficos.Numero " +
+                "AND Graficos.Validez = (SELECT Max(Graficos.Validez) FROM Graficos WHERE Graficos.Validez <= DiasCalendario.DiaFecha) " +
+                "" +
+                "WHERE IdCalendario = (SELECT _id " +
+                "                      FROM Calendarios " +
+                "                      WHERE Calendarios.MatriculaConductor = @matricula AND strftime('%Y-%m', Calendarios.Fecha) = strftime('%Y-%m', @fecha)) " +
+                "ORDER BY DiasCalendario.Dia");
+            consulta.AddParameter("@matricula", matriculaConductor);
+            consulta.AddParameter("@fecha", fecha);
+            try {
+                return GetItems<Pijama.DiaPijama>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetResumenHastaMes), ex);
+            }
+            return new List<Pijama.DiaPijama>();
+        }
+
+
+
         public ResumenPijama GetResumenHastaMes(int año, int mes, int matricula, int comodin) {
             // Inicializamos el resultado.
             ResumenPijama resultado = new ResumenPijama();
@@ -1710,12 +1868,17 @@ namespace Orion.Servicios {
                             DateTime f = lector.ToDateTime("Fecha");//  (lector["Fecha"] is DBNull) ? new DateTime(0) : (DateTime)lector["Fecha"];
                             if (d > DateTime.DaysInMonth(f.Year, f.Month)) continue;
                             DateTime fechadia = new DateTime(f.Year, f.Month, d);
+                            //var consulta2 = new SQLiteExpression("SELECT * " +
+                            //                      "FROM (SELECT * FROM Graficos WHERE IdGrupo = (SELECT _id " +
+                            //                      "										         FROM GruposGraficos " +
+                            //                      "												 WHERE Validez = (SELECT Max(Validez) " +
+                            //                      "																  FROM GruposGraficos " +
+                            //                      "														          WHERE Validez <= @validez)))" +
+                            //                      "WHERE Numero = @numero");
                             var consulta2 = new SQLiteExpression("SELECT * " +
-                                                  "FROM (SELECT * FROM Graficos WHERE IdGrupo = (SELECT _id " +
-                                                  "										         FROM GruposGraficos " +
-                                                  "												 WHERE Validez = (SELECT Max(Validez) " +
-                                                  "																  FROM GruposGraficos " +
-                                                  "														          WHERE Validez <= @validez)))" +
+                                                  "FROM (SELECT * FROM Graficos WHERE Validez = (SELECT Max(Validez) " +
+                                                  "										         FROM Graficos " +
+                                                  "											     WHERE Validez <= @validez))" +
                                                   "WHERE Numero = @numero");
                             consulta2.AddParameter("validez", fechadia);
                             consulta2.AddParameter("numero", g);
@@ -1947,22 +2110,29 @@ namespace Orion.Servicios {
         /// <summary>
         /// Prueba de cómo se pueden acceder a dos bases de datos diferentes a la vez.
         /// </summary>
-        public List<Conductor> GetPrueba(string path) {
+        public IEnumerable<Conductor> GetPrueba(string path) {
 
             try {
-                string comando1 = $"ATTACH '{path}' AS Arr";
-                string comandoSQL = "SELECT * FROM Conductores UNION ALL SELECT * FROM Arr.Conductores ORDER BY _id ASC;";
-                //string comandoSQL = "SELECT * FROM Arr.Conductores;";
-                var consulta1 = new SQLiteExpression(comando1);
-                var consulta2 = new SQLiteExpression(comandoSQL);
-                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                //string comandoSQL = $"ATTACH '{path}' AS Arr; SELECT * FROM Conductores UNION ALL SELECT * FROM Arr.Conductores ORDER BY Matricula ASC;";
+                string comandoSQL = $"ATTACH '{path}' AS Arr; SELECT * FROM Conductores; SELECT * FROM Arr.Conductores;";
+                var consulta = new SQLiteExpression(comandoSQL);
+                using (var conexion = new SQLiteConnection(App.Global.CadenaConexionSQL)) {
                     conexion.Open();
-                    using (var comando = consulta1.GetCommand(conexion)) {
-                        comando.ExecuteNonQuery();
-                        var lista = GetItems<Conductor>(conexion, consulta2);
-                        return lista.ToList();
+                    using (var comando = consulta.GetCommand(conexion)) {
+                        using (var lector = comando.ExecuteReader()) {
+                            var lista = new List<Conductor>();
+                            do {
+                                while (lector.Read()) {
+                                    var conductor = new Conductor();
+                                    conductor.FromReader(lector);
+                                    lista.Add(conductor);
+                                }
+                            } while (lector.NextResult());
+                            return lista;
+                        }
                     }
                 }
+                //return GetItems<Conductor>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetPrueba), ex);
             }

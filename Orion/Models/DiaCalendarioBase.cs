@@ -510,7 +510,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SQLiteDataReader lector) {
+        public virtual void FromReader(SQLiteDataReader lector) {
             _id = lector.ToInt32("_id");
             _idcalendario = lector.ToInt32("IdCalendario");
             _dia = lector.ToInt16("Dia");

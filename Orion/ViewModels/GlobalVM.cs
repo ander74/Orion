@@ -179,6 +179,12 @@ namespace Orion.ViewModels {
         }
 
 
+        public string GetArchivoDatos(Centros centro) {
+            return Path.Combine(Configuracion.CarpetaDatos, $"{centro}.db3");
+            //return $"{centro}.db3";
+        }
+
+
         public string GetArchivoPorCentroPath(Centros centro) {
             return Path.Combine(CarpetaConfiguracion, $"PorCentro{centro}.json");
         }

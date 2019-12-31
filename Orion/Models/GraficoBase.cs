@@ -211,6 +211,14 @@ namespace Orion.Models {
         }
 
 
+
+        private DateTime validez;
+        public DateTime Validez {
+            get => validez;
+            set => SetValue(ref validez, value);
+        }
+
+
         private bool _nocalcular;
         public bool NoCalcular {
             get { return _nocalcular; }
@@ -511,6 +519,7 @@ namespace Orion.Models {
         public virtual void FromReader(SQLiteDataReader lector) {
             _id = lector.ToInt32("_id");
             _idgrupo = lector.ToInt32("IdGrupo");
+            validez = lector.ToDateTime("Validez");
             _nocalcular = lector.ToBool("NoCalcular");
             _numero = lector.ToInt16("Numero");
             _diasemana = lector.ToString("DiaSemana");
@@ -538,6 +547,7 @@ namespace Orion.Models {
             get {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("IdGrupo", IdGrupo));
+                lista.Add(new SQLiteParameter("Validez", Validez.ToString("yyyy-MM-dd")));
                 lista.Add(new SQLiteParameter("NoCalcular", NoCalcular));
                 lista.Add(new SQLiteParameter("Numero", Numero));
                 lista.Add(new SQLiteParameter("DiaSemana", DiaSemana));

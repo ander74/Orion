@@ -6,8 +6,6 @@
 // ===============================================
 #endregion
 using System.Reflection;
-using System.Resources;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
@@ -39,12 +37,12 @@ using System.Windows;
 
 
 [assembly: ThemeInfo(
-	ResourceDictionaryLocation.None, //donde se encuentran los diccionarios de recursos específicos del tema
-									 //(se utiliza si no se encuentra ningún recurso en la página 
-									 // ni diccionarios de recursos de la aplicación)
-	ResourceDictionaryLocation.SourceAssembly //donde se encuentra el diccionario de recursos genérico
-											  //(se utiliza si no se encuentra ningún recurso en la página, 
-											  // aplicación o diccionarios de recursos específicos del tema)
+    ResourceDictionaryLocation.None, //donde se encuentran los diccionarios de recursos específicos del tema
+                                     //(se utiliza si no se encuentra ningún recurso en la página 
+                                     // ni diccionarios de recursos de la aplicación)
+    ResourceDictionaryLocation.SourceAssembly //donde se encuentra el diccionario de recursos genérico
+                                              //(se utiliza si no se encuentra ningún recurso en la página, 
+                                              // aplicación o diccionarios de recursos específicos del tema)
 )]
 
 
@@ -60,3 +58,4 @@ using System.Windows;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.1.*")]
 [assembly: AssemblyFileVersion("1.1")]
+

@@ -83,7 +83,7 @@ namespace Orion.ViewModels {
                 ListaGraficos.Clear();
                 return;
             }
-            ListaGraficos = BdGraficos.getGraficos(GrupoSeleccionado.Id);
+            ListaGraficos = BdGraficos.getGraficos(GrupoSeleccionado.Validez);
         }
 
         public void CargarGrupos() {
@@ -116,21 +116,21 @@ namespace Orion.ViewModels {
 
         }
 
-        public void GuardarGrupos() {
-            try {
-                HayCambios = false;
-                if (ListaGrupos != null && ListaGrupos.Count > 0) {
-                    BdGruposGraficos.GuardarGrupos(ListaGrupos.Where(gg => gg.Nuevo || gg.Modificado));
-                }
-            } catch (Exception ex) {
-                Mensajes.VerError("GraficosViewModel.GuardarGrupos", ex);
-                HayCambios = true;
-            } finally {
-            }
-        }
+        //public void GuardarGrupos() { //TODO: Eliminar.
+        //    try {
+        //        HayCambios = false;
+        //        if (ListaGrupos != null && ListaGrupos.Count > 0) {
+        //            BdGruposGraficos.GuardarGrupos(ListaGrupos.Where(gg => gg.Nuevo || gg.Modificado));
+        //        }
+        //    } catch (Exception ex) {
+        //        Mensajes.VerError("GraficosViewModel.GuardarGrupos", ex);
+        //        HayCambios = true;
+        //    } finally {
+        //    }
+        //}
 
         public void GuardarTodo() {
-            GuardarGrupos();
+            //GuardarGrupos(); // TODO: Eliminar
             GuardarGraficos();
             HayCambios = false;
         }
@@ -169,7 +169,10 @@ namespace Orion.ViewModels {
         private void ListaGraficos_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             if (e.NewItems != null) {
                 foreach (Grafico grafico in e.NewItems) {
-                    if (GrupoSeleccionado != null) grafico.IdGrupo = GrupoSeleccionado.Id;
+                    if (GrupoSeleccionado != null) {
+                        grafico.IdGrupo = GrupoSeleccionado.Id;
+                        grafico.Validez = GrupoSeleccionado.Validez;
+                    }
                     grafico.Nuevo = true;
                     grafico.ObjetoCambiado += ObjetoCambiadoEventHandler;
                     HayCambios = true;
@@ -189,8 +192,8 @@ namespace Orion.ViewModels {
         private void ListaGrupos_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
             if (e.NewItems != null) {
                 foreach (GrupoGraficos grupo in e.NewItems) {
-                    HayCambios = true;
                 }
+                HayCambios = true;
             }
             PropiedadCambiada(nameof(ListaGrupos));
         }
@@ -200,7 +203,7 @@ namespace Orion.ViewModels {
             PropiedadCambiada(nameof(Detalle));
         }
 
-        private void _valoracionseleccionada_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+        private void Valoracionseleccionada_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             if (e.PropertyName == "Linea") {
                 // Extraemos la línea
                 decimal linea = ValoracionSeleccionada.Linea;
@@ -257,7 +260,7 @@ namespace Orion.ViewModels {
             }
         }
 
-        private void _gruposeleccionado_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+        private void Gruposeleccionado_PropertyChanged(object sender, PropertyChangedEventArgs e) {
             if (e.PropertyName == "Validez") {
                 HayCambios = true;
             }
@@ -348,7 +351,7 @@ namespace Orion.ViewModels {
                     GuardarGraficos();
                     _gruposeleccionado = value;
                     if (_gruposeleccionado != null) {
-                        _gruposeleccionado.PropertyChanged += _gruposeleccionado_PropertyChanged;
+                        _gruposeleccionado.PropertyChanged += Gruposeleccionado_PropertyChanged;
                     }
                     CargarGraficos();
                     GraficoSeleccionado = null;
@@ -390,7 +393,7 @@ namespace Orion.ViewModels {
                 if (_valoracionseleccionada != value) {
                     _valoracionseleccionada = value;
                     if (_valoracionseleccionada != null) {
-                        _valoracionseleccionada.PropertyChanged += _valoracionseleccionada_PropertyChanged;
+                        _valoracionseleccionada.PropertyChanged += Valoracionseleccionada_PropertyChanged;
                     }
                     PropiedadCambiada();
                 }

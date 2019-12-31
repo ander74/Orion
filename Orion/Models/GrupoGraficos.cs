@@ -121,9 +121,9 @@ namespace Orion.Models {
 
 
         public void FromReader(SQLiteDataReader lector) {
-            _id = lector.ToInt32("_id");
+            //_id = lector.ToInt32("_id");
             _validez = lector.ToDateTime("Validez");
-            _notas = lector.ToString("Notas");
+            //_notas = lector.ToString("Notas");
             Nuevo = false;
             Modificado = false;
         }
@@ -133,7 +133,7 @@ namespace Orion.Models {
             get {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("Validez", Validez.ToString("yyyy-MM-dd")));
-                lista.Add(new SQLiteParameter("Notas", Notas));
+                //lista.Add(new SQLiteParameter("Notas", Notas));
                 //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }

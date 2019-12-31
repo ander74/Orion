@@ -38,7 +38,8 @@ namespace Orion.Pijama {
                 // Si el trabajador no existe, salimos.
                 if (Trabajador == null) return;
                 // Extraemos la lista de los días pijama.
-                ListaDias = BdPijamas.GetDiasPijama(calendario.ListaDias);
+                //ListaDias = BdPijamas.GetDiasPijama(calendario.ListaDias);
+                ListaDias = App.Global.Repository.GetDiasPijama(Fecha, Trabajador.Matricula).ToList();
                 // Definimos el final anterior y lo establecemos al día anterior del primer día del mes.
                 TimeSpan? finalAnterior = null;
                 DateTime fecha = new DateTime(calendario.Fecha.Year, calendario.Fecha.Month, 1).AddDays(-1);

@@ -55,9 +55,11 @@ namespace Orion.DataModels {
         * GET ESTADÍSTICAS GRUPO GRÁFICOS
         * Ok
         *================================================================================*/
+        [Obsolete("Ya no hay grupos de gráficos.")]
         public static EstadisticaGrupoGraficos GetEstadisticasGrupoGraficos(long idGrupo, Centros centro) {
 
-            return App.Global.Repository.GetEstadisticasGrupoGraficos(idGrupo, centro);
+            //return App.Global.Repository.GetEstadisticasGrupoGraficos(idGrupo, centro);
+            return null;
 
             EstadisticaGrupoGraficos resultado = null;
 
@@ -84,6 +86,15 @@ namespace Orion.DataModels {
             }
             return resultado;
         }
+
+
+        public static EstadisticaGrupoGraficos GetEstadisticasGrupoGraficos(DateTime fecha, Centros centro) {
+
+            return App.Global.Repository.GetEstadisticasGrupoGraficos(fecha, centro);
+
+        }
+
+
 
 
         /*================================================================================

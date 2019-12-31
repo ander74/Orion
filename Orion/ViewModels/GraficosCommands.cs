@@ -62,7 +62,8 @@ namespace Orion.ViewModels {
                 if (ventana.ShowDialog() == true) {
                     // Creamos el gráfico y lo guardamos en la lista.
                     Grafico grafico = ((AñadirGraficoViewModel)ventana.DataContext).GraficoActual;
-                    grafico.IdGrupo = GrupoSeleccionado.Id;
+                    //grafico.IdGrupo = GrupoSeleccionado.Id;
+                    grafico.Validez = GrupoSeleccionado.Validez;
                     grafico.DiaSemana = "";
                     ListaGraficos.Add(grafico);
                     // Establecemos las variables.
@@ -179,7 +180,8 @@ namespace Orion.ViewModels {
 
             if (resultado != true) return;
             try {
-                BdGruposGraficos.BorrarGrupoPorId(GrupoSeleccionado.Id);
+                //BdGruposGraficos.BorrarGrupoPorId(GrupoSeleccionado.Id);
+                App.Global.Repository.BorrarGrupoPorFecha(GrupoSeleccionado.Validez);
             } catch (Exception ex) {
                 Mensajes.VerError("GraficosCommands.BorrarGrupo", ex);
             }
@@ -761,7 +763,7 @@ namespace Orion.ViewModels {
                     var repoTemporal = new OrionRepository(App.Global.GetCadenaConexionSQL(Centros.Bilbao));
                     grupo = repoTemporal.GetUltimoGrupo();
                     if (grupo != null) {
-                        listaTemporal = repoTemporal.GetEstadisticasGrupoGraficos(grupo.Id, App.Global.Convenio.JornadaMedia).ToList();
+                        listaTemporal = repoTemporal.GetEstadisticasGrupoGraficos(grupo.Validez, App.Global.Convenio.JornadaMedia).ToList();
                         foreach (EstadisticasGraficos e in listaTemporal) {
                             e.Centro = Centros.Bilbao;
                             lista.Add(e);
@@ -771,7 +773,7 @@ namespace Orion.ViewModels {
                     repoTemporal = new OrionRepository(App.Global.GetCadenaConexionSQL(Centros.Donosti));
                     grupo = repoTemporal.GetUltimoGrupo();
                     if (grupo != null) {
-                        listaTemporal = repoTemporal.GetEstadisticasGrupoGraficos(grupo.Id, App.Global.Convenio.JornadaMedia).ToList();
+                        listaTemporal = repoTemporal.GetEstadisticasGrupoGraficos(grupo.Validez, App.Global.Convenio.JornadaMedia).ToList();
                         foreach (EstadisticasGraficos e in listaTemporal) {
                             e.Centro = Centros.Donosti;
                             lista.Add(e);
@@ -781,7 +783,7 @@ namespace Orion.ViewModels {
                     repoTemporal = new OrionRepository(App.Global.GetCadenaConexionSQL(Centros.Arrasate));
                     grupo = repoTemporal.GetUltimoGrupo();
                     if (grupo != null) {
-                        listaTemporal = repoTemporal.GetEstadisticasGrupoGraficos(grupo.Id, App.Global.Convenio.JornadaMedia).ToList();
+                        listaTemporal = repoTemporal.GetEstadisticasGrupoGraficos(grupo.Validez, App.Global.Convenio.JornadaMedia).ToList();
                         foreach (EstadisticasGraficos e in listaTemporal) {
                             e.Centro = Centros.Arrasate;
                             lista.Add(e);
@@ -791,7 +793,7 @@ namespace Orion.ViewModels {
                     repoTemporal = new OrionRepository(App.Global.GetCadenaConexionSQL(Centros.Vitoria));
                     grupo = repoTemporal.GetUltimoGrupo();
                     if (grupo != null) {
-                        listaTemporal = repoTemporal.GetEstadisticasGrupoGraficos(grupo.Id, App.Global.Convenio.JornadaMedia).ToList();
+                        listaTemporal = repoTemporal.GetEstadisticasGrupoGraficos(grupo.Validez, App.Global.Convenio.JornadaMedia).ToList();
                         foreach (EstadisticasGraficos e in listaTemporal) {
                             e.Centro = Centros.Vitoria;
                             lista.Add(e);

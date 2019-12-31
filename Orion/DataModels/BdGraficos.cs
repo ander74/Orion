@@ -33,7 +33,7 @@ namespace Orion.DataModels {
         /// <returns>Colección de gráficos.</returns>
         public static ObservableCollection<Grafico> getGraficos(long IdGrupo) {
 
-            return new ObservableCollection<Grafico>(App.Global.Repository.GetGraficos(Convert.ToInt32(IdGrupo)));
+            //return new ObservableCollection<Grafico>(App.Global.Repository.GetGraficos(Convert.ToInt32(IdGrupo)));
 
             ObservableCollection<Grafico> lista = new ObservableCollection<Grafico>();
 
@@ -79,6 +79,13 @@ namespace Orion.DataModels {
                 }
             }
             return lista;
+
+        }
+
+
+        public static ObservableCollection<Grafico> getGraficos(DateTime fecha) {
+
+            return new ObservableCollection<Grafico>(App.Global.Repository.GetGraficos(fecha));
 
         }
 
@@ -314,36 +321,44 @@ namespace Orion.DataModels {
         /// </summary>
         /// <param name="IdGrupo">Id del grupo al que pertenecen los gráficos.</param>
         /// <returns>Colección de gráficos.</returns>
-        public static List<EstadisticasGraficos> GetEstadisticasGrupoGraficos(long IdGrupo, OleDbConnection conexion = null) {
+        //public static List<EstadisticasGraficos> GetEstadisticasGrupoGraficos(long IdGrupo, OleDbConnection conexion = null) {
 
-            return App.Global.Repository.GetEstadisticasGrupoGraficos(IdGrupo, App.Global.Convenio.JornadaMedia).ToList();
+        //    return App.Global.Repository.GetEstadisticasGrupoGraficos(IdGrupo, App.Global.Convenio.JornadaMedia).ToList();
 
-            List<EstadisticasGraficos> lista = new List<EstadisticasGraficos>();
+        //    List<EstadisticasGraficos> lista = new List<EstadisticasGraficos>();
 
-            if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
-            using (conexion) {
-                OleDbDataReader lector = null;
-                try {
-                    string comandoSQL = DbService2.GetEstadisticasGraficos;
-                    OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
-                    Comando.Parameters.AddWithValue("@JornadaMedia", App.Global.Convenio.JornadaMedia.Ticks);
-                    Comando.Parameters.AddWithValue("@IdGrupo", IdGrupo);
-                    conexion.Open();
-                    lector = Comando.ExecuteReader();
-                    if (lector.HasRows) {
-                        while (lector.Read()) {
-                            EstadisticasGraficos estadistica = new EstadisticasGraficos(lector);
-                            lista.Add(estadistica);
-                        }
-                    }
-                } catch (Exception ex) {
-                    Utils.VerError("BdGraficos.GetEstadisticasGrupoGraficos", ex);
-                } finally {
-                    lector.Close();
-                }
-            }
-            return lista;
+        //    if (conexion == null) conexion = new OleDbConnection(App.Global.CadenaConexion);
+        //    using (conexion) {
+        //        OleDbDataReader lector = null;
+        //        try {
+        //            string comandoSQL = DbService2.GetEstadisticasGraficos;
+        //            OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
+        //            Comando.Parameters.AddWithValue("@JornadaMedia", App.Global.Convenio.JornadaMedia.Ticks);
+        //            Comando.Parameters.AddWithValue("@IdGrupo", IdGrupo);
+        //            conexion.Open();
+        //            lector = Comando.ExecuteReader();
+        //            if (lector.HasRows) {
+        //                while (lector.Read()) {
+        //                    EstadisticasGraficos estadistica = new EstadisticasGraficos(lector);
+        //                    lista.Add(estadistica);
+        //                }
+        //            }
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdGraficos.GetEstadisticasGrupoGraficos", ex);
+        //        } finally {
+        //            lector.Close();
+        //        }
+        //    }
+        //    return lista;
+        //}
+
+        public static List<EstadisticasGraficos> GetEstadisticasGrupoGraficos(DateTime fecha, OleDbConnection conexion = null) {
+
+            return App.Global.Repository.GetEstadisticasGrupoGraficos(fecha, App.Global.Convenio.JornadaMedia).ToList();
+
         }
+
+
 
 
 
