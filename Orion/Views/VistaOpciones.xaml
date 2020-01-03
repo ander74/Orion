@@ -1,128 +1,170 @@
-﻿<!-- =============================================== -->
-<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
-<!--                                                 -->
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
 <!--  Vea el archivo Licencia.txt para mas detalles  -->
-<!-- =============================================== -->
-<UserControl x:Class="Orion.Views.VistaOpciones"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:Orion.Views"
-             xmlns:controls="clr-namespace:Orion.Controls"
-             xmlns:cnv="clr-namespace:Orion.Convertidores"
-             xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:p="clr-namespace:Orion.Properties"
-             xmlns:pp="clr-namespace:Orion"
-             mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="1500">
+<!--  ===============================================  -->
+<UserControl
+    x:Class="Orion.Views.VistaOpciones"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cnv="clr-namespace:Orion.Convertidores"
+    xmlns:controls="clr-namespace:Orion.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Orion.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:p="clr-namespace:Orion.Properties"
+    xmlns:pp="clr-namespace:Orion"
+    xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DesignHeight="800"
+    d:DesignWidth="1500"
+    mc:Ignorable="d">
 
 
-    <!-- ==================================================================================================== -->
-    <!-- RECURSOS -->
-    <!-- ==================================================================================================== -->
+    <!--  ====================================================================================================  -->
+    <!--  RECURSOS  -->
+    <!--  ====================================================================================================  -->
     <UserControl.Resources>
 
-        <cnv:ConvertidorHora x:Key="cnvHora"/>
-        <cnv:ConvertidorFecha x:Key="cnvFecha"/>
-        <cnv:ConvertidorDecimal x:Key="cnvDecimal"/>
-        <cnv:ConvertidorNumeroGrafico x:Key="cnvNumGrafico"/>
-        <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility"/>
+        <cnv:ConvertidorHora x:Key="cnvHora" />
+        <cnv:ConvertidorFecha x:Key="cnvFecha" />
+        <cnv:ConvertidorDecimal x:Key="cnvDecimal" />
+        <cnv:ConvertidorNumeroGrafico x:Key="cnvNumGrafico" />
+        <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
 
-        <Style TargetType="StackPanel" x:Key="EstiloPanelOpciones">
-            <Setter Property="Orientation" Value="Horizontal"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Margin" Value="12,6,12,6"/>
-            <Setter Property="Height" Value="24"/>
+        <Style
+            x:Key="EstiloPanelOpciones"
+            TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Horizontal" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="12,6,12,6" />
+            <Setter Property="Height" Value="24" />
         </Style>
 
-        <Style x:Key="EstiloTextoOpciones" TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Width" Value="180"/>
-            <Setter Property="TextAlignment" Value="Right"/>
+        <Style
+            x:Key="EstiloTextoOpciones"
+            TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Width" Value="180" />
+            <Setter Property="TextAlignment" Value="Right" />
         </Style>
 
-        <Style x:Key="EstiloTextBoxOpciones" TargetType="TextBox">
-            <Setter Property="HorizontalAlignment" Value="Center"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="Padding" Value="4"/>
-            <Setter Property="FontSize" Value="14"/>
+        <Style
+            x:Key="EstiloTextBoxOpciones"
+            TargetType="TextBox">
+            <Setter Property="HorizontalAlignment" Value="Center" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Padding" Value="4" />
+            <Setter Property="FontSize" Value="14" />
         </Style>
 
-        <Style x:Key="EstiloTextoNegrita"  TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
-            <Setter Property="FontWeight" Value="Bold"/>
+        <Style
+            x:Key="EstiloTextoNegrita"
+            BasedOn="{StaticResource EstiloTextoOpciones}"
+            TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
 
-        <Style x:Key="EstiloTextoGraficosDias" TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
-            <Setter Property="Width" Value="140"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+        <Style
+            x:Key="EstiloTextoGraficosDias"
+            BasedOn="{StaticResource EstiloTextoOpciones}"
+            TargetType="TextBlock">
+            <Setter Property="Width" Value="140" />
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
 
-        <Style x:Key="EstiloTextoConvenio" TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
-            <Setter Property="Width" Value="200"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+        <Style
+            x:Key="EstiloTextoConvenio"
+            BasedOn="{StaticResource EstiloTextoOpciones}"
+            TargetType="TextBlock">
+            <Setter Property="Width" Value="200" />
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
 
-        <Style x:Key="EstiloTextoPluses" TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
-            <Setter Property="Width" Value="160"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+        <Style
+            x:Key="EstiloTextoPluses"
+            BasedOn="{StaticResource EstiloTextoOpciones}"
+            TargetType="TextBlock">
+            <Setter Property="Width" Value="160" />
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
 
-        <Style x:Key="EstiloTextoCarpetas" TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
-            <Setter Property="Width" Value="130"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+        <Style
+            x:Key="EstiloTextoCarpetas"
+            BasedOn="{StaticResource EstiloTextoOpciones}"
+            TargetType="TextBlock">
+            <Setter Property="Width" Value="130" />
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
 
-        <Style x:Key="EstiloColorIncidencias" TargetType="TextBlock" BasedOn="{StaticResource EstiloTextoOpciones}">
-            <Setter Property="Width" Value="200"/>
-            <Setter Property="FontWeight" Value="Bold"/>
+        <Style
+            x:Key="EstiloColorIncidencias"
+            BasedOn="{StaticResource EstiloTextoOpciones}"
+            TargetType="TextBlock">
+            <Setter Property="Width" Value="200" />
+            <Setter Property="FontWeight" Value="Bold" />
         </Style>
 
-        <Style x:Key="EstiloTextBoxCarpetas" TargetType="TextBox" BasedOn="{StaticResource EstiloTextBoxOpciones}">
-            <Setter Property="Width" Value="400"/>
+        <Style
+            x:Key="EstiloTextBoxCarpetas"
+            BasedOn="{StaticResource EstiloTextBoxOpciones}"
+            TargetType="TextBox">
+            <Setter Property="Width" Value="400" />
         </Style>
 
-        <Style x:Key="EstiloTextBoxConvenio" TargetType="TextBox" BasedOn="{StaticResource EstiloTextBoxOpciones}">
-            <Setter Property="Width" Value="65"/>
+        <Style
+            x:Key="EstiloTextBoxConvenio"
+            BasedOn="{StaticResource EstiloTextBoxOpciones}"
+            TargetType="TextBox">
+            <Setter Property="Width" Value="65" />
         </Style>
 
-        <Style x:Key="EstiloColores" TargetType="xceed:ColorPicker">
-            <Setter Property="Width" Value="50"/>
-            <Setter Property="Padding" Value="4"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="ShowDropDownButton" Value="False"/>
-            <Setter Property="AdvancedTabHeader" Value="Avanzado"/>
-            <Setter Property="StandardTabHeader" Value="Colores"/>
-            <Setter Property="AvailableColorsHeader" Value="Colores Disponibles"/>
-            <Setter Property="RecentColorsHeader" Value="Colores Recientes"/>
-            <Setter Property="StandardColorsHeader" Value="Colores Estandard"/>
-            <Setter Property="AvailableColorsSortingMode" Value="HueSaturationBrightness"/>
+        <Style
+            x:Key="EstiloColores"
+            TargetType="xceed:ColorPicker">
+            <Setter Property="Width" Value="50" />
+            <Setter Property="Padding" Value="4" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="ShowDropDownButton" Value="False" />
+            <Setter Property="AdvancedTabHeader" Value="Avanzado" />
+            <Setter Property="StandardTabHeader" Value="Colores" />
+            <Setter Property="AvailableColorsHeader" Value="Colores Disponibles" />
+            <Setter Property="RecentColorsHeader" Value="Colores Recientes" />
+            <Setter Property="StandardColorsHeader" Value="Colores Estandard" />
+            <Setter Property="AvailableColorsSortingMode" Value="HueSaturationBrightness" />
         </Style>
 
-        <!-- Si queremos que el comando se ejecute en el ViewModel del DataGrid,
-             tenemos que poner el datacontext del menú de esta manera. -->
+
+        <!--
+            Si queremos que el comando se ejecute en el ViewModel del DataGrid,
+            tenemos que poner el datacontext del menú de esta manera.
+        -->
         <!--<ContextMenu x:Key="MenuFestivos"
                          DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type controls:QDataGrid}}}">-->
         <ContextMenu x:Key="MenuFestivos">
-            <MenuItem Header="Borrar"
-                      Command="{Binding cmdBorrarFestivo}">
+            <MenuItem
+                Command="{Binding cmdBorrarFestivo}"
+                Header="Borrar">
                 <MenuItem.Icon>
-                    <Image Source="Imagenes/Cerrar.png"/>
+                    <Image Source="Imagenes/Cerrar.png" />
                 </MenuItem.Icon>
             </MenuItem>
         </ContextMenu>
 
-        <Style x:Key="EstiloGridFestivos" TargetType="DataGrid">
-            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}"/>
-            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}"/>
-            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}"/>
+        <Style
+            x:Key="EstiloGridFestivos"
+            TargetType="DataGrid">
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}" />
+            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}" />
+            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
             <Setter Property="RowStyle">
                 <Setter.Value>
-                    <Style TargetType="DataGridRow" BasedOn="{StaticResource EstiloFilasAzul}">
-                        <Setter Property="ContextMenu" Value="{StaticResource MenuFestivos}"/>
+                    <Style
+                        BasedOn="{StaticResource EstiloFilasAzul}"
+                        TargetType="DataGridRow">
+                        <Setter Property="ContextMenu" Value="{StaticResource MenuFestivos}" />
                     </Style>
                 </Setter.Value>
             </Setter>
@@ -131,83 +173,132 @@
 
     </UserControl.Resources>
 
-    <!-- ==================================================================================================== -->
-    <!-- CONTENIDO -->
-    <!-- ==================================================================================================== -->
+    <!--  ====================================================================================================  -->
+    <!--  CONTENIDO  -->
+    <!--  ====================================================================================================  -->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- ==================================================================================================== -->
-        <!-- BARRA DE BOTONES -->
-        <!-- ==================================================================================================== -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="80" Background="{StaticResource DegradadoCeleste0}">
+        <!--  ====================================================================================================  -->
+        <!--  BARRA DE BOTONES  -->
+        <!--  ====================================================================================================  -->
+        <StackPanel
+            Grid.Row="0"
+            Height="80"
+            Background="{StaticResource DegradadoCeleste0}"
+            Orientation="Horizontal">
 
-            <!--BOTON GUARDAR-->
-            <controls:BotonDual ImagenActivo="Imagenes/GuardarRojo.png"
-                                ImagenNormal="Imagenes/Guardar.png"
-                                TextoActivo="Guardar"
-                                TextoNormal="Guardar"
-                                IsActivo="{Binding EnOtroCentro}"
-                                Command="{Binding cmdGuardarCambios}"/>
+            <!--  BOTON GUARDAR  -->
+            <controls:BotonDual
+                Command="{Binding cmdGuardarCambios}"
+                ImagenActivo="Imagenes/GuardarRojo.png"
+                ImagenNormal="Imagenes/Guardar.png"
+                IsActivo="{Binding EnOtroCentro}"
+                TextoActivo="Guardar"
+                TextoNormal="Guardar" />
 
-            <!--SEPARADOR-->
-            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
 
-            <!--BOTON GENERALES-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding OpcionesVM.cmdMostrarGenerales}">
+            <!--  BOTON GENERALES  -->
+            <Button
+                Command="{Binding OpcionesVM.cmdMostrarGenerales}"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Herramientas.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Opciones Generales" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <Image
+                            Source="Imagenes/Herramientas.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Opciones Generales"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <!--BOTON CONVENIO-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding OpcionesVM.cmdMostrarConvenio}">
+            <!--  BOTON CONVENIO  -->
+            <Button
+                Command="{Binding OpcionesVM.cmdMostrarConvenio}"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Calendario.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Opciones Convenio" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <Image
+                            Source="Imagenes/Calendario.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Opciones Convenio"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <!--BOTON CONVENIO-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding OpcionesVM.cmdMostrarPorCentro}">
+            <!--  BOTON CONVENIO  -->
+            <Button
+                Command="{Binding OpcionesVM.cmdMostrarPorCentro}"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Fabrica.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Opciones Por Centro" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <Image
+                            Source="Imagenes/Fabrica.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Opciones Por Centro"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <!--SEPARADOR-->
-            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
 
-            <!--BOTON CAMBIAR CONTRASEÑA-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding OpcionesVM.cmdCambiarContraseña}">
+            <!--  BOTON CAMBIAR CONTRASEÑA  -->
+            <Button
+                Command="{Binding OpcionesVM.cmdCambiarContraseña}"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Llave.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Cambiar Contraseña" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <Image
+                            Source="Imagenes/Llave.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Cambiar Contraseña"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <!--SEPARADOR-->
-            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
 
-            <!--BOTON ACERCA DE-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding OpcionesVM.cmdAcercaDe}">
+            <!--  BOTON ACERCA DE  -->
+            <Button
+                Command="{Binding OpcionesVM.cmdAcercaDe}"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Informacion.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Acerca De" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <Image
+                            Source="Imagenes/Informacion.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Acerca De"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </Button.Content>
             </Button>
@@ -217,79 +308,120 @@
         </StackPanel>
 
 
-        <!-- ==================================================================================================== -->
-        <!-- IMAGEN DE FONDO-->
-        <!-- ==================================================================================================== -->
-        <Image Source="Imagenes\Orion.png" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.1" Grid.Row="1"/>
+        <!--  ====================================================================================================  -->
+        <!--  IMAGEN DE FONDO  -->
+        <!--  ====================================================================================================  -->
+        <Image
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Opacity="0.1"
+            Source="Imagenes\Orion.png" />
 
 
-        <!-- ==================================================================================================== -->
-        <!-- BORDE DEL CONTENIDO -->
-        <!-- ==================================================================================================== -->
-        <Border Grid.Row="1" Background="Transparent" BorderBrush="DarkBlue" BorderThickness="0.5"/>
+        <!--  ====================================================================================================  -->
+        <!--  BORDE DEL CONTENIDO  -->
+        <!--  ====================================================================================================  -->
+        <Border
+            Grid.Row="1"
+            Background="Transparent"
+            BorderBrush="DarkBlue"
+            BorderThickness="0.5" />
 
 
-        <!-- ==================================================================================================== -->
-        <!-- PANEL DE CONTENIDO GENERAL -->
-        <!-- ==================================================================================================== -->
-        <ScrollViewer Grid.Row="1" Margin="6" Visibility="{Binding OpcionesVM.VisibilidadPanelGenerales}"
-                      VerticalScrollBarVisibility="Hidden">
+        <!--  ====================================================================================================  -->
+        <!--  PANEL DE CONTENIDO GENERAL  -->
+        <!--  ====================================================================================================  -->
+        <ScrollViewer
+            Grid.Row="1"
+            Margin="6"
+            VerticalScrollBarVisibility="Hidden"
+            Visibility="{Binding OpcionesVM.VisibilidadPanelGenerales}">
 
             <Grid>
 
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
 
 
-                <!-- COLUMNA 0 y 1 FILAS 0 y 1-->
-                <StackPanel Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="2">
+                <!--  COLUMNA 0 y 1 FILAS 0 y 1  -->
+                <StackPanel
+                    Grid.RowSpan="2"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="2">
 
-                    <!-- OPCIONES INICIALES -->
-                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoAzul}"
-                                            Margin="6"
-                                            Titulo="OPCIONES GENERALES">
+                    <!--  OPCIONES INICIALES  -->
+                    <controls:GrupoOpciones
+                        Margin="6"
+                        FondoTitulo="{StaticResource orDegradadoAzul}"
+                        Titulo="OPCIONES GENERALES">
                         <controls:GrupoOpciones.Contenido>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Orientation="Vertical">
 
-                                <!--  INICIAL -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="28">
-                                    <TextBlock Style="{StaticResource EstiloTextoNegrita}" Text="Centro Inicial: " Width="160"/>
-                                    <ComboBox FontSize="14" Width="150" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                                          SelectedIndex="{Binding Configuracion.CentroInicial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <!--  INICIAL  -->
+                                <StackPanel
+                                    Height="28"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Width="160"
+                                        Style="{StaticResource EstiloTextoNegrita}"
+                                        Text="Centro Inicial: " />
+                                    <ComboBox
+                                        Width="150"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        FontSize="14"
+                                        SelectedIndex="{Binding Configuracion.CentroInicial, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                         <ComboBox.Items>
-                                            <ComboBoxItem Content="Ninguno"/>
-                                            <ComboBoxItem Content="Bilbao"/>
-                                            <ComboBoxItem Content="Donosti"/>
-                                            <ComboBoxItem Content="Arrasate"/>
-                                            <ComboBoxItem Content="Gasteiz"/>
+                                            <ComboBoxItem Content="Ninguno" />
+                                            <ComboBoxItem Content="Bilbao" />
+                                            <ComboBoxItem Content="Donosti" />
+                                            <ComboBoxItem Content="Arrasate" />
+                                            <ComboBoxItem Content="Gasteiz" />
                                         </ComboBox.Items>
                                     </ComboBox>
                                 </StackPanel>
 
-                                <!-- PROGRAMAR COPIAS DE SEGURIDAD -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="28">
-                                    <TextBlock Style="{StaticResource EstiloTextoNegrita}" Text="Copia Automática: " Width="160"/>
-                                    <ComboBox FontSize="14" Width="150" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
-                        SelectedIndex="{Binding Configuracion.CopiaAutomatica, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                                <!--  PROGRAMAR COPIAS DE SEGURIDAD  -->
+                                <StackPanel
+                                    Height="28"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Width="160"
+                                        Style="{StaticResource EstiloTextoNegrita}"
+                                        Text="Copia Automática: " />
+                                    <ComboBox
+                                        Width="150"
+                                        HorizontalContentAlignment="Center"
+                                        VerticalContentAlignment="Center"
+                                        FontSize="14"
+                                        SelectedIndex="{Binding Configuracion.CopiaAutomatica, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                                         <ComboBox.Items>
-                                            <ComboBoxItem Content="Nunca"/>
-                                            <ComboBoxItem Content="Semanal"/>
-                                            <ComboBoxItem Content="Quincenal"/>
-                                            <ComboBoxItem Content="Mensual"/>
+                                            <ComboBoxItem Content="Nunca" />
+                                            <ComboBoxItem Content="Semanal" />
+                                            <ComboBoxItem Content="Quincenal" />
+                                            <ComboBoxItem Content="Mensual" />
                                         </ComboBox.Items>
                                     </ComboBox>
-                                    <Button Style="{StaticResource EstiloBoton}" Height="28" Margin="5,0,0,0" Padding="12,0"
-                                        Content="Hacer Copia" Command="{Binding OpcionesVM.cmdCopiaSeguridadManual}"
-                                        ToolTip="Realiza una copia de seguridad con los datos del programa."/>
+                                    <Button
+                                        Height="28"
+                                        Margin="5,0,0,0"
+                                        Padding="12,0"
+                                        Command="{Binding OpcionesVM.cmdCopiaSeguridadManual}"
+                                        Content="Hacer Copia"
+                                        Style="{StaticResource EstiloBoton}"
+                                        ToolTip="Realiza una copia de seguridad con los datos del programa." />
 
                                 </StackPanel>
 
@@ -298,97 +430,186 @@
                     </controls:GrupoOpciones>
 
 
-                    <!-- CARPETAS -->
-                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoCalabaza}"
-                                            Margin="6"
-                                            Titulo="CARPETAS">
+                    <!--  CARPETAS  -->
+                    <controls:GrupoOpciones
+                        Margin="6"
+                        FondoTitulo="{StaticResource orDegradadoCalabaza}"
+                        Titulo="CARPETAS">
                         <controls:GrupoOpciones.Contenido>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Orientation="Vertical">
 
-                                <!-- CARPETA CON LAS BASES DE DATOS -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
-                                    <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Bases de Datos: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxCarpetas}"
-                                                       Text="{Binding Configuracion.CarpetaDatos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
-											Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="Datos"/>
+                                <!--  CARPETA CON LAS BASES DE DATOS  -->
+                                <StackPanel
+                                    Height="30"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoCarpetas}"
+                                        Text="Bases de Datos: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxCarpetas}"
+                                        Text="{Binding Configuracion.CarpetaDatos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Width="40"
+                                        Height="28"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding OpcionesVM.cmdCambiarCarpeta}"
+                                        CommandParameter="Datos"
+                                        Content="..."
+                                        Style="{StaticResource EstiloBoton}" />
                                 </StackPanel>
 
-                                <!-- CARPETA CON LOS ARCHIVOS DE AYUDA -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
-                                    <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Archivos Ayuda: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxCarpetas}"
-													   Text="{Binding Configuracion.CarpetaAyuda, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
-											Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="Ayuda"/>
+                                <!--  CARPETA CON LOS ARCHIVOS DE AYUDA  -->
+                                <StackPanel
+                                    Height="30"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoCarpetas}"
+                                        Text="Archivos Ayuda: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxCarpetas}"
+                                        Text="{Binding Configuracion.CarpetaAyuda, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Width="40"
+                                        Height="28"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding OpcionesVM.cmdCambiarCarpeta}"
+                                        CommandParameter="Ayuda"
+                                        Content="..."
+                                        Style="{StaticResource EstiloBoton}" />
                                 </StackPanel>
 
-                                <!-- CARPETA DE COPIAS DE SEGURIDAD -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
-                                    <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Copias Seguridad: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxCarpetas}"
-													   Text="{Binding Configuracion.CarpetaCopiasSeguridad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
-											Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="CopiasSeguridad"/>
+                                <!--  CARPETA DE COPIAS DE SEGURIDAD  -->
+                                <StackPanel
+                                    Height="30"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoCarpetas}"
+                                        Text="Copias Seguridad: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxCarpetas}"
+                                        Text="{Binding Configuracion.CarpetaCopiasSeguridad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Width="40"
+                                        Height="28"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding OpcionesVM.cmdCambiarCarpeta}"
+                                        CommandParameter="CopiasSeguridad"
+                                        Content="..."
+                                        Style="{StaticResource EstiloBoton}" />
                                 </StackPanel>
 
-                                <!-- CARPETA DE INFORMES -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
-                                    <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Informes PDF: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxCarpetas}"
-													   Text="{Binding Configuracion.CarpetaInformes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
-											Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="Informes"/>
+                                <!--  CARPETA DE INFORMES  -->
+                                <StackPanel
+                                    Height="30"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoCarpetas}"
+                                        Text="Informes PDF: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxCarpetas}"
+                                        Text="{Binding Configuracion.CarpetaInformes, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Width="40"
+                                        Height="28"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding OpcionesVM.cmdCambiarCarpeta}"
+                                        CommandParameter="Informes"
+                                        Content="..."
+                                        Style="{StaticResource EstiloBoton}" />
                                 </StackPanel>
 
-                                <!-- CREAR INFORMES DIRECTAMENTE -->
+                                <!--  CREAR INFORMES DIRECTAMENTE  -->
                                 <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Width="130"/>
-                                    <CheckBox FontSize="14" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left"
-											  Content="Crear informes sin pedir nombre de archivo."
-											  IsChecked="{Binding Configuracion.CrearInformesDirectamente, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Width="130" />
+                                    <CheckBox
+                                        Width="Auto"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Content="Crear informes sin pedir nombre de archivo."
+                                        FontSize="14"
+                                        IsChecked="{Binding Configuracion.CrearInformesDirectamente, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
 
-                                <!-- ABRIR ARCHIVOS DESPUÉS DE CREAR -->
+                                <!--  ABRIR ARCHIVOS DESPUÉS DE CREAR  -->
                                 <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Width="130"/>
-                                    <CheckBox FontSize="14" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left"
-											  Content="Abrir PDFs después de crearlos."
-											  IsChecked="{Binding Configuracion.AbrirPDFs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBlock Width="130" />
+                                    <CheckBox
+                                        Width="Auto"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Content="Abrir PDFs después de crearlos."
+                                        FontSize="14"
+                                        IsChecked="{Binding Configuracion.AbrirPDFs, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
 
                             </StackPanel>
                         </controls:GrupoOpciones.Contenido>
                     </controls:GrupoOpciones>
 
-                    <!-- OPCIONES DROPBOX -->
-                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoVioleta}"
-                                            Margin="6"
-                                            Titulo="OPCIONES DROPBOX">
+                    <!--  OPCIONES DROPBOX  -->
+                    <controls:GrupoOpciones
+                        Margin="6"
+                        FondoTitulo="{StaticResource orDegradadoVioleta}"
+                        Titulo="OPCIONES DROPBOX">
                         <controls:GrupoOpciones.Contenido>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Orientation="Vertical">
 
-                                <!-- SINCRONIZAR EN DROPBOX -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="Auto" HorizontalAlignment="Left">
-                                    <CheckBox FontSize="14" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left" Content="Sincronizar en Dropbox."
-											  IsChecked="{Binding Configuracion.SincronizarEnDropbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                <!--  SINCRONIZAR EN DROPBOX  -->
+                                <StackPanel
+                                    Height="Auto"
+                                    HorizontalAlignment="Left"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <CheckBox
+                                        Width="Auto"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Content="Sincronizar en Dropbox."
+                                        FontSize="14"
+                                        IsChecked="{Binding Configuracion.SincronizarEnDropbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
-                                    <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="Auto" HorizontalAlignment="Right">
-                                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="12,6" Command="{Binding OpcionesVM.cmdDropboxAPc}"
-												ToolTip="Copia las bases de datos que hay en la carpeta de Dropbox a la carpeta local del ordenador.">
+                                    <StackPanel
+                                        Height="Auto"
+                                        HorizontalAlignment="Right"
+                                        Style="{StaticResource EstiloPanelOpciones}">
+                                        <Button
+                                            Padding="12,6"
+                                            Command="{Binding OpcionesVM.cmdDropboxAPc}"
+                                            Style="{StaticResource EstiloBotonBarraPequeña}"
+                                            ToolTip="Copia las bases de datos que hay en la carpeta de Dropbox a la carpeta local del ordenador.">
                                             <Button.Content>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="Imagenes/BajarNube.png" Style="{StaticResource EstiloImagenPequeña}" VerticalAlignment="Center"/>
-                                                    <TextBlock FontSize="14" Text="Dropbox a PC" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                    <Image
+                                                        VerticalAlignment="Center"
+                                                        Source="Imagenes/BajarNube.png"
+                                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                                    <TextBlock
+                                                        Margin="10,0,0,0"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="14"
+                                                        Text="Dropbox a PC" />
                                                 </StackPanel>
                                             </Button.Content>
                                         </Button>
-                                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Padding="12,6" Command="{Binding OpcionesVM.cmdPcADropbox}"
-												ToolTip="Copia las bases de datos que hay en la carpeta local del ordenador a la carpeta de Dropbox.">
+                                        <Button
+                                            Padding="12,6"
+                                            Command="{Binding OpcionesVM.cmdPcADropbox}"
+                                            Style="{StaticResource EstiloBotonBarraPequeña}"
+                                            ToolTip="Copia las bases de datos que hay en la carpeta local del ordenador a la carpeta de Dropbox.">
                                             <Button.Content>
                                                 <StackPanel Orientation="Horizontal">
-                                                    <Image Source="Imagenes/SubirNube.png" Style="{StaticResource EstiloImagenPequeña}" VerticalAlignment="Center"/>
-                                                    <TextBlock FontSize="14" Text="PC a Dropbox" Margin="10,0,0,0" VerticalAlignment="Center"/>
+                                                    <Image
+                                                        VerticalAlignment="Center"
+                                                        Source="Imagenes/SubirNube.png"
+                                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                                    <TextBlock
+                                                        Margin="10,0,0,0"
+                                                        VerticalAlignment="Center"
+                                                        FontSize="14"
+                                                        Text="PC a Dropbox" />
                                                 </StackPanel>
                                             </Button.Content>
                                         </Button>
@@ -396,13 +617,26 @@
                                 </StackPanel>
 
 
-                                <!-- CARPETA DE DROPBOX-->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
-                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Text="Carpeta Dropbox: " Width="130"/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxOpciones}" Width="400"
-													   Text="{Binding Configuracion.CarpetaDropbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
-											Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="Dropbox"/>
+                                <!--  CARPETA DE DROPBOX  -->
+                                <StackPanel
+                                    Height="30"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Width="130"
+                                        Style="{StaticResource EstiloTextoOpciones}"
+                                        Text="Carpeta Dropbox: " />
+                                    <controls:QTextBox
+                                        Width="400"
+                                        Style="{StaticResource EstiloTextBoxOpciones}"
+                                        Text="{Binding Configuracion.CarpetaDropbox, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Width="40"
+                                        Height="28"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding OpcionesVM.cmdCambiarCarpeta}"
+                                        CommandParameter="Dropbox"
+                                        Content="..."
+                                        Style="{StaticResource EstiloBoton}" />
                                 </StackPanel>
 
                             </StackPanel>
@@ -412,62 +646,113 @@
                 </StackPanel>
 
 
-                <!-- COLUMNA 2 y 3 FILA 0-->
-                <StackPanel Grid.Column="2" Grid.ColumnSpan="2" Grid.Row="0">
+                <!--  COLUMNA 2 y 3 FILA 0  -->
+                <StackPanel
+                    Grid.Row="0"
+                    Grid.Column="2"
+                    Grid.ColumnSpan="2">
 
-                    <!-- ACTUALIZACION AUTOMÁTICA -->
-                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoNaranja}"
-                                            Margin="6"
-                                            Titulo="ACTUALIZACIÓN AUTOMÁTICA">
+                    <!--  ACTUALIZACION AUTOMÁTICA  -->
+                    <controls:GrupoOpciones
+                        Margin="6"
+                        FondoTitulo="{StaticResource orDegradadoNaranja}"
+                        Titulo="ACTUALIZACIÓN AUTOMÁTICA">
                         <controls:GrupoOpciones.Contenido>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Orientation="Vertical">
 
-                                <!-- CARPETA ORIGEN ACTUALIZACIÓN -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30" Margin="12,6,0,0">
-                                    <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Width="Auto" Text="Origen Actualización: "/>
+                                <!--  CARPETA ORIGEN ACTUALIZACIÓN  -->
+                                <StackPanel
+                                    Height="30"
+                                    Margin="12,6,0,0"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Width="Auto"
+                                        Style="{StaticResource EstiloTextoCarpetas}"
+                                        Text="Origen Actualización: " />
                                 </StackPanel>
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30" Margin="12,6,0,6">
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxCarpetas}"
-													   Text="{Binding Configuracion.CarpetaOrigenActualizar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
-											Content="..." Command="{Binding OpcionesVM.cmdCambiarCarpeta}" CommandParameter="OrigenActualizar"/>
+                                <StackPanel
+                                    Height="30"
+                                    Margin="12,6,0,6"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxCarpetas}"
+                                        Text="{Binding Configuracion.CarpetaOrigenActualizar, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Width="40"
+                                        Height="28"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding OpcionesVM.cmdCambiarCarpeta}"
+                                        CommandParameter="OrigenActualizar"
+                                        Content="..."
+                                        Style="{StaticResource EstiloBoton}" />
                                 </StackPanel>
 
 
-                                <!-- ABRIR ARCHIVOS DESPUÉS DE CREAR -->
+                                <!--  ABRIR ARCHIVOS DESPUÉS DE CREAR  -->
                                 <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <CheckBox FontSize="14" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left"
-											  Content="Buscar actualizaciones de Orion automáticamente."
-											  IsChecked="{Binding Configuracion.ActualizarPrograma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <CheckBox
+                                        Width="Auto"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Content="Buscar actualizaciones de Orion automáticamente."
+                                        FontSize="14"
+                                        IsChecked="{Binding Configuracion.ActualizarPrograma, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                                 </StackPanel>
 
                             </StackPanel>
                         </controls:GrupoOpciones.Contenido>
                     </controls:GrupoOpciones>
 
-                    <!-- LOGOS Y MARCAS DE AGUA -->
-                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoRojo}"
-                                            Margin="6"
-                                            Titulo="LOGOS Y MARCAS DE AGUA">
+                    <!--  LOGOS Y MARCAS DE AGUA  -->
+                    <controls:GrupoOpciones
+                        Margin="6"
+                        FondoTitulo="{StaticResource orDegradadoRojo}"
+                        Titulo="LOGOS Y MARCAS DE AGUA">
                         <controls:GrupoOpciones.Contenido>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Orientation="Vertical">
 
-                                <!-- RUTA LOGO SINDICATO -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
-                                    <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Logo Sindicato: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxCarpetas}"
-													   Text="{Binding Configuracion.RutaLogoSindicato, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
-											Content="..." Command="{Binding OpcionesVM.cmdRutaLogos}" CommandParameter="Logo"/>
+                                <!--  RUTA LOGO SINDICATO  -->
+                                <StackPanel
+                                    Height="30"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoCarpetas}"
+                                        Text="Logo Sindicato: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxCarpetas}"
+                                        Text="{Binding Configuracion.RutaLogoSindicato, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Width="40"
+                                        Height="28"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding OpcionesVM.cmdRutaLogos}"
+                                        CommandParameter="Logo"
+                                        Content="..."
+                                        Style="{StaticResource EstiloBoton}" />
                                 </StackPanel>
 
-                                <!-- RUTA MARCA DE AGUA -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" Height="30">
-                                    <TextBlock Style="{StaticResource EstiloTextoCarpetas}" Text="Marca de Agua: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxCarpetas}" 
-													   Text="{Binding Configuracion.RutaMarcaAgua, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <Button Style="{StaticResource EstiloBoton}" Width="40" Height="28" Margin="5,0,0,0"
-											Content="..." Command="{Binding OpcionesVM.cmdRutaLogos}" CommandParameter="MarcaAgua"/>
+                                <!--  RUTA MARCA DE AGUA  -->
+                                <StackPanel
+                                    Height="30"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoCarpetas}"
+                                        Text="Marca de Agua: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxCarpetas}"
+                                        Text="{Binding Configuracion.RutaMarcaAgua, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Button
+                                        Width="40"
+                                        Height="28"
+                                        Margin="5,0,0,0"
+                                        Command="{Binding OpcionesVM.cmdRutaLogos}"
+                                        CommandParameter="MarcaAgua"
+                                        Content="..."
+                                        Style="{StaticResource EstiloBoton}" />
                                 </StackPanel>
 
 
@@ -479,50 +764,73 @@
                 </StackPanel>
 
 
-                <!-- COLUMNA 2 FILA 1-->
-                <StackPanel Grid.Column="2" Grid.Row="1">
+                <!--  COLUMNA 2 FILA 1  -->
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="2">
 
-                    <!--  COLORES DE LAS INCIDENCIAS -->
-                    <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoVerde}"
-                                            Margin="6"
-                                            Titulo="COLORES INCIDENCIAS">
+                    <!--  COLORES DE LAS INCIDENCIAS  -->
+                    <controls:GrupoOpciones
+                        Margin="6"
+                        FondoTitulo="{StaticResource orDegradadoVerde}"
+                        Titulo="COLORES INCIDENCIAS">
                         <controls:GrupoOpciones.Contenido>
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Orientation="Vertical">
 
                                 <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Vacaciones (O-V): "/>
-                                    <xceed:ColorPicker Style="{StaticResource EstiloColores}" 
-													   SelectedColor="{Binding Configuracion.ColorOV, Mode=TwoWay}"/>
+                                    <TextBlock
+                                        Style="{StaticResource EstiloColorIncidencias}"
+                                        Text="Vacaciones (O-V): " />
+                                    <xceed:ColorPicker
+                                        SelectedColor="{Binding Configuracion.ColorOV, Mode=TwoWay}"
+                                        Style="{StaticResource EstiloColores}" />
                                 </StackPanel>
 
                                 <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Descanso (J-D): "/>
-                                    <xceed:ColorPicker Style="{StaticResource EstiloColores}" 
-													   SelectedColor="{Binding Configuracion.ColorJD, Mode=TwoWay}"/>
+                                    <TextBlock
+                                        Style="{StaticResource EstiloColorIncidencias}"
+                                        Text="Descanso (J-D): " />
+                                    <xceed:ColorPicker
+                                        SelectedColor="{Binding Configuracion.ColorJD, Mode=TwoWay}"
+                                        Style="{StaticResource EstiloColores}" />
                                 </StackPanel>
 
                                 <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Enfermo (E): "/>
-                                    <xceed:ColorPicker Style="{StaticResource EstiloColores}" 
-													   SelectedColor="{Binding Configuracion.ColorE, Mode=TwoWay}"/>
+                                    <TextBlock
+                                        Style="{StaticResource EstiloColorIncidencias}"
+                                        Text="Enfermo (E): " />
+                                    <xceed:ColorPicker
+                                        SelectedColor="{Binding Configuracion.ColorE, Mode=TwoWay}"
+                                        Style="{StaticResource EstiloColores}" />
                                 </StackPanel>
 
                                 <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Descanso Suelto (DS): "/>
-                                    <xceed:ColorPicker Style="{StaticResource EstiloColores}" 
-													   SelectedColor="{Binding Configuracion.ColorDS, Mode=TwoWay}"/>
+                                    <TextBlock
+                                        Style="{StaticResource EstiloColorIncidencias}"
+                                        Text="Descanso Suelto (DS): " />
+                                    <xceed:ColorPicker
+                                        SelectedColor="{Binding Configuracion.ColorDS, Mode=TwoWay}"
+                                        Style="{StaticResource EstiloColores}" />
                                 </StackPanel>
 
                                 <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Desc. Compensatorio (DC): "/>
-                                    <xceed:ColorPicker Style="{StaticResource EstiloColores}" 
-													   SelectedColor="{Binding Configuracion.ColorDC, Mode=TwoWay}"/>
+                                    <TextBlock
+                                        Style="{StaticResource EstiloColorIncidencias}"
+                                        Text="Desc. Compensatorio (DC): " />
+                                    <xceed:ColorPicker
+                                        SelectedColor="{Binding Configuracion.ColorDC, Mode=TwoWay}"
+                                        Style="{StaticResource EstiloColores}" />
                                 </StackPanel>
 
                                 <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Style="{StaticResource EstiloColorIncidencias}" Text="Día por horas (F6): "/>
-                                    <xceed:ColorPicker Style="{StaticResource EstiloColores}" 
-													   SelectedColor="{Binding Configuracion.ColorF6, Mode=TwoWay}"/>
+                                    <TextBlock
+                                        Style="{StaticResource EstiloColorIncidencias}"
+                                        Text="Día por horas (F6): " />
+                                    <xceed:ColorPicker
+                                        SelectedColor="{Binding Configuracion.ColorF6, Mode=TwoWay}"
+                                        Style="{StaticResource EstiloColores}" />
                                 </StackPanel>
 
                             </StackPanel>
@@ -539,176 +847,257 @@
         </ScrollViewer>
 
 
-        <!-- ==================================================================================================== -->
-        <!-- PANEL DE CONTENIDO CONVENIO -->
-        <!-- ==================================================================================================== -->
-        <Grid Grid.Row="1" Margin="6" Visibility="{Binding OpcionesVM.VisibilidadPanelConvenio}">
+        <!--  ====================================================================================================  -->
+        <!--  PANEL DE CONTENIDO CONVENIO  -->
+        <!--  ====================================================================================================  -->
+        <Grid
+            Grid.Row="1"
+            Margin="6"
+            Visibility="{Binding OpcionesVM.VisibilidadPanelConvenio}">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
 
-            <!-- COLUMNA 0 y 1 -->
-            <StackPanel Grid.Column="0" Grid.ColumnSpan="2">
+            <!--  COLUMNA 0 y 1  -->
+            <StackPanel
+                Grid.Column="0"
+                Grid.ColumnSpan="2">
 
-                <!--  OPCIONES DE CONVENIO -->
-                <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoMarron}"
-                                            Margin="6"
-                                            Titulo="CONVENIO">
+                <!--  OPCIONES DE CONVENIO  -->
+                <controls:GrupoOpciones
+                    Margin="6"
+                    FondoTitulo="{StaticResource orDegradadoMarron}"
+                    Titulo="CONVENIO">
                     <controls:GrupoOpciones.Contenido>
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                        <StackPanel
+                            HorizontalAlignment="Center"
+                            Orientation="Vertical">
 
-                            <!-- COLUMNAS -->
+                            <!--  COLUMNAS  -->
                             <StackPanel Orientation="Horizontal">
 
-                                <!-- COLUMNA IZQUIERDA -->
-                                <StackPanel Orientation="Vertical" DataContext="{Binding Convenio}">
+                                <!--  COLUMNA IZQUIERDA  -->
+                                <StackPanel
+                                    DataContext="{Binding Convenio}"
+                                    Orientation="Vertical">
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Jornada Media: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding JornadaMedia, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Jornada Media: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding JornadaMedia, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Inicio Nocturnas: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding InicioNocturnas, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Inicio Nocturnas: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding InicioNocturnas, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Final Nocturnas: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding FinalNocturnas, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Final Nocturnas: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding FinalNocturnas, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Hora Desayuno: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding HoraDesayuno, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Hora Desayuno: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding HoraDesayuno, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Porcentaje Desayuno: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding PorcentajeDesayuno, Mode=TwoWay}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Porcentaje Desayuno: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding PorcentajeDesayuno, Mode=TwoWay}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Inicio Comida (Continuo): "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding InicioComidaContinuo, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Inicio Comida (Continuo): " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding InicioComidaContinuo, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Final Comida (Continuo): "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding FinalComidaContinuo, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Final Comida (Continuo): " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding FinalComidaContinuo, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Inicio Comida (Partido): "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding InicioComidaPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Inicio Comida (Partido): " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding InicioComidaPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Final Comida (Partido): "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding FinalComidaPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Final Comida (Partido): " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding FinalComidaPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Inicio Cena: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding InicioCena, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Inicio Cena: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding InicioCena, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Final Cena: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding FinalCena, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Final Cena: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding FinalCena, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Inicio Plus Cena: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding InicioPlusCena, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Inicio Plus Cena: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding InicioPlusCena, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Porcentaje Plus Cena: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding PorcentajePlusCena, Mode=TwoWay}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Porcentaje Plus Cena: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding PorcentajePlusCena, Mode=TwoWay}" />
                                     </StackPanel>
 
                                 </StackPanel>
 
-                                <!-- COLUMNA DERECHA -->
-                                <StackPanel Orientation="Vertical" DataContext="{Binding Convenio}">
+                                <!--  COLUMNA DERECHA  -->
+                                <StackPanel
+                                    DataContext="{Binding Convenio}"
+                                    Orientation="Vertical">
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Maximo Horas Cobradas: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding MaxHorasCobradas, Mode=TwoWay}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Maximo Horas Cobradas: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding MaxHorasCobradas, Mode=TwoWay}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Jornada anual en horas: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding HorasAnuales, Mode=TwoWay}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Jornada anual en horas: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding HorasAnuales, Mode=TwoWay}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Días Trabajo anuales: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding TrabajoAnuales, Mode=TwoWay}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Días Trabajo anuales: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding TrabajoAnuales, Mode=TwoWay}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Días Descanso anuales: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding DescansosAnuales, Mode=TwoWay}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Días Descanso anuales: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding DescansosAnuales, Mode=TwoWay}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Días Vacaciones anuales: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding VacacionesAnuales, Mode=TwoWay}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Días Vacaciones anuales: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding VacacionesAnuales, Mode=TwoWay}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Fines de Semana Completos: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding FindesCompletosAnuales, Mode=TwoWay}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Fines de Semana Completos: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding FindesCompletosAnuales, Mode=TwoWay}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Máximo Trabajo Laborables: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding MaxHorasLaborables, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Máximo Trabajo Laborables: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding MaxHorasLaborables, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Máximo Trabajo Sáb y Fest.: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding MaxHorasFinesSemana, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Máximo Trabajo Sáb y Fest.: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding MaxHorasFinesSemana, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Máx Horas Grafico Partido: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding MaxHorasTotalGraficoPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Máx Horas Grafico Partido: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding MaxHorasTotalGraficoPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                     <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                        <TextBlock Style="{StaticResource EstiloTextoConvenio}" Text="Máx Particion Graf. Partido: "/>
-                                        <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-														   Text="{Binding MaxHorasParticionGraficoPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}"/>
+                                        <TextBlock
+                                            Style="{StaticResource EstiloTextoConvenio}"
+                                            Text="Máx Particion Graf. Partido: " />
+                                        <controls:QTextBox
+                                            Style="{StaticResource EstiloTextBoxConvenio}"
+                                            Text="{Binding MaxHorasParticionGraficoPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
                                     </StackPanel>
 
                                 </StackPanel>
@@ -721,92 +1110,123 @@
             </StackPanel>
 
 
-            <!-- COLUMNA 2 -->
-            <StackPanel Grid.Column="2">
-
-            </StackPanel>
+            <!--  COLUMNA 2  -->
+            <StackPanel Grid.Column="2" />
 
         </Grid>
 
 
 
-        <!-- ==================================================================================================== -->
-        <!-- PANEL DE CONTENIDO POR CENTROS -->
-        <!-- ==================================================================================================== -->
-        <Grid Grid.Row="1" Margin="6"  Visibility="{Binding OpcionesVM.VisibilidadPanelPorCentro}">
+        <!--  ====================================================================================================  -->
+        <!--  PANEL DE CONTENIDO POR CENTROS  -->
+        <!--  ====================================================================================================  -->
+        <Grid
+            Grid.Row="1"
+            Margin="6"
+            Visibility="{Binding OpcionesVM.VisibilidadPanelPorCentro}">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
 
-            <!-- COLUMNA 0 -->
+            <!--  COLUMNA 0  -->
             <StackPanel Grid.Column="0">
 
                 <!--  NUMEROS DE GRAFICO  -->
-                <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoNaranja}"
-                                        DataContext="{Binding PorCentro}"
-                                        Margin="6"
-                                        Titulo="NÚMEROS DE GRÁFICO">
+                <controls:GrupoOpciones
+                    Margin="6"
+                    DataContext="{Binding PorCentro}"
+                    FondoTitulo="{StaticResource orDegradadoNaranja}"
+                    Titulo="NÚMEROS DE GRÁFICO">
                     <controls:GrupoOpciones.Contenido>
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                        <StackPanel
+                            HorizontalAlignment="Stretch"
+                            Orientation="Vertical">
 
-                            <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                                <!--  LUNES A JUEVES  -->
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    Margin="6,6,6,0"
+                                    Width="Auto"
+                                    Style="{StaticResource EstiloTextoGraficosDias}"
+                                    Text="Lunes a Jueves: " />
+                                <controls:QTextBox
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left"
+                                    Width="Auto"
+                                    Margin="6"
+                                    ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos."
+                                    Style="{StaticResource EstiloTextBoxConvenio}"
+                                    Text="{Binding Lun}" />
 
-                                <!-- LUNES A JUEVES -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Left" Margin="12,6,12,0">
-                                    <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" Width="Auto" Text="Lunes a Jueves: "/>
-                                </StackPanel>
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="Del  " Margin="30,0,0,0"/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding LunDel}"/>
-                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="  al  "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding LunAl}"/>
-                                </StackPanel>
+                                <!--  VIERNES  -->
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    Margin="6,6,6,0"
+                                    Width="Auto"
+                                    Style="{StaticResource EstiloTextoGraficosDias}"
+                                    Text="Viernes: " />
+                                <controls:QTextBox
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left"
+                                    Width="Auto"
+                                    Margin="6"
+                                    ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos."
+                                    Style="{StaticResource EstiloTextBoxConvenio}"
+                                    Text="{Binding Vie}" />
 
-                                <!-- VIERNES -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Left" Margin="12,6,12,0">
-                                    <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" Width="Auto" Text="Viernes: "/>
-                                </StackPanel>
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="Del  " Margin="30,0,0,0"/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding VieDel}"/>
-                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="  al  "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding VieAl}"/>
-                                </StackPanel>
+                                <!--  SÁBADOS  -->
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    Margin="6,6,6,0"
+                                    Width="Auto"
+                                    Style="{StaticResource EstiloTextoGraficosDias}"
+                                    Text="Sábados: " />
+                                <controls:QTextBox
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left"
+                                    Width="Auto"
+                                    Margin="6"
+                                    ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos."
+                                    Style="{StaticResource EstiloTextBoxConvenio}"
+                                    Text="{Binding Sab}" />
 
-                                <!-- SÁBADOS -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Left" Margin="12,6,12,0">
-                                    <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" Width="Auto" Text="Sábados: "/>
-                                </StackPanel>
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="Del  " Margin="30,0,0,0"/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding SabDel}"/>
-                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="  al  "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding SabAl}"/>
-                                </StackPanel>
+                                <!--  DOMINGOS Y FESTIVOS  -->
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    Margin="6,6,6,0"
+                                    Width="Auto"
+                                    Style="{StaticResource EstiloTextoGraficosDias}"
+                                    Text="Dom. y Festivos: " />
+                                <controls:QTextBox
+                                    HorizontalAlignment="Stretch"
+                                    HorizontalContentAlignment="Left"
+                                    Width="Auto"
+                                    Margin="6"
+                                    ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos."
+                                    Style="{StaticResource EstiloTextBoxConvenio}"
+                                    Text="{Binding Dom}" />
 
-                                <!-- DOMINGOS Y FESTIVOS -->
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Left" Margin="12,6,12,0">
-                                    <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" Width="Auto" Text="Dom. y Festivos: "/>
-                                </StackPanel>
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}">
-                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="Del  " Margin="30,0,0,0"/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding DomDel}"/>
-                                    <TextBlock Style="{StaticResource EstiloTextoOpciones}" Width="Auto" Text="  al  "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding DomAl}"/>
-                                </StackPanel>
+                            <Border
+                                Height="1"
+                                Margin="0,5"
+                                BorderBrush="DarkGray"
+                                BorderThickness="1" />
 
-                            </StackPanel>
-
-                            <Border Height="1" BorderBrush="DarkGray" BorderThickness="1" Margin="0,5"/>
-
-                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" Width="Auto" Text="Gráfico Comodín:  "/>
-                                <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding Comodin}"/>
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Style="{StaticResource EstiloPanelOpciones}">
+                                <TextBlock
+                                    Width="Auto"
+                                    Style="{StaticResource EstiloTextoGraficosDias}"
+                                    Text="Gráfico Comodín:  " />
+                                <controls:QTextBox
+                                    Style="{StaticResource EstiloTextBoxConvenio}"
+                                    Text="{Binding Comodin}" />
                             </StackPanel>
 
                         </StackPanel>
@@ -814,35 +1234,65 @@
                     </controls:GrupoOpciones.Contenido>
                 </controls:GrupoOpciones>
 
-                <!--  LIMPIEZAS Y VIAJES -->
-                <controls:GrupoOpciones FondoTitulo="{StaticResource orDegradadoRojo}"
-                                        DataContext="{Binding PorCentro}"
-                                        Margin="6"
-                                        Titulo="LIMPIEZAS Y VIAJES">
+                <!--  LIMPIEZAS Y VIAJES  -->
+                <controls:GrupoOpciones
+                    Margin="6"
+                    DataContext="{Binding PorCentro}"
+                    FondoTitulo="{StaticResource orDegradadoRojo}"
+                    Titulo="LIMPIEZAS Y VIAJES">
                     <controls:GrupoOpciones.Contenido>
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                        <StackPanel
+                            HorizontalAlignment="Stretch"
+                            Orientation="Vertical">
 
-                            <!-- PLUS LIMPIEZA -->
-                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                <CheckBox FontSize="14" FontWeight="Bold" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                          Content="Pagar " IsChecked="{Binding PagarLimpiezas, UpdateSourceTrigger=PropertyChanged}"
-                                          ToolTip="Si está activo se ignoran las dietas de limpieza y se pagan las limpiezas indicadas al mes."/>
-                                <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding NumeroLimpiezas}"
-												   ToolTip="Si está activo se ignoran las dietas de limpieza y se pagan las limpiezas indicadas al mes."/>
-                                <TextBlock Style="{StaticResource EstiloTextoGraficosDias}" HorizontalAlignment="Left" TextAlignment="Left"
-                                           Text=" limpiezas al mes."
-                                           ToolTip="Si está activo se ignoran las dietas de limpieza y se pagan las limpiezas indicadas al mes."/>
+                            <!--  PLUS LIMPIEZA  -->
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Style="{StaticResource EstiloPanelOpciones}">
+                                <CheckBox
+                                    Width="Auto"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Content="Pagar "
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    IsChecked="{Binding PagarLimpiezas, UpdateSourceTrigger=PropertyChanged}"
+                                    ToolTip="Si está activo se ignoran las dietas de limpieza y se pagan las limpiezas indicadas al mes." />
+                                <controls:QTextBox
+                                    Style="{StaticResource EstiloTextBoxConvenio}"
+                                    Text="{Binding NumeroLimpiezas}"
+                                    ToolTip="Si está activo se ignoran las dietas de limpieza y se pagan las limpiezas indicadas al mes." />
+                                <TextBlock
+                                    HorizontalAlignment="Left"
+                                    Style="{StaticResource EstiloTextoGraficosDias}"
+                                    Text=" limpiezas al mes."
+                                    TextAlignment="Left"
+                                    ToolTip="Si está activo se ignoran las dietas de limpieza y se pagan las limpiezas indicadas al mes." />
                             </StackPanel>
 
-                            <Border Height="1" BorderBrush="DarkGray" BorderThickness="1" Margin="0,5"/>
+                            <Border
+                                Height="1"
+                                Margin="0,5"
+                                BorderBrush="DarkGray"
+                                BorderThickness="1" />
 
-                            <!-- PLUS VIAJE -->
-                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                <CheckBox FontSize="14" FontWeight="Bold" Width="Auto" VerticalAlignment="Center" HorizontalAlignment="Left"
-                                          Content="Pagar Plus Viaje " IsChecked="{Binding PagarPlusViaje, UpdateSourceTrigger=PropertyChanged}"
-                                          ToolTip="Si está activo se paga la cantidad por día trabajado en concepto de Plus Viaje."/>
-                                <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}" Text="{Binding PlusViaje, Converter={StaticResource cnvDecimal}}"
-												   ToolTip="Si está activo se paga la cantidad por día trabajado en concepto de Plus Viaje."/>
+                            <!--  PLUS VIAJE  -->
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Style="{StaticResource EstiloPanelOpciones}">
+                                <CheckBox
+                                    Width="Auto"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Content="Pagar Plus Viaje "
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    IsChecked="{Binding PagarPlusViaje, UpdateSourceTrigger=PropertyChanged}"
+                                    ToolTip="Si está activo se paga la cantidad por día trabajado en concepto de Plus Viaje." />
+                                <controls:QTextBox
+                                    Style="{StaticResource EstiloTextBoxConvenio}"
+                                    Text="{Binding PlusViaje, Converter={StaticResource cnvDecimal}}"
+                                    ToolTip="Si está activo se paga la cantidad por día trabajado en concepto de Plus Viaje." />
                             </StackPanel>
 
                         </StackPanel>
@@ -853,97 +1303,193 @@
             </StackPanel>
 
 
-            <!-- COLUMNA 1 -->
+            <!--  COLUMNA 1  -->
             <StackPanel Grid.Column="1">
 
-                <!--  PLUSES -->
+                <!--  PLUSES  -->
                 <StackPanel Margin="6">
 
-                    <!-- SELECTOR DE AÑO -->
+                    <!--  SELECTOR DE AÑO  -->
                     <Grid>
 
-                        <Border BorderBrush="DarkBlue" BorderThickness="0.5" Background="{StaticResource orDegradadoVioleta}"/>
+                        <Border
+                            Background="{StaticResource orDegradadoVioleta}"
+                            BorderBrush="DarkBlue"
+                            BorderThickness="0.5" />
 
-                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="&lt;" Foreground="DarkViolet" FontWeight="Bold" FontSize="20" Margin="6"
-                                Padding="10,5" HorizontalAlignment="Left" Height="Auto" Command="{Binding OpcionesVM.cmdAñoPlusesMenos}"/>
+                        <Button
+                            Height="Auto"
+                            Margin="6"
+                            Padding="10,5"
+                            HorizontalAlignment="Left"
+                            Command="{Binding OpcionesVM.cmdAñoPlusesMenos}"
+                            Content="&lt;"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="DarkViolet"
+                            Style="{StaticResource EstiloBotonBarraPequeña}" />
 
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,6">
-                            <TextBlock FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Text="DIETAS Y PLUSES"/>
-                            <TextBlock FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Text="{Binding OpcionesVM.AñoPluses}"/>
+                        <StackPanel
+                            Margin="0,6"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Text="DIETAS Y PLUSES" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Text="{Binding OpcionesVM.AñoPluses}" />
                         </StackPanel>
 
-                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="&gt;" Foreground="DarkViolet" FontWeight="Bold" FontSize="20" Margin="6"
-                                Padding="10,5" HorizontalAlignment="Right" Height="Auto" Command="{Binding OpcionesVM.cmdAñoPlusesMas}"/>
+                        <Button
+                            Height="Auto"
+                            Margin="6"
+                            Padding="10,5"
+                            HorizontalAlignment="Right"
+                            Command="{Binding OpcionesVM.cmdAñoPlusesMas}"
+                            Content="&gt;"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="DarkViolet"
+                            Style="{StaticResource EstiloBotonBarraPequeña}" />
 
                     </Grid>
 
-                    <Border Background="White" BorderBrush="DarkBlue" BorderThickness="0.5" Padding="0,10,0,10">
+                    <Border
+                        Padding="0,10,0,10"
+                        Background="White"
+                        BorderBrush="DarkBlue"
+                        BorderThickness="0.5">
 
-                        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+                        <StackPanel
+                            HorizontalAlignment="Stretch"
+                            Orientation="Vertical">
 
-                            <StackPanel Orientation="Vertical" DataContext="{Binding OpcionesVM.PlusesActuales}">
+                            <StackPanel
+                                DataContext="{Binding OpcionesVM.PlusesActuales}"
+                                Orientation="Vertical">
 
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                    <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Importe Dietas: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-													   Text="{Binding ImporteDietas, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoPluses}"
+                                        Text="Importe Dietas: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxConvenio}"
+                                        Text="{Binding ImporteDietas, Mode=TwoWay, Converter={StaticResource cnvDecimal}}" />
                                 </StackPanel>
 
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                    <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Sábados: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-													   Text="{Binding ImporteSabados, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoPluses}"
+                                        Text="Plus Sábados: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxConvenio}"
+                                        Text="{Binding ImporteSabados, Mode=TwoWay, Converter={StaticResource cnvDecimal}}" />
                                 </StackPanel>
 
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                    <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Festivos: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-													   Text="{Binding ImporteFestivos, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoPluses}"
+                                        Text="Plus Festivos: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxConvenio}"
+                                        Text="{Binding ImporteFestivos, Mode=TwoWay, Converter={StaticResource cnvDecimal}}" />
                                 </StackPanel>
 
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                    <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Nocturnidad: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-													   Text="{Binding PlusNocturnidad, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoPluses}"
+                                        Text="Plus Nocturnidad: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxConvenio}"
+                                        Text="{Binding PlusNocturnidad, Mode=TwoWay, Converter={StaticResource cnvDecimal}}" />
                                 </StackPanel>
 
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                    <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Menor Descanso: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-													   Text="{Binding DietaMenorDescanso, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoPluses}"
+                                        Text="Plus Menor Descanso: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxConvenio}"
+                                        Text="{Binding DietaMenorDescanso, Mode=TwoWay, Converter={StaticResource cnvDecimal}}" />
                                 </StackPanel>
 
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                    <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Limpieza: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-													   Text="{Binding PlusLimpieza, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoPluses}"
+                                        Text="Plus Limpieza: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxConvenio}"
+                                        Text="{Binding PlusLimpieza, Mode=TwoWay, Converter={StaticResource cnvDecimal}}" />
                                 </StackPanel>
 
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                    <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Paquetería: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-													   Text="{Binding PlusPaqueteria, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoPluses}"
+                                        Text="Plus Paquetería: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxConvenio}"
+                                        Text="{Binding PlusPaqueteria, Mode=TwoWay, Converter={StaticResource cnvDecimal}}" />
                                 </StackPanel>
 
-                                <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                    <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Plus Navidad: "/>
-                                    <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-													   Text="{Binding PlusNavidad, Mode=TwoWay, Converter={StaticResource cnvDecimal}}"/>
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        Style="{StaticResource EstiloTextoPluses}"
+                                        Text="Plus Navidad: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxConvenio}"
+                                        Text="{Binding PlusNavidad, Mode=TwoWay, Converter={StaticResource cnvDecimal}}" />
                                 </StackPanel>
 
                             </StackPanel>
 
-                            <Border Height="3" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="0,5"/>
+                            <Border
+                                Height="3"
+                                Margin="0,5"
+                                BorderBrush="DarkBlue"
+                                BorderThickness="0.5" />
 
-                            <StackPanel Style="{StaticResource EstiloPanelOpciones}" HorizontalAlignment="Center">
-                                <TextBlock Style="{StaticResource EstiloTextoPluses}" Text="Porcentaje: "/>
-                                <controls:QTextBox Style="{StaticResource EstiloTextBoxConvenio}"
-												   Text="{Binding OpcionesVM.PorcentajeIncremento, Converter={StaticResource cnvDecimal}}"/>
+                            <StackPanel
+                                HorizontalAlignment="Center"
+                                Style="{StaticResource EstiloPanelOpciones}">
+                                <TextBlock
+                                    Style="{StaticResource EstiloTextoPluses}"
+                                    Text="Porcentaje: " />
+                                <controls:QTextBox
+                                    Style="{StaticResource EstiloTextBoxConvenio}"
+                                    Text="{Binding OpcionesVM.PorcentajeIncremento, Converter={StaticResource cnvDecimal}}" />
                             </StackPanel>
 
-                            <Button Style="{StaticResource EstiloBoton}" Content="Incrementar Porcentajes" HorizontalAlignment="Center"
-                                    Padding="20,10" Margin="10" FontFamily="Verdana" FontSize="12" Focusable="True"
-                                    Command="{Binding OpcionesVM.cmdIncrementarImportes}"/>
+                            <Button
+                                Margin="10"
+                                Padding="20,10"
+                                HorizontalAlignment="Center"
+                                Command="{Binding OpcionesVM.cmdIncrementarImportes}"
+                                Content="Incrementar Porcentajes"
+                                Focusable="True"
+                                FontFamily="Verdana"
+                                FontSize="12"
+                                Style="{StaticResource EstiloBoton}" />
 
                         </StackPanel>
 
@@ -953,45 +1499,96 @@
             </StackPanel>
 
 
-            <!-- COLUMNA 2 -->
+            <!--  COLUMNA 2  -->
             <StackPanel Grid.Column="2">
 
-                <!-- FESTIVOS -->
+                <!--  FESTIVOS  -->
                 <StackPanel Margin="6">
 
-                    <!-- SELECTOR DE AÑO -->
+                    <!--  SELECTOR DE AÑO  -->
                     <Grid>
 
-                        <Border BorderBrush="DarkBlue" BorderThickness="1" Background="{StaticResource orDegradadoAzul}"/>
+                        <Border
+                            Background="{StaticResource orDegradadoAzul}"
+                            BorderBrush="DarkBlue"
+                            BorderThickness="1" />
 
-                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="&lt;" Foreground="Blue" FontWeight="Bold" FontSize="20" Margin="6"
-                                Padding="10,5" HorizontalAlignment="Left" Height="Auto" Command="{Binding OpcionesVM.cmdAñoFestivosMenos}"/>
+                        <Button
+                            Height="Auto"
+                            Margin="6"
+                            Padding="10,5"
+                            HorizontalAlignment="Left"
+                            Command="{Binding OpcionesVM.cmdAñoFestivosMenos}"
+                            Content="&lt;"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="Blue"
+                            Style="{StaticResource EstiloBotonBarraPequeña}" />
 
-                        <StackPanel Orientation="Vertical" VerticalAlignment="Center" Margin="0,6">
-                            <TextBlock FontSize="16" FontWeight="Bold" HorizontalAlignment="Center" Text="FESTIVOS"/>
-                            <TextBlock FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Text="{Binding FestivosVM.AñoActual}"/>
+                        <StackPanel
+                            Margin="0,6"
+                            VerticalAlignment="Center"
+                            Orientation="Vertical">
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontSize="16"
+                                FontWeight="Bold"
+                                Text="FESTIVOS" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Text="{Binding FestivosVM.AñoActual}" />
                         </StackPanel>
 
-                        <Button Style="{StaticResource EstiloBotonBarraPequeña}" Content="&gt;" Foreground="Blue" FontWeight="Bold" FontSize="20" Margin="6"
-                                Padding="10,5" HorizontalAlignment="Right" Height="Auto" Command="{Binding OpcionesVM.cmdAñoFestivosMas}"/>
+                        <Button
+                            Height="Auto"
+                            Margin="6"
+                            Padding="10,5"
+                            HorizontalAlignment="Right"
+                            Command="{Binding OpcionesVM.cmdAñoFestivosMas}"
+                            Content="&gt;"
+                            FontSize="20"
+                            FontWeight="Bold"
+                            Foreground="Blue"
+                            Style="{StaticResource EstiloBotonBarraPequeña}" />
 
                     </Grid>
 
-                    <!-- TABLA DÍAS FESTIVOS -->
-                    <controls:QDataGrid x:Name="TablaFestivos" IsReadOnly="False" HeadersVisibility="None" FontSize="12"
-                              AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False" SelectionMode="Extended"
-                              SelectionUnit="Cell" CanUserAddRows="True" CanUserSortColumns="True"
-                              Background="Transparent" Style="{StaticResource EstiloGridFestivos}"
-                              ItemsSource="{Binding FestivosVM.VistaFestivos}">
+                    <!--  TABLA DÍAS FESTIVOS  -->
+                    <controls:QDataGrid
+                        x:Name="TablaFestivos"
+                        AlternationCount="2"
+                        AutoGenerateColumns="False"
+                        Background="Transparent"
+                        CanUserAddRows="True"
+                        CanUserReorderColumns="False"
+                        CanUserSortColumns="True"
+                        FontSize="12"
+                        HeadersVisibility="None"
+                        IsReadOnly="False"
+                        ItemsSource="{Binding FestivosVM.VistaFestivos}"
+                        SelectionMode="Extended"
+                        SelectionUnit="Cell"
+                        Style="{StaticResource EstiloGridFestivos}">
 
                         <controls:QDataGrid.Resources>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="{StaticResource orAzul2}"/>
-                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
+                            <SolidColorBrush
+                                x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                                Color="{StaticResource orAzul2}" />
+                            <SolidColorBrush
+                                x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                                Color="Black" />
                         </controls:QDataGrid.Resources>
 
                         <controls:QDataGrid.Columns>
-                            <DataGridTextColumn Header="Días" Width="*" MinWidth="60" FontSize="14" FontFamily="Verdana"
-                                                Binding="{Binding Fecha, Converter={StaticResource cnvFecha}}"/>
+                            <DataGridTextColumn
+                                Width="*"
+                                MinWidth="60"
+                                Binding="{Binding Fecha, Converter={StaticResource cnvFecha}}"
+                                FontFamily="Verdana"
+                                FontSize="14"
+                                Header="Días" />
                         </controls:QDataGrid.Columns>
 
                     </controls:QDataGrid>

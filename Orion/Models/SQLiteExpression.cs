@@ -99,7 +99,7 @@ namespace Orion.Models {
         /// El decimal se añade con formato '0.0000'.
         /// </summary>
         public SQLiteExpression AddParameter(string paramName, decimal paramValue) {
-            Parametros.Add(new SQLiteParameter(paramName, paramValue.ToString("0.0000")));
+            Parametros.Add(new SQLiteParameter(paramName, paramValue.ToString("0.0000").Replace(",", ".")));
             return this;
         }
 

@@ -127,6 +127,9 @@
     <Compile Include="Config\GestionGraficos.cs" />
     <Compile Include="Config\ItemChangedEventArgs.cs" />
     <Compile Include="Config\NotifyCollection.cs" />
+    <Compile Include="Config\Rango.cs" />
+    <Compile Include="Config\IntRangoCollection.cs" />
+    <Compile Include="Config\RangoCollection.cs" />
     <Compile Include="Controls\BotonAlterno.xaml.cs">
       <DependentUpon>BotonAlterno.xaml</DependentUpon>
     </Compile>

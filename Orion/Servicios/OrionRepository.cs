@@ -562,7 +562,6 @@ namespace Orion.Servicios {
                 var consulta = new SQLiteExpression("SELECT * FROM Calendarios WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) ORDER BY MatriculaConductor;");
                 consulta.AddParameter("@fecha", fecha);
                 var lista = GetItems<Calendario>(consulta);
-                //TODO: Añadir si el conductor es o no indefinido y quitar la parte Indefinido de la consulta.
                 return lista;
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetCalendarios), ex);
@@ -580,7 +579,6 @@ namespace Orion.Servicios {
                     "ORDER BY Calendarios.Fecha;";
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                 var lista = GetItems<Calendario>(consulta);
-                //TODO: Añadir si el conductor es o no indefinido y quitar la parte Indefinido de la consulta.
                 return lista;
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetCalendariosConductor), ex);
@@ -597,7 +595,6 @@ namespace Orion.Servicios {
                                     "WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Calendarios.MatriculaConductor = @matricula ;";
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                 var lista = GetItems<Calendario>(consulta);
-                //TODO: Añadir si el conductor es o no indefinido y quitar la parte Indefinido de la consulta.
                 return lista.ToList();
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetCalendariosConductor), ex);
@@ -690,7 +687,6 @@ namespace Orion.Servicios {
                                       "      AND Grafico = -6 AND (Codigo = 0 OR Codigo Is Null);";
             DateTime fecha = new DateTime(año, mes, 1);
             var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
-            //TODO: Comprobar que no se necesita meter otro parámetro fecha, al haber dos en la consulta. Yo creo que si.
             try {
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
@@ -936,7 +932,6 @@ namespace Orion.Servicios {
                                       "      AND Grafico = -8 AND (Codigo = 0 OR Codigo Is Null);";
             DateTime fecha = new DateTime(año, mes, 1);
             var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
-            //TODO: Comprobar que no se necesita un segundo parámetro fecha, ya que hay dos en la consulta. Yo creo que si.
             try {
                 return GetIntScalar(consulta);
             } catch (Exception ex) {
@@ -1567,7 +1562,7 @@ namespace Orion.Servicios {
                     "Sum(G.Cena) As Cenas, " +
                     "Sum(G.PlusCena) As PlusesCena " +
                     "FROM Graficos G " +
-                    "WHERE strftime('%Y-%m-%d', G.Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) FROM Graficos))" +
+                    "WHERE G.Numero > 0 AND strftime('%Y-%m-%d', G.Validez) = strftime('%Y-%m-%d', (SELECT Max(Validez) FROM Graficos))" +
                     "GROUP BY G.Validez " +
                     "ORDER BY G.Validez");
                 return GetItem<EstadisticaGrupoGraficos>(consulta);
@@ -1613,7 +1608,7 @@ namespace Orion.Servicios {
                     "Sum(G.Cena) As Cenas, " +
                     "Sum(G.PlusCena) As PlusesCena " +
                     "FROM Graficos G " +
-                    "WHERE G.Validez = @validez " +
+                    "WHERE G.Numero > 0 AND G.Validez = @validez " +
                     "GROUP BY G.Validez " +
                     "ORDER BY G.Validez");
                 consulta.AddParameter("@validez", fecha);
@@ -1635,7 +1630,7 @@ namespace Orion.Servicios {
                     "graficos2 AS(SELECT GraficoVinculado FROM DiasCalendario WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND GraficoVinculado > 0) " +
                     "" +
                     "SELECT @fecha as Fecha, * FROM (SELECT * FROM Graficos WHERE (Validez in maxValidez))" +
-                    "WHERE (Numero IN graficos1 OR Numero IN graficos2) AND Numero != @comodin " +
+                    "WHERE Numero > 0 AND (Numero IN graficos1 OR Numero IN graficos2) AND Numero != @comodin " +
                     "ORDER BY Numero; ";
 
 
@@ -1662,7 +1657,7 @@ namespace Orion.Servicios {
                     "" +
                     "SELECT Numero " +
                     "FROM Graficos " +
-                    "WHERE Validez in maxValidez AND (DiaSemana = @diaSemana OR DiaSemana = '' OR DiaSemana IS NULL) " +
+                    "WHERE Numero > 0 AND Validez in maxValidez AND (DiaSemana = @diaSemana OR DiaSemana = '' OR DiaSemana IS NULL) " +
                     "ORDER BY Numero; ";
 
                 List<GraficosPorDia> lista = new List<GraficosPorDia>();
@@ -1816,7 +1811,7 @@ namespace Orion.Servicios {
                 "DiasCalendario.*, " +
                 "Graficos.* " +
                 "FROM DiasCalendario LEFT JOIN Graficos " +
-                "ON DiasCalendario.Grafico = Graficos.Numero " +
+                "ON DiasCalendario.Grafico = Graficos.Numero " + //Si falla aquí probar a añadir DiasCalendario.Grafico > 0 AND ...
                 "AND Graficos.Validez = (SELECT Max(Graficos.Validez) FROM Graficos WHERE Graficos.Validez <= DiasCalendario.DiaFecha) " +
                 "" +
                 "WHERE IdCalendario = (SELECT _id " +

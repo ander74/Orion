@@ -256,8 +256,8 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("Codigo", Codigo));
                 lista.Add(new SQLiteParameter("Fecha", Fecha.ToString("yyyy-MM-dd")));
                 lista.Add(new SQLiteParameter("Horas", Horas.Ticks));
-                lista.Add(new SQLiteParameter("Descansos", Descansos.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("Dnds", Dnds.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("Descansos", Descansos.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("Dnds", Dnds.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("Motivo", Motivo));
                 //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;

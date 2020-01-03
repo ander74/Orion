@@ -5,17 +5,13 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Orion.Config;
 
 namespace Orion.Models {
 
-	public class OpcionesPorCentro: NotifyBase {
+	public class OpcionesPorCentro : NotifyBase {
 
 
 		// ====================================================================================================
@@ -128,6 +124,61 @@ namespace Orion.Models {
 				}
 			}
 		}
+
+
+		#endregion
+		// ====================================================================================================
+
+
+		// ====================================================================================================
+		#region NUEVOS GRAFICOS
+		// ====================================================================================================
+
+		// ESTO SE CAMBIARÁ POR EL SIGUIENTE BLOQUE COMENTADO CUANDO YA ESTÉ OPERATIVO.
+		private string lun;
+		public string Lun {
+			get => string.IsNullOrEmpty(lun) ? $"{LunDel}-{LunAl}" : lun;
+			set => lun = value;
+		}
+
+		private string vie;
+		public string Vie {
+			get => string.IsNullOrEmpty(vie) ? $"{VieDel}-{VieAl}" : vie;
+			set => vie = value;
+		}
+
+		private string sab;
+		public string Sab {
+			get => string.IsNullOrEmpty(sab) ? $"{SabDel}-{SabAl}" : sab;
+			set => sab = value;
+		}
+
+		private string dom;
+		public string Dom {
+			get => string.IsNullOrEmpty(dom) ? $"{DomDel}-{DomAl}" : dom;
+			set => dom = value;
+		}
+
+		//public string Lun { get; set; } = "3000-3499";
+
+		//public string Vie { get; set; } = "3500-3599";
+
+		//public string Sab { get; set; } = "3600-3699";
+
+		//public string Dom { get; set; } = "3700-3799";
+
+
+		[JsonIgnore]
+		public IntRangoCollection RangoLun { get => new IntRangoCollection(Lun); }
+
+		[JsonIgnore]
+		public IntRangoCollection RangoVie { get => new IntRangoCollection(Vie); }
+
+		[JsonIgnore]
+		public IntRangoCollection RangoSab { get => new IntRangoCollection(Sab); }
+
+		[JsonIgnore]
+		public IntRangoCollection RangoDom { get => new IntRangoCollection(Dom); }
 
 
 		#endregion

@@ -550,7 +550,7 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("Grafico", Grafico));
                 lista.Add(new SQLiteParameter("Codigo", Codigo));
                 lista.Add(new SQLiteParameter("ExcesoJornada", ExcesoJornada.Ticks));
-                lista.Add(new SQLiteParameter("FacturadoPaqueteria", FacturadoPaqueteria.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("FacturadoPaqueteria", FacturadoPaqueteria.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("Limpieza", Limpieza == null ? (object)DBNull.Value : Limpieza == true ? 1 : 0));
                 lista.Add(new SQLiteParameter("GraficoVinculado", GraficoVinculado));
                 lista.Add(new SQLiteParameter("Notas", Notas.TrimEnd(new char[] { ' ', '\n', '\r', '\t' })));
@@ -562,10 +562,10 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("TrabajadasAlt", TrabajadasAlt.HasValue ? TrabajadasAlt.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("AcumuladasAlt", AcumuladasAlt.HasValue ? AcumuladasAlt.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("NocturnasAlt", NocturnasAlt.HasValue ? NocturnasAlt.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("DesayunoAlt", DesayunoAlt.HasValue ? DesayunoAlt.Value.ToString("0.0000") : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("ComidaAlt", ComidaAlt.HasValue ? ComidaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("CenaAlt", CenaAlt.HasValue ? CenaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("PlusCenaAlt", PlusCenaAlt.HasValue ? PlusCenaAlt.Value.ToString("0.0000") : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("DesayunoAlt", DesayunoAlt.HasValue ? DesayunoAlt.Value.ToString("0.0000").Replace(",", ".") : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("ComidaAlt", ComidaAlt.HasValue ? ComidaAlt.Value.ToString("0.0000").Replace(",", ".") : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("CenaAlt", CenaAlt.HasValue ? CenaAlt.Value.ToString("0.0000").Replace(",", ".") : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("PlusCenaAlt", PlusCenaAlt.HasValue ? PlusCenaAlt.Value.ToString("0.0000").Replace(",", ".") : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("PlusLimpiezaAlt", PlusLimpiezaAlt.HasValue ? PlusLimpiezaAlt.Value : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("PlusPaqueteriaAlt", PlusPaqueteriaAlt.HasValue ? PlusPaqueteriaAlt.Value : (object)DBNull.Value));
                 //lista.Add(new SQLiteParameter("Id", Id));

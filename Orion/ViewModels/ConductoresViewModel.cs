@@ -122,7 +122,6 @@ namespace Orion.ViewModels {
 
 
         public void InsertarRegulacion(RegulacionConductor regulacion) {
-            //TODO: Revisar
             Conductor conductor = ListaConductores.First(c => c.Id == regulacion.IdConductor);
             conductor.ListaRegulaciones.Add(regulacion);
         }

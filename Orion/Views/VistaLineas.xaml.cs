@@ -16,7 +16,7 @@ namespace Orion.Views {
 			InitializeComponent();
 		}
 
-		//TODO: Desacoplar esto.
+
 		private void Tabla_GotFocus(object sender, RoutedEventArgs e) {
 			((GlobalVM)this.DataContext).LineasVM.TablaParaCopy = sender as DataGrid;
 		}

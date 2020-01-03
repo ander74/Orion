@@ -7,7 +7,6 @@
 #endregion
 namespace Orion.ViewModels {
 	using System;
-	using System.Data.OleDb;
 	using System.Windows.Input;
 	using Models;
 	using Servicios;
@@ -37,26 +36,25 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 
 
-
 		// ====================================================================================================
 		#region COMANDOS
 		// ====================================================================================================
 
 
 
-		#region COMANDO 
+		#region COMANDO SQL NON QUERY
 
 		// Comando
-		private ICommand comandoSqlNonQuery;
-		public ICommand cmdComandoSqlNonQuery {
+		private ICommand sqlNonQuery;
+		public ICommand cmdSqlNonQuery {
 			get {
-				if (comandoSqlNonQuery == null) comandoSqlNonQuery = new RelayCommand(p => ComandoSqlNonQuery());
-				return comandoSqlNonQuery;
+				if (sqlNonQuery == null) sqlNonQuery = new RelayCommand(p => SqlNonQuery());
+				return sqlNonQuery;
 			}
 		}
 
 		// Ejecución del comando
-		private void ComandoSqlNonQuery() {
+		private void SqlNonQuery() {
 
 			string lineSeparator = ((char)0x2028).ToString();
 			string paragraphSeparator = ((char)0x2029).ToString();
@@ -66,40 +64,69 @@ namespace Orion.ViewModels {
 									 .Replace("\r\n", string.Empty)
 									 .Replace(lineSeparator, string.Empty)
 									 .Replace(paragraphSeparator, string.Empty);
-			//if (texto.Contains(";")) {
-				comandos = texto.Split(';');
-			//} else {
-			//	comandos = new string[] { texto };
-			//}
+			comandos = texto.Split(';');
 
 			CampoResultado = string.Empty;
-
-			using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-				using (OleDbCommand comando = conexion.CreateCommand()) {
-					conexion.Open();
-					try {
-						foreach (string cmd in comandos) {
-							if (string.IsNullOrWhiteSpace(cmd)) continue;
-							//comando.CommandText = cmd.Replace("\n",string.Empty)
-							//						 .Replace("\r", string.Empty)
-							//						 .Replace("\r\n", string.Empty)
-							//						 .Replace(lineSeparator, string.Empty)
-							//						 .Replace(paragraphSeparator, string.Empty);
-							comando.CommandText = cmd;
-							int resultado = comando.ExecuteNonQuery();
-							CampoResultado += $"Ejecutando ({DateTime.Now}):\n";
-							CampoResultado += $"    {cmd}\n";
-							CampoResultado += $"    {resultado} registros afectados.\n\n";
-						}
-					} catch (Exception ex){
-						Mensajes.VerError("Comando SQL Non Query", ex);
-					}
+			try {
+				foreach (string cmd in comandos) {
+					if (string.IsNullOrWhiteSpace(cmd)) continue;
+					CampoResultado += $"Ejecutando ({DateTime.Now}):\n";
+					CampoResultado += $"    {cmd}\n";
+					App.Global.Repository.ExecureNonQuery(new SQLiteExpression(cmd));
 				}
+			} catch (Exception ex) {
+				Mensajes.VerError("Comando SQL NON QUERY", ex);
+				CampoResultado += $"Consulta Errónea.\n\n";
+				return;
 			}
 			CampoResultado += $"Consulta Terminada.\n\n";
+		}
 
+		#endregion
+
+
+
+		#region COMANDO SQL ESCALAR
+
+		// Comando
+		private ICommand sqlEscalar;
+		public ICommand cmdSqlEscalar {
+			get {
+				if (sqlEscalar == null) sqlEscalar = new RelayCommand(p => SqlEscalar());
+				return sqlEscalar;
+			}
+		}
+
+		// Ejecución del comando
+		private void SqlEscalar() {
+			string lineSeparator = ((char)0x2028).ToString();
+			string paragraphSeparator = ((char)0x2029).ToString();
+			string[] comandos;
+			string texto = CampoTexto.Replace("\n", string.Empty)
+									 .Replace("\r", string.Empty)
+									 .Replace("\r\n", string.Empty)
+									 .Replace(lineSeparator, string.Empty)
+									 .Replace(paragraphSeparator, string.Empty);
+			comandos = texto.Split(';');
+
+			CampoResultado = string.Empty;
+			try {
+				foreach (string cmd in comandos) {
+					if (string.IsNullOrWhiteSpace(cmd)) continue;
+					CampoResultado += $"Ejecutando ({DateTime.Now}):\n";
+					CampoResultado += $"    {cmd}\n";
+					var resultado = App.Global.Repository.GetScalar(new SQLiteExpression(cmd));
+					CampoResultado += $"    Resultado = {resultado}\n";
+				}
+			} catch (Exception ex) {
+				Mensajes.VerError("Comando SQL ESCALAR", ex);
+				CampoResultado += $"Consulta Errónea.\n\n";
+				return;
+			}
+			CampoResultado += $"Consulta Terminada.\n\n";
 		}
 		#endregion
+
 
 
 		#endregion

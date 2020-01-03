@@ -90,7 +90,7 @@ namespace Orion.Servicios {
                     decimal minutosAntes = acumula - horas;
                     decimal minutos = minutosAntes * 60;
                     if (minutos < 0) minutos = -minutos;
-                    grafico.Acumuladas = new TimeSpan(horas, (int)minutos, 0); //TODO: Comprobar que esto está bien.
+                    grafico.Acumuladas = new TimeSpan(horas, (int)minutos, 0);
                     grafico.Desayuno = (decimal)reader.GetDouble(reader.GetOrdinal("Desayuno"));
                     grafico.Comida = (decimal)reader.GetDouble(reader.GetOrdinal("Comida"));
                     grafico.Cena = (decimal)reader.GetDouble(reader.GetOrdinal("Cena"));

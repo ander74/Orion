@@ -185,7 +185,7 @@ namespace Orion.ViewModels {
                     ventana.DialogResult = true;
                     ventana.Close();
                 }
-                if (RepetirMarcado) { //TODO: Sustituir por grupo seleccionado.
+                if (RepetirMarcado) {
                     ObservableCollection<Grafico> graficos = BdGraficos.getGraficosGrupoPorFecha(GrupoSeleccionado.Validez);
                     ObservableCollection<ValoracionGrafico> valoraciones = new ObservableCollection<ValoracionGrafico>();
                     //if (String.IsNullOrEmpty(Notas.Trim())) Notas = FechaActual.ToString("dd-MM-yyyy");
@@ -454,10 +454,14 @@ namespace Orion.ViewModels {
                                 grafico.Valoracion = valoracion.Tiempo;
                                 grafico.Recalcular();
                                 // Inferimos el día de la semana a la que pertenece.
-                                if (grafico.Numero >= App.Global.PorCentro.LunDel && grafico.Numero <= App.Global.PorCentro.LunAl) grafico.DiaSemana = "L";
-                                if (grafico.Numero >= App.Global.PorCentro.VieDel && grafico.Numero <= App.Global.PorCentro.VieAl) grafico.DiaSemana = "V";
-                                if (grafico.Numero >= App.Global.PorCentro.SabDel && grafico.Numero <= App.Global.PorCentro.SabAl) grafico.DiaSemana = "S";
-                                if (grafico.Numero >= App.Global.PorCentro.DomDel && grafico.Numero <= App.Global.PorCentro.DomAl) grafico.DiaSemana = "F";
+                                //if (grafico.Numero >= App.Global.PorCentro.LunDel && grafico.Numero <= App.Global.PorCentro.LunAl) grafico.DiaSemana = "L";
+                                //if (grafico.Numero >= App.Global.PorCentro.VieDel && grafico.Numero <= App.Global.PorCentro.VieAl) grafico.DiaSemana = "V";
+                                //if (grafico.Numero >= App.Global.PorCentro.SabDel && grafico.Numero <= App.Global.PorCentro.SabAl) grafico.DiaSemana = "S";
+                                //if (grafico.Numero >= App.Global.PorCentro.DomDel && grafico.Numero <= App.Global.PorCentro.DomAl) grafico.DiaSemana = "F";
+                                if (App.Global.PorCentro.RangoLun.Validar(grafico.Numero)) grafico.DiaSemana = "L";
+                                if (App.Global.PorCentro.RangoVie.Validar(grafico.Numero)) grafico.DiaSemana = "V";
+                                if (App.Global.PorCentro.RangoSab.Validar(grafico.Numero)) grafico.DiaSemana = "S";
+                                if (App.Global.PorCentro.RangoDom.Validar(grafico.Numero)) grafico.DiaSemana = "F";
                                 BdGraficos.InsertarGrafico(grafico);
                                 IniciaGrafico = false;
                                 EnUnGrafico = false;

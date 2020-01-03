@@ -198,7 +198,7 @@ namespace Orion.DataModels {
 
                 try {
                     //App.Global.AbrirConexion();
-                    conexion.Open(); // TODO: Probar a ver si podemos borrar todas usando Where Id IN (lista)
+                    conexion.Open(); // Probar a ver si podemos borrar todas usando Where Id IN (lista)
                     foreach (ValoracionGrafico valoracion in lista) {
                         OleDbCommand comando = new OleDbCommand(SQLBorrar, conexion);
                         comando.Parameters.AddWithValue("id", valoracion.Id);

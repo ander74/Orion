@@ -560,10 +560,10 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("Trabajadas", Trabajadas.Ticks));
                 lista.Add(new SQLiteParameter("Acumuladas", Acumuladas.Ticks));
                 lista.Add(new SQLiteParameter("Nocturnas", Nocturnas.Ticks));
-                lista.Add(new SQLiteParameter("Desayuno", Desayuno.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("Comida", Comida.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("Cena", Cena.ToString("0.0000")));
-                lista.Add(new SQLiteParameter("PlusCena", PlusCena.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("Desayuno", Desayuno.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("Comida", Comida.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("Cena", Cena.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("PlusCena", PlusCena.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza));
                 lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria));
                 //lista.Add(new SQLiteParameter("Id", Id));

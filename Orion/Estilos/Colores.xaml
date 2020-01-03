@@ -1,58 +1,226 @@
-﻿<!-- =============================================== -->
-<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
-<!--                                                 -->
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
 <!--  Vea el archivo Licencia.txt para mas detalles  -->
-<!-- =============================================== -->
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Orion">
+<!--  ===============================================  -->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Orion">
 
-    <!-- ==================================================================================================== -->
-    <!-- COLORES SOLIDOS-->
-    <!-- ==================================================================================================== -->
-    <Color x:Key="Blanco" A="255"  R="255" G="255" B="255"/>
-    <Color x:Key="NaranjaMuyClaro" A="255" R="255" G="243" B="218"/>
-    <Color x:Key="Gris1" A="255" R="192" G="192" B="192"/>
-    <SolidColorBrush x:Key="BrushGris1" Color="{StaticResource Gris1}"/>
+    <!--  ====================================================================================================  -->
+    <!--  COLORES SOLIDOS  -->
+    <!--  ====================================================================================================  -->
+    <Color
+        x:Key="Blanco"
+        A="255"
+        B="255"
+        G="255"
+        R="255" />
+    <Color
+        x:Key="NaranjaMuyClaro"
+        A="255"
+        B="218"
+        G="243"
+        R="255" />
+    <Color
+        x:Key="Gris1"
+        A="255"
+        B="192"
+        G="192"
+        R="192" />
+    <SolidColorBrush
+        x:Key="BrushGris1"
+        Color="{StaticResource Gris1}" />
 
-    <!-- ==================================================================================================== -->
-    <!-- COLORES AZULES-->
-    <!-- ==================================================================================================== -->
-    <Color x:Key="Celeste1" A="255"  R="239" G="249" B="255"/>
-    <Color x:Key="Celeste2" A="255"  R="221" G="242" B="255"/>
-    <Color x:Key="Celeste3" A="255"  R="203" G="235" B="255"/>
-    <Color x:Key="Celeste4" A="255"  R="185" G="228" B="255"/>
-    <Color x:Key="Celeste5" A="255"  R="167" G="221" B="255"/>
-    <Color x:Key="Celeste6" A="255"  R="149" G="214" B="255"/>
+    <!--  ====================================================================================================  -->
+    <!--  COLORES AZULES  -->
+    <!--  ====================================================================================================  -->
+    <Color
+        x:Key="Celeste1"
+        A="255"
+        B="255"
+        G="249"
+        R="239" />
+    <Color
+        x:Key="Celeste2"
+        A="255"
+        B="255"
+        G="242"
+        R="221" />
+    <Color
+        x:Key="Celeste3"
+        A="255"
+        B="255"
+        G="235"
+        R="203" />
+    <Color
+        x:Key="Celeste4"
+        A="255"
+        B="255"
+        G="228"
+        R="185" />
+    <Color
+        x:Key="Celeste5"
+        A="255"
+        B="255"
+        G="221"
+        R="167" />
+    <Color
+        x:Key="Celeste6"
+        A="255"
+        B="255"
+        G="214"
+        R="149" />
 
 
-    <!-- ==================================================================================================== -->
-    <!-- COLORES ORION-->
-    <!-- ==================================================================================================== -->
-    <Color x:Key="orGris1" A="255" R="192" G="192" B="192"/>
-    <Color x:Key="orGris2" A="255" R="234" G="234" B="234"/>
-    <Color x:Key="orAmarillo1" A="255" R="255" G="255" B="102"/>
-    <Color x:Key="orAmarillo2" A="255" R="255" G="255" B="153"/>
-    <Color x:Key="orAzul1" A="255" R="51" G="153" B="255"/>
-    <Color x:Key="orAzul2" A="255" R="152" G="204" B="255"/>
-    <Color x:Key="orCalabaza1" A="255" R="255" G="204" B="0"/>
-    <Color x:Key="orCalabaza2" A="255" R="255" G="240" B="60"/>
-    <Color x:Key="orCian1" A="255" R="102" G="255" B="255"/>
-    <Color x:Key="orCian2" A="255" R="204" G="255" B="255"/>
-    <Color x:Key="orLima1" A="255" R="153" G="204" B="0"/>
-    <Color x:Key="orLima2" A="255" R="204" G="255" B="51"/>
-    <Color x:Key="orMarron1" A="255" R="175" G="125" B="0"/>
-    <Color x:Key="orMarron2" A="255" R="215" G="165" B="0"/>
-    <Color x:Key="orNaranja1" A="255" R="255" G="153" B="51"/>
-    <Color x:Key="orNaranja2" A="255" R="255" G="204" B="102"/>
-    <Color x:Key="orRojo1" A="255" R="255" G="124" B="128"/>
-    <Color x:Key="orRojo2" A="255" R="255" G="204" B="204"/>
-    <Color x:Key="orRosa1" A="255" R="255" G="153" B="204"/>
-    <Color x:Key="orRosa2" A="255" R="255" G="204" B="255"/>
-    <Color x:Key="orVerde1" A="255" R="0" G="204" B="153"/>
-    <Color x:Key="orVerde2" A="255" R="153" G="255" B="204"/>
-    <Color x:Key="orVioleta1" A="255" R="153" G="153" B="255"/>
-    <Color x:Key="orVioleta2" A="255" R="204" G="204" B="255"/>
+    <!--  ====================================================================================================  -->
+    <!--  COLORES ORION  -->
+    <!--  ====================================================================================================  -->
+    <Color
+        x:Key="orGris1"
+        A="255"
+        B="192"
+        G="192"
+        R="192" />
+    <Color
+        x:Key="orGris2"
+        A="255"
+        B="234"
+        G="234"
+        R="234" />
+    <Color
+        x:Key="orAmarillo1"
+        A="255"
+        B="102"
+        G="255"
+        R="255" />
+    <Color
+        x:Key="orAmarillo2"
+        A="255"
+        B="153"
+        G="255"
+        R="255" />
+    <Color
+        x:Key="orAzul1"
+        A="255"
+        B="255"
+        G="153"
+        R="51" />
+    <Color
+        x:Key="orAzul2"
+        A="255"
+        B="255"
+        G="204"
+        R="152" />
+    <Color
+        x:Key="orCalabaza1"
+        A="255"
+        B="0"
+        G="204"
+        R="255" />
+    <Color
+        x:Key="orCalabaza2"
+        A="255"
+        B="60"
+        G="240"
+        R="255" />
+    <Color
+        x:Key="orCian1"
+        A="255"
+        B="255"
+        G="255"
+        R="102" />
+    <Color
+        x:Key="orCian2"
+        A="255"
+        B="255"
+        G="255"
+        R="204" />
+    <Color
+        x:Key="orLima1"
+        A="255"
+        B="0"
+        G="204"
+        R="153" />
+    <Color
+        x:Key="orLima2"
+        A="255"
+        B="51"
+        G="255"
+        R="204" />
+    <Color
+        x:Key="orMarron1"
+        A="255"
+        B="0"
+        G="125"
+        R="175" />
+    <Color
+        x:Key="orMarron2"
+        A="255"
+        B="0"
+        G="165"
+        R="215" />
+    <Color
+        x:Key="orNaranja1"
+        A="255"
+        B="51"
+        G="153"
+        R="255" />
+    <Color
+        x:Key="orNaranja2"
+        A="255"
+        B="102"
+        G="204"
+        R="255" />
+    <Color
+        x:Key="orRojo1"
+        A="255"
+        B="128"
+        G="124"
+        R="255" />
+    <Color
+        x:Key="orRojo2"
+        A="255"
+        B="204"
+        G="204"
+        R="255" />
+    <Color
+        x:Key="orRosa1"
+        A="255"
+        B="204"
+        G="153"
+        R="255" />
+    <Color
+        x:Key="orRosa2"
+        A="255"
+        B="255"
+        G="204"
+        R="255" />
+    <Color
+        x:Key="orVerde1"
+        A="255"
+        B="153"
+        G="204"
+        R="0" />
+    <Color
+        x:Key="orVerde2"
+        A="255"
+        B="204"
+        G="255"
+        R="153" />
+    <Color
+        x:Key="orVioleta1"
+        A="255"
+        B="255"
+        G="153"
+        R="153" />
+    <Color
+        x:Key="orVioleta2"
+        A="255"
+        B="255"
+        G="204"
+        R="204" />
 
 
 </ResourceDictionary>

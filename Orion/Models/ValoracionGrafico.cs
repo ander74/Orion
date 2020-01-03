@@ -268,7 +268,7 @@ namespace Orion.Models {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("IdGrafico", IdGrafico));
                 lista.Add(new SQLiteParameter("Inicio", Inicio.HasValue ? Inicio.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("Linea", Linea.ToString("0.0000")));
+                lista.Add(new SQLiteParameter("Linea", Linea.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("Descripcion", Descripcion));
                 lista.Add(new SQLiteParameter("Final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("Tiempo", Tiempo.Ticks));

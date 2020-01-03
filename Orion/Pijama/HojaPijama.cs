@@ -53,7 +53,7 @@ namespace Orion.Pijama {
                     // Establecemos si es festivo.
                     if (App.Global.CalendariosVM.EsFestivo(dia.DiaFecha)) dia.EsFestivo = true;
                     // Establecemos las horas trabajadas reales.
-                    dia.TrabajadasReales = dia.GraficoTrabajado.Trabajadas; //TODO: Evaluar si las establecemos antes o después de añadir el exceso de jornada.
+                    dia.TrabajadasReales = dia.GraficoTrabajado.Trabajadas;
                     // Ajustamos la jornada en función del exceso de jornada.
                     if (dia.ExcesoJornada != TimeSpan.Zero) {
                         if (dia.GraficoTrabajado != null) dia.GraficoTrabajado.Final += dia.ExcesoJornada;
@@ -135,9 +135,7 @@ namespace Orion.Pijama {
                 // Extraemos los datos hasta el mes actual.
                 HastaMesActual = BdPijamas.GetResumenHastaMes(Fecha.Year, Fecha.Month, Trabajador.Id);
                 // Extramos los datos hasta el año anterior
-                //TODO: Se ha cambiado el mes y día de la hora anterior de 11,30 a 12,1. Esto hace que se incluya la regulación de DCs.
                 DateTime fechaanterior = Fecha.Month == 12 ? new DateTime(Fecha.Year, 12, 1) : new DateTime(Fecha.Year - 1, 12, 1);
-                DateTime fechaanterior2 = Fecha.Month == 12 ? new DateTime(Fecha.Year, 11, 30) : new DateTime(Fecha.Year - 1, 11, 30);
                 fechaanterior = fechaanterior.AddMonths(-1);
                 HastaAñoAnterior = BdPijamas.GetResumenHastaMes(fechaanterior.Year, fechaanterior.Month, Trabajador.Id);
 
@@ -560,7 +558,7 @@ namespace Orion.Pijama {
         /// <summary>
         /// Descansos compensatorios pendientes hasta el año anterior.
         /// </summary>
-        public decimal DCsPendientesHastaAñoAnterior { //TODO: Cambiamos el tipo int por decimal.
+        public decimal DCsPendientesHastaAñoAnterior {
             get {
                 return Trabajador.Descansos +
                        HastaAñoAnterior.DCsRegulados -

@@ -695,8 +695,6 @@ namespace Orion.ViewModels {
                     }
                 }
             }
-            //TODO: Implementar.
-
         }
         #endregion
 
@@ -900,10 +898,9 @@ namespace Orion.ViewModels {
                                     case 4: estadistica.Turno4 += 1; break;
                                 }
                                 // Horas
-                                estadistica.Trabajadas += dp.GraficoTrabajado.TrabajadasReales; //TODO: Verificar si son reales o ajustadas a 7:20
+                                estadistica.Trabajadas += dp.GraficoTrabajado.TrabajadasReales;
                                 estadistica.Acumuladas += dp.GraficoTrabajado.Acumuladas;
                                 estadistica.Nocturnas += dp.GraficoTrabajado.Nocturnas;
-                                //TODO: Añadir dato: 
                                 estadistica.TiempoPartido += dp.GraficoTrabajado.TiempoPartido;
                                 // Si es menor de 7:20 se añade a menores, si no, a mayores.
                                 if (estadistica.Trabajadas < App.Global.Convenio.JornadaMedia) {
@@ -945,7 +942,6 @@ namespace Orion.ViewModels {
                 string nombreArchivo = String.Format("{0:yyyy}-{0:MM} - {1} - Estadisticas Calendarios", FechaActual, App.Global.CentroActual.ToString());
                 if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
                 nombreArchivo += ".pdf";
-                //TODO: Cambiar tipo de informe.
                 string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasCalendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
                 if (ruta != "") {
                     iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);

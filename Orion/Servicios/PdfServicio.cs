@@ -5,20 +5,13 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using System;
 using iText.Forms;
 using iText.Forms.Fields;
-using iText.Kernel.Colors;
-using iText.Kernel.Pdf.Canvas;
 using iText.Layout.Element;
 using iText.Layout.Renderer;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Orion.Servicios
-{
+namespace Orion.Servicios {
     public class PdfServicio {
 
         // ====================================================================================================
@@ -30,16 +23,16 @@ namespace Orion.Servicios
         /// el nombre del campo, el margen del mismo sobre la celda y la alineación
         /// </summary>
         public class TextFieldRenderer : CellRenderer {
-            //TODO: Hacer propiedades en lugar de campos.
+
             public String fieldName;
             public float margenExterior;
             public int justificacion;
             public float fontSize;
             public string valor = "";
-            
+
 
             public TextFieldRenderer(Cell modelElement, String fieldName, float margenExterior, float fontSize, int justificacion = PdfFormField.ALIGN_LEFT) : base(modelElement) {
-                
+
                 this.fieldName = fieldName;
                 this.margenExterior = margenExterior;
                 this.justificacion = justificacion;
@@ -47,7 +40,7 @@ namespace Orion.Servicios
             }
 
 
-            public TextFieldRenderer(Cell modelElement, String fieldName, string valor, float margenExterior, float fontSize, int justificacion = PdfFormField.ALIGN_LEFT) : base(modelElement){
+            public TextFieldRenderer(Cell modelElement, String fieldName, string valor, float margenExterior, float fontSize, int justificacion = PdfFormField.ALIGN_LEFT) : base(modelElement) {
 
                 this.fieldName = fieldName;
                 this.margenExterior = margenExterior;
@@ -61,7 +54,7 @@ namespace Orion.Servicios
             /// Mantiene un margen de 2, fuente de 10 puntos y alineación a la izquierda.
             /// </summary>
             public TextFieldRenderer(Cell modelElement, String fieldName) : base(modelElement) {
-                
+
                 this.fieldName = fieldName;
                 this.margenExterior = 2;
                 this.justificacion = PdfFormField.ALIGN_LEFT;

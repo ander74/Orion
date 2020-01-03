@@ -704,7 +704,7 @@ namespace Orion.PrintModel {
                     estiloTitulo.SetWidth(UnitValue.CreatePercentValue(100));
                     estiloTitulo.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
                     Table tablaTitulo = InformesServicio.GetTablaEncabezadoSindicato(textoTitulo, estiloTitulo);
-                    // TODO: Creamos la tabla de informacion
+                    // Creamos la tabla de informacion
                     string textoGrafico = "Gráfico: " + (string)cnvNumGrafico.Convert(g.Numero, null, null, null) + "   Turno: " + g.Turno.ToString("0");
                     string textoValoracion = "Valoración: " + (string)cnvHora.Convert(g.Valoracion, null, VerValores.NoCeros, null);
                     Table tablaInformacion = PdfTools.GetTablaTitulo(textoGrafico, textoValoracion);
@@ -712,7 +712,7 @@ namespace Orion.PrintModel {
                     tablaInformacion.SetFontSize(9).SetBold();
                     // Creamos la tabla de valoraciones
                     Table tablaValoraciones = GetGraficoIndividual(g);
-                    // TODO: Creamos la tabla de valores
+                    // Creamos la tabla de valores
                     string textoValores = "";
                     if (g.Desayuno > 0) textoValores += String.Format("Desayuno: {0:0.00}  ", g.Desayuno);
                     if (g.Comida > 0) textoValores += String.Format("Comida: {0:0.00}  ", g.Comida);

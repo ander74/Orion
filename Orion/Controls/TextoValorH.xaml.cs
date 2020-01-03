@@ -155,35 +155,30 @@ namespace Orion.Controls {
                         resultado = ts1.ToTexto();
                         if (ts1.Ticks == 0) esCero = true;
                     }
-                    //TODO: Añadir clase Tiempo.
                     break;
                 case Formato.HoraPlus:
                     if (baseValue is TimeSpan ts2) {
                         resultado = ts2.ToTexto(true);
                         if (ts2.Ticks == 0) esCero = true;
                     }
-                    //TODO: Añadir clase Tiempo.
                     break;
                 case Formato.HoraMixta:
                     if (baseValue is TimeSpan ts3) {
                         resultado = $"{ts3.ToTexto()} ({ts3.ToDecimal().ToString("0.00")})";
                         if (ts3.Ticks == 0) esCero = true;
                     }
-                    //TODO: Añadir clase Tiempo.
                     break;
                 case Formato.HoraPlusMixta:
                     if (baseValue is TimeSpan ts4) {
                         resultado = $"{ts4.ToTexto(true)} ({ts4.ToDecimal().ToString("0.00")})";
                         if (ts4.Ticks == 0) esCero = true;
                     }
-                    //TODO: Añadir clase Tiempo.
                     break;
                 case Formato.Fecha:
                     if (baseValue is DateTime dt) {
                         resultado = dt.ToString("dd-MM-yyyy");
                         if (dt == DateTime.MinValue) esCero = true;
                     }
-                    //TODO: Añadir clase Tiempo.
                     break;
                 default:
                     if (baseValue is string s && string.IsNullOrEmpty(s.Trim())) {

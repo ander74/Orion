@@ -6,24 +6,16 @@
 // ===============================================
 #endregion
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Orion.Models;
-using Orion.DataModels;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.Windows;
-using System.Windows.Controls;
-using Orion.Views;
-using Orion.Properties;
-using Orion.Servicios;
 using Orion.Config;
+using Orion.DataModels;
+using Orion.Models;
+using Orion.Servicios;
 
 namespace Orion.ViewModels {
 
-	public partial class OpcionesViewModel: NotifyBase {
+	public partial class OpcionesViewModel : NotifyBase {
 
 
 		// ====================================================================================================
@@ -62,7 +54,7 @@ namespace Orion.ViewModels {
 			ListaPluses.ItemPropertyChanged += ListaPluses_ItemPropertyChanged;
 		}
 
-	
+
 		public void GuardarDatos() {
 			HayCambios = false;
 			//if (ListaFestivos != null && ListaFestivos.Count > 0) {
@@ -72,8 +64,7 @@ namespace Orion.ViewModels {
 			//	BdFestivos.BorrarFestivos(_listaborrados);
 			//	_listaborrados.Clear();
 			//}
-			if (ListaPluses != null && ListaPluses.Any() && App.Global.CadenaConexion != null)
-			{
+			if (ListaPluses != null && ListaPluses.Any() && App.Global.CadenaConexion != null) {
 				BdPluses.GuardarPluses(ListaPluses.Where(item => item.Nuevo || item.Modificado));
 			}
 		}
@@ -95,8 +86,7 @@ namespace Orion.ViewModels {
 		// USO DE LOS PLUSES
 		// ----------------------------------------------------------------------------------------------------
 
-		public Pluses GetPluses(int año)
-		{
+		public Pluses GetPluses(int año) {
 			Pluses resultado = ListaPluses.FirstOrDefault(p => p.Año == año);
 			if (resultado == null) resultado = new Pluses();
 			return resultado;
@@ -131,8 +121,7 @@ namespace Orion.ViewModels {
 		//}
 
 
-		private void ListaPluses_ItemPropertyChanged(object sender, ItemPropertyChangedEventArgs e)
-		{
+		private void ListaPluses_ItemPropertyChanged(object sender, ItemPropertyChangedEventArgs e) {
 			HayCambios = true;
 		}
 
@@ -147,33 +136,6 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region PROPIEDADES
 		// ====================================================================================================
-
-		//private ObservableCollection<Festivo> _listafestivos = new ObservableCollection<Festivo>();
-		//public ObservableCollection<Festivo> ListaFestivos {
-		//	get { return _listafestivos; }
-		//	set {
-		//		if (_listafestivos != value) {
-		//			_listafestivos = value;
-		//			_listafestivos.CollectionChanged += ListaFestivos_CollectionChanged;
-		//			foreach(Festivo f in _listafestivos) {
-		//				f.ObjetoCambiado += ObjetoCambiadoEventHandler;
-		//			}
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
-
-
-		//private int _añofestivos;
-		//public int AñoFestivos {
-		//	get { return _añofestivos; }
-		//	set {
-		//		if (_añofestivos != value) {
-		//			_añofestivos = value;
-		//			PropiedadCambiada();
-		//		}
-		//	}
-		//}
 
 		public bool HayCambios { get; set; }
 
@@ -231,37 +193,34 @@ namespace Orion.ViewModels {
 		// ----------------------------------------------------------------------------------------------------
 
 		private FullObservableCollection<Pluses> _listapluses = new FullObservableCollection<Pluses>();
-		public FullObservableCollection<Pluses> ListaPluses
-		{
+		public FullObservableCollection<Pluses> ListaPluses {
 			get { return _listapluses; }
 			set { SetValue(ref _listapluses, value); }
 		}
 
 
 		private int _añopluses;
-		public int AñoPluses
-		{
+		public int AñoPluses {
 			get { return _añopluses; }
 			set {
 				if (_añopluses != value) {
 					if (!ListaPluses.Any(p => p.Año == value)) {
-						ListaPluses.Add(new Pluses(value, ListaPluses.FirstOrDefault(p => p.Año == _añopluses)));
+						ListaPluses.Add(new Pluses(value, ListaPluses.FirstOrDefault(p => p.Año == value - 1)));
 						HayCambios = true;
 					}
 					_añopluses = value;
 					PropiedadCambiada();
 					PlusesActuales = ListaPluses.FirstOrDefault(p => p.Año == _añopluses);
 				}
-			} 
+			}
 		}
 
 
 
 		private Pluses _plusesactuales;
-		public Pluses PlusesActuales
-		{
+		public Pluses PlusesActuales {
 			get { return _plusesactuales; }
-			set { SetValue(ref _plusesactuales, value); } 
+			set { SetValue(ref _plusesactuales, value); }
 		}
 
 
