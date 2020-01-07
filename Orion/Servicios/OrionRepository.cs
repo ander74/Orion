@@ -1209,7 +1209,7 @@ namespace Orion.Servicios {
                     "Sum(PlusLimpieza) AS xLimpieza, " +
                     "Sum(PlusPaqueteria) AS xPaqueteria " +
                     "FROM Graficos " +
-                    "WHERE Validez=@validez GROUP BY Validez, Turno ORDER BY Validez, Turno;");
+                    "WHERE Validez=@validez AND Numero > 0 GROUP BY xValidez, xTurno ORDER BY xValidez, xTurno;");
                 consulta.AddParameter("@jornadaMedia", jornadaMedia);
                 consulta.AddParameter("@validez", fecha);
                 return GetItems<EstadisticasGraficos>(consulta);
@@ -1267,7 +1267,7 @@ namespace Orion.Servicios {
                     "Sum(PlusLimpieza) AS xLimpieza, " +
                     "Sum(PlusPaqueteria) AS xPaqueteria " +
                     "FROM Graficos " +
-                    "WHERE strftime('%Y-%m-%d', Validez) >= strftime('%Y-%m-%d', @fecha) " +
+                    "WHERE strftime('%Y-%m-%d', Validez) >= strftime('%Y-%m-%d', @fecha) AND Numero > 0 " +
                     "GROUP BY Validez, Turno ORDER BY Validez, Turno;");
                 consulta.AddParameter("@jornadaMedia", jornadaMedia);
                 consulta.AddParameter("@fecha", fecha);

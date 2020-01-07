@@ -183,7 +183,7 @@ namespace Orion.Models {
 
         public void FromReader(SQLiteDataReader lector) {
             _validez = lector.ToDateTime("xValidez");
-            _turno = lector.ToInt16("xTurno");
+            _turno = lector.ToInt32("xTurno");
             _numerograficos = lector.ToInt32("xNumero");
             _valoracion = lector.ToTimeSpanNulable("xValoracion").Value;
             _trabajadas = lector.ToTimeSpanNulable("xTrabajadas").Value;

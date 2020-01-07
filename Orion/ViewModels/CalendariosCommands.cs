@@ -258,7 +258,7 @@ namespace Orion.ViewModels {
 
         private bool PuedePijamasEnPdf() {
             if (VistaCalendarios == null) return false;
-            return VistaCalendarios.Count > 0;
+            return VistaCalendarios.Count > 1;
         }
 
         private async void PijamasEnPdf() {
@@ -301,7 +301,7 @@ namespace Orion.ViewModels {
 
         private bool PuedePijamasSeparadosEnPdf() {
             if (VistaCalendarios == null) return false;
-            return VistaCalendarios.Count > 0;
+            return VistaCalendarios.Count > 1;
         }
 
         private async void PijamasSeparadosEnPdf() {
@@ -553,7 +553,7 @@ namespace Orion.ViewModels {
 
         private bool PuedeCalendariosEnPdf() {
             if (VistaCalendarios == null) return false;
-            return VistaCalendarios.Count > 0;
+            return VistaCalendarios.Count > 1;
         }
 
         private async void CalendariosEnPDF() {
@@ -571,7 +571,7 @@ namespace Orion.ViewModels {
                     doc.GetPdfDocument().GetDocumentInfo().SetTitle("Calendarios");
                     doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
                     doc.SetMargins(25, 25, 25, 25);
-                    await CalendarioPrintModel.CrearCalendariosEnPdf_7(doc, VistaCalendarios, FechaActual);
+                    await CalendarioPrintModel.CrearCalendariosEnPdf(doc, VistaCalendarios, FechaActual);
                     doc.Close();
                     if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
                 }
@@ -599,7 +599,7 @@ namespace Orion.ViewModels {
 
         private bool PuedeCalendariosEnPdfConFallos() {
             if (VistaCalendarios == null) return false;
-            return VistaCalendarios.Count > 0;
+            return VistaCalendarios.Count > 1;
         }
 
         private async void CalendariosEnPdfConFallos() {
@@ -617,7 +617,7 @@ namespace Orion.ViewModels {
                     doc.GetPdfDocument().GetDocumentInfo().SetTitle("Fallos de Calendario");
                     doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
                     doc.SetMargins(25, 25, 25, 25);
-                    await CalendarioPrintModel.FallosEnCalendariosEnPdf_7(doc, VistaCalendarios, FechaActual);
+                    await CalendarioPrintModel.FallosEnCalendariosEnPdf(doc, VistaCalendarios, FechaActual);
                     doc.Close();
                     if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
                 }
@@ -858,7 +858,8 @@ namespace Orion.ViewModels {
         }
 
         private bool PuedePdfEsatdisticas() {
-            return true;
+            if (VistaCalendarios == null) return false;
+            return VistaCalendarios.Count > 1;
         }
 
         private async void PdfEsatdisticas() {
@@ -973,7 +974,8 @@ namespace Orion.ViewModels {
         }
 
         private bool PuedePdfEstadisticasMes() {
-            return ListaCalendarios.Count > 0;
+            if (VistaCalendarios == null) return false;
+            return VistaCalendarios.Count > 1;
         }
 
         private async void PdfEstadisticasMes() {

@@ -124,7 +124,7 @@ namespace Orion.PrintModel {
 
 
         // ====================================================================================================
-        #region MÉTODOS PRIVADOS (ITEXT 7)
+        #region MÉTODOS PRIVADOS
         // ====================================================================================================
 
         private static Table GetTablaCalendarios(ListCollectionView listaCalendarios, DateTime fecha) {
@@ -787,88 +787,13 @@ namespace Orion.PrintModel {
 
 
         // ====================================================================================================
-        #region MÉTODOS PÚBLICOS
-        // ====================================================================================================
-        public static async Task CrearCalendariosEnPdf(Workbook Libro, ListCollectionView lista, DateTime fecha) {
-
-            await Task.Run(() => {
-                // Definimos la hoja.
-                Worksheet Hoja = Libro.Worksheets[1];
-                // Título
-                Hoja.Range["A1"].Value = string.Format("{0:MMMM} - {0:yyyy}", fecha).ToUpper();
-                // Centro
-                Hoja.Range["AF1"].Value = App.Global.CentroActual.ToString().ToUpper();
-                // Llenamos la plantilla con los calendarios.
-                int fila = 3;
-                double num = 1;
-                foreach (Object obj in lista) {
-                    double valor = num / lista.Count * 100;
-                    App.Global.ValorBarraProgreso = valor;
-                    num++;
-                    Calendario cal = obj as Calendario;
-                    if (cal == null) continue;
-                    if (fila % 2 == 0) Hoja.Range[Hoja.Cells[fila, 1], Hoja.Cells[fila, 32]].Interior.Color = System.Drawing.Color.FromArgb(255, 252, 228, 214);
-                    LlenarExcelCalendario(Hoja, fila, cal);
-                    fila++;
-                }
-                // Rellenamos los bordes de los calendarios.
-                Hoja.Range["A2", Hoja.Cells[fila - 1, 32]].Borders.LineStyle = XlLineStyle.xlContinuous;
-                Hoja.Range["A2", Hoja.Cells[fila - 1, 32]].Borders.Color = XlRgbColor.rgbBlack;
-                Hoja.Range["A2", Hoja.Cells[fila - 1, 32]].Borders.Weight = XlBorderWeight.xlThin;
-                Hoja.Range["A2", Hoja.Cells[fila - 1, 32]].BorderAround(XlLineStyle.xlContinuous, XlBorderWeight.xlMedium, XlRgbColor.rgbBlack);
-                Hoja.Range["A2:AF2"].BorderAround(XlLineStyle.xlContinuous, XlBorderWeight.xlMedium, XlColorIndex.xlColorIndexNone, XlRgbColor.rgbBlack);
-                Hoja.Range["A2", Hoja.Cells[fila - 1, 1]].BorderAround(XlLineStyle.xlContinuous, XlBorderWeight.xlMedium,
-                                                                       XlColorIndex.xlColorIndexNone, XlRgbColor.rgbBlack);
-
-                // Establecemos el área de impresión.
-                Hoja.PageSetup.PrintArea = Hoja.Range["A1", Hoja.Cells[fila - 1, 32]].Address;
-            });
-
-        }
-
-
-        public static async Task FallosEnCalendariosEnPdf(Workbook Libro, ListCollectionView lista, DateTime fecha) {
-
-            await Task.Run(() => {
-                // Definimos la hoja.
-                Worksheet Hoja = Libro.Worksheets[1];
-                // Título
-                Hoja.Range["A1"].Value = string.Format("{0:MMMM} - {0:yyyy}", fecha).ToUpper();
-                // Centro
-                Hoja.Range["C1"].Value = App.Global.CentroActual.ToString().ToUpper();
-                // Llenamos la plantilla con los calendarios.
-                int fila = 3;
-                double num = 1;
-                foreach (Object obj in lista) {
-                    double valor = num / lista.Count * 100;
-                    App.Global.ValorBarraProgreso = valor;
-                    num++;
-                    Calendario cal = obj as Calendario;
-                    if (cal == null) continue;
-                    if (!string.IsNullOrWhiteSpace(cal.Informe)) {
-                        if (fila % 2 == 0) Hoja.Range[Hoja.Cells[fila, 1], Hoja.Cells[fila, 3]].Interior.Color = System.Windows.Media.Color.FromArgb(255, 252, 228, 214);
-                        LlenarExcelCalendarioConFallos(Hoja, fila, cal, cal.Informe);
-                        fila++;
-                    }
-                }
-
-                // Establecemos el área de impresión.
-                Hoja.PageSetup.PrintArea = Hoja.Range["A1", Hoja.Cells[fila - 1, 3]].Address;
-            });
-
-        }
-
-        #endregion
-
-
-        // ====================================================================================================
         #region MÉTODOS PÚBLICOS (ITEXT 7)
         // ====================================================================================================
 
         /// <summary>
         /// Crea un PDF con la tabla de calendarios
         /// </summary>
-        public static async Task CrearCalendariosEnPdf_7(Document doc, ListCollectionView listaCalendarios, DateTime fecha) {
+        public static async Task CrearCalendariosEnPdf(Document doc, ListCollectionView listaCalendarios, DateTime fecha) {
 
             await Task.Run(() => {
                 try {
@@ -882,7 +807,7 @@ namespace Orion.PrintModel {
         /// <summary>
         /// Crea un PDF con una tabla y los fallos de todos los calendarios.
         /// </summary>
-		public static async Task FallosEnCalendariosEnPdf_7(Document doc, ListCollectionView listaCalendarios, DateTime fecha) {
+		public static async Task FallosEnCalendariosEnPdf(Document doc, ListCollectionView listaCalendarios, DateTime fecha) {
 
             await Task.Run(() => {
                 try {
