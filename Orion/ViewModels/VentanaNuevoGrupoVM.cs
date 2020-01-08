@@ -7,11 +7,8 @@
 #endregion
 using System;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
-using Orion.Config;
 using Orion.DataModels;
 using Orion.Models;
 using Orion.Servicios;
@@ -256,252 +253,140 @@ namespace Orion.ViewModels {
         #region  MÉTODOS AUXILIARES
         // ====================================================================================================
 
-        [Obsolete("No se utiliza.")]
-        private void CrearGrupoDeWord2() {
-
-            // Si el archivo no existe, salimos.
-            if (!File.Exists(ArchivoWord)) return;
-
-            // Creamos la aplicación de Word.
-            Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application();
-            Microsoft.Office.Interop.Word.Document wordDoc = null;
-            wordApp.Visible = false;
-
-            try {
-                // Abrimos el documento de word.
-                wordDoc = wordApp.Documents.Open(ArchivoWord);
-
-                // Añadimos un retorno de carro delante de las valoraciones.
-                wordDoc.Content.Find.Execute("Balorazioa", false, true, false, false, false, true, 1, false, "\rBalorazioa", 2, false, false, false, false);
-
-                // Creamos el grupo nuevo
-                if (String.IsNullOrEmpty(Notas.Trim())) Notas = FechaActual.ToString("dd-MM-yyyy");
-                int idgruponuevo = BdGruposGraficos.NuevoGrupo(FechaActual, Notas);
-                // Definimos las variables a usar
-                bool EnUnGrafico = false;
-                Grafico grafico = new Grafico();
-                ValoracionGrafico valoracionanterior = new ValoracionGrafico();
-                bool IniciaGrafico = false;
-                bool SalirDelBucle = false;
-
-                // Recorremos los párrafos del documento.
-                foreach (Microsoft.Office.Interop.Word.Paragraph parrafo in wordDoc.Paragraphs) {
-
-                    ValoracionGrafico valoracion = new ValoracionGrafico();
-                    string texto = GestionGraficos.LimpiarTexto(parrafo.Range.Text);
-                    GestionGraficos.TipoValoracion tipo = GestionGraficos.ParseaTexto(texto, ref valoracion);
-
-                    switch (tipo) {
-                        case GestionGraficos.TipoValoracion.InicioGrafico:
-                            if (EnUnGrafico) {
-                                // Gestionamos el error
-                                if (VerErrorGrafico(grafico.Numero, parrafo.Range.Text, texto)) {
-                                    grafico = new Grafico();
-                                    grafico.IdGrupo = idgruponuevo;
-                                    grafico.Numero = (int)valoracion.Linea;
-                                    IniciaGrafico = true;
-                                    EnUnGrafico = true;
-                                    continue;
-                                } else {
-                                    SalirDelBucle = true;
-                                }
-                            } else {
-                                grafico = new Grafico();
-                                grafico.IdGrupo = idgruponuevo;
-                                grafico.Numero = (int)valoracion.Linea;
-                                if (grafico.Numero % 2 == 0) grafico.Turno = 2;
-                                IniciaGrafico = true;
-                                EnUnGrafico = true;
-                            }
-                            break;
-                        case GestionGraficos.TipoValoracion.FinalGrafico:
-                            if (!EnUnGrafico) {
-                                // Gestionamos el error
-                                if (VerErrorGrafico(grafico.Numero, parrafo.Range.Text, texto)) {
-                                    EnUnGrafico = false;
-                                    IniciaGrafico = false;
-                                    continue;
-                                } else {
-                                    SalirDelBucle = true;
-                                }
-                            } else {
-                                grafico.Final = valoracionanterior.Inicio;
-                                grafico.Valoracion = valoracion.Tiempo;
-                                grafico.Recalcular();
-                                BdGraficos.InsertarGrafico(grafico);
-                                IniciaGrafico = false;
-                                EnUnGrafico = false;
-                            }
-                            break;
-                        case GestionGraficos.TipoValoracion.Completo:
-                        case GestionGraficos.TipoValoracion.Parcial:
-                        case GestionGraficos.TipoValoracion.ParcialCodigo:
-                        case GestionGraficos.TipoValoracion.ParcialLinea:
-                        case GestionGraficos.TipoValoracion.ParcialVacio:
-                            if (EnUnGrafico) {
-                                if (IniciaGrafico) {
-                                    grafico.Inicio = valoracion.Inicio;
-                                    IniciaGrafico = false;
-                                } else {
-                                    valoracionanterior.Final = valoracion.Inicio;
-                                }
-                                grafico.ListaValoraciones.Add(valoracion);
-                                valoracionanterior = valoracion;
-                            }
-                            break;
-                        case GestionGraficos.TipoValoracion.Informacion:
-                            if (EnUnGrafico) {
-                                if (!IniciaGrafico) {
-                                    valoracion.Inicio = valoracionanterior.Inicio;
-                                }
-                                grafico.ListaValoraciones.Add(valoracion);
-                            }
-                            break;
-                    }
-                    if (SalirDelBucle) break;
-                }
-
-            } catch (Exception ex) {
-                mensajes.VerError("VentanaNuevoGrupoVM.CrearGrupoDeWord", ex);
-                return;
-            } finally {
-                if (wordDoc != null) wordDoc.Close(false);
-                if (wordApp != null) wordApp.Quit(false);
-            }
-        }
-
-
         private void CrearGrupoDeWord() {
 
-            // Si el archivo no existe, salimos.
-            if (!File.Exists(ArchivoWord)) return;
-
-            // Creamos la aplicación de Word.
-            Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application();
-            Microsoft.Office.Interop.Word.Document wordDoc = null;
-            wordApp.Visible = false;
-
-            try {
-                // Abrimos el documento de word.
-                wordDoc = wordApp.Documents.Open(ArchivoWord);
-
-                StringBuilder sb = new StringBuilder();
-
-                foreach (Microsoft.Office.Interop.Word.Paragraph parrafo in wordDoc.Paragraphs) {
-                    string t = parrafo.Range.Text + "\n";
-                    //t.Replace("\r", "\n");
-                    t = t.Replace("Balorazioa", "Final\nBalorazioa");
-                    t = t.Replace("0h", "0");
-                    t = t.Replace("5h", "5");
-                    sb.Append(t);
-                }
-                string[] todo = sb.ToString().Split('\n');
+            // TODO: Deshabilitado por el momento...
 
 
-                // Creamos el grupo nuevo
-                //if (String.IsNullOrEmpty(Notas.Trim())) Notas = FechaActual.ToString("dd-MM-yyyy");
-                //int idgruponuevo = BdGruposGraficos.NuevoGrupo(FechaActual, Notas);
-                App.Global.Repository.NuevoGrupo(FechaActual);
-                // Definimos las variables a usar
-                bool EnUnGrafico = false;
-                Grafico grafico = new Grafico();
-                ValoracionGrafico valoracionanterior = new ValoracionGrafico();
-                bool IniciaGrafico = false;
-                bool SalirDelBucle = false;
+            //// Si el archivo no existe, salimos.
+            //if (!File.Exists(ArchivoWord)) return;
 
-                // Recorremos los párrafos del documento.
-                foreach (string parrafo in todo) {
+            //// Creamos la aplicación de Word.
+            //Microsoft.Office.Interop.Word.Application wordApp = new Microsoft.Office.Interop.Word.Application();
+            //Microsoft.Office.Interop.Word.Document wordDoc = null;
+            //wordApp.Visible = false;
 
-                    ValoracionGrafico valoracion = new ValoracionGrafico();
-                    string texto = GestionGraficos.LimpiarTexto(parrafo);
-                    GestionGraficos.TipoValoracion tipo = GestionGraficos.ParseaTexto(texto, ref valoracion);
+            //try {
+            //    // Abrimos el documento de word.
+            //    wordDoc = wordApp.Documents.Open(ArchivoWord);
 
-                    switch (tipo) {
-                        case GestionGraficos.TipoValoracion.InicioGrafico:
-                            if (EnUnGrafico) {
-                                // Gestionamos el error
-                                if (VerErrorGrafico(grafico.Numero, parrafo, texto)) {
-                                    grafico = new Grafico();
-                                    grafico.Validez = FechaActual;
-                                    grafico.Numero = (int)valoracion.Linea;
-                                    IniciaGrafico = true;
-                                    EnUnGrafico = true;
-                                    continue;
-                                } else {
-                                    SalirDelBucle = true;
-                                }
-                            } else {
-                                grafico = new Grafico();
-                                grafico.Validez = FechaActual;
-                                grafico.Numero = (int)valoracion.Linea;
-                                if (grafico.Numero % 2 == 0) grafico.Turno = 2;
-                                IniciaGrafico = true;
-                                EnUnGrafico = true;
-                            }
-                            break;
-                        case GestionGraficos.TipoValoracion.FinalGrafico:
-                            if (!EnUnGrafico) {
-                                // Gestionamos el error
-                                if (VerErrorGrafico(grafico.Numero, parrafo, texto)) {
-                                    EnUnGrafico = false;
-                                    IniciaGrafico = false;
-                                    continue;
-                                } else {
-                                    SalirDelBucle = true;
-                                }
-                            } else {
-                                grafico.Final = valoracionanterior.Inicio;
-                                grafico.Valoracion = valoracion.Tiempo;
-                                grafico.Recalcular();
-                                // Inferimos el día de la semana a la que pertenece.
-                                //if (grafico.Numero >= App.Global.PorCentro.LunDel && grafico.Numero <= App.Global.PorCentro.LunAl) grafico.DiaSemana = "L";
-                                //if (grafico.Numero >= App.Global.PorCentro.VieDel && grafico.Numero <= App.Global.PorCentro.VieAl) grafico.DiaSemana = "V";
-                                //if (grafico.Numero >= App.Global.PorCentro.SabDel && grafico.Numero <= App.Global.PorCentro.SabAl) grafico.DiaSemana = "S";
-                                //if (grafico.Numero >= App.Global.PorCentro.DomDel && grafico.Numero <= App.Global.PorCentro.DomAl) grafico.DiaSemana = "F";
-                                if (App.Global.PorCentro.RangoLun.Validar(grafico.Numero)) grafico.DiaSemana = "L";
-                                if (App.Global.PorCentro.RangoVie.Validar(grafico.Numero)) grafico.DiaSemana = "V";
-                                if (App.Global.PorCentro.RangoSab.Validar(grafico.Numero)) grafico.DiaSemana = "S";
-                                if (App.Global.PorCentro.RangoDom.Validar(grafico.Numero)) grafico.DiaSemana = "F";
-                                BdGraficos.InsertarGrafico(grafico);
-                                IniciaGrafico = false;
-                                EnUnGrafico = false;
-                            }
-                            break;
-                        case GestionGraficos.TipoValoracion.Completo:
-                        case GestionGraficos.TipoValoracion.Parcial:
-                        case GestionGraficos.TipoValoracion.ParcialCodigo:
-                        case GestionGraficos.TipoValoracion.ParcialLinea:
-                        case GestionGraficos.TipoValoracion.ParcialVacio:
-                            if (EnUnGrafico) {
-                                if (IniciaGrafico) {
-                                    grafico.Inicio = valoracion.Inicio;
-                                    IniciaGrafico = false;
-                                } else {
-                                    valoracionanterior.Final = valoracion.Inicio;
-                                }
-                                grafico.ListaValoraciones.Add(valoracion);
-                                valoracionanterior = valoracion;
-                            }
-                            break;
-                        case GestionGraficos.TipoValoracion.Informacion:
-                            if (EnUnGrafico) {
-                                if (!IniciaGrafico) {
-                                    valoracion.Inicio = valoracionanterior.Inicio;
-                                }
-                                grafico.ListaValoraciones.Add(valoracion);
-                            }
-                            break;
-                    }
-                    if (SalirDelBucle) break;
-                }
+            //    StringBuilder sb = new StringBuilder();
 
-            } catch (Exception ex) {
-                mensajes.VerError("VentanaNuevoGrupoVM.CrearGrupoDeWord", ex);
-                return;
-            } finally {
-                if (wordDoc != null) wordDoc.Close(false);
-                if (wordApp != null) wordApp.Quit(false);
-            }
+            //    foreach (Microsoft.Office.Interop.Word.Paragraph parrafo in wordDoc.Paragraphs) {
+            //        string t = parrafo.Range.Text + "\n";
+            //        //t.Replace("\r", "\n");
+            //        t = t.Replace("Balorazioa", "Final\nBalorazioa");
+            //        t = t.Replace("0h", "0");
+            //        t = t.Replace("5h", "5");
+            //        sb.Append(t);
+            //    }
+            //    string[] todo = sb.ToString().Split('\n');
+
+
+            //    // Creamos el grupo nuevo
+            //    //if (String.IsNullOrEmpty(Notas.Trim())) Notas = FechaActual.ToString("dd-MM-yyyy");
+            //    //int idgruponuevo = BdGruposGraficos.NuevoGrupo(FechaActual, Notas);
+            //    App.Global.Repository.NuevoGrupo(FechaActual);
+            //    // Definimos las variables a usar
+            //    bool EnUnGrafico = false;
+            //    Grafico grafico = new Grafico();
+            //    ValoracionGrafico valoracionanterior = new ValoracionGrafico();
+            //    bool IniciaGrafico = false;
+            //    bool SalirDelBucle = false;
+
+            //    // Recorremos los párrafos del documento.
+            //    foreach (string parrafo in todo) {
+
+            //        ValoracionGrafico valoracion = new ValoracionGrafico();
+            //        string texto = GestionGraficos.LimpiarTexto(parrafo);
+            //        GestionGraficos.TipoValoracion tipo = GestionGraficos.ParseaTexto(texto, ref valoracion);
+
+            //        switch (tipo) {
+            //            case GestionGraficos.TipoValoracion.InicioGrafico:
+            //                if (EnUnGrafico) {
+            //                    // Gestionamos el error
+            //                    if (VerErrorGrafico(grafico.Numero, parrafo, texto)) {
+            //                        grafico = new Grafico();
+            //                        grafico.Validez = FechaActual;
+            //                        grafico.Numero = (int)valoracion.Linea;
+            //                        IniciaGrafico = true;
+            //                        EnUnGrafico = true;
+            //                        continue;
+            //                    } else {
+            //                        SalirDelBucle = true;
+            //                    }
+            //                } else {
+            //                    grafico = new Grafico();
+            //                    grafico.Validez = FechaActual;
+            //                    grafico.Numero = (int)valoracion.Linea;
+            //                    if (grafico.Numero % 2 == 0) grafico.Turno = 2;
+            //                    IniciaGrafico = true;
+            //                    EnUnGrafico = true;
+            //                }
+            //                break;
+            //            case GestionGraficos.TipoValoracion.FinalGrafico:
+            //                if (!EnUnGrafico) {
+            //                    // Gestionamos el error
+            //                    if (VerErrorGrafico(grafico.Numero, parrafo, texto)) {
+            //                        EnUnGrafico = false;
+            //                        IniciaGrafico = false;
+            //                        continue;
+            //                    } else {
+            //                        SalirDelBucle = true;
+            //                    }
+            //                } else {
+            //                    grafico.Final = valoracionanterior.Inicio;
+            //                    grafico.Valoracion = valoracion.Tiempo;
+            //                    grafico.Recalcular();
+            //                    // Inferimos el día de la semana a la que pertenece.
+            //                    //if (grafico.Numero >= App.Global.PorCentro.LunDel && grafico.Numero <= App.Global.PorCentro.LunAl) grafico.DiaSemana = "L";
+            //                    //if (grafico.Numero >= App.Global.PorCentro.VieDel && grafico.Numero <= App.Global.PorCentro.VieAl) grafico.DiaSemana = "V";
+            //                    //if (grafico.Numero >= App.Global.PorCentro.SabDel && grafico.Numero <= App.Global.PorCentro.SabAl) grafico.DiaSemana = "S";
+            //                    //if (grafico.Numero >= App.Global.PorCentro.DomDel && grafico.Numero <= App.Global.PorCentro.DomAl) grafico.DiaSemana = "F";
+            //                    if (App.Global.PorCentro.RangoLun.Validar(grafico.Numero)) grafico.DiaSemana = "L";
+            //                    if (App.Global.PorCentro.RangoVie.Validar(grafico.Numero)) grafico.DiaSemana = "V";
+            //                    if (App.Global.PorCentro.RangoSab.Validar(grafico.Numero)) grafico.DiaSemana = "S";
+            //                    if (App.Global.PorCentro.RangoDom.Validar(grafico.Numero)) grafico.DiaSemana = "F";
+            //                    BdGraficos.InsertarGrafico(grafico);
+            //                    IniciaGrafico = false;
+            //                    EnUnGrafico = false;
+            //                }
+            //                break;
+            //            case GestionGraficos.TipoValoracion.Completo:
+            //            case GestionGraficos.TipoValoracion.Parcial:
+            //            case GestionGraficos.TipoValoracion.ParcialCodigo:
+            //            case GestionGraficos.TipoValoracion.ParcialLinea:
+            //            case GestionGraficos.TipoValoracion.ParcialVacio:
+            //                if (EnUnGrafico) {
+            //                    if (IniciaGrafico) {
+            //                        grafico.Inicio = valoracion.Inicio;
+            //                        IniciaGrafico = false;
+            //                    } else {
+            //                        valoracionanterior.Final = valoracion.Inicio;
+            //                    }
+            //                    grafico.ListaValoraciones.Add(valoracion);
+            //                    valoracionanterior = valoracion;
+            //                }
+            //                break;
+            //            case GestionGraficos.TipoValoracion.Informacion:
+            //                if (EnUnGrafico) {
+            //                    if (!IniciaGrafico) {
+            //                        valoracion.Inicio = valoracionanterior.Inicio;
+            //                    }
+            //                    grafico.ListaValoraciones.Add(valoracion);
+            //                }
+            //                break;
+            //        }
+            //        if (SalirDelBucle) break;
+            //    }
+
+            //} catch (Exception ex) {
+            //    mensajes.VerError("VentanaNuevoGrupoVM.CrearGrupoDeWord", ex);
+            //    return;
+            //} finally {
+            //    if (wordDoc != null) wordDoc.Close(false);
+            //    if (wordApp != null) wordApp.Quit(false);
+            //}
         }
 
 

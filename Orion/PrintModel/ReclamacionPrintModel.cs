@@ -5,23 +5,16 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using iText.Forms;
 using iText.Forms.Fields;
 using iText.IO.Font.Constants;
 using iText.Kernel.Font;
 using iText.Kernel.Pdf;
-using Microsoft.Office.Interop.Excel;
 using Orion.Config;
-using Orion.Convertidores;
 using Orion.Models;
-using Orion.Properties;
-using Orion.Views;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Threading.Tasks;
-using System.Windows.Data;
 
 namespace Orion.PrintModel {
 
@@ -40,29 +33,6 @@ namespace Orion.PrintModel {
 		// ====================================================================================================
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
-
-		[Obsolete("Este método usa Excel y ya no es necesario. Usar GenerarReclamación")]
-		public static async Task CrearReclamacion(Workbook Libro, string[,] datos, DateTime fecha, Conductor trabajador, DateTime fechaReclamacion, string notas) {
-
-			await Task.Run(() => {
-				// Definimos la hoja.
-				Worksheet Hoja = Libro.Worksheets[1];
-				// Establecemos el centro, la fecha y el conductor.
-				Hoja.Range["A6"].Value = $"Centro: {App.Global.CentroActual.ToString().ToUpper()}";
-				Hoja.Range["A8"].Value = $"Trabajador/a: {trabajador.Apellidos} ({trabajador.Id:000})";
-				Hoja.Range["A10"].Value = $"{fecha:MMMM - yyyy}".ToUpper();
-				Hoja.Range["D10"].Value = $"'Reclamación Nº: {fechaReclamacion:yyyyMMdd}{trabajador.Id:000}";
-				Hoja.Range["C32"].Value = $"'{fechaReclamacion:dd - MM - yyyy}";
-				Hoja.Range["A32"].Value = notas;
-				// Pegamos los datos
-				Range rango = Hoja.Range["A13:D29"];
-				rango.Value = datos;
-			});
-
-
-
-		}
-
 
 		public static async Task GenerarReclamacion(Centros centro, Conductor conductor, DateTime fecha, PdfDocument docPdf) {
 

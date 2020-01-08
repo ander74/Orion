@@ -231,7 +231,7 @@ namespace Orion.ViewModels {
                     doc.GetPdfDocument().GetDocumentInfo().SetTitle("Hoja Pijama");
                     doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{Pijama.Trabajador.Matricula} - {Pijama.Fecha.ToString("MMMM-yyyy").ToUpper()}");
                     doc.SetMargins(25, 25, 25, 25);
-                    await PijamaPrintModel.CrearPijamaEnPdf_7(doc, Pijama);
+                    await PijamaPrintModel.CrearPijamaEnPdf(doc, Pijama);
                     doc.Close();
                     if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
                 }
@@ -274,7 +274,7 @@ namespace Orion.ViewModels {
                     doc.GetPdfDocument().GetDocumentInfo().SetTitle("Hojas Pijama");
                     doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
                     doc.SetMargins(25, 25, 25, 25);
-                    await PijamaPrintModel.CrearTodosPijamasEnPdf_7(doc, VistaCalendarios);
+                    await PijamaPrintModel.CrearTodosPijamasEnPdf(doc, VistaCalendarios);
                     doc.Close();
                     if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
                 }
@@ -336,7 +336,7 @@ namespace Orion.ViewModels {
                         doc.GetPdfDocument().GetDocumentInfo().SetTitle("Hoja Pijama");
                         doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{hojaPijama.Trabajador.Matricula} - {hojaPijama.Fecha.ToString("MMMM-yyyy").ToUpper()}");
                         doc.SetMargins(25, 25, 25, 25);
-                        await PijamaPrintModel.CrearPijamaEnPdf_7(doc, hojaPijama);
+                        await PijamaPrintModel.CrearPijamaEnPdf(doc, hojaPijama);
                         doc.Close();
                     }
                 }

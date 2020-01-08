@@ -14,7 +14,6 @@ namespace Orion.ViewModels {
     using System.Linq;
     using System.Windows.Input;
     using DataModels;
-    using Microsoft.Office.Interop.Excel;
     using Models;
     using PrintModel;
     using Servicios;
@@ -576,7 +575,7 @@ namespace Orion.ViewModels {
                     doc.GetPdfDocument().GetDocumentInfo().SetTitle("Gráficos");
                     doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{GrupoSeleccionado.Validez.ToString("dd-MMMM-yyyy").ToUpper()}");
                     doc.SetMargins(25, 25, 25, 25);
-                    await GraficosPrintModel.CrearGraficosEnPdf_7(doc, VistaGraficos, GrupoSeleccionado.Validez);
+                    await GraficosPrintModel.CrearGraficosEnPdf(doc, VistaGraficos, GrupoSeleccionado.Validez);
                     doc.Close();
                     if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
                 }
@@ -621,7 +620,7 @@ namespace Orion.ViewModels {
                     doc.GetPdfDocument().GetDocumentInfo().SetTitle("Gráficos Individuales");
                     doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{GrupoSeleccionado.Validez.ToString("dd-MMMM-yyyy").ToUpper()}");
                     doc.SetMargins(25, 25, 25, 25);
-                    await GraficosPrintModel.CrearGraficosIndividualesEnPdf_7(doc, VistaGraficos, GrupoSeleccionado.Validez);
+                    await GraficosPrintModel.CrearGraficosIndividualesEnPdf(doc, VistaGraficos, GrupoSeleccionado.Validez);
                     doc.Close();
                     if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
                 }
@@ -672,27 +671,29 @@ namespace Orion.ViewModels {
         }
 
         private async void EstadisticasGraficos() {
-            // Creamos el libro a usar.
-            Workbook libro = null;
             try {
                 // Activamos la barra de progreso.
                 App.Global.IniciarProgreso("Creando PDF...");
-                // Definimos el nombre del archivo a guardar.
+                // Pedimos el archivo donde guardarlo.
                 string nombreArchivo = String.Format("Estadisticas Gráficos {0:yyyy}-{0:MM}-{0:dd} - {1}.pdf", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
                 if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
                 string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
                 if (ruta != "") {
-                    libro = Informes.GetArchivoExcel(TiposInforme.EstadisticasGraficos);
-                    await GraficosPrintModel.CrearEstadisticasGraficosEnPdf(libro, GrupoSeleccionado.Validez, GrupoSeleccionado.Id);
-                    Informes.ExportarLibroToPdf(libro, ruta, App.Global.Configuracion.AbrirPDFs);
+                    iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
+                    doc.GetPdfDocument().GetDocumentInfo().SetTitle("Estadísticas Gráficos");
+                    doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{GrupoSeleccionado.Validez.ToString("dd-MMMM-yyyy").ToUpper()}");
+                    doc.SetMargins(25, 25, 25, 25);
+                    await GraficosPrintModel.CrearEstadisticasGraficosEnPdf(doc, GrupoSeleccionado.Validez);
+                    doc.Close();
+                    if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
                 }
             } catch (Exception ex) {
                 Mensajes.VerError("GraficosCommands.EstadisticasGraficos", ex);
             } finally {
                 App.Global.FinalizarProgreso();
             }
-
         }
+
         #endregion
 
 
@@ -711,19 +712,21 @@ namespace Orion.ViewModels {
         }
 
         private async void EstadisticasGruposGraficos() {
-            // Creamos el libro a usar.
-            Workbook libro = null;
             try {
                 // Activamos la barra de progreso.
                 App.Global.IniciarProgreso("Creando PDF...");
-                // Definimos el nombre del archivo a guardar.
+                // Pedimos el archivo donde guardarlo.
                 string nombreArchivo = String.Format("Estadisticas Gráficos - {0}.pdf", App.Global.CentroActual.ToString());
                 if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
                 string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
                 if (ruta != "") {
-                    libro = Informes.GetArchivoExcel(TiposInforme.EstadisticasGraficos);
-                    await GraficosPrintModel.CrearEstadisticasGruposGraficosEnPdf(libro, FechaEstadisticas);
-                    Informes.ExportarHojaToPdf(libro, 1, ruta);
+                    iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
+                    doc.GetPdfDocument().GetDocumentInfo().SetTitle("Estadísticas Gráficos");
+                    doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaEstadisticas.ToString("dd-MMMM-yyyy").ToUpper()}");
+                    doc.SetMargins(25, 25, 25, 25);
+                    await GraficosPrintModel.CrearEstadisticasGruposGraficosEnPdf(doc, FechaEstadisticas);
+                    doc.Close();
+                    if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
                 }
             } catch (Exception ex) {
                 Mensajes.VerError("GraficosCommands.EstadisticasGruposGraficos", ex);
@@ -732,6 +735,8 @@ namespace Orion.ViewModels {
             }
 
         }
+
+
         #endregion
 
 
@@ -746,16 +751,20 @@ namespace Orion.ViewModels {
         }
 
         private async void EstadisticasGraficosPorCentros() {
-            // Creamos el libro a usar.
-            Workbook libro = null;
             try {
                 // Activamos la barra de progreso.
                 App.Global.IniciarProgreso("Creando PDF...");
-                // Definimos el nombre del archivo a guardar.
-                string nombreArchivo = String.Format("Estadisticas Gráficos Por Centros.pdf");
-                string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficosPorCentros, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
+                // Pedimos el archivo donde guardarlo.
+                string nombreArchivo = String.Format("Estadisticas Gráficos - {0}.pdf", App.Global.CentroActual.ToString());
+                if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
+                string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
                 if (ruta != "") {
-                    libro = Informes.GetArchivoExcel(TiposInforme.EstadisticasGraficosPorCentros);
+                    iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
+                    doc.GetPdfDocument().GetDocumentInfo().SetTitle("Estadísticas Gráficos");
+                    doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaEstadisticas.ToString("dd-MMMM-yyyy").ToUpper()}");
+                    doc.SetMargins(25, 25, 25, 25);
+
+
                     List<EstadisticasGraficos> lista = new List<EstadisticasGraficos>();
                     List<EstadisticasGraficos> listaTemporal;
                     GrupoGraficos grupo = null;
@@ -799,9 +808,11 @@ namespace Orion.ViewModels {
                             lista.Add(e);
                         }
                     }
-                    //Action<double> modificaBarra = new Action<double>((valor) => App.Global.ValorBarraProgreso = valor);
-                    await GraficosPrintModel.CrearEstadisticasGraficosPorCentros(libro, lista);
-                    Informes.ExportarLibroToPdf(libro, ruta, App.Global.Configuracion.AbrirPDFs);
+
+                    await GraficosPrintModel.CrearEstadisticasGraficosPorCentros(doc, lista);
+
+                    doc.Close();
+                    if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
                 }
             } catch (Exception ex) {
                 Mensajes.VerError("GraficosCommands.EstadisticasGruposGraficos", ex);
@@ -810,6 +821,7 @@ namespace Orion.ViewModels {
             }
 
         }
+
         #endregion
 
 
