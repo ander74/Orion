@@ -52,7 +52,7 @@ namespace Orion.PrintModel {
             // Fuente a utilizar en la tabla.
             PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
             // Estilo de la tabla.
-            iText.Layout.Style estiloTabla = new iText.Layout.Style();
+            Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
                        .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                        .SetMargins(0, 0, 0, 0)
@@ -61,24 +61,24 @@ namespace Orion.PrintModel {
                        .SetFont(arial)
                        .SetFontSize(8);
             // Estilo titulos
-            iText.Layout.Style estiloTitulos = new iText.Layout.Style();
+            Style estiloTitulos = new Style();
             estiloTitulos.SetBold()
-                         .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                         .SetBorder(Border.NO_BORDER)
                          .SetFontSize(14);
             // Estilo de las celdas de encabezado.
-            iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+            Style estiloEncabezados = new Style();
             estiloEncabezados.SetBackgroundColor(new DeviceRgb(112, 173, 71))
                              .SetBold()
                              .SetFontSize(8);
             // Estilo de las celdas de izq.
-            iText.Layout.Style estiloIzq = new iText.Layout.Style();
+            Style estiloIzq = new Style();
             estiloIzq.SetBorderLeft(new SolidBorder(1));
             // Estilo de las celdas de med.
-            iText.Layout.Style estiloMed = new iText.Layout.Style();
+            Style estiloMed = new Style();
             estiloMed.SetBorderTop(new SolidBorder(1))
                      .SetBorderBottom(new SolidBorder(1));
             // Estilo de las celdas de der.
-            iText.Layout.Style estiloDer = new iText.Layout.Style();
+            Style estiloDer = new Style();
             estiloDer.SetBorderRight(new SolidBorder(1));
             // Creamos la tabla
             float[] ancho = new float[] { 3, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3 };
@@ -115,11 +115,11 @@ namespace Orion.PrintModel {
                 Grafico g = obj as Grafico;
                 if (g == null) continue;
                 // Estilo Fondo Alternativo
-                iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
+                Style estiloFondo = new Style().SetBackgroundColor(ColorConstants.WHITE);
                 if (indice % 2 == 0) estiloFondo.SetBackgroundColor(new DeviceRgb(226, 239, 218));
                 indice++;
                 // Estilo Valoracion Diferente
-                iText.Layout.Style estiloValDif = new iText.Layout.Style();
+                Style estiloValDif = new Style();
                 if (g.DiferenciaValoracion.Ticks != 0) estiloValDif.SetFontColor(new DeviceRgb(255, 20, 147));
                 // Escribimos el grafico.
                 tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvNumGrafico.Convert(g.Numero, null, null, null)}"))
@@ -169,7 +169,7 @@ namespace Orion.PrintModel {
             // Fuente a utilizar en la tabla.
             PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
             // Estilo de la tabla.
-            iText.Layout.Style estiloTabla = new iText.Layout.Style();
+            Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
                        .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                        .SetMargins(0, 0, 0, 0)
@@ -178,7 +178,7 @@ namespace Orion.PrintModel {
                        .SetFont(arial)
                        .SetFontSize(8);
             // Estilo de las celdas de encabezado.
-            iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+            Style estiloEncabezados = new Style();
             estiloEncabezados.SetBackgroundColor(new DeviceRgb(112, 173, 71))
                              .SetBold()
                              .SetFontSize(8);
@@ -197,7 +197,7 @@ namespace Orion.PrintModel {
             int indice = 1;
             foreach (var valoracion in grafico.ListaValoraciones) {
                 // Estilo Fondo Alternativo
-                iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
+                Style estiloFondo = new Style().SetBackgroundColor(ColorConstants.WHITE);
                 if (indice % 2 == 0) estiloFondo.SetBackgroundColor(new DeviceRgb(226, 239, 218));
                 indice++;
                 // Escribimos el grafico.
@@ -228,7 +228,7 @@ namespace Orion.PrintModel {
             // Fuente a utilizar en la tabla.
             PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
             // Estilo de la tabla.
-            iText.Layout.Style estiloTabla = new iText.Layout.Style();
+            Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
                        .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                        .SetMargins(10, 0, 10, 0)
@@ -237,27 +237,27 @@ namespace Orion.PrintModel {
                        .SetFont(arial)
                        .SetFontSize(8);
             // Estilo titulos
-            iText.Layout.Style estiloTitulos = new iText.Layout.Style();
+            Style estiloTitulos = new Style();
             estiloTitulos.SetBold()
-                         .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                         .SetBorder(Border.NO_BORDER)
                          .SetFontSize(14);
             // Estilo de las celdas de encabezado.
-            iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+            Style estiloEncabezados = new Style();
             estiloEncabezados.SetBackgroundColor(new DeviceRgb(112, 173, 71))
                              .SetBold()
                              .SetFontSize(8);
             // Estilo de las celdas de izq.
-            iText.Layout.Style estiloIzq = new iText.Layout.Style();
+            Style estiloIzq = new Style();
             estiloIzq.SetBorderLeft(new SolidBorder(1));
             // Estilo de las celdas de med.
-            iText.Layout.Style estiloMed = new iText.Layout.Style();
+            Style estiloMed = new Style();
             estiloMed.SetBorderTop(new SolidBorder(1))
                      .SetBorderBottom(new SolidBorder(1));
             // Estilo de las celdas de der.
-            iText.Layout.Style estiloDer = new iText.Layout.Style();
+            Style estiloDer = new Style();
             estiloDer.SetBorderRight(new SolidBorder(1));
             // Estilo Fondo SubCabecera
-            iText.Layout.Style estiloFondoSub = new iText.Layout.Style().SetBackgroundColor(new DeviceRgb(196, 215, 155));
+            Style estiloFondoSub = new Style().SetBackgroundColor(new DeviceRgb(196, 215, 155));
             // Creamos la tabla
             float[] ancho = new float[] { 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
             Table tabla = new Table(UnitValue.CreatePercentArray(ancho));
@@ -266,7 +266,7 @@ namespace Orion.PrintModel {
             // Añadimos las celdas de encabezado.
             tabla.AddHeaderCell(new Cell().Add(new Paragraph(fecha.ToString("dd-MMM-yyyy").Replace(".", "").ToUpper())).AddStyle(estiloEncabezados).AddStyle(estiloIzq).AddStyle(estiloDer).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Nº Gráficos")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Valoracion")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Valoración")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Trabajadas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Acumuladas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Nocturnas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
@@ -284,7 +284,7 @@ namespace Orion.PrintModel {
                 var estadistica = lista.FirstOrDefault(e => e.Turno == turno);
                 if (estadistica == null) estadistica = new EstadisticasGraficos { Turno = turno };
                 // Estilo Fondo Alternativo
-                iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
+                Style estiloFondo = new Style().SetBackgroundColor(ColorConstants.WHITE);
                 if (turno % 2 == 0) estiloFondo.SetBackgroundColor(new DeviceRgb(226, 239, 218));
                 // Añadimos el turno en texto.
                 tabla.AddCell(new Cell().Add(new Paragraph($"{turnos[turno]}")).AddStyle(estiloIzq).AddStyle(estiloDer).AddStyle(estiloFondoSub));
@@ -329,7 +329,7 @@ namespace Orion.PrintModel {
             // Fuente a utilizar en la tabla.
             PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
             // Estilo de la tabla.
-            iText.Layout.Style estiloTabla = new iText.Layout.Style();
+            Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
                        .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                        .SetMargins(10, 0, 10, 0)
@@ -338,31 +338,33 @@ namespace Orion.PrintModel {
                        .SetFont(arial)
                        .SetFontSize(8);
             // Estilo titulos
-            iText.Layout.Style estiloTitulos = new iText.Layout.Style();
+            Style estiloTitulos = new Style();
             estiloTitulos.SetBold()
-                         .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                         .SetBorder(Border.NO_BORDER)
                          .SetFontSize(14);
             // Estilo de las celdas de encabezado.
-            iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+            Style estiloEncabezados = new Style();
             estiloEncabezados.SetBackgroundColor(new DeviceRgb(170, 62, 26))
                              .SetBold()
                              .SetFontColor(ColorConstants.WHITE)
                              .SetFontSize(8);
 
             // Estilo de las celdas de izq.
-            iText.Layout.Style estiloIzq = new iText.Layout.Style();
+            Style estiloIzq = new Style();
             estiloIzq.SetBorderLeft(new SolidBorder(1));
             // Estilo de las celdas de med.
-            iText.Layout.Style estiloMed = new iText.Layout.Style();
+            Style estiloMed = new Style();
             estiloMed.SetBorderTop(new SolidBorder(1))
                      .SetBorderBottom(new SolidBorder(1));
             // Estilo de las celdas de der.
-            iText.Layout.Style estiloDer = new iText.Layout.Style();
+            Style estiloDer = new Style();
             estiloDer.SetBorderRight(new SolidBorder(1));
             // Estilo Fondo SubCabecera
-            iText.Layout.Style estiloFondoSub = new iText.Layout.Style().SetBackgroundColor(new DeviceRgb(236, 152, 123));
+            Style estiloFondoSub = new Style();
+            estiloFondoSub.SetBackgroundColor(new DeviceRgb(236, 152, 123));
+            estiloFondoSub.SetFontColor(ColorConstants.BLACK);
             // Estilo Encabezado Vertical
-            iText.Layout.Style estiloEncabezadoVertical = new iText.Layout.Style();
+            Style estiloEncabezadoVertical = new Style();
             estiloEncabezadoVertical.SetBorder(new SolidBorder(1));
             estiloEncabezadoVertical.SetFontSize(12);
             estiloEncabezadoVertical.SetBold();
@@ -378,7 +380,7 @@ namespace Orion.PrintModel {
             // Añadimos las celdas de encabezado.
             tabla.AddHeaderCell(new Cell(1, 2).Add(new Paragraph("")).AddStyle(estiloEncabezados).AddStyle(estiloIzq).AddStyle(estiloDer).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Nº Gráficos")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Valoracion")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Valoración")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Trabajadas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Acumuladas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Nocturnas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
@@ -417,7 +419,7 @@ namespace Orion.PrintModel {
                 estadistica.Limpieza = lista.Where(e => e.Turno == turno).Sum(e => e.Limpieza);
                 estadistica.Paqueteria = lista.Where(e => e.Turno == turno).Sum(e => e.Paqueteria);
                 // Estilo Fondo Alternativo
-                iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
+                Style estiloFondo = new Style().SetBackgroundColor(ColorConstants.WHITE);
                 if (turno % 2 == 0) estiloFondo.SetBackgroundColor(new DeviceRgb(249, 220, 210));
                 // Añadimos el turno en texto.
                 tabla.AddCell(new Cell().Add(new Paragraph($"{turnos[turno]}")).AddStyle(estiloIzq).AddStyle(estiloDer).AddStyle(estiloFondoSub));
@@ -489,24 +491,24 @@ namespace Orion.PrintModel {
                     break;
             }
             // Estilo de las celdas de encabezado.
-            iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+            Style estiloEncabezados = new Style();
             estiloEncabezados.SetBackgroundColor(fondoEncabezado)
                              .SetBold()
                              .SetFontSize(8);
             // Estilo de las celdas de izq.
-            iText.Layout.Style estiloIzq = new iText.Layout.Style();
+            Style estiloIzq = new Style();
             estiloIzq.SetBorderLeft(new SolidBorder(1));
             // Estilo de las celdas de med.
-            iText.Layout.Style estiloMed = new iText.Layout.Style();
+            Style estiloMed = new Style();
             estiloMed.SetBorderTop(new SolidBorder(1))
                      .SetBorderBottom(new SolidBorder(1));
             // Estilo de las celdas de der.
-            iText.Layout.Style estiloDer = new iText.Layout.Style();
+            Style estiloDer = new Style();
             estiloDer.SetBorderRight(new SolidBorder(1));
             // Estilo Fondo SubCabecera
-            iText.Layout.Style estiloFondoSub = new iText.Layout.Style().SetBackgroundColor(fondoSubCabecera);
+            Style estiloFondoSub = new Style().SetBackgroundColor(fondoSubCabecera);
             // Estilo Encabezado Vertical
-            iText.Layout.Style estiloEncabezadoVertical = new iText.Layout.Style();
+            Style estiloEncabezadoVertical = new Style();
             estiloEncabezadoVertical.SetBorder(new SolidBorder(1));
             estiloEncabezadoVertical.SetFontSize(12);
             estiloEncabezadoVertical.SetBold();
@@ -522,7 +524,7 @@ namespace Orion.PrintModel {
                 var estadistica = lista.FirstOrDefault(e => e.Turno == turno);
                 if (estadistica == null) estadistica = new EstadisticasGraficos { Turno = turno };
                 // Estilo Fondo Alternativo
-                iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
+                Style estiloFondo = new Style().SetBackgroundColor(ColorConstants.WHITE);
                 if (turno % 2 == 0) estiloFondo.SetBackgroundColor(fondoAlterno);
                 // Añadimos el turno en texto.
                 tabla.AddCell(new Cell().Add(new Paragraph($"{turnos[turno]}")).AddStyle(estiloIzq).AddStyle(estiloDer).AddStyle(estiloFondoSub));
@@ -589,12 +591,12 @@ namespace Orion.PrintModel {
                     // Creamos la tabla de título
                     //Table tablaTitulo = PdfTools.GetTablaTitulo($"{fecha:dd - MMMM - yyyy}".ToUpper(), App.Global.CentroActual.ToString().ToUpper());
                     string textoTitulo = $"{fecha:dd - MMMM - yyyy}\n{App.Global.CentroActual}".ToUpper();
-                    iText.Layout.Style estiloTitulo = new iText.Layout.Style();
+                    Style estiloTitulo = new Style();
                     estiloTitulo.SetFontSize(12).SetBold();
                     estiloTitulo.SetMargins(0, 0, 6, 0);
                     estiloTitulo.SetPadding(0);
                     estiloTitulo.SetWidth(UnitValue.CreatePercentValue(100));
-                    estiloTitulo.SetBorder(iText.Layout.Borders.Border.NO_BORDER);
+                    estiloTitulo.SetBorder(Border.NO_BORDER);
                     Table tablaTitulo = InformesServicio.GetTablaEncabezadoSindicato(textoTitulo, estiloTitulo);
                     // Creamos la tabla de informacion
                     string textoGrafico = "Gráfico: " + (string)cnvNumGrafico.Convert(g.Numero, null, null, null) + "   Turno: " + g.Turno.ToString("0");

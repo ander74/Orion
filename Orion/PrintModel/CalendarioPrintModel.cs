@@ -70,7 +70,7 @@ namespace Orion.PrintModel {
             // Fuente a utilizar en la tabla.
             PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
             // Estilo de la tabla.
-            iText.Layout.Style estiloTabla = new iText.Layout.Style();
+            Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
                        .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                        .SetMargins(0, 0, 0, 0)
@@ -79,21 +79,21 @@ namespace Orion.PrintModel {
                        .SetFont(arial)
                        .SetFontSize(7);
             // Estilo titulos
-            iText.Layout.Style estiloTitulos = new iText.Layout.Style();
+            Style estiloTitulos = new Style();
             estiloTitulos.SetBold()
-                         .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                         .SetBorder(Border.NO_BORDER)
                          .SetFontSize(14);
             // Estilo de las celdas de encabezado.
-            iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+            Style estiloEncabezados = new Style();
             estiloEncabezados.SetBackgroundColor(new DeviceRgb(255, 153, 102))
                              .SetBold()
                              .SetFontSize(8);
             // Estilo de las celdas de conductor.
-            iText.Layout.Style estiloConductor = new iText.Layout.Style();
+            Style estiloConductor = new Style();
             estiloConductor.SetBorderLeft(new SolidBorder(1))
                            .SetBorderRight(new SolidBorder(1));
             // Estilo de las celdas de dia.
-            iText.Layout.Style estiloDia = new iText.Layout.Style();
+            Style estiloDia = new Style();
             estiloDia.SetBorderTop(new SolidBorder(1))
                      .SetBorderBottom(new SolidBorder(1));
 
@@ -130,7 +130,7 @@ namespace Orion.PrintModel {
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Conductor")).AddStyle(estiloEncabezados).AddStyle(estiloConductor).AddStyle(estiloDia));
             for (int i = 1; i <= diasMes; i++) {
                 // Definimos el estilo para la última celda.
-                iText.Layout.Style estiloUltima = new iText.Layout.Style();
+                Style estiloUltima = new Style();
                 if (i == diasMes) estiloUltima.SetBorderRight(new SolidBorder(1));
                 tabla.AddHeaderCell(new Cell().Add(new Paragraph($"{i:00}")).AddStyle(estiloEncabezados).AddStyle(estiloDia).AddStyle(estiloUltima));
             }
@@ -138,7 +138,7 @@ namespace Orion.PrintModel {
             int indice = 1;
             foreach (Object obj in listaCalendarios) {
                 // Estilo Fondo Alternativo
-                iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
+                Style estiloFondo = new Style().SetBackgroundColor(ColorConstants.WHITE);
                 if (indice % 2 == 0) estiloFondo.SetBackgroundColor(new DeviceRgb(252, 228, 214));
                 indice++;
                 Calendario cal = obj as Calendario;
@@ -148,7 +148,7 @@ namespace Orion.PrintModel {
                 // Escribimos los días.
                 for (int i = 1; i <= diasMes; i++) {
                     // Definimos el estilo para la última celda.
-                    iText.Layout.Style estiloUltima = new iText.Layout.Style();
+                    Style estiloUltima = new Style();
                     if (i == diasMes) estiloUltima.SetBorderRight(new SolidBorder(1));
                     // Definimos los datos para extraer el color.
                     object[] valores = new object[] { cal.ListaDias[i - 1].ComboGrafico, cal.Fecha, cal.ListaDias[i - 1].Dia };
@@ -169,7 +169,7 @@ namespace Orion.PrintModel {
             // Fuente a utilizar en la tabla.
             PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
             // Estilo de la tabla.
-            iText.Layout.Style estiloTabla = new iText.Layout.Style();
+            Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
                        .SetMargins(0, 0, 0, 0)
                        .SetPaddings(0, 0, 0, 0)
@@ -177,22 +177,22 @@ namespace Orion.PrintModel {
                        .SetFont(arial)
                        .SetFontSize(10);
             // Estilo encabezados 1
-            iText.Layout.Style estiloEncabezados1 = new iText.Layout.Style();
+            Style estiloEncabezados1 = new Style();
             estiloEncabezados1.SetBold()
-                              .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                              .SetBorder(Border.NO_BORDER)
                               .SetFontSize(8);
             // Estilo de las celdas de encabezado 2.
-            iText.Layout.Style estiloEncabezados2 = new iText.Layout.Style();
+            Style estiloEncabezados2 = new Style();
             estiloEncabezados2.SetBackgroundColor(new DeviceRgb(255, 153, 102))
                              .SetBold()
                              .SetFontSize(8);
             // Estilo de las celdas de conductor.
-            iText.Layout.Style estiloConductor = new iText.Layout.Style();
+            Style estiloConductor = new Style();
             estiloConductor.SetVerticalAlignment(VerticalAlignment.MIDDLE)
                            .SetFontSize(14)
                            .SetKeepTogether(true);
             // Estilo de las celdas de Fallos.
-            iText.Layout.Style estiloFallos = new iText.Layout.Style();
+            Style estiloFallos = new Style();
             estiloFallos.SetTextAlignment(TextAlignment.LEFT)
                         .SetPadding(5)
                         .SetKeepTogether(true);
@@ -218,7 +218,7 @@ namespace Orion.PrintModel {
                 if (cal == null) continue;
                 if (!string.IsNullOrWhiteSpace(cal.Informe)) {
                     // Estilo Fondo Alternativo
-                    iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(ColorConstants.WHITE);
+                    Style estiloFondo = new Style().SetBackgroundColor(ColorConstants.WHITE);
                     if (indice % 2 == 0) estiloFondo.SetBackgroundColor(new DeviceRgb(252, 228, 214));
                     tabla.AddCell(new Cell().Add(new Paragraph($"{cal.MatriculaConductor:000}")).AddStyle(estiloConductor).AddStyle(estiloFondo));
                     tabla.AddCell(new Cell().Add(new Paragraph($"{cal.Informe}")).AddStyle(estiloFallos).AddStyle(estiloFondo));
@@ -235,7 +235,7 @@ namespace Orion.PrintModel {
             // Fuente a utilizar en la tabla.
             PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
             // Estilo de la tabla.
-            iText.Layout.Style estiloTabla = new iText.Layout.Style();
+            Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
                        .SetMargins(0, 0, 0, 0)
                        .SetPaddings(0, 0, 0, 0)
@@ -243,21 +243,21 @@ namespace Orion.PrintModel {
                        .SetFont(arial)
                        .SetFontSize(8);
             // Estilo encabezados 1
-            iText.Layout.Style estiloEncabezados1 = new iText.Layout.Style();
+            Style estiloEncabezados1 = new Style();
             estiloEncabezados1.SetBold()
-                              .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                              .SetBorder(Border.NO_BORDER)
                               .SetFontSize(8);
             // Estilo de las celdas de encabezado 2.
-            iText.Layout.Style estiloEncabezados2 = new iText.Layout.Style();
+            Style estiloEncabezados2 = new Style();
             estiloEncabezados2.SetBackgroundColor(new DeviceRgb(255, 153, 102))
                              .SetBold()
                              .SetFontSize(9);
             // Estilo de fondo 2
-            iText.Layout.Style estiloFondo = new iText.Layout.Style().SetBackgroundColor(new DeviceRgb(252, 228, 214));
+            Style estiloFondo = new Style().SetBackgroundColor(new DeviceRgb(252, 228, 214));
             // Estilo Sábados
-            iText.Layout.Style estiloSabados = new iText.Layout.Style().SetFontColor(new DeviceRgb(0, 0, 255));
+            Style estiloSabados = new Style().SetFontColor(new DeviceRgb(0, 0, 255));
             // Estilo Festivos
-            iText.Layout.Style estiloFestivos = new iText.Layout.Style().SetFontColor(new DeviceRgb(255, 0, 0));
+            Style estiloFestivos = new Style().SetFontColor(new DeviceRgb(255, 0, 0));
 
             // Creamos la tabla con el encabezado con el logo UGT.
             string textoEncabezado = $"ESTADÍSTICAS DE CALENDARIOS\n{fecha:MMMM - yyyy} ({App.Global.CentroActual.ToString()})".ToUpper();
@@ -291,13 +291,13 @@ namespace Orion.PrintModel {
             for (int d = 1; d <= dias; d++) {
                 int dd = segundaQuincena ? diasMes - dias + d : d;
                 DateTime f = new DateTime(fecha.Year, fecha.Month, dd);
-                iText.Layout.Style estiloDia = null;
+                Style estiloDia = null;
                 if (f.DayOfWeek == DayOfWeek.Saturday) {
                     estiloDia = estiloSabados;
                 } else if (f.DayOfWeek == DayOfWeek.Sunday || App.Global.CalendariosVM.EsFestivo(f)) {
                     estiloDia = estiloFestivos;
                 } else {
-                    estiloDia = new iText.Layout.Style().SetFontColor(new DeviceRgb(0, 0, 0));
+                    estiloDia = new Style().SetFontColor(new DeviceRgb(0, 0, 0));
                 }
                 tabla.AddHeaderCell(new Cell().Add(new Paragraph($"{dd:00}")).AddStyle(estiloEncabezados2).AddStyle(estiloDia));
             }
@@ -517,7 +517,7 @@ namespace Orion.PrintModel {
             // Fuente a utilizar en la tabla.
             PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
             // Estilo de la tabla.
-            iText.Layout.Style estiloTabla = new iText.Layout.Style();
+            Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
                        .SetMargins(0, 0, 0, 0)
                        .SetPaddings(0, 0, 0, 0)
@@ -526,26 +526,26 @@ namespace Orion.PrintModel {
                        .SetFont(arial)
                        .SetFontSize(7);
             // Estilo titulos
-            iText.Layout.Style estiloTitulos = new iText.Layout.Style();
+            Style estiloTitulos = new Style();
             estiloTitulos.SetBold()
-                         .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
+                         .SetBorder(Border.NO_BORDER)
                          .SetFontSize(14);
             // Estilo de las celdas de encabezado.
-            iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
+            Style estiloEncabezados = new Style();
             estiloEncabezados.SetBackgroundColor(new DeviceRgb(102, 153, 255))
                              .SetBorderBottom(new SolidBorder(1))
                              .SetBorderTop(new SolidBorder(1))
                              .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                              .SetBold();
             // Estilo de las celdas de encabezado.
-            iText.Layout.Style estiloEncabezadoFilas = new iText.Layout.Style();
+            Style estiloEncabezadoFilas = new Style();
             estiloEncabezadoFilas.SetBackgroundColor(new DeviceRgb(102, 153, 255))
                                  .SetBorderLeft(new SolidBorder(1))
                                  .SetBorderRight(new SolidBorder(1))
                                  .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                                  .SetBold();
             // Estilo de las celdas de encabezado total.
-            iText.Layout.Style estiloTotalesEncabezado = new iText.Layout.Style();
+            Style estiloTotalesEncabezado = new Style();
             estiloTotalesEncabezado.SetBackgroundColor(new DeviceRgb(192, 0, 0))
                                    .SetFontColor(ColorConstants.WHITE)
                                    .SetBorder(new SolidBorder(1))
@@ -553,26 +553,26 @@ namespace Orion.PrintModel {
                                    .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                                    .SetBold();
             // Estilo de las celdas de total.
-            iText.Layout.Style estiloTotales = new iText.Layout.Style();
+            Style estiloTotales = new Style();
             estiloTotales.SetBorder(new SolidBorder(1))
                          .SetFontSize(9)
                          .SetVerticalAlignment(VerticalAlignment.MIDDLE);
             // Estilo de las celdas de dia.
-            iText.Layout.Style estiloDia = new iText.Layout.Style();
+            Style estiloDia = new Style();
             estiloDia.SetBorder(new SolidBorder(1))
                      .SetFontSize(14)
                      .SetVerticalAlignment(VerticalAlignment.MIDDLE)
                      .SetKeepTogether(true)
                      .SetBold();
             // Estilo de las celdas del final.
-            iText.Layout.Style estiloCeldaFinal = new iText.Layout.Style();
+            Style estiloCeldaFinal = new Style();
             estiloCeldaFinal.SetHorizontalAlignment(HorizontalAlignment.LEFT)
                             .SetBorderBottom(new SolidBorder(1))
                             .SetBorderRight(new SolidBorder(1))
                             .SetKeepTogether(true)
                             .SetTextAlignment(TextAlignment.LEFT);
             // Estilo de las celdas del final.
-            iText.Layout.Style estiloCeldaDerecha = new iText.Layout.Style().SetBorderRight(new SolidBorder(1));
+            Style estiloCeldaDerecha = new Style().SetBorderRight(new SolidBorder(1));
             // Variables a usar.
             int diasMes = DateTime.DaysInMonth(listaGraficos[0].Fecha.Year, listaGraficos[0].Fecha.Month);
             long totalTrabajadas = 0;
@@ -611,7 +611,7 @@ namespace Orion.PrintModel {
             for (int dia = 1; dia <= diasMes; dia++) {
                 // Establecemos el estilo para el fin de semana
                 DateTime fechaFindes = new DateTime(listaGraficos[0].Fecha.Year, listaGraficos[0].Fecha.Month, dia);
-                iText.Layout.Style estiloFindes = new iText.Layout.Style().SetFontColor(ColorConstants.BLACK);
+                Style estiloFindes = new Style().SetFontColor(ColorConstants.BLACK);
                 if (fechaFindes.DayOfWeek == DayOfWeek.Saturday) estiloFindes.SetFontColor(ColorConstants.BLUE);
                 if (fechaFindes.DayOfWeek == DayOfWeek.Sunday) estiloFindes.SetFontColor(ColorConstants.RED);
                 if (App.Global.CalendariosVM.EsFestivo(fechaFindes)) estiloFindes.SetFontColor(ColorConstants.RED);
@@ -695,7 +695,7 @@ namespace Orion.PrintModel {
             }
 
             // AÑADIMOS UNA FILA VACÍA
-            tabla.AddCell(new Cell(1, diasMes + 1).Add(new Paragraph("\n\n")).SetBorder(iText.Layout.Borders.Border.NO_BORDER));
+            tabla.AddCell(new Cell(1, diasMes + 1).Add(new Paragraph("\n\n")).SetBorder(Border.NO_BORDER));
 
             // AÑADIMOS LAS CABECERAS DE LOS TOTALES
             tabla.AddCell(new Cell(1, 3).Add(new Paragraph("Total Trabajadas")).AddStyle(estiloTotalesEncabezado));
@@ -703,7 +703,7 @@ namespace Orion.PrintModel {
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph("Total Gráficos")).AddStyle(estiloTotalesEncabezado));
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph("Total Asignados")).AddStyle(estiloTotalesEncabezado));
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph("Total No Asignados")).AddStyle(estiloTotalesEncabezado));
-            tabla.AddCell(new Cell(1, diasMes + 1 - 15).Add(new Paragraph()).SetBorder(iText.Layout.Borders.Border.NO_BORDER));
+            tabla.AddCell(new Cell(1, diasMes + 1 - 15).Add(new Paragraph()).SetBorder(Border.NO_BORDER));
 
             // AÑADIMOS LOS TOTALES
             tabla.AddCell(new Cell(1, 3).Add(new Paragraph((string)cnvHora.Convert(new TimeSpan(totalTrabajadas), null, VerValores.HoraPlus, null))).AddStyle(estiloTotales));
@@ -711,7 +711,7 @@ namespace Orion.PrintModel {
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalGraficosTotales:00}")).AddStyle(estiloTotales));
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalGraficosAsignados:00}")).AddStyle(estiloTotales));
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalGraficosTotales - totalGraficosAsignados:00}")).AddStyle(estiloTotales));
-            tabla.AddCell(new Cell(1, diasMes + 1 - 15).Add(new Paragraph()).SetBorder(iText.Layout.Borders.Border.NO_BORDER));
+            tabla.AddCell(new Cell(1, diasMes + 1 - 15).Add(new Paragraph()).SetBorder(Border.NO_BORDER));
 
 
             return tabla;

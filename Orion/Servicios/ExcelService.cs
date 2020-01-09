@@ -9,7 +9,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -72,35 +71,31 @@ namespace Orion.Servicios {
         /// La hoja debe llamarse 'graficos'
         /// </summary>
         private List<GraficoBase> getGraficosDietas(string excelFile) {
-            string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0; Data Source='{excelFile}';Excel 12.0 Xml;Extended Properties=\"HDR=YES;IMEX=1;\"";
-            List<GraficoBase> lista = new List<GraficoBase>();
-            using (OleDbConnection conexion = new OleDbConnection(connectionString)) {
-                OleDbCommand comando = new OleDbCommand();
-                comando.Connection = conexion;
-                comando.CommandText = "SELECT * FROM [graficos$] ORDER BY Grafico";
-                conexion.Open();
-                OleDbDataReader reader = comando.ExecuteReader();
-                while (reader.Read()) {
-                    GraficoBase grafico = new GraficoBase();
-                    grafico.Numero = (int)reader.GetDouble(reader.GetOrdinal("Grafico"));
-                    DateTime tiempo = reader.GetDateTime(reader.GetOrdinal("Valoracion"));
-                    grafico.Valoracion = new TimeSpan(tiempo.Hour, tiempo.Minute, tiempo.Second);
-                    decimal acumula = (decimal)reader.GetDouble(reader.GetOrdinal("Acumula"));
-                    int horas = (int)Math.Abs(acumula);
-                    decimal minutosAntes = acumula - horas;
-                    decimal minutos = minutosAntes * 60;
-                    if (minutos < 0) minutos = -minutos;
-                    grafico.Acumuladas = new TimeSpan(horas, (int)minutos, 0);
-                    grafico.Desayuno = (decimal)reader.GetDouble(reader.GetOrdinal("Desayuno"));
-                    grafico.Comida = (decimal)reader.GetDouble(reader.GetOrdinal("Comida"));
-                    grafico.Cena = (decimal)reader.GetDouble(reader.GetOrdinal("Cena"));
-                    lista.Add(grafico);
+            var fileInfo = new FileInfo(excelFile);
+            var lista = new List<GraficoBase>();
+            using (var excel = new ExcelPackage(fileInfo)) {
+                var hoja = excel.Workbook.Worksheets.FirstOrDefault(h => h.Name == "graficos");
+                if (hoja != null && hoja.Dimension != null) {
+                    for (int fila = 2; fila <= hoja.Dimension.End.Row; fila++) {
+                        var grafico = new GraficoBase();
+                        grafico.Numero = hoja.Cells[fila, 1].GetValue<int>();
+                        var valoracion = hoja.Cells[fila, 2].GetValue<DateTime>();
+                        grafico.Valoracion = new TimeSpan(valoracion.Hour, valoracion.Minute, 0);
+                        var acumula = hoja.Cells[fila, 3].GetValue<decimal>();
+                        int horas = (int)Math.Abs(acumula);
+                        decimal minutosAntes = acumula - horas;
+                        decimal minutos = minutosAntes * 60;
+                        if (minutos < 0) minutos = -minutos;
+                        grafico.Acumuladas = new TimeSpan(horas, (int)minutos, 0);
+                        grafico.Desayuno = hoja.Cells[fila, 4].GetValue<decimal>();
+                        grafico.Comida = hoja.Cells[fila, 5].GetValue<decimal>();
+                        grafico.Cena = hoja.Cells[fila, 6].GetValue<decimal>();
+                        lista.Add(grafico);
+                    }
                 }
             }
             return lista;
-
         }
-
 
         private string parseDiaSemana(string tipoDia) {
             switch (tipoDia) {
@@ -114,37 +109,6 @@ namespace Orion.Servicios {
                     return "Festivos";
             }
             return "Desconocido";
-        }
-
-
-        [Obsolete("Esto usa el puto OLEDB de Microsoft y es una puta mierda. Quítalo ya.")]
-        private List<Calendario> getCalendarios2(string excelFile, int año, int mes) {
-            string connectionString = $"Provider=Microsoft.ACE.OLEDB.12.0; Data Source='{excelFile}';Excel 12.0 Xml;Extended Properties=\"HDR=YES;IMEX=1;\"";
-            List<Calendario> lista = new List<Calendario>();
-            ConvertidorNumeroGraficoCalendario converter = new ConvertidorNumeroGraficoCalendario();
-            using (OleDbConnection conexion = new OleDbConnection(connectionString)) {
-                OleDbCommand comando = new OleDbCommand();
-                comando.Connection = conexion;
-                comando.CommandText = $"SELECT * FROM [{meses[mes]}$] ORDER BY Matricula";
-                conexion.Open();
-                OleDbDataReader reader = comando.ExecuteReader();
-                while (reader.Read()) {
-                    Calendario calendario = new Calendario();
-                    calendario.Fecha = new DateTime(año, mes, 1);
-                    calendario.MatriculaConductor = (int)reader.GetDouble(reader.GetOrdinal("Matricula"));
-                    calendario.ListaDias = new ObservableCollection<DiaCalendario>();
-                    for (int dia = 1; dia <= DateTime.DaysInMonth(año, mes); dia++) {
-                        DiaCalendario diaCalendario = new DiaCalendario();
-                        diaCalendario.Dia = dia;
-                        var valor = reader.GetValue(reader.GetOrdinal($"D{dia}"));
-                        diaCalendario.ComboGrafico = (Tuple<int, int>)converter.ConvertBack(reader.GetValue(reader.GetOrdinal($"D{dia}")).ToString(), null, null, null);
-                        calendario.ListaDias.Add(diaCalendario);
-                    }
-                    lista.Add(calendario);
-                }
-            }
-            return lista;
-
         }
 
 
@@ -176,8 +140,6 @@ namespace Orion.Servicios {
             }
             return lista;
         }
-
-
 
 
         private void rellenarHojaComparacionCalendarios(ref ExcelWorksheet hoja, IEnumerable<Calendario> listaCalendarios, IEnumerable<Calendario> listaExcel, int año, int mes) {

@@ -567,8 +567,9 @@ namespace Orion.ViewModels {
                 // Activamos la barra de progreso.
                 App.Global.IniciarProgreso("Creando PDF...");
                 // Pedimos el archivo donde guardarlo.
-                string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1}.pdf", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
+                string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1}", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
                 if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
+                nombreArchivo += ".pdf";
                 string ruta = Informes.GetRutaArchivo(TiposInforme.Graficos, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
                 if (ruta != "") {
                     iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
@@ -612,8 +613,9 @@ namespace Orion.ViewModels {
                 // Activamos la barra de progreso.
                 App.Global.IniciarProgreso("Creando PDF...");
                 // Definimos el nombre del archivo a guardar.
-                string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1} (Individuales).pdf", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
+                string nombreArchivo = String.Format("{0:yyyy}-{0:MM}-{0:dd} - {1} (Individuales)", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
                 if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
+                nombreArchivo += ".pdf";
                 string ruta = Informes.GetRutaArchivo(TiposInforme.GraficoIndividual, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
                 if (ruta != "") {
                     iText.Layout.Document doc = Informes.GetNuevoPdfA5(ruta);
@@ -676,7 +678,6 @@ namespace Orion.ViewModels {
                 App.Global.IniciarProgreso("Creando PDF...");
                 // Pedimos el archivo donde guardarlo.
                 string nombreArchivo = String.Format("Estadisticas Gráficos {0:yyyy}-{0:MM}-{0:dd} - {1}.pdf", GrupoSeleccionado.Validez, App.Global.CentroActual.ToString());
-                if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
                 string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
                 if (ruta != "") {
                     iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
@@ -717,7 +718,6 @@ namespace Orion.ViewModels {
                 App.Global.IniciarProgreso("Creando PDF...");
                 // Pedimos el archivo donde guardarlo.
                 string nombreArchivo = String.Format("Estadisticas Gráficos - {0}.pdf", App.Global.CentroActual.ToString());
-                if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
                 string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
                 if (ruta != "") {
                     iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
@@ -755,8 +755,7 @@ namespace Orion.ViewModels {
                 // Activamos la barra de progreso.
                 App.Global.IniciarProgreso("Creando PDF...");
                 // Pedimos el archivo donde guardarlo.
-                string nombreArchivo = String.Format("Estadisticas Gráficos - {0}.pdf", App.Global.CentroActual.ToString());
-                if (FiltroAplicado != "Ninguno") nombreArchivo += $" - ({FiltroAplicado})";
+                string nombreArchivo = "Estadisticas Gráficos Por Centros.pdf";
                 string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasGraficos, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
                 if (ruta != "") {
                     iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);

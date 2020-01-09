@@ -521,9 +521,9 @@ namespace Orion.Models {
             _idgrupo = lector.ToInt32("IdGrupo");
             validez = lector.ToDateTime("Validez");
             _nocalcular = lector.ToBool("NoCalcular");
-            _numero = lector.ToInt16("Numero");
+            _numero = lector.ToInt32("Numero");
             _diasemana = lector.ToString("DiaSemana");
-            _turno = lector.ToInt16("Turno");
+            _turno = lector.ToInt32("Turno");
             _inicio = lector.ToTimeSpanNulable("Inicio");
             _final = lector.ToTimeSpanNulable("Final");
             _iniciopartido = lector.ToTimeSpanNulable("InicioPartido");
