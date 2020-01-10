@@ -12,7 +12,6 @@ using iText.Layout.Element;
 using iText.Layout.Properties;
 using Microsoft.Win32;
 using Orion.Config;
-using Orion.Models;
 
 namespace Orion.Servicios {
 
@@ -142,7 +141,7 @@ namespace Orion.Servicios {
 			iText.Kernel.Pdf.PdfDocument docPDF = new iText.Kernel.Pdf.PdfDocument(writer);
 			// Añadimos los datos de Metadata
 			docPDF.GetDocumentInfo().SetAuthor("Orion - AnderSoft - A.Herrero");
-			docPDF.GetDocumentInfo().SetCreator("Orion 1.0");
+			docPDF.GetDocumentInfo().SetCreator("Orion 1.1");
 			// Creamos el tamaño de página y le asignamos la rotaciñon si debe ser apaisado.
 			iText.Kernel.Geom.PageSize tamañoPagina;
 			if (apaisado) {
@@ -222,32 +221,32 @@ namespace Orion.Servicios {
 		#region MÉTODOS PÚBLICOS RECLAMACIONES
 		// ====================================================================================================
 
-		public void GenerarReclamación(Centros centro, Conductor conductor, DateTime fecha, string ruta) {
+		//public void GenerarReclamación(Centros centro, Conductor conductor, DateTime fecha, string ruta) {
 
-			// Creamos el lector del documento.
-			string rutaPlantilla = Utils.CombinarCarpetas(App.RutaInicial, $"/Plantillas/Reclamacion.pdf");
-			iTextSharp.text.pdf.PdfReader reader = new iTextSharp.text.pdf.PdfReader(rutaPlantilla);
-			// Creamos el 'modificador' del documento.
-			FileStream fs = new FileStream(ruta, FileMode.Create);
-			iTextSharp.text.pdf.PdfStamper stamper = new iTextSharp.text.pdf.PdfStamper(reader, fs);
+		//	// Creamos el lector del documento.
+		//	string rutaPlantilla = Utils.CombinarCarpetas(App.RutaInicial, $"/Plantillas/Reclamacion.pdf");
+		//	PdfReader reader = new PdfReader(rutaPlantilla);
+		//	// Creamos el 'modificador' del documento.
+		//	FileStream fs = new FileStream(ruta, FileMode.Create);
+		//	PdfStamper stamper = new PdfStamper(reader, fs);
 
-			// Extraemos los campos del documento.
-			iTextSharp.text.pdf.AcroFields campos = stamper.AcroFields;
+		//	// Extraemos los campos del documento.
+		//	AcroFields campos = stamper.AcroFields;
 
-			// Asignamos los campos
-			campos.SetField("Centro", centro.ToString().ToUpper());
-			campos.SetField("Trabajador", $"{conductor.Apellidos}, {conductor.Nombre} ({conductor.Id:000})");
-			campos.SetField("FechaCabecera", $"{fecha:MMMM - yyyy}".ToUpper());
-			campos.SetField("NumeroReclamacion", $"Nº Reclamación: {fecha:yyyyMM}{conductor.Id:000}/01");
-			campos.SetField("FechaFirma", $"{DateTime.Today:dd - MM - yyyy}");
+		//	// Asignamos los campos
+		//	campos.SetField("Centro", centro.ToString().ToUpper());
+		//	campos.SetField("Trabajador", $"{conductor.Apellidos}, {conductor.Nombre} ({conductor.Id:000})");
+		//	campos.SetField("FechaCabecera", $"{fecha:MMMM - yyyy}".ToUpper());
+		//	campos.SetField("NumeroReclamacion", $"Nº Reclamación: {fecha:yyyyMM}{conductor.Id:000}/01");
+		//	campos.SetField("FechaFirma", $"{DateTime.Today:dd - MM - yyyy}");
 
-			// Cerramos los elementos abiertos
-			stamper.Close();
-			fs.Close();
-			reader.Close();
+		//	// Cerramos los elementos abiertos
+		//	stamper.Close();
+		//	fs.Close();
+		//	reader.Close();
 
 
-		}
+		//}
 
 
 

@@ -5,19 +5,14 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using iTextSharp.xmp.impl;
-using Orion.Models;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+using Orion.Models;
 
 namespace Orion.ViewModels {
 
-	public class VentanaAcercaDeVM: NotifyBase {
+	public class VentanaAcercaDeVM : NotifyBase {
 
 		// ====================================================================================================
 		#region CONSTRUCTOR

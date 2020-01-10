@@ -57,6 +57,8 @@ namespace Orion.Views {
             }
 
             // Si hay que sincronizar con DropBox, se copian los archivos.
+            //TODO: Actualizar con el método de autenticación.
+            var clave = ApiKeys.DropboxAppKey;
             if (App.Global.Configuracion.SincronizarEnDropbox) Respaldo.SincronizarDropbox();
 
             // Si hay que actualizar el programa, se actualiza.
