@@ -1,133 +1,300 @@
-﻿<!-- =============================================== -->
-<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
-<!--                                                 -->
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
 <!--  Vea el archivo Licencia.txt para mas detalles  -->
-<!-- =============================================== -->
-<UserControl x:Class="Orion.Views.VistaEstadisticasTurnos"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:local="clr-namespace:Orion.Views"
-             mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+<!--  ===============================================  -->
+<UserControl
+    x:Class="Orion.Views.VistaEstadisticasTurnos"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Orion.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:xc="http://schemas.xceed.com/wpf/xaml/toolkit"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
 
 
-    <!-- ==================================================================================================== -->
-    <!-- RECURSOS -->
-    <!-- ==================================================================================================== -->
+    <!--  ====================================================================================================  -->
+    <!--  RECURSOS  -->
+    <!--  ====================================================================================================  -->
     <UserControl.Resources>
 
-        <Style x:Key="EstiloTablaEstadisticas" TargetType="DataGrid">
-            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersNaranja}"/>
-            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasNaranja}"/>
-            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}"/>
+        <Style
+            x:Key="EstiloTablaEstadisticas"
+            TargetType="DataGrid">
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersNaranja}" />
+            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasNaranja}" />
+            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
         </Style>
+
+        <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
+
 
     </UserControl.Resources>
 
 
-    <!-- ==================================================================================================== -->
-    <!-- CONTENIDO -->
-    <!-- ==================================================================================================== -->
+    <!--  ====================================================================================================  -->
+    <!--  CONTENIDO  -->
+    <!--  ====================================================================================================  -->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
 
-        <!-- ==================================================================================================== -->
-        <!-- BARRA DE BOTONES -->
-        <!-- ==================================================================================================== -->
-        <StackPanel Grid.Row="0" Orientation="Horizontal" Height="80" Background="{StaticResource DegradadoCeleste0}">
+        <!--  ====================================================================================================  -->
+        <!--  BARRA DE BOTONES  -->
+        <!--  ====================================================================================================  -->
+        <StackPanel
+            Grid.Row="0"
+            Height="80"
+            Background="{StaticResource DegradadoCeleste0}"
+            Orientation="Horizontal">
 
-            <!--BOTON CARGAR ESTADISTICAS TURNOS-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="{Binding EstadisticasTurnosVM.cmdCargarEstadisticasDeCalendario}">
+            <!--  BOTON CARGAR ESTADISTICAS TURNOS  -->
+            <Button
+                Command="{Binding EstadisticasTurnosVM.cmdCargarEstadisticasDeCalendario}"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/VerTabla.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Cargar De Calendarios" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <Image
+                            Source="Imagenes/VerTabla.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Cargar De Calendarios"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <!--SEPARADOR-->
-            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
 
-            <!--BOTON COPIAR-->
-            <Button Style="{StaticResource EstiloBotonBarra}" Command="ApplicationCommands.Copy"
-                    CommandTarget="{Binding ElementName=TablaEstadisticas}">
+            <!--  BOTON COPIAR  -->
+            <Button
+                Command="ApplicationCommands.Copy"
+                CommandTarget="{Binding ElementName=TablaEstadisticas}"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Copiar.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Copiar" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <Image
+                            Source="Imagenes/Copiar.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Copiar"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <!--SEPARADOR-->
-            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
 
-            <!-- DESPLEGABLE COLUMNAS -->
-            <xc:DropDownButton Style="{StaticResource EstiloBotonDesplegable}" Height="80" MaxDropDownHeight="900" Width="64">
+            <!--  DESPLEGABLE COLUMNAS  -->
+            <xc:DropDownButton
+                Width="64"
+                Height="80"
+                MaxDropDownHeight="900"
+                Style="{StaticResource EstiloBotonDesplegable}">
                 <xc:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/SeleccionarColumna.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Mostrar Columnas" FontSize="10" FontFamily="Arial" TextWrapping="Wrap"
-                                                       VerticalAlignment="Center" TextAlignment="Center"/>
+                        <Image
+                            Source="Imagenes/SeleccionarColumna.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontFamily="Arial"
+                            FontSize="10"
+                            Text="Mostrar Columnas"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </xc:DropDownButton.Content>
                 <xc:DropDownButton.DropDownContent>
-                    <Border BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Background="AliceBlue">
-                        <Border BorderBrush="DarkGray" BorderThickness="1" CornerRadius="5" Margin="3">
+                    <Border
+                        Background="AliceBlue"
+                        BorderBrush="DarkBlue"
+                        BorderThickness="2"
+                        CornerRadius="5">
+                        <Border
+                            Margin="3"
+                            BorderBrush="DarkGray"
+                            BorderThickness="1"
+                            CornerRadius="5">
                             <StackPanel Orientation="Vertical">
-                                
+
                                 <StackPanel Orientation="Vertical">
-                                    <!-- TODOS -->
-                                    <CheckBox FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Todos" Margin="5,10" Click="CheckBox_Click" Tag="Todos"/>
+                                    <!--  TODOS  -->
+                                    <CheckBox
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Todos"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="Todos" />
                                 </StackPanel>
-                                
-                                <StackPanel Orientation="Vertical" Margin="10,0,0,0">
-                                    <!-- DIAS -->
-                                    <CheckBox x:Name="ChDias" FontFamily="Verdana" FontSize="12" Click="CheckBox_Click"
-                                              VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                              IsChecked="True" Content="Días Trabajados Por Turnos" Margin="5,10" Tag="Dias"/>
-                                    <!-- TRABAJADAS -->
-                                    <CheckBox x:Name="ChTrabajadas" FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Horas Trabajadas Por Turnos" Margin="5,10" Click="CheckBox_Click" Tag="Trabajadas"/>
-                                    <!-- ACUMULADAS -->
-                                    <CheckBox x:Name="ChAcumuladas" FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Horas Acumuladas Por Turnos" Margin="5,10" Click="CheckBox_Click" Tag="Acumuladas"/>
-                                    <!-- NOCTURNAS -->
-                                    <CheckBox x:Name="ChNocturnas" FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Horas Nocturnas Por Turnos" Margin="5,10" Click="CheckBox_Click" Tag="Nocturnas"/>
-                                    <!-- IMPORTE DIETAS -->
-                                    <CheckBox x:Name="ChImporteDietas" FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Importe Dietas Por Turnos" Margin="5,10" Click="CheckBox_Click" Tag="ImporteDietas"/>
-                                    <!-- FESTIVOS -->
-                                    <CheckBox x:Name="ChFestivos" FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Días Festivos Trabajados Por Turnos" Margin="5,10" Click="CheckBox_Click" Tag="Festivos"/>
-                                    <!-- DIAS TRABAJO-->
-                                    <CheckBox x:Name="ChDiasTrabajo" FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Días Trabajados" Margin="5,10" Click="CheckBox_Click" Tag="DiasTrabajo"/>
-                                    <!-- DIAS DESCANSO-->
-                                    <CheckBox x:Name="ChDiasDescanso" FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Días Descanso" Margin="5,10" Click="CheckBox_Click" Tag="DiasDescanso"/>
-                                    <!-- FINDES TRABAJO -->
-                                    <CheckBox x:Name="ChFindesTrabajo" FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Findes Trabajados" Margin="5,10" Click="CheckBox_Click" Tag="FindesTrabajo"/>
-                                    <!-- FINDES DESCANSO -->
-                                    <CheckBox x:Name="ChFindesDescanso" FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Findes Descanso" Margin="5,10" Click="CheckBox_Click" Tag="FindesDescanso"/>
-                                    <!-- PLUS PAQUETERIA -->
-                                    <CheckBox x:Name="ChPlusPaqueteria" FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Plus Paquetería" Margin="5,10" Click="CheckBox_Click" Tag="PlusPaqueteria"/>
-                                    <!-- PLUS MENOR DESCANSO -->
-                                    <CheckBox x:Name="ChPlusMenorDescanso" FontFamily="Verdana" FontSize="12" VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
-                                          IsChecked="True" Content="Plus Menor Descanso" Margin="5,10" Click="CheckBox_Click" Tag="PlusMenorDescanso"/>
+
+                                <StackPanel
+                                    Margin="10,0,0,0"
+                                    Orientation="Vertical">
+                                    <!--  DIAS  -->
+                                    <CheckBox
+                                        x:Name="ChDias"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Días Trabajados Por Turnos"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="Dias" />
+                                    <!--  TRABAJADAS  -->
+                                    <CheckBox
+                                        x:Name="ChTrabajadas"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Horas Trabajadas Por Turnos"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="Trabajadas" />
+                                    <!--  ACUMULADAS  -->
+                                    <CheckBox
+                                        x:Name="ChAcumuladas"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Horas Acumuladas Por Turnos"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="Acumuladas" />
+                                    <!--  NOCTURNAS  -->
+                                    <CheckBox
+                                        x:Name="ChNocturnas"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Horas Nocturnas Por Turnos"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="Nocturnas" />
+                                    <!--  IMPORTE DIETAS  -->
+                                    <CheckBox
+                                        x:Name="ChImporteDietas"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Importe Dietas Por Turnos"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="ImporteDietas" />
+                                    <!--  FESTIVOS  -->
+                                    <CheckBox
+                                        x:Name="ChFestivos"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Días Festivos Trabajados Por Turnos"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="Festivos" />
+                                    <!--  DIAS TRABAJO  -->
+                                    <CheckBox
+                                        x:Name="ChDiasTrabajo"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Días Trabajados"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="DiasTrabajo" />
+                                    <!--  DIAS DESCANSO  -->
+                                    <CheckBox
+                                        x:Name="ChDiasDescanso"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Días Descanso"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="DiasDescanso" />
+                                    <!--  FINDES TRABAJO  -->
+                                    <CheckBox
+                                        x:Name="ChFindesTrabajo"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Findes Trabajados"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="FindesTrabajo" />
+                                    <!--  FINDES DESCANSO  -->
+                                    <CheckBox
+                                        x:Name="ChFindesDescanso"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Findes Descanso"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="FindesDescanso" />
+                                    <!--  PLUS PAQUETERIA  -->
+                                    <CheckBox
+                                        x:Name="ChPlusPaqueteria"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Plus Paquetería"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="PlusPaqueteria" />
+                                    <!--  PLUS MENOR DESCANSO  -->
+                                    <CheckBox
+                                        x:Name="ChPlusMenorDescanso"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="CheckBox_Click"
+                                        Content="Plus Menor Descanso"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="PlusMenorDescanso" />
                                 </StackPanel>
                             </StackPanel>
 
@@ -137,112 +304,315 @@
             </xc:DropDownButton>
 
 
-            <!--BOTON QUITAR FILTRO-->
+            <!--  BOTON QUITAR FILTRO  -->
             <Button Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/QuitarFiltro.png" Style="{StaticResource EstiloImagen}"/>
-                        <TextBlock Text="Quitar Filtro" TextWrapping="Wrap" TextAlignment="Center"/>
+                        <Image
+                            Source="Imagenes/QuitarFiltro.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Quitar Filtro"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <!--SEPARADOR-->
-            <TextBlock Width="2" Margin="3,5" Background="LightGray"/>
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
 
 
         </StackPanel>
 
-        <!-- IMAGEN DE FONDO-->
-        <Image Source="Imagenes\Orion.png" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.1" Grid.Row="1"/>
+        <!--  IMAGEN DE FONDO  -->
+        <Image
+            Grid.Row="1"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Opacity="0.1"
+            Source="Imagenes\Orion.png" />
 
-        <!-- PANEL DE CONTENIDO -->
+        <!--  PANEL DE CONTENIDO  -->
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-                <!-- ==================================================================================================== -->
-                <!-- FECHA TABLA -->
-                <!-- ==================================================================================================== -->
-                <Grid Grid.Row="0" HorizontalAlignment="Stretch">
-                    <Border BorderBrush="DarkBlue" BorderThickness="0.5" Height="Auto" Margin="0,3"
-                            Padding="3" CornerRadius="4" Background="{StaticResource DegradadoCeleste1}">
+            <!--  ====================================================================================================  -->
+            <!--  FECHA TABLA  -->
+            <!--  ====================================================================================================  -->
+            <Grid
+                Grid.Row="0"
+                HorizontalAlignment="Stretch">
+                <Border
+                    Height="Auto"
+                    Margin="0,3"
+                    Padding="3"
+                    Background="{StaticResource DegradadoCeleste1}"
+                    BorderBrush="DarkBlue"
+                    BorderThickness="0.5"
+                    CornerRadius="4">
 
-                        <Label FontFamily="Verdana" FontSize="14" FontWeight="Normal" VerticalContentAlignment="Center">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Margin="4,0" Width="300" VerticalAlignment="Center" Text="{Binding EstadisticasTurnosVM.TextoFecha}"/>
-                            </StackPanel>
-                        </Label>
+                    <Label
+                        VerticalContentAlignment="Center"
+                        FontFamily="Verdana"
+                        FontSize="14"
+                        FontWeight="Normal">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Width="300"
+                                Margin="4,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding EstadisticasTurnosVM.TextoFecha}" />
+                        </StackPanel>
+                    </Label>
 
-                    </Border>
-                </Grid>
+                </Border>
+            </Grid>
 
 
-                <!-- ==================================================================================================== -->
-                <!-- TABLA ESTADÍSTICAS -->
-                <!-- ==================================================================================================== -->
-                <DataGrid Grid.Row="1" x:Name="TablaEstadisticas" ItemsSource="{Binding EstadisticasTurnosVM.VistaEstadisticas}"
-                          IsReadOnly="True" HeadersVisibility="Column" FontSize="12"
-                          AlternationCount="2" CanUserReorderColumns="False" AutoGenerateColumns="False"
-                          SelectionMode="Extended" CanUserAddRows="False"
-                          VerticalAlignment="Stretch"
-                          Background="Transparent" Style="{StaticResource EstiloTablaEstadisticas}">
+            <!--  ====================================================================================================  -->
+            <!--  TABLA ESTADÍSTICAS  -->
+            <!--  ====================================================================================================  -->
+            <DataGrid
+                x:Name="TablaEstadisticas"
+                Grid.Row="1"
+                VerticalAlignment="Stretch"
+                AlternationCount="2"
+                AutoGenerateColumns="False"
+                Background="Transparent"
+                CanUserAddRows="False"
+                CanUserReorderColumns="False"
+                FontSize="12"
+                HeadersVisibility="Column"
+                IsReadOnly="True"
+                ItemsSource="{Binding EstadisticasTurnosVM.VistaEstadisticas}"
+                SelectionMode="Extended"
+                Style="{StaticResource EstiloTablaEstadisticas}">
 
-                    <DataGrid.Resources>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod"/>
-                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black"/>
-                    </DataGrid.Resources>
+                <DataGrid.Resources>
+                    <SolidColorBrush
+                        x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                        Color="PaleGoldenrod" />
+                    <SolidColorBrush
+                        x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                        Color="Black" />
+                </DataGrid.Resources>
 
-                    <DataGrid.Columns>
-                        <DataGridTextColumn x:Name="Conductor" Header="Conductor" Width="Auto" MinWidth="100" MaxWidth="140"
-                                            CellStyle="{StaticResource EstiloCeldasNormalIzquierda}"
-                                            Binding="{Binding Conductor.MatriculaApellidos}"/>
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        x:Name="Conductor"
+                        Width="Auto"
+                        MinWidth="100"
+                        MaxWidth="140"
+                        Binding="{Binding Conductor.MatriculaApellidos}"
+                        CellStyle="{StaticResource EstiloCeldasNormalIzquierda}"
+                        Header="Conductor" />
 
-                        <DataGridTextColumn x:Name="Dias1" Header="Turnos 1" Width="*" MinWidth="60" Binding="{Binding Dias[1]}"/>
-                        <DataGridTextColumn x:Name="Dias2" Header="Turnos 2" Width="*" MinWidth="60" Binding="{Binding Dias[2]}"/>
-                        <DataGridTextColumn x:Name="Dias3" Header="Turnos 3" Width="*" MinWidth="60" Binding="{Binding Dias[3]}"/>
-                        <DataGridTextColumn x:Name="Dias4" Header="Turnos 4" Width="*" MinWidth="60" Binding="{Binding Dias[4]}"/>
+                    <DataGridTextColumn
+                        x:Name="Dias1"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Dias[1]}"
+                        Header="Turnos 1" />
+                    <DataGridTextColumn
+                        x:Name="Dias2"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Dias[2]}"
+                        Header="Turnos 2" />
+                    <DataGridTextColumn
+                        x:Name="Dias3"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Dias[3]}"
+                        Header="Turnos 3" />
+                    <DataGridTextColumn
+                        x:Name="Dias4"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Dias[4]}"
+                        Header="Turnos 4" />
 
-                        <DataGridTextColumn x:Name="Trabajadas1" Header="Horas T1" Width="*" MinWidth="60" Binding="{Binding Trabajadas[1]}"/>
-                        <DataGridTextColumn x:Name="Trabajadas2" Header="Horas T2" Width="*" MinWidth="60" Binding="{Binding Trabajadas[2]}"/>
-                        <DataGridTextColumn x:Name="Trabajadas3" Header="Horas T3" Width="*" MinWidth="60" Binding="{Binding Trabajadas[3]}"/>
-                        <DataGridTextColumn x:Name="Trabajadas4" Header="Horas T4" Width="*" MinWidth="60" Binding="{Binding Trabajadas[4]}"/>
+                    <DataGridTextColumn
+                        x:Name="Trabajadas1"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Trabajadas[1]}"
+                        Header="Horas T1" />
+                    <DataGridTextColumn
+                        x:Name="Trabajadas2"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Trabajadas[2]}"
+                        Header="Horas T2" />
+                    <DataGridTextColumn
+                        x:Name="Trabajadas3"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Trabajadas[3]}"
+                        Header="Horas T3" />
+                    <DataGridTextColumn
+                        x:Name="Trabajadas4"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Trabajadas[4]}"
+                        Header="Horas T4" />
 
-                        <DataGridTextColumn x:Name="Acumuladas1" Header="Acum T1" Width="*" MinWidth="60" Binding="{Binding Acumuladas[1]}"/>
-                        <DataGridTextColumn x:Name="Acumuladas2" Header="Acum T2" Width="*" MinWidth="60" Binding="{Binding Acumuladas[2]}"/>
-                        <DataGridTextColumn x:Name="Acumuladas3" Header="Acum T3" Width="*" MinWidth="60" Binding="{Binding Acumuladas[3]}"/>
-                        <DataGridTextColumn x:Name="Acumuladas4" Header="Acum T4" Width="*" MinWidth="60" Binding="{Binding Acumuladas[4]}"/>
+                    <DataGridTextColumn
+                        x:Name="Acumuladas1"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Acumuladas[1]}"
+                        Header="Acum T1" />
+                    <DataGridTextColumn
+                        x:Name="Acumuladas2"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Acumuladas[2]}"
+                        Header="Acum T2" />
+                    <DataGridTextColumn
+                        x:Name="Acumuladas3"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Acumuladas[3]}"
+                        Header="Acum T3" />
+                    <DataGridTextColumn
+                        x:Name="Acumuladas4"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Acumuladas[4]}"
+                        Header="Acum T4" />
 
-                        <DataGridTextColumn x:Name="Nocturnas1" Header="Noct T1" Width="*" MinWidth="60" Binding="{Binding Nocturnas[1]}"/>
-                        <DataGridTextColumn x:Name="Nocturnas2" Header="Noct T2" Width="*" MinWidth="60" Binding="{Binding Nocturnas[2]}"/>
-                        <DataGridTextColumn x:Name="Nocturnas3" Header="Noct T3" Width="*" MinWidth="60" Binding="{Binding Nocturnas[3]}"/>
-                        <DataGridTextColumn x:Name="Nocturnas4" Header="Noct T4" Width="*" MinWidth="60" Binding="{Binding Nocturnas[4]}"/>
+                    <DataGridTextColumn
+                        x:Name="Nocturnas1"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Nocturnas[1]}"
+                        Header="Noct T1" />
+                    <DataGridTextColumn
+                        x:Name="Nocturnas2"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Nocturnas[2]}"
+                        Header="Noct T2" />
+                    <DataGridTextColumn
+                        x:Name="Nocturnas3"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Nocturnas[3]}"
+                        Header="Noct T3" />
+                    <DataGridTextColumn
+                        x:Name="Nocturnas4"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding Nocturnas[4]}"
+                        Header="Noct T4" />
 
-                        <DataGridTextColumn x:Name="ImporteDietas1" Header="Dietas T1" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[1]}"/>
-                        <DataGridTextColumn x:Name="ImporteDietas2" Header="Dietas T2" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[2]}"/>
-                        <DataGridTextColumn x:Name="ImporteDietas3" Header="Dietas T3" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[3]}"/>
-                        <DataGridTextColumn x:Name="ImporteDietas4" Header="Dietas T4" Width="*" MinWidth="60" Binding="{Binding ImporteDietas[4]}"/>
+                    <DataGridTextColumn
+                        x:Name="ImporteDietas1"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding ImporteDietas[1]}"
+                        Header="Dietas T1" />
+                    <DataGridTextColumn
+                        x:Name="ImporteDietas2"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding ImporteDietas[2]}"
+                        Header="Dietas T2" />
+                    <DataGridTextColumn
+                        x:Name="ImporteDietas3"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding ImporteDietas[3]}"
+                        Header="Dietas T3" />
+                    <DataGridTextColumn
+                        x:Name="ImporteDietas4"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding ImporteDietas[4]}"
+                        Header="Dietas T4" />
 
-                        <DataGridTextColumn x:Name="DiasFestivos1" Header="Fest T1" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[1]}"/>
-                        <DataGridTextColumn x:Name="DiasFestivos2" Header="Fest T2" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[2]}"/>
-                        <DataGridTextColumn x:Name="DiasFestivos3" Header="Fest T3" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[3]}"/>
-                        <DataGridTextColumn x:Name="DiasFestivos4" Header="Fest T4" Width="*" MinWidth="60" Binding="{Binding DiasFestivos[4]}"/>
+                    <DataGridTextColumn
+                        x:Name="DiasFestivos1"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding DiasFestivos[1]}"
+                        Header="Fest T1" />
+                    <DataGridTextColumn
+                        x:Name="DiasFestivos2"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding DiasFestivos[2]}"
+                        Header="Fest T2" />
+                    <DataGridTextColumn
+                        x:Name="DiasFestivos3"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding DiasFestivos[3]}"
+                        Header="Fest T3" />
+                    <DataGridTextColumn
+                        x:Name="DiasFestivos4"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding DiasFestivos[4]}"
+                        Header="Fest T4" />
 
-                        <DataGridTextColumn x:Name="DiasTrabajo" Header="D.Trab" Width="*" MinWidth="60" Binding="{Binding DiasTrabajo}"/>
-                        <DataGridTextColumn x:Name="DiasDescanso" Header="D.Desc" Width="*" MinWidth="60" Binding="{Binding DiasDescanso}"/>
-                        <DataGridTextColumn x:Name="FindesTrabajados" Header="FN.Trab" Width="*" MinWidth="60" Binding="{Binding FindesTrabajados}"/>
-                        <DataGridTextColumn x:Name="FindesDescansados" Header="FN.Desc" Width="*" MinWidth="60" Binding="{Binding FindesDescansados}"/>
-                        <DataGridTextColumn x:Name="PlusPaqueteria" Header="Paqu" Width="*" MinWidth="60" Binding="{Binding PlusPaqueteria}"/>
-                        <DataGridTextColumn x:Name="PlusMenorDescanso" Header="M.Desc" Width="*" MinWidth="60" Binding="{Binding PlusMenorDescanso}"/>
-                    </DataGrid.Columns>
-                </DataGrid>
+                    <DataGridTextColumn
+                        x:Name="DiasTrabajo"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding DiasTrabajo}"
+                        Header="D.Trab" />
+                    <DataGridTextColumn
+                        x:Name="DiasDescanso"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding DiasDescanso}"
+                        Header="D.Desc" />
+                    <DataGridTextColumn
+                        x:Name="FindesTrabajados"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding FindesTrabajados}"
+                        Header="FN.Trab" />
+                    <DataGridTextColumn
+                        x:Name="FindesDescansados"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding FindesDescansados}"
+                        Header="FN.Desc" />
+                    <DataGridTextColumn
+                        x:Name="PlusPaqueteria"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding PlusPaqueteria}"
+                        Header="Paqu" />
+                    <DataGridTextColumn
+                        x:Name="PlusMenorDescanso"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding PlusMenorDescanso}"
+                        Header="M.Desc" />
+                </DataGrid.Columns>
+            </DataGrid>
 
         </Grid>
-        
-        <!-- ACTIVITY INDICATOR -->
-        <xc:BusyIndicator Grid.RowSpan="2" BusyContent="Cargando estadísticas..." Background="{StaticResource DegradadoCeleste1}"
-                          Padding="0" FontSize="18" BorderBrush="Navy" IsBusy="{Binding EstadisticasTurnosVM.IsBusy}"/>
+
+        <!--  ACTIVITY INDICATOR  -->
+        <xc:BusyIndicator
+            Grid.RowSpan="2"
+            Padding="0"
+            Background="{StaticResource DegradadoCeleste1}"
+            BorderBrush="Navy"
+            BusyContent="Cargando estadísticas..."
+            FontSize="18"
+            IsBusy="{Binding EstadisticasTurnosVM.IsBusy}" />
 
     </Grid>
 

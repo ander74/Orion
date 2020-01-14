@@ -11,10 +11,11 @@ namespace Orion.Models {
     using System.Collections.Generic;
     using System.Collections.Specialized;
     using System.Data.OleDb;
-    using System.Data.SQLite;
+    using Microsoft.Data.Sqlite;
     using Config;
     using Orion.Interfaces;
 
+    [Author("AndresClass")]
     public class Conductor : NotifyBase, ISQLiteItem {
 
 
@@ -199,6 +200,7 @@ namespace Orion.Models {
 
 
         private int matricula;
+        [Author("Mi Matricula")]
         public int Matricula {
             get => matricula;
             set {
@@ -266,6 +268,7 @@ namespace Orion.Models {
 
 
         private string _email = "";
+        [Author("Mi Email")]
         public string Email {
             get { return _email; }
             set {
@@ -363,7 +366,6 @@ namespace Orion.Models {
             }
         }
 
-
         private NotifyCollection<RegulacionConductor> _regulaciones = new NotifyCollection<RegulacionConductor>();
         public NotifyCollection<RegulacionConductor> ListaRegulaciones {
             get { return _regulaciones; }
@@ -386,7 +388,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SQLiteDataReader lector) {
+        public void FromReader(SqliteDataReader lector) {
             _id = lector.ToInt32("_id");
             matricula = lector.ToInt32("Matricula");
             _nombre = lector.ToString("Nombre");
@@ -405,22 +407,22 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        public IEnumerable<SqliteParameter> Parametros {
             get {
-                var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("Matricula", Matricula));
-                lista.Add(new SQLiteParameter("Nombre", Nombre));
-                lista.Add(new SQLiteParameter("Apellidos", Apellidos));
-                lista.Add(new SQLiteParameter("Indefinido", Indefinido ? 1 : 0));
-                lista.Add(new SQLiteParameter("Telefono", Telefono));
-                lista.Add(new SQLiteParameter("Email", Email));
-                lista.Add(new SQLiteParameter("Acumuladas", Acumuladas.Ticks));
-                lista.Add(new SQLiteParameter("Descansos", Descansos.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SQLiteParameter("DescansosNoDisfrutados", DescansosNoDisfrutados.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SQLiteParameter("PlusDistancia", PlusDistancia.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SQLiteParameter("ReduccionJornada", ReduccionJornada ? 1 : 0));
-                lista.Add(new SQLiteParameter("Notas", Notas));
-                //lista.Add(new SQLiteParameter("Id", Id));
+                var lista = new List<SqliteParameter>();
+                lista.Add(new SqliteParameter("Matricula", Matricula));
+                lista.Add(new SqliteParameter("Nombre", Nombre));
+                lista.Add(new SqliteParameter("Apellidos", Apellidos));
+                lista.Add(new SqliteParameter("Indefinido", Indefinido ? 1 : 0));
+                lista.Add(new SqliteParameter("Telefono", Telefono));
+                lista.Add(new SqliteParameter("Email", Email));
+                lista.Add(new SqliteParameter("Acumuladas", Acumuladas.Ticks));
+                lista.Add(new SqliteParameter("Descansos", Descansos.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SqliteParameter("DescansosNoDisfrutados", DescansosNoDisfrutados.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SqliteParameter("PlusDistancia", PlusDistancia.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SqliteParameter("ReduccionJornada", ReduccionJornada ? 1 : 0));
+                lista.Add(new SqliteParameter("Notas", Notas));
+                //lista.Add(new SqliteParameter("Id", Id));
                 return lista;
             }
         }
@@ -511,4 +513,16 @@ namespace Orion.Models {
 
 
     } //Final de clase
+
+
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Class)]
+    public class AuthorAttribute : Attribute {
+        public string Nombre;
+
+        public AuthorAttribute(string name) {
+            this.Nombre = name;
+        }
+    }
+
+
 }

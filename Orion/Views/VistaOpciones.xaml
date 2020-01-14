@@ -1147,69 +1147,69 @@
                             HorizontalAlignment="Stretch"
                             Orientation="Vertical">
 
-                                <!--  LUNES A JUEVES  -->
-                                <TextBlock
-                                    HorizontalAlignment="Left"
-                                    Margin="6,6,6,0"
-                                    Width="Auto"
-                                    Style="{StaticResource EstiloTextoGraficosDias}"
-                                    Text="Lunes a Jueves: " />
-                                <controls:QTextBox
-                                    HorizontalAlignment="Stretch"
-                                    HorizontalContentAlignment="Left"
-                                    Width="Auto"
-                                    Margin="6"
-                                    ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos."
-                                    Style="{StaticResource EstiloTextBoxConvenio}"
-                                    Text="{Binding Lun}" />
+                            <!--  LUNES A JUEVES  -->
+                            <TextBlock
+                                Width="Auto"
+                                Margin="6,6,6,0"
+                                HorizontalAlignment="Left"
+                                Style="{StaticResource EstiloTextoGraficosDias}"
+                                Text="Lunes a Jueves: " />
+                            <controls:QTextBox
+                                Width="Auto"
+                                Margin="6"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Style="{StaticResource EstiloTextBoxConvenio}"
+                                Text="{Binding Lun}"
+                                ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos." />
 
-                                <!--  VIERNES  -->
-                                <TextBlock
-                                    HorizontalAlignment="Left"
-                                    Margin="6,6,6,0"
-                                    Width="Auto"
-                                    Style="{StaticResource EstiloTextoGraficosDias}"
-                                    Text="Viernes: " />
-                                <controls:QTextBox
-                                    HorizontalAlignment="Stretch"
-                                    HorizontalContentAlignment="Left"
-                                    Width="Auto"
-                                    Margin="6"
-                                    ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos."
-                                    Style="{StaticResource EstiloTextBoxConvenio}"
-                                    Text="{Binding Vie}" />
+                            <!--  VIERNES  -->
+                            <TextBlock
+                                Width="Auto"
+                                Margin="6,6,6,0"
+                                HorizontalAlignment="Left"
+                                Style="{StaticResource EstiloTextoGraficosDias}"
+                                Text="Viernes: " />
+                            <controls:QTextBox
+                                Width="Auto"
+                                Margin="6"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Style="{StaticResource EstiloTextBoxConvenio}"
+                                Text="{Binding Vie}"
+                                ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos." />
 
-                                <!--  SÁBADOS  -->
-                                <TextBlock
-                                    HorizontalAlignment="Left"
-                                    Margin="6,6,6,0"
-                                    Width="Auto"
-                                    Style="{StaticResource EstiloTextoGraficosDias}"
-                                    Text="Sábados: " />
-                                <controls:QTextBox
-                                    HorizontalAlignment="Stretch"
-                                    HorizontalContentAlignment="Left"
-                                    Width="Auto"
-                                    Margin="6"
-                                    ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos."
-                                    Style="{StaticResource EstiloTextBoxConvenio}"
-                                    Text="{Binding Sab}" />
+                            <!--  SÁBADOS  -->
+                            <TextBlock
+                                Width="Auto"
+                                Margin="6,6,6,0"
+                                HorizontalAlignment="Left"
+                                Style="{StaticResource EstiloTextoGraficosDias}"
+                                Text="Sábados: " />
+                            <controls:QTextBox
+                                Width="Auto"
+                                Margin="6"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Style="{StaticResource EstiloTextBoxConvenio}"
+                                Text="{Binding Sab}"
+                                ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos." />
 
-                                <!--  DOMINGOS Y FESTIVOS  -->
-                                <TextBlock
-                                    HorizontalAlignment="Left"
-                                    Margin="6,6,6,0"
-                                    Width="Auto"
-                                    Style="{StaticResource EstiloTextoGraficosDias}"
-                                    Text="Dom. y Festivos: " />
-                                <controls:QTextBox
-                                    HorizontalAlignment="Stretch"
-                                    HorizontalContentAlignment="Left"
-                                    Width="Auto"
-                                    Margin="6"
-                                    ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos."
-                                    Style="{StaticResource EstiloTextBoxConvenio}"
-                                    Text="{Binding Dom}" />
+                            <!--  DOMINGOS Y FESTIVOS  -->
+                            <TextBlock
+                                Width="Auto"
+                                Margin="6,6,6,0"
+                                HorizontalAlignment="Left"
+                                Style="{StaticResource EstiloTextoGraficosDias}"
+                                Text="Dom. y Festivos: " />
+                            <controls:QTextBox
+                                Width="Auto"
+                                Margin="6"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Left"
+                                Style="{StaticResource EstiloTextBoxConvenio}"
+                                Text="{Binding Dom}"
+                                ToolTip="Introduce rangos de gráficos separados por comas. También pueden ir números de gráfico sueltos." />
 
                             <Border
                                 Height="1"

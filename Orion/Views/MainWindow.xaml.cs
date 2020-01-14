@@ -6,12 +6,15 @@
 // ===============================================
 #endregion
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using Orion.Config;
 using Orion.DataModels;
+using Orion.Models;
 using Orion.ViewModels;
 
 namespace Orion.Views {
@@ -23,6 +26,46 @@ namespace Orion.Views {
         //****************************************************************************************************
         public MainWindow() {
             InitializeComponent();
+
+            //
+            // EJEMPLO DE ATRIBUTOS
+            //
+            var inicio = DateTime.Now;
+            //Conductor miConductor = new Conductor();
+            //miConductor.Matricula = 5060;
+            //var fijo = (AuthorAttribute)typeof(Conductor).GetProperty("Matricula").GetCustomAttribute(typeof(AuthorAttribute));
+            //var quizas = (AuthorAttribute)typeof(Conductor).GetCustomAttribute(typeof(AuthorAttribute));
+            //var seguroqueno = (AuthorAttribute)typeof(GraficoBase).GetCustomAttribute(typeof(AuthorAttribute));
+            //var props2 = miConductor.GetType().GetProperties();
+            //var nulo = miConductor.GetType().GetProperty("Otra");
+            //var valor = typeof(Conductor).GetProperty("Matricula").GetValue(miConductor);
+
+            //var props = typeof(Conductor).GetProperties();
+            //var props = typeof(Conductor).GetProperties().Where(p => p.CustomAttributes.Any(a => a.AttributeType == typeof(AuthorAttribute)));// INTERESANTE
+            var props = typeof(Conductor).GetProperties().Where(p => p.CustomAttributes.Any());
+
+            var lista = new List<(string, string)>();
+            foreach (var prop in props) {
+                //lista.Add((prop.Name, prop.PropertyType.Name));
+                var att = prop.GetCustomAttribute<AuthorAttribute>(true);
+                if (att != null) {
+                    var nombre = att.Nombre;
+                    var tipo = prop.PropertyType.Name;
+                    lista.Add((nombre, tipo));
+                    //var atttt = prop.CustomAttributes;
+                    //var esCadena = false;
+                    //if (prop.PropertyType.Equals(typeof(string))) esCadena = true;
+                    //var otro = 10;
+                }
+            }
+
+            var tiempoInvertido = DateTime.Now - inicio;
+            var x = 10;
+
+            //
+            // FIN DEL EJEMPLO
+            //
+
 
             // Solicitamos aceptar la licencia si no se ha aceptado nunca.
             if (!App.Global.Configuracion.LicenciaAceptada) {
@@ -58,7 +101,7 @@ namespace Orion.Views {
 
             // Si hay que sincronizar con DropBox, se copian los archivos.
             //TODO: Actualizar con el método de autenticación.
-            var clave = ApiKeys.DropboxAppKey;
+            //var clave = ApiKeys.DropboxAppKey;
             if (App.Global.Configuracion.SincronizarEnDropbox) Respaldo.SincronizarDropbox();
 
             // Si hay que actualizar el programa, se actualiza.
@@ -84,23 +127,24 @@ namespace Orion.Views {
                 }
             }
 
+            //TODO: Eliminar esta petición y establecer los archivos al iniciar los repositorios.
             // Definimos el archivo de base de datos
-            string archivo = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaDatos, "Lineas.db3");
+            //string archivo = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaDatos, "Lineas.db3");
             // Si el archivo no existe, pedimos cambiar la carpeta de datos
-            if (!File.Exists(archivo)) {
-                if (MessageBox.Show("La carpeta de datos no está bien definida.\n\n¿Desea elegir otra carpeta?",
-                                                   "ERROR", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes) {
-                    System.Windows.Forms.FolderBrowserDialog dialogo = new System.Windows.Forms.FolderBrowserDialog();
-                    dialogo.Description = "Ubicación Bases de Datos";
-                    dialogo.RootFolder = Environment.SpecialFolder.MyComputer;
-                    dialogo.SelectedPath = App.Global.Configuracion.CarpetaDatos;
-                    dialogo.ShowNewFolderButton = true;
-                    if (dialogo.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-                        App.Global.Configuracion.CarpetaDatos = dialogo.SelectedPath;
-                        App.Global.Configuracion.Guardar(App.Global.ArchivoOpcionesConfiguracion);
-                    }
-                }
-            }
+            //if (!File.Exists(archivo)) {
+            //    if (MessageBox.Show("La carpeta de datos no está bien definida.\n\n¿Desea elegir otra carpeta?",
+            //                                       "ERROR", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes) {
+            //        System.Windows.Forms.FolderBrowserDialog dialogo = new System.Windows.Forms.FolderBrowserDialog();
+            //        dialogo.Description = "Ubicación Bases de Datos";
+            //        dialogo.RootFolder = Environment.SpecialFolder.MyComputer;
+            //        dialogo.SelectedPath = App.Global.Configuracion.CarpetaDatos;
+            //        dialogo.ShowNewFolderButton = true;
+            //        if (dialogo.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+            //            App.Global.Configuracion.CarpetaDatos = dialogo.SelectedPath;
+            //            App.Global.Configuracion.Guardar(App.Global.ArchivoOpcionesConfiguracion);
+            //        }
+            //    }
+            //}
 
             // Establecemos el DataContext de la ventana.
             this.DataContext = App.Global;
@@ -159,10 +203,6 @@ namespace Orion.Views {
         private void Label_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e) {
             ((GlobalVM)DataContext).cmdCambiarCentro.Execute(null);
         }
-
-
-
-
 
     }
 }

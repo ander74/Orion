@@ -8,8 +8,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Data.Sqlite;
 using Orion.Config;
 using Orion.Models;
 using Orion.Pijama;
@@ -493,7 +494,10 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
         public OrionRepository(string cadenaConexion) : base(cadenaConexion) {
-            InicializarBasesDatos();
+            //Task.Run(async () => await InicializarBaseDatosAsync());
+            // No podemos crear la base de datos de forma asíncrona, porque el programa intenta acceder a ella
+            // mientras se está creando. Por eso debemos esperar...
+            if (CadenaConexion != null) InicializarBaseDatosAsync().Wait();
         }
 
         #endregion
@@ -504,18 +508,18 @@ namespace Orion.Servicios {
         #region MÉTODOS PRIVADOS
         // ====================================================================================================
 
-        private void CrearDBs() {
-            using (var conexion = new SQLiteConnection(CadenaConexion)) {
+        private async Task CrearTablasAsync() {
+            using (var conexion = new SqliteConnection(CadenaConexion)) {
                 conexion.Open();
-                using (var comando = new SQLiteCommand(CrearTablaCalendarios, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaConductores, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaDiasCalendario, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaFestivos, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaGraficos, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaGruposGraficos, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaPluses, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaRegulaciones, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaValoraciones, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(CrearTablaCalendarios, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SqliteCommand(CrearTablaConductores, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SqliteCommand(CrearTablaDiasCalendario, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SqliteCommand(CrearTablaFestivos, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SqliteCommand(CrearTablaGraficos, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SqliteCommand(CrearTablaGruposGraficos, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SqliteCommand(CrearTablaPluses, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SqliteCommand(CrearTablaRegulaciones, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SqliteCommand(CrearTablaValoraciones, conexion)) await comando.ExecuteNonQueryAsync();
             }
         }
 
@@ -535,12 +539,12 @@ namespace Orion.Servicios {
         /// Inicializa un centro, creando el archivo de base de datos si no existe.
         /// En caso de que la versión de la base de datos no sea correcta, crea o modifica las tablas en consecuencia.
         /// </summary>
-        public void InicializarBasesDatos() {
-            int version = GetDbVersion();
+        public async Task InicializarBaseDatosAsync() {
+            int version = await GetDbVersionAsync();
             switch (version) {
                 case 0: // BASE DE DATOS NUEVA: Creamos las tablas y actualizamos el número de versión al correcto.
-                    CrearDBs();
-                    SetDbVersion(DB_VERSION);
+                    await CrearTablasAsync();
+                    await SetDbVersionAsync(DB_VERSION);
                     break;
             }
         }
@@ -771,7 +775,7 @@ namespace Orion.Servicios {
             string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idConductor AND strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Codigo = 1;";
             DateTime fecha = new DateTime(año, mes, 1);
             int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
-            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@idCOnductor", idConductor).AddParameter("@fecha", fecha);
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@idConductor", idConductor).AddParameter("@fecha", fecha);
             try {
                 return GetTimeSpanScalar(consulta);
             } catch (Exception ex) {
@@ -830,7 +834,8 @@ namespace Orion.Servicios {
                                 "WHERE Numero = @numero";
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
             try {
-                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                if (CadenaConexion == null) return TimeSpan.Zero;
+                using (var conexion = new SqliteConnection(CadenaConexion)) {
                     conexion.Open();
                     var consulta = new SQLiteExpression(comandoDias).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                     using (var comando = consulta.GetCommand(conexion)) {
@@ -1650,6 +1655,7 @@ namespace Orion.Servicios {
 
 
         public IEnumerable<GraficosPorDia> GetGraficosByDia(DateTime fecha) {
+            if (CadenaConexion == null) return null;
             try {
                 var consultaSQL = "" +
                     "WITH " +
@@ -1688,7 +1694,7 @@ namespace Orion.Servicios {
                     consulta.AddParameter("@diaSemana", diasemana);
                     var Gpd = new GraficosPorDia();
                     Gpd.Fecha = fechaDia;
-                    using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                    using (var conexion = new SqliteConnection(CadenaConexion)) {
                         conexion.Open();
                         using (var comando = consulta.GetCommand(conexion)) {
                             using (var lector = comando.ExecuteReader()) {
@@ -1710,13 +1716,13 @@ namespace Orion.Servicios {
 
         public List<DescansosPorDia> GetDescansosByDia(DateTime fecha) {
             try {
-                var consulta = new SQLiteExpression("SELECT Count(*) " +
-                                    "FROM DiasCalendario " +
-                                    "WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND (Grafico = -2 OR Grafico = -3)");
-
                 List<DescansosPorDia> lista = new List<DescansosPorDia>();
 
                 for (int dia = 1; dia <= DateTime.DaysInMonth(fecha.Year, fecha.Month); dia++) {
+                    var consulta = new SQLiteExpression("SELECT Count(*) " +
+                                        "FROM DiasCalendario " +
+                                        "WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND (Grafico = -2 OR Grafico = -3)");
+
                     DateTime fechaDia = new DateTime(fecha.Year, fecha.Month, dia);
                     consulta.AddParameter("@fecha", fechaDia);
                     var Dpd = new DescansosPorDia();
@@ -1748,10 +1754,11 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
         public IEnumerable<Pijama.DiaPijama> GetDiasPijama(IEnumerable<DiaCalendarioBase> listadias, int comodin) {
+            if (CadenaConexion == null) return null;
             // Creamos la lista que se devolverá.
             var lista = new List<Pijama.DiaPijama>();
             try {
-                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                using (var conexion = new SqliteConnection(CadenaConexion)) {
                     conexion.Open();
                     foreach (var dia in listadias) {
                         // Creamos el día pijama a añadir a la lista.
@@ -1831,6 +1838,7 @@ namespace Orion.Servicios {
 
 
         public ResumenPijama GetResumenHastaMes(int año, int mes, int matricula, int comodin) {
+            if (CadenaConexion == null) return null;
             // Inicializamos el resultado.
             ResumenPijama resultado = new ResumenPijama();
             // Establecemos la fecha del día 1 del siguiente mes al indicado.
@@ -1838,7 +1846,7 @@ namespace Orion.Servicios {
             // Establecemos el id del conductor
             int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
             try {
-                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                using (var conexion = new SqliteConnection(CadenaConexion)) {
                     conexion.Open();
                     //----------------------------------------------------------------------------------------------------
                     // HORAS ACUMULADAS
@@ -2106,12 +2114,12 @@ namespace Orion.Servicios {
         /// Prueba de cómo se pueden acceder a dos bases de datos diferentes a la vez.
         /// </summary>
         public IEnumerable<Conductor> GetPrueba(string path) {
-
+            if (CadenaConexion == null) return null;
             try {
                 //string comandoSQL = $"ATTACH '{path}' AS Arr; SELECT * FROM Conductores UNION ALL SELECT * FROM Arr.Conductores ORDER BY Matricula ASC;";
                 string comandoSQL = $"ATTACH '{path}' AS Arr; SELECT * FROM Conductores; SELECT * FROM Arr.Conductores;";
                 var consulta = new SQLiteExpression(comandoSQL);
-                using (var conexion = new SQLiteConnection(App.Global.CadenaConexionSQL)) {
+                using (var conexion = new SqliteConnection(App.Global.CadenaConexionSQL)) {
                     conexion.Open();
                     using (var comando = consulta.GetCommand(conexion)) {
                         using (var lector = comando.ExecuteReader()) {

@@ -10,7 +10,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data.OleDb;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -213,7 +213,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SQLiteDataReader lector) {
+        public void FromReader(SqliteDataReader lector) {
             _id = lector.ToInt32("_id");
             _nombre = lector.ToString("Nombre");
             _descripcion = lector.ToString("Descripcion");
@@ -222,12 +222,12 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        public IEnumerable<SqliteParameter> Parametros {
             get {
-                var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("Nombre", Nombre));
-                lista.Add(new SQLiteParameter("Descripcion", Descripcion));
-                //lista.Add(new SQLiteParameter("Id", Id));
+                var lista = new List<SqliteParameter>();
+                lista.Add(new SqliteParameter("Nombre", Nombre));
+                lista.Add(new SqliteParameter("Descripcion", Descripcion));
+                //lista.Add(new SqliteParameter("Id", Id));
                 return lista;
             }
         }

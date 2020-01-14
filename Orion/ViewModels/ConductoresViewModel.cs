@@ -62,6 +62,7 @@ namespace Orion.ViewModels {
                 return;
             }
             ListaConductores = new NotifyCollection<Conductor>(BdConductores.GetConductores());
+            //Task.Run(async () => ListaConductores = new NotifyCollection<Conductor>(await App.Global.Repository.GetItemsAsync<Conductor>()));
             PropiedadCambiada(nameof(Detalle));
         }
 

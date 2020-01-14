@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 using Orion.Config;
 using Orion.Interfaces;
 
@@ -516,7 +516,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public virtual void FromReader(SQLiteDataReader lector) {
+        public virtual void FromReader(SqliteDataReader lector) {
             _id = lector.ToInt32("_id");
             _idgrupo = lector.ToInt32("IdGrupo");
             validez = lector.ToDateTime("Validez");
@@ -543,30 +543,30 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        public IEnumerable<SqliteParameter> Parametros {
             get {
-                var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("IdGrupo", IdGrupo));
-                lista.Add(new SQLiteParameter("Validez", Validez.ToString("yyyy-MM-dd")));
-                lista.Add(new SQLiteParameter("NoCalcular", NoCalcular));
-                lista.Add(new SQLiteParameter("Numero", Numero));
-                lista.Add(new SQLiteParameter("DiaSemana", DiaSemana));
-                lista.Add(new SQLiteParameter("Turno", Turno));
-                lista.Add(new SQLiteParameter("Inicio", Inicio.HasValue ? Inicio.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("Final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("InicioPartido", InicioPartido.HasValue ? InicioPartido.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("FinalPartido", FinalPartido.HasValue ? FinalPartido.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("Valoracion", Valoracion.Ticks));
-                lista.Add(new SQLiteParameter("Trabajadas", Trabajadas.Ticks));
-                lista.Add(new SQLiteParameter("Acumuladas", Acumuladas.Ticks));
-                lista.Add(new SQLiteParameter("Nocturnas", Nocturnas.Ticks));
-                lista.Add(new SQLiteParameter("Desayuno", Desayuno.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SQLiteParameter("Comida", Comida.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SQLiteParameter("Cena", Cena.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SQLiteParameter("PlusCena", PlusCena.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza));
-                lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria));
-                //lista.Add(new SQLiteParameter("Id", Id));
+                var lista = new List<SqliteParameter>();
+                lista.Add(new SqliteParameter("IdGrupo", IdGrupo));
+                lista.Add(new SqliteParameter("Validez", Validez.ToString("yyyy-MM-dd")));
+                lista.Add(new SqliteParameter("NoCalcular", NoCalcular));
+                lista.Add(new SqliteParameter("Numero", Numero));
+                lista.Add(new SqliteParameter("DiaSemana", DiaSemana));
+                lista.Add(new SqliteParameter("Turno", Turno));
+                lista.Add(new SqliteParameter("Inicio", Inicio.HasValue ? Inicio.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("Final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("InicioPartido", InicioPartido.HasValue ? InicioPartido.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("FinalPartido", FinalPartido.HasValue ? FinalPartido.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SqliteParameter("Valoracion", Valoracion.Ticks));
+                lista.Add(new SqliteParameter("Trabajadas", Trabajadas.Ticks));
+                lista.Add(new SqliteParameter("Acumuladas", Acumuladas.Ticks));
+                lista.Add(new SqliteParameter("Nocturnas", Nocturnas.Ticks));
+                lista.Add(new SqliteParameter("Desayuno", Desayuno.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SqliteParameter("Comida", Comida.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SqliteParameter("Cena", Cena.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SqliteParameter("PlusCena", PlusCena.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SqliteParameter("PlusLimpieza", PlusLimpieza));
+                lista.Add(new SqliteParameter("PlusPaqueteria", PlusPaqueteria));
+                //lista.Add(new SqliteParameter("Id", Id));
                 return lista;
             }
         }

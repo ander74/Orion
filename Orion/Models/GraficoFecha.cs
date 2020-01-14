@@ -7,7 +7,7 @@
 #endregion
 using System;
 using System.Data.OleDb;
-using System.Data.SQLite;
+using Microsoft.Data.Sqlite;
 
 namespace Orion.Models {
 
@@ -65,7 +65,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public override void FromReader(SQLiteDataReader lector) {
+        public override void FromReader(SqliteDataReader lector) {
             base.FromReader(lector);
             _fecha = lector.ToDateTime("Fecha");
             Nuevo = false;

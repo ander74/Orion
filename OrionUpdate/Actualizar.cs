@@ -48,10 +48,16 @@ namespace OrionUpdate {
                 }
 
                 // Si las carpetas x86 y x64 no existen, las creamos...
-                string x86 = Path.Combine(rutaDestino, "x86");
-                string x64 = Path.Combine(rutaDestino, "x64");
-                if (!Directory.Exists(x86)) Directory.CreateDirectory(x86);
-                if (!Directory.Exists(x64)) Directory.CreateDirectory(x64);
+                //string x86 = CombinarYCrearCarpeta(rutaDestino, "x86");
+                //string x64 = CombinarYCrearCarpeta(rutaDestino, "x64");
+                // Si las carpetas runtime y demás no existen, las creamos...
+                string runtime = CombinarYCrearCarpeta(rutaDestino, "runtimes");
+                string winArm = CombinarYCrearCarpeta(runtime, "win-arm");
+                string winx64 = CombinarYCrearCarpeta(runtime, "win-x64");
+                string winx86 = CombinarYCrearCarpeta(runtime, "win-x86");
+                string nativeArm = CombinarYCrearCarpeta(winArm, "native");
+                string nativex64 = CombinarYCrearCarpeta(winx64, "native");
+                string nativex86 = CombinarYCrearCarpeta(winx86, "native");
 
                 // BIBLIOTECAS
                 if (!CopiarArchivoRaiz("Xceed.Wpf.Toolkit.dll")) {
@@ -67,6 +73,27 @@ namespace OrionUpdate {
                     GenerarError();
                     return;
                 }
+
+                if (!CopiarArchivoRaiz("System.Buffers.dll")) {
+                    GenerarError();
+                    return;
+                }
+
+                if (!CopiarArchivoRaiz("System.Memory.dll")) {
+                    GenerarError();
+                    return;
+                }
+
+                if (!CopiarArchivoRaiz("System.Numerics.Vectors.dll")) {
+                    GenerarError();
+                    return;
+                }
+
+                if (!CopiarArchivoRaiz("System.Runtime.CompilerServices.Unsafe.dll")) {
+                    GenerarError();
+                    return;
+                }
+
 
                 // Las siguientes son para iText7
                 if (!CopiarArchivoRaiz("BouncyCastle.Crypto.dll")) {
@@ -109,6 +136,14 @@ namespace OrionUpdate {
                     GenerarError();
                     return;
                 }
+                if (!CopiarArchivoRaiz("itext.styledxmlparser.dll")) {
+                    GenerarError();
+                    return;
+                }
+                if (!CopiarArchivoRaiz("itext.svg.dll")) {
+                    GenerarError();
+                    return;
+                }
                 // Las siguientes son para Live Charts
                 if (!CopiarArchivoRaiz("LiveCharts.dll")) {
                     GenerarError();
@@ -123,33 +158,49 @@ namespace OrionUpdate {
                     GenerarError();
                     return;
                 }
-                // Las siguientes son para Entity Framework (excel)
-                if (!CopiarArchivoRaiz("EntityFramework.dll")) {
+                //// Las siguientes son para Entity Framework (excel)
+                //if (!CopiarArchivoRaiz("EntityFramework.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("EntityFramework.SqlServer.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
+                // Las siguientes son para SQLite
+                if (!CopiarArchivoRaiz("e_sqlite3.dll")) {
                     GenerarError();
                     return;
                 }
-                if (!CopiarArchivoRaiz("EntityFramework.SqlServer.dll")) {
+                if (!CopiarArchivoRaiz("Microsoft.Data.Sqlite.dll")) {
                     GenerarError();
                     return;
                 }
-                // Las siguientes son para SQLite (excel)
-                if (!CopiarArchivoRaiz("System.Data.SQLite.dll")) {
+                if (!CopiarArchivoRaiz("SQLitePCLRaw.batteries_v2.dll")) {
                     GenerarError();
                     return;
                 }
-                if (!CopiarArchivoRaiz("System.Data.SQLite.EF6.dll")) {
+                if (!CopiarArchivoRaiz("SQLitePCLRaw.core.dll")) {
                     GenerarError();
                     return;
                 }
-                if (!CopiarArchivoRaiz("System.Data.SQLite.Linq.dll")) {
+                if (!CopiarArchivoRaiz("SQLitePCLRaw.nativelibrary.dll")) {
                     GenerarError();
                     return;
                 }
-                if (!CopiarArchivoRaiz("x86\\SQLite.Interop.dll")) {
+                if (!CopiarArchivoRaiz("SQLitePCLRaw.provider.dynamic_cdecl.dll")) {
                     GenerarError();
                     return;
                 }
-                if (!CopiarArchivoRaiz("x64\\SQLite.Interop.dll")) {
+                if (!CopiarArchivoRaiz("runtimes\\win-arm\\native\\e_sqlite3.dll")) {
+                    GenerarError();
+                    return;
+                }
+                if (!CopiarArchivoRaiz("runtimes\\win-x64\\native\\e_sqlite3.dll")) {
+                    GenerarError();
+                    return;
+                }
+                if (!CopiarArchivoRaiz("runtimes\\win-x86\\native\\e_sqlite3.dll")) {
                     GenerarError();
                     return;
                 }
@@ -163,43 +214,44 @@ namespace OrionUpdate {
                     return;
                 }
 
-                // PLANTILLAS
-                if (!CopiarArchivoRaiz("Plantillas\\Calendarios.xlsx")) {
-                    GenerarError();
-                    return;
-                }
-                if (!CopiarArchivoRaiz("Plantillas\\EstadisticasGraficos.xlsx")) {
-                    GenerarError();
-                    return;
-                }
-                if (!CopiarArchivoRaiz("Plantillas\\EstadisticasGraficosPorCentros.xlsx")) {
-                    GenerarError();
-                    return;
-                }
-                if (!CopiarArchivoRaiz("Plantillas\\FallosCalendarios.xlsx")) {
-                    GenerarError();
-                    return;
-                }
-                if (!CopiarArchivoRaiz("Plantillas\\GraficoIndividual.xlsx")) {
-                    GenerarError();
-                    return;
-                }
-                if (!CopiarArchivoRaiz("Plantillas\\Graficos.xlsx")) {
-                    GenerarError();
-                    return;
-                }
-                if (!CopiarArchivoRaiz("Plantillas\\Pijama.xlsx")) {
-                    GenerarError();
-                    return;
-                }
-                if (!CopiarArchivoRaiz("Plantillas\\Reclamacion.xlsx")) {//TODO: Eliminar este archivo cuando esté correcta la reclamación PDF
-                    GenerarError();
-                    return;
-                }
-                if (!CopiarArchivoRaiz("Plantillas\\Reclamacion.pdf")) {
-                    GenerarError();
-                    return;
-                }
+                //// PLANTILLAS
+                //if (!CopiarArchivoRaiz("Plantillas\\Calendarios.xlsx")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("Plantillas\\EstadisticasGraficos.xlsx")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("Plantillas\\EstadisticasGraficosPorCentros.xlsx")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("Plantillas\\FallosCalendarios.xlsx")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("Plantillas\\GraficoIndividual.xlsx")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("Plantillas\\Graficos.xlsx")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("Plantillas\\Pijama.xlsx")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("Plantillas\\Reclamacion.xlsx")) {//TODO: Eliminar este archivo cuando esté correcta la reclamación PDF
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("Plantillas\\Reclamacion.pdf")) {
+                //    GenerarError();
+                //    return;
+                //}
+
                 // PROGRAMA
                 if (!CopiarArchivoRaiz("Orion.exe")) {
                     GenerarError();
@@ -266,6 +318,12 @@ namespace OrionUpdate {
             return true;
         }
 
+
+        static string CombinarYCrearCarpeta(string carpeta1, string carpeta2) {
+            string carpeta = Path.Combine(carpeta1, carpeta2);
+            if (!Directory.Exists(carpeta)) Directory.CreateDirectory(carpeta);
+            return carpeta;
+        }
 
 
     }

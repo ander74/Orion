@@ -10,12 +10,12 @@ namespace Orion.ViewModels {
     using System;
     using System.ComponentModel;
     using System.Data.OleDb;
-    using System.Data.SQLite;
     using System.Diagnostics;
     using System.IO;
     using System.Windows;
     using Config;
     using DataModels;
+    using Microsoft.Data.Sqlite;
     using Models;
     using Orion.Interfaces;
     using Servicios;
@@ -56,12 +56,16 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         public GlobalVM() {
 
-            // Definimos la carpeta 'Configuracion Orion' en la carpeta 'Documentos' del usuario. Si no existe, la creamos.
-            CarpetaConfiguracion = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Configuracion Orion");
+            // Definimos la carpeta 'Orion' en la carpeta 'Documentos' del usuario. Si no existe, la creamos.
+            CarpetaOrion = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Orion");
+            if (!Directory.Exists(CarpetaOrion)) Directory.CreateDirectory(CarpetaOrion);
+
+            // Definimos la carpeta 'Configuracion Orion' en la carpeta 'Orion'. Si no existe, la creamos.
+            CarpetaConfiguracion = Path.Combine(CarpetaOrion, "Configuracion");
             if (!Directory.Exists(CarpetaConfiguracion)) Directory.CreateDirectory(CarpetaConfiguracion);
 
             // Definimos la carpeta 'Datos Orion' en la carpeta 'Documentos' del usuario. Si no existe, la creamos.
-            CarpetaDatos = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Datos Orion");
+            CarpetaDatos = Path.Combine(CarpetaOrion, "Datos");
             if (!Directory.Exists(CarpetaDatos)) Directory.CreateDirectory(CarpetaDatos);
 
             // ----------------------------------------------------------------------------------------------------------------------------
@@ -92,11 +96,11 @@ namespace Orion.ViewModels {
             Convenio.Cargar(ArchivoOpcionesConvenio);
 
             // Si las carpetas de configuracion están en blanco, crearlas y rellenarlas.
-            if (Configuracion.CarpetaDatos == "") Configuracion.CarpetaDatos = CreateAndGetCarpetaEnDatos("Datos");
-            if (Configuracion.CarpetaDropbox == "") Configuracion.CarpetaDropbox = CreateAndGetCarpetaEnDatos("Dropbox");
-            if (Configuracion.CarpetaInformes == "") Configuracion.CarpetaInformes = CreateAndGetCarpetaEnDatos("Informes");
-            if (Configuracion.CarpetaAyuda == "") Configuracion.CarpetaAyuda = CreateAndGetCarpetaEnDatos("Ayuda");
-            if (Configuracion.CarpetaCopiasSeguridad == "") Configuracion.CarpetaCopiasSeguridad = CreateAndGetCarpetaEnDatos("CopiasSeguridad");
+            if (Configuracion.CarpetaDatos == "") Configuracion.CarpetaDatos = CarpetaDatos;
+            if (Configuracion.CarpetaDropbox == "") Configuracion.CarpetaDropbox = CreateAndGetCarpetaEnOrion("Dropbox");
+            if (Configuracion.CarpetaInformes == "") Configuracion.CarpetaInformes = CreateAndGetCarpetaEnOrion("Informes");
+            if (Configuracion.CarpetaAyuda == "") Configuracion.CarpetaAyuda = CreateAndGetCarpetaEnOrion("Ayuda");
+            if (Configuracion.CarpetaCopiasSeguridad == "") Configuracion.CarpetaCopiasSeguridad = CreateAndGetCarpetaEnOrion("CopiasSeguridad");
             if (Configuracion.CarpetaOrigenActualizar == "") Configuracion.CarpetaOrigenActualizar = App.RutaInicial;
             // Creamos los servicios
             mensajes = new MensajesServicio();
@@ -146,9 +150,9 @@ namespace Orion.ViewModels {
             if (centro == Centros.Desconocido) return null;
             // Definimos el archivo de base de datos
             string archivo = Utils.CombinarCarpetas(Configuracion.CarpetaDatos, centro.ToString() + ".db3");
-            //if (!File.Exists(archivo)) SQLiteConnection.CreateFile(archivo); //TODO: Comprobar que esto funciona bien.
+            //if (!File.Exists(archivo)) SqliteConnection.CreateFile(archivo); //TODO: Comprobar que esto funciona bien.
             // Establecemos la cadena de conexión
-            SQLiteConnectionStringBuilder cadenaConexionBuilder = new SQLiteConnectionStringBuilder {
+            SqliteConnectionStringBuilder cadenaConexionBuilder = new SqliteConnectionStringBuilder {
                 DataSource = archivo,
             };
             string cadenaConexion = cadenaConexionBuilder.ToString();
@@ -190,8 +194,8 @@ namespace Orion.ViewModels {
         }
 
 
-        public string CreateAndGetCarpetaEnDatos(string carpeta) {
-            var resultado = Path.Combine(CarpetaDatos, carpeta);
+        public string CreateAndGetCarpetaEnOrion(string carpeta) {
+            var resultado = Path.Combine(CarpetaOrion, carpeta);
             if (!Directory.Exists(resultado)) Directory.CreateDirectory(resultado);
             return resultado;
         }
@@ -442,6 +446,7 @@ namespace Orion.ViewModels {
         }
 
 
+
         //====================================================================================================
         // REPOSITORIO DE DATOS
         //====================================================================================================
@@ -599,6 +604,8 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         #region OPCIONES
         // ====================================================================================================
+
+        public string CarpetaOrion { get; set; }
 
 
         public string CarpetaConfiguracion { get; set; }

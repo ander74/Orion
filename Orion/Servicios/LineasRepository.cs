@@ -7,7 +7,8 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using System.Data.SQLite;
+using System.Threading.Tasks;
+using Microsoft.Data.Sqlite;
 using Orion.Config;
 using Orion.Models;
 
@@ -76,7 +77,8 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
         public LineasRepository(string cadenaConexion) : base(cadenaConexion) {
-            InicializarBasesDatos();
+            //Task.Run(async () => await InicializarBaseDatosAsync());
+            if (CadenaConexion != null) InicializarBaseDatosAsync().Wait();
         }
 
         #endregion
@@ -87,12 +89,12 @@ namespace Orion.Servicios {
         #region MÉTODOS PRIVADOS
         // ====================================================================================================
 
-        private void CrearDBs() {
-            using (var conexion = new SQLiteConnection(CadenaConexion)) {
+        private async Task CrearTablasAsync() {
+            using (var conexion = new SqliteConnection(CadenaConexion)) {
                 conexion.Open();
-                using (var comando = new SQLiteCommand(CrearTablaLineas, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaItinerarios, conexion)) comando.ExecuteNonQuery();
-                using (var comando = new SQLiteCommand(CrearTablaParadas, conexion)) comando.ExecuteNonQuery();
+                using (var comando = new SqliteCommand(CrearTablaLineas, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SqliteCommand(CrearTablaItinerarios, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SqliteCommand(CrearTablaParadas, conexion)) await comando.ExecuteNonQueryAsync();
             }
         }
 
@@ -112,11 +114,11 @@ namespace Orion.Servicios {
         /// Crea el archivo de base de datos si no existe.
         /// En caso de que la versión de la base de datos no sea correcta, crea o modifica las tablas en consecuencia.
         /// </summary>
-        public void InicializarBasesDatos() {
+        public async Task InicializarBaseDatosAsync() {
             switch (GetDbVersion()) {
                 case 0: // BASE DE DATOS NUEVA: Creamos las tablas y actualizamos el número de versión al correcto.
-                    CrearDBs();
-                    SetDbVersion(DB_VERSION);
+                    await CrearTablasAsync();
+                    await SetDbVersionAsync(DB_VERSION);
                     break;
             }
         }

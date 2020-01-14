@@ -13,7 +13,7 @@ namespace Orion.Models {
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Data.OleDb;
-    using System.Data.SQLite;
+    using Microsoft.Data.Sqlite;
     using System.Linq;
     using Orion.Interfaces;
 
@@ -328,7 +328,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SQLiteDataReader lector) {
+        public void FromReader(SqliteDataReader lector) {
             _id = lector.ToInt32("_id");
             matriculaConductor = lector.ToInt32("MatriculaConductor");
             _fecha = lector.ToDateTime("Fecha");
@@ -338,13 +338,13 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        public IEnumerable<SqliteParameter> Parametros {
             get {
-                var lista = new List<SQLiteParameter>();
-                lista.Add(new SQLiteParameter("MatriculaConductor", MatriculaConductor));
-                lista.Add(new SQLiteParameter("Fecha", Fecha.ToString("yyyy-MM-dd")));
-                lista.Add(new SQLiteParameter("Notas", Notas));
-                //lista.Add(new SQLiteParameter("Id", Id));
+                var lista = new List<SqliteParameter>();
+                lista.Add(new SqliteParameter("MatriculaConductor", MatriculaConductor));
+                lista.Add(new SqliteParameter("Fecha", Fecha.ToString("yyyy-MM-dd")));
+                lista.Add(new SqliteParameter("Notas", Notas));
+                //lista.Add(new SqliteParameter("Id", Id));
                 return lista;
             }
         }

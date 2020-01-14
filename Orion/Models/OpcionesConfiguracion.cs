@@ -5,18 +5,14 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Media;
+using Newtonsoft.Json;
 
 namespace Orion.Models {
 
-	public class OpcionesConfiguracion: NotifyBase {
+	public class OpcionesConfiguracion : NotifyBase {
 
 
 		// ====================================================================================================
@@ -85,12 +81,12 @@ namespace Orion.Models {
 		}
 
 
-		private int _centroinicial = 0;
+		private int _centroinicial = 1;
 		public int CentroInicial {
 			get { return _centroinicial; }
 			set {
 				if (_centroinicial != value) {
-					_centroinicial = value;
+					_centroinicial = value == 0 ? 1 : value;
 					PropiedadCambiada();
 				}
 			}
@@ -273,28 +269,28 @@ namespace Orion.Models {
 		}
 
 
-        private string _rutaLogoSindicato = "";
-        public string RutaLogoSindicato {
-            get { return _rutaLogoSindicato; }
-            set {
-                if (_rutaLogoSindicato != value) {
-                    _rutaLogoSindicato = value;
-                    PropiedadCambiada();
-                }
-            }
-        }
+		private string _rutaLogoSindicato = "";
+		public string RutaLogoSindicato {
+			get { return _rutaLogoSindicato; }
+			set {
+				if (_rutaLogoSindicato != value) {
+					_rutaLogoSindicato = value;
+					PropiedadCambiada();
+				}
+			}
+		}
 
 
-        private string _rutamarcaagua = "";
-        public string RutaMarcaAgua {
-            get { return _rutamarcaagua; }
-            set {
-                if (_rutamarcaagua != value) {
-                    _rutamarcaagua = value;
-                    PropiedadCambiada();
-                }
-            }
-        }
+		private string _rutamarcaagua = "";
+		public string RutaMarcaAgua {
+			get { return _rutamarcaagua; }
+			set {
+				if (_rutamarcaagua != value) {
+					_rutamarcaagua = value;
+					PropiedadCambiada();
+				}
+			}
+		}
 
 
 

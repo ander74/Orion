@@ -45,6 +45,7 @@ namespace Orion.ViewModels {
             FileService = fileService;
             _listacalendarios = new ObservableCollection<Calendario>();
             _listacalendarios.CollectionChanged += ListaCalendarios_CollectionChanged;
+            VistaCalendarios = new ListCollectionView(ListaCalendarios);
             FechaActual = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
 
             // PASO DE ACCESS A SQLITE
@@ -73,6 +74,7 @@ namespace Orion.ViewModels {
                 return;
             }
             ListaCalendarios = BdCalendarios.GetCalendarios(FechaActual.Year, FechaActual.Month);
+
             if (ListaCalendarios.Any(x => x.HayDiasNuevos)) HayCambios = true;
             foreach (Calendario c in ListaCalendarios) {
                 c.ObjetoCambiado += ObjetoCambiadoEventHandler;
