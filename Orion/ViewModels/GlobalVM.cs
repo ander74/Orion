@@ -60,21 +60,24 @@ namespace Orion.ViewModels {
             CarpetaOrion = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Orion");
             if (!Directory.Exists(CarpetaOrion)) Directory.CreateDirectory(CarpetaOrion);
 
-            // Definimos la carpeta 'Configuracion Orion' en la carpeta 'Orion'. Si no existe, la creamos.
+            // Definimos la carpeta 'Configuracion' en la carpeta 'Orion'. Si no existe, la creamos.
             CarpetaConfiguracion = Path.Combine(CarpetaOrion, "Configuracion");
             if (!Directory.Exists(CarpetaConfiguracion)) Directory.CreateDirectory(CarpetaConfiguracion);
 
-            // Definimos la carpeta 'Datos Orion' en la carpeta 'Documentos' del usuario. Si no existe, la creamos.
-            CarpetaDatos = Path.Combine(CarpetaOrion, "Datos");
-            if (!Directory.Exists(CarpetaDatos)) Directory.CreateDirectory(CarpetaDatos);
+            // Definimos la carpeta 'Datos' en la carpeta 'Orion' del usuario. Si no existe, la creamos.
+            //CarpetaDatos = Path.Combine(CarpetaOrion, "Datos");
+            //if (!Directory.Exists(CarpetaDatos)) Directory.CreateDirectory(CarpetaDatos);
 
             // ----------------------------------------------------------------------------------------------------------------------------
-            // Si los archivos no existen y sí existen en la raiz, copiarlos.
+            // Copiar los archivos de configuración de la raiz (si existen) a la carpeta de configuracion en 'Documentos/Orion', siempre
+            // que no existan ya.
             //
             // El siguiente bloque se puede eliminar una vez que ya llevemos un tiempo usando las nuevas ubicaciones de los archivos.
             // ----------------------------------------------------------------------------------------------------------------------------
+            // CONFIG
             if (!File.Exists(ArchivoOpcionesConfiguracion) && File.Exists("Config.json"))
                 File.Copy("Config.json", ArchivoOpcionesConfiguracion);
+            // CONVENIO
             if (!File.Exists(ArchivoOpcionesConvenio) && File.Exists("Convenio.json"))
                 File.Copy("Convenio.json", ArchivoOpcionesConvenio);
             // ARRASATE
@@ -96,7 +99,7 @@ namespace Orion.ViewModels {
             Convenio.Cargar(ArchivoOpcionesConvenio);
 
             // Si las carpetas de configuracion están en blanco, crearlas y rellenarlas.
-            if (Configuracion.CarpetaDatos == "") Configuracion.CarpetaDatos = CarpetaDatos;
+            if (Configuracion.CarpetaDatos == "") Configuracion.CarpetaDatos = CreateAndGetCarpetaEnOrion("Datos");
             if (Configuracion.CarpetaDropbox == "") Configuracion.CarpetaDropbox = CreateAndGetCarpetaEnOrion("Dropbox");
             if (Configuracion.CarpetaInformes == "") Configuracion.CarpetaInformes = CreateAndGetCarpetaEnOrion("Informes");
             if (Configuracion.CarpetaAyuda == "") Configuracion.CarpetaAyuda = CreateAndGetCarpetaEnOrion("Ayuda");
@@ -611,7 +614,7 @@ namespace Orion.ViewModels {
         public string CarpetaConfiguracion { get; set; }
 
 
-        public string CarpetaDatos { get; set; }
+        //public string CarpetaDatos { get; set; }
 
 
         public string ArchivoOpcionesConfiguracion {

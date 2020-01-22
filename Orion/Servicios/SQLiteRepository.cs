@@ -168,8 +168,12 @@ namespace Orion.Servicios {
         protected int GuardarItem<T>(SqliteConnection conexion, T item, bool ignorarLista = false) where T : ISQLiteItem {
             if (conexion == null || conexion.State != ConnectionState.Open || item == null) return -1;
             if (item.Id == 0) {
+                var insertCommand = GetInsertCommand(item);
                 using (var comando = new SqliteCommand(GetInsertCommand(item), conexion)) {
                     comando.Parameters.AddRange(item.Parametros.ToArray());
+                    foreach (var param in comando.Parameters) {
+                        if (param is SqliteParameter p) p.ParameterName = $"@{p.ParameterName.ToLower()}";
+                    }
                     comando.ExecuteNonQuery();
                     using (var comando2 = new SqliteCommand(Identity, conexion)) {
                         int id = Convert.ToInt32(comando2.ExecuteScalar());
@@ -179,6 +183,9 @@ namespace Orion.Servicios {
             } else {
                 using (var comando = new SqliteCommand(GetUpdateCommand(item), conexion)) {
                     comando.Parameters.AddRange(item.Parametros.ToArray());
+                    foreach (var param in comando.Parameters) {
+                        if (param is SqliteParameter p) p.ParameterName = $"@{p.ParameterName.ToLower()}";
+                    }
                     comando.Parameters.AddWithValue("@id", item.Id);
                     comando.ExecuteNonQuery();
                 }
@@ -605,6 +612,9 @@ namespace Orion.Servicios {
             if (item.Id == 0) {
                 using (var comando = new SqliteCommand(GetInsertCommand(item), conexion)) {
                     comando.Parameters.AddRange(item.Parametros.ToArray());
+                    foreach (var param in comando.Parameters) {
+                        if (param is SqliteParameter p) p.ParameterName = $"@{p.ParameterName.ToLower()}";
+                    }
                     await comando.ExecuteNonQueryAsync();
                     using (var comando2 = new SqliteCommand(Identity, conexion)) {
                         int id = Convert.ToInt32(await comando2.ExecuteScalarAsync());
@@ -614,6 +624,9 @@ namespace Orion.Servicios {
             } else {
                 using (var comando = new SqliteCommand(GetUpdateCommand(item), conexion)) {
                     comando.Parameters.AddRange(item.Parametros.ToArray());
+                    foreach (var param in comando.Parameters) {
+                        if (param is SqliteParameter p) p.ParameterName = $"@{p.ParameterName.ToLower()}";
+                    }
                     comando.Parameters.AddWithValue("@id", item.Id);
                     await comando.ExecuteNonQueryAsync();
                 }

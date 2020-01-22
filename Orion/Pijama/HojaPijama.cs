@@ -168,6 +168,7 @@ namespace Orion.Pijama {
             int findestrabajados = 0;       // Fines de semana trabajados.
             bool sabadotrabajado = false;   // Indica si el último sábado se ha trabajado.
             bool sabadodescansado = false;  // Indica si el último sábado se ha descansado.
+            int totalDiasDescanso = 0;
 
             TimeSpan? finalAnterior = TimeSpan.Zero; // Indica la hora final del servicio anterior.
 
@@ -198,8 +199,9 @@ namespace Orion.Pijama {
 
                 // DÍA NO TRABAJADO
                 if (dia.Grafico == -2 || dia.Grafico == -3) {
-                    // Se añade a días de descanso.
+                    // Se añade a días de descanso y al total de descansos.
                     diasdescansados++;
+                    totalDiasDescanso++;
                     // Si es el primero, se marca como primer día descansado.
                     if (diasdescansados == 1) primerdiadescanso = dia.DiaFecha.Day;
                     // Reiniciamos los días trabajados, inactivos y borramos el final anterior.
@@ -211,8 +213,9 @@ namespace Orion.Pijama {
 
                 // DESCANSO SUELTO
                 if (dia.Grafico == -5) {
-                    // Lo añadimos a descansos sueltos.
+                    // Lo añadimos a descansos sueltos y al total de descansos.
                     descansossueltos++;
+                    totalDiasDescanso++;
                     // Si hay más de dos descansos sueltos, se añade el fallo.
                     if (descansossueltos > 2) resultado += String.Format("Día {0:00}: Más de dos descansos sueltos en el mes.\n", dia.Dia);
                     // Reiniciamos los días trabajados, inactivos y borramos el final anterior.
@@ -316,8 +319,11 @@ namespace Orion.Pijama {
                 } else {
                     finalAnterior = null;
                 }
-
             }
+
+            // TOTAL DIAS DESCANSADOS MENOS DE 8 Y MAS DE 12
+            if (totalDiasDescanso < 8) resultado += $"Menos de 8 descansos en el mes.\n";
+            if (totalDiasDescanso > 12) resultado += $"Más de 12 descansos en el mes.\n";
 
             return resultado;
         }

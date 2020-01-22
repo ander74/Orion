@@ -123,7 +123,7 @@ namespace Orion.ViewModels {
                     // DÍAS TRABAJO
                     estadistica.DiasTrabajo = pijama.Trabajo.ToString("00");
                     // DÍAS DESCANSO
-                    estadistica.DiasDescanso = pijama.Descanso.ToString("00");
+                    estadistica.DiasDescanso = (pijama.Descanso + pijama.DescansoEnFinde + pijama.DescansoSuelto).ToString("00");
                     // FINDES TRABAJO No hay forma de saberlo.
                     //estadistica.FindesTrabajados = pijama.FindesCompletos.ToString("00");
                     // FINDES DESCANSO
