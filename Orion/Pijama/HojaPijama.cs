@@ -172,6 +172,19 @@ namespace Orion.Pijama {
 
             TimeSpan? finalAnterior = TimeSpan.Zero; // Indica la hora final del servicio anterior.
 
+            // TODO: Añadir función en el repositorio para cargar el calendario de un conductor y un mes en concreto.
+            var listaDiasAnterior = new List<DiaCalendarioBase>();
+            for (int dia = 1; dia <= 10; dia++) {
+                var fechaAnterior = Fecha.AddDays(dia * -1);
+                var diaAnterior = App.Global.Repository.GetDiaCalendario(Trabajador.Matricula, fechaAnterior);
+                listaDiasAnterior.Add(diaAnterior);
+            }
+            foreach (var diaAnterior in listaDiasAnterior.OrderByDescending(d => d?.DiaFecha)) {
+                if (diaAnterior.Grafico <= 0) break;
+                diastrabajados++;
+            }
+
+
             // Evaluamos los días.
             foreach (DiaPijama dia in ListaDias) {
 
@@ -793,6 +806,7 @@ namespace Orion.Pijama {
         public TimeSpan Acumuladas {
             get {
                 if (ListaDias == null) return TimeSpan.Zero;
+                var xxx = new TimeSpan(ListaDias.Sum(x => (x.GraficoTrabajado.Acumuladas.Ticks)));
                 return new TimeSpan(ListaDias.Sum(x => (x.GraficoTrabajado.Acumuladas.Ticks)));
             }
         }

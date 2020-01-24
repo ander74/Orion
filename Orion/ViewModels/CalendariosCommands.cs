@@ -86,6 +86,33 @@ namespace Orion.ViewModels {
         #endregion
 
 
+        #region BORRAR TODOS
+        private ICommand _cmdborrartodos;
+        public ICommand cmdBorrarTodos {
+            get {
+                if (_cmdborrartodos == null) _cmdborrartodos = new RelayCommand(p => BorrarTodos(), p => PuedeBorrarTodos());
+                return _cmdborrartodos;
+            }
+        }
+
+        private bool PuedeBorrarTodos() {
+            return VistaCalendarios.Count > 1;
+        }
+
+        private void BorrarTodos() {
+            string titulo = "Borrar Calendarios";
+            string mensaje = $"ATENCIÓN.\n\nSe van a borrar todos los calendarios.\n\n¿Desea continuar?";
+            if (Mensajes.VerMensaje(mensaje, titulo, true) == true) {
+                foreach (var cal in _listacalendarios) {
+                    _listaborrados.Add(cal);
+                }
+                _listacalendarios.Clear();
+                HayCambios = true;
+            }
+        }
+        #endregion
+
+
         #region DESHACER BORRAR
         private ICommand _cmddeshacerborrar;
         public ICommand cmdDeshacerBorrar {

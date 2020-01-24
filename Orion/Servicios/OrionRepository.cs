@@ -520,6 +520,14 @@ namespace Orion.Servicios {
                 using (var comando = new SqliteCommand(CrearTablaPluses, conexion)) await comando.ExecuteNonQueryAsync();
                 using (var comando = new SqliteCommand(CrearTablaRegulaciones, conexion)) await comando.ExecuteNonQueryAsync();
                 using (var comando = new SqliteCommand(CrearTablaValoraciones, conexion)) await comando.ExecuteNonQueryAsync();
+                var coman = conexion.CreateCommand();
+                coman.CommandText = "INSERT INTO Graficos (Numero) VALUES (5060);";
+                coman.ExecuteNonQuery();
+                coman.CommandText = "SELECT * FROM Graficos;";
+                var xxx = coman.ExecuteReader();
+
+
+
             }
         }
 
@@ -545,6 +553,7 @@ namespace Orion.Servicios {
                 case 0: // BASE DE DATOS NUEVA: Creamos las tablas y actualizamos el número de versión al correcto.
                     await CrearTablasAsync();
                     await SetDbVersionAsync(DB_VERSION);
+
                     break;
             }
         }

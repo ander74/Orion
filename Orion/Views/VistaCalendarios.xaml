@@ -249,6 +249,23 @@
                 </Button.Content>
             </Button>
 
+            <!--  BOTON BORRAR TODOS  -->
+            <Button
+                Command="{Binding CalendariosVM.cmdBorrarTodos}"
+                Style="{StaticResource EstiloBotonBarra}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Source="Imagenes/BorrarTabla.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Borrar Todos"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
             <!--  SEPARADOR  -->
             <TextBlock
                 Width="2"

@@ -7,6 +7,7 @@
     x:Class="Orion.Views.VistaEstadisticasTurnos"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cnv="clr-namespace:Orion.Convertidores"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Orion.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -30,6 +31,8 @@
         </Style>
 
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
+        <cnv:ConvertidorSuperHora x:Key="cnvHora" />
+        <cnv:ConvertidorDecimal x:Key="cnvDecimal" />
 
 
     </UserControl.Resources>
@@ -64,7 +67,24 @@
                             Source="Imagenes/VerTabla.png"
                             Style="{StaticResource EstiloImagen}" />
                         <TextBlock
-                            Text="Cargar De Calendarios"
+                            Text="Cargar Del Mes Actual"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--  BOTON CARGAR ESTADISTICAS TURNOS  -->
+            <Button
+                Command="{Binding EstadisticasTurnosVM.cmdCargarEstadisticasCalendariosAño}"
+                Style="{StaticResource EstiloBotonBarra}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Source="Imagenes/VerTabla.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Cargar Del Año Entero"
                             TextAlignment="Center"
                             TextWrapping="Wrap" />
                     </StackPanel>
@@ -367,7 +387,7 @@
                                 Width="300"
                                 Margin="4,0"
                                 VerticalAlignment="Center"
-                                Text="{Binding EstadisticasTurnosVM.TextoFecha}" />
+                                Text="{Binding EstadisticasTurnosVM.TextoCabecera}" />
                         </StackPanel>
                     </Label>
 
@@ -417,187 +437,187 @@
                         x:Name="Dias1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Dias[1]}"
+                        Binding="{Binding Dias[1], StringFormat=00}"
                         Header="Turnos 1" />
                     <DataGridTextColumn
                         x:Name="Dias2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Dias[2]}"
+                        Binding="{Binding Dias[2], StringFormat=00}"
                         Header="Turnos 2" />
                     <DataGridTextColumn
                         x:Name="Dias3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Dias[3]}"
+                        Binding="{Binding Dias[3], StringFormat=00}"
                         Header="Turnos 3" />
                     <DataGridTextColumn
                         x:Name="Dias4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Dias[4]}"
+                        Binding="{Binding Dias[4], StringFormat=00}"
                         Header="Turnos 4" />
 
                     <DataGridTextColumn
                         x:Name="Trabajadas1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Trabajadas[1]}"
+                        Binding="{Binding Trabajadas[1], Converter={StaticResource cnvHora}}"
                         Header="Horas T1" />
                     <DataGridTextColumn
                         x:Name="Trabajadas2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Trabajadas[2]}"
+                        Binding="{Binding Trabajadas[2], Converter={StaticResource cnvHora}}"
                         Header="Horas T2" />
                     <DataGridTextColumn
                         x:Name="Trabajadas3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Trabajadas[3]}"
+                        Binding="{Binding Trabajadas[3], Converter={StaticResource cnvHora}}"
                         Header="Horas T3" />
                     <DataGridTextColumn
                         x:Name="Trabajadas4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Trabajadas[4]}"
+                        Binding="{Binding Trabajadas[4], Converter={StaticResource cnvHora}}"
                         Header="Horas T4" />
 
                     <DataGridTextColumn
                         x:Name="Acumuladas1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Acumuladas[1]}"
+                        Binding="{Binding Acumuladas[1], Converter={StaticResource cnvHora}}"
                         Header="Acum T1" />
                     <DataGridTextColumn
                         x:Name="Acumuladas2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Acumuladas[2]}"
+                        Binding="{Binding Acumuladas[2], Converter={StaticResource cnvHora}}"
                         Header="Acum T2" />
                     <DataGridTextColumn
                         x:Name="Acumuladas3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Acumuladas[3]}"
+                        Binding="{Binding Acumuladas[3], Converter={StaticResource cnvHora}}"
                         Header="Acum T3" />
                     <DataGridTextColumn
                         x:Name="Acumuladas4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Acumuladas[4]}"
+                        Binding="{Binding Acumuladas[4], Converter={StaticResource cnvHora}}"
                         Header="Acum T4" />
 
                     <DataGridTextColumn
                         x:Name="Nocturnas1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Nocturnas[1]}"
+                        Binding="{Binding Nocturnas[1], Converter={StaticResource cnvHora}}"
                         Header="Noct T1" />
                     <DataGridTextColumn
                         x:Name="Nocturnas2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Nocturnas[2]}"
+                        Binding="{Binding Nocturnas[2], Converter={StaticResource cnvHora}}"
                         Header="Noct T2" />
                     <DataGridTextColumn
                         x:Name="Nocturnas3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Nocturnas[3]}"
+                        Binding="{Binding Nocturnas[3], Converter={StaticResource cnvHora}}"
                         Header="Noct T3" />
                     <DataGridTextColumn
                         x:Name="Nocturnas4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Nocturnas[4]}"
+                        Binding="{Binding Nocturnas[4], Converter={StaticResource cnvHora}}"
                         Header="Noct T4" />
 
                     <DataGridTextColumn
                         x:Name="ImporteDietas1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding ImporteDietas[1]}"
+                        Binding="{Binding ImporteDietas[1], Converter={StaticResource cnvDecimal}}"
                         Header="Dietas T1" />
                     <DataGridTextColumn
                         x:Name="ImporteDietas2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding ImporteDietas[2]}"
+                        Binding="{Binding ImporteDietas[2], Converter={StaticResource cnvDecimal}}"
                         Header="Dietas T2" />
                     <DataGridTextColumn
                         x:Name="ImporteDietas3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding ImporteDietas[3]}"
+                        Binding="{Binding ImporteDietas[3], Converter={StaticResource cnvDecimal}}"
                         Header="Dietas T3" />
                     <DataGridTextColumn
                         x:Name="ImporteDietas4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding ImporteDietas[4]}"
+                        Binding="{Binding ImporteDietas[4], Converter={StaticResource cnvDecimal}}"
                         Header="Dietas T4" />
 
                     <DataGridTextColumn
                         x:Name="DiasFestivos1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasFestivos[1]}"
+                        Binding="{Binding DiasFestivos[1], StringFormat=00}"
                         Header="Fest T1" />
                     <DataGridTextColumn
                         x:Name="DiasFestivos2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasFestivos[2]}"
+                        Binding="{Binding DiasFestivos[2], StringFormat=00}"
                         Header="Fest T2" />
                     <DataGridTextColumn
                         x:Name="DiasFestivos3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasFestivos[3]}"
+                        Binding="{Binding DiasFestivos[3], StringFormat=00}"
                         Header="Fest T3" />
                     <DataGridTextColumn
                         x:Name="DiasFestivos4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasFestivos[4]}"
+                        Binding="{Binding DiasFestivos[4], StringFormat=00}"
                         Header="Fest T4" />
 
                     <DataGridTextColumn
                         x:Name="DiasTrabajo"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasTrabajo}"
+                        Binding="{Binding DiasTrabajo, StringFormat=00}"
                         Header="D.Trab" />
                     <DataGridTextColumn
                         x:Name="DiasDescanso"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasDescanso}"
+                        Binding="{Binding DiasDescanso, StringFormat=00}"
                         Header="D.Desc" />
                     <DataGridTextColumn
                         x:Name="FindesTrabajados"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding FindesTrabajados}"
+                        Binding="{Binding FindesTrabajados, Converter={StaticResource cnvDecimal}}"
                         Header="FN.Trab" />
                     <DataGridTextColumn
                         x:Name="FindesDescansados"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding FindesDescansados}"
+                        Binding="{Binding FindesDescansados, Converter={StaticResource cnvDecimal}}"
                         Header="FN.Desc" />
                     <DataGridTextColumn
                         x:Name="PlusPaqueteria"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding PlusPaqueteria}"
+                        Binding="{Binding PlusPaqueteria, Converter={StaticResource cnvDecimal}}"
                         Header="Paqu" />
                     <DataGridTextColumn
                         x:Name="PlusMenorDescanso"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding PlusMenorDescanso}"
+                        Binding="{Binding PlusMenorDescanso, Converter={StaticResource cnvDecimal}}"
                         Header="M.Desc" />
                 </DataGrid.Columns>
             </DataGrid>

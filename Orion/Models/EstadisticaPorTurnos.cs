@@ -5,6 +5,8 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using System;
+
 namespace Orion.Models {
 
     public class EstadisticaPorTurnos : NotifyBase {
@@ -14,12 +16,12 @@ namespace Orion.Models {
         // ====================================================================================================
 
         public EstadisticaPorTurnos() {
-            Dias = new string[5];
-            Trabajadas = new string[5];
-            Acumuladas = new string[5];
-            Nocturnas = new string[5];
-            ImporteDietas = new string[5];
-            DiasFestivos = new string[5];
+            Dias = new int[5];
+            Trabajadas = new TimeSpan[5];
+            Acumuladas = new TimeSpan[5];
+            Nocturnas = new TimeSpan[5];
+            ImporteDietas = new decimal[5];
+            DiasFestivos = new int[5];
 
         }
 
@@ -33,29 +35,29 @@ namespace Orion.Models {
 
         public Conductor Conductor { get; set; }
 
-        public string[] Dias { get; set; }
+        public int[] Dias { get; set; }
 
-        public string[] Trabajadas { get; set; }
+        public TimeSpan[] Trabajadas { get; set; }
 
-        public string[] Acumuladas { get; set; }
+        public TimeSpan[] Acumuladas { get; set; }
 
-        public string[] Nocturnas { get; set; }
+        public TimeSpan[] Nocturnas { get; set; }
 
-        public string[] ImporteDietas { get; set; }
+        public decimal[] ImporteDietas { get; set; }
 
-        public string[] DiasFestivos { get; set; }
+        public int[] DiasFestivos { get; set; }
 
-        public string DiasTrabajo { get; set; }
+        public int DiasTrabajo { get; set; }
 
-        public string DiasDescanso { get; set; }
+        public int DiasDescanso { get; set; }
 
-        public string FindesTrabajados { get; set; }
+        public decimal FindesTrabajados { get; set; }
 
-        public string FindesDescansados { get; set; }
+        public decimal FindesDescansados { get; set; }
 
-        public string PlusPaqueteria { get; set; }
+        public decimal PlusPaqueteria { get; set; }
 
-        public string PlusMenorDescanso { get; set; }
+        public decimal PlusMenorDescanso { get; set; }
 
 
 
