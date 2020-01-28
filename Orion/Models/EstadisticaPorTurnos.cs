@@ -6,6 +6,7 @@
 // ===============================================
 #endregion
 using System;
+using System.Linq;
 
 namespace Orion.Models {
 
@@ -36,22 +37,30 @@ namespace Orion.Models {
         public Conductor Conductor { get; set; }
 
         public int[] Dias { get; set; }
+        public int TotalDias { get => Dias.Sum(); }
+
 
         public TimeSpan[] Trabajadas { get; set; }
+        public TimeSpan TotalTrabajadas { get => new TimeSpan(Trabajadas.Sum(h => h.Ticks)); }
+
 
         public TimeSpan[] Acumuladas { get; set; }
+        public TimeSpan TotalAcumuladas { get => new TimeSpan(Acumuladas.Sum(h => h.Ticks)); }
+
 
         public TimeSpan[] Nocturnas { get; set; }
+        public TimeSpan TotalNocturnas { get => new TimeSpan(Nocturnas.Sum(h => h.Ticks)); }
+
 
         public decimal[] ImporteDietas { get; set; }
+        public decimal TotalImporteDietas { get => ImporteDietas.Sum(); }
+
 
         public int[] DiasFestivos { get; set; }
+        public int TotalDiasFestivos { get => DiasFestivos.Sum(); }
 
-        public int DiasTrabajo { get; set; }
 
         public int DiasDescanso { get; set; }
-
-        public decimal FindesTrabajados { get; set; }
 
         public decimal FindesDescansados { get; set; }
 
@@ -59,6 +68,15 @@ namespace Orion.Models {
 
         public decimal PlusMenorDescanso { get; set; }
 
+
+        //public bool MostrarDiasTrabajados { get; set; }
+        //public bool MostrarHorasTrabajadas { get; set; }
+        //public bool MostrarHorasAcumuladas { get; set; }
+        //public bool MostrarHorasNocturnas { get; set; }
+        //public bool MostrarImporteDietas { get; set; }
+        //public bool MostrarFestivosTrabajados { get; set; }
+        //public bool MostrarDescansos { get; set; }
+        //public bool MostrarPluses { get; set; }
 
 
         #endregion

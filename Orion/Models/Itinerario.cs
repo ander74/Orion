@@ -9,8 +9,9 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Data.Common;
 using System.Data.OleDb;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -264,7 +265,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SqliteDataReader lector) {
+        public void FromReader(DbDataReader lector) {
             _id = lector.ToInt32("_id");
             _idlinea = lector.ToInt32("IdLinea");
             _nombre = lector.ToDecimal("Nombre");
@@ -276,16 +277,16 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SqliteParameter> Parametros {
+        public IEnumerable<SQLiteParameter> Parametros {
             get {
-                var lista = new List<SqliteParameter>();
+                var lista = new List<SQLiteParameter>();
 
-                lista.Add(new SqliteParameter("IdLinea", IdLinea));
-                lista.Add(new SqliteParameter("Nombre", Nombre));
-                lista.Add(new SqliteParameter("Descripcion", Descripcion));
-                lista.Add(new SqliteParameter("TiempoReal", TiempoReal));
-                lista.Add(new SqliteParameter("TiempoPago", TiempoPago));
-                //lista.Add(new SqliteParameter("Id", Id));
+                lista.Add(new SQLiteParameter("IdLinea", IdLinea));
+                lista.Add(new SQLiteParameter("Nombre", Nombre));
+                lista.Add(new SQLiteParameter("Descripcion", Descripcion));
+                lista.Add(new SQLiteParameter("TiempoReal", TiempoReal));
+                lista.Add(new SQLiteParameter("TiempoPago", TiempoPago));
+                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }

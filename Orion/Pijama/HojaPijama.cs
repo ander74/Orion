@@ -231,10 +231,9 @@ namespace Orion.Pijama {
                     totalDiasDescanso++;
                     // Si hay más de dos descansos sueltos, se añade el fallo.
                     if (descansossueltos > 2) resultado += String.Format("Día {0:00}: Más de dos descansos sueltos en el mes.\n", dia.Dia);
-                    // Reiniciamos los días trabajados, inactivos y borramos el final anterior.
+                    // Reiniciamos los días trabajados, inactivos.
                     diastrabajados = 0;
                     diasinactivos = 0;
-                    //finalanterior = null;
                 }
 
 

@@ -6,8 +6,8 @@
 // ===============================================
 #endregion
 using System;
+using System.Data.Common;
 using System.Data.OleDb;
-using Microsoft.Data.Sqlite;
 
 namespace Orion {
 
@@ -297,103 +297,103 @@ namespace Orion {
 
 
         // ====================================================================================================
-        #region MÉTODOS DE EXTENSION PARA SQLITE DATA READER
+        #region MÉTODOS DE EXTENSION PARA DB DATA READER
         // ====================================================================================================
 
-        public static TimeSpan ToTimeSpan(this SqliteDataReader lector, string campo) {
+        public static TimeSpan ToTimeSpan(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return TimeSpan.Zero;
             return TimeSpan.FromTicks(Convert.ToInt64(lector[campo]));
         }
 
 
-        public static TimeSpan? ToTimeSpanNulable(this SqliteDataReader lector, string campo) {
+        public static TimeSpan? ToTimeSpanNulable(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return null;
             return TimeSpan.FromTicks(Convert.ToInt64(lector[campo]));
         }
 
 
-        public static string ToString(this SqliteDataReader lector, string campo) {
+        public static string ToString(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return "";
             return (string)lector[campo];
         }
 
 
-        public static bool ToBool(this SqliteDataReader lector, string campo) {
+        public static bool ToBool(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return false;
             return Convert.ToBoolean(lector[campo]);
         }
 
 
-        public static bool? ToBoolNulable(this SqliteDataReader lector, string campo) {
+        public static bool? ToBoolNulable(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return null;
             return Convert.ToBoolean(lector[campo]);
         }
 
 
-        public static DateTime ToDateTime(this SqliteDataReader lector, string campo) {
+        public static DateTime ToDateTime(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return new DateTime(0);
             if (!DateTime.TryParse((string)lector[campo], out DateTime fecha)) return new DateTime(0);
             return fecha;
         }
 
 
-        public static DateTime? ToDateTimeNulable(this SqliteDataReader lector, string campo) {
+        public static DateTime? ToDateTimeNulable(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return null;
             if (!DateTime.TryParse((string)lector[campo], out DateTime fecha)) return null;
             return fecha;
         }
 
 
-        public static byte ToByte(this SqliteDataReader lector, string campo) {
+        public static byte ToByte(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return 0;
             return (byte)lector[campo];
         }
 
 
-        public static Single ToSingle(this SqliteDataReader lector, string campo) {
+        public static Single ToSingle(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return 0;
             return (Single)lector[campo];
         }
 
 
-        public static Int16 ToInt16(this SqliteDataReader lector, string campo) {
+        public static Int16 ToInt16(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return 0;
             return Convert.ToInt16(lector[campo]);
         }
 
 
-        public static Int16? ToInt16Nulable(this SqliteDataReader lector, string campo) {
+        public static Int16? ToInt16Nulable(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return null;
             object x = lector[campo];
             return Convert.ToInt16(lector[campo]);
         }
 
 
-        public static Int32 ToInt32(this SqliteDataReader lector, string campo) {
+        public static Int32 ToInt32(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return 0;
             return Convert.ToInt32(lector[campo]);
         }
 
 
-        public static Int64 ToInt64(this SqliteDataReader lector, string campo) {
+        public static Int64 ToInt64(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return 0;
             return Convert.ToInt64(lector[campo]);
         }
 
 
-        public static double ToDouble(this SqliteDataReader lector, string campo) {
+        public static double ToDouble(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return 0;
             return Convert.ToDouble(lector[campo]);
         }
 
 
-        public static decimal ToDecimal(this SqliteDataReader lector, string campo) {
+        public static decimal ToDecimal(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return 0;
             return Convert.ToDecimal(lector[campo]);
         }
 
 
-        public static decimal? ToDecimalNulable(this SqliteDataReader lector, string campo) {
+        public static decimal? ToDecimalNulable(this DbDataReader lector, string campo) {
             if (lector == null || lector[campo] is DBNull) return null;
             return Convert.ToDecimal(lector[campo]);
         }

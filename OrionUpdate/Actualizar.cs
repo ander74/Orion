@@ -48,16 +48,33 @@ namespace OrionUpdate {
                 }
 
                 // Si las carpetas x86 y x64 no existen, las creamos...
-                //string x86 = CombinarYCrearCarpeta(rutaDestino, "x86");
-                //string x64 = CombinarYCrearCarpeta(rutaDestino, "x64");
+                string x86 = CombinarYCrearCarpeta(rutaDestino, "x86");
+                string x64 = CombinarYCrearCarpeta(rutaDestino, "x64");
+
+                // MICROSOFT.DATA.SQLITE
                 // Si las carpetas runtime y demás no existen, las creamos...
-                string runtime = CombinarYCrearCarpeta(rutaDestino, "runtimes");
-                string winArm = CombinarYCrearCarpeta(runtime, "win-arm");
-                string winx64 = CombinarYCrearCarpeta(runtime, "win-x64");
-                string winx86 = CombinarYCrearCarpeta(runtime, "win-x86");
-                string nativeArm = CombinarYCrearCarpeta(winArm, "native");
-                string nativex64 = CombinarYCrearCarpeta(winx64, "native");
-                string nativex86 = CombinarYCrearCarpeta(winx86, "native");
+                //string runtime = CombinarYCrearCarpeta(rutaDestino, "runtimes");
+                //string winArm = CombinarYCrearCarpeta(runtime, "win-arm");
+                //string winx64 = CombinarYCrearCarpeta(runtime, "win-x64");
+                //string winx86 = CombinarYCrearCarpeta(runtime, "win-x86");
+                //string nativeArm = CombinarYCrearCarpeta(winArm, "native");
+                //string nativex64 = CombinarYCrearCarpeta(winx64, "native");
+                //string nativex86 = CombinarYCrearCarpeta(winx86, "native");
+
+                // ELIMINAMOS LOS ARCHIVOS ANTERIORES.
+                DirectoryInfo info = new DirectoryInfo(rutaDestino);
+                foreach (var archivo in info.GetFiles()) {
+                    if (archivo.Name != "OrionUpdate.exe") archivo.Delete();
+                }
+                info = new DirectoryInfo(x86);
+                foreach (var archivo in info.GetFiles()) {
+                    archivo.Delete();
+                }
+                info = new DirectoryInfo(x64);
+                foreach (var archivo in info.GetFiles()) {
+                    archivo.Delete();
+                }
+
 
                 // BIBLIOTECAS
                 if (!CopiarArchivoRaiz("Xceed.Wpf.Toolkit.dll")) {
@@ -74,25 +91,25 @@ namespace OrionUpdate {
                     return;
                 }
 
-                if (!CopiarArchivoRaiz("System.Buffers.dll")) {
-                    GenerarError();
-                    return;
-                }
+                //if (!CopiarArchivoRaiz("System.Buffers.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
 
-                if (!CopiarArchivoRaiz("System.Memory.dll")) {
-                    GenerarError();
-                    return;
-                }
+                //if (!CopiarArchivoRaiz("System.Memory.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
 
-                if (!CopiarArchivoRaiz("System.Numerics.Vectors.dll")) {
-                    GenerarError();
-                    return;
-                }
+                //if (!CopiarArchivoRaiz("System.Numerics.Vectors.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
 
-                if (!CopiarArchivoRaiz("System.Runtime.CompilerServices.Unsafe.dll")) {
-                    GenerarError();
-                    return;
-                }
+                //if (!CopiarArchivoRaiz("System.Runtime.CompilerServices.Unsafe.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
 
 
                 // Las siguientes son para iText7
@@ -158,52 +175,81 @@ namespace OrionUpdate {
                     GenerarError();
                     return;
                 }
-                //// Las siguientes son para Entity Framework (excel)
-                //if (!CopiarArchivoRaiz("EntityFramework.dll")) {
-                //    GenerarError();
-                //    return;
-                //}
-                //if (!CopiarArchivoRaiz("EntityFramework.SqlServer.dll")) {
-                //    GenerarError();
-                //    return;
-                //}
+
+                // SYSTEM.DATA.SQLITE
+                // Las siguientes son para Entity Framework
+                if (!CopiarArchivoRaiz("EntityFramework.dll")) {
+                    GenerarError();
+                    return;
+                }
+                if (!CopiarArchivoRaiz("EntityFramework.SqlServer.dll")) {
+                    GenerarError();
+                    return;
+                }
+
+
+                // SYSTEM.DATA.SQLITE
                 // Las siguientes son para SQLite
-                if (!CopiarArchivoRaiz("e_sqlite3.dll")) {
+                if (!CopiarArchivoRaiz("System.Data.SQLite.dll")) {
                     GenerarError();
                     return;
                 }
-                if (!CopiarArchivoRaiz("Microsoft.Data.Sqlite.dll")) {
+                if (!CopiarArchivoRaiz("System.Data.SQLite.EF6.dll")) {
                     GenerarError();
                     return;
                 }
-                if (!CopiarArchivoRaiz("SQLitePCLRaw.batteries_v2.dll")) {
+                if (!CopiarArchivoRaiz("System.Data.SQLite.Linq.dll")) {
                     GenerarError();
                     return;
                 }
-                if (!CopiarArchivoRaiz("SQLitePCLRaw.core.dll")) {
+                if (!CopiarArchivoRaiz("x64\\SQLite.Interop.dll")) {
                     GenerarError();
                     return;
                 }
-                if (!CopiarArchivoRaiz("SQLitePCLRaw.nativelibrary.dll")) {
+                if (!CopiarArchivoRaiz("x86\\SQLite.Interop.dll")) {
                     GenerarError();
                     return;
                 }
-                if (!CopiarArchivoRaiz("SQLitePCLRaw.provider.dynamic_cdecl.dll")) {
-                    GenerarError();
-                    return;
-                }
-                if (!CopiarArchivoRaiz("runtimes\\win-arm\\native\\e_sqlite3.dll")) {
-                    GenerarError();
-                    return;
-                }
-                if (!CopiarArchivoRaiz("runtimes\\win-x64\\native\\e_sqlite3.dll")) {
-                    GenerarError();
-                    return;
-                }
-                if (!CopiarArchivoRaiz("runtimes\\win-x86\\native\\e_sqlite3.dll")) {
-                    GenerarError();
-                    return;
-                }
+
+
+                // MICROSOFT.DATA.SQLITE
+                // Las siguientes son para SQLite
+                //if (!CopiarArchivoRaiz("e_sqlite3.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("Microsoft.Data.Sqlite.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("SQLitePCLRaw.batteries_v2.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("SQLitePCLRaw.core.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("SQLitePCLRaw.nativelibrary.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("SQLitePCLRaw.provider.dynamic_cdecl.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("runtimes\\win-arm\\native\\e_sqlite3.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("runtimes\\win-x64\\native\\e_sqlite3.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
+                //if (!CopiarArchivoRaiz("runtimes\\win-x86\\native\\e_sqlite3.dll")) {
+                //    GenerarError();
+                //    return;
+                //}
 
 
 

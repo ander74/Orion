@@ -294,6 +294,13 @@ namespace Orion.Models {
 
 
 
+		private DateTime lastWriteSetupFile;
+		public DateTime LastWriteSetupFile {
+			get => lastWriteSetupFile;
+			set => SetValue(ref lastWriteSetupFile, value);
+		}
+
+
 
 
 		#endregion

@@ -7,8 +7,9 @@
 #endregion
 namespace Orion.Models {
     using System.Collections.Generic;
+    using System.Data.Common;
     using System.Data.OleDb;
-    using Microsoft.Data.Sqlite;
+    using System.Data.SQLite;
     using Orion.Interfaces;
 
     public class Pluses : NotifyBase, ISQLiteItem {
@@ -177,7 +178,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SqliteDataReader lector) {
+        public void FromReader(DbDataReader lector) {
             _id = lector.ToInt32("_id");
             _año = lector.ToInt16("Año");
             _importedietas = lector.ToDecimal("ImporteDietas");
@@ -193,29 +194,29 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SqliteParameter> Parametros {
+        public IEnumerable<SQLiteParameter> Parametros {
             get {
-                var lista = new List<SqliteParameter>();
-                lista.Add(new SqliteParameter("Año", Año));
-                lista.Add(new SqliteParameter("ImporteDietas", ImporteDietas.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SqliteParameter("ImporteSabados", ImporteSabados.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SqliteParameter("ImporteFestivos", ImporteFestivos.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SqliteParameter("PlusNocturnidad", PlusNocturnidad.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SqliteParameter("DietaMenorDescanso", DietaMenorDescanso.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SqliteParameter("PlusLimpieza", PlusLimpieza.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SqliteParameter("PlusPaqueteria", PlusPaqueteria.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SqliteParameter("PlusNavidad", PlusNavidad.ToString("0.0000").Replace(",", ".")));
+                var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("Año", Año));
+                lista.Add(new SQLiteParameter("ImporteDietas", ImporteDietas.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("ImporteSabados", ImporteSabados.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("ImporteFestivos", ImporteFestivos.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("PlusNocturnidad", PlusNocturnidad.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("DietaMenorDescanso", DietaMenorDescanso.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("PlusNavidad", PlusNavidad.ToString("0.0000").Replace(",", ".")));
 
-                //lista.Add(new SqliteParameter("ImporteDietas", ImporteDietas));
-                //lista.Add(new SqliteParameter("ImporteSabados", ImporteSabados));
-                //lista.Add(new SqliteParameter("ImporteFestivos", ImporteFestivos));
-                //lista.Add(new SqliteParameter("PlusNocturnidad", PlusNocturnidad));
-                //lista.Add(new SqliteParameter("DietaMenorDescanso", DietaMenorDescanso));
-                //lista.Add(new SqliteParameter("PlusLimpieza", PlusLimpieza));
-                //lista.Add(new SqliteParameter("PlusPaqueteria", PlusPaqueteria));
-                //lista.Add(new SqliteParameter("PlusNavidad", PlusNavidad));
+                //lista.Add(new SQLiteParameter("ImporteDietas", ImporteDietas));
+                //lista.Add(new SQLiteParameter("ImporteSabados", ImporteSabados));
+                //lista.Add(new SQLiteParameter("ImporteFestivos", ImporteFestivos));
+                //lista.Add(new SQLiteParameter("PlusNocturnidad", PlusNocturnidad));
+                //lista.Add(new SQLiteParameter("DietaMenorDescanso", DietaMenorDescanso));
+                //lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza));
+                //lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria));
+                //lista.Add(new SQLiteParameter("PlusNavidad", PlusNavidad));
 
-                //lista.Add(new SqliteParameter("Id", Id));                
+                //lista.Add(new SQLiteParameter("Id", Id));                
                 return lista;
             }
         }

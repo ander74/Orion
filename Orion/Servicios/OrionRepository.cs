@@ -10,7 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 using Orion.Config;
 using Orion.Models;
 using Orion.Pijama;
@@ -509,17 +509,17 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
         private async Task CrearTablasAsync() {
-            using (var conexion = new SqliteConnection(CadenaConexion)) {
+            using (var conexion = new SQLiteConnection(CadenaConexion)) {
                 conexion.Open();
-                using (var comando = new SqliteCommand(CrearTablaCalendarios, conexion)) await comando.ExecuteNonQueryAsync();
-                using (var comando = new SqliteCommand(CrearTablaConductores, conexion)) await comando.ExecuteNonQueryAsync();
-                using (var comando = new SqliteCommand(CrearTablaDiasCalendario, conexion)) await comando.ExecuteNonQueryAsync();
-                using (var comando = new SqliteCommand(CrearTablaFestivos, conexion)) await comando.ExecuteNonQueryAsync();
-                using (var comando = new SqliteCommand(CrearTablaGraficos, conexion)) await comando.ExecuteNonQueryAsync();
-                using (var comando = new SqliteCommand(CrearTablaGruposGraficos, conexion)) await comando.ExecuteNonQueryAsync();
-                using (var comando = new SqliteCommand(CrearTablaPluses, conexion)) await comando.ExecuteNonQueryAsync();
-                using (var comando = new SqliteCommand(CrearTablaRegulaciones, conexion)) await comando.ExecuteNonQueryAsync();
-                using (var comando = new SqliteCommand(CrearTablaValoraciones, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaCalendarios, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaConductores, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaDiasCalendario, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaFestivos, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaGraficos, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaGruposGraficos, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaPluses, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaRegulaciones, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaValoraciones, conexion)) await comando.ExecuteNonQueryAsync();
                 var coman = conexion.CreateCommand();
                 coman.CommandText = "INSERT INTO Graficos (Numero) VALUES (5060);";
                 coman.ExecuteNonQuery();
@@ -851,7 +851,7 @@ namespace Orion.Servicios {
             DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
             try {
                 if (CadenaConexion == null) return TimeSpan.Zero;
-                using (var conexion = new SqliteConnection(CadenaConexion)) {
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
                     conexion.Open();
                     var consulta = new SQLiteExpression(comandoDias).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                     using (var comando = consulta.GetCommand(conexion)) {
@@ -1710,7 +1710,7 @@ namespace Orion.Servicios {
                     consulta.AddParameter("@diaSemana", diasemana);
                     var Gpd = new GraficosPorDia();
                     Gpd.Fecha = fechaDia;
-                    using (var conexion = new SqliteConnection(CadenaConexion)) {
+                    using (var conexion = new SQLiteConnection(CadenaConexion)) {
                         conexion.Open();
                         using (var comando = consulta.GetCommand(conexion)) {
                             using (var lector = comando.ExecuteReader()) {
@@ -1774,7 +1774,7 @@ namespace Orion.Servicios {
             // Creamos la lista que se devolverá.
             var lista = new List<Pijama.DiaPijama>();
             try {
-                using (var conexion = new SqliteConnection(CadenaConexion)) {
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
                     conexion.Open();
                     foreach (var dia in listadias) {
                         // Creamos el día pijama a añadir a la lista.
@@ -1865,7 +1865,7 @@ namespace Orion.Servicios {
             // Establecemos el id del conductor
             int idConductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == matricula)?.Id ?? 0;
             try {
-                using (var conexion = new SqliteConnection(CadenaConexion)) {
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
                     conexion.Open();
                     //----------------------------------------------------------------------------------------------------
                     // HORAS ACUMULADAS
@@ -2138,7 +2138,7 @@ namespace Orion.Servicios {
                 //string comandoSQL = $"ATTACH '{path}' AS Arr; SELECT * FROM Conductores UNION ALL SELECT * FROM Arr.Conductores ORDER BY Matricula ASC;";
                 string comandoSQL = $"ATTACH '{path}' AS Arr; SELECT * FROM Conductores; SELECT * FROM Arr.Conductores;";
                 var consulta = new SQLiteExpression(comandoSQL);
-                using (var conexion = new SqliteConnection(App.Global.CadenaConexionSQL)) {
+                using (var conexion = new SQLiteConnection(App.Global.CadenaConexionSQL)) {
                     conexion.Open();
                     using (var comando = consulta.GetCommand(conexion)) {
                         using (var lector = comando.ExecuteReader()) {

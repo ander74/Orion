@@ -10,12 +10,12 @@ namespace Orion.ViewModels {
     using System;
     using System.ComponentModel;
     using System.Data.OleDb;
+    using System.Data.SQLite;
     using System.Diagnostics;
     using System.IO;
     using System.Windows;
     using Config;
     using DataModels;
-    using Microsoft.Data.Sqlite;
     using Models;
     using Orion.Interfaces;
     using Servicios;
@@ -116,6 +116,7 @@ namespace Orion.ViewModels {
             // Activamos el botón de la calculadora.
             Configuracion.BotonCalculadoraActivo = true;
 
+
         }
 
 
@@ -153,9 +154,9 @@ namespace Orion.ViewModels {
             if (centro == Centros.Desconocido) return null;
             // Definimos el archivo de base de datos
             string archivo = Utils.CombinarCarpetas(Configuracion.CarpetaDatos, centro.ToString() + ".db3");
-            //if (!File.Exists(archivo)) SqliteConnection.CreateFile(archivo); //TODO: Comprobar que esto funciona bien.
+            //if (!File.Exists(archivo)) SQLiteConnection.CreateFile(archivo); //TODO: Comprobar que esto funciona bien.
             // Establecemos la cadena de conexión
-            SqliteConnectionStringBuilder cadenaConexionBuilder = new SqliteConnectionStringBuilder {
+            SQLiteConnectionStringBuilder cadenaConexionBuilder = new SQLiteConnectionStringBuilder {
                 DataSource = archivo,
             };
             string cadenaConexion = cadenaConexionBuilder.ToString();
@@ -248,7 +249,10 @@ namespace Orion.ViewModels {
 
             // Si hay que actualizar el programa, lanzamos el actualizador.
             if (App.ActualizarAlSalir) {
-                Process.Start(@"OrionUpdate.exe", $"\"{Configuracion.CarpetaOrigenActualizar}\"");
+                //Process.Start(@"OrionUpdate.exe", $"\"{Configuracion.CarpetaOrigenActualizar}\"");
+                //TODO: Con el nuevo sistema de actualización, comentar la línea anterior y descomentar las siguientes.
+                var exeFile = Path.Combine(Configuracion.CarpetaOrigenActualizar, "setup.exe");
+                if (File.Exists(exeFile)) Process.Start(exeFile);
             }
         }
 

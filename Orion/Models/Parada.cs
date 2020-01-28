@@ -7,8 +7,9 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.OleDb;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -191,7 +192,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(SqliteDataReader lector) {
+        public void FromReader(DbDataReader lector) {
             _id = lector.ToInt32("_id");
             _iditinerario = lector.ToInt32("IdItinerario");
             _orden = lector.ToInt32("Orden");
@@ -202,14 +203,14 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SqliteParameter> Parametros {
+        public IEnumerable<SQLiteParameter> Parametros {
             get {
-                var lista = new List<SqliteParameter>();
-                lista.Add(new SqliteParameter("IdItinerario", IdItinerario));
-                lista.Add(new SqliteParameter("Orden", Orden));
-                lista.Add(new SqliteParameter("Descripcion", Descripcion));
-                lista.Add(new SqliteParameter("Tiempo", Tiempo.Ticks));
-                //lista.Add(new SqliteParameter("Id", Id));
+                var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("IdItinerario", IdItinerario));
+                lista.Add(new SQLiteParameter("Orden", Orden));
+                lista.Add(new SQLiteParameter("Descripcion", Descripcion));
+                lista.Add(new SQLiteParameter("Tiempo", Tiempo.Ticks));
+                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }

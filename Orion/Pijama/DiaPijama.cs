@@ -6,8 +6,8 @@
 // ===============================================
 #endregion
 using System;
+using System.Data.Common;
 using System.Data.OleDb;
-using Microsoft.Data.Sqlite;
 using Orion.Models;
 
 namespace Orion.Pijama {
@@ -377,7 +377,7 @@ namespace Orion.Pijama {
         #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
-        public override void FromReader(SqliteDataReader lector) {
+        public override void FromReader(DbDataReader lector) {
             base.FromReader(lector);
             GraficoTrabajado = new GraficoBase();
             GraficoOriginal = new GraficoBase();

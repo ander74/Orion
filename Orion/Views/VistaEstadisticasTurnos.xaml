@@ -171,53 +171,53 @@
                                 <StackPanel
                                     Margin="10,0,0,0"
                                     Orientation="Vertical">
-                                    <!--  DIAS  -->
+                                    <!--  DIAS TRABAJADOS  -->
                                     <CheckBox
                                         x:Name="ChDias"
                                         Margin="5,10"
                                         HorizontalContentAlignment="Left"
                                         VerticalContentAlignment="Center"
                                         Click="CheckBox_Click"
-                                        Content="Días Trabajados Por Turnos"
+                                        Content="Días Trabajados"
                                         FontFamily="Verdana"
                                         FontSize="12"
-                                        IsChecked="True"
+                                        IsChecked="{Binding EstadisticasTurnosVM.MostrarDiasTrabajados}"
                                         Tag="Dias" />
-                                    <!--  TRABAJADAS  -->
+                                    <!--  HORAS TRABAJADAS  -->
                                     <CheckBox
                                         x:Name="ChTrabajadas"
                                         Margin="5,10"
                                         HorizontalContentAlignment="Left"
                                         VerticalContentAlignment="Center"
                                         Click="CheckBox_Click"
-                                        Content="Horas Trabajadas Por Turnos"
+                                        Content="Horas Trabajadas"
                                         FontFamily="Verdana"
                                         FontSize="12"
-                                        IsChecked="True"
+                                        IsChecked="{Binding EstadisticasTurnosVM.MostrarHorasTrabajadas}"
                                         Tag="Trabajadas" />
-                                    <!--  ACUMULADAS  -->
+                                    <!--  HORAS ACUMULADAS  -->
                                     <CheckBox
                                         x:Name="ChAcumuladas"
                                         Margin="5,10"
                                         HorizontalContentAlignment="Left"
                                         VerticalContentAlignment="Center"
                                         Click="CheckBox_Click"
-                                        Content="Horas Acumuladas Por Turnos"
+                                        Content="Horas Acumuladas"
                                         FontFamily="Verdana"
                                         FontSize="12"
-                                        IsChecked="True"
+                                        IsChecked="{Binding EstadisticasTurnosVM.MostrarHorasAcumuladas}"
                                         Tag="Acumuladas" />
-                                    <!--  NOCTURNAS  -->
+                                    <!--  HORAS NOCTURNAS  -->
                                     <CheckBox
                                         x:Name="ChNocturnas"
                                         Margin="5,10"
                                         HorizontalContentAlignment="Left"
                                         VerticalContentAlignment="Center"
                                         Click="CheckBox_Click"
-                                        Content="Horas Nocturnas Por Turnos"
+                                        Content="Horas Nocturnas"
                                         FontFamily="Verdana"
                                         FontSize="12"
-                                        IsChecked="True"
+                                        IsChecked="{Binding EstadisticasTurnosVM.MostrarHorasNocturnas}"
                                         Tag="Nocturnas" />
                                     <!--  IMPORTE DIETAS  -->
                                     <CheckBox
@@ -226,95 +226,47 @@
                                         HorizontalContentAlignment="Left"
                                         VerticalContentAlignment="Center"
                                         Click="CheckBox_Click"
-                                        Content="Importe Dietas Por Turnos"
+                                        Content="Importe Dietas"
                                         FontFamily="Verdana"
                                         FontSize="12"
-                                        IsChecked="True"
+                                        IsChecked="{Binding EstadisticasTurnosVM.MostrarImporteDietas}"
                                         Tag="ImporteDietas" />
-                                    <!--  FESTIVOS  -->
+                                    <!--  FESTIVOS TRABAJADOS  -->
                                     <CheckBox
                                         x:Name="ChFestivos"
                                         Margin="5,10"
                                         HorizontalContentAlignment="Left"
                                         VerticalContentAlignment="Center"
                                         Click="CheckBox_Click"
-                                        Content="Días Festivos Trabajados Por Turnos"
+                                        Content="Días Festivos Trabajados"
                                         FontFamily="Verdana"
                                         FontSize="12"
-                                        IsChecked="True"
+                                        IsChecked="{Binding EstadisticasTurnosVM.MostrarFestivosTrabajados}"
                                         Tag="Festivos" />
-                                    <!--  DIAS TRABAJO  -->
+                                    <!--  DESCANSOS  -->
                                     <CheckBox
-                                        x:Name="ChDiasTrabajo"
+                                        x:Name="ChDescansos"
                                         Margin="5,10"
                                         HorizontalContentAlignment="Left"
                                         VerticalContentAlignment="Center"
                                         Click="CheckBox_Click"
-                                        Content="Días Trabajados"
+                                        Content="Descansos"
                                         FontFamily="Verdana"
                                         FontSize="12"
-                                        IsChecked="True"
-                                        Tag="DiasTrabajo" />
-                                    <!--  DIAS DESCANSO  -->
-                                    <CheckBox
-                                        x:Name="ChDiasDescanso"
-                                        Margin="5,10"
-                                        HorizontalContentAlignment="Left"
-                                        VerticalContentAlignment="Center"
-                                        Click="CheckBox_Click"
-                                        Content="Días Descanso"
-                                        FontFamily="Verdana"
-                                        FontSize="12"
-                                        IsChecked="True"
+                                        IsChecked="{Binding EstadisticasTurnosVM.MostrarDescansos}"
                                         Tag="DiasDescanso" />
-                                    <!--  FINDES TRABAJO  -->
+                                    <!--  PLUSES  -->
                                     <CheckBox
-                                        x:Name="ChFindesTrabajo"
+                                        x:Name="ChPluses"
                                         Margin="5,10"
                                         HorizontalContentAlignment="Left"
                                         VerticalContentAlignment="Center"
                                         Click="CheckBox_Click"
-                                        Content="Findes Trabajados"
+                                        Content="Pluses"
                                         FontFamily="Verdana"
                                         FontSize="12"
-                                        IsChecked="True"
-                                        Tag="FindesTrabajo" />
-                                    <!--  FINDES DESCANSO  -->
-                                    <CheckBox
-                                        x:Name="ChFindesDescanso"
-                                        Margin="5,10"
-                                        HorizontalContentAlignment="Left"
-                                        VerticalContentAlignment="Center"
-                                        Click="CheckBox_Click"
-                                        Content="Findes Descanso"
-                                        FontFamily="Verdana"
-                                        FontSize="12"
-                                        IsChecked="True"
-                                        Tag="FindesDescanso" />
-                                    <!--  PLUS PAQUETERIA  -->
-                                    <CheckBox
-                                        x:Name="ChPlusPaqueteria"
-                                        Margin="5,10"
-                                        HorizontalContentAlignment="Left"
-                                        VerticalContentAlignment="Center"
-                                        Click="CheckBox_Click"
-                                        Content="Plus Paquetería"
-                                        FontFamily="Verdana"
-                                        FontSize="12"
-                                        IsChecked="True"
+                                        IsChecked="{Binding EstadisticasTurnosVM.MostrarPluses}"
                                         Tag="PlusPaqueteria" />
-                                    <!--  PLUS MENOR DESCANSO  -->
-                                    <CheckBox
-                                        x:Name="ChPlusMenorDescanso"
-                                        Margin="5,10"
-                                        HorizontalContentAlignment="Left"
-                                        VerticalContentAlignment="Center"
-                                        Click="CheckBox_Click"
-                                        Content="Plus Menor Descanso"
-                                        FontFamily="Verdana"
-                                        FontSize="12"
-                                        IsChecked="True"
-                                        Tag="PlusMenorDescanso" />
                                 </StackPanel>
                             </StackPanel>
 
@@ -345,6 +297,23 @@
                 Margin="3,5"
                 Background="LightGray" />
 
+            <!--  BOTON GENERAR EXCEL  -->
+            <Button
+                Command="{Binding EstadisticasTurnosVM.cmdGenerarExcelEstadisticas}"
+                Style="{StaticResource EstiloBotonBarra}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Source="Imagenes/GuardarExcel.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Generar Excel"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
 
         </StackPanel>
 
@@ -363,7 +332,7 @@
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <!--  ====================================================================================================  -->
-            <!--  FECHA TABLA  -->
+            <!--  CABECERA TABLA  -->
             <!--  ====================================================================================================  -->
             <Grid
                 Grid.Row="0"
@@ -378,13 +347,13 @@
                     CornerRadius="4">
 
                     <Label
+                        x:Name="Cabecera"
                         VerticalContentAlignment="Center"
                         FontFamily="Verdana"
                         FontSize="14"
                         FontWeight="Normal">
                         <StackPanel Orientation="Horizontal">
                             <TextBlock
-                                Width="300"
                                 Margin="4,0"
                                 VerticalAlignment="Center"
                                 Text="{Binding EstadisticasTurnosVM.TextoCabecera}" />
@@ -431,194 +400,284 @@
                         MaxWidth="140"
                         Binding="{Binding Conductor.MatriculaApellidos}"
                         CellStyle="{StaticResource EstiloCeldasNormalIzquierda}"
-                        Header="Conductor" />
+                        Header="Conductor"
+                        HeaderStyle="{StaticResource EstiloHeadersAzul}" />
 
                     <DataGridTextColumn
                         x:Name="Dias1"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Dias[1], StringFormat=00}"
-                        Header="Turnos 1" />
+                        Header="Dias 1"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding Source={x:Reference Cabecera}, Path=DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados, Converter={StaticResource cnvBoolToVisibility}}" />
+
                     <DataGridTextColumn
                         x:Name="Dias2"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Dias[2], StringFormat=00}"
-                        Header="Turnos 2" />
+                        Header="Dias 2"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Dias3"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Dias[3], StringFormat=00}"
-                        Header="Turnos 3" />
+                        Header="Dias 3"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Dias4"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Dias[4], StringFormat=00}"
-                        Header="Turnos 4" />
+                        Header="Dias 4"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
+                    <DataGridTextColumn
+                        x:Name="TotalDias"
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding TotalDias, StringFormat=00}"
+                        Header="Total"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="Trabajadas1"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Trabajadas[1], Converter={StaticResource cnvHora}}"
-                        Header="Horas T1" />
+                        Header="Horas T1"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Trabajadas2"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Trabajadas[2], Converter={StaticResource cnvHora}}"
-                        Header="Horas T2" />
+                        Header="Horas T2"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Trabajadas3"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Trabajadas[3], Converter={StaticResource cnvHora}}"
-                        Header="Horas T3" />
+                        Header="Horas T3"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Trabajadas4"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Trabajadas[4], Converter={StaticResource cnvHora}}"
-                        Header="Horas T4" />
+                        Header="Horas T4"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
+                    <DataGridTextColumn
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding TotalTrabajadas, Converter={StaticResource cnvHora}}"
+                        Header="Total"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="Acumuladas1"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Acumuladas[1], Converter={StaticResource cnvHora}}"
-                        Header="Acum T1" />
+                        Header="Acum T1"
+                        HeaderStyle="{StaticResource EstiloHeadersAzul}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Acumuladas2"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Acumuladas[2], Converter={StaticResource cnvHora}}"
-                        Header="Acum T2" />
+                        Header="Acum T2"
+                        HeaderStyle="{StaticResource EstiloHeadersAzul}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Acumuladas3"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Acumuladas[3], Converter={StaticResource cnvHora}}"
-                        Header="Acum T3" />
+                        Header="Acum T3"
+                        HeaderStyle="{StaticResource EstiloHeadersAzul}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Acumuladas4"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Acumuladas[4], Converter={StaticResource cnvHora}}"
-                        Header="Acum T4" />
+                        Header="Acum T4"
+                        HeaderStyle="{StaticResource EstiloHeadersAzul}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
+                    <DataGridTextColumn
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding TotalAcumuladas, Converter={StaticResource cnvHora}}"
+                        Header="Total"
+                        HeaderStyle="{StaticResource EstiloHeadersAzul}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="Nocturnas1"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Nocturnas[1], Converter={StaticResource cnvHora}}"
-                        Header="Noct T1" />
+                        Header="Noct T1"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Nocturnas2"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Nocturnas[2], Converter={StaticResource cnvHora}}"
-                        Header="Noct T2" />
+                        Header="Noct T2"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Nocturnas3"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Nocturnas[3], Converter={StaticResource cnvHora}}"
-                        Header="Noct T3" />
+                        Header="Noct T3"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Nocturnas4"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding Nocturnas[4], Converter={StaticResource cnvHora}}"
-                        Header="Noct T4" />
+                        Header="Noct T4"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
+                    <DataGridTextColumn
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding TotalNocturnas, Converter={StaticResource cnvHora}}"
+                        Header="Total"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="ImporteDietas1"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding ImporteDietas[1], Converter={StaticResource cnvDecimal}}"
-                        Header="Dietas T1" />
+                        Header="Dietas T1"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="ImporteDietas2"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding ImporteDietas[2], Converter={StaticResource cnvDecimal}}"
-                        Header="Dietas T2" />
+                        Header="Dietas T2"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="ImporteDietas3"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding ImporteDietas[3], Converter={StaticResource cnvDecimal}}"
-                        Header="Dietas T3" />
+                        Header="Dietas T3"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="ImporteDietas4"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding ImporteDietas[4], Converter={StaticResource cnvDecimal}}"
-                        Header="Dietas T4" />
+                        Header="Dietas T4"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
+                    <DataGridTextColumn
+                        Width="*"
+                        MinWidth="60"
+                        Binding="{Binding TotalImporteDietas, Converter={StaticResource cnvDecimal}}"
+                        Header="Total"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="DiasFestivos1"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding DiasFestivos[1], StringFormat=00}"
-                        Header="Fest T1" />
+                        Header="Fest T1"
+                        HeaderStyle="{StaticResource EstiloHeadersAzul}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="DiasFestivos2"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding DiasFestivos[2], StringFormat=00}"
-                        Header="Fest T2" />
+                        Header="Fest T2"
+                        HeaderStyle="{StaticResource EstiloHeadersAzul}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="DiasFestivos3"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding DiasFestivos[3], StringFormat=00}"
-                        Header="Fest T3" />
+                        Header="Fest T3"
+                        HeaderStyle="{StaticResource EstiloHeadersAzul}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="DiasFestivos4"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding DiasFestivos[4], StringFormat=00}"
-                        Header="Fest T4" />
-
+                        Header="Fest T4"
+                        HeaderStyle="{StaticResource EstiloHeadersAzul}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
-                        x:Name="DiasTrabajo"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasTrabajo, StringFormat=00}"
-                        Header="D.Trab" />
+                        Binding="{Binding TotalDiasFestivos, StringFormat=00}"
+                        Header="Total"
+                        HeaderStyle="{StaticResource EstiloHeadersAzul}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
+
                     <DataGridTextColumn
                         x:Name="DiasDescanso"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding DiasDescanso, StringFormat=00}"
-                        Header="D.Desc" />
-                    <DataGridTextColumn
-                        x:Name="FindesTrabajados"
-                        Width="*"
-                        MinWidth="60"
-                        Binding="{Binding FindesTrabajados, Converter={StaticResource cnvDecimal}}"
-                        Header="FN.Trab" />
+                        Header="D.Desc"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDescansos, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="FindesDescansados"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding FindesDescansados, Converter={StaticResource cnvDecimal}}"
-                        Header="FN.Desc" />
+                        Header="FN.Desc"
+                        HeaderStyle="{StaticResource EstiloHeadersNaranja}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDescansos, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
+
                     <DataGridTextColumn
                         x:Name="PlusPaqueteria"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding PlusPaqueteria, Converter={StaticResource cnvDecimal}}"
-                        Header="Paqu" />
+                        Header="Paqu"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarPluses, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="PlusMenorDescanso"
                         Width="*"
                         MinWidth="60"
                         Binding="{Binding PlusMenorDescanso, Converter={StaticResource cnvDecimal}}"
-                        Header="M.Desc" />
+                        Header="M.Desc"
+                        HeaderStyle="{StaticResource EstiloHeadersVerde}"
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarPluses, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                 </DataGrid.Columns>
             </DataGrid>
 

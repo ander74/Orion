@@ -6,15 +6,12 @@
 // ===============================================
 #endregion
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
 using Orion.Config;
 using Orion.DataModels;
-using Orion.Models;
 using Orion.ViewModels;
 
 namespace Orion.Views {
@@ -26,47 +23,6 @@ namespace Orion.Views {
         //****************************************************************************************************
         public MainWindow() {
             InitializeComponent();
-
-            //
-            // EJEMPLO DE ATRIBUTOS
-            //
-            var inicio = DateTime.Now;
-            //Conductor miConductor = new Conductor();
-            //miConductor.Matricula = 5060;
-            //var fijo = (AuthorAttribute)typeof(Conductor).GetProperty("Matricula").GetCustomAttribute(typeof(AuthorAttribute));
-            //var quizas = (AuthorAttribute)typeof(Conductor).GetCustomAttribute(typeof(AuthorAttribute));
-            //var seguroqueno = (AuthorAttribute)typeof(GraficoBase).GetCustomAttribute(typeof(AuthorAttribute));
-            //var props2 = miConductor.GetType().GetProperties();
-            //var nulo = miConductor.GetType().GetProperty("Otra");
-            //var valor = typeof(Conductor).GetProperty("Matricula").GetValue(miConductor);
-
-            //var props = typeof(Conductor).GetProperties();
-            //var props = typeof(Conductor).GetProperties().Where(p => p.CustomAttributes.Any(a => a.AttributeType == typeof(AuthorAttribute)));// INTERESANTE
-            var props = typeof(Conductor).GetProperties().Where(p => p.CustomAttributes.Any());
-
-            var lista = new List<(string, string)>();
-            foreach (var prop in props) {
-                //lista.Add((prop.Name, prop.PropertyType.Name));
-                var att = prop.GetCustomAttribute<AuthorAttribute>(true);
-                if (att != null) {
-                    var nombre = att.Nombre;
-                    var tipo = prop.PropertyType.Name;
-                    lista.Add((nombre, tipo));
-                    //var atttt = prop.CustomAttributes;
-                    //var esCadena = false;
-                    //if (prop.PropertyType.Equals(typeof(string))) esCadena = true;
-                    //var otro = 10;
-                }
-            }
-
-            var tiempoInvertido = DateTime.Now - inicio;
-            var x = 10;
-
-            //
-            // FIN DEL EJEMPLO
-            //
-
-
             // Solicitamos aceptar la licencia si no se ha aceptado nunca.
             if (!App.Global.Configuracion.LicenciaAceptada) {
                 VentanaAcercaDeVM vm = new VentanaAcercaDeVM() { MostrarAceptarLicencia = true };
@@ -86,7 +42,7 @@ namespace Orion.Views {
             DateTime fechaReferencia = new DateTime(2019, 12, 23); // Fecha del cambio de versión a la 1.1
             int buildVersion = Convert.ToInt32(Math.Round((fechaCompilacion - fechaReferencia).TotalDays, 0));
             //App.Global.TextoEstado = $"Versión {ver.Major}.{ver.Minor}.{ver.Build}";
-            App.Global.TextoEstado = $"Versión {ver.Major}.{ver.Minor}.{buildVersion}";
+            App.Global.TextoEstado = $"Versión {ver.Major}.{ver.Minor}.{buildVersion}".ToUpper();
 
             // Registramos el evento cerrar en el viewmodel.
             this.Closing += App.Global.CerrandoVentanaEventHandler;
@@ -105,52 +61,47 @@ namespace Orion.Views {
             if (App.Global.Configuracion.SincronizarEnDropbox) Respaldo.SincronizarDropbox();
 
             // Si hay que actualizar el programa, se actualiza.
-            if (App.Global.Configuracion.ActualizarPrograma && !string.IsNullOrWhiteSpace(App.Global.Configuracion.CarpetaOrigenActualizar)) {
-                string archivoOrigen = Path.Combine(App.Global.Configuracion.CarpetaOrigenActualizar, "OrionUpdate.exe");
-                string archivoDestino = Path.Combine(Directory.GetCurrentDirectory(), "OrionUpdate.exe");
-                DateTime origen = File.GetLastWriteTime(archivoOrigen);
-                DateTime destino = File.GetLastWriteTime(archivoDestino);
-                if (origen > destino && File.Exists(archivoOrigen)) {
-                    File.Copy(archivoOrigen, archivoDestino, true);
-                }
-                archivoOrigen = Path.Combine(App.Global.Configuracion.CarpetaOrigenActualizar, "Orion.exe");
-                archivoDestino = Path.Combine(Directory.GetCurrentDirectory(), "Orion.exe");
-                origen = File.GetLastWriteTime(archivoOrigen);
-                destino = File.GetLastWriteTime(archivoDestino);
-                if (origen > destino) {
-                    // Necesita actualizar
-                    string mensaje = "Hay una nueva versión de Orión.\n\n¿Desea actualizar ahora?";
-                    if (MessageBox.Show(mensaje, "Actualización", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes) {
-                        App.ActualizarAlSalir = true;
-                        this.Close();
-                    }
-                }
-            }
-
-            //TODO: Eliminar esta petición y establecer los archivos al iniciar los repositorios.
-            // Definimos el archivo de base de datos
-            //string archivo = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaDatos, "Lineas.db3");
-            // Si el archivo no existe, pedimos cambiar la carpeta de datos
-            //if (!File.Exists(archivo)) {
-            //    if (MessageBox.Show("La carpeta de datos no está bien definida.\n\n¿Desea elegir otra carpeta?",
-            //                                       "ERROR", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes) {
-            //        System.Windows.Forms.FolderBrowserDialog dialogo = new System.Windows.Forms.FolderBrowserDialog();
-            //        dialogo.Description = "Ubicación Bases de Datos";
-            //        dialogo.RootFolder = Environment.SpecialFolder.MyComputer;
-            //        dialogo.SelectedPath = App.Global.Configuracion.CarpetaDatos;
-            //        dialogo.ShowNewFolderButton = true;
-            //        if (dialogo.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
-            //            App.Global.Configuracion.CarpetaDatos = dialogo.SelectedPath;
-            //            App.Global.Configuracion.Guardar(App.Global.ArchivoOpcionesConfiguracion);
+            // TODO: Con el nuevo sistema de actualización, eliminar este bloque if y descomentar el siguiente.
+            //if (App.Global.Configuracion.ActualizarPrograma && !string.IsNullOrWhiteSpace(App.Global.Configuracion.CarpetaOrigenActualizar)) {
+            //    string archivoOrigen = Path.Combine(App.Global.Configuracion.CarpetaOrigenActualizar, "OrionUpdate.exe");
+            //    string archivoDestino = Path.Combine(Directory.GetCurrentDirectory(), "OrionUpdate.exe");
+            //    DateTime origen = File.GetLastWriteTime(archivoOrigen);
+            //    DateTime destino = File.GetLastWriteTime(archivoDestino);
+            //    if (origen > destino && File.Exists(archivoOrigen)) {
+            //        File.Copy(archivoOrigen, archivoDestino, true);
+            //    }
+            //    archivoOrigen = Path.Combine(App.Global.Configuracion.CarpetaOrigenActualizar, "Orion.exe");
+            //    archivoDestino = Path.Combine(Directory.GetCurrentDirectory(), "Orion.exe");
+            //    origen = File.GetLastWriteTime(archivoOrigen);
+            //    destino = File.GetLastWriteTime(archivoDestino);
+            //    if (origen > destino) {
+            //        // Necesita actualizar
+            //        string mensaje = "Hay una nueva versión de Orión.\n\n¿Desea actualizar ahora?";
+            //        if (MessageBox.Show(mensaje, "Actualización", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes) {
+            //            App.ActualizarAlSalir = true;
+            //            this.Close();
             //        }
             //    }
             //}
 
+            if (App.Global.Configuracion.ActualizarPrograma && !string.IsNullOrWhiteSpace(App.Global.Configuracion.CarpetaOrigenActualizar)) {
+                var exeFile = Path.Combine(App.Global.Configuracion.CarpetaOrigenActualizar, "setup.exe");
+                if (File.Exists(exeFile)) {
+                    DateTime lastWrite = File.GetLastWriteTime(exeFile);
+                    if (lastWrite > App.Global.Configuracion.LastWriteSetupFile) {
+                        string mensaje = "Hay una nueva versión de Orión.\n\n¿Desea actualizar ahora?";
+                        if (MessageBox.Show(mensaje, "Actualización", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes) {
+                            App.ActualizarAlSalir = true;
+                            App.Global.Configuracion.LastWriteSetupFile = lastWrite;
+                            this.Close();
+                        }
+                    }
+                }
+            }
+
+
             // Establecemos el DataContext de la ventana.
             this.DataContext = App.Global;
-
-            // Activamos el botón de la calculadora.
-            //App.Global.Configuracion.BotonCalculadoraActivo = true;
 
             //Si hay que hacer una copia de seguridad, evaluar si hay que hacerla y si es así, hacerla.
             if (App.Global.Configuracion.CopiaAutomatica > 0 && App.Global.Configuracion.UltimaCopia != null) {
@@ -176,6 +127,7 @@ namespace Orion.Views {
                         break;
                 }
             }
+
 
         }
 

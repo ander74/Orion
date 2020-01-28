@@ -13,6 +13,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using OfficeOpenXml;
+using OfficeOpenXml.Style;
 using Orion.Convertidores;
 using Orion.DataModels;
 using Orion.Models;
@@ -401,7 +402,6 @@ namespace Orion.Servicios {
         }
 
 
-
         public void GenerarComparacionCalendarios(string destino, IEnumerable<Calendario> listaCalendarios, string excelCalendarios, int año, int mes) {
             var listaExcel = getCalendarios(excelCalendarios, año, mes);
 
@@ -432,6 +432,545 @@ namespace Orion.Servicios {
                 excelApp.SaveAs(new FileInfo(destino));
             }
         }
+
+
+        public void GenerarEstadisticasCalendario(string destino, IEnumerable<EstadisticaPorTurnos> listaEstadisticas, string titulo) {
+            // Variables que se van a utilizar.
+            var centroActual = App.Global.CentroActual.ToString();
+            // Colores de encabezado rotativos.
+            var listaColores = new List<Color> {
+                Color.FromArgb(191, 143, 0),
+                Color.FromArgb(198, 89, 17),
+                Color.FromArgb(84, 130, 53),
+                Color.FromArgb(47, 117, 181),
+                // Se repiten, pero podrían cambiarse.
+                Color.FromArgb(191, 143, 0),
+                Color.FromArgb(198, 89, 17),
+                Color.FromArgb(84, 130, 53),
+                Color.FromArgb(47, 117, 181),
+            };
+            var columnaActual = 4;
+            var filaActual = 6;
+            var colorActual = 0;
+            var mostrarDiasTrabajados = App.Global.EstadisticasTurnosVM.MostrarDiasTrabajados;
+            var mostrarHorasTrabajadas = App.Global.EstadisticasTurnosVM.MostrarHorasTrabajadas;
+            var mostrarHorasAcumuladas = App.Global.EstadisticasTurnosVM.MostrarHorasAcumuladas;
+            var mostrarHorasNocturnas = App.Global.EstadisticasTurnosVM.MostrarHorasNocturnas;
+            var mostrarImporteDietas = App.Global.EstadisticasTurnosVM.MostrarImporteDietas;
+            var mostrarFestivosTrabajados = App.Global.EstadisticasTurnosVM.MostrarFestivosTrabajados;
+            var mostrarDescansos = App.Global.EstadisticasTurnosVM.MostrarDescansos;
+            var mostrarPluses = App.Global.EstadisticasTurnosVM.MostrarPluses;
+
+
+            using (var excelApp = new ExcelPackage()) {
+                // Añadimos una hoja con las estadísticas.
+                var hoja = excelApp.Workbook.Worksheets.Add($"Estadisticas Calendarios");
+                // Título
+                hoja.Cells["A1"].Value = $"ESTADÍSTICAS CALENDARIOS {centroActual.ToUpper()}";
+                hoja.Cells["A1"].Style.Font.Size = 20;
+                hoja.Cells["A2"].Value = $"{titulo}";
+                hoja.Cells["A2"].Style.Font.Size = 16;
+
+                // Encabezados.
+                hoja.Cells["A4"].Value = "CONDUCTOR";
+                hoja.Cells["A4:C4"].Merge = true;
+                hoja.Cells["A5"].Value = "Centro";
+                hoja.Cells["B5"].Value = "Matrícula";
+                hoja.Cells["C5"].Value = "Apellidos";
+                hoja.Cells["A4:C5"].Style.Font.Color.SetColor(Color.White);
+                hoja.Cells["A4:C5"].Style.Font.Bold = true;
+                hoja.Cells["A4:C5"].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                hoja.Cells["A4:C5"].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(123, 123, 123));
+                hoja.Cells["A4:C5"].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                hoja.Cells["A4:C5"].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                hoja.Cells["A4:C5"].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                hoja.Cells["A4:C5"].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                hoja.Cells["A4:C5"].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+
+                // Encabezados Días Trabajados
+                if (mostrarDiasTrabajados) {
+                    hoja.Cells[4, columnaActual].Value = "DÍAS TRABAJADOS";
+                    hoja.Cells[4, columnaActual, 4, columnaActual + 4].Merge = true;
+                    hoja.Cells[5, columnaActual].Value = "Días 1";
+                    hoja.Cells[5, columnaActual + 1].Value = "Días 2";
+                    hoja.Cells[5, columnaActual + 2].Value = "Días 3";
+                    hoja.Cells[5, columnaActual + 3].Value = "Días 4";
+                    hoja.Cells[5, columnaActual + 4].Value = "Total Días";
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Bold = true;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                    colorActual++;
+                }
+                // Encabezados Horas Trabajadas
+                if (mostrarHorasTrabajadas) {
+                    hoja.Cells[4, columnaActual].Value = "HORAS TRABAJADAS";
+                    hoja.Cells[4, columnaActual, 4, columnaActual + 4].Merge = true;
+                    hoja.Cells[5, columnaActual].Value = "Trab. 1";
+                    hoja.Cells[5, columnaActual + 1].Value = "Trab. 2";
+                    hoja.Cells[5, columnaActual + 2].Value = "Trab. 3";
+                    hoja.Cells[5, columnaActual + 3].Value = "Trab. 4";
+                    hoja.Cells[5, columnaActual + 4].Value = "Total Trab.";
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Bold = true;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                    colorActual++;
+                }
+                // Encabezados Horas Acumuladas
+                if (mostrarHorasAcumuladas) {
+                    hoja.Cells[4, columnaActual].Value = "HORAS ACUMULADAS";
+                    hoja.Cells[4, columnaActual, 4, columnaActual + 4].Merge = true;
+                    hoja.Cells[5, columnaActual].Value = "Acum. 1";
+                    hoja.Cells[5, columnaActual + 1].Value = "Acum. 2";
+                    hoja.Cells[5, columnaActual + 2].Value = "Acum. 3";
+                    hoja.Cells[5, columnaActual + 3].Value = "Acum. 4";
+                    hoja.Cells[5, columnaActual + 4].Value = "Total Acum.";
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Bold = true;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                    colorActual++;
+                }
+                // Encabezados Horas Nocturnas
+                if (mostrarHorasNocturnas) {
+                    hoja.Cells[4, columnaActual].Value = "HORAS NOCTURNAS";
+                    hoja.Cells[4, columnaActual, 4, columnaActual + 4].Merge = true;
+                    hoja.Cells[5, columnaActual].Value = "Noct. 1";
+                    hoja.Cells[5, columnaActual + 1].Value = "Noct. 2";
+                    hoja.Cells[5, columnaActual + 2].Value = "Noct. 3";
+                    hoja.Cells[5, columnaActual + 3].Value = "Noct. 4";
+                    hoja.Cells[5, columnaActual + 4].Value = "Total Noct";
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Bold = true;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                    colorActual++;
+                }
+                // Encabezados Importe Dietas
+                if (mostrarImporteDietas) {
+                    hoja.Cells[4, columnaActual].Value = "IMPORTE DIETAS";
+                    hoja.Cells[4, columnaActual, 4, columnaActual + 4].Merge = true;
+                    hoja.Cells[5, columnaActual].Value = "Imp. 1";
+                    hoja.Cells[5, columnaActual + 1].Value = "Imp. 2";
+                    hoja.Cells[5, columnaActual + 2].Value = "Imp. 3";
+                    hoja.Cells[5, columnaActual + 3].Value = "Imp. 4";
+                    hoja.Cells[5, columnaActual + 4].Value = "Total Imp.";
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Bold = true;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                    colorActual++;
+                }
+                // Encabezados Festivos Trabajados
+                if (mostrarFestivosTrabajados) {
+                    hoja.Cells[4, columnaActual].Value = "FESTIVOS TRABAJADOS";
+                    hoja.Cells[4, columnaActual, 4, columnaActual + 4].Merge = true;
+                    hoja.Cells[5, columnaActual].Value = "Fest. 1";
+                    hoja.Cells[5, columnaActual + 1].Value = "Fest. 2";
+                    hoja.Cells[5, columnaActual + 2].Value = "Fest. 3";
+                    hoja.Cells[5, columnaActual + 3].Value = "Fest. 4";
+                    hoja.Cells[5, columnaActual + 4].Value = "Total Fest.";
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Font.Bold = true;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                    colorActual++;
+                }
+                // Encabezados Descansos
+                if (mostrarDescansos) {
+                    hoja.Cells[4, columnaActual].Value = "DESCANSOS";
+                    hoja.Cells[4, columnaActual, 4, columnaActual + 1].Merge = true;
+                    hoja.Cells[5, columnaActual].Value = "Días";
+                    hoja.Cells[5, columnaActual + 1].Value = "Findes";
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Font.Color.SetColor(Color.White);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Font.Bold = true;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 2;
+                    colorActual++;
+                }
+                // Encabezados Pluses
+                if (mostrarPluses) {
+                    hoja.Cells[4, columnaActual].Value = "PLUSES";
+                    hoja.Cells[4, columnaActual, 4, columnaActual + 1].Merge = true;
+                    hoja.Cells[5, columnaActual].Value = "Paquet.";
+                    hoja.Cells[5, columnaActual + 1].Value = "M.Desc";
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Font.Color.SetColor(Color.White);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Font.Bold = true;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[4, columnaActual, 5, columnaActual + 1].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 2;
+                    colorActual++;
+                }
+
+                // DATOS
+                foreach (var estadistica in listaEstadisticas) {
+                    // Si el conductor es matricula cero, saltarselo.
+                    if (estadistica.Conductor.Matricula == 0) continue;
+
+                    hoja.Cells[filaActual, 1].Value = centroActual;
+                    hoja.Cells[filaActual, 2].Value = estadistica.Conductor.Matricula;
+                    hoja.Cells[filaActual, 3].Value = estadistica.Conductor.Apellidos;
+
+                    columnaActual = 4;
+                    //Dias Trabajados
+                    if (mostrarDiasTrabajados) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadistica.Dias[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadistica.Dias[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadistica.Dias[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadistica.Dias[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = estadistica.Dias.Sum();
+                        columnaActual += 5;
+                    }
+                    //Horas Trabajadas
+                    if (mostrarHorasTrabajadas) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadistica.Trabajadas[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadistica.Trabajadas[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadistica.Trabajadas[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadistica.Trabajadas[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = new TimeSpan(estadistica.Trabajadas.Sum(t => t.Ticks));
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Numberformat.Format = "[hh]:mm";
+                        columnaActual += 5;
+                    }
+                    //Horas Acumuladas
+                    if (mostrarHorasAcumuladas) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadistica.Acumuladas[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadistica.Acumuladas[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadistica.Acumuladas[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadistica.Acumuladas[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = new TimeSpan(estadistica.Acumuladas.Sum(t => t.Ticks));
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Numberformat.Format = "[hh]:mm";
+                        columnaActual += 5;
+                    }
+                    //Horas Nocturnas
+                    if (mostrarHorasNocturnas) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadistica.Nocturnas[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadistica.Nocturnas[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadistica.Nocturnas[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadistica.Nocturnas[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = new TimeSpan(estadistica.Nocturnas.Sum(t => t.Ticks));
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Numberformat.Format = "[hh]:mm";
+                        columnaActual += 5;
+                    }
+                    //Importe Dietas
+                    if (mostrarImporteDietas) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadistica.ImporteDietas[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadistica.ImporteDietas[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadistica.ImporteDietas[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadistica.ImporteDietas[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = estadistica.ImporteDietas.Sum();
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Numberformat.Format = "0.00";
+                        columnaActual += 5;
+                    }
+                    //Festivos Trabajados
+                    if (mostrarFestivosTrabajados) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadistica.DiasFestivos[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadistica.DiasFestivos[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadistica.DiasFestivos[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadistica.DiasFestivos[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = estadistica.DiasFestivos.Sum();
+                        columnaActual += 5;
+                    }
+                    //Descansos
+                    if (mostrarDescansos) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadistica.DiasDescanso;
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadistica.FindesDescansados;
+                        hoja.Cells[filaActual, columnaActual + 1].Style.Numberformat.Format = "0.00";
+                        columnaActual += 2;
+                    }
+                    //Pluses
+                    if (mostrarPluses) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadistica.PlusPaqueteria;
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadistica.PlusMenorDescanso;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Numberformat.Format = "0.00";
+                        columnaActual += 2;
+                    }
+                    filaActual++;
+                }
+
+                // Bordes Celdas de Datos y Encabezados Juntos
+                hoja.Cells[6, 1, filaActual - 1, columnaActual - 1].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                hoja.Cells[6, 1, filaActual - 1, columnaActual - 1].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                hoja.Cells[6, 1, filaActual - 1, columnaActual - 1].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                hoja.Cells[6, 1, filaActual - 1, columnaActual - 1].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                hoja.Cells[4, 1, 5, columnaActual - 1].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                hoja.Cells[6, 1, filaActual - 1, 3].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                columnaActual = 4;
+                if (mostrarDiasTrabajados) {
+                    hoja.Cells[6, columnaActual, filaActual - 1, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                }
+                if (mostrarHorasTrabajadas) {
+                    hoja.Cells[6, columnaActual, filaActual - 1, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                }
+                if (mostrarHorasAcumuladas) {
+                    hoja.Cells[6, columnaActual, filaActual - 1, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                }
+                if (mostrarHorasNocturnas) {
+                    hoja.Cells[6, columnaActual, filaActual - 1, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                }
+                if (mostrarImporteDietas) {
+                    hoja.Cells[6, columnaActual, filaActual - 1, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                }
+                if (mostrarFestivosTrabajados) {
+                    hoja.Cells[6, columnaActual, filaActual - 1, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 5;
+                }
+                if (mostrarDescansos) {
+                    hoja.Cells[6, columnaActual, filaActual - 1, columnaActual + 1].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 2;
+                }
+                if (mostrarPluses) {
+                    hoja.Cells[6, columnaActual, filaActual - 1, columnaActual + 1].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                    columnaActual += 2;
+                }
+                hoja.Cells[6, 1, filaActual - 1, columnaActual - 1].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+
+                // Configuracion filas y columnas
+                hoja.Cells[4, 1, filaActual, columnaActual - 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                hoja.Cells[1, 1, filaActual, columnaActual - 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                for (int i = 1; i <= 37; i++) hoja.Column(i).Width = i == 3 ? 30 : 12;
+                hoja.Row(1).Height = 30;
+                hoja.Row(2).Height = 25;
+                for (int i = 4; i <= filaActual - 1; i++) hoja.Row(i).Height = i > 5 ? 16 : 17;
+
+                // Creamos una tabla con los datos existentes.
+                var rango = hoja.Cells[5, 1, filaActual - 1, columnaActual - 1];
+                var tabla = hoja.Tables.Add(rango, "Estadisticas");
+                tabla.TableStyle = OfficeOpenXml.Table.TableStyles.Medium1;
+
+                // Fila Totales
+                var estadisticaTotal = listaEstadisticas.FirstOrDefault(e => e.Conductor.Matricula == 0 && e.Conductor.Apellidos == "TOTAL");
+                if (estadisticaTotal != null) {
+
+                    hoja.Cells[filaActual, 1, filaActual, 3].Merge = true;
+                    hoja.Cells[filaActual, 1, filaActual, 3].Value = "TOTALES";
+
+                    columnaActual = 4;
+                    //Dias Trabajados
+                    if (mostrarDiasTrabajados) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadisticaTotal.Dias[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadisticaTotal.Dias[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadisticaTotal.Dias[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadisticaTotal.Dias[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = estadisticaTotal.TotalDias;
+                        columnaActual += 5;
+                    }
+                    //Horas Trabajadas
+                    if (mostrarHorasTrabajadas) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadisticaTotal.Trabajadas[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadisticaTotal.Trabajadas[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadisticaTotal.Trabajadas[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadisticaTotal.Trabajadas[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = estadisticaTotal.TotalTrabajadas;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Numberformat.Format = "[hh]:mm";
+                        columnaActual += 5;
+                    }
+                    //Horas Acumuladas
+                    if (mostrarHorasAcumuladas) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadisticaTotal.Acumuladas[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadisticaTotal.Acumuladas[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadisticaTotal.Acumuladas[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadisticaTotal.Acumuladas[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = estadisticaTotal.TotalAcumuladas;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Numberformat.Format = "[hh]:mm";
+                        columnaActual += 5;
+                    }
+                    //Horas Nocturnas
+                    if (mostrarHorasNocturnas) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadisticaTotal.Nocturnas[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadisticaTotal.Nocturnas[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadisticaTotal.Nocturnas[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadisticaTotal.Nocturnas[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = estadisticaTotal.TotalNocturnas;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Numberformat.Format = "[hh]:mm";
+                        columnaActual += 5;
+                    }
+                    //Importe Dietas
+                    if (mostrarImporteDietas) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadisticaTotal.ImporteDietas[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadisticaTotal.ImporteDietas[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadisticaTotal.ImporteDietas[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadisticaTotal.ImporteDietas[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = estadisticaTotal.TotalImporteDietas;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Numberformat.Format = "0.00";
+                        columnaActual += 5;
+                    }
+                    //Festivos Trabajados
+                    if (mostrarFestivosTrabajados) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadisticaTotal.DiasFestivos[1];
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadisticaTotal.DiasFestivos[2];
+                        hoja.Cells[filaActual, columnaActual + 2].Value = estadisticaTotal.DiasFestivos[3];
+                        hoja.Cells[filaActual, columnaActual + 3].Value = estadisticaTotal.DiasFestivos[4];
+                        hoja.Cells[filaActual, columnaActual + 4].Value = estadisticaTotal.TotalDiasFestivos;
+                        columnaActual += 5;
+                    }
+                    //Descansos
+                    if (mostrarDescansos) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadisticaTotal.DiasDescanso;
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadisticaTotal.FindesDescansados;
+                        hoja.Cells[filaActual, columnaActual + 1].Style.Numberformat.Format = "0.00";
+                        columnaActual += 2;
+                    }
+                    //Pluses
+                    if (mostrarPluses) {
+                        hoja.Cells[filaActual, columnaActual].Value = estadisticaTotal.PlusPaqueteria;
+                        hoja.Cells[filaActual, columnaActual + 1].Value = estadisticaTotal.PlusMenorDescanso;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Numberformat.Format = "0.00";
+                        columnaActual += 2;
+                    }
+
+                    // Formato Fila Total
+                    hoja.Row(filaActual).Height = 20;
+                    hoja.Cells[filaActual, 1, filaActual, 3].Style.Font.Color.SetColor(Color.White);
+                    hoja.Cells[filaActual, 1, filaActual, 3].Style.Font.Bold = true;
+                    hoja.Cells[filaActual, 1, filaActual, 3].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    hoja.Cells[filaActual, 1, filaActual, 3].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(123, 123, 123));
+
+                    hoja.Cells[filaActual, 1, filaActual, columnaActual - 1].Style.Border.Bottom.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[filaActual, 1, filaActual, columnaActual - 1].Style.Border.Top.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[filaActual, 1, filaActual, columnaActual - 1].Style.Border.Left.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[filaActual, 1, filaActual, columnaActual - 1].Style.Border.Right.Style = ExcelBorderStyle.Thin;
+                    hoja.Cells[filaActual, 1, filaActual, 3].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+
+                    columnaActual = 4;
+                    colorActual = 0;
+                    if (mostrarDiasTrabajados) {
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Bold = true;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                        colorActual++;
+                        columnaActual += 5;
+                    }
+                    if (mostrarHorasTrabajadas) {
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Bold = true;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                        colorActual++;
+                        columnaActual += 5;
+                    }
+                    if (mostrarHorasAcumuladas) {
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Bold = true;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                        colorActual++;
+                        columnaActual += 5;
+                    }
+                    if (mostrarHorasNocturnas) {
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Bold = true;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                        colorActual++;
+                        columnaActual += 5;
+                    }
+                    if (mostrarImporteDietas) {
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Bold = true;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                        colorActual++;
+                        columnaActual += 5;
+                    }
+                    if (mostrarFestivosTrabajados) {
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Color.SetColor(Color.White);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Font.Bold = true;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 4].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                        colorActual++;
+                        columnaActual += 5;
+                    }
+                    if (mostrarDescansos) {
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Font.Color.SetColor(Color.White);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Font.Bold = true;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                        colorActual++;
+                        columnaActual += 2;
+                    }
+                    if (mostrarPluses) {
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Font.Color.SetColor(Color.White);
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Font.Bold = true;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        hoja.Cells[filaActual, columnaActual, filaActual, columnaActual + 1].Style.Fill.BackgroundColor.SetColor(listaColores[colorActual]);
+                        colorActual++;
+                        columnaActual += 2;
+                    }
+                    hoja.Cells[filaActual, 1, filaActual, columnaActual - 1].Style.Border.BorderAround(ExcelBorderStyle.Thick);
+
+                }
+
+                // Inmovilizar paneles -- Por el momento no incluirlo.
+                //hoja.View.FreezePanes(6, 4);
+
+                // Guardamos el libro y cerramos la aplicación.
+                excelApp.SaveAs(new FileInfo(destino));
+
+            }
+        }
+
 
 
         #endregion

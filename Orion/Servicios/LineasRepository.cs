@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.Data.Sqlite;
+using System.Data.SQLite;
 using Orion.Config;
 using Orion.Models;
 
@@ -90,11 +90,11 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
         private async Task CrearTablasAsync() {
-            using (var conexion = new SqliteConnection(CadenaConexion)) {
+            using (var conexion = new SQLiteConnection(CadenaConexion)) {
                 conexion.Open();
-                using (var comando = new SqliteCommand(CrearTablaLineas, conexion)) await comando.ExecuteNonQueryAsync();
-                using (var comando = new SqliteCommand(CrearTablaItinerarios, conexion)) await comando.ExecuteNonQueryAsync();
-                using (var comando = new SqliteCommand(CrearTablaParadas, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaLineas, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaItinerarios, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaParadas, conexion)) await comando.ExecuteNonQueryAsync();
             }
         }
 

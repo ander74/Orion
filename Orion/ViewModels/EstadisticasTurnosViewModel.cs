@@ -8,9 +8,12 @@
 namespace Orion.ViewModels {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Data;
+    using System.Windows.Input;
     using Orion.Models;
     using Orion.MVVM;
     using Orion.Servicios;
@@ -47,7 +50,7 @@ namespace Orion.ViewModels {
         #region MÉTODOS PÚBLICOS
         // ====================================================================================================
 
-        public async Task<List<EstadisticaPorTurnos>> CargarEstadisticas(IEnumerable<Calendario> listaCalendarios) {
+        public async Task<List<EstadisticaPorTurnos>> CargarEstadisticasAsync(IEnumerable<Calendario> listaCalendarios) {
 
             var lista = new List<EstadisticaPorTurnos>();
             await Task.Run(() => {
@@ -96,35 +99,46 @@ namespace Orion.ViewModels {
                     estadisticaTotal.ImporteDietas[4] += estadistica.ImporteDietas[4] = listaDiasT4.Sum(d => d.ImporteTotalDietas);
                     estadisticaTotal.DiasFestivos[4] += estadistica.DiasFestivos[4] = listaDiasT4.Count(d => d.Grafico > 0 && d.EsFestivo);
 
-                    // DÍAS TRABAJO
-                    estadisticaTotal.DiasTrabajo += estadistica.DiasTrabajo = pijama.Trabajo;
-                    // DÍAS DESCANSO
+                    // DESCANSOS
                     estadisticaTotal.DiasDescanso += estadistica.DiasDescanso = pijama.Descanso + pijama.DescansoEnFinde + pijama.DescansoSuelto;
-                    // FINDES TRABAJO No hay forma de saberlo.
-                    //estadisticaTotal.FindesTrabajados += estadistica.FindesTrabajados = pijama.FindesCompletos;
-                    // FINDES DESCANSO
                     estadisticaTotal.FindesDescansados += estadistica.FindesDescansados = pijama.FindesCompletos;
-                    // PLUS PAQUETERIA
+
+                    // PLUSES
                     estadisticaTotal.PlusPaqueteria += estadistica.PlusPaqueteria = pijama.PlusPaqueteria;
-                    // PLUS MENOR DESCANSO
                     estadisticaTotal.PlusMenorDescanso += estadistica.PlusMenorDescanso = pijama.PlusMenorDescanso;
 
                     lista.Add(estadistica);
                 }
-                lista.Add(estadisticaTotal);
+                //lista.Add(estadisticaTotal);
             });
             return lista;
         }
 
 
-
-        public async Task<List<EstadisticaPorTurnos>> CargarEstadisticasAño(int año) {
+        public async Task<List<EstadisticaPorTurnos>> CargarEstadisticasAñoAsync(int año) {
 
             var lista = new List<EstadisticaPorTurnos>();
             var listaCalendarios = new List<Calendario>();
             await Task.Run(() => {
                 for (int mes = 1; mes <= 12; mes++) {
-                    listaCalendarios.AddRange(App.Global.Repository.GetCalendarios(año, mes));
+                    switch (App.Global.CalendariosVM.FiltroAplicado) {
+                        case "Conductores Indefinidos":
+                            listaCalendarios.AddRange(App.Global.Repository.GetCalendarios(año, mes)
+                                .Where(c => App.Global.ConductoresVM.IsIndefinido(c.MatriculaConductor)));
+                            break;
+                        case "Conductores Eventuales":
+                            listaCalendarios.AddRange(App.Global.Repository.GetCalendarios(año, mes)
+                                .Where(c => !App.Global.ConductoresVM.IsIndefinido(c.MatriculaConductor)));
+                            break;
+                        case "Conductores Eventuales Parcial":
+                            listaCalendarios.AddRange(App.Global.Repository.GetCalendarios(año, mes)
+                                .Where(c => !App.Global.ConductoresVM.IsIndefinido(c.MatriculaConductor) && c.ListaDias.Any(d => d.Grafico == 0)));
+                            break;
+                        default:
+                            listaCalendarios.AddRange(App.Global.Repository.GetCalendarios(año, mes));
+                            break;
+                    }
+
                 }
                 EstadisticaPorTurnos estadisticaTotal = new EstadisticaPorTurnos();
                 estadisticaTotal.Conductor = new Conductor { Matricula = 0, Apellidos = "TOTAL" };
@@ -174,23 +188,19 @@ namespace Orion.ViewModels {
                     estadisticaTotal.ImporteDietas[4] += estadistica.ImporteDietas[4] += listaDiasT4.Sum(d => d.ImporteTotalDietas);
                     estadisticaTotal.DiasFestivos[4] += estadistica.DiasFestivos[4] += listaDiasT4.Count(d => d.Grafico > 0 && d.EsFestivo);
 
-                    // DÍAS TRABAJO
-                    estadisticaTotal.DiasTrabajo += estadistica.DiasTrabajo += pijama.Trabajo;
-                    // DÍAS DESCANSO
+                    // DESCANSOS
                     estadisticaTotal.DiasDescanso += estadistica.DiasDescanso += pijama.Descanso + pijama.DescansoEnFinde + pijama.DescansoSuelto;
-                    // FINDES TRABAJO No hay forma de saberlo.
-                    //estadisticaTotal.FindesTrabajados += estadistica.FindesTrabajados += pijama.FindesCompletos;
-                    // FINDES DESCANSO
                     estadisticaTotal.FindesDescansados += estadistica.FindesDescansados += pijama.FindesCompletos;
-                    // PLUS PAQUETERIA
+
+                    // PLUSES
                     estadisticaTotal.PlusPaqueteria += estadistica.PlusPaqueteria += pijama.PlusPaqueteria;
-                    // PLUS MENOR DESCANSO
                     estadisticaTotal.PlusMenorDescanso += estadistica.PlusMenorDescanso += pijama.PlusMenorDescanso;
                 }
-                lista.Add(estadisticaTotal);
+                //lista.Add(estadisticaTotal);
             });
-            return lista;
+            return lista.OrderBy(e => e.Conductor.Matricula).ToList();
         }
+
 
         #endregion
         // ====================================================================================================
@@ -200,18 +210,21 @@ namespace Orion.ViewModels {
         #region COMANDOS
         // ====================================================================================================
 
-        public ICommandAsync cmdCargarEstadisticasDeCalendario { get => new CommandAsync(CargarEstadisticasDeCalendario); }
-        private async Task CargarEstadisticasDeCalendario() {
+        public ICommandAsync cmdCargarEstadisticasDeCalendario { get => new CommandAsync(CargarEstadisticasDeCalendarioAsync); }
+        private async Task CargarEstadisticasDeCalendarioAsync() {
             IsBusy = true;
             try {
                 List<Calendario> lista = new List<Calendario>();
                 foreach (Object obj in App.Global.CalendariosVM.VistaCalendarios) {
                     if (obj is Calendario cal) lista.Add(cal);
                 }
-                ListaEstadisticas = await CargarEstadisticas(lista);
+                ListaEstadisticas = await CargarEstadisticasAsync(lista);
                 if (lista.Count > 0) {
                     Fecha = lista[0].Fecha;
                     TextoCabecera = lista[0].Fecha.ToString("MMMM - yyyy").ToUpper();
+                    if (!App.Global.CalendariosVM.FiltroAplicado.Equals("Ninguno")) {
+                        TextoCabecera += $" ({App.Global.CalendariosVM.FiltroAplicado})";
+                    }
                 } else {
                     Fecha = DateTime.MinValue;
                     TextoCabecera = "Sin Datos";
@@ -222,12 +235,35 @@ namespace Orion.ViewModels {
         }
 
 
-        public ICommandAsync cmdCargarEstadisticasCalendariosAño { get => new CommandAsync(CargarEstadisticasCalendariosAño); }
-        private async Task CargarEstadisticasCalendariosAño() {
+        public ICommandAsync cmdCargarEstadisticasCalendariosAño { get => new CommandAsync(CargarEstadisticasCalendariosAñoAsync); }
+        private async Task CargarEstadisticasCalendariosAñoAsync() {
             IsBusy = true;
             try {
-                ListaEstadisticas = await CargarEstadisticasAño(App.Global.CalendariosVM.FechaActual.Year);
+                ListaEstadisticas = await CargarEstadisticasAñoAsync(App.Global.CalendariosVM.FechaActual.Year);
                 TextoCabecera = $"ESTADÍSTICAS DEL AÑO {App.Global.CalendariosVM.FechaActual.Year}";
+                if (!App.Global.CalendariosVM.FiltroAplicado.Equals("Ninguno")) {
+                    TextoCabecera += $" ({App.Global.CalendariosVM.FiltroAplicado})";
+                }
+            } finally {
+                IsBusy = false;
+            }
+        }
+
+
+
+        // Comando
+        public ICommand cmdGenerarExcelEstadisticas { get => new RelayCommand(p => GenerarExcelEstadisticas(), p => PuedeGenerarExcelEstadisticas()); }
+        private bool PuedeGenerarExcelEstadisticas() => ListaEstadisticas.Any();
+        private void GenerarExcelEstadisticas() {
+            IsBusy = true;
+            try {
+                string nombreArchivo = $"Estadisticas Calendarios {App.Global.CentroActual} - {TextoCabecera.Replace(" ", "")}.xlsx";
+                string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios\\Estadisticas");
+                if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
+                string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
+                ExcelService.getInstance().GenerarEstadisticasCalendario(rutaDestino, ListaEstadisticas, textoCabecera);
+                if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
+
             } finally {
                 IsBusy = false;
             }
@@ -294,6 +330,70 @@ namespace Orion.ViewModels {
         public bool IsBusy {
             get => isBusy;
             set => SetValue(ref isBusy, value);
+        }
+
+
+
+        private bool mostrarDiasTrabajados = true;
+        public bool MostrarDiasTrabajados {
+            get => mostrarDiasTrabajados;
+            set => SetValue(ref mostrarDiasTrabajados, value);
+        }
+
+
+
+        private bool mostrarHorasTrabajadas = true;
+        public bool MostrarHorasTrabajadas {
+            get => mostrarHorasTrabajadas;
+            set => SetValue(ref mostrarHorasTrabajadas, value);
+        }
+
+
+
+        private bool mostrarHorasAcumuladas = true;
+        public bool MostrarHorasAcumuladas {
+            get => mostrarHorasAcumuladas;
+            set => SetValue(ref mostrarHorasAcumuladas, value);
+        }
+
+
+
+        private bool mostrarHorasNocturnas = true;
+        public bool MostrarHorasNocturnas {
+            get => mostrarHorasNocturnas;
+            set => SetValue(ref mostrarHorasNocturnas, value);
+        }
+
+
+
+        private bool mostrarImporteDietas = true;
+        public bool MostrarImporteDietas {
+            get => mostrarImporteDietas;
+            set => SetValue(ref mostrarImporteDietas, value);
+        }
+
+
+
+        private bool mostrarFestivosTrabajados = true;
+        public bool MostrarFestivosTrabajados {
+            get => mostrarFestivosTrabajados;
+            set => SetValue(ref mostrarFestivosTrabajados, value);
+        }
+
+
+
+        private bool mostrarDescansos = true;
+        public bool MostrarDescansos {
+            get => mostrarDescansos;
+            set => SetValue(ref mostrarDescansos, value);
+        }
+
+
+
+        private bool mostrarPluses = true;
+        public bool MostrarPluses {
+            get => mostrarPluses;
+            set => SetValue(ref mostrarPluses, value);
         }
 
 
