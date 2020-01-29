@@ -6,10 +6,6 @@
 // ===============================================
 #endregion
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orion.Models {
 
@@ -25,11 +21,7 @@ namespace Orion.Models {
         public DateTime Fecha { get; set; }
 
 
-        public int Dia {
-            get { return Fecha.Day; }
-        }
-
-
+        public int Dia { get => Fecha.Day; }
 
         #endregion
         // ====================================================================================================

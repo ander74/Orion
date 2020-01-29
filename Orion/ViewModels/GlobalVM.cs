@@ -618,9 +618,6 @@ namespace Orion.ViewModels {
         public string CarpetaConfiguracion { get; set; }
 
 
-        //public string CarpetaDatos { get; set; }
-
-
         public string ArchivoOpcionesConfiguracion {
             get {
                 return Path.Combine(CarpetaConfiguracion, "Config.json");

@@ -49,7 +49,6 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-
         // ====================================================================================================
         #region MÉTODOS ESTÁTICOS
         // ====================================================================================================
@@ -84,7 +83,6 @@ namespace Orion.Models {
 
         #endregion
         // ====================================================================================================
-
 
 
         // ====================================================================================================
@@ -206,17 +204,6 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("PlusNavidad", PlusNavidad.ToString("0.0000").Replace(",", ".")));
-
-                //lista.Add(new SQLiteParameter("ImporteDietas", ImporteDietas));
-                //lista.Add(new SQLiteParameter("ImporteSabados", ImporteSabados));
-                //lista.Add(new SQLiteParameter("ImporteFestivos", ImporteFestivos));
-                //lista.Add(new SQLiteParameter("PlusNocturnidad", PlusNocturnidad));
-                //lista.Add(new SQLiteParameter("DietaMenorDescanso", DietaMenorDescanso));
-                //lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza));
-                //lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria));
-                //lista.Add(new SQLiteParameter("PlusNavidad", PlusNavidad));
-
-                //lista.Add(new SQLiteParameter("Id", Id));                
                 return lista;
             }
         }
@@ -270,21 +257,6 @@ namespace Orion.Models {
                 "@plusNavidad, " +
                 "@id);";
         }
-
-
-        //public string ComandoActualizar {
-        //    get => "UPDATE Pluses SET " +
-        //        "Año = @año, " +
-        //        "ImporteDietas = @importeDietas, " +
-        //        "ImporteSabados = @importeSabados, " +
-        //        "ImporteFestivos = @importeFestivos, " +
-        //        "PlusNocturnidad = @plusNocturnidad, " +
-        //        "DietaMenorDescanso = @dietaMenorDescanso, " +
-        //        "PlusLimpieza = @plusLimpieza, " +
-        //        "PlusPaqueteria = @plusPaqueteria, " +
-        //        "PlusNavidad = @plusNavidad " +
-        //        "WHERE _id = @id;";
-        //}
 
 
         #endregion

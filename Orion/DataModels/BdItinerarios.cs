@@ -43,7 +43,7 @@ namespace Orion.DataModels {
                     lector = Comando.ExecuteReader();
                     while (lector.Read()) {
                         Itinerario itinerario = new Itinerario(lector);
-                        itinerario.ListaParadas = BdParadas.GetParadas(itinerario.Id);
+                        itinerario.ListaParadas = new NotifyCollection<Parada>(BdParadas.GetParadas(itinerario.Id));
                         lista.Add(itinerario);
                         itinerario.Nuevo = false;
                         itinerario.Modificado = false;
@@ -155,7 +155,7 @@ namespace Orion.DataModels {
 
                     if (lector.Read()) {
                         itinerario = new Itinerario(lector);
-                        itinerario.ListaParadas = BdParadas.GetParadas(itinerario.Id);
+                        itinerario.ListaParadas = new NotifyCollection<Parada>(BdParadas.GetParadas(itinerario.Id));
                     }
                 } catch (Exception ex) {
                     Utils.VerError("BdItinerarios.GetItinerarioByNombre", ex);

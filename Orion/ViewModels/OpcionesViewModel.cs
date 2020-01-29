@@ -6,10 +6,10 @@
 // ===============================================
 #endregion
 using System;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
 using Orion.Config;
-using Orion.DataModels;
 using Orion.Models;
 using Orion.Servicios;
 
@@ -22,7 +22,6 @@ namespace Orion.ViewModels {
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
 		private IMensajes mensajes;
-		//private List<Festivo> _listaborrados = new List<Festivo>();
 		#endregion
 
 
@@ -31,8 +30,6 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		public OpcionesViewModel(IMensajes servicioMensajes) {
 			mensajes = servicioMensajes;
-			//_listafestivos.CollectionChanged += ListaFestivos_CollectionChanged;
-			//AñoFestivos = DateTime.Now.Year;
 			CargarDatos();
 			AñoPluses = DateTime.Now.Year;
 
@@ -44,29 +41,17 @@ namespace Orion.ViewModels {
 		#region MÉTODOS PÚBLICOS
 		// ====================================================================================================
 		public void CargarDatos() {
-			//if (App.Global.CadenaConexion == null) {
-			//	_listafestivos.Clear();
-			//	return;
-			//}
-			//ListaFestivos = BdFestivos.GetFestivosPorAño(AñoFestivos);
-			if (App.Global.CadenaConexion == null) return;
-			ListaPluses = BdPluses.GetPluses();
-			ListaPluses.ItemPropertyChanged += ListaPluses_ItemPropertyChanged;
+			if (App.Global.CadenaConexion == null) {
+				ListaPluses = new NotifyCollection<Pluses>();
+				return;
+			}
+			ListaPluses = new NotifyCollection<Pluses>(App.Global.Repository.GetPluses());
 		}
 
 
 		public void GuardarDatos() {
+			App.Global.Repository.GuardarPluses(ListaPluses.Where(item => item.Nuevo || item.Modificado));
 			HayCambios = false;
-			//if (ListaFestivos != null && ListaFestivos.Count > 0) {
-			//	BdFestivos.GuardarFestivos(ListaFestivos);
-			//}
-			//if (_listaborrados.Count > 0) {
-			//	BdFestivos.BorrarFestivos(_listaborrados);
-			//	_listaborrados.Clear();
-			//}
-			if (ListaPluses != null && ListaPluses.Any() && App.Global.CadenaConexion != null) {
-				BdPluses.GuardarPluses(ListaPluses.Where(item => item.Nuevo || item.Modificado));
-			}
 		}
 
 
@@ -77,7 +62,6 @@ namespace Orion.ViewModels {
 
 
 		public void Reiniciar() {
-			//AñoFestivos = DateTime.Now.Year;
 			CargarDatos();
 			HayCambios = false;
 		}
@@ -100,35 +84,22 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		#region EVENTOS
 		// ====================================================================================================
-		//private void ListaFestivos_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
 
-		//	if (e.NewItems != null) {
-		//		foreach (Festivo festivo in e.NewItems) {
-		//			festivo.Año = AñoFestivos;
-		//			festivo.Nuevo = true;
-		//			festivo.ObjetoCambiado += ObjetoCambiadoEventHandler;
-		//			HayCambios = true;
-		//		}
-		//	}
-
-		//	if (e.OldItems != null) {
-		//		foreach (Festivo festivo in e.OldItems) {
-		//			festivo.ObjetoCambiado -= ObjetoCambiadoEventHandler;
-		//		}
-		//	}
-
-		//	PropiedadCambiada(nameof(ListaFestivos));
-		//}
-
-
-		private void ListaPluses_ItemPropertyChanged(object sender, ItemPropertyChangedEventArgs e) {
+		private void ListaPluses_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+			if (e.NewItems != null) {
+				foreach (Pluses plus in e.NewItems) {
+					plus.Nuevo = true;
+				}
+			}
 			HayCambios = true;
 		}
 
 
-		private void ObjetoCambiadoEventHandler(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
+
+		private void ListaPluses_ItemPropertyChanged(object sender, ItemChangedEventArgs<Pluses> e) {
 			HayCambios = true;
 		}
+
 
 		#endregion
 
@@ -192,12 +163,16 @@ namespace Orion.ViewModels {
 		// PLUSES
 		// ----------------------------------------------------------------------------------------------------
 
-		private FullObservableCollection<Pluses> _listapluses = new FullObservableCollection<Pluses>();
-		public FullObservableCollection<Pluses> ListaPluses {
+		private NotifyCollection<Pluses> _listapluses = new NotifyCollection<Pluses>();
+		public NotifyCollection<Pluses> ListaPluses {
 			get { return _listapluses; }
-			set { SetValue(ref _listapluses, value); }
+			set {
+				if (SetValue(ref _listapluses, value)) {
+					_listapluses.CollectionChanged += ListaPluses_CollectionChanged;
+					_listapluses.ItemPropertyChanged += ListaPluses_ItemPropertyChanged;
+				}
+			}
 		}
-
 
 		private int _añopluses;
 		public int AñoPluses {

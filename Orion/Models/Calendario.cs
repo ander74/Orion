@@ -9,13 +9,12 @@ namespace Orion.Models {
 
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Collections.Specialized;
-    using System.ComponentModel;
     using System.Data.Common;
     using System.Data.OleDb;
     using System.Data.SQLite;
     using System.Linq;
+    using Orion.Config;
     using Orion.Interfaces;
 
     public class Calendario : NotifyBase, ISQLiteItem {
@@ -31,14 +30,11 @@ namespace Orion.Models {
         // ====================================================================================================
         #region CONSTRUCTOR
         // ====================================================================================================
-        public Calendario() {
-            // Creamos la lista de días.
-            //ListaDias = new ObservableCollection<DiaCalendario>();
-        }
+        public Calendario() { }
 
         public Calendario(DateTime fecha) {
             Fecha = fecha;
-            ListaDias = new ObservableCollection<DiaCalendario>(
+            ListaDias = new NotifyCollection<DiaCalendario>(
                 Enumerable.Range(1, DateTime.DaysInMonth(fecha.Year, fecha.Month)).Select(d => new DiaCalendario() {
                     Dia = d,
                     DiaFecha = new DateTime(fecha.Year, fecha.Month, d),
@@ -158,23 +154,21 @@ namespace Orion.Models {
                 foreach (DiaCalendario dia in e.NewItems) {
                     dia.IdCalendario = this.Id;
                     dia.Nuevo = true;
-                    dia.ObjetoCambiado += ObjetoCambiadoEventHandler;
                 }
             }
 
             if (e.OldItems != null) {
-                foreach (DiaCalendario dia in e.OldItems) {
-                    dia.ObjetoCambiado -= ObjetoCambiadoEventHandler;
-                }
+                // No hace falta de momento.
             }
 
             PropiedadCambiada(nameof(ListaDias));
         }
 
-        private void ObjetoCambiadoEventHandler(object sender, PropertyChangedEventArgs e) {
-            PropiedadCambiada(nameof(GrafDif));
+        private void Listadias_ItemPropertyChanged(object sender, ItemChangedEventArgs<DiaCalendario> e) {
             Modificado = true;
+            PropiedadCambiada(nameof(GrafDif));
         }
+
 
         #endregion
 
@@ -219,9 +213,6 @@ namespace Orion.Models {
             set {
                 if (_fecha != value) {
                     _fecha = value;
-                    //foreach (DiaCalendario dia in ListaDias) {
-                    //	dia.DiaFecha = new DateTime(_fecha.Year, _fecha.Month, dia.DiaFecha.Day);
-                    //}
                     Modificado = true;
                     PropiedadCambiada();
                 }
@@ -275,45 +266,16 @@ namespace Orion.Models {
         }
 
 
-        public bool HayDiasNuevos { get; set; }
-
-
-        private ObservableCollection<DiaCalendario> _listadias;
-        public ObservableCollection<DiaCalendario> ListaDias {
+        private NotifyCollection<DiaCalendario> _listadias;
+        public NotifyCollection<DiaCalendario> ListaDias {
             get {
-                //TODO: Descomentar la siguiente línea
-                //if (_listadias == null) ListaDias = new ObservableCollection<DiaCalendario>();
                 return _listadias;
             }
             set {
                 if (_listadias != value) {
                     _listadias = value;
-                    //// Creamos una nueva lista.
-                    //_listadias = new ObservableCollection<DiaCalendario>();
-                    //// Activamos el evento CollectionChanged
-                    //_listadias.CollectionChanged += ListaDias_CollectionChanged;
-                    //// Definimos los días en el mes.
-                    //int diasMes = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-                    //// Si los días de la lista pasada son menos que los días del mes, se activa HayDiasNuevos.
-                    //if (diasMes > value.Count) HayDiasNuevos = true;
-                    //// Llenamos la lista con días vacíos (el número que le corresponde al mes).
-                    //for (int m = 1; m <= diasMes; m++) {
-                    //	DiaCalendario d = new DiaCalendario {
-                    //		IdCalendario = this.Id,
-                    //		Dia = m,
-                    //		DiaFecha = new DateTime(Fecha.Year, Fecha.Month, m),
-                    //		Nuevo = true,
-                    //	};
-                    //	d.Modificado = false;
-                    //	_listadias.Add(d);
-                    //}
-                    //// Sustituimos los días que existen por los días vacíos en la lista.
-                    //foreach (DiaCalendario dia in value) {
-                    //	_listadias[dia.Dia - 1] = dia;
-                    //	dia.Nuevo = false;
-                    //}
                     _listadias.CollectionChanged += ListaDias_CollectionChanged;
-                    _listadias.ToList().ForEach(dc => dc.ObjetoCambiado += ObjetoCambiadoEventHandler);
+                    _listadias.ItemPropertyChanged += Listadias_ItemPropertyChanged;
                     Modificado = true;
                     PropiedadCambiada();
                 }
@@ -358,7 +320,7 @@ namespace Orion.Models {
 
 
         public void InicializarLista() {
-            ListaDias = new ObservableCollection<DiaCalendario>();
+            ListaDias = new NotifyCollection<DiaCalendario>();
         }
 
 
@@ -391,15 +353,6 @@ namespace Orion.Models {
                 "@notas, " +
                 "@id);";
         }
-
-
-        //public string ComandoActualizar {
-        //    get => "UPDATE Calendarios SET " +
-        //        "MatriculaConductor = @matriculaConductor, " +
-        //        "Fecha = @fecha, " +
-        //        "Notas = @notas " +
-        //        "WHERE _id = @id;";
-        //}
 
 
         #endregion

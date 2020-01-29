@@ -5,25 +5,14 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Orion.Config;
-using Orion.DataModels;
-using Orion.Models;
-using Orion.Servicios;
-using Orion.Views;
 using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Orion.Models;
+using Orion.Servicios;
 
-namespace Orion.ViewModels
-{
-    public partial class VentanaRegularAñoVM: NotifyBase{
+namespace Orion.ViewModels {
+	public partial class VentanaRegularAñoVM : NotifyBase {
 
 
 		// ====================================================================================================
@@ -53,8 +42,8 @@ namespace Orion.ViewModels
 
 			try {
 				// Cargamos las horas.
-				TimeSpan acumuladas = BdCalendarios.GetAcumuladasHastaMes(Año, 11, IdConductor);
-				TimeSpan reguladas = BdCalendarios.GetHorasReguladasHastaMes(Año, 11, IdConductor);
+				TimeSpan acumuladas = App.Global.Repository.GetAcumuladasHastaMes(Año, 11, IdConductor, App.Global.PorCentro.Comodin);
+				TimeSpan reguladas = App.Global.Repository.GetHorasReguladasHastaMes(Año, 11, IdConductor);
 				HorasDisponibles = HorasConductor + acumuladas + reguladas;
 			} catch (Exception ex) {
 				mensajes.VerError("VentanaCobrarHorasVM.RefrescarValores", ex);

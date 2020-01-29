@@ -6,24 +6,16 @@
 // ===============================================
 #endregion
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Orion.Models
-{
+namespace Orion.Models {
     public class EstadisticaCalendario {
-
-
-
 
         // ====================================================================================================
         #region PROPIEDADES
         // ====================================================================================================
 
         public int Dia { get; set; }
-        
+
         public int Turno1 { get; set; }
 
         public int Turno2 { get; set; }
@@ -84,7 +76,6 @@ namespace Orion.Models
 
         #endregion
         // ====================================================================================================
-
 
     }
 }

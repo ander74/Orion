@@ -6,15 +6,10 @@
 // ===============================================
 #endregion
 using Orion.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orion.ViewModels {
 
-	public class VentanaMensajesVM: NotifyBase {
+	public class VentanaMensajesVM : NotifyBase {
 
 		public enum BotonesMensaje { Cancelar, No, Si }
 

@@ -7,22 +7,16 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Orion.Models;
-using Orion.DataModels;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Windows;
+using System.Linq;
 using System.Windows.Controls;
-using Orion.Views;
-using System.ComponentModel;
+using Orion.Config;
+using Orion.Models;
 using Orion.Servicios;
 
 namespace Orion.ViewModels {
 
-	public partial class LineasViewModel :NotifyBase {
+	public partial class LineasViewModel : NotifyBase {
 
 		public enum Tablas { Ninguna = 0, Lineas = 1, Itinerarios = 2, Paradas = 4 }
 
@@ -42,7 +36,7 @@ namespace Orion.ViewModels {
 		// ====================================================================================================
 		public LineasViewModel(IMensajes servicioMensajes) {
 			mensajes = servicioMensajes;
-			_listalineas.CollectionChanged += ListaLineas_CollectionChanged;
+			ListaLineas = new NotifyCollection<Linea>();
 			CargarLineas();
 		}
 		#endregion
@@ -54,14 +48,11 @@ namespace Orion.ViewModels {
 
 		public void CargarLineas() {
 			if (App.Global.CadenaConexionLineas == null) {
-				_listalineas.Clear();
+				ListaLineas.Clear();
 				return;
 			}
 			try {
-				ListaLineas = BdLineas.GetLineas();
-				foreach(Linea l in ListaLineas) {
-					l.PropertyChanged += PropiedadCambiadaEventHandler;
-				}
+				ListaLineas = new NotifyCollection<Linea>(App.Global.LineasRepo.GetLineas());
 			} catch (Exception ex) {
 				mensajes.VerError("LineasViewModel.CargarLineas", ex);
 			}
@@ -73,10 +64,10 @@ namespace Orion.ViewModels {
 			try {
 				HayCambios = false;
 				if (ListaLineas != null && ListaLineas.Count > 0) {
-					BdLineas.GuardarLineas(ListaLineas.Where(item => item.Nuevo || item.Modificado));
+					App.Global.LineasRepo.GuardarLineas(ListaLineas.Where(item => item.Nuevo || item.Modificado));
 				}
 				if (_listalineasborradas.Count > 0) {
-					BdLineas.BorrarLineas(_listalineasborradas);
+					App.Global.LineasRepo.BorrarLineas(_listalineasborradas);
 					_listalineasborradas.Clear();
 				}
 			} catch (Exception ex) {
@@ -111,22 +102,18 @@ namespace Orion.ViewModels {
 			if (e.NewItems != null) {
 				foreach (Linea linea in e.NewItems) {
 					linea.Nuevo = true;
-					linea.PropertyChanged += PropiedadCambiadaEventHandler;
 					HayCambios = true;
 				}
 			}
 
 			if (e.OldItems != null) {
-				foreach (Linea linea in e.OldItems) {
-					linea.PropertyChanged -= PropiedadCambiadaEventHandler;
-				}
 			}
 
 			PropiedadCambiada(nameof(ListaLineas));
 		}
 
 
-		private void PropiedadCambiadaEventHandler(object sender, PropertyChangedEventArgs e) {
+		private void ListaLineas_ItemPropertyChanged(object sender, ItemChangedEventArgs<Linea> e) {
 			HayCambios = true;
 		}
 
@@ -138,19 +125,19 @@ namespace Orion.ViewModels {
 		#region PROPIEDADES
 		// ====================================================================================================
 
-		private ObservableCollection<Linea> _listalineas = new ObservableCollection<Linea>();
-		public ObservableCollection<Linea> ListaLineas {
+		private NotifyCollection<Linea> _listalineas = new NotifyCollection<Linea>();
+		public NotifyCollection<Linea> ListaLineas {
 			get { return _listalineas; }
 			set {
 				if (_listalineas != value) {
 					_listalineas = value;
 					_listalineas.CollectionChanged += ListaLineas_CollectionChanged;
+					_listalineas.ItemPropertyChanged += ListaLineas_ItemPropertyChanged;
 					PropiedadCambiada();
 					PropiedadCambiada(nameof(LineaSeleccionada));
 				}
 			}
 		}
-
 
 		private Linea _lineaseleccionada;
 		public Linea LineaSeleccionada {

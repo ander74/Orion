@@ -9,9 +9,7 @@ namespace Orion.ViewModels {
 
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Threading.Tasks;
-    using Orion.DataModels;
     using Orion.Models;
     using Orion.Servicios;
 
@@ -40,7 +38,7 @@ namespace Orion.ViewModels {
             this.mensajes = servicioMensajes;
             this.informes = servicioInformes;
             // Llenamos la lista de conductores.
-            ListaConductores = App.Global.ConductoresVM.ListaConductores;
+            ListaConductores = new List<Conductor>(App.Global.ConductoresVM.ListaConductores);
             AñoActual = DateTime.Now.Year;
 
             // Creamos el formato de las etiquetas de las horas trabajadas
@@ -91,7 +89,7 @@ namespace Orion.ViewModels {
 
         public void Reiniciar() {
             ConductorActual = null;
-            ListaConductores = App.Global.ConductoresVM.ListaConductores;
+            ListaConductores = new List<Conductor>(App.Global.ConductoresVM.ListaConductores);
         }
 
         #endregion
@@ -115,29 +113,6 @@ namespace Orion.ViewModels {
                 App.Global.IniciarProgreso("Recopilando datos...");
                 // Solicitamos los pijamas
                 pijamasAño = await GetPijamas(AñoActual, ConductorActual.Matricula);
-
-
-                //// Cargamos los calendarios del año del conductor.
-                //List<Calendario> listaCalendarios = BdCalendarios.GetCalendariosConductor(AñoActual, ConductorActual.Id);
-                //// Inicializamos la lista de pijamas del año.
-                //pijamasAño = new Dictionary<int, Pijama.HojaPijama>();
-                //// Iniciamos el valor para la barra de progreso.
-                //double num = 1;
-                //// Cargamos las hojas pijama disponibles.
-                //foreach (Calendario cal in listaCalendarios)
-                //{
-                //	// Incrementamos la barra de progreso.
-                //	App.Global.ValorBarraProgreso = num / listaCalendarios.Count * 100;
-                //	// Cargamos un pijama nuevo.
-                //	Pijama.HojaPijama hoja = null;
-                //	await Task.Run(() => { hoja = new Pijama.HojaPijama(cal, mensajes); });
-                //	// Añadimos el pijama a la lista.
-                //	pijamasAño.Add(cal.Fecha.Month, hoja);
-                //	// Incrementamos el valor de la barra de progreso.
-                //	num++;
-                //}
-
-
                 // Llenar los datos con los resultados de los pijamas.
                 LlenarListaResumen(AñoActual);
 
@@ -155,7 +130,7 @@ namespace Orion.ViewModels {
         private async Task<Dictionary<int, Pijama.HojaPijama>> GetPijamas(int año, int matriculaConductor) {
             return await Task.Run(() => {
                 // Cargamos los calendarios del año del conductor.
-                List<Calendario> listaCalendarios = BdCalendarios.GetCalendariosConductor(año, matriculaConductor);
+                List<Calendario> listaCalendarios = new List<Calendario>(App.Global.Repository.GetCalendariosConductor(año, matriculaConductor));
                 // Creamos el diccionario que contendrá las hojas pijama.
                 Dictionary<int, Pijama.HojaPijama> pijamasAño = new Dictionary<int, Pijama.HojaPijama>();
                 // Iniciamos el valor para la barra de progreso.
@@ -359,8 +334,8 @@ namespace Orion.ViewModels {
         // ====================================================================================================
 
 
-        private ObservableCollection<Conductor> listaConductores;
-        public ObservableCollection<Conductor> ListaConductores {
+        private List<Conductor> listaConductores;
+        public List<Conductor> ListaConductores {
             get { return listaConductores; }
             set {
                 if (listaConductores != value) {
@@ -564,8 +539,8 @@ namespace Orion.ViewModels {
         }
 
 
-        private decimal dcspendientes; //Cambiamos el tipo int por decimal.
-        public decimal DCsPendientes { //Cambiamos el tipo int por decimal.
+        private decimal dcspendientes;
+        public decimal DCsPendientes {
             get { return dcspendientes; }
             set {
                 if (dcspendientes != value) {

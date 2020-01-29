@@ -5,20 +5,15 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Orion.Models;
-using Orion.Servicios;
-using Orion.Views;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using Orion.Models;
+using Orion.Servicios;
 
 namespace Orion.ViewModels {
 
-	public partial class AñadirValoracionGraficoViewModel: NotifyBase {
+	public partial class AñadirValoracionGraficoViewModel : NotifyBase {
 
 
 		// ====================================================================================================

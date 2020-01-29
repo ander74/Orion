@@ -68,17 +68,6 @@ namespace Orion.Models {
 
         public decimal PlusMenorDescanso { get; set; }
 
-
-        //public bool MostrarDiasTrabajados { get; set; }
-        //public bool MostrarHorasTrabajadas { get; set; }
-        //public bool MostrarHorasAcumuladas { get; set; }
-        //public bool MostrarHorasNocturnas { get; set; }
-        //public bool MostrarImporteDietas { get; set; }
-        //public bool MostrarFestivosTrabajados { get; set; }
-        //public bool MostrarDescansos { get; set; }
-        //public bool MostrarPluses { get; set; }
-
-
         #endregion
         // ====================================================================================================
 

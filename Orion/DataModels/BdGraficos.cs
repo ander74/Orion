@@ -56,7 +56,7 @@ namespace Orion.DataModels {
 
                     while (lector.Read()) {
                         Grafico grafico = new Grafico(lector);
-                        grafico.ListaValoraciones = new ObservableCollection<ValoracionGrafico>();
+                        grafico.ListaValoraciones = new NotifyCollection<ValoracionGrafico>();
                         string comandoSQLValoraciones = "SELECT * FROM Valoraciones WHERE IdGrafico=? ORDER BY Inicio, Id";
                         OleDbCommand ComandoValoraciones = new OleDbCommand(comandoSQLValoraciones, conexion, transaccion);
                         ComandoValoraciones.Parameters.AddWithValue("idgrafico", grafico.Id);

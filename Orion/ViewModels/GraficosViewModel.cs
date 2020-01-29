@@ -9,13 +9,13 @@ namespace Orion.ViewModels {
 
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Collections.Specialized;
     using System.ComponentModel;
     using System.Linq;
     using System.Windows.Data;
     using DataModels;
     using Models;
+    using Orion.Config;
     using Orion.Interfaces;
     using Servicios;
 
@@ -24,7 +24,6 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         #region CAMPOS PRIVADOS
         // ====================================================================================================
-        private ObservableCollection<GrupoGraficos> _listagrupos = new ObservableCollection<GrupoGraficos>();
         private List<Grafico> _listaborrados = new List<Grafico>();
         private List<ValoracionGrafico> _valoracionesborradas = new List<ValoracionGrafico>();
         private GrupoGraficos _gruposeleccionado;
@@ -48,28 +47,10 @@ namespace Orion.ViewModels {
             Informes = servicioInformes;
             FileService = fileService;
             // Añadimos los eventos a las listas.
-            _listagraficos.CollectionChanged += ListaGraficos_CollectionChanged;
-            _listagrupos.CollectionChanged += ListaGrupos_CollectionChanged;
+            ListaGraficos = new NotifyCollection<Grafico>();
+            ListaGrupos = new NotifyCollection<GrupoGraficos>();
             // Cargamos los grupos de gráficos.
             CargarGrupos();
-
-
-
-            // PASO DE ACCESS A SQLITE
-            //if (App.Global.Reposritory.GetCount<GrupoGraficos>() == 0) {
-            //    var listaSQLite = BdGruposGraficos.getGrupos();
-            //    App.Global.Reposritory.GuardarGrupos(listaSQLite);
-            //}
-            //if (App.Global.Reposritory.GetCount<Grafico>() == 0) {
-            //    var listaSQLite = BdGraficos.getGraficosSinLista();
-            //    App.Global.Reposritory.GuardarGraficos(listaSQLite);
-            //}
-            //if (App.Global.Reposritory.GetCount<ValoracionGrafico>() == 0) {
-            //    var listaSQLite = BdValoracionesGraficos.getValoraciones();
-            //    App.Global.Reposritory.GuardarItems(listaSQLite);
-            //}
-
-
         }
         #endregion
 
@@ -83,7 +64,7 @@ namespace Orion.ViewModels {
                 ListaGraficos.Clear();
                 return;
             }
-            ListaGraficos = BdGraficos.getGraficos(GrupoSeleccionado.Validez);
+            ListaGraficos = new NotifyCollection<Grafico>(App.Global.Repository.GetGraficos(GrupoSeleccionado.Validez));
         }
 
         public void CargarGrupos() {
@@ -91,7 +72,7 @@ namespace Orion.ViewModels {
                 ListaGrupos.Clear();
                 return;
             }
-            ListaGrupos = BdGruposGraficos.getGrupos();
+            ListaGrupos = new NotifyCollection<GrupoGraficos>(App.Global.Repository.GetGrupos());
 
         }
 
@@ -99,14 +80,14 @@ namespace Orion.ViewModels {
             try {
                 HayCambios = false;
                 if (ListaGraficos != null && ListaGraficos.Count > 0) {
-                    BdGraficos.GuardarGraficos(ListaGraficos.Where(gg => gg.Nuevo || gg.Modificado));
+                    App.Global.Repository.GuardarGraficos(ListaGraficos.Where(gg => gg.Nuevo || gg.Modificado));
                 }
                 if (_listaborrados.Count > 0) {
-                    BdGraficos.BorrarGraficos(_listaborrados);
+                    App.Global.Repository.BorrarGraficos(_listaborrados);
                     _listaborrados.Clear();
                 }
                 if (_valoracionesborradas.Count > 0) {
-                    BdValoracionesGraficos.BorrarValoraciones(_valoracionesborradas);
+                    App.Global.Repository.BorrarValoraciones(_valoracionesborradas);
                     _valoracionesborradas.Clear();
                 }
             } catch (Exception ex) {
@@ -116,21 +97,7 @@ namespace Orion.ViewModels {
 
         }
 
-        //public void GuardarGrupos() { //TODO: Eliminar.
-        //    try {
-        //        HayCambios = false;
-        //        if (ListaGrupos != null && ListaGrupos.Count > 0) {
-        //            BdGruposGraficos.GuardarGrupos(ListaGrupos.Where(gg => gg.Nuevo || gg.Modificado));
-        //        }
-        //    } catch (Exception ex) {
-        //        Mensajes.VerError("GraficosViewModel.GuardarGrupos", ex);
-        //        HayCambios = true;
-        //    } finally {
-        //    }
-        //}
-
         public void GuardarTodo() {
-            //GuardarGrupos(); // TODO: Eliminar
             GuardarGraficos();
             HayCambios = false;
         }
@@ -174,15 +141,11 @@ namespace Orion.ViewModels {
                         grafico.Validez = GrupoSeleccionado.Validez;
                     }
                     grafico.Nuevo = true;
-                    grafico.ObjetoCambiado += ObjetoCambiadoEventHandler;
                     HayCambios = true;
                 }
             }
 
             if (e.OldItems != null) {
-                foreach (Grafico grafico in e.OldItems) {
-                    grafico.ObjetoCambiado -= ObjetoCambiadoEventHandler;
-                }
             }
 
             PropiedadCambiada(nameof(ListaGraficos));
@@ -198,7 +161,7 @@ namespace Orion.ViewModels {
             PropiedadCambiada(nameof(ListaGrupos));
         }
 
-        private void ObjetoCambiadoEventHandler(object sender, PropertyChangedEventArgs e) {
+        private void Listagraficos_ItemPropertyChanged(object sender, ItemChangedEventArgs<Grafico> e) {
             HayCambios = true;
             PropiedadCambiada(nameof(Detalle));
         }
@@ -272,23 +235,20 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         #region PROPIEDADES
         // ====================================================================================================
-        private ObservableCollection<Grafico> _listagraficos = new ObservableCollection<Grafico>();
-        public ObservableCollection<Grafico> ListaGraficos {
+        private NotifyCollection<Grafico> _listagraficos;
+        public NotifyCollection<Grafico> ListaGraficos {
             get { return _listagraficos; }
             set {
                 if (_listagraficos != value) {
                     _listagraficos = value;
-                    foreach (Grafico g in _listagraficos) {
-                        g.ObjetoCambiado += ObjetoCambiadoEventHandler;
-                    }
                     _listagraficos.CollectionChanged += ListaGraficos_CollectionChanged;
+                    _listagraficos.ItemPropertyChanged += Listagraficos_ItemPropertyChanged;
                     VistaGraficos = new ListCollectionView(ListaGraficos);
                     PropiedadCambiada();
                     PropiedadCambiada(nameof(GraficoSeleccionado));
                 }
             }
         }
-
 
         private ListCollectionView _vistagraficos;
         public ListCollectionView VistaGraficos {
@@ -301,7 +261,8 @@ namespace Orion.ViewModels {
             }
         }
 
-        public ObservableCollection<GrupoGraficos> ListaGrupos {
+        private NotifyCollection<GrupoGraficos> _listagrupos;
+        public NotifyCollection<GrupoGraficos> ListaGrupos {
             get { return _listagrupos; }
             set {
                 if (_listagrupos != value) {

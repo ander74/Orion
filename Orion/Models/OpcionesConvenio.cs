@@ -5,17 +5,13 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Orion.Models {
 
-	public class OpcionesConvenio: NotifyBase {
+	public class OpcionesConvenio : NotifyBase {
 
 
 		// ====================================================================================================
@@ -430,13 +426,11 @@ namespace Orion.Models {
 		// ====================================================================================================
 
 		public void Guardar(string ruta) {
-
 			string datos = JsonConvert.SerializeObject(this, Formatting.Indented);
 			File.WriteAllText(ruta, datos);
 		}
 
 		public void Cargar(string ruta) {
-
 			if (File.Exists(ruta)) {
 				string datos = File.ReadAllText(ruta);
 				JsonConvert.PopulateObject(datos, this);

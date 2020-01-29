@@ -5,22 +5,18 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Orion.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
+using Orion.Models;
 
 namespace Orion.ViewModels {
 
-	public class AccionesLotesCalendariosVM: NotifyBase {
+	public class AccionesLotesCalendariosVM : NotifyBase {
 
 		// ====================================================================================================
 		#region CAMPOS PRIVADOS
 		// ====================================================================================================
-		
+
 
 		#endregion
 

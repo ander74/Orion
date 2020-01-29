@@ -9,13 +9,12 @@ namespace Orion.ViewModels {
 
     using System;
     using System.Collections.Generic;
-    using System.Collections.ObjectModel;
     using System.Collections.Specialized;
-    using System.ComponentModel;
     using System.Linq;
     using System.Windows.Data;
     using DataModels;
     using Models;
+    using Orion.Config;
     using Orion.Interfaces;
     using Servicios;
 
@@ -39,28 +38,18 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         #region CONSTRUCTORES
         // ====================================================================================================
+
         public CalendariosViewModel(IMensajes servicioMensajes, InformesServicio servicioInformes, IFileService fileService) {
             Mensajes = servicioMensajes;
             Informes = servicioInformes;
             FileService = fileService;
-            _listacalendarios = new ObservableCollection<Calendario>();
+            _listacalendarios = new NotifyCollection<Calendario>();
             _listacalendarios.CollectionChanged += ListaCalendarios_CollectionChanged;
             VistaCalendarios = new ListCollectionView(ListaCalendarios);
             FechaActual = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-
-            // PASO DE ACCESS A SQLITE
-            //if (App.Global.Reposritory.GetCount<Calendario>() == 0) {
-            //    var listaSQLite = BdCalendarios.GetCalendariosSinLista();
-            //    App.Global.Reposritory.GuardarCalendarios(listaSQLite);
-            //    listaSQLite = null;
-            //}
-            //if (App.Global.Reposritory.GetCount<DiaCalendario>() == 0) {
-            //    var listaSQLite2 = BdDiasCalendario.GetDiasCalendario();
-            //    App.Global.Reposritory.GuardarItems(listaSQLite2);
-            //    listaSQLite2 = null;
-            //}
-
         }
+
+
         #endregion
         // ====================================================================================================
 
@@ -73,14 +62,13 @@ namespace Orion.ViewModels {
                 _listacalendarios.Clear();
                 return;
             }
-            ListaCalendarios = BdCalendarios.GetCalendarios(FechaActual.Year, FechaActual.Month);
+            ListaCalendarios = new NotifyCollection<Calendario>(BdCalendarios.GetCalendarios(FechaActual.Year, FechaActual.Month));
 
-            if (ListaCalendarios.Any(x => x.HayDiasNuevos)) HayCambios = true;
             foreach (Calendario c in ListaCalendarios) {
-                c.ObjetoCambiado += ObjetoCambiadoEventHandler;
                 // Añadimos el campo indefinido.
                 c.ConductorIndefinido = App.Global.ConductoresVM.IsIndefinido(c.MatriculaConductor);
             }
+            HayCambios = false; // Hay que ponerlo en false, ya que el foreach anterior modifica propiedades.
             CalendarioSeleccionado = null;
             PropiedadCambiada(nameof(Detalle));
         }
@@ -172,7 +160,7 @@ namespace Orion.ViewModels {
                 foreach (Calendario calendario in e.NewItems) {
                     calendario.Fecha = FechaActual;
                     if (calendario.ListaDias == null) {
-                        calendario.ListaDias = new ObservableCollection<DiaCalendario>(
+                        calendario.ListaDias = new NotifyCollection<DiaCalendario>(
                             Enumerable.Range(1, DateTime.DaysInMonth(FechaActual.Year, FechaActual.Month)).Select(d => new DiaCalendario() {
                                 Dia = d,
                                 DiaFecha = new DateTime(FechaActual.Year, FechaActual.Month, d),
@@ -181,19 +169,16 @@ namespace Orion.ViewModels {
                     }
                     calendario.Nuevo = true;
                     calendario.Modificado = false;
-                    calendario.ObjetoCambiado += ObjetoCambiadoEventHandler;
                     HayCambios = true;
                 }
             }
             if (e.OldItems != null) {
-                foreach (Calendario calendario in e.OldItems) {
-                    calendario.ObjetoCambiado -= ObjetoCambiadoEventHandler;
-                }
+                // No hacer nada.
             }
             PropiedadCambiada(nameof(ListaCalendarios));
         }
 
-        private void ObjetoCambiadoEventHandler(object sender, PropertyChangedEventArgs e) {
+        private void ListaCalendarios_ItemPropertyChanged(object sender, ItemChangedEventArgs<Calendario> e) {
             HayCambios = true;
         }
 
@@ -208,13 +193,15 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         #region PROPIEDADES
         // ====================================================================================================
-        private ObservableCollection<Calendario> _listacalendarios;
-        public ObservableCollection<Calendario> ListaCalendarios {
+
+        private NotifyCollection<Calendario> _listacalendarios;
+        public NotifyCollection<Calendario> ListaCalendarios {
             get { return _listacalendarios; }
             set {
                 if (_listacalendarios != value) {
                     _listacalendarios = value;
                     _listacalendarios.CollectionChanged += ListaCalendarios_CollectionChanged;
+                    _listacalendarios.ItemPropertyChanged += ListaCalendarios_ItemPropertyChanged;
                     VistaCalendarios = new ListCollectionView(ListaCalendarios);
                     FiltroAplicado = "Ninguno";
                     PropiedadCambiada();

@@ -5,18 +5,13 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Orion.Models;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
+using Orion.Models;
 
-namespace Orion.ViewModels
-{
-    public class ReclamacionesViewModel: NotifyBase{
+namespace Orion.ViewModels {
+	public class ReclamacionesViewModel : NotifyBase {
 
 
 		// ====================================================================================================
@@ -212,7 +207,7 @@ namespace Orion.ViewModels
 			}
 		}
 
-		
+
 		private TimeSpan _trabajadas;
 		public TimeSpan Trabajadas {
 			get { return _trabajadas; }
@@ -732,8 +727,8 @@ namespace Orion.ViewModels
 		#region PROPIEDADES GRÁFICOS
 		// ====================================================================================================
 
-		private ObservableCollection<DiaGrafico> _listagraficos = new ObservableCollection<DiaGrafico>();
-		public ObservableCollection<DiaGrafico> ListaGraficos {
+		private List<DiaGrafico> _listagraficos = new List<DiaGrafico>();
+		public List<DiaGrafico> ListaGraficos {
 			get { return _listagraficos; }
 			set {
 				if (_listagraficos != value) {
@@ -759,7 +754,7 @@ namespace Orion.ViewModels
 		/// <summary>
 		/// Clase usada para la lista de gráficos a reclamar.
 		/// </summary>
-		public class DiaGrafico: NotifyBase {
+		public class DiaGrafico : NotifyBase {
 
 
 			private int _dia;

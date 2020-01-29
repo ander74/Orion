@@ -23,9 +23,9 @@ namespace Orion.DataModels {
 		 * GET CALENDARIOS 
          * Ok
 		 *================================================================================*/
-        public static ObservableCollection<Calendario> GetCalendarios(int año, int mes) {
+        public static IEnumerable<Calendario> GetCalendarios(int año, int mes) {
 
-            return new ObservableCollection<Calendario>(App.Global.Repository.GetCalendarios(año, mes));
+            return App.Global.Repository.GetCalendarios(año, mes);
 
             // Creamos la lista y el comando que extrae los gráficos.
             ObservableCollection<Calendario> lista = new ObservableCollection<Calendario>();
@@ -54,14 +54,13 @@ namespace Orion.DataModels {
                     while (lector.Read()) {
                         // Extraemos el calendario y sus días
                         Calendario calendario = new Calendario(lector);
-                        calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
+                        //calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
                         // Extraemos los datos del conductor.
                         calendario.ConductorIndefinido = lector.ToBool("Indefinido");
                         // Añadimos el calendario a la lista.
                         lista.Add(calendario);
                         calendario.Nuevo = false;
                         calendario.Modificado = false;
-                        if (calendario.HayDiasNuevos) calendario.Modificado = true;
                     }
                 } catch (Exception ex) {
                     Utils.VerError("BdCalendarios.GetCalendarios", ex);
@@ -99,14 +98,13 @@ namespace Orion.DataModels {
                     while (lector.Read()) {
                         // Extraemos el calendario y sus días
                         Calendario calendario = new Calendario(lector);
-                        calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
+                        //calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
                         // Extraemos los datos del conductor.
                         //calendario.ConductorIndefinido = lector.ToBool("Indefinido");
                         // Añadimos el calendario a la lista.
                         lista.Add(calendario);
                         calendario.Nuevo = false;
                         calendario.Modificado = false;
-                        if (calendario.HayDiasNuevos) calendario.Modificado = true;
                     }
                 } catch (Exception ex) {
                     Utils.VerError("BdCalendarios.GetCalendarios", ex);
@@ -151,7 +149,6 @@ namespace Orion.DataModels {
                         lista.Add(calendario);
                         calendario.Nuevo = false;
                         calendario.Modificado = false;
-                        if (calendario.HayDiasNuevos) calendario.Modificado = true;
                     }
                 } catch (Exception ex) {
                     Utils.VerError("BdCalendarios.GetCalendarios", ex);
@@ -198,7 +195,7 @@ namespace Orion.DataModels {
                     while (lector.Read()) {
                         // Extraemos el calendario y sus días
                         Calendario calendario = new Calendario(lector);
-                        calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
+                        //calendario.ListaDias = BdDiasCalendario.GetDiasCalendario(calendario.Id);
                         // Extraemos los datos del conductor.
                         calendario.ConductorIndefinido = lector.ToBool("Indefinido");
                         // Añadimos el calendario a la lista.
@@ -250,7 +247,7 @@ namespace Orion.DataModels {
                     if (lector.Read()) {
                         // Extraemos el calendario y sus días
                         resultado = new Calendario(lector);
-                        resultado.ListaDias = BdDiasCalendario.GetDiasCalendario(resultado.Id);
+                        resultado.ListaDias = new NotifyCollection<DiaCalendario>(BdDiasCalendario.GetDiasCalendario(resultado.Id));
                         // Extraemos los datos del conductor.
                         resultado.ConductorIndefinido = lector.ToBool("Indefinido");
                         resultado.Nuevo = false;

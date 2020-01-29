@@ -7,11 +7,11 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data.OleDb;
 using System.Linq;
+using Orion.Config;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -24,15 +24,17 @@ namespace Orion.Models {
         // ====================================================================================================
         public Grafico() : base() {
             PropertyChanged += LlamarPropiedadCambiada;
-            _valoraciones.CollectionChanged += ListaValoraciones_CollectionChanged;
+            ListaValoraciones = new NotifyCollection<ValoracionGrafico>();
         }
 
 
         public Grafico(OleDbDataReader lector) : base(lector) {
             PropertyChanged += LlamarPropiedadCambiada;
-            _valoraciones.CollectionChanged += ListaValoraciones_CollectionChanged;
+            ListaValoraciones = new NotifyCollection<ValoracionGrafico>();
         }
+
         #endregion
+        // ====================================================================================================
 
 
         // ====================================================================================================
@@ -73,7 +75,9 @@ namespace Orion.Models {
             PropiedadCambiada(nameof(ListaValoraciones));
             PropiedadCambiada(nameof(TiempoValoraciones));
         }
+
         #endregion
+        // ====================================================================================================
 
 
         // ====================================================================================================
@@ -85,17 +89,12 @@ namespace Orion.Models {
                 foreach (ValoracionGrafico valoracion in e.NewItems) {
                     valoracion.IdGrafico = this.Id;
                     valoracion.Nuevo = true;
-                    valoracion.ObjetoCambiado += ObjetoCambiadoEventHandler;
                 }
                 Modificado = true;
             }
 
 
             if (e.OldItems != null) {
-                foreach (ValoracionGrafico valoracion in e.OldItems) {
-                    valoracion.ObjetoCambiado -= ObjetoCambiadoEventHandler;
-                }
-                Modificado = true;
             }
 
 
@@ -104,7 +103,7 @@ namespace Orion.Models {
         }
 
 
-        private void ObjetoCambiadoEventHandler(object sender, PropertyChangedEventArgs e) {
+        private void Valoraciones_ItemPropertyChanged(object sender, ItemChangedEventArgs<ValoracionGrafico> e) {
             Modificado = true;
         }
 
@@ -124,22 +123,21 @@ namespace Orion.Models {
         }
 
         #endregion
+        // ====================================================================================================
 
 
         // ====================================================================================================
         #region  PROPIEDADES
         // ====================================================================================================
 
-        private ObservableCollection<ValoracionGrafico> _valoraciones = new ObservableCollection<ValoracionGrafico>();
-        public ObservableCollection<ValoracionGrafico> ListaValoraciones {
+        private NotifyCollection<ValoracionGrafico> _valoraciones;
+        public NotifyCollection<ValoracionGrafico> ListaValoraciones {
             get { return _valoraciones; }
             set {
                 if (_valoraciones != value) {
                     _valoraciones = value;
                     _valoraciones.CollectionChanged += ListaValoraciones_CollectionChanged;
-                    foreach (ValoracionGrafico v in _valoraciones) {
-                        v.ObjetoCambiado += ObjetoCambiadoEventHandler;
-                    }
+                    _valoraciones.ItemPropertyChanged += Valoraciones_ItemPropertyChanged;
                     Modificado = true;
                     PropiedadCambiada();
                 }
@@ -178,10 +176,6 @@ namespace Orion.Models {
         }
 
 
-
-
-
-
         public TimeSpan DiferenciaValoracion {
             get {
                 TimeSpan diferencia = TimeSpan.Zero;
@@ -203,6 +197,7 @@ namespace Orion.Models {
             }
         }
         #endregion
+        // ====================================================================================================
 
 
         // ====================================================================================================
@@ -217,7 +212,7 @@ namespace Orion.Models {
 
 
         public new void InicializarLista() {
-            ListaValoraciones = new ObservableCollection<ValoracionGrafico>();
+            ListaValoraciones.Clear();
         }
 
 

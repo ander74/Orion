@@ -42,6 +42,7 @@ namespace Orion.ViewModels {
             };
 
             // Cargamos los datos de las estadísticas.
+            //TODO: Añadir los repositorios de los centros y cambiar esto...
             GruposArrasate = BdGruposGraficos.getGrupos(new OleDbConnection(App.Global.GetCadenaConexion(Centros.Arrasate))).ToList();
             GruposBilbao = BdGruposGraficos.getGrupos(new OleDbConnection(App.Global.GetCadenaConexion(Centros.Bilbao))).ToList();
             GruposDonosti = BdGruposGraficos.getGrupos(new OleDbConnection(App.Global.GetCadenaConexion(Centros.Donosti))).ToList();
@@ -67,7 +68,7 @@ namespace Orion.ViewModels {
                 TurnosArrasate = null;
                 HoraMediaArrasate = null;
             } else {
-                EstArrasate = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoArrasate.Validez, Centros.Arrasate) ?? new EstadisticaGrupoGraficos();
+                EstArrasate = App.Global.Repository.GetEstadisticasGrupoGraficos(GrupoSeleccionadoArrasate.Validez, Centros.Arrasate) ?? new EstadisticaGrupoGraficos();
                 TituloArrasate = $"ARRASATE\n({EstArrasate.Validez:dd-MM-yy})";
                 // TURNOS
                 TurnosArrasate = new ChartValues<decimal> { EstArrasate.PorcentajeTurnos1, EstArrasate.PorcentajeTurnos2,
@@ -85,7 +86,7 @@ namespace Orion.ViewModels {
                 TurnosBilbao = null;
                 HoraMediaBilbao = null;
             } else {
-                EstBilbao = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoBilbao.Validez, Centros.Bilbao) ?? new EstadisticaGrupoGraficos();
+                EstBilbao = App.Global.Repository.GetEstadisticasGrupoGraficos(GrupoSeleccionadoBilbao.Validez, Centros.Bilbao) ?? new EstadisticaGrupoGraficos();
                 TituloBilbao = $"BILBAO\n({EstBilbao.Validez:dd-MM-yy})";
                 // TURNOS
                 TurnosBilbao = new ChartValues<decimal> { EstBilbao.PorcentajeTurnos1, EstBilbao.PorcentajeTurnos2,
@@ -103,7 +104,7 @@ namespace Orion.ViewModels {
                 TurnosDonosti = null;
                 HoraMediaDonosti = null;
             } else {
-                EstDonosti = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoDonosti.Validez, Centros.Donosti) ?? new EstadisticaGrupoGraficos();
+                EstDonosti = App.Global.Repository.GetEstadisticasGrupoGraficos(GrupoSeleccionadoDonosti.Validez, Centros.Donosti) ?? new EstadisticaGrupoGraficos();
                 TituloDonosti = $"DONOSTI\n({EstDonosti.Validez:dd-MM-yy})";
                 // TURNOS
                 TurnosDonosti = new ChartValues<decimal> { EstDonosti.PorcentajeTurnos1, EstDonosti.PorcentajeTurnos2,
@@ -121,7 +122,7 @@ namespace Orion.ViewModels {
                 TurnosVitoria = null;
                 HoraMediaVitoria = null;
             } else {
-                EstVitoria = BdEstadisticas.GetEstadisticasGrupoGraficos(GrupoSeleccionadoVitoria.Validez, Centros.Vitoria) ?? new EstadisticaGrupoGraficos();
+                EstVitoria = App.Global.Repository.GetEstadisticasGrupoGraficos(GrupoSeleccionadoVitoria.Validez, Centros.Vitoria) ?? new EstadisticaGrupoGraficos();
                 TituloVitoria = $"GASTEIZ\n({EstVitoria.Validez:dd-MM-yy})";
                 // TURNOS
                 TurnosVitoria = new ChartValues<decimal> { EstVitoria.PorcentajeTurnos1, EstVitoria.PorcentajeTurnos2,

@@ -8,12 +8,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
+using Orion.Config;
 using Orion.Convertidores;
 using Orion.DataModels;
 using Orion.Models;
@@ -127,7 +127,7 @@ namespace Orion.Servicios {
                         Calendario calendario = new Calendario();
                         calendario.Fecha = new DateTime(año, mes, 1);
                         calendario.MatriculaConductor = hoja.Cells[fila, 1].GetValue<int>();
-                        calendario.ListaDias = new ObservableCollection<DiaCalendario>();
+                        calendario.ListaDias = new NotifyCollection<DiaCalendario>();
                         for (int dia = 1; dia <= diasMes; dia++) {
                             DiaCalendario diaCalendario = new DiaCalendario();
                             diaCalendario.Dia = dia;

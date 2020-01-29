@@ -45,7 +45,7 @@ namespace Orion.DataModels {
 
                     while (lector.Read()) {
                         Linea linea = new Linea(lector);
-                        linea.ListaItinerarios = BdItinerarios.GetItinerarios(linea.Id);
+                        linea.ListaItinerarios = new NotifyCollection<Itinerario>(BdItinerarios.GetItinerarios(linea.Id));
                         lista.Add(linea);
                         linea.Nuevo = false;
                         linea.Modificado = false;

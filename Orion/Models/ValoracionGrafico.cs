@@ -66,11 +66,11 @@ namespace Orion.Models {
         #region MÉTODOS PRIVADOS
         // ====================================================================================================
         private void FromReader(OleDbDataReader lector) {
-            _id = lector.ToInt32("Id");//(lector["Id"] is DBNull) ? 0 : (Int32)lector["Id"];
-            _idgrafico = lector.ToInt32("IdGrafico");//(lector["IdGrafico"] is DBNull) ? 0 : (Int32)lector["IdGrafico"];
+            _id = lector.ToInt32("Id");
+            _idgrafico = lector.ToInt32("IdGrafico");
             _inicio = lector.ToTimeSpanNulable("Inicio");
-            _linea = lector.ToDecimal("Linea");//(lector["Linea"] is DBNull) ? 0 : (decimal)lector["Linea"];
-            _descripcion = lector.ToString("Descripcion");//(lector["Descripcion"] is DBNull) ? "" : (string)lector["Descripcion"];
+            _linea = lector.ToDecimal("Linea");
+            _descripcion = lector.ToString("Descripcion");
             _final = lector.ToTimeSpanNulable("Final");
             _tiempo = lector.ToTimeSpan("Tiempo");
         }
@@ -273,7 +273,6 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("Descripcion", Descripcion));
                 lista.Add(new SQLiteParameter("Final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("Tiempo", Tiempo.Ticks));
-                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }
@@ -324,18 +323,6 @@ namespace Orion.Models {
                 "@tiempo, " +
                 "@id);";
         }
-
-
-        //public string ComandoActualizar {
-        //    get => "UPDATE Valoraciones SET " +
-        //        "IdGrafico = @idGrafico, " +
-        //        "Inicio = @inicio, " +
-        //        "Linea = @linea, " +
-        //        "Descripcion = @descripcion, " +
-        //        "Final = @final, " +
-        //        "Tiempo = @tiempo " +
-        //        "WHERE _id=@id;";
-        //}
 
 
         #endregion

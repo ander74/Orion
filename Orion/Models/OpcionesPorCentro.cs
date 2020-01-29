@@ -255,13 +255,11 @@ namespace Orion.Models {
 		// ====================================================================================================
 
 		public void Guardar(string ruta) {
-
 			string datos = JsonConvert.SerializeObject(this, Formatting.Indented);
 			File.WriteAllText(ruta, datos);
 		}
 
 		public void Cargar(string ruta) {
-
 			if (File.Exists(ruta)) {
 				string datos = File.ReadAllText(ruta);
 				JsonConvert.PopulateObject(datos, this);

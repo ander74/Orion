@@ -6,12 +6,11 @@
 // ===============================================
 #endregion
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Data.SQLite;
+using Orion.Config;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -24,13 +23,15 @@ namespace Orion.Models {
         // ====================================================================================================
 
         public Linea() {
-            _listaitinerarios.CollectionChanged += _listaitinerarios_CollectionChanged;
+            ListaItinerarios = new NotifyCollection<Itinerario>();
+            ItinerariosBorrados = new List<Itinerario>();
         }
 
 
         public Linea(OleDbDataReader lector) {
             FromReader(lector);
-            _listaitinerarios.CollectionChanged += _listaitinerarios_CollectionChanged;
+            ListaItinerarios = new NotifyCollection<Itinerario>();
+            ItinerariosBorrados = new List<Itinerario>();
         }
 
         #endregion
@@ -115,17 +116,12 @@ namespace Orion.Models {
                 foreach (Itinerario itinerario in e.NewItems) {
                     itinerario.IdLinea = this.Id;
                     itinerario.Nuevo = true;
-                    itinerario.ObjetoCambiado += ObjetoCambiadoEventHandler;
                 }
                 Modificado = true;
             }
 
 
             if (e.OldItems != null) {
-                foreach (Itinerario itinerario in e.OldItems) {
-                    itinerario.ObjetoCambiado -= ObjetoCambiadoEventHandler;
-                }
-                Modificado = true;
             }
 
             PropiedadCambiada(nameof(ListaItinerarios));
@@ -133,7 +129,7 @@ namespace Orion.Models {
         }
 
 
-        private void ObjetoCambiadoEventHandler(object sender, PropertyChangedEventArgs e) {
+        private void Listaitinerarios_ItemPropertyChanged(object sender, ItemChangedEventArgs<Itinerario> e) {
             Modificado = true;
         }
         #endregion
@@ -183,27 +179,21 @@ namespace Orion.Models {
         }
 
 
-        private ObservableCollection<Itinerario> _listaitinerarios = new ObservableCollection<Itinerario>();
-        public ObservableCollection<Itinerario> ListaItinerarios {
+        private NotifyCollection<Itinerario> _listaitinerarios;
+        public NotifyCollection<Itinerario> ListaItinerarios {
             get { return _listaitinerarios; }
             set {
                 if (_listaitinerarios != value) {
                     _listaitinerarios = value;
-                    Modificado = true;
-                    foreach (Itinerario i in _listaitinerarios) {
-                        i.ObjetoCambiado += ObjetoCambiadoEventHandler;
-                    }
                     _listaitinerarios.CollectionChanged += _listaitinerarios_CollectionChanged;
+                    _listaitinerarios.ItemPropertyChanged += Listaitinerarios_ItemPropertyChanged;
+                    Modificado = true;
                     PropiedadCambiada();
                 }
             }
         }
 
-
-        private List<Itinerario> _itinerariosborrados = new List<Itinerario>();
-        public List<Itinerario> ItinerariosBorrados {
-            get { return _itinerariosborrados; }
-        }
+        public List<Itinerario> ItinerariosBorrados { get; }
 
 
         #endregion
@@ -241,7 +231,7 @@ namespace Orion.Models {
 
 
         public void InicializarLista() {
-            ListaItinerarios = new ObservableCollection<Itinerario>();
+            ListaItinerarios.Clear();
         }
 
 

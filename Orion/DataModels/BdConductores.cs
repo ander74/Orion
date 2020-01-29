@@ -26,9 +26,9 @@ namespace Orion.DataModels {
 		* GET CONDUCTORES
         * Ok
 		*================================================================================*/
-        public static List<Conductor> GetConductores() {
+        public static IEnumerable<Conductor> GetConductores() {
 
-            return App.Global.Repository.GetConductores().ToList();
+            return App.Global.Repository.GetConductores();
             //return App.Global.Repository.GetPrueba(App.Global.GetArchivoDatos(Centros.Arrasate)).OrderBy(c => c.Matricula).ToList();
 
             // Creamos la lista y el comando que extrae los gráficos.

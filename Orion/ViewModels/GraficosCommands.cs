@@ -452,7 +452,7 @@ namespace Orion.ViewModels {
         // Ejecución del comando
         private void NuevoGrupo() {
             VentanaNuevoGrupoVM ventanaVM = new VentanaNuevoGrupoVM(new MensajesServicio()) { FechaActual = DateTime.Now };
-            ventanaVM.ListaGrupos = ListaGrupos;
+            ventanaVM.ListaGrupos = ListaGrupos.ToList();
             if (ListaGrupos.Count > 0) ventanaVM.GrupoSeleccionado = ListaGrupos[ListaGrupos.Count - 1];
             VentanaNuevoGrupo ventana = new VentanaNuevoGrupo { DataContext = ventanaVM };
             if (ventana.ShowDialog() == true) CargarGrupos();

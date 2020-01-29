@@ -65,10 +65,6 @@ namespace Orion.ViewModels {
                     if (DeducirTurnoMarcado) { Turno = (value % 2 == 0) ? 2 : 1; }
                     DiaSemana = "";
                     if (DeducirDiaSemanaMarcado) {
-                        //if (_numero >= App.Global.PorCentro.LunDel && _numero <= App.Global.PorCentro.LunAl) DiaSemana = "L";
-                        //if (_numero >= App.Global.PorCentro.VieDel && _numero <= App.Global.PorCentro.VieAl) DiaSemana = "V";
-                        //if (_numero >= App.Global.PorCentro.SabDel && _numero <= App.Global.PorCentro.SabAl) DiaSemana = "S";
-                        //if (_numero >= App.Global.PorCentro.DomDel && _numero <= App.Global.PorCentro.DomAl) DiaSemana = "F";
                         if (App.Global.PorCentro.RangoLun.Validar(_numero)) DiaSemana = "L";
                         if (App.Global.PorCentro.RangoVie.Validar(_numero)) DiaSemana = "V";
                         if (App.Global.PorCentro.RangoSab.Validar(_numero)) DiaSemana = "S";

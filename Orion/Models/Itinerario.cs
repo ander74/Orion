@@ -6,12 +6,11 @@
 // ===============================================
 #endregion
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Data.SQLite;
+using Orion.Config;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -24,13 +23,15 @@ namespace Orion.Models {
         // ====================================================================================================
 
         public Itinerario() {
-            _listaparadas.CollectionChanged += _listaparadas_CollectionChanged;
+            ParadasBorradas = new List<Parada>();
+            ListaParadas = new NotifyCollection<Parada>();
         }
 
 
         public Itinerario(OleDbDataReader lector) {
             FromReader(lector);
-            _listaparadas.CollectionChanged += _listaparadas_CollectionChanged;
+            ParadasBorradas = new List<Parada>();
+            ListaParadas = new NotifyCollection<Parada>();
         }
 
         #endregion
@@ -120,29 +121,29 @@ namespace Orion.Models {
         #region EVENTOS
         // ====================================================================================================
 
-        private void _listaparadas_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+        private void Listaparadas_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
 
             if (e.NewItems != null) {
                 foreach (Parada parada in e.NewItems) {
                     parada.IdItinerario = this.Id;
                     parada.Nuevo = true;
-                    parada.ObjetoCambiado += ObjetoCambiadoEventHandler;
+                    //parada.ObjetoCambiado += ObjetoCambiadoEventHandler;
                 }
                 Modificado = true;
             }
 
             if (e.OldItems != null) {
-                foreach (Parada parada in e.OldItems) {
-                    parada.ObjetoCambiado += ObjetoCambiadoEventHandler;
-                }
-                Modificado = true;
+                //foreach (Parada parada in e.OldItems) {
+                //    parada.ObjetoCambiado += ObjetoCambiadoEventHandler;
+                //}
+                //Modificado = true;
             }
 
             PropiedadCambiada(nameof(ListaParadas));
         }
 
 
-        private void ObjetoCambiadoEventHandler(object sender, PropertyChangedEventArgs e) {
+        private void Listaparadas_ItemPropertyChanged(object sender, ItemChangedEventArgs<Parada> e) {
             Modificado = true;
         }
 
@@ -234,27 +235,21 @@ namespace Orion.Models {
         }
 
 
-        private ObservableCollection<Parada> _listaparadas = new ObservableCollection<Parada>();
-        public ObservableCollection<Parada> ListaParadas {
+        private NotifyCollection<Parada> _listaparadas;
+        public NotifyCollection<Parada> ListaParadas {
             get { return _listaparadas; }
             set {
                 if (_listaparadas != value) {
                     _listaparadas = value;
                     Modificado = true;
-                    _listaparadas.CollectionChanged += _listaparadas_CollectionChanged;
-                    foreach (Parada p in _listaparadas) {
-                        p.ObjetoCambiado += ObjetoCambiadoEventHandler;
-                    }
+                    _listaparadas.CollectionChanged += Listaparadas_CollectionChanged;
+                    _listaparadas.ItemPropertyChanged += Listaparadas_ItemPropertyChanged;
                     PropiedadCambiada();
                 }
             }
         }
 
-
-        private List<Parada> _paradasborradas = new List<Parada>();
-        public List<Parada> ParadasBorradas {
-            get { return _paradasborradas; }
-        }
+        public List<Parada> ParadasBorradas { get; private set; }
 
 
         #endregion
@@ -299,7 +294,7 @@ namespace Orion.Models {
 
 
         public void InicializarLista() {
-            ListaParadas = new ObservableCollection<Parada>();
+            ListaParadas.Clear();
         }
 
 

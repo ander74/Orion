@@ -13,7 +13,6 @@ namespace Orion.ViewModels {
     using System.Linq;
     using System.Windows.Data;
     using Config;
-    using DataModels;
     using Models;
     using Servicios;
 
@@ -23,13 +22,11 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         #region CAMPOS PRIVADOS
         // ====================================================================================================
-        NotifyCollection<Conductor> _listaconductores = new NotifyCollection<Conductor>();
+
         List<Conductor> _listaborrados = new List<Conductor>();
         List<RegulacionConductor> _regulacionesborradas = new List<RegulacionConductor>();
-        Conductor _conductorseleccionado;
-        RegulacionConductor _regulacionseleccionada;
-        private bool _haycambios = false;
         private IMensajes mensajes;
+
         #endregion
 
 
@@ -37,17 +34,9 @@ namespace Orion.ViewModels {
         #region CONSTRUCTOR
         // ====================================================================================================
         public ConductoresViewModel(IMensajes servicioMensajes) {
+            _listaconductores = new NotifyCollection<Conductor>();
             mensajes = servicioMensajes;
             CargarConductores();
-
-
-            // PASO DE ACCESS A SQLITE
-            //if (App.Global.Reposritory.GetCount<Conductor>() == 0) {
-            //    var listaSQLite = BdConductores.GetConductores();
-            //    App.Global.Reposritory.GuardarConductores(listaSQLite);
-            //    listaSQLite = null;
-            //}
-
         }
 
         #endregion
@@ -56,13 +45,13 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         #region MÉTODOS PÚBLICOS
         // ====================================================================================================
+
         public void CargarConductores() {
             if (App.Global.CadenaConexion == null) {
                 ListaConductores.Clear();
                 return;
             }
-            ListaConductores = new NotifyCollection<Conductor>(BdConductores.GetConductores());
-            //Task.Run(async () => ListaConductores = new NotifyCollection<Conductor>(await App.Global.Repository.GetItemsAsync<Conductor>()));
+            ListaConductores = new NotifyCollection<Conductor>(App.Global.Repository.GetConductores());
             PropiedadCambiada(nameof(Detalle));
         }
 
@@ -71,15 +60,15 @@ namespace Orion.ViewModels {
                 App.Global.CalendariosVM.AñadirConductoresDesconocidos();
                 HayCambios = false;
                 if (_listaborrados.Count > 0) {
-                    BdConductores.BorrarConductores(_listaborrados);
+                    App.Global.Repository.BorrarConductores(_listaborrados);
                     _listaborrados.Clear();
                 }
                 if (_regulacionesborradas.Count > 0) {
-                    BdRegulacionConductor.BorrarRegulaciones(_regulacionesborradas);
+                    App.Global.Repository.BorrarRegulaciones(_regulacionesborradas);
                     _regulacionesborradas.Clear();
                 }
                 if (ListaConductores != null && ListaConductores.Count > 0) {
-                    BdConductores.GuardarConductores(ListaConductores.Where(c => c.Nuevo || c.Modificado));
+                    App.Global.Repository.GuardarConductores(ListaConductores.Where(c => c.Nuevo || c.Modificado));
                 }
                 // Si hay conductores con la matrícula cero, avisamos.
                 if (ListaConductores.Count(item => item.Matricula == 0) > 0) {
@@ -164,6 +153,8 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         #region PROPIEDADES
         // ====================================================================================================
+
+        NotifyCollection<Conductor> _listaconductores;
         public NotifyCollection<Conductor> ListaConductores {
             get { return _listaconductores; }
             set {
@@ -190,6 +181,7 @@ namespace Orion.ViewModels {
         }
 
 
+        private Conductor _conductorseleccionado;
         public Conductor ConductorSeleccionado {
             get { return _conductorseleccionado; }
             set {
@@ -205,6 +197,7 @@ namespace Orion.ViewModels {
         }
 
 
+        private RegulacionConductor _regulacionseleccionada;
         public RegulacionConductor RegulacionSeleccionada {
             get { return _regulacionseleccionada; }
             set {
@@ -240,6 +233,7 @@ namespace Orion.ViewModels {
         }
 
 
+        private bool _haycambios = false;
         public bool HayCambios {
             get { return _haycambios; }
             set {

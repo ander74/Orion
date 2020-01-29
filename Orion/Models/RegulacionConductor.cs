@@ -55,14 +55,14 @@ namespace Orion.Models {
         #region MÉTODOS PRIVADOS
         // ====================================================================================================
         private void FromReader(OleDbDataReader lector) {
-            _id = lector.ToInt32("Id");//(lector["Id"] is DBNull) ? 0 : (int)lector["Id"];
-            _idconductor = lector.ToInt32("IdConductor");//(lector["IdConductor"] is DBNull) ? 0 : (int)lector["IdConductor"];
-            _codigo = lector.ToInt16("Codigo");//(lector["Codigo"] is DBNull) ? 0 : (Int16)lector["Codigo"];
+            _id = lector.ToInt32("Id");
+            _idconductor = lector.ToInt32("IdConductor");
+            _codigo = lector.ToInt16("Codigo");
             _fecha = (lector["Fecha"] is DBNull) ? new DateTime(2001, 1, 2) : (DateTime)lector["Fecha"];
             _horas = lector.ToTimeSpan("Horas");
-            _descansos = lector.ToDecimal("Descansos");//(lector["Descansos"] is DBNull) ? 0 : (Int16)lector["Descansos"];
-            _dnds = lector.ToDecimal("Dnds");//(lector["Dnds"] is DBNull) ? 0 : (Int16)lector["Dnds"];
-            _motivo = lector.ToString("Motivo");//(lector["Motivo"] is DBNull) ? "" : (string)lector["Motivo"];
+            _descansos = lector.ToDecimal("Descansos");
+            _dnds = lector.ToDecimal("Dnds");
+            _motivo = lector.ToString("Motivo");
         }
 
         #endregion
@@ -260,7 +260,6 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("Descansos", Descansos.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("Dnds", Dnds.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("Motivo", Motivo));
-                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }
@@ -313,19 +312,6 @@ namespace Orion.Models {
                 "@motivo, " +
                 "@id);";
         }
-
-
-        //public string ComandoActualizar {
-        //    get => "UPDATE Regulaciones SET " +
-        //        "IdConductor = @IdConductor, " +
-        //        "Codigo = @Codigo, " +
-        //        "Fecha = @Fecha, " +
-        //        "Horas = @Horas, " +
-        //        "Descansos = @Descansos, " +
-        //        "Dnds = @Dnds, " +
-        //        "Motivo = @Motivo " +
-        //        "WHERE _id = @id;";
-        //}
 
 
         #endregion

@@ -177,7 +177,7 @@ namespace Orion.Models {
             PropiedadCambiada(nameof(ListaRegulaciones));
         }
 
-        private void _regulaciones_ItemPropertyChanged(object sender, ItemChangedEventArgs<RegulacionConductor> e) {
+        private void Regulaciones_ItemPropertyChanged(object sender, ItemChangedEventArgs<RegulacionConductor> e) {
             Modificado = true;
         }
 
@@ -375,7 +375,7 @@ namespace Orion.Models {
                     _regulaciones = value;
                     Modificado = true;
                     _regulaciones.CollectionChanged += ListaRegulaciones_CollectionChanged;
-                    _regulaciones.ItemPropertyChanged += _regulaciones_ItemPropertyChanged;
+                    _regulaciones.ItemPropertyChanged += Regulaciones_ItemPropertyChanged;
                     PropiedadCambiada();
                 }
             }

@@ -644,30 +644,6 @@ namespace Orion.Models {
         }
 
 
-        //public string ComandoActualizar {
-        //    get => "UPDATE Graficos SET " +
-        //        "IdGrupo = @idGrupo, " +
-        //        "NoCalcular = @noCalcular, " +
-        //        "Numero = @numero, " +
-        //        "Turno = @turno, " +
-        //        //"DescuadreInicio = @descuadreInicio, " +
-        //        "Inicio = @inicio, " +
-        //        "Final = @final, " +
-        //        //"DescuadreFinal = @descuadreFinal, " +
-        //        "InicioPartido = @inicioPartido, " +
-        //        "FinalPartido = @finalPartido, " +
-        //        "Valoracion = @valoracion, " +
-        //        "Trabajadas = @trabajadas, " +
-        //        "Acumuladas = @acumuladas, " +
-        //        "Nocturnas = @nocturnas, " +
-        //        "Desayuno = @desayuno, " +
-        //        "Comida = @comida, " +
-        //        "Cena = @cena, " +
-        //        "PlusCena = @plusCena, " +
-        //        "PlusLimpieza = @plusLimpieza, " +
-        //        "PlusPaqueteria = @plusPaqueteria " +
-        //        "WHERE _id=@id;";
-        //}
 
 
         #endregion

@@ -11,7 +11,6 @@ namespace Orion.ViewModels {
     using System.Linq;
     using System.Windows.Data;
     using Orion.Config;
-    using Orion.DataModels;
     using Orion.Models;
     using Orion.Servicios;
 
@@ -34,15 +33,6 @@ namespace Orion.ViewModels {
             mensajes = servicioMensajes;
             CargarDatos();
             AñoActual = DateTime.Now.Year;
-
-
-            // PASO DE ACCESS A SQLITE
-            //if (App.Global.Reposritory.GetCount<Festivo>() == 0) {
-            //    var listaSQLite = BdFestivos.GetFestivos();
-            //    App.Global.Reposritory.GuardarFestivos(listaSQLite);
-            //}
-
-
         }
 
 
@@ -59,7 +49,7 @@ namespace Orion.ViewModels {
                 ListaFestivos?.Clear();
                 return;
             }
-            ListaFestivos = new NotifyCollection<Festivo>(BdFestivos.GetFestivos());
+            ListaFestivos = new NotifyCollection<Festivo>(App.Global.Repository.GetFestivos());
             VistaFestivos = new ListCollectionView(ListaFestivos);
         }
 
@@ -67,10 +57,10 @@ namespace Orion.ViewModels {
         public void GuardarDatos() {
             HayCambios = false;
             if (ListaFestivos != null && ListaFestivos.Count > 0) {
-                BdFestivos.GuardarFestivos(ListaFestivos.Where(f => f.Nuevo || f.Modificado));
+                App.Global.Repository.GuardarFestivos(ListaFestivos.Where(f => f.Nuevo || f.Modificado));
             }
             if (ListaFestivos != null && ListaFestivos.Any(f => f.Borrado)) {
-                BdFestivos.BorrarFestivos(ListaFestivos.Where(f => f.Borrado));
+                App.Global.Repository.BorrarFestivos(ListaFestivos.Where(f => f.Borrado));
             }
         }
 

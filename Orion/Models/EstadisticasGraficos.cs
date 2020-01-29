@@ -36,19 +36,19 @@ namespace Orion.Models {
         // ====================================================================================================
 
         public void FromReader(OleDbDataReader lector) {
-            _validez = lector.ToDateTime("xValidez");
-            _turno = lector.ToInt16("xTurno");
-            _numerograficos = lector.ToInt32("xNumero");
-            _valoracion = lector.ToTimeSpanNulable("xValoracion").Value;
-            _trabajadas = lector.ToTimeSpanNulable("xTrabajadas").Value;
-            _acumuladas = lector.ToTimeSpanNulable("xAcumuladas").Value;
-            _nocturnas = lector.ToTimeSpanNulable("xNocturnas").Value;
-            _desayuno = lector.ToDecimal("xDesayuno");
-            _comida = lector.ToDecimal("xComida");
-            _cena = lector.ToDecimal("xCena");
-            _pluscena = lector.ToDecimal("xPlusCena");
-            _limpieza = (int)lector.ToDouble("xLimpieza");
-            _paqueteria = (int)lector.ToDouble("xPaqueteria");
+            Validez = lector.ToDateTime("xValidez");
+            Turno = lector.ToInt16("xTurno");
+            NumeroGraficos = lector.ToInt32("xNumero");
+            Valoracion = lector.ToTimeSpanNulable("xValoracion").Value;
+            Trabajadas = lector.ToTimeSpanNulable("xTrabajadas").Value;
+            Acumuladas = lector.ToTimeSpanNulable("xAcumuladas").Value;
+            Nocturnas = lector.ToTimeSpanNulable("xNocturnas").Value;
+            Desayuno = lector.ToDecimal("xDesayuno");
+            Comida = lector.ToDecimal("xComida");
+            Cena = lector.ToDecimal("xCena");
+            PlusCena = lector.ToDecimal("xPlusCena");
+            Limpieza = (int)lector.ToDouble("xLimpieza");
+            Paqueteria = (int)lector.ToDouble("xPaqueteria");
         }
 
 
@@ -61,18 +61,8 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        private Centros _centro;
-        public Centros Centro {
-            get { return _centro; }
-            set { _centro = value; }
-        }
-
-
-        private DateTime _validez;
-        public DateTime Validez {
-            get { return _validez; }
-            set { _validez = value; }
-        }
+        public Centros Centro { get; set; }
+        public DateTime Validez { get; set; }
 
 
         private int _turno;
@@ -81,88 +71,42 @@ namespace Orion.Models {
             set { _turno = value; }
         }
 
-
-        private int _numerograficos;
-        public int NumeroGraficos {
-            get { return _numerograficos; }
-            set { _numerograficos = value; }
-        }
+        public int NumeroGraficos { get; set; }
 
 
-        private TimeSpan _valoracion;
-        public TimeSpan Valoracion {
-            get { return _valoracion; }
-            set { _valoracion = value; }
-        }
+        public TimeSpan Valoracion { get; set; }
 
 
-        private TimeSpan _trabajadas;
-        public TimeSpan Trabajadas {
-            get { return _trabajadas; }
-            set { _trabajadas = value; }
-        }
-
-        private TimeSpan _acumuladas;
-        public TimeSpan Acumuladas {
-            get { return _acumuladas; }
-            set { _acumuladas = value; }
-        }
+        public TimeSpan Trabajadas { get; set; }
 
 
-        private TimeSpan _nocturnas;
-        public TimeSpan Nocturnas {
-            get { return _nocturnas; }
-            set { _nocturnas = value; }
-        }
+        public TimeSpan Acumuladas { get; set; }
 
 
-        private decimal _desayuno;
-        public decimal Desayuno {
-            get { return _desayuno; }
-            set { _desayuno = value; }
-        }
+        public TimeSpan Nocturnas { get; set; }
 
 
-        private decimal _comida;
-        public decimal Comida {
-            get { return _comida; }
-            set { _comida = value; }
-        }
+        public decimal Desayuno { get; set; }
 
 
-        private decimal _cena;
-        public decimal Cena {
-            get { return _cena; }
-            set { _cena = value; }
-        }
+        public decimal Comida { get; set; }
 
 
-        private decimal _pluscena;
-        public decimal PlusCena {
-            get { return _pluscena; }
-            set { _pluscena = value; }
-        }
+        public decimal Cena { get; set; }
+        public decimal PlusCena { get; set; }
 
 
         public decimal TotalDietas {
             get {
-                return (_desayuno * App.Global.Convenio.PorcentajeDesayuno / 100m) + Comida + Cena + PlusCena;
+                return (Desayuno * App.Global.Convenio.PorcentajeDesayuno / 100m) + Comida + Cena + PlusCena;
             }
         }
 
 
-        private int _limpieza;
-        public int Limpieza {
-            get { return _limpieza; }
-            set { _limpieza = value; }
-        }
+        public int Limpieza { get; set; }
 
 
-        private int _paqueteria;
-        public int Paqueteria {
-            get { return _paqueteria; }
-            set { _paqueteria = value; }
-        }
+        public int Paqueteria { get; set; }
 
 
 
@@ -183,19 +127,19 @@ namespace Orion.Models {
 
 
         public void FromReader(DbDataReader lector) {
-            _validez = lector.ToDateTime("xValidez");
-            _turno = lector.ToInt32("xTurno");
-            _numerograficos = lector.ToInt32("xNumero");
-            _valoracion = lector.ToTimeSpanNulable("xValoracion").Value;
-            _trabajadas = lector.ToTimeSpanNulable("xTrabajadas").Value;
-            _acumuladas = lector.ToTimeSpanNulable("xAcumuladas").Value;
-            _nocturnas = lector.ToTimeSpanNulable("xNocturnas").Value;
-            _desayuno = lector.ToDecimal("xDesayuno");
-            _comida = lector.ToDecimal("xComida");
-            _cena = lector.ToDecimal("xCena");
-            _pluscena = lector.ToDecimal("xPlusCena");
-            _limpieza = (int)lector.ToDouble("xLimpieza");
-            _paqueteria = (int)lector.ToDouble("xPaqueteria");
+            Validez = lector.ToDateTime("xValidez");
+            Turno = lector.ToInt32("xTurno");
+            NumeroGraficos = lector.ToInt32("xNumero");
+            Valoracion = lector.ToTimeSpanNulable("xValoracion").Value;
+            Trabajadas = lector.ToTimeSpanNulable("xTrabajadas").Value;
+            Acumuladas = lector.ToTimeSpanNulable("xAcumuladas").Value;
+            Nocturnas = lector.ToTimeSpanNulable("xNocturnas").Value;
+            Desayuno = lector.ToDecimal("xDesayuno");
+            Comida = lector.ToDecimal("xComida");
+            Cena = lector.ToDecimal("xCena");
+            PlusCena = lector.ToDecimal("xPlusCena");
+            Limpieza = (int)lector.ToDouble("xLimpieza");
+            Paqueteria = (int)lector.ToDouble("xPaqueteria");
         }
 
 

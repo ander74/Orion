@@ -80,21 +80,14 @@ namespace Orion.Models {
 
         public int CantidadTurnos4 { get; set; }
 
-        public decimal PorcentajeTurnos1 {
-            get { return CantidadGraficos == 0 ? 0 : Math.Round(CantidadTurnos1 * 100m / CantidadGraficos, 2); }
-        }
+        public decimal PorcentajeTurnos1 => CantidadGraficos != 0 ? Math.Round(CantidadTurnos1 * 100m / CantidadGraficos, 2) : 0;
 
-        public decimal PorcentajeTurnos2 {
-            get { return CantidadGraficos == 0 ? 0 : Math.Round(CantidadTurnos2 * 100m / CantidadGraficos, 2); }
-        }
+        public decimal PorcentajeTurnos2 => CantidadGraficos != 0 ? Math.Round(CantidadTurnos2 * 100m / CantidadGraficos, 2) : 0;
 
-        public decimal PorcentajeTurnos3 {
-            get { return CantidadGraficos == 0 ? 0 : Math.Round(CantidadTurnos3 * 100m / CantidadGraficos, 2); }
-        }
 
-        public decimal PorcentajeTurnos4 {
-            get { return CantidadGraficos == 0 ? 0 : Math.Round(CantidadTurnos4 * 100m / CantidadGraficos, 2); }
-        }
+        public decimal PorcentajeTurnos3 => CantidadGraficos != 0 ? Math.Round(CantidadTurnos3 * 100m / CantidadGraficos, 2) : 0;
+
+        public decimal PorcentajeTurnos4 => CantidadGraficos != 0 ? Math.Round(CantidadTurnos4 * 100m / CantidadGraficos, 2) : 0;
 
         public TimeSpan Valoracion { get; set; }
 
@@ -108,25 +101,15 @@ namespace Orion.Models {
 
         public TimeSpan TrabajadasTurno4 { get; set; }
 
-        public TimeSpan MediaTrabajadas {
-            get { return CantidadGraficos == 0 ? TimeSpan.Zero : new TimeSpan(Trabajadas.Ticks / CantidadGraficos); }
-        }
+        public TimeSpan MediaTrabajadas => CantidadGraficos == 0 ? TimeSpan.Zero : new TimeSpan(Trabajadas.Ticks / CantidadGraficos);
 
-        public TimeSpan MediaTrabajadasTurno1 {
-            get { return CantidadTurnos1 == 0 ? TimeSpan.Zero : new TimeSpan(TrabajadasTurno1.Ticks / CantidadTurnos1); }
-        }
+        public TimeSpan MediaTrabajadasTurno1 => CantidadTurnos1 != 0 ? new TimeSpan(TrabajadasTurno1.Ticks / CantidadTurnos1) : TimeSpan.Zero;
 
-        public TimeSpan MediaTrabajadasTurno2 {
-            get { return CantidadTurnos2 == 0 ? TimeSpan.Zero : new TimeSpan(TrabajadasTurno2.Ticks / CantidadTurnos2); }
-        }
+        public TimeSpan MediaTrabajadasTurno2 => CantidadTurnos2 != 0 ? new TimeSpan(TrabajadasTurno2.Ticks / CantidadTurnos2) : TimeSpan.Zero;
 
-        public TimeSpan MediaTrabajadasTurno3 {
-            get { return CantidadTurnos3 == 0 ? TimeSpan.Zero : new TimeSpan(TrabajadasTurno3.Ticks / CantidadTurnos3); }
-        }
+        public TimeSpan MediaTrabajadasTurno3 => CantidadTurnos3 != 0 ? new TimeSpan(TrabajadasTurno3.Ticks / CantidadTurnos3) : TimeSpan.Zero;
 
-        public TimeSpan MediaTrabajadasTurno4 {
-            get { return CantidadTurnos4 == 0 ? TimeSpan.Zero : new TimeSpan(TrabajadasTurno4.Ticks / CantidadTurnos4); }
-        }
+        public TimeSpan MediaTrabajadasTurno4 => CantidadTurnos4 != 0 ? new TimeSpan(TrabajadasTurno4.Ticks / CantidadTurnos4) : TimeSpan.Zero;
 
         public TimeSpan Acumuladas { get; set; }
 

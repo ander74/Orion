@@ -6,10 +6,9 @@
 // ===============================================
 #endregion
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
-using Orion.DataModels;
 using Orion.Models;
 using Orion.Servicios;
 
@@ -40,8 +39,8 @@ namespace Orion.ViewModels {
         #region PROPIEDADES
         // ====================================================================================================
 
-        private ObservableCollection<GrupoGraficos> _listagrupos;
-        public ObservableCollection<GrupoGraficos> ListaGrupos {
+        private List<GrupoGraficos> _listagrupos;
+        public List<GrupoGraficos> ListaGrupos {
             get { return _listagrupos; }
             set {
                 if (_listagrupos != value) {
@@ -172,30 +171,29 @@ namespace Orion.ViewModels {
             Window ventana = (Window)parametro;
             try {
                 // Si la fecha ya existe, mostramos mensaje
-                if (BdGruposGraficos.ExisteGrupo(FechaActual)) {
+                if (App.Global.Repository.ExisteGrupo(FechaActual)) {
                     mensajes.VerMensaje("Ya existe un grupo con la fecha elegida.", "ERROR");
                     return;
                 }
                 if (NuevoMarcado) {
-                    //if (String.IsNullOrEmpty(Notas.Trim())) Notas = FechaActual.ToString("dd-MM-yyyy");
                     App.Global.Repository.NuevoGrupo(FechaActual);
                     ventana.DialogResult = true;
                     ventana.Close();
                 }
                 if (RepetirMarcado) {
-                    ObservableCollection<Grafico> graficos = BdGraficos.getGraficosGrupoPorFecha(GrupoSeleccionado.Validez);
-                    ObservableCollection<ValoracionGrafico> valoraciones = new ObservableCollection<ValoracionGrafico>();
-                    //if (String.IsNullOrEmpty(Notas.Trim())) Notas = FechaActual.ToString("dd-MM-yyyy");
-                    int idgruponuevo = BdGruposGraficos.NuevoGrupo(FechaActual, Notas);
+                    var graficos = App.Global.Repository.GetGraficosGrupoPorFecha(GrupoSeleccionado.Validez);
+                    //List<ValoracionGrafico> valoraciones = new List<ValoracionGrafico>();
+                    //int idgruponuevo = BdGruposGraficos.NuevoGrupo(FechaActual, Notas);
                     int idgraficonuevo = -1;
                     foreach (Grafico grafico in graficos) {
-                        //grafico.IdGrupo = idgruponuevo;
                         grafico.Validez = FechaActual;
-                        idgraficonuevo = BdGraficos.InsertarGrafico(grafico);
-                        valoraciones = BdValoracionesGraficos.getValoraciones(grafico.Id);
+                        var valoraciones = App.Global.Repository.GetValoraciones(grafico.Id);
+                        grafico.Id = 0;
+                        idgraficonuevo = App.Global.Repository.InsertarGrafico(grafico);
                         foreach (ValoracionGrafico valoracion in valoraciones) {
+                            valoracion.Id = 0;
                             valoracion.IdGrafico = idgraficonuevo;
-                            BdValoracionesGraficos.InsertarValoracion(valoracion);
+                            App.Global.Repository.InsertarValoracion(valoracion);
                         }
                     }
                     // Cerramos la ventana enviando True.
