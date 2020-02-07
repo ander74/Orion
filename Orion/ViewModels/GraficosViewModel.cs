@@ -13,7 +13,6 @@ namespace Orion.ViewModels {
     using System.ComponentModel;
     using System.Linq;
     using System.Windows.Data;
-    using DataModels;
     using Models;
     using Orion.Config;
     using Orion.Interfaces;
@@ -194,7 +193,7 @@ namespace Orion.ViewModels {
                     Itinerario itinerario = null;
                     // Buscamos el itinerario.
                     try {
-                        itinerario = BdItinerarios.GetItinerarioByNombre(linea);
+                        itinerario = App.Global.LineasRepo.GetItinerarioByNombre(linea);
                     } catch (Exception ex) {
                         Mensajes.VerError("GraficosViewModel.AñadirValoracion", ex);
                     }

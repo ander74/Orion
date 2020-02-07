@@ -19,6 +19,9 @@ PROYECTO ORION
 		-13 :  O-V(FN) - Vacaciones en descanso en fin de semana.
 		-14 :   F6(DC) - F6 a cuenta de un DC.
 		-15 :      FOR - Formación. Cuenta como trabajada la jornada.
+		-16 :      OVA - Vacaciones atrasadas.
+		-17 :  OVA(JD) - Vacaciones atrasadas en JD.
+		-18 :  OVA(FN) - Vacaciones atrasadas en FN.
 
 
 	Códigos de modificación de gráfico (se ponen como decimal):

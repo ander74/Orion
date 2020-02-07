@@ -5,12 +5,6 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Data.OleDb;
-using System.Linq;
-using Orion.Config;
-using Orion.Models;
 
 namespace Orion.Pijama {
 
@@ -126,596 +120,596 @@ namespace Orion.Pijama {
         //================================================================================
         // GET DÍAS PIJAMA
         //================================================================================
-        public static List<DiaPijama> GetDiasPijama(IEnumerable<DiaCalendarioBase> listadias) {
+        //public static List<DiaPijama> GetDiasPijama(IEnumerable<DiaCalendarioBase> listadias) {
 
-            return App.Global.Repository.GetDiasPijama(listadias, App.Global.PorCentro.Comodin).ToList();
+        //    return App.Global.Repository.GetDiasPijama(listadias, App.Global.PorCentro.Comodin).ToList();
 
-            // Creamos la lista que se devolverá.
-            List<DiaPijama> lista = new List<DiaPijama>();
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-                // Habrá que quitar el control de excepciones aquí y ponerselo en la llamada al método, ya que aquí no hay
-                // gestión de ventanas (o no debería haberlo).
-                try {
-                    conexion.Open();
-                    foreach (DiaCalendarioBase dia in listadias) {
-                        // Creamos el día pijama a añadir a la lista.
-                        DiaPijama diaPijama = new DiaPijama(dia);
-                        // Si el día no pertenece al mes, continuamos el bucle al siguiente día.
-                        if (dia.Dia > DateTime.DaysInMonth(dia.DiaFecha.Year, dia.DiaFecha.Month)) continue;
-                        // Establecemos el gráfico a buscar, por si está seleccionado el comodín.
-                        int GraficoBusqueda = dia.Grafico;
-                        if (dia.GraficoVinculado != 0 && dia.Grafico == App.Global.PorCentro.Comodin) GraficoBusqueda = dia.GraficoVinculado;
-                        // Creamos el comando SQL y añadimos los parámetros
-                        OleDbCommand comando = new OleDbCommand(comandoGetGrafico, conexion);
-                        comando.Parameters.AddWithValue("@Validez", dia.DiaFecha.ToString("yyyy-MM-dd"));
-                        comando.Parameters.AddWithValue("@Numero", GraficoBusqueda);
-                        // Ejecutamos el comando y extraemos el gráfico.
-                        OleDbDataReader lector = comando.ExecuteReader();
-                        if (lector.Read()) {
-                            diaPijama.GraficoTrabajado = new GraficoBase(lector);
-                            diaPijama.GraficoOriginal = new GraficoBase(lector);
-                        } else {
-                            diaPijama.GraficoTrabajado = new GraficoBase() { Numero = GraficoBusqueda };
-                            diaPijama.GraficoOriginal = new GraficoBase() { Numero = GraficoBusqueda };
-                        }
-                        // Modificamos los parámetros del gráfico trabajado en función de si existen en el DiaCalendarioBase.
-                        if (dia.TurnoAlt.HasValue) diaPijama.GraficoTrabajado.Turno = dia.TurnoAlt.Value;
-                        if (dia.InicioAlt.HasValue) diaPijama.GraficoTrabajado.Inicio = new TimeSpan(dia.InicioAlt.Value.Ticks);
-                        if (dia.FinalAlt.HasValue) diaPijama.GraficoTrabajado.Final = new TimeSpan(dia.FinalAlt.Value.Ticks);
-                        if (dia.InicioPartidoAlt.HasValue) diaPijama.GraficoTrabajado.InicioPartido = new TimeSpan(dia.InicioPartidoAlt.Value.Ticks);
-                        if (dia.FinalPartidoAlt.HasValue) diaPijama.GraficoTrabajado.FinalPartido = new TimeSpan(dia.FinalPartidoAlt.Value.Ticks);
-                        if (dia.TrabajadasAlt.HasValue) diaPijama.GraficoTrabajado.Trabajadas = new TimeSpan(dia.TrabajadasAlt.Value.Ticks);
-                        if (dia.AcumuladasAlt.HasValue) diaPijama.GraficoTrabajado.Acumuladas = new TimeSpan(dia.AcumuladasAlt.Value.Ticks);
-                        if (dia.NocturnasAlt.HasValue) diaPijama.GraficoTrabajado.Nocturnas = new TimeSpan(dia.NocturnasAlt.Value.Ticks);
-                        if (dia.DesayunoAlt.HasValue) diaPijama.GraficoTrabajado.Desayuno = dia.DesayunoAlt.Value;
-                        if (dia.ComidaAlt.HasValue) diaPijama.GraficoTrabajado.Comida = dia.ComidaAlt.Value;
-                        if (dia.CenaAlt.HasValue) diaPijama.GraficoTrabajado.Cena = dia.CenaAlt.Value;
-                        if (dia.PlusCenaAlt.HasValue) diaPijama.GraficoTrabajado.PlusCena = dia.PlusCenaAlt.Value;
-                        if (dia.PlusLimpiezaAlt.HasValue) diaPijama.GraficoTrabajado.PlusLimpieza = dia.PlusLimpiezaAlt.Value;
-                        if (dia.PlusPaqueteriaAlt.HasValue) diaPijama.GraficoTrabajado.PlusPaqueteria = dia.PlusPaqueteriaAlt.Value;
-                        // Añadimos el día pijama a la lista.
-                        lista.Add(diaPijama);
-                        // Cerramos el lector.
-                        lector.Close();
-                    }
-                } catch (Exception ex) {
-                    Utils.VerError("BdPijamas.GetDiasPijama", ex);
-                }
-            }
-            return lista;
-        }
+        //    // Creamos la lista que se devolverá.
+        //    List<DiaPijama> lista = new List<DiaPijama>();
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //        // Habrá que quitar el control de excepciones aquí y ponerselo en la llamada al método, ya que aquí no hay
+        //        // gestión de ventanas (o no debería haberlo).
+        //        try {
+        //            conexion.Open();
+        //            foreach (DiaCalendarioBase dia in listadias) {
+        //                // Creamos el día pijama a añadir a la lista.
+        //                DiaPijama diaPijama = new DiaPijama(dia);
+        //                // Si el día no pertenece al mes, continuamos el bucle al siguiente día.
+        //                if (dia.Dia > DateTime.DaysInMonth(dia.DiaFecha.Year, dia.DiaFecha.Month)) continue;
+        //                // Establecemos el gráfico a buscar, por si está seleccionado el comodín.
+        //                int GraficoBusqueda = dia.Grafico;
+        //                if (dia.GraficoVinculado != 0 && dia.Grafico == App.Global.PorCentro.Comodin) GraficoBusqueda = dia.GraficoVinculado;
+        //                // Creamos el comando SQL y añadimos los parámetros
+        //                OleDbCommand comando = new OleDbCommand(comandoGetGrafico, conexion);
+        //                comando.Parameters.AddWithValue("@Validez", dia.DiaFecha.ToString("yyyy-MM-dd"));
+        //                comando.Parameters.AddWithValue("@Numero", GraficoBusqueda);
+        //                // Ejecutamos el comando y extraemos el gráfico.
+        //                OleDbDataReader lector = comando.ExecuteReader();
+        //                if (lector.Read()) {
+        //                    diaPijama.GraficoTrabajado = new GraficoBase(lector);
+        //                    diaPijama.GraficoOriginal = new GraficoBase(lector);
+        //                } else {
+        //                    diaPijama.GraficoTrabajado = new GraficoBase() { Numero = GraficoBusqueda };
+        //                    diaPijama.GraficoOriginal = new GraficoBase() { Numero = GraficoBusqueda };
+        //                }
+        //                // Modificamos los parámetros del gráfico trabajado en función de si existen en el DiaCalendarioBase.
+        //                if (dia.TurnoAlt.HasValue) diaPijama.GraficoTrabajado.Turno = dia.TurnoAlt.Value;
+        //                if (dia.InicioAlt.HasValue) diaPijama.GraficoTrabajado.Inicio = new TimeSpan(dia.InicioAlt.Value.Ticks);
+        //                if (dia.FinalAlt.HasValue) diaPijama.GraficoTrabajado.Final = new TimeSpan(dia.FinalAlt.Value.Ticks);
+        //                if (dia.InicioPartidoAlt.HasValue) diaPijama.GraficoTrabajado.InicioPartido = new TimeSpan(dia.InicioPartidoAlt.Value.Ticks);
+        //                if (dia.FinalPartidoAlt.HasValue) diaPijama.GraficoTrabajado.FinalPartido = new TimeSpan(dia.FinalPartidoAlt.Value.Ticks);
+        //                if (dia.TrabajadasAlt.HasValue) diaPijama.GraficoTrabajado.Trabajadas = new TimeSpan(dia.TrabajadasAlt.Value.Ticks);
+        //                if (dia.AcumuladasAlt.HasValue) diaPijama.GraficoTrabajado.Acumuladas = new TimeSpan(dia.AcumuladasAlt.Value.Ticks);
+        //                if (dia.NocturnasAlt.HasValue) diaPijama.GraficoTrabajado.Nocturnas = new TimeSpan(dia.NocturnasAlt.Value.Ticks);
+        //                if (dia.DesayunoAlt.HasValue) diaPijama.GraficoTrabajado.Desayuno = dia.DesayunoAlt.Value;
+        //                if (dia.ComidaAlt.HasValue) diaPijama.GraficoTrabajado.Comida = dia.ComidaAlt.Value;
+        //                if (dia.CenaAlt.HasValue) diaPijama.GraficoTrabajado.Cena = dia.CenaAlt.Value;
+        //                if (dia.PlusCenaAlt.HasValue) diaPijama.GraficoTrabajado.PlusCena = dia.PlusCenaAlt.Value;
+        //                if (dia.PlusLimpiezaAlt.HasValue) diaPijama.GraficoTrabajado.PlusLimpieza = dia.PlusLimpiezaAlt.Value;
+        //                if (dia.PlusPaqueteriaAlt.HasValue) diaPijama.GraficoTrabajado.PlusPaqueteria = dia.PlusPaqueteriaAlt.Value;
+        //                // Añadimos el día pijama a la lista.
+        //                lista.Add(diaPijama);
+        //                // Cerramos el lector.
+        //                lector.Close();
+        //            }
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdPijamas.GetDiasPijama", ex);
+        //        }
+        //    }
+        //    return lista;
+        //}
 
 
         //================================================================================
         // GET RESUMEN HASTA MES
         //================================================================================
-        public static ResumenPijama GetResumenHastaMes(int año, int mes, int idconductor) {
+        //public static ResumenPijama GetResumenHastaMes(int año, int mes, int idconductor) {
 
-            return App.Global.Repository.GetResumenHastaMes(año, mes, idconductor, App.Global.PorCentro.Comodin);
+        //    return App.Global.Repository.GetResumenHastaMes(año, mes, idconductor, App.Global.PorCentro.Comodin);
 
-            // Inicializamos las horas acumuladas.
-            ResumenPijama resultado = new ResumenPijama();
+        //    // Inicializamos las horas acumuladas.
+        //    ResumenPijama resultado = new ResumenPijama();
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                // Establecemos la fecha del día 1 del siguiente mes al indicado.
-                DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
-                // Establecemos un objeto a usar para los resultados.
-                object objeto = null;
+        //        // Establecemos la fecha del día 1 del siguiente mes al indicado.
+        //        DateTime fecha = new DateTime(año, mes, 1).AddMonths(1);
+        //        // Establecemos un objeto a usar para los resultados.
+        //        object objeto = null;
 
-                try {
-                    conexion.Open();
+        //        try {
+        //            conexion.Open();
 
-                    //----------------------------------------------------------------------------------------------------
-                    // HORAS ACUMULADAS
-                    //----------------------------------------------------------------------------------------------------
-                    OleDbCommand comando = new OleDbCommand(comandoDiasCalendario, conexion);
-                    comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
-                    comando.Parameters.AddWithValue("idconductor", idconductor);
-                    OleDbDataReader lector = comando.ExecuteReader();
+        //            //----------------------------------------------------------------------------------------------------
+        //            // HORAS ACUMULADAS
+        //            //----------------------------------------------------------------------------------------------------
+        //            OleDbCommand comando = new OleDbCommand(comandoDiasCalendario, conexion);
+        //            comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+        //            comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            OleDbDataReader lector = comando.ExecuteReader();
 
-                    // Por cada día, sumamos las horas acumuladas.
-                    while (lector.Read()) {
-                        int d = (lector["Dia"] is DBNull) ? 0 : (Int16)lector["Dia"];
-                        int g = (lector["Grafico"] is DBNull) ? 0 : (Int16)lector["Grafico"];
-                        int v = (lector["GraficoVinculado"] is DBNull) ? 0 : (Int16)lector["GraficoVinculado"];
-                        TimeSpan? acumuladasAlt = lector.ToTimeSpanNulable("AcumuladasAlt");
-                        TimeSpan ej = lector.ToTimeSpan("ExcesoJornada");
-                        if (v != 0 && g == App.Global.PorCentro.Comodin) g = v;
-                        DateTime f = (lector["Fecha"] is DBNull) ? new DateTime(0) : (DateTime)lector["Fecha"];
-                        if (d > DateTime.DaysInMonth(f.Year, f.Month)) continue;
-                        DateTime fechadia = new DateTime(f.Year, f.Month, d);
-                        OleDbCommand comando2 = new OleDbCommand(comandoAcumuladas, conexion);
-                        comando2.Parameters.AddWithValue("validez", fechadia.ToString("yyyy-MM-dd"));
-                        comando2.Parameters.AddWithValue("numero", g);
-                        OleDbDataReader lector2 = comando2.ExecuteReader();
+        //            // Por cada día, sumamos las horas acumuladas.
+        //            while (lector.Read()) {
+        //                int d = (lector["Dia"] is DBNull) ? 0 : (Int16)lector["Dia"];
+        //                int g = (lector["Grafico"] is DBNull) ? 0 : (Int16)lector["Grafico"];
+        //                int v = (lector["GraficoVinculado"] is DBNull) ? 0 : (Int16)lector["GraficoVinculado"];
+        //                TimeSpan? acumuladasAlt = lector.ToTimeSpanNulable("AcumuladasAlt");
+        //                TimeSpan ej = lector.ToTimeSpan("ExcesoJornada");
+        //                if (v != 0 && g == App.Global.PorCentro.Comodin) g = v;
+        //                DateTime f = (lector["Fecha"] is DBNull) ? new DateTime(0) : (DateTime)lector["Fecha"];
+        //                if (d > DateTime.DaysInMonth(f.Year, f.Month)) continue;
+        //                DateTime fechadia = new DateTime(f.Year, f.Month, d);
+        //                OleDbCommand comando2 = new OleDbCommand(comandoAcumuladas, conexion);
+        //                comando2.Parameters.AddWithValue("validez", fechadia.ToString("yyyy-MM-dd"));
+        //                comando2.Parameters.AddWithValue("numero", g);
+        //                OleDbDataReader lector2 = comando2.ExecuteReader();
 
-                        GraficoBase grafico = null;
-                        if (lector2.Read()) {
-                            grafico = new GraficoBase(lector2);
-                            if (ej != TimeSpan.Zero) {
-                                if (grafico != null) grafico.Final += ej;
-                            }
-                        } else {
-                            grafico = new GraficoBase();
-                        }
-                        if (acumuladasAlt.HasValue) grafico.Acumuladas = acumuladasAlt.Value;
-                        resultado.HorasAcumuladas += grafico.Acumuladas;
-                        lector2.Close();
-                    }
-                    lector.Close();
-                    //----------------------------------------------------------------------------------------------------
-                    // HORAS REGULADAS
-                    //----------------------------------------------------------------------------------------------------
-                    comando = new OleDbCommand(comandoReguladas, conexion);
-                    comando.Parameters.AddWithValue("idconductor", idconductor);
-                    comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
-                    objeto = comando.ExecuteScalar();
-                    if (objeto == DBNull.Value) {
-                        objeto = 0d;
-                    }
-                    resultado.HorasReguladas = new TimeSpan(Convert.ToInt64(objeto));
-                    //----------------------------------------------------------------------------------------------------
-                    // HORAS COBRADAS
-                    //----------------------------------------------------------------------------------------------------
-                    //comando = new OleDbCommand(comandoCobradas, conexion);
-                    //comando.Parameters.AddWithValue("idconductor", idconductor);
-                    //comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
-                    //objeto = comando.ExecuteScalar();
-                    //if (objeto == DBNull.Value) {
-                    //	objeto = 0d;
-                    //}
-                    //resultado.HorasCobradas = new TimeSpan(Convert.ToInt64(objeto));
-                    //----------------------------------------------------------------------------------------------------
-                    // DIAS F6
-                    //----------------------------------------------------------------------------------------------------
-                    comando = new OleDbCommand(comandoDiasF6, conexion);
-                    comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
-                    comando.Parameters.AddWithValue("idconductor", idconductor);
-                    objeto = comando.ExecuteScalar();
-                    if (objeto == DBNull.Value) objeto = 0d;
-                    resultado.DiasLibreDisposicionF6 = Convert.ToDecimal(objeto);
-                    //----------------------------------------------------------------------------------------------------
-                    // DIAS F6DC
-                    //----------------------------------------------------------------------------------------------------
-                    comando = new OleDbCommand(comandoDiasF6DC, conexion);
-                    comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
-                    comando.Parameters.AddWithValue("idconductor", idconductor);
-                    objeto = comando.ExecuteScalar();
-                    if (objeto == DBNull.Value) objeto = 0d;
-                    resultado.DiasF6DC = Convert.ToDecimal(objeto);
-                    //----------------------------------------------------------------------------------------------------
-                    // DCS REGULADOS 
-                    //----------------------------------------------------------------------------------------------------
-                    comando = new OleDbCommand(comandoDCsRegulados, conexion);
-                    comando.Parameters.AddWithValue("idconductor", idconductor);
-                    comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
-                    objeto = comando.ExecuteScalar();
-                    if (objeto == DBNull.Value) objeto = 0d;
-                    resultado.DCsRegulados = Convert.ToDecimal(objeto);
-                    //----------------------------------------------------------------------------------------------------
-                    // DCS DISFRUTADOS
-                    //----------------------------------------------------------------------------------------------------
-                    comando = new OleDbCommand(comandoDCsDisfrutados, conexion);
-                    comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
-                    comando.Parameters.AddWithValue("idconductor", idconductor);
-                    objeto = comando.ExecuteScalar();
-                    if (objeto == DBNull.Value) objeto = 0d;
-                    resultado.DCsDisfrutados = Convert.ToDecimal(objeto);
-                    //----------------------------------------------------------------------------------------------------
-                    // DNDs REGULADOS 
-                    //----------------------------------------------------------------------------------------------------
-                    comando = new OleDbCommand(comandoDNDsRegulados, conexion);
-                    comando.Parameters.AddWithValue("idconductor", idconductor);
-                    comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
-                    objeto = comando.ExecuteScalar();
-                    if (objeto == DBNull.Value) objeto = 0d;
-                    resultado.DNDsRegulados = Convert.ToDecimal(objeto);
-                    //----------------------------------------------------------------------------------------------------
-                    // DNDS DISFRUTADOS
-                    //----------------------------------------------------------------------------------------------------
-                    comando = new OleDbCommand(comandoDNDsDisfrutados, conexion);
-                    comando.Parameters.AddWithValue("idconductor", idconductor);
-                    comando.Parameters.AddWithValue("fecha", fecha);
-                    objeto = comando.ExecuteScalar();
-                    if (objeto == DBNull.Value) objeto = 0d;
-                    resultado.DNDsDisfrutados = Convert.ToDecimal(objeto);
-                    //----------------------------------------------------------------------------------------------------
-                    // DÍAS COMITÉ EN DESCANSO
-                    //----------------------------------------------------------------------------------------------------
-                    comando = new OleDbCommand(comandoDiasComiteEnJD, conexion);
-                    comando.Parameters.AddWithValue("idconductor", idconductor);
-                    comando.Parameters.AddWithValue("fecha", fecha);
-                    objeto = comando.ExecuteScalar();
-                    if (objeto == DBNull.Value) objeto = 0d;
-                    resultado.DiasComiteEnDescanso = Convert.ToDecimal(objeto);
-                    //----------------------------------------------------------------------------------------------------
-                    // DÍAS TRABAJO EN DESCANSO
-                    //----------------------------------------------------------------------------------------------------
-                    comando = new OleDbCommand(comandoDiasTrabajoEnJD, conexion);
-                    comando.Parameters.AddWithValue("idconductor", idconductor);
-                    comando.Parameters.AddWithValue("fecha", fecha);
-                    objeto = comando.ExecuteScalar();
-                    if (objeto == DBNull.Value) objeto = 0d;
-                    resultado.DiasTrabajoEnDescanso = Convert.ToDecimal(objeto);
-                    ////----------------------------------------------------------------------------------------------------
-                    //// DÍAS VACACIONES
-                    ////----------------------------------------------------------------------------------------------------
-                    //comando = new OleDbCommand(comandoDiasVacaciones, conexion);
-                    //comando.Parameters.AddWithValue("idconductor", idconductor);
-                    //comando.Parameters.AddWithValue("fecha", fecha);
-                    //objeto = comando.ExecuteScalar();
-                    //if (objeto == DBNull.Value) objeto = 0;
-                    //resultado.DiasVacaciones = Convert.ToInt32(objeto);
-                    ////----------------------------------------------------------------------------------------------------
-                    //// DÍAS INACTIVO
-                    ////----------------------------------------------------------------------------------------------------
-                    //comando = new OleDbCommand(comandoDiasInactivo, conexion);
-                    //comando.Parameters.AddWithValue("idconductor", idconductor);
-                    //comando.Parameters.AddWithValue("fecha", fecha);
-                    //objeto = comando.ExecuteScalar();
-                    //if (objeto == DBNull.Value) objeto = 0;
-                    //resultado.DiasInactivo = Convert.ToInt32(objeto);
-                    //----------------------------------------------------------------------------------------------------
-                    // FINAL
-                    //----------------------------------------------------------------------------------------------------
-                } catch (Exception ex) {
-                    Utils.VerError("BdPijamas.GetResumenHastaMes", ex);
-                }
-            }
+        //                GraficoBase grafico = null;
+        //                if (lector2.Read()) {
+        //                    grafico = new GraficoBase(lector2);
+        //                    if (ej != TimeSpan.Zero) {
+        //                        if (grafico != null) grafico.Final += ej;
+        //                    }
+        //                } else {
+        //                    grafico = new GraficoBase();
+        //                }
+        //                if (acumuladasAlt.HasValue) grafico.Acumuladas = acumuladasAlt.Value;
+        //                resultado.HorasAcumuladas += grafico.Acumuladas;
+        //                lector2.Close();
+        //            }
+        //            lector.Close();
+        //            //----------------------------------------------------------------------------------------------------
+        //            // HORAS REGULADAS
+        //            //----------------------------------------------------------------------------------------------------
+        //            comando = new OleDbCommand(comandoReguladas, conexion);
+        //            comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+        //            objeto = comando.ExecuteScalar();
+        //            if (objeto == DBNull.Value) {
+        //                objeto = 0d;
+        //            }
+        //            resultado.HorasReguladas = new TimeSpan(Convert.ToInt64(objeto));
+        //            //----------------------------------------------------------------------------------------------------
+        //            // HORAS COBRADAS
+        //            //----------------------------------------------------------------------------------------------------
+        //            //comando = new OleDbCommand(comandoCobradas, conexion);
+        //            //comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            //comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+        //            //objeto = comando.ExecuteScalar();
+        //            //if (objeto == DBNull.Value) {
+        //            //	objeto = 0d;
+        //            //}
+        //            //resultado.HorasCobradas = new TimeSpan(Convert.ToInt64(objeto));
+        //            //----------------------------------------------------------------------------------------------------
+        //            // DIAS F6
+        //            //----------------------------------------------------------------------------------------------------
+        //            comando = new OleDbCommand(comandoDiasF6, conexion);
+        //            comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+        //            comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            objeto = comando.ExecuteScalar();
+        //            if (objeto == DBNull.Value) objeto = 0d;
+        //            resultado.DiasLibreDisposicionF6 = Convert.ToDecimal(objeto);
+        //            //----------------------------------------------------------------------------------------------------
+        //            // DIAS F6DC
+        //            //----------------------------------------------------------------------------------------------------
+        //            comando = new OleDbCommand(comandoDiasF6DC, conexion);
+        //            comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+        //            comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            objeto = comando.ExecuteScalar();
+        //            if (objeto == DBNull.Value) objeto = 0d;
+        //            resultado.DiasF6DC = Convert.ToDecimal(objeto);
+        //            //----------------------------------------------------------------------------------------------------
+        //            // DCS REGULADOS 
+        //            //----------------------------------------------------------------------------------------------------
+        //            comando = new OleDbCommand(comandoDCsRegulados, conexion);
+        //            comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+        //            objeto = comando.ExecuteScalar();
+        //            if (objeto == DBNull.Value) objeto = 0d;
+        //            resultado.DCsRegulados = Convert.ToDecimal(objeto);
+        //            //----------------------------------------------------------------------------------------------------
+        //            // DCS DISFRUTADOS
+        //            //----------------------------------------------------------------------------------------------------
+        //            comando = new OleDbCommand(comandoDCsDisfrutados, conexion);
+        //            comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+        //            comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            objeto = comando.ExecuteScalar();
+        //            if (objeto == DBNull.Value) objeto = 0d;
+        //            resultado.DCsDisfrutados = Convert.ToDecimal(objeto);
+        //            //----------------------------------------------------------------------------------------------------
+        //            // DNDs REGULADOS 
+        //            //----------------------------------------------------------------------------------------------------
+        //            comando = new OleDbCommand(comandoDNDsRegulados, conexion);
+        //            comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            comando.Parameters.AddWithValue("fecha", fecha.ToString("yyyy-MM-dd"));
+        //            objeto = comando.ExecuteScalar();
+        //            if (objeto == DBNull.Value) objeto = 0d;
+        //            resultado.DNDsRegulados = Convert.ToDecimal(objeto);
+        //            //----------------------------------------------------------------------------------------------------
+        //            // DNDS DISFRUTADOS
+        //            //----------------------------------------------------------------------------------------------------
+        //            comando = new OleDbCommand(comandoDNDsDisfrutados, conexion);
+        //            comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            comando.Parameters.AddWithValue("fecha", fecha);
+        //            objeto = comando.ExecuteScalar();
+        //            if (objeto == DBNull.Value) objeto = 0d;
+        //            resultado.DNDsDisfrutados = Convert.ToDecimal(objeto);
+        //            //----------------------------------------------------------------------------------------------------
+        //            // DÍAS COMITÉ EN DESCANSO
+        //            //----------------------------------------------------------------------------------------------------
+        //            comando = new OleDbCommand(comandoDiasComiteEnJD, conexion);
+        //            comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            comando.Parameters.AddWithValue("fecha", fecha);
+        //            objeto = comando.ExecuteScalar();
+        //            if (objeto == DBNull.Value) objeto = 0d;
+        //            resultado.DiasComiteEnDescanso = Convert.ToDecimal(objeto);
+        //            //----------------------------------------------------------------------------------------------------
+        //            // DÍAS TRABAJO EN DESCANSO
+        //            //----------------------------------------------------------------------------------------------------
+        //            comando = new OleDbCommand(comandoDiasTrabajoEnJD, conexion);
+        //            comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            comando.Parameters.AddWithValue("fecha", fecha);
+        //            objeto = comando.ExecuteScalar();
+        //            if (objeto == DBNull.Value) objeto = 0d;
+        //            resultado.DiasTrabajoEnDescanso = Convert.ToDecimal(objeto);
+        //            ////----------------------------------------------------------------------------------------------------
+        //            //// DÍAS VACACIONES
+        //            ////----------------------------------------------------------------------------------------------------
+        //            //comando = new OleDbCommand(comandoDiasVacaciones, conexion);
+        //            //comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            //comando.Parameters.AddWithValue("fecha", fecha);
+        //            //objeto = comando.ExecuteScalar();
+        //            //if (objeto == DBNull.Value) objeto = 0;
+        //            //resultado.DiasVacaciones = Convert.ToInt32(objeto);
+        //            ////----------------------------------------------------------------------------------------------------
+        //            //// DÍAS INACTIVO
+        //            ////----------------------------------------------------------------------------------------------------
+        //            //comando = new OleDbCommand(comandoDiasInactivo, conexion);
+        //            //comando.Parameters.AddWithValue("idconductor", idconductor);
+        //            //comando.Parameters.AddWithValue("fecha", fecha);
+        //            //objeto = comando.ExecuteScalar();
+        //            //if (objeto == DBNull.Value) objeto = 0;
+        //            //resultado.DiasInactivo = Convert.ToInt32(objeto);
+        //            //----------------------------------------------------------------------------------------------------
+        //            // FINAL
+        //            //----------------------------------------------------------------------------------------------------
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdPijamas.GetResumenHastaMes", ex);
+        //        }
+        //    }
 
-            // Devolvemos el resultado
-            return resultado;
-        }
+        //    // Devolvemos el resultado
+        //    return resultado;
+        //}
 
 
 
         //================================================================================
         // GET HORAS COBRADAS MES
         //================================================================================
-        public static TimeSpan GetHorasCobradasMes(int año, int mes, int idconductor) {
+        //public static TimeSpan GetHorasCobradasMes(int año, int mes, int idconductor) {
 
-            return App.Global.Repository.GetHorasCobradasMes(año, mes, idconductor);
+        //    return App.Global.Repository.GetHorasCobradasMes(año, mes, idconductor);
 
-            object resultado = null;
+        //    object resultado = null;
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                // Definimos el comando SQL.
-                string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idconductor AND Year(Fecha) = @año AND Month(Fecha) = @mes AND Codigo = 1";
+        //        // Definimos el comando SQL.
+        //        string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = @idconductor AND Year(Fecha) = @año AND Month(Fecha) = @mes AND Codigo = 1";
 
-                // Creamos el comando y añadimos los parámetros.
-                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-                comando.Parameters.AddWithValue("idconductor", idconductor);
-                comando.Parameters.AddWithValue("año", año);
-                comando.Parameters.AddWithValue("mes", mes);
+        //        // Creamos el comando y añadimos los parámetros.
+        //        OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+        //        comando.Parameters.AddWithValue("idconductor", idconductor);
+        //        comando.Parameters.AddWithValue("año", año);
+        //        comando.Parameters.AddWithValue("mes", mes);
 
-                try {
-                    conexion.Open();
-                    // Ejecutamos el comando y guardamos el resultado.
-                    resultado = comando.ExecuteScalar();
-                } catch (Exception ex) {
-                    Utils.VerError("BdCalendarios.GetHorasCobradasMes", ex);
-                }
-            }
-            // Devolvemos el resultado.
-            if (resultado == DBNull.Value) resultado = 0d;
-            return new TimeSpan(Convert.ToInt64(resultado));
+        //        try {
+        //            conexion.Open();
+        //            // Ejecutamos el comando y guardamos el resultado.
+        //            resultado = comando.ExecuteScalar();
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdCalendarios.GetHorasCobradasMes", ex);
+        //        }
+        //    }
+        //    // Devolvemos el resultado.
+        //    if (resultado == DBNull.Value) resultado = 0d;
+        //    return new TimeSpan(Convert.ToInt64(resultado));
 
-        }
+        //}
 
 
         //================================================================================
         // GET HORAS COBRADAS AÑO
         //================================================================================
-        public static TimeSpan GetHorasCobradasAño(int año, int mes, int idconductor) {
+        //public static TimeSpan GetHorasCobradasAño(int año, int mes, int idconductor) {
 
-            return App.Global.Repository.GetHorasCobradasAño(año, mes, idconductor);
+        //    return App.Global.Repository.GetHorasCobradasAño(año, mes, idconductor);
 
-            object resultado = null;
+        //    object resultado = null;
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                // Definimos el comando SQL.
-                string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Fecha > ? AND Fecha < ? AND Codigo = 1;";
+        //        // Definimos el comando SQL.
+        //        string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Fecha > ? AND Fecha < ? AND Codigo = 1;";
 
-                // Definimos las fechas de inicio y final
-                DateTime fechainicio = mes == 12 ? new DateTime(año, 11, 30) : new DateTime(año - 1, 11, 30);
-                DateTime fechafinal = mes == 12 ? new DateTime(año + 1, 12, 1) : new DateTime(año, 12, 1);
+        //        // Definimos las fechas de inicio y final
+        //        DateTime fechainicio = mes == 12 ? new DateTime(año, 11, 30) : new DateTime(año - 1, 11, 30);
+        //        DateTime fechafinal = mes == 12 ? new DateTime(año + 1, 12, 1) : new DateTime(año, 12, 1);
 
-                // Creamos el comando y añadimos los parámetros.
-                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-                comando.Parameters.AddWithValue("idconductor", idconductor);
-                comando.Parameters.AddWithValue("fechainicio", fechainicio);
-                comando.Parameters.AddWithValue("fechafinal", fechafinal);
+        //        // Creamos el comando y añadimos los parámetros.
+        //        OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+        //        comando.Parameters.AddWithValue("idconductor", idconductor);
+        //        comando.Parameters.AddWithValue("fechainicio", fechainicio);
+        //        comando.Parameters.AddWithValue("fechafinal", fechafinal);
 
-                try {
-                    conexion.Open();
-                    // Ejecutamos el comando y guardamos el resultado.
-                    resultado = comando.ExecuteScalar();
-                } catch (Exception ex) {
-                    Utils.VerError("BdCalendarios.GetHorasCobradasAño", ex);
-                }
-            }
-            // Devolvemos el resultado.
-            if (resultado == DBNull.Value) resultado = 0d;
-            return new TimeSpan(Convert.ToInt64(resultado));
+        //        try {
+        //            conexion.Open();
+        //            // Ejecutamos el comando y guardamos el resultado.
+        //            resultado = comando.ExecuteScalar();
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdCalendarios.GetHorasCobradasAño", ex);
+        //        }
+        //    }
+        //    // Devolvemos el resultado.
+        //    if (resultado == DBNull.Value) resultado = 0d;
+        //    return new TimeSpan(Convert.ToInt64(resultado));
 
-        }
+        //}
 
 
         //================================================================================
         // GET HORAS CAMBIADAS POR DCs MES
         //================================================================================
-        public static TimeSpan GetHorasCambiadasPorDCsMes(int año, int mes, int idconductor) {
+        //public static TimeSpan GetHorasCambiadasPorDCsMes(int año, int mes, int idconductor) {
 
-            return App.Global.Repository.GetHorasCambiadasPorDCsMes(año, mes, idconductor);
+        //    return App.Global.Repository.GetHorasCambiadasPorDCsMes(año, mes, idconductor);
 
-            object resultado = null;
+        //    object resultado = null;
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                // Definimos el comando SQL.
-                string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Year(Fecha) = ? AND Month(Fecha) = ? AND Codigo = 2;";
+        //        // Definimos el comando SQL.
+        //        string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Year(Fecha) = ? AND Month(Fecha) = ? AND Codigo = 2;";
 
-                // Creamos el comando y añadimos los parámetros.
-                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-                comando.Parameters.AddWithValue("idconductor", idconductor);
-                comando.Parameters.AddWithValue("año", año);
-                comando.Parameters.AddWithValue("mes", mes);
+        //        // Creamos el comando y añadimos los parámetros.
+        //        OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+        //        comando.Parameters.AddWithValue("idconductor", idconductor);
+        //        comando.Parameters.AddWithValue("año", año);
+        //        comando.Parameters.AddWithValue("mes", mes);
 
-                try {
-                    conexion.Open();
-                    // Ejecutamos el comando y guardamos el resultado.
-                    resultado = comando.ExecuteScalar();
-                } catch (Exception ex) {
-                    Utils.VerError("BdCalendarios.GetHorasReguladasMes", ex);
-                }
-            }
-            // Devolvemos el resultado.
-            if (resultado == DBNull.Value) resultado = 0d;
-            return new TimeSpan((long)(double)resultado);
+        //        try {
+        //            conexion.Open();
+        //            // Ejecutamos el comando y guardamos el resultado.
+        //            resultado = comando.ExecuteScalar();
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdCalendarios.GetHorasReguladasMes", ex);
+        //        }
+        //    }
+        //    // Devolvemos el resultado.
+        //    if (resultado == DBNull.Value) resultado = 0d;
+        //    return new TimeSpan((long)(double)resultado);
 
-        }
+        //}
 
 
         //================================================================================
         // GET HORAS REGULADAS MES
         //================================================================================
-        public static TimeSpan GetHorasReguladasMes(int año, int mes, int idconductor) {
+        //public static TimeSpan GetHorasReguladasMes(int año, int mes, int idconductor) {
 
-            return App.Global.Repository.GetHorasReguladasMes(año, mes, idconductor);
+        //    return App.Global.Repository.GetHorasReguladasMes(año, mes, idconductor);
 
-            object resultado = null;
+        //    object resultado = null;
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                // Definimos el comando SQL.
-                string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Year(Fecha) = ? AND Month(Fecha) = ? AND Codigo = 0;";
+        //        // Definimos el comando SQL.
+        //        string comandoSQL = "SELECT Sum(Horas) FROM Regulaciones WHERE IdConductor = ? AND Year(Fecha) = ? AND Month(Fecha) = ? AND Codigo = 0;";
 
-                // Creamos el comando y añadimos los parámetros.
-                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-                comando.Parameters.AddWithValue("idconductor", idconductor);
-                comando.Parameters.AddWithValue("año", año);
-                comando.Parameters.AddWithValue("mes", mes);
+        //        // Creamos el comando y añadimos los parámetros.
+        //        OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+        //        comando.Parameters.AddWithValue("idconductor", idconductor);
+        //        comando.Parameters.AddWithValue("año", año);
+        //        comando.Parameters.AddWithValue("mes", mes);
 
-                try {
-                    conexion.Open();
-                    // Ejecutamos el comando y guardamos el resultado.
-                    resultado = comando.ExecuteScalar();
-                } catch (Exception ex) {
-                    Utils.VerError("BdCalendarios.GetHorasReguladasMes", ex);
-                }
-            }
-            // Devolvemos el resultado.
-            if (resultado == DBNull.Value) resultado = 0d;
-            return new TimeSpan((long)(double)resultado);
+        //        try {
+        //            conexion.Open();
+        //            // Ejecutamos el comando y guardamos el resultado.
+        //            resultado = comando.ExecuteScalar();
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdCalendarios.GetHorasReguladasMes", ex);
+        //        }
+        //    }
+        //    // Devolvemos el resultado.
+        //    if (resultado == DBNull.Value) resultado = 0d;
+        //    return new TimeSpan((long)(double)resultado);
 
-        }
+        //}
 
 
         //================================================================================
         // GET GRAFICO
         //================================================================================
-        public static GraficoBase GetGrafico(int numero, DateTime validez) {
+        //public static GraficoBase GetGrafico(int numero, DateTime validez) {
 
-            return App.Global.Repository.GetGrafico(numero, validez);
+        //    return App.Global.Repository.GetGrafico(numero, validez);
 
-            GraficoBase grafico = null;
-            OleDbDataReader lector = null;
+        //    GraficoBase grafico = null;
+        //    OleDbDataReader lector = null;
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                try {
-                    conexion.Open();
-                    OleDbCommand comando = new OleDbCommand(comandoGetGrafico, conexion);
-                    comando.Parameters.AddWithValue("@Validez", validez.ToString("yyyy-MM-dd"));
-                    comando.Parameters.AddWithValue("@Numero", numero);
-                    // Ejecutamos el comando y extraemos el gráfico.
-                    lector = comando.ExecuteReader();
-                    if (lector.Read()) {
-                        grafico = new GraficoBase(lector);
-                    }
-                } catch (Exception ex) {
-                    Utils.VerError("BdPijamas.GetGrafico", ex);
-                } finally {
-                    lector?.Close();
-                }
-            }
-            return grafico;
-        }
+        //        try {
+        //            conexion.Open();
+        //            OleDbCommand comando = new OleDbCommand(comandoGetGrafico, conexion);
+        //            comando.Parameters.AddWithValue("@Validez", validez.ToString("yyyy-MM-dd"));
+        //            comando.Parameters.AddWithValue("@Numero", numero);
+        //            // Ejecutamos el comando y extraemos el gráfico.
+        //            lector = comando.ExecuteReader();
+        //            if (lector.Read()) {
+        //                grafico = new GraficoBase(lector);
+        //            }
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdPijamas.GetGrafico", ex);
+        //        } finally {
+        //            lector?.Close();
+        //        }
+        //    }
+        //    return grafico;
+        //}
 
 
         //================================================================================
         // GET DIAS TRABAJADOS HASTA MES EN AÑO
         //================================================================================
-        public static int GetDiasTrabajadosHastaMesEnAño(int año, int mes, int idconductor) {
+        //public static int GetDiasTrabajadosHastaMesEnAño(int año, int mes, int idconductor) {
 
-            return App.Global.Repository.GetDiasTrabajadosHastaMesEnAño(año, mes, idconductor);
+        //    return App.Global.Repository.GetDiasTrabajadosHastaMesEnAño(año, mes, idconductor);
 
-            object resultado = null;
+        //    object resultado = null;
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                // Definimos el comando SQL.
-                string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
-                                    "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
-                                    "                                                        Fecha < @fechafinal AND " +
-                                    "                                                        IdConductor = @idconductor) " +
-                                    "      AND Grafico > 0; ";
+        //        // Definimos el comando SQL.
+        //        string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
+        //                            "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
+        //                            "                                                        Fecha < @fechafinal AND " +
+        //                            "                                                        IdConductor = @idconductor) " +
+        //                            "      AND Grafico > 0; ";
 
-                // Definimos las fechas de inicio y final
-                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
-                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+        //        // Definimos las fechas de inicio y final
+        //        DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+        //        DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
 
-                // Creamos el comando y añadimos los parámetros.
-                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-                comando.Parameters.AddWithValue("fechainicio", fechainicio);
-                comando.Parameters.AddWithValue("fechafinal", fechafinal);
-                comando.Parameters.AddWithValue("idconductor", idconductor);
+        //        // Creamos el comando y añadimos los parámetros.
+        //        OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+        //        comando.Parameters.AddWithValue("fechainicio", fechainicio);
+        //        comando.Parameters.AddWithValue("fechafinal", fechafinal);
+        //        comando.Parameters.AddWithValue("idconductor", idconductor);
 
-                try {
-                    conexion.Open();
-                    // Ejecutamos el comando y guardamos el resultado.
-                    resultado = comando.ExecuteScalar();
-                } catch (Exception ex) {
-                    Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
-                }
-            }
-            // Devolvemos el resultado.
-            if (resultado == DBNull.Value) resultado = 0;
-            return Convert.ToInt32(resultado);
+        //        try {
+        //            conexion.Open();
+        //            // Ejecutamos el comando y guardamos el resultado.
+        //            resultado = comando.ExecuteScalar();
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
+        //        }
+        //    }
+        //    // Devolvemos el resultado.
+        //    if (resultado == DBNull.Value) resultado = 0;
+        //    return Convert.ToInt32(resultado);
 
-        }
+        //}
 
 
         //================================================================================
         // GET DIAS DESCANSO HASTA MES EN AÑO
         //================================================================================
-        public static int GetDiasDescansoHastaMesEnAño(int año, int mes, int idconductor) {
+        //public static int GetDiasDescansoHastaMesEnAño(int año, int mes, int idconductor) {
 
-            return App.Global.Repository.GetDiasDescansoHastaMesEnAño(año, mes, idconductor);
+        //    return App.Global.Repository.GetDiasDescansoHastaMesEnAño(año, mes, idconductor);
 
-            object resultado = null;
+        //    object resultado = null;
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                // Definimos el comando SQL.
-                string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
-                                    "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
-                                    "                                                        Fecha < @fechafinal AND " +
-                                    "                                                        IdConductor = @idconductor) " +
-                                    "      AND (Grafico = -2 OR Grafico = -10 OR Grafico = -12); ";
+        //        // Definimos el comando SQL.
+        //        string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
+        //                            "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
+        //                            "                                                        Fecha < @fechafinal AND " +
+        //                            "                                                        IdConductor = @idconductor) " +
+        //                            "      AND (Grafico = -2 OR Grafico = -10 OR Grafico = -12); ";
 
-                // Definimos las fechas de inicio y final
-                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
-                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+        //        // Definimos las fechas de inicio y final
+        //        DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+        //        DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
 
-                // Creamos el comando y añadimos los parámetros.
-                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-                comando.Parameters.AddWithValue("fechainicio", fechainicio);
-                comando.Parameters.AddWithValue("fechafinal", fechafinal);
-                comando.Parameters.AddWithValue("idconductor", idconductor);
+        //        // Creamos el comando y añadimos los parámetros.
+        //        OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+        //        comando.Parameters.AddWithValue("fechainicio", fechainicio);
+        //        comando.Parameters.AddWithValue("fechafinal", fechafinal);
+        //        comando.Parameters.AddWithValue("idconductor", idconductor);
 
-                try {
-                    conexion.Open();
-                    // Ejecutamos el comando y guardamos el resultado.
-                    resultado = comando.ExecuteScalar();
-                } catch (Exception ex) {
-                    Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
-                }
-            }
-            // Devolvemos el resultado.
-            if (resultado == DBNull.Value) resultado = 0;
-            return Convert.ToInt32(resultado);
+        //        try {
+        //            conexion.Open();
+        //            // Ejecutamos el comando y guardamos el resultado.
+        //            resultado = comando.ExecuteScalar();
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
+        //        }
+        //    }
+        //    // Devolvemos el resultado.
+        //    if (resultado == DBNull.Value) resultado = 0;
+        //    return Convert.ToInt32(resultado);
 
-        }
+        //}
 
 
         //================================================================================
         // GET DIAS VACACIONES HASTA MES EN AÑO
         //================================================================================
-        public static int GetDiasVacacionesHastaMesEnAño(int año, int mes, int idconductor) {
+        //public static int GetDiasVacacionesHastaMesEnAño(int año, int mes, int idconductor) {
 
-            return App.Global.Repository.GetDiasVacacionesHastaMesEnAño(año, mes, idconductor);
+        //    return App.Global.Repository.GetDiasVacacionesHastaMesEnAño(año, mes, idconductor);
 
-            object resultado = null;
+        //    object resultado = null;
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                // Definimos el comando SQL.
-                string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
-                                    "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
-                                    "                                                        Fecha < @fechafinal AND " +
-                                    "                                                        IdConductor = @idconductor) " +
-                                    "      AND Grafico = -1; ";
+        //        // Definimos el comando SQL.
+        //        string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
+        //                            "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
+        //                            "                                                        Fecha < @fechafinal AND " +
+        //                            "                                                        IdConductor = @idconductor) " +
+        //                            "      AND Grafico = -1; ";
 
-                // Definimos las fechas de inicio y final
-                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
-                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+        //        // Definimos las fechas de inicio y final
+        //        DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+        //        DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
 
-                // Creamos el comando y añadimos los parámetros.
-                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-                comando.Parameters.AddWithValue("fechainicio", fechainicio);
-                comando.Parameters.AddWithValue("fechafinal", fechafinal);
-                comando.Parameters.AddWithValue("idconductor", idconductor);
+        //        // Creamos el comando y añadimos los parámetros.
+        //        OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+        //        comando.Parameters.AddWithValue("fechainicio", fechainicio);
+        //        comando.Parameters.AddWithValue("fechafinal", fechafinal);
+        //        comando.Parameters.AddWithValue("idconductor", idconductor);
 
-                try {
-                    conexion.Open();
-                    // Ejecutamos el comando y guardamos el resultado.
-                    resultado = comando.ExecuteScalar();
-                } catch (Exception ex) {
-                    Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
-                }
-            }
-            // Devolvemos el resultado.
-            if (resultado == DBNull.Value) resultado = 0;
-            return Convert.ToInt32(resultado);
+        //        try {
+        //            conexion.Open();
+        //            // Ejecutamos el comando y guardamos el resultado.
+        //            resultado = comando.ExecuteScalar();
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
+        //        }
+        //    }
+        //    // Devolvemos el resultado.
+        //    if (resultado == DBNull.Value) resultado = 0;
+        //    return Convert.ToInt32(resultado);
 
-        }
+        //}
 
 
         //================================================================================
         // GET DIAS INACTIVO HASTA MES EN AÑO
         //================================================================================
-        public static int GetDiasInactivoHastaMesEnAño(int año, int mes, int idconductor) {
+        //public static int GetDiasInactivoHastaMesEnAño(int año, int mes, int idconductor) {
 
-            return App.Global.Repository.GetDiasInactivoHastaMesEnAño(año, mes, idconductor);
+        //    return App.Global.Repository.GetDiasInactivoHastaMesEnAño(año, mes, idconductor);
 
-            object resultado = null;
+        //    object resultado = null;
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                // Definimos el comando SQL.
-                string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
-                                    "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
-                                    "                                                        Fecha < @fechafinal AND " +
-                                    "                                                        IdConductor = @idconductor) " +
-                                    "      AND Grafico = 0; ";
+        //        // Definimos el comando SQL.
+        //        string comandoSQL = "SELECT Count(Grafico) FROM DiasCalendario " +
+        //                            "WHERE IdCalendario IN (SELECT Id FROM Calendarios WHERE Fecha > @fechainicio AND " +
+        //                            "                                                        Fecha < @fechafinal AND " +
+        //                            "                                                        IdConductor = @idconductor) " +
+        //                            "      AND Grafico = 0; ";
 
-                // Definimos las fechas de inicio y final
-                DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
-                DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
+        //        // Definimos las fechas de inicio y final
+        //        DateTime fechainicio = new DateTime(año, 1, 1).AddDays(-1);
+        //        DateTime fechafinal = new DateTime(año, mes, DateTime.DaysInMonth(año, mes)).AddDays(1);
 
-                // Creamos el comando y añadimos los parámetros.
-                OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
-                comando.Parameters.AddWithValue("fechainicio", fechainicio);
-                comando.Parameters.AddWithValue("fechafinal", fechafinal);
-                comando.Parameters.AddWithValue("idconductor", idconductor);
+        //        // Creamos el comando y añadimos los parámetros.
+        //        OleDbCommand comando = new OleDbCommand(comandoSQL, conexion);
+        //        comando.Parameters.AddWithValue("fechainicio", fechainicio);
+        //        comando.Parameters.AddWithValue("fechafinal", fechafinal);
+        //        comando.Parameters.AddWithValue("idconductor", idconductor);
 
-                try {
-                    conexion.Open();
-                    // Ejecutamos el comando y guardamos el resultado.
-                    resultado = comando.ExecuteScalar();
-                } catch (Exception ex) {
-                    Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
-                }
-            }
-            // Devolvemos el resultado.
-            if (resultado == DBNull.Value) resultado = 0;
-            return Convert.ToInt32(resultado);
+        //        try {
+        //            conexion.Open();
+        //            // Ejecutamos el comando y guardamos el resultado.
+        //            resultado = comando.ExecuteScalar();
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdCalendarios.GetDiasVacacionesHastaMes", ex);
+        //        }
+        //    }
+        //    // Devolvemos el resultado.
+        //    if (resultado == DBNull.Value) resultado = 0;
+        //    return Convert.ToInt32(resultado);
 
-        }
+        //}
 
 
 

@@ -946,12 +946,12 @@
                 FontSize="12"
                 Foreground="DarkGray"
                 Style="{StaticResource TextoPijama1}"
-                Text="Año Anter."
                 TextAlignment="Center">
                 <TextBlock.LayoutTransform>
                     <RotateTransform Angle="-90" />
                 </TextBlock.LayoutTransform>
-            </TextBlock>
+                Pendiente<LineBreak />
+                Año Anter.</TextBlock>
 
             <StackPanel
                 Margin="10"
@@ -963,11 +963,11 @@
                     Orientation="Horizontal"
                     ToolTipService.ShowDuration="100000">
                     <TextBlock
-                        Width="150"
+                        Width="50"
                         Margin="0,5"
                         FontSize="13"
                         Style="{StaticResource TextoPijama1}"
-                        Text="DCs Pendientes:  "
+                        Text="DCs: "
                         TextAlignment="Right" />
                     <TextBlock
                         Width="Auto"
@@ -981,16 +981,17 @@
                             enteros y con el pico de horas restante incluido.</TextBlock>
                     </StackPanel.ToolTip>
                 </StackPanel>
+
                 <!--  DNDs PENDIENTES AÑO ANTERIOR  -->
                 <StackPanel
                     Orientation="Horizontal"
                     ToolTipService.ShowDuration="100000">
                     <TextBlock
-                        Width="150"
+                        Width="50"
                         Margin="0,5"
                         FontSize="13"
                         Style="{StaticResource TextoPijama1}"
-                        Text="DNDs Pendientes:  "
+                        Text="DNDs: "
                         TextAlignment="Right" />
                     <TextBlock
                         Width="Auto"
@@ -1007,11 +1008,193 @@
 
 
             </StackPanel>
+
             <!--  SEPARADOR  -->
             <TextBlock
                 Width="2"
                 Margin="3,5"
                 Background="LightGray" />
+
+            <!--  ANUAL  -->
+            <TextBlock
+                Margin="3,5"
+                FontSize="12"
+                Foreground="DarkGray"
+                Style="{StaticResource TextoPijama1}"
+                Text="Anual"
+                TextAlignment="Center">
+                <TextBlock.LayoutTransform>
+                    <RotateTransform Angle="-90" />
+                </TextBlock.LayoutTransform>
+            </TextBlock>
+
+            <StackPanel
+                Margin="10"
+                VerticalAlignment="Top"
+                Orientation="Vertical">
+
+                <!--  DÍAS TRABAJADOS AÑO  -->
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
+                    <TextBlock
+                        Width="50"
+                        Margin="0,5"
+                        FontSize="13"
+                        Style="{StaticResource TextoPijama1}"
+                        Text="Trab: "
+                        TextAlignment="Right" />
+                    <TextBlock
+                        Width="Auto"
+                        Margin="0,5"
+                        FontSize="14"
+                        Style="{StaticResource TextoPijama2}"
+                        Text="{Binding CalendariosVM.Pijama.HastaMesActual.DiasTrabajados, StringFormat=00}" />
+                    <StackPanel.ToolTip>
+                        <TextBlock>
+                            Días trabajados desde el 1 de enero de este año.
+                        </TextBlock>
+                    </StackPanel.ToolTip>
+                </StackPanel>
+
+                <!--  DÍAS DESCANSO AÑO  -->
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
+                    <TextBlock
+                        Width="50"
+                        Margin="0,5"
+                        FontSize="13"
+                        Style="{StaticResource TextoPijama1}"
+                        Text="J-D: "
+                        TextAlignment="Right" />
+                    <TextBlock
+                        Width="Auto"
+                        Margin="0,5"
+                        FontSize="14"
+                        Style="{StaticResource TextoPijama2}"
+                        Text="{Binding CalendariosVM.Pijama.HastaMesActual.DiasDescansados, StringFormat=00}" />
+                    <StackPanel.ToolTip>
+                        <TextBlock>
+                            Días de descanso desde el 1 de enero de este año.
+                        </TextBlock>
+                    </StackPanel.ToolTip>
+                </StackPanel>
+
+                <!--  DÍAS VACACIONES AÑO  -->
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
+                    <TextBlock
+                        Width="50"
+                        Margin="0,5"
+                        FontSize="13"
+                        Style="{StaticResource TextoPijama1}"
+                        Text="O-V: "
+                        TextAlignment="Right" />
+                    <TextBlock
+                        Width="Auto"
+                        Margin="0,5"
+                        FontSize="14"
+                        Style="{StaticResource TextoPijama2}"
+                        Text="{Binding CalendariosVM.Pijama.HastaMesActual.DiasVacaciones, StringFormat=00}" />
+                    <StackPanel.ToolTip>
+                        <TextBlock>
+                            Días de vacaciones desde el 1 de enero de este año.
+                        </TextBlock>
+                    </StackPanel.ToolTip>
+                </StackPanel>
+
+
+            </StackPanel>
+
+            <StackPanel
+                Margin="10"
+                VerticalAlignment="Top"
+                Orientation="Vertical">
+
+                <!--  DÍAS DE BAJA AÑO  -->
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
+                    <TextBlock
+                        Width="50"
+                        Margin="0,5"
+                        FontSize="13"
+                        Style="{StaticResource TextoPijama1}"
+                        Text="E: "
+                        TextAlignment="Right" />
+                    <TextBlock
+                        Width="Auto"
+                        Margin="0,5"
+                        FontSize="14"
+                        Style="{StaticResource TextoPijama2}"
+                        Text="{Binding CalendariosVM.Pijama.HastaMesActual.DiasEnfermo, StringFormat=00}" />
+                    <StackPanel.ToolTip>
+                        <TextBlock>
+                            Días enfermo desde el 1 de enero de este año.
+                        </TextBlock>
+                    </StackPanel.ToolTip>
+                </StackPanel>
+
+                <!--  DÍAS DESCANSO COMPENSATORIO AÑO  -->
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
+                    <TextBlock
+                        Width="50"
+                        Margin="0,5"
+                        FontSize="13"
+                        Style="{StaticResource TextoPijama1}"
+                        Text="DCs: "
+                        TextAlignment="Right" />
+                    <TextBlock
+                        Width="Auto"
+                        Margin="0,5"
+                        FontSize="14"
+                        Style="{StaticResource TextoPijama2}"
+                        Text="{Binding CalendariosVM.Pijama.HastaMesActual.DiasDC, StringFormat=00}" />
+                    <StackPanel.ToolTip>
+                        <TextBlock>
+                            Días de descanso compensatorio desde el 1 de enero de este año.
+                        </TextBlock>
+                    </StackPanel.ToolTip>
+                </StackPanel>
+
+                <!--  HORAS TRABAJADAS AÑO  -->
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
+                    <TextBlock
+                        Width="50"
+                        Margin="0,5"
+                        FontSize="13"
+                        Style="{StaticResource TextoPijama1}"
+                        Text="Horas: "
+                        TextAlignment="Right" />
+                    <TextBlock
+                        Width="Auto"
+                        Margin="0,5"
+                        FontSize="14"
+                        Style="{StaticResource TextoPijama2}"
+                        Text="{Binding CalendariosVM.Pijama.HastaMesActual.HorasAnuales, Converter={StaticResource cnvDecimal6}}" />
+                    <StackPanel.ToolTip>
+                        <TextBlock>
+                            Horas computadas como trabajo desde el 1 de enero de este año.
+                        </TextBlock>
+                    </StackPanel.ToolTip>
+                </StackPanel>
+
+
+            </StackPanel>
+
+
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
+
 
         </StackPanel>
 
@@ -3709,7 +3892,7 @@
                                     Descripcion="Horas Trabajadas"
                                     Style="{StaticResource EstiloItemResumen}"
                                     Valor="{Binding CalendariosVM.Pijama.Trabajadas, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}"
-                                    Visibility="{Binding CalendariosVM.Pijama.Acumuladas, Converter={StaticResource cnvOcultoSiCero}}" />
+                                    Visibility="{Binding CalendariosVM.Pijama.Trabajadas, Converter={StaticResource cnvOcultoSiCero}}" />
                                 <controls:ItemResumen
                                     Descripcion="Horas Acumuladas"
                                     Style="{StaticResource EstiloItemResumen}"
@@ -4209,6 +4392,7 @@
 
 
                     </StackPanel>
+
                 </Grid>
 
 
@@ -4265,7 +4449,7 @@
                                 Style="{StaticResource TextoPijama1}"
                                 Text="H.Acumuladas"
                                 TextAlignment="Center"
-                                ToolTip="Horas acumuladas generadas en el año en curso." />
+                                ToolTip="Horas acumuladas disponibles hasta final del mes." />
                         </StackPanel>
 
                         <StackPanel

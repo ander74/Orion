@@ -35,7 +35,7 @@
     <ProductName>Orion</ProductName>
     <PublisherName>AnderSoft</PublisherName>
     <SuiteName>Orion</SuiteName>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>2</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -119,6 +119,29 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release64|x64'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x64\Release64\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseAny|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ReleaseAny\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <LangVersion>7.3</LangVersion>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'ReleaseAny|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\ReleaseAny\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -239,6 +262,7 @@
     <Compile Include="Interfaces\IFileService.cs" />
     <Compile Include="Interfaces\ISQLiteItem.cs" />
     <Compile Include="Models\DescansosPorDia.cs" />
+    <Compile Include="Models\DiaCalendarioEstadistica.cs" />
     <Compile Include="Models\EstadisticaCalendario.cs" />
     <Compile Include="Models\EstadisticaGrupoGraficos.cs" />
     <Compile Include="Models\EstadisticaPorTurnos.cs" />
@@ -273,6 +297,7 @@
     <Compile Include="Mvvm\TaskUtilities.cs" />
     <Compile Include="Pijama\BdPijamas.cs" />
     <Compile Include="Pijama\DiaPijama.cs" />
+    <Compile Include="Pijama\DiaPijamaBasico.cs" />
     <Compile Include="Pijama\HojaPijama.cs" />
     <Compile Include="Pijama\ResumenPijama.cs" />
     <Compile Include="PrintModel\CalendarioPrintModel.cs" />

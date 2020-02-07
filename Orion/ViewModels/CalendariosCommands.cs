@@ -15,8 +15,8 @@ namespace Orion.ViewModels {
     using System.Threading.Tasks;
     using System.Windows.Input;
     using Convertidores;
-    using DataModels;
     using Models;
+    using Orion.Config;
     using PrintModel;
     using Servicios;
     using Views;
@@ -152,6 +152,7 @@ namespace Orion.ViewModels {
         }
 
         private void QuitarFiltro() {
+            if (VistaCalendarios != null) VistaCalendarios.Filter = null;
             FiltroAplicado = "Ninguno";
         }
         #endregion
@@ -394,7 +395,7 @@ namespace Orion.ViewModels {
 
         private void MostrarResumenAño() {
             // Cargamos los calendarios del año del conductor.
-            List<Calendario> listaCalendarios = BdCalendarios.GetCalendariosConductor(FechaActual.Year, CalendarioSeleccionado.MatriculaConductor);
+            List<Calendario> listaCalendarios = App.Global.Repository.GetCalendariosConductor(FechaActual.Year, CalendarioSeleccionado.MatriculaConductor).ToList();
             // Creamos el diccionario que contendrá las hojas pijama.
             Dictionary<int, Pijama.HojaPijama> pijamasAño = new Dictionary<int, Pijama.HojaPijama>();
             // Cargamos las hojas pijama disponibles.
@@ -903,7 +904,7 @@ namespace Orion.ViewModels {
                     }
                     // Recorremos todos los calendarios
                     foreach (object obj in VistaCalendarios) {
-                        double valor = num / VistaCalendarios.Count * 100;
+                        double valor = (num / VistaCalendarios.Count * 100) / 2;
                         App.Global.ValorBarraProgreso = valor;
                         num++;
                         Calendario cal = obj as Calendario;
@@ -926,12 +927,13 @@ namespace Orion.ViewModels {
                                     case 4: estadistica.Turno4 += 1; break;
                                 }
                                 // Horas
-                                estadistica.Trabajadas += dp.GraficoTrabajado.TrabajadasReales;
+                                estadistica.Trabajadas += dp.TrabajadasReales;
                                 estadistica.Acumuladas += dp.GraficoTrabajado.Acumuladas;
                                 estadistica.Nocturnas += dp.GraficoTrabajado.Nocturnas;
-                                estadistica.TiempoPartido += dp.GraficoTrabajado.TiempoPartido;
+                                estadistica.TiempoPartido += Calculos.Horas.TiempoPartido(dp.GraficoTrabajado.InicioPartido, dp.GraficoTrabajado.FinalPartido);
+                                //estadistica.TiempoPartido += dp.GraficoTrabajado.TiempoPartido;
                                 // Si es menor de 7:20 se añade a menores, si no, a mayores.
-                                if (estadistica.Trabajadas < App.Global.Convenio.JornadaMedia) {
+                                if (dp.TrabajadasReales < App.Global.Convenio.JornadaMedia) {
                                     estadistica.JornadasMenoresMedia += 1;
                                     estadistica.HorasNegativas += App.Global.Convenio.JornadaMedia - estadistica.Trabajadas;
                                 } else {
@@ -1015,11 +1017,11 @@ namespace Orion.ViewModels {
                 App.Global.IniciarProgreso("Recopilando...");
                 await Task.Run(() => {
                     App.Global.ValorBarraProgreso = 33;
-                    listaGraficos = BdEstadisticas.GetGraficosFromDiaCalendario(FechaActual);
+                    listaGraficos = App.Global.Repository.GetGraficosFromDiaCalendario(FechaActual, App.Global.PorCentro.Comodin).ToList();
                     App.Global.ValorBarraProgreso = 66;
-                    listaNumeros = BdEstadisticas.GetGraficosByDia(FechaActual);
+                    listaNumeros = App.Global.Repository.GetGraficosByDia(FechaActual).ToList();
                     App.Global.ValorBarraProgreso = 95;
-                    listaDescansos = BdEstadisticas.GetDescansosByDia(FechaActual);
+                    listaDescansos = App.Global.Repository.GetDescansosByDia(FechaActual).ToList();
                 });
 
                 // Activamos la barra de progreso.
@@ -1197,6 +1199,110 @@ namespace Orion.ViewModels {
         #endregion
 
 
+
+        #region COMANDO ESTADISTICAS AÑO
+
+        // Comando
+        public ICommand cmdPdfEstadisticasAño => new RelayCommand(p => PdfEstadisticasAño());
+        private async void PdfEstadisticasAño() {
+            List<EstadisticaCalendario> listaEstadisticas = new List<EstadisticaCalendario>();
+            try {
+                double num = 1;
+                App.Global.IniciarProgreso($"Recopilando...");
+
+                await Task.Run(() => {
+                    // Llenamos la lista de estadísticas y generamos los calendarios.
+                    var listaCalendarios = new List<Calendario>();
+                    for (int mes = 1; mes <= 12; mes++) {
+                        EstadisticaCalendario e = new EstadisticaCalendario() { Dia = mes };
+                        listaEstadisticas.Add(e);
+                        listaCalendarios.AddRange(App.Global.Repository.GetCalendarios(FechaActual.Year, mes));
+                    }
+
+                    foreach (var cal in listaCalendarios) {
+                        Pijama.HojaPijama hojapijama = new Pijama.HojaPijama(cal, new MensajesServicio());
+                        double valor = (num * 100 / listaCalendarios.Count) / 2;
+                        App.Global.ValorBarraProgreso = valor;
+                        num++;
+                        // Añadimos los datos del pijama a las estadisticas.
+                        for (int dia = 0; dia < DateTime.DaysInMonth(cal.Fecha.Year, cal.Fecha.Month); dia++) {
+                            // Cogemos el día de la lista.
+                            Pijama.DiaPijama dp = hojapijama.ListaDias[dia];
+                            EstadisticaCalendario estadistica = listaEstadisticas[cal.Fecha.Month - 1];
+                            // Si es un día activo
+                            if (dp.Grafico != 0) estadistica.TotalDias += 1;
+                            // Si se ha trabajado y no hemos tenido día de comite
+                            if (dp.Grafico > 0 && dp.Codigo != 1 && dp.Codigo != 2) {
+                                estadistica.TotalJornadas += 1;
+                                switch (dp.GraficoTrabajado.Turno) {
+                                    case 1: estadistica.Turno1 += 1; break;
+                                    case 2: estadistica.Turno2 += 1; break;
+                                    case 3: estadistica.Turno3 += 1; break;
+                                    case 4: estadistica.Turno4 += 1; break;
+                                }
+                                // Horas
+                                estadistica.Trabajadas += dp.TrabajadasReales;
+                                estadistica.Acumuladas += dp.GraficoTrabajado.Acumuladas;
+                                estadistica.Nocturnas += dp.GraficoTrabajado.Nocturnas;
+                                estadistica.TiempoPartido += Calculos.Horas.TiempoPartido(dp.GraficoTrabajado.InicioPartido, dp.GraficoTrabajado.FinalPartido);
+                                //estadistica.TiempoPartido += dp.GraficoTrabajado.TiempoPartido;
+                                // Si es menor de 7:20 se añade a menores, si no, a mayores.
+                                if (dp.TrabajadasReales < App.Global.Convenio.JornadaMedia) {
+                                    estadistica.JornadasMenoresMedia += 1;
+                                    estadistica.HorasNegativas += App.Global.Convenio.JornadaMedia - dp.TrabajadasReales;
+                                } else {
+                                    estadistica.JornadasMayoresMedia += 1;
+                                }
+                            }
+                            // Dietas
+                            estadistica.Desayuno += Math.Round(dp.GraficoTrabajado.Desayuno, 2);
+                            estadistica.Comida += Math.Round(dp.GraficoTrabajado.Comida, 2);
+                            estadistica.Cena += Math.Round(dp.GraficoTrabajado.Cena, 2);
+                            estadistica.PlusCena += Math.Round(dp.GraficoTrabajado.PlusCena, 2);
+                            estadistica.ImporteDesayuno += Math.Round((dp.GraficoTrabajado.Desayuno * App.Global.Convenio.PorcentajeDesayuno / 100) * App.Global.OpcionesVM.GetPluses(dp.DiaFecha.Year).ImporteDietas, 2);
+                            estadistica.ImporteComida += Math.Round(dp.GraficoTrabajado.Comida * App.Global.OpcionesVM.GetPluses(dp.DiaFecha.Year).ImporteDietas, 2);
+                            estadistica.ImporteCena += Math.Round(dp.GraficoTrabajado.Cena * App.Global.OpcionesVM.GetPluses(dp.DiaFecha.Year).ImporteDietas, 2);
+                            estadistica.ImportePlusCena += Math.Round(dp.GraficoTrabajado.PlusCena * App.Global.OpcionesVM.GetPluses(dp.DiaFecha.Year).ImporteDietas, 2);
+                            // Pluses
+                            estadistica.PlusMenorDescanso += Math.Round(dp.PlusMenorDescanso, 2);
+                            estadistica.PlusNocturnidad += Math.Round(dp.PlusNocturnidad, 2);
+                            estadistica.PlusNavidad += Math.Round(dp.PlusNavidad, 2);
+                            estadistica.PlusLimipeza += Math.Round(dp.PlusLimpieza, 2);
+                            estadistica.PlusPaqueteria += Math.Round(dp.PlusPaqueteria, 2);
+
+                        }
+                    }
+                    // Establecemos los globales
+                    foreach (EstadisticaCalendario estadistica in listaEstadisticas) {
+                        if (estadistica.TotalJornadas != 0) {
+                            estadistica.MediaTrabajadas = new TimeSpan(estadistica.Trabajadas.Ticks / estadistica.TotalJornadas);
+                        }
+                    }
+
+                });
+                // Activamos la barra de progreso.
+                App.Global.IniciarProgreso("Creando PDF...");
+                // Pedimos el archivo donde guardarlo.
+                string nombreArchivo = String.Format("{0:yyyy} - {1} - Estadisticas Calendarios", FechaActual, App.Global.CentroActual.ToString());
+                nombreArchivo += ".pdf";
+                string ruta = Informes.GetRutaArchivo(TiposInforme.EstadisticasCalendarios, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente);
+                if (ruta != "") {
+                    iText.Layout.Document doc = Informes.GetNuevoPdf(ruta, true);
+                    doc.GetPdfDocument().GetDocumentInfo().SetTitle("Estadísticas de Calendario");
+                    doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("yyyy").ToUpper()}");
+                    doc.SetMargins(25, 25, 25, 25);
+                    await CalendarioPrintModel.EstadisticasCalendariosAñoEnPdf(doc, listaEstadisticas, FechaActual);
+                    doc.Close();
+                    if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+                }
+            } catch (Exception ex) {
+                Mensajes.VerError("CalendariosCommands.PdfEstadisticas", ex);
+            } finally {
+                App.Global.FinalizarProgreso();
+            }
+
+        }
+        #endregion
 
 
 

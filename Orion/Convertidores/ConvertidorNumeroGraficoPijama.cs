@@ -6,11 +6,7 @@
 // ===============================================
 #endregion
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace Orion.Convertidores {
@@ -18,11 +14,11 @@ namespace Orion.Convertidores {
 
 
 	[ValueConversion(typeof(Tuple<int, int>), typeof(string))]
-	class ConvertidorNumeroGraficoPijama :IValueConverter {
+	class ConvertidorNumeroGraficoPijama : IValueConverter {
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 
-			if (value != null && value is Tuple<int,int>) {
+			if (value != null && value is Tuple<int, int>) {
 				Tuple<int, int> comboGrafico = value as Tuple<int, int>;
 				if (comboGrafico.Item1 == 0) return "";
 				string resultado = "";
@@ -44,12 +40,15 @@ namespace Orion.Convertidores {
 						case -7: return resultado + "F6";
 						case -8: return resultado + "DND";
 						case -9: return resultado + "PER";
-						case -10: return resultado + "E-(JD)";
-						case -11: return resultado + "E-(FN)";
-						case -12: return resultado + "O-V (JD)";
-						case -13: return resultado + "O-V (FN)";
-						case -14: return resultado + "F6 (DC)";
+						case -10: return resultado + "E(JD)";
+						case -11: return resultado + "E(FN)";
+						case -12: return resultado + "OV(JD)";
+						case -13: return resultado + "OV(FN)";
+						case -14: return resultado + "F6(DC)";
 						case -15: return resultado + "FOR";
+						case -16: return resultado + "OVA";
+						case -17: return resultado + "OVA(JD)";
+						case -18: return resultado + "OVA(FN)";
 					}
 				}
 			}
@@ -80,6 +79,9 @@ namespace Orion.Convertidores {
 					case "ovfn": grafico = -13; break;
 					case "f6dc": case "dcf6": grafico = -14; break;
 					case "for": grafico = -15; break;
+					case "ova": grafico = -16; break;
+					case "ovajd": grafico = -17; break;
+					case "ovafn": grafico = -18; break;
 					default: Int32.TryParse(texto[0], out grafico); break;
 				}
 
@@ -87,7 +89,7 @@ namespace Orion.Convertidores {
 					switch (texto[1]) {
 						case "co": codigo = 1; break;
 						case "ce": codigo = 2; break;
-						case "d": codigo = 3; break;
+						case "jd": case "d": codigo = 3; break;
 						default: Int32.TryParse(texto[1], out codigo); break;
 					}
 				}

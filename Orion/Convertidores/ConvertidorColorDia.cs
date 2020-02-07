@@ -5,20 +5,14 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Orion.Models;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
 namespace Orion.Convertidores {
 
-	class ConvertidorColorDia :IMultiValueConverter {
+	class ConvertidorColorDia : IMultiValueConverter {
 
 		public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture) {
 
@@ -57,17 +51,27 @@ namespace Orion.Convertidores {
 			}
 			if (!esfinde) {
 				switch (grafico) {
-					case -1: case -12: case -13: case -15:
+					case -1:
+					case -12:
+					case -13:
+					case -15:
+					case -16:
 						color = new SolidColorBrush(App.Global.Configuracion.ColorOV); break;
-					case -2: case -3:
+					case -2:
+					case -3:
+					case -17:
+					case -18:
 						color = new SolidColorBrush(App.Global.Configuracion.ColorJD); break;
-					case -4: case -10: case -11:
+					case -4:
+					case -10:
+					case -11:
 						color = new SolidColorBrush(App.Global.Configuracion.ColorE); break;
 					case -5:
 						color = new SolidColorBrush(App.Global.Configuracion.ColorDS); break;
 					case -6:
 						color = new SolidColorBrush(App.Global.Configuracion.ColorDC); break;
-					case -7: case -14:
+					case -7:
+					case -14:
 						color = new SolidColorBrush(App.Global.Configuracion.ColorF6); break;
 					case -8:
 						color = new SolidColorBrush(App.Global.Configuracion.ColorF6); break;
@@ -87,7 +91,7 @@ namespace Orion.Convertidores {
 	}
 
 
-	class ConvertidorColorDiaSinGraficos :IValueConverter {
+	class ConvertidorColorDiaSinGraficos : IValueConverter {
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
 			// Declaramos el color que se devolverá.

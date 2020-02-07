@@ -12,7 +12,6 @@ namespace Orion.ViewModels {
     using System.Collections.Specialized;
     using System.Linq;
     using System.Windows.Data;
-    using DataModels;
     using Models;
     using Orion.Config;
     using Orion.Interfaces;
@@ -62,7 +61,7 @@ namespace Orion.ViewModels {
                 _listacalendarios.Clear();
                 return;
             }
-            ListaCalendarios = new NotifyCollection<Calendario>(BdCalendarios.GetCalendarios(FechaActual.Year, FechaActual.Month));
+            ListaCalendarios = new NotifyCollection<Calendario>(App.Global.Repository.GetCalendarios(FechaActual.Year, FechaActual.Month));
 
             foreach (Calendario c in ListaCalendarios) {
                 // Añadimos el campo indefinido.
@@ -85,10 +84,10 @@ namespace Orion.ViewModels {
             try {
                 HayCambios = false;
                 if (ListaCalendarios != null && ListaCalendarios.Count > 0) {
-                    BdCalendarios.GuardarCalendarios(ListaCalendarios.Where(c => c.Modificado || c.Nuevo));
+                    App.Global.Repository.GuardarCalendarios(ListaCalendarios.Where(c => c.Modificado || c.Nuevo));
                 }
                 if (_listaborrados.Count > 0) {
-                    BdCalendarios.BorrarCalendarios(_listaborrados);
+                    App.Global.Repository.BorrarCalendarios(_listaborrados);
                     _listaborrados.Clear();
                 }
             } catch (Exception ex) {

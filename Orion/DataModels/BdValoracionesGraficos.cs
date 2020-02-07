@@ -5,13 +5,6 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Data.OleDb;
-using System.Linq;
-using Orion.Config;
-using Orion.Models;
 
 namespace Orion.DataModels {
 
@@ -28,75 +21,75 @@ namespace Orion.DataModels {
         /// </summary>
         /// <param name="IdGrafico">Id del gráfico al que pertenecen las valoraciones.</param>
         /// <returns>Colección de valoraciones.</returns>
-        public static ObservableCollection<ValoracionGrafico> getValoraciones(long IdGrafico) {
+        //public static ObservableCollection<ValoracionGrafico> getValoraciones(long IdGrafico) {
 
-            return new ObservableCollection<ValoracionGrafico>(App.Global.Repository.GetValoraciones(Convert.ToInt32(IdGrafico)));
+        //    return new ObservableCollection<ValoracionGrafico>(App.Global.Repository.GetValoraciones(Convert.ToInt32(IdGrafico)));
 
-            // Creamos la lista y el comando que extrae los gráficos.
-            ObservableCollection<ValoracionGrafico> lista = new ObservableCollection<ValoracionGrafico>();
+        //    // Creamos la lista y el comando que extrae los gráficos.
+        //    ObservableCollection<ValoracionGrafico> lista = new ObservableCollection<ValoracionGrafico>();
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-                OleDbDataReader lector = null;
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //        OleDbDataReader lector = null;
 
-                // Ejecutamos el comando y extraemos los gráficos del lector a la lista.
-                try {
+        //        // Ejecutamos el comando y extraemos los gráficos del lector a la lista.
+        //        try {
 
-                    if (conexion.State != System.Data.ConnectionState.Open) conexion.Open();
+        //            if (conexion.State != System.Data.ConnectionState.Open) conexion.Open();
 
-                    string comandoSQL = "SELECT * FROM Valoraciones WHERE IdGrafico=? ORDER BY Inicio, Id";
-                    OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
-                    Comando.Parameters.AddWithValue("idgrafico", IdGrafico);
+        //            string comandoSQL = "SELECT * FROM Valoraciones WHERE IdGrafico=? ORDER BY Inicio, Id";
+        //            OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
+        //            Comando.Parameters.AddWithValue("idgrafico", IdGrafico);
 
-                    lector = Comando.ExecuteReader();
+        //            lector = Comando.ExecuteReader();
 
-                    while (lector.Read()) {
-                        ValoracionGrafico valoracion = new ValoracionGrafico(lector);
-                        lista.Add(valoracion);
-                        valoracion.Nuevo = false;
-                        valoracion.Modificado = false;
-                    }
-                } catch (Exception ex) {
-                    Utils.VerError("BdValoracionesGraficos.GetValoraciones", ex);
-                } finally {
-                    lector.Close();
-                }
-            }
-            return lista;
-        }
+        //            while (lector.Read()) {
+        //                ValoracionGrafico valoracion = new ValoracionGrafico(lector);
+        //                lista.Add(valoracion);
+        //                valoracion.Nuevo = false;
+        //                valoracion.Modificado = false;
+        //            }
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdValoracionesGraficos.GetValoraciones", ex);
+        //        } finally {
+        //            lector.Close();
+        //        }
+        //    }
+        //    return lista;
+        //}
 
 
-        public static List<ValoracionGrafico> getValoraciones() {
+        //public static List<ValoracionGrafico> getValoraciones() {
 
-            // Creamos la lista y el comando que extrae los gráficos.
-            List<ValoracionGrafico> lista = new List<ValoracionGrafico>();
+        //    // Creamos la lista y el comando que extrae los gráficos.
+        //    List<ValoracionGrafico> lista = new List<ValoracionGrafico>();
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
-                OleDbDataReader lector = null;
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //        OleDbDataReader lector = null;
 
-                // Ejecutamos el comando y extraemos los gráficos del lector a la lista.
-                try {
+        //        // Ejecutamos el comando y extraemos los gráficos del lector a la lista.
+        //        try {
 
-                    if (conexion.State != System.Data.ConnectionState.Open) conexion.Open();
+        //            if (conexion.State != System.Data.ConnectionState.Open) conexion.Open();
 
-                    string comandoSQL = "SELECT * FROM Valoraciones";
-                    OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
+        //            string comandoSQL = "SELECT * FROM Valoraciones";
+        //            OleDbCommand Comando = new OleDbCommand(comandoSQL, conexion);
 
-                    lector = Comando.ExecuteReader();
+        //            lector = Comando.ExecuteReader();
 
-                    while (lector.Read()) {
-                        ValoracionGrafico valoracion = new ValoracionGrafico(lector);
-                        lista.Add(valoracion);
-                        valoracion.Nuevo = false;
-                        valoracion.Modificado = false;
-                    }
-                } catch (Exception ex) {
-                    Utils.VerError("BdValoracionesGraficos.GetValoraciones", ex);
-                } finally {
-                    lector.Close();
-                }
-            }
-            return lista;
-        }
+        //            while (lector.Read()) {
+        //                ValoracionGrafico valoracion = new ValoracionGrafico(lector);
+        //                lista.Add(valoracion);
+        //                valoracion.Nuevo = false;
+        //                valoracion.Modificado = false;
+        //            }
+        //        } catch (Exception ex) {
+        //            Utils.VerError("BdValoracionesGraficos.GetValoraciones", ex);
+        //        } finally {
+        //            lector.Close();
+        //        }
+        //    }
+        //    return lista;
+        //}
 
 
         /*================================================================================
@@ -107,41 +100,41 @@ namespace Orion.DataModels {
         /// Guarda la lista de valoraciones que se le pasa en la base de datos, actualizando las modificadas e insertando las nuevas.
         /// </summary>
         /// <param name="lista">Lista con las valoraciones a guardar.</param>
-        public static void GuardarValoraciones(IEnumerable<ValoracionGrafico> lista) {
+        //public static void GuardarValoraciones(IEnumerable<ValoracionGrafico> lista) {
 
-            // Si la lista está vacía, salimos.
-            if (lista == null || lista.Count() == 0) return;
+        //    // Si la lista está vacía, salimos.
+        //    if (lista == null || lista.Count() == 0) return;
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                string SQLInsertar = "INSERT INTO Valoraciones (IdGrafico, Inicio, Linea, Descripcion, Final, Tiempo) " +
-                                     "VALUES (?, ?, ?, ?, ?, ?);";
+        //        string SQLInsertar = "INSERT INTO Valoraciones (IdGrafico, Inicio, Linea, Descripcion, Final, Tiempo) " +
+        //                             "VALUES (?, ?, ?, ?, ?, ?);";
 
-                string SQLActualizar = "UPDATE Valoraciones SET IdGrafico=?, Inicio=?, Linea=?, Descripcion=?, " +
-                                       "Final=?, Tiempo=? WHERE Id=?;";
+        //        string SQLActualizar = "UPDATE Valoraciones SET IdGrafico=?, Inicio=?, Linea=?, Descripcion=?, " +
+        //                               "Final=?, Tiempo=? WHERE Id=?;";
 
-                try {
-                    foreach (ValoracionGrafico valoracion in lista) {
-                        if (valoracion.Nuevo) {
-                            OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
-                            ValoracionGrafico.ParseToCommand(comando, valoracion);
-                            if (conexion.State == System.Data.ConnectionState.Closed) conexion.Open();
-                            comando.ExecuteNonQuery();
-                            valoracion.Nuevo = false;
-                            valoracion.Modificado = false;
-                        } else if (valoracion.Modificado) {
-                            OleDbCommand comando = new OleDbCommand(SQLActualizar, conexion);
-                            ValoracionGrafico.ParseToCommand(comando, valoracion);
-                            conexion.Open();
-                            comando.ExecuteNonQuery();
-                            valoracion.Modificado = false;
-                        }
-                    }
-                } catch (OleDbException ex) {
-                    Utils.VerError("BdValoracionesGraficos.GuardarValoraciones", ex);
-                }
-            }
-        }
+        //        try {
+        //            foreach (ValoracionGrafico valoracion in lista) {
+        //                if (valoracion.Nuevo) {
+        //                    OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
+        //                    ValoracionGrafico.ParseToCommand(comando, valoracion);
+        //                    if (conexion.State == System.Data.ConnectionState.Closed) conexion.Open();
+        //                    comando.ExecuteNonQuery();
+        //                    valoracion.Nuevo = false;
+        //                    valoracion.Modificado = false;
+        //                } else if (valoracion.Modificado) {
+        //                    OleDbCommand comando = new OleDbCommand(SQLActualizar, conexion);
+        //                    ValoracionGrafico.ParseToCommand(comando, valoracion);
+        //                    conexion.Open();
+        //                    comando.ExecuteNonQuery();
+        //                    valoracion.Modificado = false;
+        //                }
+        //            }
+        //        } catch (OleDbException ex) {
+        //            Utils.VerError("BdValoracionesGraficos.GuardarValoraciones", ex);
+        //        }
+        //    }
+        //}
 
 
         /*================================================================================
@@ -152,31 +145,31 @@ namespace Orion.DataModels {
         /// Guarda la lista de valoraciones que se le pasa en la base de datos, actualizando las modificadas e insertando las nuevas.
         /// </summary>
         /// <param name="lista">Lista con las valoraciones a guardar.</param>
-        public static void InsertarValoracion(ValoracionGrafico valoracion) {
+        //public static void InsertarValoracion(ValoracionGrafico valoracion) {
 
-            App.Global.Repository.InsertarValoracion(valoracion);
-            return;
+        //    App.Global.Repository.InsertarValoracion(valoracion);
+        //    return;
 
-            // Si la conexión no existe o la valoracion es nula, devolvemos nulo.
-            if (App.Global.CadenaConexion == null || valoracion == null) return;
+        //    // Si la conexión no existe o la valoracion es nula, devolvemos nulo.
+        //    if (App.Global.CadenaConexion == null || valoracion == null) return;
 
-            string SQLInsertar = "INSERT INTO Valoraciones (IdGrafico, Inicio, Linea, Descripcion, Final, Tiempo) " +
-                                 "VALUES (?, ?, ?, ?, ?, ?);";
+        //    string SQLInsertar = "INSERT INTO Valoraciones (IdGrafico, Inicio, Linea, Descripcion, Final, Tiempo) " +
+        //                         "VALUES (?, ?, ?, ?, ?, ?);";
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
-                ValoracionGrafico.ParseToCommand(comando, valoracion);
+        //        OleDbCommand comando = new OleDbCommand(SQLInsertar, conexion);
+        //        ValoracionGrafico.ParseToCommand(comando, valoracion);
 
-                try {
-                    //App.Global.AbrirConexion();
-                    conexion.Open();
-                    comando.ExecuteNonQuery();
-                } catch (OleDbException ex) {
-                    Utils.VerError("BdValoracionesGraficos.InsertarValoracion", ex);
-                }
-            }
-        }
+        //        try {
+        //            //App.Global.AbrirConexion();
+        //            conexion.Open();
+        //            comando.ExecuteNonQuery();
+        //        } catch (OleDbException ex) {
+        //            Utils.VerError("BdValoracionesGraficos.InsertarValoracion", ex);
+        //        }
+        //    }
+        //}
 
 
         /*================================================================================
@@ -187,28 +180,28 @@ namespace Orion.DataModels {
         /// Elimina de la base de datos las valoraciones pasados en la lista.
         /// </summary>
         /// <param name="lista">Lista con las valoraciones a borrar.</param>
-        public static void BorrarValoraciones(List<ValoracionGrafico> lista) {
+        //public static void BorrarValoraciones(List<ValoracionGrafico> lista) {
 
-            App.Global.Repository.BorrarValoraciones(lista);
-            return;
+        //    App.Global.Repository.BorrarValoraciones(lista);
+        //    return;
 
-            string SQLBorrar = "DELETE FROM Valoraciones WHERE Id=?";
+        //    string SQLBorrar = "DELETE FROM Valoraciones WHERE Id=?";
 
-            using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
+        //    using (OleDbConnection conexion = new OleDbConnection(App.Global.CadenaConexion)) {
 
-                try {
-                    //App.Global.AbrirConexion();
-                    conexion.Open(); // Probar a ver si podemos borrar todas usando Where Id IN (lista)
-                    foreach (ValoracionGrafico valoracion in lista) {
-                        OleDbCommand comando = new OleDbCommand(SQLBorrar, conexion);
-                        comando.Parameters.AddWithValue("id", valoracion.Id);
-                        comando.ExecuteNonQuery();
-                    }
-                } catch (OleDbException ex) {
-                    Utils.VerError("BdValoracionesGraficos.BorrarValoraciones", ex);
-                }
-            }
-        }
+        //        try {
+        //            //App.Global.AbrirConexion();
+        //            conexion.Open(); // Probar a ver si podemos borrar todas usando Where Id IN (lista)
+        //            foreach (ValoracionGrafico valoracion in lista) {
+        //                OleDbCommand comando = new OleDbCommand(SQLBorrar, conexion);
+        //                comando.Parameters.AddWithValue("id", valoracion.Id);
+        //                comando.ExecuteNonQuery();
+        //            }
+        //        } catch (OleDbException ex) {
+        //            Utils.VerError("BdValoracionesGraficos.BorrarValoraciones", ex);
+        //        }
+        //    }
+        //}
 
 
 

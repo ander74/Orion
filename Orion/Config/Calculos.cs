@@ -26,7 +26,7 @@ namespace Orion.Config {
                 TimeSpan partido = (finalpartido ?? TimeSpan.Zero) - (iniciopartido ?? TimeSpan.Zero);
                 // regulamos el tiempo partido
                 if (partido.TotalSeconds < 0) partido += new TimeSpan(1, 0, 0, 0);
-                // Si el tiempo partido es más de tres horas, le sumamos al total el tiempo que excede.
+                // Si el tiempo partido es más del indicado en las opcione, le sumamos al total el tiempo que excede.
                 TimeSpan excesoPartido = TimeSpan.Zero;
                 if (partido > App.Global.Convenio.MaxHorasParticionGraficoPartido) excesoPartido = partido - App.Global.Convenio.MaxHorasParticionGraficoPartido;
                 // Devolvemos el tiempo trabajado.
@@ -56,6 +56,7 @@ namespace Orion.Config {
                 TimeSpan horas = (trabajadas ?? TimeSpan.Zero) - App.Global.Convenio.JornadaMedia;
                 return horas.TotalSeconds < 0 ? TimeSpan.Zero : horas;
             }
+
 
             /* NOCTURNAS */
             public static TimeSpan Nocturnas(TimeSpan? inicio, TimeSpan? final, int turno) {
@@ -90,7 +91,6 @@ namespace Orion.Config {
                 TimeSpan horadesayuno = App.Global.Convenio.HoraDesayuno;
                 if (inicio < horadesayuno) {
                     TimeSpan tiempo = horadesayuno - inicio.Value;
-                    decimal x = tiempo.ToDecimal();
                     return tiempo.TotalMinutes > 60 ? 1m : tiempo.ToDecimal();
                 } else {
                     return 0m;

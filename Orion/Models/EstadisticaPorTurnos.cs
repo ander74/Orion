@@ -36,6 +36,8 @@ namespace Orion.Models {
 
         public Conductor Conductor { get; set; }
 
+        public bool EventualParcial { get; set; }
+
         public int[] Dias { get; set; }
         public int TotalDias { get => Dias.Sum(); }
 

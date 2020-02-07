@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Data;
+using iText.IO.Font.Constants;
 using iText.Kernel.Colors;
 using iText.Kernel.Font;
 using iText.Layout;
@@ -18,7 +19,6 @@ using iText.Layout.Element;
 using iText.Layout.Properties;
 using Orion.Config;
 using Orion.Convertidores;
-using Orion.DataModels;
 using Orion.Models;
 using Orion.Servicios;
 
@@ -50,7 +50,7 @@ namespace Orion.PrintModel {
 
         private static Table GetTablaGraficos(ListCollectionView listaGraficos, DateTime fecha) {
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo de la tabla.
             Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
@@ -58,7 +58,7 @@ namespace Orion.PrintModel {
                        .SetMargins(0, 0, 0, 0)
                        .SetPaddings(0, 0, 0, 0)
                        .SetWidth(UnitValue.CreatePercentValue(100))
-                       .SetFont(arial)
+                       .SetFont(helvetica)
                        .SetFontSize(8);
             // Estilo titulos
             Style estiloTitulos = new Style();
@@ -167,7 +167,7 @@ namespace Orion.PrintModel {
         private static Table GetGraficoIndividual(Grafico grafico) {
 
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo de la tabla.
             Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
@@ -175,7 +175,7 @@ namespace Orion.PrintModel {
                        .SetMargins(0, 0, 0, 0)
                        .SetPaddings(0, 0, 0, 0)
                        .SetWidth(UnitValue.CreatePercentValue(100))
-                       .SetFont(arial)
+                       .SetFont(helvetica)
                        .SetFontSize(8);
             // Estilo de las celdas de encabezado.
             Style estiloEncabezados = new Style();
@@ -226,7 +226,7 @@ namespace Orion.PrintModel {
             // Nombres de turnos.
             string[] turnos = { "Desconocido", "Mañana", "Tarde", "Noche", "Partido" };
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo de la tabla.
             Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
@@ -234,7 +234,7 @@ namespace Orion.PrintModel {
                        .SetMargins(10, 0, 10, 0)
                        .SetPaddings(0, 0, 0, 0)
                        .SetWidth(UnitValue.CreatePercentValue(100))
-                       .SetFont(arial)
+                       .SetFont(helvetica)
                        .SetFontSize(8);
             // Estilo titulos
             Style estiloTitulos = new Style();
@@ -327,7 +327,7 @@ namespace Orion.PrintModel {
             // Nombres de turnos.
             string[] turnos = { "Desconocido", "Mañana", "Tarde", "Noche", "Partido" };
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo de la tabla.
             Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
@@ -335,7 +335,7 @@ namespace Orion.PrintModel {
                        .SetMargins(10, 0, 10, 0)
                        .SetPaddings(0, 0, 0, 0)
                        .SetWidth(UnitValue.CreatePercentValue(100))
-                       .SetFont(arial)
+                       .SetFont(helvetica)
                        .SetFontSize(8);
             // Estilo titulos
             Style estiloTitulos = new Style();
@@ -650,7 +650,7 @@ namespace Orion.PrintModel {
         public static async Task CrearEstadisticasGruposGraficosEnPdf(Document doc, DateTime fecha) {
             await Task.Run(() => {
                 // Definimos y llenamos la lista de estadisticas.
-                List<EstadisticasGraficos> lista = BdGraficos.GetEstadisticasGraficosDesdeFecha(fecha);
+                List<EstadisticasGraficos> lista = App.Global.Repository.GetEstadisticasGraficosDesdeFecha(fecha, App.Global.Convenio.JornadaMedia).ToList();
                 // Creamos el encabezado.
                 string textoEncabezado = $"ESTADÍSTICAS GRÁFICOS\n{App.Global.CentroActual}".ToUpper();
                 doc.Add(InformesServicio.GetTablaEncabezadoSindicato(textoEncabezado));

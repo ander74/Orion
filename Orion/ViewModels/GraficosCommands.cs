@@ -13,7 +13,6 @@ namespace Orion.ViewModels {
     using System.IO;
     using System.Linq;
     using System.Windows.Input;
-    using DataModels;
     using Models;
     using PrintModel;
     using Servicios;
@@ -324,7 +323,7 @@ namespace Orion.ViewModels {
                         Itinerario itinerario = null;
                         // Buscamos el itinerario.
                         try {
-                            itinerario = BdItinerarios.GetItinerarioByNombre(Linea);
+                            itinerario = App.Global.LineasRepo.GetItinerarioByNombre(Linea);
                         } catch (Exception ex) {
                             Mensajes.VerError("GraficosViewModel.AñadirValoracion", ex);
                         }
@@ -481,7 +480,7 @@ namespace Orion.ViewModels {
 
             List<Grafico> anteriores = null;
             try {
-                anteriores = BdGraficos.getGraficos(GrupoComparacionSeleccionado.Id).ToList();
+                anteriores = App.Global.Repository.GetGraficos(GrupoComparacionSeleccionado.Validez).ToList();
                 if (anteriores.Count == 0) return;
             } catch (Exception ex) {
                 Mensajes.VerError("GraficosViewModel.CompararGrupo", ex);

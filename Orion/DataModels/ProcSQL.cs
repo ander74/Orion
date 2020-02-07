@@ -5,11 +5,6 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orion.DataModels {
 
@@ -21,7 +16,7 @@ namespace Orion.DataModels {
 		/// <summary>
 		/// Procedimiento almacenado que devuelve todos los conductores.
 		/// </summary>
-		public static string GetConductores => "GetConductores";
+		//public static string GetConductores => "GetConductores";
 
 
 	}

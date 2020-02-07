@@ -8,9 +8,9 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Data.SQLite;
 using Orion.Config;
 using Orion.Models;
 using Orion.Pijama;
@@ -217,269 +217,6 @@ namespace Orion.Servicios {
 
 
         // ====================================================================================================
-        #region CONSULTAS SQLITE
-        // ====================================================================================================
-
-        //public const string SqlActualizarCalendario = "UPDATE Calendarios SET IdConductor = @idConductor, Fecha = @fecha, Notas = @notas WHERE __id=@id;";
-
-
-        //public const string SqlActualizarConductor = "UPDATE Conductores SET " +
-        //    "Nombre = @nombre, Apellidos = @apellidos, Indefinido = @indefinido, Telefono = @telefono, Email = @email, " +
-        //    "Acumuladas = @acumuladas, Descansos = @descansos, DescansosNoDisfrutados = @descansosNoDisfrutados, PlusDistancia = @plusDistancia, " +
-        //    "ReduccionJornada = @reduccionJornada, Notas = @notas WHERE __id=@id;";
-
-
-        //public const string SqlActualizarDiaCalendario = "UPDATE DiasCalendario SET " +
-        //    "IdCalendario = @idCalendario, Dia = @dia, DiaFecha = @diaFecha, Grafico = @grafico, Codigo = @codigo, ExcesoJornada = @excesoJornada, " +
-        //    "FacturadoPaqueteria = @facturadoPaqueteria, Limpieza = @limpieza, GraficoVinculado = @graficoVinculado, Notas = @notas WHERE __id=@id;";
-
-
-        //public const string SqlActualizarFestivo = "UPDATE Festivos SET Año = @año, Fecha = @fecha WHERE __id=@id;";
-
-
-        //public const string SqlActualizarGrafico = "UPDATE Graficos SET " +
-        //    "IdGrupo = @idGrupo, NoCalcular = @noCalcular, Numero = @numero, Turno = @turno, DescuadreInicio = @descuadreInicio, Inicio = @inicio, " +
-        //    "Final = @final, DescuadreFinal = @descuadreFinal, InicioPartido = @inicioPartido, FinalPartido = @finalPartido, Valoracion = @valoracion, " +
-        //    "Trabajadas = @trabajadas, Acumuladas = @acumuladas, Nocturnas = @nocturnas, Desayuno = @desayuno, Comida = @comida, Cena = @cena, " +
-        //    "PlusCena = @plusCena, PlusLimpieza = @plusLimpieza, PlusPaqueteria = @plusPaqueteria WHERE _id=@id;";
-
-
-        //public const string SqlActualizarGrupo = "UPDATE GruposGraficos SET Validez = @validez, Notas = @notas WHERE _id=@id;";
-
-
-        //public const string SqlActualizarItinerario = "UPDATE Itinerarios SET " +
-        //    "IdLinea = @idLinea, Nombre = @nombre, Descripcion = @descripcion, TiempoReal = @tiempoReal, TiempoPago = @tiempoPago WHERE _id=@id;";
-
-
-        //public const string SqlActualizarLinea = "UPDATE Lineas SET Nombre = @nombre, Descripcion = @descripcion WHERE _id=@id;";
-
-
-        //public const string SqlActualizarParada = "UPDATE Paradas SET " +
-        //    "IdItinerario = @idItinerario, Orden = @orden, Descripcion = @descripcion, Tiempo = @tiempo WHERE _id=@id;";
-
-
-        //public const string SqlActualizarRegulacion = "UPDATE Regulaciones SET " +
-        //    "IdConductor = @idConductor, Codigo = @codigo, Fecha = @fecha, Horas = @horas, Descansos = @descansos, Motivo = @motivo WHERE _id=@id;";
-
-
-        //public const string SqlActualizarValoracion = "UPDATE Valoraciones SET " +
-        //    "IdGrafico = @idGrafico, Inicio = @inicio, Linea = @linea, Descripcion = @descripcion, Final = @final, Tiempo = @tiempo WHERE _id=@id;";
-
-
-        // CONSULTA NO FUNCIONAL
-        //public const string SqlCambiarFechasDiasCalendario = "UPDATE (SELECT DiasCalendario.DiaFecha AS F, DateSerial(Year(Calendarios.Fecha),Month(Calendarios.Fecha),DiasCalendario.Dia) AS FF FROM Calendarios LEFT JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario) SET F = FF;";
-
-
-        //public const string SqlInsertarCalendario = "INSERT INTO Calendarios (IdConductor, Fecha, Notas) VALUES (@idConductor, @fecha, @notas);";
-
-
-        //public const string SqlInsertarConductor = "INSERT INTO Conductores " +
-        //    "(Nombre, Apellidos, Indefinido, Telefono, Email, Acumuladas, Descansos, DescansosNoDisfrutados, PlusDistancia, ReduccionJornada, Notas, _id ) " +
-        //    "VALUES " +
-        //    "(@nombre, @apellidos, @indefinido, @telefono, @email, @acumuladas, @descansos, @descansosNoDisfrutados, @plusDistancia, @reduccionJornada, " +
-        //    "@notas, @id);";
-
-
-        //public const string SqlInsertarConductorDesconocido = "INSERT INTO Conductores (_id, Nombre) VALUES (@id, 'Desconocido');";
-
-
-        //public const string SqlInsertarDiaCalendario = "INSERT INTO DiasCalendario " +
-        //    "(IdCalendario, Dia, DiaFecha, Grafico, Codigo, ExcesoJornada, FacturadoPaqueteria, Limpieza, GraficoVinculado, Notas) " +
-        //    "VALUES " +
-        //    "(@idCalendario, @dia, @diaFecha, @grafico, @codigo, @excesoJornada, @facturadoPaqueteria, @limpieza, @graficoVinculado, @notas);";
-
-
-        //public const string SqlInsertarFestivo = "INSERT INTO Festivos (Año, Fecha) VALUES (@año, @fecha);";
-
-
-        //public const string SqlInsertarGrafico = "INSERT INTO Graficos " +
-        //    "(IdGrupo, NoCalcular, Numero, Turno, DescuadreInicio, Inicio, Final, DescuadreFinal, InicioPartido, FinalPartido, " +
-        //    "Valoracion, Trabajadas, Acumuladas, Nocturnas, Desayuno, Comida, Cena, PlusCena, PlusLimpieza, PlusPaqueteria) " +
-        //    "VALUES " +
-        //    "(@idGrupo, @noCalcular, @numero, @turno, @descuadreInicio, @inicio, @final, @descuadreFinal, @inicioPartido, @finalPartido, " +
-        //    "@valoracion, @trabajadas, @acumuladas, @nocturnas, @desayuno, @comida, @cena, @plusCena, @plusLimpieza, @plusPaqueteria);";
-
-
-        //public const string SqlInsertarGrupo = "INSERT INTO GruposGraficos (Validez, Notas) VALUES (@validez, @notas);";
-
-
-        //public const string SqlInsertarItinerario = "INSERT INTO Itinerarios " +
-        //    "(IdLinea, Nombre, Descripcion, TiempoReal, TiempoPago) " +
-        //    "VALUES " +
-        //    "(@idLinea, @nombre, @descripcion, @tiempoReal, @tiempoPago);";
-
-
-        //public const string SqlInsertarLinea = "INSERT INTO Lineas (Nombre, Descripcion) VALUES (@nombre, @descripcion);";
-
-
-        //public const string SqlInsertarParada = "INSERT INTO Paradas " +
-        //    "(IdItinerario, Orden, Descripcion, Tiempo) " +
-        //    "VALUES " +
-        //    "(@idItinerario, @orden, @descripcion, @tiempo);";
-
-
-        //public const string SqlInsertarRegulacion = "INSERT INTO Regulaciones " +
-        //    "(IdConductor, Codigo, Fecha, Horas, Descansos, Motivo) " +
-        //    "VALUES " +
-        //    "(@idConductor, @codigo, @fecha, @horas, @descansos, @motivo);";
-
-
-        //public const string SqlInsertarValoracion = "INSERT INTO Valoraciones " +
-        //    "(IdGrafico, Inicio, Linea, Descripcion, Final, Tiempo) " +
-        //    "VALUES " +
-        //    "(@idGrafico, @inicio, @linea, @descripcion, @final, @tiempo);";
-
-
-        //public const string SqlBorrarCalendario = "DELETE * FROM Calendarios WHERE _id=@id;";
-
-
-        //public const string SqlBorrarConductor = "DELETE * FROM Conductores WHERE _id=@id;";
-
-
-        //public const string SqlBorrarDiaCalendario = "DELETE * FROM DiasCalendario WHERE _id=@id;";
-
-
-        //public const string SqlBorrarFestivo = "DELETE * FROM Festivos WHERE _id=@id;";
-
-
-        //public const string SqlBorrarGrafico = "DELETE * FROM Graficos WHERE _id=@id;";
-
-
-        //public const string SqlBorrarGrupo = "DELETE * FROM GruposGraficos WHERE _id=@id;";
-
-
-        //public const string SqlBorrarItinerario = "DELETE * FROM Itinerarios WHERE _id=@id;";
-
-
-        //public const string SqlBorrarLinea = "DELETE * FROM Lineas WHERE _id=@id;";
-
-
-        //public const string SqlBorrarParada = "DELETE * FROM Paradas WHERE _id=@id;";
-
-
-        //public const string SqlBorrarRegulacion = "DELETE * FROM Regulaciones WHERE _id=@id;";
-
-
-        //public const string SqlBorrarValoracion = "DELETE * FROM Valoraciones WHERE _id=@id;";
-
-
-        // CONSULTA NO FUNCIONAL
-        //public const string SqlConsultaPrueba = "SELECT (Sum(Graficos.Inicio) + Sum(Calendarios._id)) AS Resultado FROM Graficos, Calendarios WHERE Graficos._id = 123 AND Calendarios._id = 190;";
-
-
-        //public const string SqlExisteConductor = "SELECT Count(_id) FROM Conductores WHERE _id=@id;";
-
-
-        //public const string SqlExisteGrupo = "SELECT Count(*) FROM GruposGraficos WHERE Validez=@validez;";
-
-
-        //public const string SqlGetCalendarios = "SELECT Calendarios.*, Conductores.Indefinido " +
-        //    "FROM Calendarios " +
-        //    "LEFT JOIN Conductores " +
-        //    "ON Calendarios.IdConductor = Conductores._id " +
-        //    "WHERE Year(Calendarios.Fecha)=@año And Month(Calendarios.Fecha)=@mes ORDER BY Calendarios.IdConductor;";
-
-
-        //public const string SqlGetConductor = "SELECT * FROM Conductores WHERE _id=@id;";
-
-
-        //public const string SqlGetConductores = "SELECT * FROM Conductores ORDER BY _id;";
-
-
-        // CONSULTA NO FUNCIONAL
-        //public const string SqlGetConsultas = "SELECT Name FROM MSysObjects WHERE Type = 5 ORDER BY Name;";
-
-
-        //public const string SqlGetDiasCalendario = "SELECT * FROM DiasCalendario WHERE IdCalendario=@idCalendario ORDER BY Dia;";
-
-
-        //public const string SqlGetDiasCalendarioAño = "SELECT * FROM DiasCalendario " +
-        //    "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE IdConductor = @idConductor AND Year(Fecha) = @año);";
-
-
-        //public const string SqlGetDiasCalendarioConBloqueos = "SELECT * FROM DiasCalendario " +
-        //    "WHERE (ExcesoJornada <> 0 OR Descuadre <> 0) AND IdCalendario IN (SELECT _id FROM Calendarios WHERE IdConductor = @idConductor);";
-
-
-        //public const string SqlGetDiasPijama = "SELECT * FROM " +
-        //    "(SELECT * FROM Graficos WHERE IdGrupo = " +
-        //    "(SELECT _id FROM GruposGraficos WHERE Validez = " +
-        //    "(SELECT Max(Validez) FROM GruposGraficos WHERE Validez <= @validez))) " +
-        //    "WHERE Numero=@numero;";
-
-
-        //public const string SqlGetEstadisticasGraficos = "SELECT GruposGraficos.Validez AS xValidez, Turno AS xTurno, Count(Numero) AS xNumero, " +
-        //    "Sum(Valoracion) AS xValoracion, Sum(IIf(Trabajadas<@jornadaMedia AND NOT NoCalcular,@jornadaMedia,Trabajadas)) AS xTrabajadas, " +
-        //    "Sum(Acumuladas) AS xAcumuladas, Sum(Nocturnas) AS xNocturnas, Sum(Desayuno) AS xDesayuno, Sum(Comida) AS xComida, Sum(Cena) AS xCena, " +
-        //    "Sum(PlusCena) AS xPlusCena, Sum(iif(PlusLimpieza=True,1,0)) AS xLimpieza, Sum(iif(PlusPaqueteria=True,1,0)) AS xPaqueteria " +
-        //    "FROM GruposGraficos " +
-        //    "LEFT JOIN Graficos ON GruposGraficos._id = Graficos.IdGrupo " +
-        //    "WHERE IdGrupo=@idGrupo GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;";
-
-
-        //public const string SqlGetEstadisticasGraficosDesdeFecha = "SELECT GruposGraficos.Validez AS xValidez, Turno AS xTurno, Count(Numero) AS xNumero, " +
-        //    "Sum(Valoracion) AS xValoracion, Sum(IIf(Trabajadas<@jornadaMedia AND NOT NoCalcular,@jornadaMedia,Trabajadas)) AS xTrabajadas, " +
-        //    "Sum(Acumuladas) AS xAcumuladas, Sum(Nocturnas) AS xNocturnas, Sum(Desayuno) AS xDesayuno, Sum(Comida) AS xComida, Sum(Cena) AS xCena, " +
-        //    "Sum(PlusCena) AS xPlusCena, Sum(iif(PlusLimpieza=True,1,0)) AS xLimpieza, Sum(iif(PlusPaqueteria=True,1,0)) AS xPaqueteria " +
-        //    "FROM GruposGraficos " +
-        //    "LEFT JOIN Graficos ON GruposGraficos._id = Graficos.IdGrupo " +
-        //    "WHERE GruposGraficos.Validez >= @fecha GROUP BY GruposGraficos.Validez, Turno ORDER BY GruposGraficos.Validez, Turno;";
-
-
-        //public const string SqlGetFestivos = "SELECT * FROM Festivos ORDER BY Fecha;";
-
-
-        //public const string SqlGetFestivosPorAño = "SELECT * FROM Festivos WHERE Año=@año ORDER BY Fecha;";
-
-
-        //public const string SqlGetFestivosPorMes = "SELECT * FROM Festivos WHERE Año=@año And Month(Fecha)=@mes ORDER BY Fecha;";
-
-
-        //public const string SqlGetGraficos = "SELECT * FROM Graficos WHERE IdGrupo=@idGrupo ORDER BY Numero;";
-
-
-        //public const string SqlGetGraficosGrupoPorFecha = "SELECT * FROM Graficos WHERE IdGrupo = (SELECT _id FROM GruposGraficos WHERE Validez = @validez);";
-
-
-        //public const string SqlGetGrupos = "SELECT * FROM GruposGraficos ORDER BY Validez DESC;";
-
-
-        //public const string SqlGetItinerarioPorNombre = "SELECT * FROM Itinerarios WHERE Name=@nombre;";
-
-
-        //public const string SqlGetItinerarios = "SELECT * FROM Itinerarios WHERE IdLinea=@ ORDER BY Nombre;";
-
-
-        //public const string SqlGetLineas = "SELECT * FROM Lineas ORDER BY Nombre;";
-
-
-        //public const string SqlGetParadas = "SELECT * FROM Paradas WHERE IdItinerario=@idItinerario ORDER BY Orden;";
-
-
-        //public const string SqlGetRegulaciones = "SELECT * FROM Regulaciones WHERE IdConductor=@idConductor ORDER BY Fecha, _id;";
-
-
-        //public const string SqlGetValoraciones = "SELECT * FROM Valoraciones WHERE IdGrafico=@idGrafico ORDER BY Inicio, _id;";
-
-
-        // CONSULTA NO FUNCIONAL
-        //public const string SqlTemporal = "SELECT DiasCalendario.Dia, Calendarios.IdConductor, DiasCalendario.Fecha, DiasCalendario.ExcesoJornada FROM Calendarios LEFT JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario WHERE Calendarios.IdConductor = 450 AND ExcesoJornada > 0;";
-
-
-
-
-
-
-
-
-
-
-
-        #endregion
-        // ====================================================================================================
-
-
-        // ====================================================================================================
         #region CAMPOS PRIVADOS
         // ====================================================================================================
 
@@ -497,7 +234,10 @@ namespace Orion.Servicios {
             //Task.Run(async () => await InicializarBaseDatosAsync());
             // No podemos crear la base de datos de forma asíncrona, porque el programa intenta acceder a ella
             // mientras se está creando. Por eso debemos esperar...
-            if (CadenaConexion != null) InicializarBaseDatosAsync().Wait();
+
+            // No inicializamos las bases de datos desde aquí, ya que deben actualizarse las 5 bases de datos
+            // a la vez, con lo que lo tengo que hacer yo desde la pestaña programador.
+            //if (CadenaConexion != null) InicializarBaseDatosAsync().Wait();
         }
 
         #endregion
@@ -520,14 +260,6 @@ namespace Orion.Servicios {
                 using (var comando = new SQLiteCommand(CrearTablaPluses, conexion)) await comando.ExecuteNonQueryAsync();
                 using (var comando = new SQLiteCommand(CrearTablaRegulaciones, conexion)) await comando.ExecuteNonQueryAsync();
                 using (var comando = new SQLiteCommand(CrearTablaValoraciones, conexion)) await comando.ExecuteNonQueryAsync();
-                var coman = conexion.CreateCommand();
-                coman.CommandText = "INSERT INTO Graficos (Numero) VALUES (5060);";
-                coman.ExecuteNonQuery();
-                coman.CommandText = "SELECT * FROM Graficos;";
-                var xxx = coman.ExecuteReader();
-
-
-
             }
         }
 
@@ -1754,6 +1486,114 @@ namespace Orion.Servicios {
         }
 
 
+        public List<DiaCalendarioEstadistica> GetDiasCalendarioEstadisticaMes(int año, int mes, int matricula) {
+            var lista = new List<DiaCalendarioEstadistica>();
+            var fecha = new DateTime(año, mes, 1);
+            try {
+                var consulta = new SQLiteExpression("" +
+                    "SELECT " +
+                    "    DC.DiaFecha AS Fecha, " +
+                    "    C.MatriculaConductor AS MatriculaConductor, " +
+                    "    DC.Grafico AS NumeroGrafico, " +
+                    "    DC.Codigo AS Codigo, " +
+                    "    G.Turno AS Turno, " +
+                    "    G.Trabajadas AS Trabajadas, " +
+                    "    G.Acumuladas AS Acumuladas, " +
+                    "    G.Nocturnas AS Nocturnas, " +
+                    "    G.Desayuno AS Desayuno, " +
+                    "    G.Comida AS Comida, " +
+                    "    G.Cena AS Cena, " +
+                    "    G.PlusCena AS PlusCena, " +
+                    "    G.PlusLimpieza AS PlusLimpieza, " +
+                    "    G.PlusPaqueteria AS PlusPaqueteria, " +
+                    "    DC.TurnoAlt AS TurnoAlt, " +
+                    "    DC.TrabajadasAlt AS TrabajadasAlt, " +
+                    "    DC.AcumuladasAlt AS AcumuladasAlt, " +
+                    "    DC.NocturnasAlt AS NocturnasAlt, " +
+                    "    DC.DesayunoAlt AS DesayunoAlt, " +
+                    "    DC.ComidaAlt AS ComidaAlt, " +
+                    "    DC.CenaAlt AS CenaAlt, " +
+                    "    DC.PlusCenaAlt AS PlusCenaAlt, " +
+                    "    DC.PlusLimpiezaAlt AS PlusLimpiezaAlt, " +
+                    "    DC.PlusPaqueteriaAlt AS PlusPaqueteriaAlt " +
+                    "FROM DiasCalendario As DC " +
+                    "    LEFT JOIN Calendarios AS C ON C._id = DC.IdCalendario " +
+                    "    LEFT JOIN Graficos AS G ON G.Validez = (SELECT Max(Validez) FROM Graficos WHERE DC.Grafico = G.Numero AND Validez <= DC.DiaFecha) " +
+                    "WHERE C.MatriculaConductor = @conductor AND strftime('%Y-%m', C.Fecha) = strftime('%Y-%m', @fecha) " +
+                    "ORDER BY DC.DiaFecha;");
+                consulta.AddParameter("@conductor", matricula);
+                consulta.AddParameter("@fecha", fecha);
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                    using (var comando = consulta.GetCommand(conexion)) {
+                        using (var lector = comando.ExecuteReader()) {
+                            while (lector.Read()) {
+                                var dia = new DiaCalendarioEstadistica(lector);
+                                lista.Add(dia);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasCalendarioEstadisticaMes), ex);
+            }
+            return lista;
+        }
+
+
+        public List<DiaCalendarioEstadistica> GetDiasCalendarioEstadisticaAño(int año, int matricula) {
+            var lista = new List<DiaCalendarioEstadistica>();
+            var fecha = new DateTime(año, 1, 1);
+            try {
+                var consulta = new SQLiteExpression("" +
+                    "SELECT " +
+                    "    DC.DiaFecha AS Fecha, " +
+                    "    C.MatriculaConductor AS MatriculaConductor, " +
+                    "    DC.Grafico AS NumeroGrafico, " +
+                    "    DC.Codigo AS Codigo, " +
+                    "    G.Turno AS Turno, " +
+                    "    G.Trabajadas AS Trabajadas, " +
+                    "    G.Acumuladas AS Acumuladas, " +
+                    "    G.Nocturnas AS Nocturnas, " +
+                    "    G.Desayuno AS Desayuno, " +
+                    "    G.Comida AS Comida, " +
+                    "    G.Cena AS Cena, " +
+                    "    G.PlusCena AS PlusCena, " +
+                    "    G.PlusLimpieza AS PlusLimpieza, " +
+                    "    G.PlusPaqueteria AS PlusPaqueteria, " +
+                    "    DC.TurnoAlt AS TurnoAlt, " +
+                    "    DC.TrabajadasAlt AS TrabajadasAlt, " +
+                    "    DC.AcumuladasAlt AS AcumuladasAlt, " +
+                    "    DC.NocturnasAlt AS NocturnasAlt, " +
+                    "    DC.DesayunoAlt AS DesayunoAlt, " +
+                    "    DC.ComidaAlt AS ComidaAlt, " +
+                    "    DC.CenaAlt AS CenaAlt, " +
+                    "    DC.PlusCenaAlt AS PlusCenaAlt, " +
+                    "    DC.PlusLimpiezaAlt AS PlusLimpiezaAlt, " +
+                    "    DC.PlusPaqueteriaAlt AS PlusPaqueteriaAlt " +
+                    "FROM DiasCalendario As DC " +
+                    "    LEFT JOIN Calendarios AS C ON C._id = DC.IdCalendario " +
+                    "    LEFT JOIN Graficos AS G ON G.Validez = (SELECT Max(Validez) FROM Graficos WHERE DC.Grafico = G.Numero AND Validez <= DC.DiaFecha) " +
+                    "WHERE C.MatriculaConductor = @conductor AND strftime('%Y', C.Fecha) = strftime('%Y', @fecha) " +
+                    "ORDER BY DC.DiaFecha;");
+                consulta.AddParameter("@conductor", matricula);
+                consulta.AddParameter("@fecha", fecha);
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                    using (var comando = consulta.GetCommand(conexion)) {
+                        using (var lector = comando.ExecuteReader()) {
+                            while (lector.Read()) {
+                                var dia = new DiaCalendarioEstadistica(lector);
+                                lista.Add(dia);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasCalendarioEstadisticaMes), ex);
+            }
+            return lista;
+        }
+
+
 
 
 
@@ -1786,17 +1626,18 @@ namespace Orion.Servicios {
                         if (dia.GraficoVinculado != 0 && dia.Grafico == comodin) GraficoBusqueda = dia.GraficoVinculado;
                         // Creamos el comando SQL y añadimos los parámetros
 
-                        var consulta = new SQLiteExpression(
-                            "SELECT * FROM " +
-                            "    (SELECT * FROM Graficos " +
-                            "     WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(strftime('%Y-%m-%d', Validez)) FROM Graficos " +
-                            "                                                                 WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @validez))))" +
-                            "WHERE Numero = @numero");
+                        //var consulta = new SQLiteExpression(
+                        //    "SELECT * FROM " +
+                        //    "    (SELECT * FROM Graficos " +
+                        //    "     WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(strftime('%Y-%m-%d', Validez)) FROM Graficos " +
+                        //    "                                                                 WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @validez))))" +
+                        //    "WHERE Numero = @numero");
+
+                        var consulta = new SQLiteExpression("" +
+                            "SELECT * FROM Graficos " +
+                            "WHERE Numero = @numero AND Validez = (SELECT Max(Validez) FROM Graficos WHERE Numero = @numero AND Validez < @validez);");
 
 
-                        //var consulta = new SQLiteExpression("SELECT * " +
-                        //                          "FROM (SELECT * FROM Graficos WHERE IdGrupo = (SELECT _id FROM GruposGraficos WHERE Validez = (SELECT Max(Validez) FROM GruposGraficos WHERE Validez <= @validez)))" +
-                        //                          "WHERE Numero = @numero");
                         consulta.AddParameter("@validez", dia.DiaFecha);
                         consulta.AddParameter("@numero", GraficoBusqueda);
                         // Ejecutamos el comando y extraemos el gráfico.
@@ -1831,7 +1672,7 @@ namespace Orion.Servicios {
         }
 
 
-        public IEnumerable<Pijama.DiaPijama> GetDiasPijama(DateTime fecha, int matriculaConductor) {
+        public IEnumerable<DiaPijama> GetDiasPijama(DateTime fecha, int matriculaConductor) {
             var consulta = new SQLiteExpression("" +
                 "SELECT " +
                 "DiasCalendario.*, " +
@@ -1847,7 +1688,7 @@ namespace Orion.Servicios {
             consulta.AddParameter("@matricula", matriculaConductor);
             consulta.AddParameter("@fecha", fecha);
             try {
-                return GetItems<Pijama.DiaPijama>(consulta);
+                return GetItems<DiaPijama>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetResumenHastaMes), ex);
             }
@@ -1870,12 +1711,18 @@ namespace Orion.Servicios {
                     //----------------------------------------------------------------------------------------------------
                     // HORAS ACUMULADAS
                     //----------------------------------------------------------------------------------------------------
+                    //var consulta = new SQLiteExpression("SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha, " +
+                    //                                  "DiasCalendario.ExcesoJornada, DiasCalendario.AcumuladasAlt " +
+                    //                                  "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios._id " +
+                    //                                  "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha) AND MatriculaConductor = @matricula) " +
+                    //                                  "      AND Grafico > 0 " +
+                    //                                  "ORDER BY Calendarios.Fecha, DiasCalendario.Dia;");
                     var consulta = new SQLiteExpression("SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha, " +
-                                                      "DiasCalendario.ExcesoJornada, DiasCalendario.AcumuladasAlt " +
-                                                      "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios._id " +
-                                                      "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha) AND MatriculaConductor = @matricula) " +
-                                                      "      AND Grafico > 0 " +
-                                                      "ORDER BY Calendarios.Fecha, DiasCalendario.Dia;");
+                                   "DiasCalendario.ExcesoJornada, DiasCalendario.AcumuladasAlt " +
+                                   "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios._id " +
+                                   "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE Fecha < @fecha AND MatriculaConductor = @matricula) " +
+                                   "      AND Grafico > 0 " +
+                                   "ORDER BY Calendarios.Fecha, DiasCalendario.Dia;");
                     consulta.AddParameter("@fecha", fecha);
                     consulta.AddParameter("@matricula", matricula);
                     using (var lector = consulta.GetCommand(conexion).ExecuteReader()) {
@@ -1995,6 +1842,94 @@ namespace Orion.Servicios {
                     consulta.AddParameter("@matricula", matricula);
                     consulta.AddParameter("@fecha", fecha);
                     resultado.DiasTrabajoEnDescanso = GetDecimalScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DÍAS TRABAJADOS AÑO
+                    //----------------------------------------------------------------------------------------------------
+                    var fechaInicio = new DateTime(año, 1, 1);
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                       "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                       "WHERE Calendarios.MatriculaConductor = @matricula AND " +
+                                                       "      DiasCalendario.Grafico > 0 AND strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)" +
+                                                       "       AND strftime('%Y-%m-%d', Fecha) >= strftime('%Y-%m-%d', @fechaInicio)");
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@fechaInicio", fechaInicio);
+                    resultado.DiasTrabajados = GetIntScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DÍAS DESCANSADOS AÑO
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                      "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                      "WHERE Calendarios.MatriculaConductor = @matricula AND " +
+                                                      "      (DiasCalendario.Grafico = -2 OR DiasCalendario.Grafico = -3 OR DiasCalendario.Grafico = -5 OR " +
+                                                      "       DiasCalendario.Grafico = -10 OR DiasCalendario.Grafico = -11 OR" +
+                                                      "       DiasCalendario.Grafico = -17 OR DiasCalendario.Grafico = -18) AND " +
+                                                      "      strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)" +
+                                                       "       AND strftime('%Y-%m-%d', Fecha) >= strftime('%Y-%m-%d', @fechaInicio)");
+                    //TODO: ELiminar si es así el OVA-JD y el OVA-FN (-17 y -18)
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@fechaInicio", fechaInicio);
+                    resultado.DiasDescansados = GetIntScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DÍAS VACACIONES AÑO
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                      "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                      "WHERE Calendarios.MatriculaConductor = @matricula AND " +
+                                                      "      (DiasCalendario.Grafico = -1 OR DiasCalendario.Grafico = -12 OR DiasCalendario.Grafico = -13) AND " +
+                                                      "      strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)" +
+                                                       "       AND strftime('%Y-%m-%d', Fecha) >= strftime('%Y-%m-%d', @fechaInicio)");
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@fechaInicio", fechaInicio);
+                    resultado.DiasVacaciones = GetIntScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DÍAS ENFERMO AÑO
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                      "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                      "WHERE Calendarios.MatriculaConductor = @matricula AND " +
+                                                      "      (DiasCalendario.Grafico = -4 OR DiasCalendario.Grafico = -10 OR DiasCalendario.Grafico = -11) AND " +
+                                                      "      strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)" +
+                                                       "       AND strftime('%Y-%m-%d', Fecha) >= strftime('%Y-%m-%d', @fechaInicio)");
+                    //TODO: Si no se computan los días de descanso, hay que eliminar los codigos -10 y -11.
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@fechaInicio", fechaInicio);
+                    resultado.DiasEnfermo = GetIntScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DÍAS DC AÑO
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                      "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                      "WHERE Calendarios.MatriculaConductor = @matricula AND " +
+                                                      "      (DiasCalendario.Grafico = -6) AND " +
+                                                      "      strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)" +
+                                                       "       AND strftime('%Y-%m-%d', Fecha) >= strftime('%Y-%m-%d', @fechaInicio)");
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@fechaInicio", fechaInicio);
+                    resultado.DiasDC = GetIntScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // HORAS ANUALES
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                      "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                      "WHERE Calendarios.MatriculaConductor = @matricula AND " +
+                                                      "      (DiasCalendario.Grafico > 0 OR DiasCalendario.Grafico = -4 OR " +
+                                                      "       DiasCalendario.Grafico = -6 OR DiasCalendario.Grafico = -7 OR " +
+                                                      "       DiasCalendario.Grafico = -8 OR DiasCalendario.Grafico = -9 OR " +
+                                                      "       DiasCalendario.Grafico = -14 OR DiasCalendario.Grafico = -15 OR DiasCalendario.Grafico = -16) AND " +
+                                                      "      strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)" +
+                                                       "       AND strftime('%Y-%m-%d', Fecha) >= strftime('%Y-%m-%d', @fechaInicio)");
+                    // Si los días de OVA (código -16) no se computan, eliminarlos.
+                    // Si hay que incluir los OVA-JD y OVA-FN (-17 y -18), añadirlos.
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@fechaInicio", fechaInicio);
+                    var dias = GetIntScalar(conexion, consulta);
+                    resultado.HorasAnuales = new TimeSpan(dias * App.Global.Convenio.JornadaMedia.Ticks).ToDecimal();
 
                 }
             } catch (Exception ex) {
@@ -2117,6 +2052,247 @@ namespace Orion.Servicios {
             }
             return 0;
         }
+
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BD DIAS PIJAMA BÁSICOS
+        // ====================================================================================================
+
+        public List<DiaPijamaBasico> GetDiasPijamaBasicoMes(int año, int mes, int matricula) {
+            var lista = new List<DiaPijamaBasico>();
+            var fecha = new DateTime(año, mes, 1);
+            try {
+                var consulta = new SQLiteExpression("" +
+                    "SELECT " +
+                    "    C.MatriculaConductor AS MatriculaConductor, " +
+                    "    DC.DiaFecha AS Fecha, " +
+                    "    DC.Grafico AS NumeroGrafico, " +
+                    "    DC.Codigo AS Codigo, " +
+                    "    DC.ExcesoJornada AS ExcesoJornada, " +
+                    "    DC.FacturadoPaqueteria AS FacturadoPaqueteria, " +
+                    "    DC.Limpieza AS Limpieza, " +
+                    "    DC.GraficoVinculado AS NumeroGraficoVinculado, " +
+                    "    G.Validez AS ValidezGrafico, " +
+                    "    G.DiaSemana AS DiaSemanaGrafico, " +
+                    "    CASE WHEN DC.TurnoAlt > 0 THEN DC.TurnoAlt ELSE G.Turno END AS Turno, " +
+                    "    CASE WHEN DC.InicioAlt > 0 THEN DC.InicioAlt ELSE G.Inicio END AS Inicio, " +
+                    "    CASE WHEN DC.FinalAlt > 0 THEN DC.FinalAlt ELSE G.Final END AS Final, " +
+                    "    CASE WHEN DC.InicioPartidoAlt > 0 THEN DC.InicioPartidoAlt ELSE G.InicioPartido END AS InicioPartido, " +
+                    "    CASE WHEN DC.FinalPartidoAlt > 0 THEN DC.FinalPartidoAlt ELSE G.FinalPartido END AS FinalPartido, " +
+                    "    G.Valoracion AS ValoracionGrafico, " +
+                    "    CASE WHEN DC.TrabajadasAlt > 0 THEN DC.TrabajadasAlt ELSE G.Trabajadas END AS Trabajadas, " +
+                    "    CASE WHEN DC.AcumuladasAlt > 0 THEN DC.AcumuladasAlt ELSE G.Acumuladas END AS Acumuladas, " +
+                    "    CASE WHEN DC.NocturnasAlt > 0 THEN DC.NocturnasAlt ELSE G.Nocturnas END AS Nocturnas, " +
+                    "    CASE WHEN DC.DesayunoAlt > 0 THEN DC.DesayunoAlt ELSE G.Desayuno END AS Desayuno, " +
+                    "    CASE WHEN DC.ComidaAlt > 0 THEN DC.ComidaAlt ELSE G.Comida END AS Comida, " +
+                    "    CASE WHEN DC.CenaAlt > 0 THEN DC.CenaAlt ELSE G.Cena END AS Cena, " +
+                    "    CASE WHEN DC.PlusCenaAlt > 0 THEN DC.PlusCenaAlt ELSE G.PlusCena END AS PlusCena, " +
+                    "    CASE WHEN DC.PlusLimpiezaAlt > 0 THEN DC.PlusLimpiezaAlt ELSE G.PlusLimpieza END AS PlusLimpieza, " +
+                    "    CASE WHEN DC.PlusPaqueteriaAlt > 0 THEN DC.PlusPaqueteriaAlt ELSE G.PlusPaqueteria END AS PlusPaqueteria, " +
+                    "    DC.Notas AS Notas " +
+                    "FROM DiasCalendario As DC " +
+                    "LEFT JOIN Calendarios AS C ON C._id = DC.IdCalendario " +
+                    "LEFT JOIN Graficos AS G ON G.Validez = (SELECT Max(Validez) FROM Graficos WHERE DC.Grafico = G.Numero AND Validez <= DC.DiaFecha) " +
+                    "WHERE C.MatriculaConductor = @conductor AND strftime('%Y-%m', C.Fecha) = strftime('%Y-%m', @fecha) " +
+                    "ORDER BY C.MatriculaConductor, DC.DiaFecha; ");
+
+                consulta.AddParameter("@conductor", matricula);
+                consulta.AddParameter("@fecha", fecha);
+
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                    using (var comando = consulta.GetCommand(conexion)) {
+                        using (var lector = comando.ExecuteReader()) {
+                            while (lector.Read()) {
+                                var dia = new DiaPijamaBasico(lector);
+                                lista.Add(dia);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasPijamaBasicoMes), ex);
+            }
+            return lista;
+        }
+
+
+        public List<DiaPijamaBasico> GetDiasPijamaBasicoAño(int año, int matricula) {
+            var lista = new List<DiaPijamaBasico>();
+            var fecha = new DateTime(año, 1, 1);
+            try {
+                var consulta = new SQLiteExpression("" +
+                    "SELECT " +
+                    "    C.MatriculaConductor AS MatriculaConductor, " +
+                    "    DC.DiaFecha AS Fecha, " +
+                    "    DC.Grafico AS NumeroGrafico, " +
+                    "    DC.Codigo AS Codigo, " +
+                    "    DC.ExcesoJornada AS ExcesoJornada, " +
+                    "    DC.FacturadoPaqueteria AS FacturadoPaqueteria, " +
+                    "    DC.Limpieza AS Limpieza, " +
+                    "    DC.GraficoVinculado AS NumeroGraficoVinculado, " +
+                    "    G.Validez AS ValidezGrafico, " +
+                    "    G.DiaSemana AS DiaSemanaGrafico, " +
+                    "    CASE WHEN DC.TurnoAlt > 0 THEN DC.TurnoAlt ELSE G.Turno END AS Turno, " +
+                    "    CASE WHEN DC.InicioAlt > 0 THEN DC.InicioAlt ELSE G.Inicio END AS Inicio, " +
+                    "    CASE WHEN DC.FinalAlt > 0 THEN DC.FinalAlt ELSE G.Final END AS Final, " +
+                    "    CASE WHEN DC.InicioPartidoAlt > 0 THEN DC.InicioPartidoAlt ELSE G.InicioPartido END AS InicioPartido, " +
+                    "    CASE WHEN DC.FinalPartidoAlt > 0 THEN DC.FinalPartidoAlt ELSE G.FinalPartido END AS FinalPartido, " +
+                    "    G.Valoracion AS ValoracionGrafico, " +
+                    "    CASE WHEN DC.TrabajadasAlt > 0 THEN DC.TrabajadasAlt ELSE G.Trabajadas END AS Trabajadas, " +
+                    "    CASE WHEN DC.AcumuladasAlt > 0 THEN DC.AcumuladasAlt ELSE G.Acumuladas END AS Acumuladas, " +
+                    "    CASE WHEN DC.NocturnasAlt > 0 THEN DC.NocturnasAlt ELSE G.Nocturnas END AS Nocturnas, " +
+                    "    CASE WHEN DC.DesayunoAlt > 0 THEN DC.DesayunoAlt ELSE G.Desayuno END AS Desayuno, " +
+                    "    CASE WHEN DC.ComidaAlt > 0 THEN DC.ComidaAlt ELSE G.Comida END AS Comida, " +
+                    "    CASE WHEN DC.CenaAlt > 0 THEN DC.CenaAlt ELSE G.Cena END AS Cena, " +
+                    "    CASE WHEN DC.PlusCenaAlt > 0 THEN DC.PlusCenaAlt ELSE G.PlusCena END AS PlusCena, " +
+                    "    CASE WHEN DC.PlusLimpiezaAlt > 0 THEN DC.PlusLimpiezaAlt ELSE G.PlusLimpieza END AS PlusLimpieza, " +
+                    "    CASE WHEN DC.PlusPaqueteriaAlt > 0 THEN DC.PlusPaqueteriaAlt ELSE G.PlusPaqueteria END AS PlusPaqueteria, " +
+                    "    DC.Notas AS Notas " +
+                    "FROM DiasCalendario As DC " +
+                    "LEFT JOIN Calendarios AS C ON C._id = DC.IdCalendario " +
+                    "LEFT JOIN Graficos AS G ON G.Validez = (SELECT Max(Validez) FROM Graficos WHERE DC.Grafico = G.Numero AND Validez <= DC.DiaFecha) " +
+                    "WHERE C.MatriculaConductor = @conductor AND strftime('%Y', C.Fecha) = strftime('%Y', @fecha) " +
+                    "ORDER BY C.MatriculaConductor, DC.DiaFecha; ");
+
+                consulta.AddParameter("@conductor", matricula);
+                consulta.AddParameter("@fecha", fecha);
+
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                    using (var comando = consulta.GetCommand(conexion)) {
+                        using (var lector = comando.ExecuteReader()) {
+                            while (lector.Read()) {
+                                var dia = new DiaPijamaBasico(lector);
+                                lista.Add(dia);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasPijamaBasicoMes), ex);
+            }
+            return lista;
+        }
+
+
+        public List<DiaPijamaBasico> GetTodosDiasPijamaBasicoMes(int año, int mes) {
+            var lista = new List<DiaPijamaBasico>();
+            var fecha = new DateTime(año, mes, 1);
+            try {
+                var consulta = new SQLiteExpression("" +
+                    "SELECT " +
+                    "    C.MatriculaConductor AS MatriculaConductor, " +
+                    "    DC.DiaFecha AS Fecha, " +
+                    "    DC.Grafico AS NumeroGrafico, " +
+                    "    DC.Codigo AS Codigo, " +
+                    "    DC.ExcesoJornada AS ExcesoJornada, " +
+                    "    DC.FacturadoPaqueteria AS FacturadoPaqueteria, " +
+                    "    DC.Limpieza AS Limpieza, " +
+                    "    DC.GraficoVinculado AS NumeroGraficoVinculado, " +
+                    "    G.Validez AS ValidezGrafico, " +
+                    "    G.DiaSemana AS DiaSemanaGrafico, " +
+                    "    CASE WHEN DC.TurnoAlt > 0 THEN DC.TurnoAlt ELSE G.Turno END AS Turno, " +
+                    "    CASE WHEN DC.InicioAlt > 0 THEN DC.InicioAlt ELSE G.Inicio END AS Inicio, " +
+                    "    CASE WHEN DC.FinalAlt > 0 THEN DC.FinalAlt ELSE G.Final END AS Final, " +
+                    "    CASE WHEN DC.InicioPartidoAlt > 0 THEN DC.InicioPartidoAlt ELSE G.InicioPartido END AS InicioPartido, " +
+                    "    CASE WHEN DC.FinalPartidoAlt > 0 THEN DC.FinalPartidoAlt ELSE G.FinalPartido END AS FinalPartido, " +
+                    "    G.Valoracion AS ValoracionGrafico, " +
+                    "    CASE WHEN DC.TrabajadasAlt > 0 THEN DC.TrabajadasAlt ELSE G.Trabajadas END AS Trabajadas, " +
+                    "    CASE WHEN DC.AcumuladasAlt > 0 THEN DC.AcumuladasAlt ELSE G.Acumuladas END AS Acumuladas, " +
+                    "    CASE WHEN DC.NocturnasAlt > 0 THEN DC.NocturnasAlt ELSE G.Nocturnas END AS Nocturnas, " +
+                    "    CASE WHEN DC.DesayunoAlt > 0 THEN DC.DesayunoAlt ELSE G.Desayuno END AS Desayuno, " +
+                    "    CASE WHEN DC.ComidaAlt > 0 THEN DC.ComidaAlt ELSE G.Comida END AS Comida, " +
+                    "    CASE WHEN DC.CenaAlt > 0 THEN DC.CenaAlt ELSE G.Cena END AS Cena, " +
+                    "    CASE WHEN DC.PlusCenaAlt > 0 THEN DC.PlusCenaAlt ELSE G.PlusCena END AS PlusCena, " +
+                    "    CASE WHEN DC.PlusLimpiezaAlt > 0 THEN DC.PlusLimpiezaAlt ELSE G.PlusLimpieza END AS PlusLimpieza, " +
+                    "    CASE WHEN DC.PlusPaqueteriaAlt > 0 THEN DC.PlusPaqueteriaAlt ELSE G.PlusPaqueteria END AS PlusPaqueteria, " +
+                    "    DC.Notas AS Notas " +
+                    "FROM DiasCalendario As DC " +
+                    "LEFT JOIN Calendarios AS C ON C._id = DC.IdCalendario " +
+                    "LEFT JOIN Graficos AS G ON G.Validez = (SELECT Max(Validez) FROM Graficos WHERE DC.Grafico = G.Numero AND Validez <= DC.DiaFecha) " +
+                    "WHERE strftime('%Y-%m', C.Fecha) = strftime('%Y-%m', @fecha) " +
+                    "ORDER BY C.MatriculaConductor, DC.DiaFecha; ");
+
+                consulta.AddParameter("@fecha", fecha);
+
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                    using (var comando = consulta.GetCommand(conexion)) {
+                        using (var lector = comando.ExecuteReader()) {
+                            while (lector.Read()) {
+                                var dia = new DiaPijamaBasico(lector);
+                                lista.Add(dia);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasPijamaBasicoMes), ex);
+            }
+            return lista;
+        }
+
+
+        public List<DiaPijamaBasico> GetTodosDiasPijamaBasicoAño(int año) {
+            var lista = new List<DiaPijamaBasico>();
+            var fecha = new DateTime(año, 1, 1);
+            try {
+                var consulta = new SQLiteExpression("" +
+                    "SELECT " +
+                    "    C.MatriculaConductor AS MatriculaConductor, " +
+                    "    DC.DiaFecha AS Fecha, " +
+                    "    DC.Grafico AS NumeroGrafico, " +
+                    "    DC.Codigo AS Codigo, " +
+                    "    DC.ExcesoJornada AS ExcesoJornada, " +
+                    "    DC.FacturadoPaqueteria AS FacturadoPaqueteria, " +
+                    "    DC.Limpieza AS Limpieza, " +
+                    "    DC.GraficoVinculado AS NumeroGraficoVinculado, " +
+                    "    G.Validez AS ValidezGrafico, " +
+                    "    G.DiaSemana AS DiaSemanaGrafico, " +
+                    "    CASE WHEN DC.TurnoAlt > 0 THEN DC.TurnoAlt ELSE G.Turno END AS Turno, " +
+                    "    CASE WHEN DC.InicioAlt > 0 THEN DC.InicioAlt ELSE G.Inicio END AS Inicio, " +
+                    "    CASE WHEN DC.FinalAlt > 0 THEN DC.FinalAlt ELSE G.Final END AS Final, " +
+                    "    CASE WHEN DC.InicioPartidoAlt > 0 THEN DC.InicioPartidoAlt ELSE G.InicioPartido END AS InicioPartido, " +
+                    "    CASE WHEN DC.FinalPartidoAlt > 0 THEN DC.FinalPartidoAlt ELSE G.FinalPartido END AS FinalPartido, " +
+                    "    G.Valoracion AS ValoracionGrafico, " +
+                    "    CASE WHEN DC.TrabajadasAlt > 0 THEN DC.TrabajadasAlt ELSE G.Trabajadas END AS Trabajadas, " +
+                    "    CASE WHEN DC.AcumuladasAlt > 0 THEN DC.AcumuladasAlt ELSE G.Acumuladas END AS Acumuladas, " +
+                    "    CASE WHEN DC.NocturnasAlt > 0 THEN DC.NocturnasAlt ELSE G.Nocturnas END AS Nocturnas, " +
+                    "    CASE WHEN DC.DesayunoAlt > 0 THEN DC.DesayunoAlt ELSE G.Desayuno END AS Desayuno, " +
+                    "    CASE WHEN DC.ComidaAlt > 0 THEN DC.ComidaAlt ELSE G.Comida END AS Comida, " +
+                    "    CASE WHEN DC.CenaAlt > 0 THEN DC.CenaAlt ELSE G.Cena END AS Cena, " +
+                    "    CASE WHEN DC.PlusCenaAlt > 0 THEN DC.PlusCenaAlt ELSE G.PlusCena END AS PlusCena, " +
+                    "    CASE WHEN DC.PlusLimpiezaAlt > 0 THEN DC.PlusLimpiezaAlt ELSE G.PlusLimpieza END AS PlusLimpieza, " +
+                    "    CASE WHEN DC.PlusPaqueteriaAlt > 0 THEN DC.PlusPaqueteriaAlt ELSE G.PlusPaqueteria END AS PlusPaqueteria, " +
+                    "    DC.Notas AS Notas " +
+                    "FROM DiasCalendario As DC " +
+                    "LEFT JOIN Calendarios AS C ON C._id = DC.IdCalendario " +
+                    "LEFT JOIN Graficos AS G ON G.Validez = (SELECT Max(Validez) FROM Graficos WHERE DC.Grafico = G.Numero AND Validez <= DC.DiaFecha) " +
+                    "WHERE strftime('%Y', C.Fecha) = strftime('%Y', @fecha) " +
+                    "ORDER BY C.MatriculaConductor, DC.DiaFecha; ");
+
+                consulta.AddParameter("@fecha", fecha);
+
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                    using (var comando = consulta.GetCommand(conexion)) {
+                        using (var lector = comando.ExecuteReader()) {
+                            while (lector.Read()) {
+                                var dia = new DiaPijamaBasico(lector);
+                                lista.Add(dia);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasPijamaBasicoMes), ex);
+            }
+            return lista;
+        }
+
+
 
 
 

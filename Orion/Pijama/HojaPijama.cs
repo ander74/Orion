@@ -13,7 +13,6 @@ namespace Orion.Pijama {
     using System.Linq;
     using LiveCharts;
     using LiveCharts.Defaults;
-    using Orion.DataModels;
     using Orion.Models;
     using Orion.Servicios;
 
@@ -26,26 +25,21 @@ namespace Orion.Pijama {
         public HojaPijama(Calendario calendario, IMensajes mensajes) {
             Mensajes = mensajes;
 
-            // Creamos el servicio de base de datos especial. TODO: En prueba.
-            //BdEspecial ServicioBD = new BdEspecial();
-
             try {
                 // Establecemos la fecha del pijama.
                 Fecha = calendario.Fecha;
                 // Extraemos el conductor del calendario.
-                //Trabajador = BdConductores.GetConductor(calendario.IdConductor);
                 Trabajador = App.Global.ConductoresVM.GetConductor(calendario.MatriculaConductor);
                 // Si el trabajador no existe, salimos.
                 if (Trabajador == null) return;
                 // Extraemos la lista de los días pijama.
-                //ListaDias = BdPijamas.GetDiasPijama(calendario.ListaDias);
                 ListaDias = App.Global.Repository.GetDiasPijama(Fecha, Trabajador.Matricula).ToList();
                 // Definimos el final anterior y lo establecemos al día anterior del primer día del mes.
                 TimeSpan? finalAnterior = null;
                 DateTime fecha = new DateTime(calendario.Fecha.Year, calendario.Fecha.Month, 1).AddDays(-1);
-                DiaCalendarioBase diaAnterior = BdDiasCalendario.GetDiaCalendario(calendario.MatriculaConductor, fecha);
+                DiaCalendarioBase diaAnterior = App.Global.Repository.GetDiaCalendario(calendario.MatriculaConductor, fecha);
                 if (diaAnterior != null) {
-                    GraficoBase graficoanterior = BdGraficos.GetGrafico(diaAnterior.Grafico, fecha);
+                    GraficoBase graficoanterior = App.Global.Repository.GetGrafico(diaAnterior.Grafico, fecha);
                     if (graficoanterior != null && graficoanterior.Final.HasValue) finalAnterior = graficoanterior.Final.Value;
                 }
                 // Recorremos cada uno de los días para computar todos los valores.
@@ -121,23 +115,23 @@ namespace Orion.Pijama {
                     }
                 }
                 // Extraemos las horas de las regulaciones.
-                HorasCobradas = BdPijamas.GetHorasCobradasMes(Fecha.Year, Fecha.Month, Trabajador.Id);
-                HorasCobradasAño = BdPijamas.GetHorasCobradasAño(Fecha.Year, Fecha.Month, Trabajador.Id);
-                HorasReguladas = BdPijamas.GetHorasCambiadasPorDCsMes(Fecha.Year, Fecha.Month, Trabajador.Id);
-                OtrasHoras = BdPijamas.GetHorasReguladasMes(Fecha.Year, Fecha.Month, Trabajador.Id);
-                DiasTrabajadosHastaMesEnAño = BdPijamas.GetDiasTrabajadosHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Id);
-                DiasDescansoHastaMesEnAño = BdPijamas.GetDiasDescansoHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Id);
-                DiasVacacionesHastaMesEnAño = BdPijamas.GetDiasVacacionesHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Id);
-                DiasInactivoHastaMesEnAño = BdPijamas.GetDiasInactivoHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Id);
+                HorasCobradas = App.Global.Repository.GetHorasCobradasMes(Fecha.Year, Fecha.Month, Trabajador.Matricula);
+                HorasCobradasAño = App.Global.Repository.GetHorasCobradasAño(Fecha.Year, Fecha.Month, Trabajador.Matricula);
+                HorasReguladas = App.Global.Repository.GetHorasCambiadasPorDCsMes(Fecha.Year, Fecha.Month, Trabajador.Matricula);
+                OtrasHoras = App.Global.Repository.GetHorasReguladasMes(Fecha.Year, Fecha.Month, Trabajador.Matricula);
+                DiasTrabajadosHastaMesEnAño = App.Global.Repository.GetDiasTrabajadosHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Matricula);
+                DiasDescansoHastaMesEnAño = App.Global.Repository.GetDiasDescansoHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Matricula);
+                DiasVacacionesHastaMesEnAño = App.Global.Repository.GetDiasVacacionesHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Matricula);
+                DiasInactivoHastaMesEnAño = App.Global.Repository.GetDiasInactivoHastaMesEnAño(Fecha.Year, Fecha.Month, Trabajador.Matricula);
                 // Cambiamos el signo de las horas cobradas para que estén en positivo.
                 HorasCobradas = new TimeSpan(HorasCobradas.Ticks * -1);
                 HorasCobradasAño = new TimeSpan(HorasCobradasAño.Ticks * -1);
                 // Extraemos los datos hasta el mes actual.
-                HastaMesActual = BdPijamas.GetResumenHastaMes(Fecha.Year, Fecha.Month, Trabajador.Id);
+                HastaMesActual = App.Global.Repository.GetResumenHastaMes(Fecha.Year, Fecha.Month, Trabajador.Matricula, App.Global.PorCentro.Comodin);
                 // Extramos los datos hasta el año anterior
                 DateTime fechaanterior = Fecha.Month == 12 ? new DateTime(Fecha.Year, 12, 1) : new DateTime(Fecha.Year - 1, 12, 1);
                 fechaanterior = fechaanterior.AddMonths(-1);
-                HastaAñoAnterior = BdPijamas.GetResumenHastaMes(fechaanterior.Year, fechaanterior.Month, Trabajador.Id);
+                HastaAñoAnterior = App.Global.Repository.GetResumenHastaMes(fechaanterior.Year, fechaanterior.Month, Trabajador.Matricula, App.Global.PorCentro.Comodin);
 
             } catch (Exception ex) {
                 Mensajes.VerError("HojaPijama.Constructor", ex);
@@ -605,6 +599,10 @@ namespace Orion.Pijama {
         /// </summary>
         public TimeSpan AcumuladasHastaMes {
             get {
+                var h = Trabajador.Acumuladas +
+                       HastaMesActual.HorasAcumuladas +
+                       HastaMesActual.HorasReguladas -
+                       new TimeSpan(Convert.ToInt64(HastaMesActual.DiasLibreDisposicionF6 * App.Global.Convenio.JornadaMedia.Ticks));
                 return Trabajador.Acumuladas +
                        HastaMesActual.HorasAcumuladas +
                        HastaMesActual.HorasReguladas -

@@ -490,6 +490,32 @@
         </Setter>
     </Style>
 
+    
+    <Style TargetType="TabItem" x:Key="EstiloPestañaProgramador">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TabItem">
+                    <Border x:Name="Border" Margin="0,0,-2,0" BorderThickness="1,1,1,0" CornerRadius="10,10,0,0"
+                            BorderBrush="{StaticResource AzulOscuro}" Background="{StaticResource orDegradadoRojo }">
+                        <ContentPresenter x:Name="ContentSite" VerticalAlignment="Center" HorizontalAlignment="Center" 
+                                          ContentSource="Header" Margin="12,2,12,2" RecognizesAccessKey="True">
+                        </ContentPresenter>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource orDegradadoVerde}"/>
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource orDegradadoMarron}"/>
+                            <Setter TargetName="Border" Property="BorderThickness" Value="1,1,1,0"/>
+                            <Setter Property="Panel.ZIndex" Value="100" />
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource orDegradadoGris}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!-- ==================================================================================================== -->
     <!-- ESTILO CALENDARIO -->

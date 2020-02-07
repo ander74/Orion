@@ -12,6 +12,7 @@ namespace Orion.PrintModel {
     using System.Linq;
     using System.Threading.Tasks;
     using System.Windows.Data;
+    using iText.IO.Font.Constants;
     using iText.Kernel.Colors;
     using iText.Kernel.Font;
     using iText.Layout;
@@ -68,7 +69,7 @@ namespace Orion.PrintModel {
 
         private static Table GetTablaCalendarios(ListCollectionView listaCalendarios, DateTime fecha) {
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo de la tabla.
             Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
@@ -76,7 +77,7 @@ namespace Orion.PrintModel {
                        .SetMargins(0, 0, 0, 0)
                        .SetPaddings(0, 0, 0, 0)
                        .SetWidth(UnitValue.CreatePercentValue(100))
-                       .SetFont(arial)
+                       .SetFont(helvetica)
                        .SetFontSize(7);
             // Estilo titulos
             Style estiloTitulos = new Style();
@@ -167,14 +168,14 @@ namespace Orion.PrintModel {
         private static Table GetTablaFallosCalendario(ListCollectionView listaCalendarios, DateTime fecha) {
 
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo de la tabla.
             Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
                        .SetMargins(0, 0, 0, 0)
                        .SetPaddings(0, 0, 0, 0)
                        .SetWidth(UnitValue.CreatePercentValue(100))
-                       .SetFont(arial)
+                       .SetFont(helvetica)
                        .SetFontSize(10);
             // Estilo encabezados 1
             Style estiloEncabezados1 = new Style();
@@ -233,14 +234,14 @@ namespace Orion.PrintModel {
         private static Table GetTablaEstadisticasCalendarios(List<EstadisticaCalendario> lista, DateTime fecha, bool segundaQuincena = false) {
 
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo de la tabla.
             Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
                        .SetMargins(0, 0, 0, 0)
                        .SetPaddings(0, 0, 0, 0)
                        .SetWidth(UnitValue.CreatePercentValue(100))
-                       .SetFont(arial)
+                       .SetFont(helvetica)
                        .SetFontSize(8);
             // Estilo encabezados 1
             Style estiloEncabezados1 = new Style();
@@ -267,20 +268,22 @@ namespace Orion.PrintModel {
             float[] anchos14 = new float[] { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             float[] anchos15 = new float[] { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             float[] anchos16 = new float[] { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+            float[] anchos17 = new float[] { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
             // Definimos el número de días de la tabla.
             int diasMes = DateTime.DaysInMonth(fecha.Year, fecha.Month);
             int dias = 0;
             switch (diasMes) {
-                case 28: dias = 14; break;
-                case 29: dias = segundaQuincena ? 14 : 15; break;
-                case 30: dias = 15; break;
-                case 31: dias = segundaQuincena ? 16 : 15; break;
+                case 28: dias = segundaQuincena ? 15 : 14; break;
+                case 29: dias = segundaQuincena ? 15 : 15; break;
+                case 30: dias = segundaQuincena ? 15 : 16; break;
+                case 31: dias = segundaQuincena ? 15 : 17; break;
             }
             Table tabla = null;
             switch (dias) {
                 case 14: tabla = new Table(UnitValue.CreatePercentArray(anchos14)); break;
                 case 15: tabla = new Table(UnitValue.CreatePercentArray(anchos15)); break;
                 case 16: tabla = new Table(UnitValue.CreatePercentArray(anchos16)); break;
+                case 17: tabla = new Table(UnitValue.CreatePercentArray(anchos17)); break;
             }
             // Asignamos el estilo a la tabla.
             tabla.AddStyle(estiloTabla);
@@ -289,206 +292,362 @@ namespace Orion.PrintModel {
             // Añadimos las celdas de encabezado.
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("CONCEPTOS")).AddStyle(estiloEncabezados2));
             for (int d = 1; d <= dias; d++) {
-                int dd = segundaQuincena ? diasMes - dias + d : d;
-                DateTime f = new DateTime(fecha.Year, fecha.Month, dd);
+                int dd = segundaQuincena ? diasMes - dias + 1 + d : d;
                 Style estiloDia = null;
-                if (f.DayOfWeek == DayOfWeek.Saturday) {
-                    estiloDia = estiloSabados;
-                } else if (f.DayOfWeek == DayOfWeek.Sunday || App.Global.CalendariosVM.EsFestivo(f)) {
-                    estiloDia = estiloFestivos;
-                } else {
+                if (segundaQuincena && d == dias) {
                     estiloDia = new Style().SetFontColor(new DeviceRgb(0, 0, 0));
+                    tabla.AddHeaderCell(new Cell().Add(new Paragraph($"TOTAL")).AddStyle(estiloEncabezados2).AddStyle(estiloDia));
+                } else {
+                    DateTime f = new DateTime(fecha.Year, fecha.Month, dd);
+                    if (f.DayOfWeek == DayOfWeek.Saturday) {
+                        estiloDia = estiloSabados;
+                    } else if (f.DayOfWeek == DayOfWeek.Sunday || App.Global.CalendariosVM.EsFestivo(f)) {
+                        estiloDia = estiloFestivos;
+                    } else {
+                        estiloDia = new Style().SetFontColor(new DeviceRgb(0, 0, 0));
+                    }
+                    tabla.AddHeaderCell(new Cell().Add(new Paragraph($"{dd:00}")).AddStyle(estiloEncabezados2).AddStyle(estiloDia));
                 }
-                tabla.AddHeaderCell(new Cell().Add(new Paragraph($"{dd:00}")).AddStyle(estiloEncabezados2).AddStyle(estiloDia));
             }
-            // Turnos 1
-            tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 1").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = lista[i].Turno1 == 0 ? "" : $"{lista[i].Turno1:00}";
-                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+
+            //TURNOS
+            if (App.Global.EstadisticasTurnosVM.ElegirTurnos) {
+                // Turnos 1
+                tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 1").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Turno1):00}")));
+                    } else {
+                        string dato = lista[i].Turno1 == 0 ? "" : $"{lista[i].Turno1:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Turnos 2
+                tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 2").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Turno2):00}")));
+                    } else {
+                        string dato = lista[i].Turno2 == 0 ? "" : $"{lista[i].Turno2:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Turnos 3
+                tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 3").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Turno3):00}")));
+                    } else {
+                        string dato = lista[i].Turno3 == 0 ? "" : $"{lista[i].Turno3:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Turnos 4
+                tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 4").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Turno4):00}")));
+                    } else {
+                        string dato = lista[i].Turno4 == 0 ? "" : $"{lista[i].Turno4:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+
             }
-            // Turnos 2
-            tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 2").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = lista[i].Turno2 == 0 ? "" : $"{lista[i].Turno2:00}";
-                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+
+            // JORNADAS
+            if (App.Global.EstadisticasTurnosVM.ElegirJornadas) {
+
+                // Jornadas Trabajadas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas trabajadas").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.TotalJornadas):00}")));
+                    } else {
+                        string dato = lista[i].TotalJornadas == 0 ? "" : $"{lista[i].TotalJornadas:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Jornadas menores de 7:20
+                tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas menores de {App.Global.Convenio.JornadaMedia.ToTexto()}").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.JornadasMenoresMedia):00}")));
+                    } else {
+                        string dato = lista[i].JornadasMenoresMedia == 0 ? "" : $"{lista[i].JornadasMenoresMedia:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Jornadas mayores o iguales de 7:20
+                tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas mayores de {App.Global.Convenio.JornadaMedia.ToTexto()}").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.JornadasMayoresMedia):00}")));
+                    } else {
+                        string dato = lista[i].JornadasMayoresMedia == 0 ? "" : $"{lista[i].JornadasMayoresMedia:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+
             }
-            // Turnos 3
-            tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 3").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = lista[i].Turno3 == 0 ? "" : $"{lista[i].Turno3:00}";
-                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+
+            // HORAS
+            if (App.Global.EstadisticasTurnosVM.ElegirHoras) {
+
+                // Horas trabajadas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Horas trabajadas").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        var horas = new TimeSpan(lista.Sum(x => x.Trabajadas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[i].Trabajadas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Media de horas trabajadas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Media de horas trab.").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        var horas = new TimeSpan(lista.Sum(x => x.MediaTrabajadas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[i].MediaTrabajadas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Tiempo partido no computable
+                tabla.AddCell(new Cell().Add(new Paragraph($"Tiempo part. no comput.").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        var horas = new TimeSpan(lista.Sum(x => x.TiempoPartido.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[i].TiempoPartido, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Horas Negativas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Horas negativas").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        var horas = new TimeSpan(lista.Sum(x => x.HorasNegativas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[i].HorasNegativas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Horas Acumuladas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Horas Acumuladas").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        var horas = new TimeSpan(lista.Sum(x => x.Acumuladas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[i].Acumuladas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Acumuladas - Negativas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Diferencia Acumul. - Negat.").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        var horas = new TimeSpan(lista.Sum(x => x.Acumuladas.Ticks) - lista.Sum(y => y.HorasNegativas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[i].Acumuladas - lista[i].HorasNegativas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Horas Nocturnas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Horas Nocturnas").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        var horas = new TimeSpan(lista.Sum(x => x.Nocturnas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[i].Nocturnas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+
             }
-            // Turnos 4
-            tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 4").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = lista[i].Turno4 == 0 ? "" : $"{lista[i].Turno4:00}";
-                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+
+            // DIETAS
+            if (App.Global.EstadisticasTurnosVM.ElegirDietas) {
+
+                // Desayuno
+                tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Desayuno").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Desayuno):0.00}")));
+                    } else {
+                        string dato = (string)cnvDecimal.Convert(lista[i].Desayuno, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Importe Desayuno
+                tabla.AddCell(new Cell().Add(new Paragraph($"Importe Desayuno").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.ImporteDesayuno):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[i].ImporteDesayuno, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Comida
+                tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Comida").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Comida):0.00}")));
+                    } else {
+                        string dato = (string)cnvDecimal.Convert(lista[i].Comida, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Importe Comida
+                tabla.AddCell(new Cell().Add(new Paragraph($"Importe Comida").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.ImporteComida):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[i].ImporteComida, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Cena
+                tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Cena").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Cena):0.00}")));
+                    } else {
+                        string dato = (string)cnvDecimal.Convert(lista[i].Cena, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Importe Cena
+                tabla.AddCell(new Cell().Add(new Paragraph($"Importe Cena").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.ImporteCena):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[i].ImporteCena, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Plus Cena
+                tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Plus Cena").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusCena):0.00}")));
+                    } else {
+                        string dato = (string)cnvDecimal.Convert(lista[i].PlusCena, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Importe Plus Cena
+                tabla.AddCell(new Cell().Add(new Paragraph($"Importe Plus Cena").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.ImportePlusCena):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[i].ImportePlusCena, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+
             }
-            // Jornadas Trabajadas
-            tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas trabajadas").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = lista[i].TotalJornadas == 0 ? "" : $"{lista[i].TotalJornadas:00}";
-                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
-            }
-            // Jornadas menores de 7:20
-            tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas menores de {App.Global.Convenio.JornadaMedia.ToTexto()}").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = lista[i].JornadasMenoresMedia == 0 ? "" : $"{lista[i].JornadasMenoresMedia:00}";
-                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
-            }
-            // Jornadas mayores o iguales de 7:20
-            tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas mayores de {App.Global.Convenio.JornadaMedia.ToTexto()}").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = lista[i].JornadasMayoresMedia == 0 ? "" : $"{lista[i].JornadasMayoresMedia:00}";
-                tabla.AddCell(new Cell().Add(new Paragraph(dato)));
-            }
-            // Horas trabajadas
-            tabla.AddCell(new Cell().Add(new Paragraph($"Horas trabajadas").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvSuperHora.Convert(lista[i].Trabajadas, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Media de horas trabajadas
-            tabla.AddCell(new Cell().Add(new Paragraph($"Media de horas trabajadas").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvSuperHora.Convert(lista[i].MediaTrabajadas, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Tiempo partido no computable
-            tabla.AddCell(new Cell().Add(new Paragraph($"Tiempo partido no computable").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvSuperHora.Convert(lista[i].TiempoPartido, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Horas Negativas
-            tabla.AddCell(new Cell().Add(new Paragraph($"Horas negativas").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvSuperHora.Convert(lista[i].HorasNegativas, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Horas Acumuladas
-            tabla.AddCell(new Cell().Add(new Paragraph($"Horas Acumuladas").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvSuperHora.Convert(lista[i].Acumuladas, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Acumuladas - Negativas
-            tabla.AddCell(new Cell().Add(new Paragraph($"Diferencia Acumuladas - Negativas").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvSuperHora.Convert(lista[i].Acumuladas - lista[i].HorasNegativas, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Horas Nocturnas
-            tabla.AddCell(new Cell().Add(new Paragraph($"Horas Nocturnas").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvSuperHora.Convert(lista[i].Nocturnas, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Desayuno
-            tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Desayuno").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimal.Convert(lista[i].Desayuno, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Importe Desayuno
-            tabla.AddCell(new Cell().Add(new Paragraph($"Importe Desayuno").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimalEuro.Convert(lista[i].ImporteDesayuno, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Comida
-            tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Comida").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimal.Convert(lista[i].Comida, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Importe Comida
-            tabla.AddCell(new Cell().Add(new Paragraph($"Importe Comida").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimalEuro.Convert(lista[i].ImporteComida, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Cena
-            tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Cena").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimal.Convert(lista[i].Cena, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Importe Cena
-            tabla.AddCell(new Cell().Add(new Paragraph($"Importe Cena").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimalEuro.Convert(lista[i].ImporteCena, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Plus Cena
-            tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Plus Cena").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimal.Convert(lista[i].PlusCena, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Importe Plus Cena
-            tabla.AddCell(new Cell().Add(new Paragraph($"Importe Plus Cena").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimalEuro.Convert(lista[i].ImportePlusCena, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Plus Nocturnidad
-            tabla.AddCell(new Cell().Add(new Paragraph($"Plus Nocturnidad").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusNocturnidad, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Plus Menor Descanso
-            tabla.AddCell(new Cell().Add(new Paragraph($"Plus Menor Descnaso").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusMenorDescanso, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Plus Limpieza
-            tabla.AddCell(new Cell().Add(new Paragraph($"Plus Limpieza").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusLimipeza, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Plus Paqueteria
-            tabla.AddCell(new Cell().Add(new Paragraph($"Plus Paqueteria").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusPaqueteria, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
-            }
-            // Plus Navidad
-            tabla.AddCell(new Cell().Add(new Paragraph($"Plus Navidad").SetBold()));
-            for (int d = 1; d <= dias; d++) {
-                int i = (segundaQuincena ? diasMes - dias + d : d) - 1;
-                string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusNavidad, null, VerValores.NoCeros, null);
-                tabla.AddCell(new Cell().Add(new Paragraph($"{dato}")));
+
+            // PLUSES
+            if (App.Global.EstadisticasTurnosVM.ElegirPluses) {
+
+                // Plus Nocturnidad
+                tabla.AddCell(new Cell().Add(new Paragraph($"Plus Nocturnidad").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusNocturnidad):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusNocturnidad, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Plus Menor Descanso
+                tabla.AddCell(new Cell().Add(new Paragraph($"Plus Menor Descnaso").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusMenorDescanso):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusMenorDescanso, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Plus Limpieza
+                tabla.AddCell(new Cell().Add(new Paragraph($"Plus Limpieza").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusLimipeza):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusLimipeza, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Plus Paqueteria
+                tabla.AddCell(new Cell().Add(new Paragraph($"Plus Paqueteria").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusPaqueteria):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusPaqueteria, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Plus Navidad
+                tabla.AddCell(new Cell().Add(new Paragraph($"Plus Navidad").SetBold()));
+                for (int d = 1; d <= dias; d++) {
+                    int i = (segundaQuincena ? diasMes - dias + 1 + d : d) - 1;
+                    if (segundaQuincena && d == dias) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusNavidad):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[i].PlusNavidad, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+
             }
 
 
@@ -496,10 +655,12 @@ namespace Orion.PrintModel {
             for (int fila = 0; fila < tabla.GetNumberOfRows(); fila++) {
                 for (int col = 0; col < tabla.GetNumberOfColumns(); col++) {
                     if (col > 0) {
-                        int dia = (segundaQuincena ? diasMes - dias + col : col);
-                        DateTime f = new DateTime(fecha.Year, fecha.Month, dia);
-                        if (f.DayOfWeek == DayOfWeek.Saturday) tabla.GetCell(fila, col).AddStyle(estiloSabados);
-                        if (f.DayOfWeek == DayOfWeek.Sunday || App.Global.CalendariosVM.EsFestivo(f)) tabla.GetCell(fila, col).AddStyle(estiloFestivos);
+                        int dia = (segundaQuincena ? diasMes - dias + col + 1 : col);
+                        if (dia <= DateTime.DaysInMonth(fecha.Year, fecha.Month)) {
+                            DateTime f = new DateTime(fecha.Year, fecha.Month, dia);
+                            if (f.DayOfWeek == DayOfWeek.Saturday) tabla.GetCell(fila, col).AddStyle(estiloSabados);
+                            if (f.DayOfWeek == DayOfWeek.Sunday || App.Global.CalendariosVM.EsFestivo(f)) tabla.GetCell(fila, col).AddStyle(estiloFestivos);
+                        }
                     }
                     if (fila % 2 != 0) {
                         tabla.GetCell(fila, col).AddStyle(estiloFondo);
@@ -515,7 +676,7 @@ namespace Orion.PrintModel {
         private static Table GetTablaEstadisticasMes(List<GraficoFecha> listaGraficos, List<GraficosPorDia> listaNumeros, List<DescansosPorDia> listaDescansos) {
 
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo de la tabla.
             Style estiloTabla = new Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
@@ -523,7 +684,7 @@ namespace Orion.PrintModel {
                        .SetPaddings(0, 0, 0, 0)
                        .SetWidth(UnitValue.CreatePercentValue(100))
                        .SetKeepTogether(true)
-                       .SetFont(arial)
+                       .SetFont(helvetica)
                        .SetFontSize(7);
             // Estilo titulos
             Style estiloTitulos = new Style();
@@ -718,6 +879,395 @@ namespace Orion.PrintModel {
         }
 
 
+        private static Table GetTablaEstadisticasCalendariosAño(List<EstadisticaCalendario> lista, DateTime fecha) {
+
+            // Fuente a utilizar en la tabla.
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+            // Estilo de la tabla.
+            Style estiloTabla = new Style();
+            estiloTabla.SetTextAlignment(TextAlignment.CENTER)
+                       .SetMargins(0, 0, 0, 0)
+                       .SetPaddings(0, 0, 0, 0)
+                       .SetWidth(UnitValue.CreatePercentValue(100))
+                       .SetFont(helvetica)
+                       .SetFontSize(8);
+            // Estilo encabezados 1
+            Style estiloEncabezados1 = new Style();
+            estiloEncabezados1.SetBold()
+                              .SetBorder(Border.NO_BORDER)
+                              .SetFontSize(8);
+            // Estilo de las celdas de encabezado 2.
+            Style estiloEncabezados2 = new Style();
+            estiloEncabezados2.SetBackgroundColor(new DeviceRgb(255, 153, 102))
+                             .SetBold()
+                             .SetFontSize(9);
+            // Estilo de fondo 2
+            Style estiloFondo = new Style().SetBackgroundColor(new DeviceRgb(252, 228, 214));
+            // Estilo Sábados
+            Style estiloSabados = new Style().SetFontColor(new DeviceRgb(0, 0, 0));
+            // Estilo Festivos
+            Style estiloFestivos = new Style().SetFontColor(new DeviceRgb(0, 0, 0));
+
+            // Creamos la tabla con el encabezado con el logo UGT.
+            string textoEncabezado = $"ESTADÍSTICAS DE CALENDARIOS\n{fecha:yyyy} ({App.Global.CentroActual.ToString()})".ToUpper();
+            Table tablaEncabezado = InformesServicio.GetTablaEncabezadoSindicato(textoEncabezado);
+            // Creamos los meses.
+            var Meses = new string[] { "DES", "ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC" };
+            // Creamos la tabla que tendrá las estadísticas.
+            float[] anchos = new float[] { 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+
+            // Definimos el número de días de la tabla.
+            Table tabla = new Table(UnitValue.CreatePercentArray(anchos));
+            // Asignamos el estilo a la tabla.
+            tabla.AddStyle(estiloTabla);
+            // Añadimos el encabezado inicial.
+            tabla.AddHeaderCell(new Cell(1, 14).Add(tablaEncabezado).AddStyle(estiloEncabezados1));
+            // Añadimos las celdas de encabezado.
+            tabla.AddHeaderCell(new Cell().Add(new Paragraph("CONCEPTOS")).AddStyle(estiloEncabezados2));
+            for (int d = 1; d <= 13; d++) {
+                Style estiloDia = new Style().SetFontColor(new DeviceRgb(0, 0, 0));
+                if (d == 13) {
+                    tabla.AddHeaderCell(new Cell().Add(new Paragraph($"TOTAL")).AddStyle(estiloEncabezados2).AddStyle(estiloDia));
+                } else {
+                    tabla.AddHeaderCell(new Cell().Add(new Paragraph($"{Meses[d]}")).AddStyle(estiloEncabezados2).AddStyle(estiloDia));
+                }
+            }
+
+            //TURNOS
+            if (App.Global.EstadisticasTurnosVM.ElegirTurnos) {
+                // Turnos 1
+                tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 1").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Turno1):00}")));
+                    } else {
+                        string dato = lista[d - 1].Turno1 == 0 ? "" : $"{lista[d - 1].Turno1:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Turnos 2
+                tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 2").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Turno2):00}")));
+                    } else {
+                        string dato = lista[d - 1].Turno2 == 0 ? "" : $"{lista[d - 1].Turno2:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Turnos 3
+                tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 3").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Turno3):00}")));
+                    } else {
+                        string dato = lista[d - 1].Turno3 == 0 ? "" : $"{lista[d - 1].Turno3:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Turnos 4
+                tabla.AddCell(new Cell().Add(new Paragraph($"Turnos 4").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Turno4):00}")));
+                    } else {
+                        string dato = lista[d - 1].Turno4 == 0 ? "" : $"{lista[d - 1].Turno4:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+
+            }
+
+            // JORNADAS
+            if (App.Global.EstadisticasTurnosVM.ElegirJornadas) {
+
+                // Jornadas Trabajadas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas trabajadas").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.TotalJornadas):00}")));
+                    } else {
+                        string dato = lista[d - 1].TotalJornadas == 0 ? "" : $"{lista[d - 1].TotalJornadas:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Jornadas menores de 7:20
+                tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas menores de {App.Global.Convenio.JornadaMedia.ToTexto()}").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.JornadasMenoresMedia):00}")));
+                    } else {
+                        string dato = lista[d - 1].JornadasMenoresMedia == 0 ? "" : $"{lista[d - 1].JornadasMenoresMedia:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Jornadas mayores o iguales de 7:20
+                tabla.AddCell(new Cell().Add(new Paragraph($"Jornadas mayores de {App.Global.Convenio.JornadaMedia.ToTexto()}").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.JornadasMayoresMedia):00}")));
+                    } else {
+                        string dato = lista[d - 1].JornadasMayoresMedia == 0 ? "" : $"{lista[d - 1].JornadasMayoresMedia:00}";
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+
+            }
+
+            // HORAS
+            if (App.Global.EstadisticasTurnosVM.ElegirHoras) {
+
+                // Horas trabajadas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Horas trabajadas").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        var horas = new TimeSpan(lista.Sum(x => x.Trabajadas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[d - 1].Trabajadas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Media de horas trabajadas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Media de horas trab.").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        var horas = new TimeSpan(lista.Sum(x => x.MediaTrabajadas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[d - 1].MediaTrabajadas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Tiempo partido no computable
+                tabla.AddCell(new Cell().Add(new Paragraph($"Tiempo part. no comput.").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        var horas = new TimeSpan(lista.Sum(x => x.TiempoPartido.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[d - 1].TiempoPartido, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Horas Negativas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Horas negativas").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        var horas = new TimeSpan(lista.Sum(x => x.HorasNegativas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[d - 1].HorasNegativas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Horas Acumuladas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Horas Acumuladas").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        var horas = new TimeSpan(lista.Sum(x => x.Acumuladas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[d - 1].Acumuladas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Acumuladas - Negativas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Diferencia Acumul. - Negat.").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        var horas = new TimeSpan(lista.Sum(x => x.Acumuladas.Ticks) - lista.Sum(y => y.HorasNegativas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[d - 1].Acumuladas - lista[d - 1].HorasNegativas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Horas Nocturnas
+                tabla.AddCell(new Cell().Add(new Paragraph($"Horas Nocturnas").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        var horas = new TimeSpan(lista.Sum(x => x.Nocturnas.Ticks));
+                        string dato = (string)cnvSuperHora.Convert(horas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    } else {
+                        string dato = (string)cnvSuperHora.Convert(lista[d - 1].Nocturnas, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+
+            }
+
+            // DIETAS
+            if (App.Global.EstadisticasTurnosVM.ElegirDietas) {
+
+                // Desayuno
+                tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Desayuno").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Desayuno):0.00}")));
+                    } else {
+                        string dato = (string)cnvDecimal.Convert(lista[d - 1].Desayuno, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Importe Desayuno
+                tabla.AddCell(new Cell().Add(new Paragraph($"Importe Desayuno").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.ImporteDesayuno):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[d - 1].ImporteDesayuno, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Comida
+                tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Comida").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Comida):0.00}")));
+                    } else {
+                        string dato = (string)cnvDecimal.Convert(lista[d - 1].Comida, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Importe Comida
+                tabla.AddCell(new Cell().Add(new Paragraph($"Importe Comida").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.ImporteComida):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[d - 1].ImporteComida, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Cena
+                tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Cena").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.Cena):0.00}")));
+                    } else {
+                        string dato = (string)cnvDecimal.Convert(lista[d - 1].Cena, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Importe Cena
+                tabla.AddCell(new Cell().Add(new Paragraph($"Importe Cena").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.ImporteCena):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[d - 1].ImporteCena, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Plus Cena
+                tabla.AddCell(new Cell().Add(new Paragraph($"Dieta Plus Cena").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusCena):0.00}")));
+                    } else {
+                        string dato = (string)cnvDecimal.Convert(lista[d - 1].PlusCena, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Importe Plus Cena
+                tabla.AddCell(new Cell().Add(new Paragraph($"Importe Plus Cena").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.ImportePlusCena):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[d - 1].ImportePlusCena, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+
+            }
+
+            // PLUSES
+            if (App.Global.EstadisticasTurnosVM.ElegirPluses) {
+
+                // Plus Nocturnidad
+                tabla.AddCell(new Cell().Add(new Paragraph($"Plus Nocturnidad").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusNocturnidad):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[d - 1].PlusNocturnidad, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Plus Menor Descanso
+                tabla.AddCell(new Cell().Add(new Paragraph($"Plus Menor Descnaso").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusMenorDescanso):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[d - 1].PlusMenorDescanso, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Plus Limpieza
+                tabla.AddCell(new Cell().Add(new Paragraph($"Plus Limpieza").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusLimipeza):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[d - 1].PlusLimipeza, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Plus Paqueteria
+                tabla.AddCell(new Cell().Add(new Paragraph($"Plus Paqueteria").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusPaqueteria):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[d - 1].PlusPaqueteria, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+                // Plus Navidad
+                tabla.AddCell(new Cell().Add(new Paragraph($"Plus Navidad").SetBold()));
+                for (int d = 1; d <= 13; d++) {
+                    if (d == 13) {
+                        tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(x => x.PlusNavidad):0.00 €}")));
+                    } else {
+                        string dato = (string)cnvDecimalEuro.Convert(lista[d - 1].PlusNavidad, null, VerValores.NoCeros, null);
+                        tabla.AddCell(new Cell().Add(new Paragraph(dato)));
+                    }
+                }
+
+            }
+
+
+            // Ponemos el fondo de las filas alternas.
+            for (int fila = 0; fila < tabla.GetNumberOfRows(); fila++) {
+                for (int col = 0; col < tabla.GetNumberOfColumns(); col++) {
+                    if (col > 0) {
+                        if (col <= DateTime.DaysInMonth(fecha.Year, fecha.Month)) {
+                            DateTime f = new DateTime(fecha.Year, fecha.Month, col);
+                            if (f.DayOfWeek == DayOfWeek.Saturday) tabla.GetCell(fila, col).AddStyle(estiloSabados);
+                            if (f.DayOfWeek == DayOfWeek.Sunday || App.Global.CalendariosVM.EsFestivo(f)) tabla.GetCell(fila, col).AddStyle(estiloFestivos);
+                        }
+                    }
+                    if (fila % 2 != 0) {
+                        tabla.GetCell(fila, col).AddStyle(estiloFondo);
+                    }
+                }
+            }
+
+
+            return tabla;
+        }
+
+
 
 
 
@@ -768,6 +1318,22 @@ namespace Orion.PrintModel {
                     doc.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
                     doc.Add(GetTablaEstadisticasCalendarios(listaEstadisticas, fecha, true));
                 } catch (Exception ex) {
+                }
+            });
+
+        }
+
+
+        /// <summary>
+        /// Crea un PDF con las estadísticas de los calendarios anuales
+        /// </summary>
+        public static async Task EstadisticasCalendariosAñoEnPdf(Document doc, List<EstadisticaCalendario> listaEstadisticas, DateTime fecha) {
+
+            await Task.Run(() => {
+                try {
+                    doc.Add(GetTablaEstadisticasCalendariosAño(listaEstadisticas, fecha));
+                } catch (Exception ex) {
+                    throw ex;
                 }
             });
 

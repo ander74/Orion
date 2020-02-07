@@ -17,6 +17,7 @@ namespace Orion.PrintModel {
     using Convertidores;
     using iText.Forms;
     using iText.Forms.Fields;
+    using iText.IO.Font.Constants;
     using iText.Kernel.Colors;
     using iText.Kernel.Font;
     using iText.Kernel.Geom;
@@ -57,14 +58,14 @@ namespace Orion.PrintModel {
         private static Table GetTablaPijama(IEnumerable dias) {
 
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo de la tabla.
             iText.Layout.Style estiloTabla = new iText.Layout.Style();
             estiloTabla.SetTextAlignment(TextAlignment.CENTER)
                        .SetMargins(0, 0, 0, 0)
                        .SetPaddings(0, 0, 0, 0)
                        .SetWidth(UnitValue.CreatePercentValue(100))
-                       .SetFont(arial)
+                       .SetFont(helvetica)
                        .SetFontSize(7);
             // Estilo de las celdas de encabezado.
             iText.Layout.Style estiloEncabezados = new iText.Layout.Style();
@@ -260,13 +261,13 @@ namespace Orion.PrintModel {
             // Definimos la celda a devolver.
             Cell celda = new Cell();
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo Tabla
             iText.Layout.Style estiloTabla = new iText.Layout.Style().SetTextAlignment(TextAlignment.CENTER)
                                                                      .SetMargins(0, 0, 2, 0)
                                                                      .SetPaddings(1.5f, 0, 1.5f, 0)
                                                                      .SetBorder(new SolidBorder(1))
-                                                                     .SetFont(arial)
+                                                                     .SetFont(helvetica)
                                                                      .SetWidth(UnitValue.CreatePercentValue(100))
                                                                      .SetFontSize(7);
             // Estilo Seccion
@@ -274,7 +275,7 @@ namespace Orion.PrintModel {
                                                                        .SetFontColor(new DeviceRgb(192, 0, 0))
                                                                        .SetMargin(0)
                                                                        .SetBold()
-                                                                       .SetFont(arial)
+                                                                       .SetFont(helvetica)
                                                                        .SetFontSize(9);
             // Estilo Encabezado
             iText.Layout.Style estiloEncabezado = new iText.Layout.Style().SetBackgroundColor(new DeviceRgb(153, 204, 255))
@@ -282,7 +283,7 @@ namespace Orion.PrintModel {
             // Estilo Resumen
             iText.Layout.Style estiloResumen = new iText.Layout.Style().SetBackgroundColor(new DeviceRgb(204, 236, 255))
                                                                        .SetPaddings(1.5f, 0, 1.5f, 0)
-                                                                       .SetFont(arial)
+                                                                       .SetFont(helvetica)
                                                                        .SetFontSize(8);
             // Estilo Eventuales
             iText.Layout.Style estiloEventuales = new iText.Layout.Style().SetMargins(0, 0, 0, 0)
@@ -437,13 +438,13 @@ namespace Orion.PrintModel {
             // Definimos el valor que nos indica si es fila alterna.
             bool esFilaAlterna = false;
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo Tabla
             iText.Layout.Style estiloTabla = new iText.Layout.Style().SetTextAlignment(TextAlignment.LEFT)
                                                                      .SetMargins(0, 0, 2, 0)
                                                                      .SetPaddings(1f, 0, 1f, 0)
                                                                      .SetBorder(new SolidBorder(1))
-                                                                     .SetFont(arial)
+                                                                     .SetFont(helvetica)
                                                                      .SetWidth(UnitValue.CreatePercentValue(100))
                                                                      .SetFontSize(9);
             // Estilo Seccion
@@ -451,7 +452,7 @@ namespace Orion.PrintModel {
                                                                        .SetFontColor(new DeviceRgb(192, 0, 0))
                                                                        .SetMargin(0)
                                                                        .SetBold()
-                                                                       .SetFont(arial)
+                                                                       .SetFont(helvetica)
                                                                        .SetFontSize(12);
             // Estilo Titulo
             iText.Layout.Style estiloTitulo = new iText.Layout.Style().SetTextAlignment(TextAlignment.LEFT)
@@ -460,7 +461,7 @@ namespace Orion.PrintModel {
                                                                       .SetBold()
                                                                       .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
                                                                       .SetBorderBottom(new SolidBorder(0.2f))
-                                                                      .SetFont(arial)
+                                                                      .SetFont(helvetica)
                                                                       .SetFontSize(9);
 
             // Estilo Valor
@@ -469,7 +470,7 @@ namespace Orion.PrintModel {
                                                                       .SetPaddings(0, 1.5f, 0, 1.5f)
                                                                       .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
                                                                       .SetBorderBottom(new SolidBorder(0.2f))
-                                                                      .SetFont(arial)
+                                                                      .SetFont(helvetica)
                                                                       .SetFontSize(9);
 
             // Estilo eventual
@@ -489,7 +490,7 @@ namespace Orion.PrintModel {
                                                                        .SetBorder(new SolidBorder(1))
                                                                        .SetPaddings(1.5f, 0, 1.5f, 0)
                                                                        .SetTextAlignment(TextAlignment.CENTER)
-                                                                       .SetFont(arial)
+                                                                       .SetFont(helvetica)
                                                                        .SetFontSize(9);
             // Estilo Eventuales
             iText.Layout.Style estiloEventuales = new iText.Layout.Style().SetMargins(0, 0, 0, 0)
@@ -1057,19 +1058,19 @@ namespace Orion.PrintModel {
         private static Table GetHojaPijama(Pijama.HojaPijama pijama) {
 
             // Fuente a utilizar en la tabla.
-            PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
+            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
             // Estilo de la tabla.
             iText.Layout.Style estiloTabla = new iText.Layout.Style();
             estiloTabla.SetWidth(UnitValue.CreatePercentValue(100))
                        .SetBorder(iText.Layout.Borders.Border.NO_BORDER)
-                       .SetFont(arial)
+                       .SetFont(helvetica)
                        .SetMargin(0)
                        .SetPadding(0);
             iText.Layout.Style estiloCelda = new iText.Layout.Style();
             estiloCelda.SetBorder(iText.Layout.Borders.Border.NO_BORDER)
                        .SetMargin(0)
                        .SetPadding(0)
-                       .SetFont(arial)
+                       .SetFont(helvetica)
                        .SetFontSize(16);
             // Creamos la tabla
             Table tabla = new Table(UnitValue.CreatePercentArray(new float[] { 50, 25, 25 }));
@@ -1189,8 +1190,8 @@ namespace Orion.PrintModel {
                 App.Global.IniciarProgreso("Creando PDF...");
                 float anchoHoja = PageSize.A4.GetWidth();
                 float altoHoja = PageSize.A4.GetHeight();
-                PdfFont arial = PdfFontFactory.CreateFont("c:/windows/fonts/calibri.ttf", true);
-                doc.SetFont(arial);
+                PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
+                doc.SetFont(helvetica);
                 doc.SetFontSize(12);
                 PdfAcroForm form = PdfAcroForm.GetAcroForm(doc.GetPdfDocument(), true);
 
@@ -1308,7 +1309,7 @@ namespace Orion.PrintModel {
 
                 // Añadimos el campo para las notas.
                 iText.Kernel.Geom.Rectangle cuadroNotas = new iText.Kernel.Geom.Rectangle(45, 55, ((anchoHoja - 80) / 3) * 2 - 20, 160);
-                PdfTextFormField campoNotas = PdfFormField.CreateText(doc.GetPdfDocument(), cuadroNotas, "Notas", "", arial, 12);
+                PdfTextFormField campoNotas = PdfFormField.CreateText(doc.GetPdfDocument(), cuadroNotas, "Notas", "", helvetica, 12);
                 campoNotas.SetJustification(PdfFormField.ALIGN_LEFT);
                 campoNotas.SetVisibility(PdfFormField.VISIBLE);
                 campoNotas.SetMultiline(true);
@@ -1323,7 +1324,7 @@ namespace Orion.PrintModel {
                 // Añadimos el campo para la fecha.
                 iText.Kernel.Geom.Rectangle cuadroFecha = new iText.Kernel.Geom.Rectangle(((anchoHoja - 80) / 3) * 2 + 45, 190, ((anchoHoja - 80) / 3) - 10, 25);
                 string fechaFinal = $"{DateTime.Now:dd - MM - yyyy}";
-                PdfTextFormField campoFecha = PdfFormField.CreateText(doc.GetPdfDocument(), cuadroFecha, "FechaFinal", fechaFinal, arial, 16);
+                PdfTextFormField campoFecha = PdfFormField.CreateText(doc.GetPdfDocument(), cuadroFecha, "FechaFinal", fechaFinal, helvetica, 16);
                 campoFecha.SetJustification(PdfFormField.ALIGN_CENTER);
                 campoFecha.SetVisibility(PdfFormField.VISIBLE);
                 form.AddField(campoFecha);

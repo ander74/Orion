@@ -7,10 +7,8 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using System.Data.OleDb;
 using System.Linq;
 using LiveCharts;
-using Orion.DataModels;
 using Orion.Models;
 using Orion.Servicios;
 
@@ -42,11 +40,10 @@ namespace Orion.ViewModels {
             };
 
             // Cargamos los datos de las estadísticas.
-            //TODO: Añadir los repositorios de los centros y cambiar esto...
-            GruposArrasate = BdGruposGraficos.getGrupos(new OleDbConnection(App.Global.GetCadenaConexion(Centros.Arrasate))).ToList();
-            GruposBilbao = BdGruposGraficos.getGrupos(new OleDbConnection(App.Global.GetCadenaConexion(Centros.Bilbao))).ToList();
-            GruposDonosti = BdGruposGraficos.getGrupos(new OleDbConnection(App.Global.GetCadenaConexion(Centros.Donosti))).ToList();
-            GruposVitoria = BdGruposGraficos.getGrupos(new OleDbConnection(App.Global.GetCadenaConexion(Centros.Vitoria))).ToList();
+            GruposArrasate = App.Global.GetRepository(Centros.Arrasate).GetGrupos().ToList();
+            GruposBilbao = App.Global.GetRepository(Centros.Bilbao).GetGrupos().ToList();
+            GruposDonosti = App.Global.GetRepository(Centros.Donosti).GetGrupos().ToList();
+            GruposVitoria = App.Global.GetRepository(Centros.Vitoria).GetGrupos().ToList();
             GrupoSeleccionadoArrasate = GruposArrasate.FirstOrDefault();
             GrupoSeleccionadoBilbao = GruposBilbao.FirstOrDefault();
             GrupoSeleccionadoDonosti = GruposDonosti.FirstOrDefault();

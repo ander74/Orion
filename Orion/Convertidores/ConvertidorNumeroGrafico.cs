@@ -36,6 +36,9 @@ namespace Orion.Convertidores {
                     case -13: return "OV(FN)";
                     case -14: return "F6(DC)";
                     case -15: return "FOR";
+                    case -16: return "OVA";
+                    case -17: return "OVA(JD)";
+                    case -18: return "OVA(FN)";
                 }
             }
             return "";
@@ -64,6 +67,9 @@ namespace Orion.Convertidores {
                     case "ovfn": grafico = -13; break;
                     case "f6dc": case "dcf6": grafico = -14; break;
                     case "for": grafico = -15; break;
+                    case "ova": grafico = -16; break;
+                    case "ovajd": grafico = -17; break;
+                    case "ovafn": grafico = -18; break;
                     default: Int32.TryParse(texto, out grafico); break;
                 }
 

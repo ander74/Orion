@@ -63,6 +63,12 @@ namespace Orion.ViewModels {
                     // CONDUCTOR
                     estadistica.Conductor = App.Global.ConductoresVM.GetConductor(calendario.MatriculaConductor);
 
+                    // EVENTUAL PARCIAL
+                    var evnt = !estadistica.Conductor.Indefinido;
+                    var parc = pijama.ListaDias.Any(d => d.Grafico == 0);
+
+                    if (!estadistica.Conductor.Indefinido && pijama.ListaDias.Any(d => d.Grafico == 0)) estadistica.EventualParcial = true;
+
                     // TURNO 1
                     estadisticaTotal.Dias[1] += estadistica.Dias[1] = pijama.ListaDias.Count(d => (d.Grafico > 0) && (d.TurnoAlt.HasValue ? d.TurnoAlt == 1 : d.GraficoTrabajado.Turno == 1));
                     var listaDiasT1 = pijama.ListaDias.Where(d => d.TurnoAlt.HasValue ? d.TurnoAlt == 1 : d.GraficoTrabajado.Turno == 1);
@@ -121,24 +127,7 @@ namespace Orion.ViewModels {
             var listaCalendarios = new List<Calendario>();
             await Task.Run(() => {
                 for (int mes = 1; mes <= 12; mes++) {
-                    switch (App.Global.CalendariosVM.FiltroAplicado) {
-                        case "Conductores Indefinidos":
-                            listaCalendarios.AddRange(App.Global.Repository.GetCalendarios(año, mes)
-                                .Where(c => App.Global.ConductoresVM.IsIndefinido(c.MatriculaConductor)));
-                            break;
-                        case "Conductores Eventuales":
-                            listaCalendarios.AddRange(App.Global.Repository.GetCalendarios(año, mes)
-                                .Where(c => !App.Global.ConductoresVM.IsIndefinido(c.MatriculaConductor)));
-                            break;
-                        case "Conductores Eventuales Parcial":
-                            listaCalendarios.AddRange(App.Global.Repository.GetCalendarios(año, mes)
-                                .Where(c => !App.Global.ConductoresVM.IsIndefinido(c.MatriculaConductor) && c.ListaDias.Any(d => d.Grafico == 0)));
-                            break;
-                        default:
-                            listaCalendarios.AddRange(App.Global.Repository.GetCalendarios(año, mes));
-                            break;
-                    }
-
+                    listaCalendarios.AddRange(App.Global.Repository.GetCalendarios(año, mes));
                 }
                 EstadisticaPorTurnos estadisticaTotal = new EstadisticaPorTurnos();
                 estadisticaTotal.Conductor = new Conductor { Matricula = 0, Apellidos = "TOTAL" };
@@ -151,6 +140,9 @@ namespace Orion.ViewModels {
                         estadistica.Conductor = App.Global.ConductoresVM.GetConductor(calendario.MatriculaConductor);
                         lista.Add(estadistica);
                     }
+
+                    // EVENTUAL PARCIAL
+                    if (!estadistica.Conductor.Indefinido && pijama.ListaDias.Any(d => d.Grafico == 0)) estadistica.EventualParcial = true;
 
                     // TURNO 1
                     estadisticaTotal.Dias[1] += estadistica.Dias[1] += pijama.ListaDias.Count(d => (d.Grafico > 0) && (d.TurnoAlt.HasValue ? d.TurnoAlt == 1 : d.GraficoTrabajado.Turno == 1));
@@ -210,23 +202,15 @@ namespace Orion.ViewModels {
         #region COMANDOS
         // ====================================================================================================
 
+        // CARGAR ESTADÍSTICAS DEL MES
         public ICommandAsync cmdCargarEstadisticasDeCalendario { get => new CommandAsync(CargarEstadisticasDeCalendarioAsync); }
         private async Task CargarEstadisticasDeCalendarioAsync() {
             IsBusy = true;
             try {
-                List<Calendario> lista = new List<Calendario>();
-                foreach (Object obj in App.Global.CalendariosVM.VistaCalendarios) {
-                    if (obj is Calendario cal) lista.Add(cal);
-                }
-                ListaEstadisticas = await CargarEstadisticasAsync(lista);
-                if (lista.Count > 0) {
-                    Fecha = lista[0].Fecha;
-                    TextoCabecera = lista[0].Fecha.ToString("MMMM - yyyy").ToUpper();
-                    if (!App.Global.CalendariosVM.FiltroAplicado.Equals("Ninguno")) {
-                        TextoCabecera += $" ({App.Global.CalendariosVM.FiltroAplicado})";
-                    }
+                ListaEstadisticas = await CargarEstadisticasAsync(App.Global.CalendariosVM.ListaCalendarios);
+                if (ListaEstadisticas.Count > 0) {
+                    TextoCabecera = App.Global.CalendariosVM.FechaActual.ToString("MMMM - yyyy").ToUpper();
                 } else {
-                    Fecha = DateTime.MinValue;
                     TextoCabecera = "Sin Datos";
                 }
             } finally {
@@ -235,6 +219,7 @@ namespace Orion.ViewModels {
         }
 
 
+        // CARGAR ESTADÍSTICAS DEL AÑO
         public ICommandAsync cmdCargarEstadisticasCalendariosAño { get => new CommandAsync(CargarEstadisticasCalendariosAñoAsync); }
         private async Task CargarEstadisticasCalendariosAñoAsync() {
             IsBusy = true;
@@ -251,7 +236,7 @@ namespace Orion.ViewModels {
 
 
 
-        // Comando
+        // GENERAR EXCEL DE ESTADÍSTICAS
         public ICommand cmdGenerarExcelEstadisticas { get => new RelayCommand(p => GenerarExcelEstadisticas(), p => PuedeGenerarExcelEstadisticas()); }
         private bool PuedeGenerarExcelEstadisticas() => ListaEstadisticas.Any();
         private void GenerarExcelEstadisticas() {
@@ -261,7 +246,11 @@ namespace Orion.ViewModels {
                 string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios\\Estadisticas");
                 if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
                 string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
-                ExcelService.getInstance().GenerarEstadisticasCalendario(rutaDestino, ListaEstadisticas, textoCabecera);
+                var lista = new List<EstadisticaPorTurnos>();
+                foreach (var obj in VistaEstadisticas) {
+                    if (obj is EstadisticaPorTurnos estadistica) lista.Add(estadistica);
+                }
+                ExcelService.getInstance().GenerarEstadisticasCalendario(rutaDestino, lista, TextoCabecera + FiltroAplicado);
                 if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
 
             } finally {
@@ -269,6 +258,33 @@ namespace Orion.ViewModels {
             }
         }
 
+
+        // APLICAR FILTRO
+        public ICommand cmdAplicarFiltro { get => new RelayCommand(p => AplicarFiltro(p), p => PuedeAplicarFiltro()); }
+        private bool PuedeAplicarFiltro() => ListaEstadisticas.Any();
+        private void AplicarFiltro(object parametro) {
+            if (parametro is string filtro) {
+                switch (filtro) {
+                    case "Indefinidos":
+                        VistaEstadisticas.Filter = (c) => (c as EstadisticaPorTurnos).Conductor.Indefinido;
+                        FiltroAplicado = " (Conductores Indefinidos)";
+                        break;
+                    case "Eventuales":
+                        VistaEstadisticas.Filter = (c) => !(c as EstadisticaPorTurnos).Conductor.Indefinido;
+                        FiltroAplicado = " (Conductores Eventuales)";
+                        break;
+                    case "EventualesParcial":
+                        VistaEstadisticas.Filter = (c) => (c as EstadisticaPorTurnos).EventualParcial;
+                        FiltroAplicado = " (Conductores Eventuales Parcial)";
+                        break;
+                    case "Ninguno":
+                        VistaEstadisticas.Filter = null;
+                        FiltroAplicado = "";
+                        break;
+                }
+            }
+
+        }
 
 
         #endregion
@@ -322,6 +338,13 @@ namespace Orion.ViewModels {
         public string TextoCabecera {
             get => textoCabecera;
             set => SetValue(ref textoCabecera, value);
+        }
+
+
+        private string filtroAplicado = "";
+        public string FiltroAplicado {
+            get => filtroAplicado;
+            set => SetValue(ref filtroAplicado, value);
         }
 
 
@@ -393,6 +416,42 @@ namespace Orion.ViewModels {
         public bool MostrarPluses {
             get => mostrarPluses;
             set => SetValue(ref mostrarPluses, value);
+        }
+
+
+
+        private bool elegirTurnos = true;
+        public bool ElegirTurnos {
+            get => elegirTurnos;
+            set => SetValue(ref elegirTurnos, value);
+        }
+
+
+        private bool elegirJornadas = true;
+        public bool ElegirJornadas {
+            get => elegirJornadas;
+            set => SetValue(ref elegirJornadas, value);
+        }
+
+
+        private bool elegirHoras = true;
+        public bool ElegirHoras {
+            get => elegirHoras;
+            set => SetValue(ref elegirHoras, value);
+        }
+
+
+        private bool elegirDietas = true;
+        public bool ElegirDietas {
+            get => elegirDietas;
+            set => SetValue(ref elegirDietas, value);
+        }
+
+
+        private bool elegirPluses = true;
+        public bool ElegirPluses {
+            get => elegirPluses;
+            set => SetValue(ref elegirPluses, value);
         }
 
 

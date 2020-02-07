@@ -42,7 +42,7 @@ namespace Orion.Views {
             DateTime fechaReferencia = new DateTime(2019, 12, 23); // Fecha del cambio de versión a la 1.1
             int buildVersion = Convert.ToInt32(Math.Round((fechaCompilacion - fechaReferencia).TotalDays, 0));
             //App.Global.TextoEstado = $"Versión {ver.Major}.{ver.Minor}.{ver.Build}";
-            App.Global.TextoEstado = $"Versión {ver.Major}.{ver.Minor}.{buildVersion}".ToUpper();
+            App.Global.TextoEstado = $"Versión {ver.Major}.{ver.Minor}.{buildVersion}";
 
             // Registramos el evento cerrar en el viewmodel.
             this.Closing += App.Global.CerrandoVentanaEventHandler;

@@ -21,6 +21,15 @@
 
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
+
+        <Style
+            x:Key="EstiloGrid"
+            TargetType="DataGrid">
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}" />
+            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}" />
+            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
+        </Style>
+
     </UserControl.Resources>
 
     <!--  ====================================================================================================  -->
@@ -30,7 +39,8 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="1*" />
+            <RowDefinition Height="2*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
@@ -39,7 +49,7 @@
         </Grid.ColumnDefinitions>
 
         <!--  ====================================================================================================  -->
-        <!--  BARRA DE BOTONES CALENDARIOS  -->
+        <!--  BARRA DE BOTONES PROGRAMADOR  -->
         <!--  ====================================================================================================  -->
         <StackPanel
             Grid.Row="0"
@@ -62,6 +72,23 @@
                 Width="2"
                 Margin="3,5"
                 Background="LightGray" />
+
+            <!--  BOTON SQL READER  -->
+            <Button
+                Command="{Binding ProgramadorVM.cmdSqlReader}"
+                Style="{StaticResource EstiloBotonBarra}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Source="Imagenes/table_refresh.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="SQL Reader"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
 
             <!--  BOTON SQL NON QUERY  -->
             <Button
@@ -131,10 +158,40 @@
             FontSize="12"
             Text="{Binding ProgramadorVM.CampoTexto, UpdateSourceTrigger=PropertyChanged}" />
 
-        <TextBox
+
+        <DataGrid
+            x:Name="Datos"
             Grid.Row="2"
             Grid.Column="0"
-            Height="200"
+            Padding="10"
+            AlternationCount="2"
+            AutoGenerateColumns="True"
+            Background="Transparent"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
+            CanUserResizeRows="False"
+            FontSize="12"
+            HeadersVisibility="Column"
+            IsReadOnly="True"
+            ItemsSource="{Binding ProgramadorVM.VistaTabla}"
+            Style="{StaticResource EstiloGrid}">
+            <DataGrid.Resources>
+                <SolidColorBrush
+                    x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                    Color="PaleGoldenrod" />
+                <SolidColorBrush
+                    x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                    Color="Black" />
+            </DataGrid.Resources>
+
+        </DataGrid>
+
+
+        <TextBox
+            Grid.Row="3"
+            Grid.Column="0"
+            Height="130"
             Padding="10"
             HorizontalAlignment="Stretch"
             VerticalAlignment="Top"

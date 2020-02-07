@@ -181,7 +181,7 @@
                 Height="24"
                 Panel.ZIndex="15"
                 Header="Programador"
-                Style="{StaticResource EstiloPestañas}"
+                Style="{StaticResource EstiloPestañaProgramador}"
                 Visibility="{Binding VisibilidadProgramador}">
                 <views:VistaProgramador x:Name="PestañaProgramador" />
             </TabItem>

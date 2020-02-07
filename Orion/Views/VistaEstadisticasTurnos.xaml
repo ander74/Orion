@@ -30,6 +30,23 @@
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
         </Style>
 
+        <Style
+            x:Key="TextoVertical"
+            TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Verdana" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="TextAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="DarkGray" />
+            <Setter Property="Margin" Value="3,5" />
+            <Setter Property="LayoutTransform">
+                <Setter.Value>
+                    <RotateTransform Angle="-90" />
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
         <cnv:ConvertidorSuperHora x:Key="cnvHora" />
         <cnv:ConvertidorDecimal x:Key="cnvDecimal" />
@@ -56,6 +73,11 @@
             Height="80"
             Background="{StaticResource DegradadoCeleste0}"
             Orientation="Horizontal">
+
+            <!--  TEXTO VERTICAL  -->
+            <TextBlock Style="{StaticResource TextoVertical}">
+                POR<LineBreak />
+                CONDUCTOR</TextBlock>
 
             <!--  BOTON CARGAR ESTADISTICAS TURNOS  -->
             <Button
@@ -90,36 +112,6 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-
-            <!--  SEPARADOR  -->
-            <TextBlock
-                Width="2"
-                Margin="3,5"
-                Background="LightGray" />
-
-            <!--  BOTON COPIAR  -->
-            <Button
-                Command="ApplicationCommands.Copy"
-                CommandTarget="{Binding ElementName=TablaEstadisticas}"
-                Style="{StaticResource EstiloBotonBarra}">
-                <Button.Content>
-                    <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/Copiar.png"
-                            Style="{StaticResource EstiloImagen}" />
-                        <TextBlock
-                            Text="Copiar"
-                            TextAlignment="Center"
-                            TextWrapping="Wrap" />
-                    </StackPanel>
-                </Button.Content>
-            </Button>
-
-            <!--  SEPARADOR  -->
-            <TextBlock
-                Width="2"
-                Margin="3,5"
-                Background="LightGray" />
 
             <!--  DESPLEGABLE COLUMNAS  -->
             <xc:DropDownButton
@@ -276,8 +268,107 @@
             </xc:DropDownButton>
 
 
+            <!--  BOTON COPIAR  -->
+            <Button
+                Command="ApplicationCommands.Copy"
+                CommandTarget="{Binding ElementName=TablaEstadisticas}"
+                Style="{StaticResource EstiloBotonBarra}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Source="Imagenes/Copiar.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Copiar"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+
+            <!--  DESPLEGABLE FILTRAR TABLA  -->
+            <xc:DropDownButton
+                x:Name="BtFiltrar"
+                Style="{StaticResource EstiloBotonDesplegable}">
+                <xc:DropDownButton.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Source="Imagenes/Filtrar.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Name="TxtFiltrar"
+                            FontFamily="Arial"
+                            FontSize="10"
+                            Text="Filtrar Tabla"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </xc:DropDownButton.Content>
+                <xc:DropDownButton.DropDownContent>
+                    <Border
+                        Background="AliceBlue"
+                        BorderBrush="DarkBlue"
+                        BorderThickness="2"
+                        CornerRadius="5"
+                        DataContext="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.EstadisticasTurnosVM}">
+                        <Border
+                            Margin="3"
+                            BorderBrush="DarkGray"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <StackPanel Orientation="Vertical">
+
+                                <!--  BOTON INDEFINIDOS  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtFiltrar_Click"
+                                    Command="{Binding cmdAplicarFiltro}"
+                                    CommandParameter="Indefinidos"
+                                    Content="Indefinidos"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Muestra sólo los conductores indefinidos." />
+
+                                <!--  BOTON EVENTUALES  -->
+                                <Button
+                                    Margin="6,3,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtFiltrar_Click"
+                                    Command="{Binding cmdAplicarFiltro}"
+                                    CommandParameter="Eventuales"
+                                    Content="Eventuales"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Muestra sólo los conductores eventuales" />
+
+                                <!--  BOTON EVENTUALES PARCIAL  -->
+                                <Button
+                                    Margin="6,3,6,6"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtFiltrar_Click"
+                                    Command="{Binding cmdAplicarFiltro}"
+                                    CommandParameter="EventualesParcial"
+                                    Content="Eventuales Parcial"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Muestra sólo los conductores eventuales que no trabajen todo el mes." />
+
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </xc:DropDownButton.DropDownContent>
+            </xc:DropDownButton>
+
             <!--  BOTON QUITAR FILTRO  -->
-            <Button Style="{StaticResource EstiloBotonBarra}">
+            <Button
+                Command="{Binding EstadisticasTurnosVM.cmdAplicarFiltro}"
+                CommandParameter="Ninguno"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
                         <Image
@@ -290,12 +381,6 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
-
-            <!--  SEPARADOR  -->
-            <TextBlock
-                Width="2"
-                Margin="3,5"
-                Background="LightGray" />
 
             <!--  BOTON GENERAR EXCEL  -->
             <Button
@@ -313,6 +398,170 @@
                     </StackPanel>
                 </Button.Content>
             </Button>
+
+            <!--  SEPARADOR DOBLE  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
+
+            <!--  TEXTO VERTICAL  -->
+            <TextBlock Style="{StaticResource TextoVertical}">
+                POR<LineBreak />
+                DIAS/MESES</TextBlock>
+
+            <!--  BOTON CARGAR ESTADISTICAS MES POR DIA  -->
+            <Button
+                Command="{Binding CalendariosVM.cmdPdfEstadisticas}"
+                Style="{StaticResource EstiloBotonBarra}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Source="Imagenes/GuardarPDF.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Generar Mes Actual"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--  BOTON CARGAR ESTADISTICAS AÑO POR DIA  -->
+            <Button
+                Command="{Binding CalendariosVM.cmdPdfEstadisticasAño}"
+                Style="{StaticResource EstiloBotonBarra}">
+                <Button.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Source="Imagenes/GuardarPDF.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Text="Generar Año Actual"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </Button.Content>
+            </Button>
+
+            <!--  DESPLEGABLE COLUMNAS  -->
+            <xc:DropDownButton
+                Width="64"
+                Height="80"
+                MaxDropDownHeight="900"
+                Style="{StaticResource EstiloBotonDesplegable}">
+                <xc:DropDownButton.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Source="Imagenes/SeleccionarColumna.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontFamily="Arial"
+                            FontSize="10"
+                            Text="Elegir Conceptos"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </xc:DropDownButton.Content>
+                <xc:DropDownButton.DropDownContent>
+                    <Border
+                        Background="AliceBlue"
+                        BorderBrush="DarkBlue"
+                        BorderThickness="2"
+                        CornerRadius="5">
+                        <Border
+                            Margin="3"
+                            BorderBrush="DarkGray"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <StackPanel Orientation="Vertical">
+
+                                <StackPanel Orientation="Vertical">
+                                    <!--  TODOS  -->
+                                    <CheckBox
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Click="ChElegirConceptos_Click"
+                                        Content="Todos"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="True"
+                                        Tag="Todos" />
+                                </StackPanel>
+
+                                <StackPanel
+                                    Margin="10,0,0,0"
+                                    Orientation="Vertical">
+                                    <!--  DIAS TRABAJADOS  -->
+                                    <CheckBox
+                                        x:Name="Ch2Turnos"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Content="Turnos"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="{Binding EstadisticasTurnosVM.ElegirTurnos}"
+                                        Tag="Turnos" />
+                                    <!--  HORAS TRABAJADAS  -->
+                                    <CheckBox
+                                        x:Name="Ch2Jornadas"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Content="Jornadas"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="{Binding EstadisticasTurnosVM.ElegirJornadas}"
+                                        Tag="Jornadas" />
+                                    <!--  HORAS ACUMULADAS  -->
+                                    <CheckBox
+                                        x:Name="Ch2Horas"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Content="Horas"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="{Binding EstadisticasTurnosVM.ElegirHoras}"
+                                        Tag="Horas" />
+                                    <!--  HORAS NOCTURNAS  -->
+                                    <CheckBox
+                                        x:Name="Ch2Dietas"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Content="Dietas"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="{Binding EstadisticasTurnosVM.ElegirDietas}"
+                                        Tag="Dietas" />
+                                    <!--  IMPORTE DIETAS  -->
+                                    <CheckBox
+                                        x:Name="Ch2Pluses"
+                                        Margin="5,10"
+                                        HorizontalContentAlignment="Left"
+                                        VerticalContentAlignment="Center"
+                                        Content="Pluses"
+                                        FontFamily="Verdana"
+                                        FontSize="12"
+                                        IsChecked="{Binding EstadisticasTurnosVM.ElegirPluses}"
+                                        Tag="Pluses" />
+                                </StackPanel>
+                            </StackPanel>
+
+                        </Border>
+                    </Border>
+                </xc:DropDownButton.DropDownContent>
+            </xc:DropDownButton>
+
+
 
 
         </StackPanel>
@@ -348,15 +597,15 @@
 
                     <Label
                         x:Name="Cabecera"
+                        Margin="4,0"
+                        VerticalAlignment="Center"
                         VerticalContentAlignment="Center"
                         FontFamily="Verdana"
                         FontSize="14"
                         FontWeight="Normal">
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock
-                                Margin="4,0"
-                                VerticalAlignment="Center"
-                                Text="{Binding EstadisticasTurnosVM.TextoCabecera}" />
+                            <TextBlock Text="{Binding EstadisticasTurnosVM.TextoCabecera}" />
+                            <TextBlock Text="{Binding EstadisticasTurnosVM.FiltroAplicado}" />
                         </StackPanel>
                     </Label>
 

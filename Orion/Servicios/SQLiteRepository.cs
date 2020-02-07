@@ -144,18 +144,44 @@ namespace Orion.Servicios {
 
 
         // ====================================================================================================
-        #region MÉTODOS PÚBLICOS NON QUERY
+        #region MÉTODOS PÚBLICOS QUERIES
         // ====================================================================================================
 
-        public void ExecureNonQuery(SQLiteExpression consulta) {
-            if (CadenaConexion == null) return;
+        public int ExecureNonQuery(SQLiteExpression consulta) {
+            if (CadenaConexion == null) return -1;
             using (var conexion = new SQLiteConnection(CadenaConexion)) {
                 using (var comando = consulta.GetCommand(conexion)) {
                     conexion.Open();
-                    comando.ExecuteNonQuery();
+                    return comando.ExecuteNonQuery();
                 }
             }
         }
+
+
+        public DataTable ExecuteReader(SQLiteExpression consulta) {
+            if (CadenaConexion == null) return null;
+            DataTable tabla = null;
+            using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                using (var comando = consulta.GetCommand(conexion)) {
+                    conexion.Open();
+                    using (var lector = comando.ExecuteReader()) {
+                        tabla = new DataTable("TablaSQL");
+                        for (int i = 0; i < lector.FieldCount; i++) {
+                            tabla.Columns.Add(new DataColumn(lector.GetName(i), lector.GetFieldType(i)));
+                        }
+                        while (lector.Read()) {
+                            var fila = tabla.NewRow();
+                            for (int i = 0; i < lector.FieldCount; i++) {
+                                fila[i] = lector.GetValue(i);
+                            }
+                            tabla.Rows.Add(fila);
+                        }
+                    }
+                }
+            }
+            return tabla;
+        }
+
 
         #endregion
         // ====================================================================================================

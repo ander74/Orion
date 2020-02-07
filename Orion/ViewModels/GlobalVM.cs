@@ -45,6 +45,12 @@ namespace Orion.ViewModels {
         private ProgramadorViewModel _programador;
         private EstadisticasTurnosViewModel _estadisticasTurnos;
 
+        // Repositorios
+        private OrionRepository bilbaoRepository;
+        private OrionRepository donostiRepository;
+        private OrionRepository arrasateRepository;
+        private OrionRepository gasteizRepository;
+
 
 
         #endregion
@@ -205,6 +211,30 @@ namespace Orion.ViewModels {
         }
 
 
+        /// <summary>
+        /// Devuelve el repositorio del centro en cuestion.<br/>
+        /// No válido para el repositorio de las líneas.
+        /// </summary>
+        /// <param name="centro"></param>
+        /// <returns></returns>
+        public OrionRepository GetRepository(Centros centro) {
+            switch (centro) {
+                case Centros.Bilbao:
+                    if (bilbaoRepository == null) bilbaoRepository = new OrionRepository(GetCadenaConexionSQL(Centros.Bilbao));
+                    return bilbaoRepository;
+                case Centros.Donosti:
+                    if (donostiRepository == null) donostiRepository = new OrionRepository(GetCadenaConexionSQL(Centros.Donosti));
+                    return donostiRepository;
+                case Centros.Arrasate:
+                    if (arrasateRepository == null) arrasateRepository = new OrionRepository(GetCadenaConexionSQL(Centros.Arrasate));
+                    return arrasateRepository;
+                case Centros.Vitoria:
+                    if (gasteizRepository == null) gasteizRepository = new OrionRepository(GetCadenaConexionSQL(Centros.Vitoria));
+                    return gasteizRepository;
+            }
+            return null;
+        }
+
 
         #endregion
         // ====================================================================================================
@@ -294,8 +324,8 @@ namespace Orion.ViewModels {
                     if (_centroactual != Centros.Desconocido) {
                         // Cargamos las opciones por centro.
                         PorCentro.Cargar(ArchivoOpcionesPorCentro);
-                        // Inicializamos el centro en la base de datos SQL
-                        repository = new OrionRepository(CadenaConexionSQL);
+                        //// Inicializamos el centro en la base de datos SQL
+                        //repository = new OrionRepository(CadenaConexionSQL);
                     }
                     PropiedadCambiada();
                 }
@@ -458,21 +488,24 @@ namespace Orion.ViewModels {
         // REPOSITORIO DE DATOS
         //====================================================================================================
 
-        private OrionRepository repository;
+        /// <summary>
+        /// Repositorio del centro activo
+        /// </summary>
         public OrionRepository Repository {
             get {
-                if (repository == null) repository = new OrionRepository(CadenaConexionSQL);
-                return repository;
+                return GetRepository(CentroActual);
             }
         }
 
 
-
-        private LineasRepository lineasRepo;
+        private LineasRepository lineasRepository;
+        /// <summary>
+        /// Repositorio de líneas.
+        /// </summary>
         public LineasRepository LineasRepo {
             get {
-                if (lineasRepo == null) lineasRepo = new LineasRepository(CadenaConexionLineasSQL);
-                return lineasRepo;
+                if (lineasRepository == null) lineasRepository = new LineasRepository(CadenaConexionLineasSQL);
+                return lineasRepository;
             }
         }
 

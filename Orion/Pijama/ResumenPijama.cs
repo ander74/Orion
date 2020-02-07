@@ -6,10 +6,6 @@
 // ===============================================
 #endregion
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Orion.Pijama {
 
@@ -24,7 +20,7 @@ namespace Orion.Pijama {
 		/// <summary>
 		/// Horas acumuladas.
 		/// </summary>
-		public TimeSpan HorasAcumuladas{
+		public TimeSpan HorasAcumuladas {
 			get { return _horasacumuladas; }
 			set {
 				if (_horasacumuladas != value) {
@@ -52,13 +48,10 @@ namespace Orion.Pijama {
 		/// <summary>
 		/// Días de libre disposición.
 		/// </summary>
-		public decimal DiasLibreDisposicionF6
-		{
+		public decimal DiasLibreDisposicionF6 {
 			get { return _diaslibredisposicionf6; }
-			set
-			{
-				if (_diaslibredisposicionf6 != value)
-				{
+			set {
+				if (_diaslibredisposicionf6 != value) {
 					_diaslibredisposicionf6 = value;
 				}
 			}
@@ -163,40 +156,60 @@ namespace Orion.Pijama {
 		}
 
 
-        /// <summary>
-        /// Días de vacaciones disfrutados.
-        /// </summary>
-        private int diasVacaciones;
-        public int DiasVacaciones {
-            get => diasVacaciones;
-            set {
-                if (diasVacaciones != value) {
-                    diasVacaciones = value;
-                }
-            }
+		/// <summary>
+		/// Días de vacaciones disfrutados.
+		/// </summary>
+		private int diasVacaciones;
+		public int DiasVacaciones {
+			get => diasVacaciones;
+			set {
+				if (diasVacaciones != value) {
+					diasVacaciones = value;
+				}
+			}
 
-        }
+		}
 
-        /// <summary>
-        /// Días de vacaciones disfrutados.
-        /// </summary>
-        private int diasInactivo;
-        public int DiasInactivo {
-            get => diasInactivo;
-            set {
-                if (diasInactivo != value) {
-                    diasInactivo = value;
-                }
-            }
+		/// <summary>
+		/// Días de vacaciones disfrutados.
+		/// </summary>
+		private int diasInactivo;
+		public int DiasInactivo {
+			get => diasInactivo;
+			set {
+				if (diasInactivo != value) {
+					diasInactivo = value;
+				}
+			}
 
-        }
-
-
+		}
 
 
-        #endregion
-        // ====================================================================================================
+
+		public int DiasTrabajados { get; set; }
 
 
-    }
+		public int DiasDescansados { get; set; }
+
+
+		public int DiasEnfermo { get; set; }
+
+
+		public int DiasDC { get; set; }
+
+
+		public decimal HorasAnuales { get; set; }
+
+
+
+
+
+
+
+
+		#endregion
+		// ====================================================================================================
+
+
+	}
 }

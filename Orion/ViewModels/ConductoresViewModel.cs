@@ -25,7 +25,7 @@ namespace Orion.ViewModels {
 
         List<Conductor> _listaborrados = new List<Conductor>();
         List<RegulacionConductor> _regulacionesborradas = new List<RegulacionConductor>();
-        private IMensajes mensajes;
+        private static IMensajes mensajes;
 
         #endregion
 
