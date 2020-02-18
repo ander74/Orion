@@ -189,7 +189,17 @@ namespace Orion.Pijama {
 		public int DiasTrabajados { get; set; }
 
 
-		public int DiasDescansados { get; set; }
+		public int DiasDescansados => DiasJD + DiasFN + DiasDS;
+
+		public int DiasJD { get; set; }
+
+		public int DiasFN { get; set; }
+
+		public int DiasDS { get; set; }
+
+		public int DiasPermiso { get; set; }
+
+		public int DiasF6 { get; set; }
 
 
 		public int DiasEnfermo { get; set; }
@@ -198,7 +208,7 @@ namespace Orion.Pijama {
 		public int DiasDC { get; set; }
 
 
-		public decimal HorasAnuales { get; set; }
+		public TimeSpan HorasAnuales { get; set; }
 
 
 

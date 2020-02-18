@@ -11,8 +11,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
-namespace Orion.Config
-{
+namespace Orion.Config {
 
     /// <summary>
     /// Esta clase añade la notificación de cambios en las propiedades de los elementos dentro de la colección.
@@ -23,11 +22,16 @@ namespace Orion.Config
     /// 
     /// </summary>
     public class FullObservableCollection<T> : ObservableCollection<T> where T : INotifyPropertyChanged {
-        
-		/// <summary>
+
+        /// <summary>
         /// Ocurre cuando un elemento hijo de la colección ha cambiado.
         /// </summary>
         public event EventHandler<ItemPropertyChangedEventArgs> ItemPropertyChanged;
+
+        // ====================================================================================================
+        #region CONSTRUCTORES
+        // ====================================================================================================
+
 
         public FullObservableCollection() : base() { }
 
@@ -38,6 +42,11 @@ namespace Orion.Config
         public FullObservableCollection(IEnumerable<T> enumerable) : base(enumerable) {
             ObserveAll();
         }
+
+        #endregion
+        // ====================================================================================================
+
+
 
         protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e) {
             if (e.Action == NotifyCollectionChangedAction.Remove || e.Action == NotifyCollectionChangedAction.Replace) {
@@ -63,7 +72,7 @@ namespace Orion.Config
 
         protected override void ClearItems() {
             foreach (T item in Items)
-				item.PropertyChanged -= ChildPropertyChanged;
+                item.PropertyChanged -= ChildPropertyChanged;
 
             base.ClearItems();
         }

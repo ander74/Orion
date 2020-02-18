@@ -65,7 +65,7 @@ namespace Orion.Controls {
 
         private static object OnDescripcionCoerceValue(DependencyObject d, object baseValue) {
             if (baseValue is string s && d.GetValue(LineaPuntosProperty) is bool b && b == true) {
-                return s += $" {new string('.', 50)}";
+                return s += $" {new string('.', 100)}";
             }
             return baseValue;
         }

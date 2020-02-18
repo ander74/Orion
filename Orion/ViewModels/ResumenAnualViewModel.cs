@@ -203,7 +203,7 @@ namespace Orion.ViewModels {
                 if (!pijamasAño.ContainsKey(mes)) continue;
                 // HORAS
                 Trabajadas.SetDato(mes, pijamasAño[mes].Trabajadas);
-                TotalTrabajadas += pijamasAño[mes].Trabajadas.ToDecimal();
+                TotalTrabajadas = pijamasAño[mes].HastaMesActual.HorasAnuales.ToDecimal();
                 Acumuladas.SetDato(mes, pijamasAño[mes].Acumuladas);
                 Nocturnas.SetDato(mes, pijamasAño[mes].Nocturnas);
                 Cobradas.SetDato(mes, pijamasAño[mes].HorasCobradas);

@@ -5,9 +5,9 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-namespace Orion.MVVM {
+using System;
 
-    using System;
+namespace Orion.MVVM {
 
     public interface IErrorHandler {
         void HandleError(Exception ex);

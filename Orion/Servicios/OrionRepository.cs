@@ -1626,16 +1626,16 @@ namespace Orion.Servicios {
                         if (dia.GraficoVinculado != 0 && dia.Grafico == comodin) GraficoBusqueda = dia.GraficoVinculado;
                         // Creamos el comando SQL y añadimos los parámetros
 
-                        //var consulta = new SQLiteExpression(
-                        //    "SELECT * FROM " +
-                        //    "    (SELECT * FROM Graficos " +
-                        //    "     WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(strftime('%Y-%m-%d', Validez)) FROM Graficos " +
-                        //    "                                                                 WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @validez))))" +
-                        //    "WHERE Numero = @numero");
+                        var consulta = new SQLiteExpression(
+                            "SELECT * FROM " +
+                            "    (SELECT * FROM Graficos " +
+                            "     WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(strftime('%Y-%m-%d', Validez)) FROM Graficos " +
+                            "                                                                 WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @validez))))" +
+                            "WHERE Numero = @numero");
 
-                        var consulta = new SQLiteExpression("" +
-                            "SELECT * FROM Graficos " +
-                            "WHERE Numero = @numero AND Validez = (SELECT Max(Validez) FROM Graficos WHERE Numero = @numero AND Validez < @validez);");
+                        //var consulta = new SQLiteExpression("" +
+                        //    "SELECT * FROM Graficos " +
+                        //    "WHERE Numero = @numero AND Validez = (SELECT Max(Validez) FROM Graficos WHERE Numero = @numero AND Validez < @validez);");
 
 
                         consulta.AddParameter("@validez", dia.DiaFecha);
@@ -1711,12 +1711,6 @@ namespace Orion.Servicios {
                     //----------------------------------------------------------------------------------------------------
                     // HORAS ACUMULADAS
                     //----------------------------------------------------------------------------------------------------
-                    //var consulta = new SQLiteExpression("SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha, " +
-                    //                                  "DiasCalendario.ExcesoJornada, DiasCalendario.AcumuladasAlt " +
-                    //                                  "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios._id " +
-                    //                                  "WHERE IdCalendario IN (SELECT _id FROM Calendarios WHERE strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha) AND MatriculaConductor = @matricula) " +
-                    //                                  "      AND Grafico > 0 " +
-                    //                                  "ORDER BY Calendarios.Fecha, DiasCalendario.Dia;");
                     var consulta = new SQLiteExpression("SELECT DiasCalendario.Dia, DiasCalendario.Grafico, DiasCalendario.GraficoVinculado, Calendarios.Fecha, " +
                                    "DiasCalendario.ExcesoJornada, DiasCalendario.AcumuladasAlt " +
                                    "FROM DiasCalendario LEFT JOIN Calendarios ON DiasCalendario.IdCalendario = Calendarios._id " +
@@ -1728,37 +1722,30 @@ namespace Orion.Servicios {
                     using (var lector = consulta.GetCommand(conexion).ExecuteReader()) {
                         // Por cada día, sumamos las horas acumuladas.
                         while (lector.Read()) {
-                            int d = lector.ToInt32("Dia");//  (lector["Dia"] is DBNull) ? 0 : (Int32)lector["Dia"];
-                            int g = lector.ToInt32("Grafico");//  (lector["Grafico"] is DBNull) ? 0 : (Int32)lector["Grafico"];
-                            int v = lector.ToInt32("GraficoVinculado");//  (lector["GraficoVinculado"] is DBNull) ? 0 : (Int32)lector["GraficoVinculado"];
+                            int dia = lector.ToInt32("Dia");
+                            int grafico = lector.ToInt32("Grafico");
+                            int graficoVinculado = lector.ToInt32("GraficoVinculado");
                             TimeSpan? acumuladasAlt = lector.ToTimeSpanNulable("AcumuladasAlt");
-                            TimeSpan ej = lector.ToTimeSpan("ExcesoJornada");
-                            if (v != 0 && g == comodin) g = v;
-                            DateTime f = lector.ToDateTime("Fecha");//  (lector["Fecha"] is DBNull) ? new DateTime(0) : (DateTime)lector["Fecha"];
-                            if (d > DateTime.DaysInMonth(f.Year, f.Month)) continue;
-                            DateTime fechadia = new DateTime(f.Year, f.Month, d);
-                            //var consulta2 = new SQLiteExpression("SELECT * " +
-                            //                      "FROM (SELECT * FROM Graficos WHERE IdGrupo = (SELECT _id " +
-                            //                      "										         FROM GruposGraficos " +
-                            //                      "												 WHERE Validez = (SELECT Max(Validez) " +
-                            //                      "																  FROM GruposGraficos " +
-                            //                      "														          WHERE Validez <= @validez)))" +
-                            //                      "WHERE Numero = @numero");
+                            TimeSpan excesoJornada = lector.ToTimeSpan("ExcesoJornada");
+                            if (graficoVinculado != 0 && grafico == comodin) grafico = graficoVinculado;
+                            DateTime fechaCalendario = lector.ToDateTime("Fecha");
+                            if (dia > DateTime.DaysInMonth(fechaCalendario.Year, fechaCalendario.Month)) continue;
+                            DateTime fechadia = new DateTime(fechaCalendario.Year, fechaCalendario.Month, dia);
                             var consulta2 = new SQLiteExpression("SELECT * " +
                                                   "FROM (SELECT * FROM Graficos WHERE strftime('%Y-%m-%d', Validez) = strftime('%Y-%m-%d', (SELECT Max(strftime('%Y-%m-%d', Validez)) " +
                                                   "										         FROM Graficos " +
                                                   "											     WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @validez))))" +
                                                   "WHERE Numero = @numero");
                             consulta2.AddParameter("validez", fechadia);
-                            consulta2.AddParameter("numero", g);
-                            var grafico = GetItem<GraficoBase>(conexion, consulta2, true);
-                            if (grafico == null) {
-                                grafico = new GraficoBase();
+                            consulta2.AddParameter("numero", grafico);
+                            var graficoTrabajado = GetItem<GraficoBase>(conexion, consulta2, true);
+                            if (graficoTrabajado == null) {
+                                graficoTrabajado = new GraficoBase();
                             } else {
-                                grafico.Final += ej;
+                                graficoTrabajado.Final += excesoJornada;
                             }
-                            if (acumuladasAlt.HasValue) grafico.Acumuladas = acumuladasAlt.Value;
-                            resultado.HorasAcumuladas += grafico.Acumuladas;
+                            if (acumuladasAlt.HasValue) graficoTrabajado.Acumuladas = acumuladasAlt.Value;
+                            resultado.HorasAcumuladas += graficoTrabajado.Acumuladas;
                         }
                     }
 
@@ -1856,21 +1843,77 @@ namespace Orion.Servicios {
                     consulta.AddParameter("@fechaInicio", fechaInicio);
                     resultado.DiasTrabajados = GetIntScalar(conexion, consulta);
                     //----------------------------------------------------------------------------------------------------
-                    // DÍAS DESCANSADOS AÑO
+                    // DÍAS JD AÑO
                     //----------------------------------------------------------------------------------------------------
                     consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
                                                       "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
                                                       "WHERE Calendarios.MatriculaConductor = @matricula AND " +
-                                                      "      (DiasCalendario.Grafico = -2 OR DiasCalendario.Grafico = -3 OR DiasCalendario.Grafico = -5 OR " +
-                                                      "       DiasCalendario.Grafico = -10 OR DiasCalendario.Grafico = -11 OR" +
-                                                      "       DiasCalendario.Grafico = -17 OR DiasCalendario.Grafico = -18) AND " +
+                                                      "      (DiasCalendario.Grafico = -2 OR DiasCalendario.Grafico = -10 OR " +
+                                                      "       DiasCalendario.Grafico = -12 OR DiasCalendario.Grafico = -17) AND " +
                                                       "      strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)" +
                                                        "       AND strftime('%Y-%m-%d', Fecha) >= strftime('%Y-%m-%d', @fechaInicio)");
                     //TODO: ELiminar si es así el OVA-JD y el OVA-FN (-17 y -18)
                     consulta.AddParameter("@matricula", matricula);
                     consulta.AddParameter("@fecha", fecha);
                     consulta.AddParameter("@fechaInicio", fechaInicio);
-                    resultado.DiasDescansados = GetIntScalar(conexion, consulta);
+                    resultado.DiasJD = GetIntScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DÍAS FN AÑO
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                      "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                      "WHERE Calendarios.MatriculaConductor = @matricula AND " +
+                                                      "      (DiasCalendario.Grafico = -3 OR DiasCalendario.Grafico = -11 OR " +
+                                                      "       DiasCalendario.Grafico = -13 OR DiasCalendario.Grafico = -18) AND " +
+                                                      "      strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)" +
+                                                       "       AND strftime('%Y-%m-%d', Fecha) >= strftime('%Y-%m-%d', @fechaInicio)");
+                    //TODO: ELiminar si es así el OVA-JD y el OVA-FN (-17 y -18)
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@fechaInicio", fechaInicio);
+                    resultado.DiasFN = GetIntScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DÍAS DS AÑO
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                      "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                      "WHERE Calendarios.MatriculaConductor = @matricula AND " +
+                                                      "      (DiasCalendario.Grafico = -5) AND " +
+                                                      "      strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)" +
+                                                       "       AND strftime('%Y-%m-%d', Fecha) >= strftime('%Y-%m-%d', @fechaInicio)");
+                    //TODO: ELiminar si es así el OVA-JD y el OVA-FN (-17 y -18)
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@fechaInicio", fechaInicio);
+                    resultado.DiasDS = GetIntScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DÍAS PERMISO AÑO
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                      "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                      "WHERE Calendarios.MatriculaConductor = @matricula AND " +
+                                                      "      (DiasCalendario.Grafico = -9) AND " +
+                                                      "      strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)" +
+                                                       "       AND strftime('%Y-%m-%d', Fecha) >= strftime('%Y-%m-%d', @fechaInicio)");
+                    //TODO: ELiminar si es así el OVA-JD y el OVA-FN (-17 y -18)
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@fechaInicio", fechaInicio);
+                    resultado.DiasPermiso = GetIntScalar(conexion, consulta);
+                    //----------------------------------------------------------------------------------------------------
+                    // DÍAS F6 AÑO
+                    //----------------------------------------------------------------------------------------------------
+                    consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
+                                                      "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
+                                                      "WHERE Calendarios.MatriculaConductor = @matricula AND " +
+                                                      "      (DiasCalendario.Grafico = -7 OR DiasCalendario.Grafico = -14) AND " +
+                                                      "      strftime('%Y-%m-%d', Fecha) < strftime('%Y-%m-%d', @fecha)" +
+                                                       "       AND strftime('%Y-%m-%d', Fecha) >= strftime('%Y-%m-%d', @fechaInicio)");
+                    //TODO: ELiminar si es así el OVA-JD y el OVA-FN (-17 y -18)
+                    consulta.AddParameter("@matricula", matricula);
+                    consulta.AddParameter("@fecha", fecha);
+                    consulta.AddParameter("@fechaInicio", fechaInicio);
+                    resultado.DiasF6 = GetIntScalar(conexion, consulta);
                     //----------------------------------------------------------------------------------------------------
                     // DÍAS VACACIONES AÑO
                     //----------------------------------------------------------------------------------------------------
@@ -1929,7 +1972,7 @@ namespace Orion.Servicios {
                     consulta.AddParameter("@fecha", fecha);
                     consulta.AddParameter("@fechaInicio", fechaInicio);
                     var dias = GetIntScalar(conexion, consulta);
-                    resultado.HorasAnuales = new TimeSpan(dias * App.Global.Convenio.JornadaMedia.Ticks).ToDecimal();
+                    resultado.HorasAnuales = new TimeSpan(dias * App.Global.Convenio.JornadaMedia.Ticks);
 
                 }
             } catch (Exception ex) {
@@ -1939,38 +1982,61 @@ namespace Orion.Servicios {
         }
 
 
-        [Obsolete("Ya hay un método que hace esto en el apartado Calendarios.")]
-        public TimeSpan GetHorasCobradasMes2(int año, int mes, int idconductor) {
-            //Referirse al GetHorasCobradasMes de Calendarios
-            return TimeSpan.Zero;
-        }
-
-
-        [Obsolete("Ya hay un método que hace esto en el apartado Calendarios.")]
-        public TimeSpan GetHorasCobradasAño2(int año, int mes, int idconductor) {
-            //Referirse al GetHorasCobradasAño de Calendarios
-            return TimeSpan.Zero;
-        }
-
-
-        [Obsolete("Ya hay un método que hace esto en el apartado Calendarios.")]
-        public static TimeSpan GetHorasCambiadasPorDCsMes2(int año, int mes, int idconductor) {
-            //Referirse al GetHorasCambiadasPorDCsMes de Calendarios
-            return TimeSpan.Zero;
-        }
-
-
-        [Obsolete("Ya hay un método que hace esto en el apartado Calendarios.")]
-        public TimeSpan GetHorasReguladasMes2(int año, int mes, int idconductor) {
-            //Referirse al GetHorasReguladasMes de Calendarios
-            return TimeSpan.Zero;
-        }
-
-
-        [Obsolete("Ya hay un método que hace esto en el apartado Calendarios.")]
-        public GraficoBase GetGrafico2(int numero, DateTime validez) {
-            //Referirse al GetGrafico de Calendarios
-            return null;
+        //TODO: El método siguiente devuelve todos los dias del año hasta el mes indicado. En el método anterior,
+        // se mezcla hasta el mes actual desde el inicio de Orión con hasta el mes actual desde el primer día del año.
+        // Revisarlo y modificar lo que haga falta.
+        public ResumenDias GetDiasAcumuladoAño(int año, int mes, int matricula) {
+            if (CadenaConexion == null) return null;
+            // Inicializamos el resultado.
+            ResumenDias resultado = null;
+            // Establecemos la fecha del día 1 del año y la fecha del día 1 del siguiente mes al indicado.
+            DateTime fechaInicio = new DateTime(año, 1, 1);
+            DateTime fechaFinal = new DateTime(año, mes, 1).AddMonths(1);
+            try {
+                var consulta = new SQLiteExpression("" +
+                    "SELECT " +
+                    "Count(CASE WHEN DC.Grafico > 0 THEN 1 ELSE NULL END) AS DiasTrabajados, " +
+                    "Count(CASE WHEN DC.Grafico = -1 THEN 1 ELSE NULL END) AS DiasOV, " +
+                    "Count(CASE WHEN DC.Grafico = -2 THEN 1 ELSE NULL END) AS DiasJD, " +
+                    "Count(CASE WHEN DC.Grafico = -3 THEN 1 ELSE NULL END) AS DiasFN, " +
+                    "Count(CASE WHEN DC.Grafico = -4 THEN 1 ELSE NULL END) AS DiasE, " +
+                    "Count(CASE WHEN DC.Grafico = -5 THEN 1 ELSE NULL END) AS DiasDS, " +
+                    "Count(CASE WHEN DC.Grafico = -6 THEN 1 ELSE NULL END) AS DiasDC, " +
+                    "Count(CASE WHEN DC.Grafico = -7 THEN 1 ELSE NULL END) AS DiasF6, " +
+                    "Count(CASE WHEN DC.Grafico = -8 THEN 1 ELSE NULL END) AS DiasDND, " +
+                    "Count(CASE WHEN DC.Grafico = -9 THEN 1 ELSE NULL END) AS DiasPER, " +
+                    "Count(CASE WHEN DC.Grafico = -10 THEN 1 ELSE NULL END) AS DiasEJD, " +
+                    "Count(CASE WHEN DC.Grafico = -11 THEN 1 ELSE NULL END) AS DiasEFN, " +
+                    "Count(CASE WHEN DC.Grafico = -12 THEN 1 ELSE NULL END) AS DiasOVJD, " +
+                    "Count(CASE WHEN DC.Grafico = -13 THEN 1 ELSE NULL END) AS DiasOVFN, " +
+                    "Count(CASE WHEN DC.Grafico = -14 THEN 1 ELSE NULL END) AS DiasF6DC, " +
+                    "Count(CASE WHEN DC.Grafico = -15 THEN 1 ELSE NULL END) AS DiasFOR, " +
+                    "Count(CASE WHEN DC.Grafico = -16 THEN 1 ELSE NULL END) AS DiasOVA, " +
+                    "Count(CASE WHEN DC.Grafico = -17 THEN 1 ELSE NULL END) AS DiasOVAJD, " +
+                    "Count(CASE WHEN DC.Grafico = -18 THEN 1 ELSE NULL END) AS DiasOVAFN, " +
+                    "Count(CASE WHEN DC.Codigo = 1 THEN 1 ELSE NULL END) AS DiasCO, " +
+                    "Count(CASE WHEN DC.Codigo = 2 THEN 1 ELSE NULL END) AS DiasCE, " +
+                    "Count(CASE WHEN DC.Codigo = 3 THEN 1 ELSE NULL END) AS DiasJDTrabajados " +
+                    "FROM " +
+                    "Calendarios AS C INNER JOIN DiasCalendario AS DC ON C._id = DC.IdCalendario " +
+                    "WHERE " +
+                    "C.MatriculaConductor = @matricula AND " +
+                    "strftime('%Y-%m-%d', C.Fecha) >= strftime('%Y-%m-%d', @fechaInicio) AND " +
+                    "strftime('%Y-%m-%d', C.Fecha) < strftime('%Y-%m-%d', @fechaFinal)");
+                consulta.AddParameter("@matricula", matricula);
+                consulta.AddParameter("@fechaInicio", fechaInicio);
+                consulta.AddParameter("@fechaFinal", fechaFinal);
+                using (var conexion = new SQLiteConnection(CadenaConexion)) {
+                    using (var comando = consulta.GetCommand(conexion)) {
+                        using (var lector = comando.ExecuteReader()) {
+                            resultado = new ResumenDias(lector);
+                        }
+                    }
+                }
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetDiasAcumuladoAño), ex);
+            }
+            return resultado;
         }
 
 

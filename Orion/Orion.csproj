@@ -35,7 +35,7 @@
     <ProductName>Orion</ProductName>
     <PublisherName>AnderSoft</PublisherName>
     <SuiteName>Orion</SuiteName>
-    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -216,6 +216,7 @@
       <DependentUpon>TextoValorH.xaml</DependentUpon>
     </Compile>
     <Compile Include="Convertidores\ConvertidorColorColumnaPijama.cs" />
+    <Compile Include="Convertidores\ConvertidorColorFecha.cs" />
     <Compile Include="Convertidores\ConvertidorDecimal6.cs" />
     <Compile Include="Convertidores\ConvertidorDecimalNulable.cs" />
     <Compile Include="Convertidores\ConvertidorDiaSemanaGrafico.cs" />
@@ -224,6 +225,7 @@
     <Compile Include="Convertidores\ConvertidorNegritaColumnaPijama.cs" />
     <Compile Include="Convertidores\ConvertidorNegritaDiaPijama.cs" />
     <Compile Include="Convertidores\ConvertidorOcultoSiCero.cs" />
+    <Compile Include="Convertidores\ConvertidorTextoNegrita.cs" />
     <Compile Include="Convertidores\ConvertidorVisibilityInverter.cs" />
     <Compile Include="Convertidores\ConvertidorColorDia.cs" />
     <Compile Include="Convertidores\ConvertidorColorDiaPijama.cs" />
@@ -299,6 +301,7 @@
     <Compile Include="Pijama\DiaPijama.cs" />
     <Compile Include="Pijama\DiaPijamaBasico.cs" />
     <Compile Include="Pijama\HojaPijama.cs" />
+    <Compile Include="Pijama\ResumenDias.cs" />
     <Compile Include="Pijama\ResumenPijama.cs" />
     <Compile Include="PrintModel\CalendarioPrintModel.cs" />
     <Compile Include="PrintModel\GraficosPrintModel.cs" />

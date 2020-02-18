@@ -5,10 +5,10 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-namespace Orion.MVVM {
+using System.Threading.Tasks;
+using System.Windows.Input;
 
-    using System.Threading.Tasks;
-    using System.Windows.Input;
+namespace Orion.MVVM {
 
     /// <summary>
     /// Define un comando asíncrono.

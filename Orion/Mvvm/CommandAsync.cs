@@ -5,11 +5,11 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-namespace Orion.MVVM {
+using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
 
-    using System;
-    using System.Threading.Tasks;
-    using System.Windows.Input;
+namespace Orion.MVVM {
 
     /// <summary>
     /// Representa un comando asíncrono enlazable a la propiedad Command de XAML.

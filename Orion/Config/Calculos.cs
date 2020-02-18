@@ -91,7 +91,9 @@ namespace Orion.Config {
                 TimeSpan horadesayuno = App.Global.Convenio.HoraDesayuno;
                 if (inicio < horadesayuno) {
                     TimeSpan tiempo = horadesayuno - inicio.Value;
-                    return tiempo.TotalMinutes > 60 ? 1m : tiempo.ToDecimal();
+                    // Eliminamos el límite de una dieta de desayuno como máximo.
+                    //return tiempo.TotalMinutes > 60 ? 1m : tiempo.ToDecimal();
+                    return tiempo.ToDecimal();
                 } else {
                     return 0m;
                 }

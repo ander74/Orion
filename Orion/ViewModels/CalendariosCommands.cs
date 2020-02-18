@@ -475,6 +475,49 @@ namespace Orion.ViewModels {
         #endregion
 
 
+        #region CAMBIAR JD POR FN
+
+        private ICommand _cmdcambiarjdporfn;
+        public ICommand cmdCambiarJDPorFN {
+            get {
+                if (_cmdcambiarjdporfn == null) _cmdcambiarjdporfn = new RelayCommand(p => CambiarJDPorFN());
+                return _cmdcambiarjdporfn;
+            }
+        }
+
+        private void CambiarJDPorFN() {
+
+            int numero = 0;
+            foreach (object obj in VistaCalendarios) {
+                if (obj is Calendario cal) {
+                    for (int i = 0; i < cal.ListaDias.Count; i++) {
+                        var diaSemana = cal.ListaDias[i].DiaFecha.DayOfWeek;
+                        if (diaSemana == DayOfWeek.Saturday || diaSemana == DayOfWeek.Sunday) {
+                            if (cal.ListaDias[i].Grafico == -2) {
+                                cal.ListaDias[i].Grafico = -3;
+                                numero++;
+                            }
+                            if (cal.ListaDias[i].Grafico == -10) {
+                                cal.ListaDias[i].Grafico = -11;
+                                numero++;
+                            }
+                            if (cal.ListaDias[i].Grafico == -12) {
+                                cal.ListaDias[i].Grafico = -13;
+                                numero++;
+                            }
+                            if (cal.ListaDias[i].Grafico == -17) {
+                                cal.ListaDias[i].Grafico = -18;
+                                numero++;
+                            }
+                        }
+                    }
+                }
+            }
+            Mensajes.VerMensaje($"Se han cambiado {numero} JDs.", "JDs cambiados a DS");
+        }
+        #endregion
+
+
         #region REGULAR HORAS
 
         private ICommand _cmdregularhoras;
@@ -1197,7 +1240,6 @@ namespace Orion.ViewModels {
             if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
         }
         #endregion
-
 
 
         #region COMANDO ESTADISTICAS AÑO

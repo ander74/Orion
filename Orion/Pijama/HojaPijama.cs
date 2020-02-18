@@ -205,7 +205,10 @@ namespace Orion.Pijama {
 
 
                 // DÍA NO TRABAJADO
-                if (dia.Grafico == -2 || dia.Grafico == -3) {
+                if (dia.Grafico == -2 || dia.Grafico == -3 ||
+                    dia.Grafico == -10 || dia.Grafico == -11 ||
+                    dia.Grafico == -12 || dia.Grafico == -13 ||
+                    dia.Grafico == -17 || dia.Grafico == -18) {
                     // Se añade a días de descanso y al total de descansos.
                     diasdescansados++;
                     totalDiasDescanso++;

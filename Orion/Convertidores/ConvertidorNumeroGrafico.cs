@@ -66,7 +66,7 @@ namespace Orion.Convertidores {
                     case "ovjd": grafico = -12; break;
                     case "ovfn": grafico = -13; break;
                     case "f6dc": case "dcf6": grafico = -14; break;
-                    case "for": grafico = -15; break;
+                    case "for": case "cap": grafico = -15; break;
                     case "ova": grafico = -16; break;
                     case "ovajd": grafico = -17; break;
                     case "ovafn": grafico = -18; break;

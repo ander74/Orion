@@ -1,24 +1,26 @@
-﻿<!-- =============================================== -->
-<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
-<!--                                                 -->
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
 <!--  Vea el archivo Licencia.txt para mas detalles  -->
-<!-- =============================================== -->
-<ToggleButton x:Class="Orion.Controls.BotonAlterno"
-              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              x:Name="Item"
-              Checked="Item_Checked"
-              Unchecked="Item_Checked"
-              Loaded="Item_Checked">
-    
+<!--  ===============================================  -->
+<ToggleButton
+    x:Class="Orion.Controls.BotonAlterno"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Name="Item"
+    Checked="Item_Checked"
+    Loaded="Item_Checked"
+    Unchecked="Item_Checked">
+
     <ToggleButton.Style>
         <Style TargetType="ToggleButton">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Margin" Value="2,5"/>
-            <Setter Property="FontSize" Value="10"/>
-            <Setter Property="Focusable" Value="False"/>
-            <Setter Property="Width" Value="58"/>
-            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Margin" Value="2,5" />
+            <Setter Property="FontSize" Value="10" />
+            <Setter Property="FontFamily" Value="Comic Sans MS" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="Width" Value="58" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background">
@@ -56,14 +58,18 @@
 
     <ToggleButton.Template>
         <ControlTemplate TargetType="ToggleButton">
-            <Border CornerRadius="5" Background="{TemplateBinding Background}" 
-                            BorderBrush="Transparent" BorderThickness="{TemplateBinding BorderThickness}" >
-                <ContentPresenter x:Name="contentPresenter" 
-                                            ContentTemplate="{TemplateBinding ContentTemplate}" 
-                                            Content="{TemplateBinding Content}" 
-                                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
-                                            Margin="{TemplateBinding Padding}" 
-                                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+            <Border
+                Background="{TemplateBinding Background}"
+                BorderBrush="Transparent"
+                BorderThickness="{TemplateBinding BorderThickness}"
+                CornerRadius="5">
+                <ContentPresenter
+                    x:Name="contentPresenter"
+                    Margin="{TemplateBinding Padding}"
+                    HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                    VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                    Content="{TemplateBinding Content}"
+                    ContentTemplate="{TemplateBinding ContentTemplate}" />
             </Border>
         </ControlTemplate>
     </ToggleButton.Template>
@@ -72,19 +78,20 @@
         <Image x:Name="Imagen">
             <Image.Style>
                 <Style TargetType="Image">
-                    <Setter Property="Height" Value="28"/>
-                    <Setter Property="Margin" Value="0,0,0,5"/>
+                    <Setter Property="Height" Value="28" />
+                    <Setter Property="Margin" Value="0,0,0,5" />
                     <Style.Triggers>
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Opacity" Value="0.4"/>
+                            <Setter Property="Opacity" Value="0.4" />
                         </Trigger>
                     </Style.Triggers>
                 </Style>
             </Image.Style>
         </Image>
-        <TextBlock x:Name="Texto"
-                   TextWrapping="Wrap" 
-                   TextAlignment="Center"/>
+        <TextBlock
+            x:Name="Texto"
+            TextAlignment="Center"
+            TextWrapping="Wrap" />
     </StackPanel>
 
 </ToggleButton>

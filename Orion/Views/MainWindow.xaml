@@ -19,6 +19,7 @@
     Title="Orión"
     Width="1024"
     Height="768"
+    FontFamily="Comic Sans MS"
     Loaded="Ventana_Loaded"
     WindowStartupLocation="CenterScreen"
     WindowState="Maximized"
@@ -53,6 +54,7 @@
         <TabControl
             x:Name="Ribbon"
             Grid.Row="0"
+            Padding="0"
             VerticalAlignment="Stretch"
             FontFamily="Arial"
             FontSize="12"
@@ -205,7 +207,8 @@
                 FontSize="16"
                 FontWeight="Bold"
                 Foreground="DarkGray"
-                IsEnabled="{Binding Configuracion.BotonCalculadoraActivo, Mode=TwoWay}"
+                IsEnabled="{Binding Configuracion.BotonCalculadoraActivo,
+                                    Mode=TwoWay}"
                 Style="{StaticResource EstiloBotonBarraPequeña}">
                 <Button.Content>
                     <Image
@@ -220,7 +223,8 @@
                 Margin="0"
                 Padding="20,1"
                 Command="{Binding cmdMostrarAyuda}"
-                CommandParameter="{Binding ElementName=Ribbon, Path=SelectedItem.Header}"
+                CommandParameter="{Binding ElementName=Ribbon,
+                                           Path=SelectedItem.Header}"
                 FontSize="16"
                 FontWeight="Bold"
                 Foreground="DarkGray"
@@ -262,12 +266,14 @@
             <Border
                 Grid.ColumnSpan="3"
                 Background="{StaticResource DegradadoCeleste1}"
-                Visibility="{Binding EnOtroCentro, Converter={StaticResource VisibilityInverter}}" />
+                Visibility="{Binding EnOtroCentro,
+                                     Converter={StaticResource VisibilityInverter}}" />
 
             <Border
                 Grid.ColumnSpan="3"
                 Background="LightCoral"
-                Visibility="{Binding EnOtroCentro, Converter={StaticResource VisibilityConverter}}" />
+                Visibility="{Binding EnOtroCentro,
+                                     Converter={StaticResource VisibilityConverter}}" />
 
             <!--  TEXTO DE ESTADO  -->
             <Label
@@ -279,7 +285,8 @@
                 Content="{Binding TextoEstado}"
                 FontFamily="Times New Roman"
                 FontSize="13"
-                Visibility="{Binding VisibilidadBarraProgreso, Converter={StaticResource VisibilityInverter}}" />
+                Visibility="{Binding VisibilidadBarraProgreso,
+                                     Converter={StaticResource VisibilityInverter}}" />
 
             <StackPanel
                 Orientation="Horizontal"
@@ -300,7 +307,8 @@
                     FontSize="13"
                     Maximum="100"
                     Minimum="0"
-                    Value="{Binding ValorBarraProgreso, Mode=TwoWay}" />
+                    Value="{Binding ValorBarraProgreso,
+                                    Mode=TwoWay}" />
             </StackPanel>
 
             <!--  TEXTO DE DETALLE  -->
@@ -315,16 +323,24 @@
                 <StackPanel Orientation="Horizontal">
                     <TextBlock
                         Text="{Binding GraficosVM.Detalle}"
-                        Visibility="{Binding ElementName=TabGraficos, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+                        Visibility="{Binding ElementName=TabGraficos,
+                                             Path=IsSelected,
+                                             Converter={StaticResource VisibilityConverter}}" />
                     <TextBlock
                         Text="{Binding ConductoresVM.Detalle}"
-                        Visibility="{Binding ElementName=TabConductores, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+                        Visibility="{Binding ElementName=TabConductores,
+                                             Path=IsSelected,
+                                             Converter={StaticResource VisibilityConverter}}" />
                     <TextBlock
                         Text="{Binding CalendariosVM.Detalle}"
-                        Visibility="{Binding ElementName=TabCalendarios, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+                        Visibility="{Binding ElementName=TabCalendarios,
+                                             Path=IsSelected,
+                                             Converter={StaticResource VisibilityConverter}}" />
                     <TextBlock
                         Text="{Binding LineasVM.Detalle}"
-                        Visibility="{Binding ElementName=TabLineas, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+                        Visibility="{Binding ElementName=TabLineas,
+                                             Path=IsSelected,
+                                             Converter={StaticResource VisibilityConverter}}" />
                 </StackPanel>
             </Label>
 
@@ -482,7 +498,8 @@
             VerticalAlignment="Stretch"
             Background="LightGray"
             Opacity="0.5"
-            Visibility="{Binding VisibilidadProgreso, Mode=TwoWay}" />
+            Visibility="{Binding VisibilidadProgreso,
+                                 Mode=TwoWay}" />
 
 
         <Grid
@@ -491,7 +508,8 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
             Background="{StaticResource DegradadoCeleste1}"
-            Visibility="{Binding VisibilidadProgreso, Mode=TwoWay}">
+            Visibility="{Binding VisibilidadProgreso,
+                                 Mode=TwoWay}">
 
             <Border
                 Grid.RowSpan="2"

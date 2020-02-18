@@ -1,69 +1,98 @@
-﻿<!-- =============================================== -->
-<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
-<!--                                                 -->
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
 <!--  Vea el archivo Licencia.txt para mas detalles  -->
-<!-- =============================================== -->
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:Orion">
+<!--  ===============================================  -->
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cnv="clr-namespace:Orion.Convertidores"
+    xmlns:local="clr-namespace:Orion">
 
-    
-    <!-- ==================================================================================================== -->
-    <!-- HEADERS VERDE -->
-    <!-- ==================================================================================================== -->
-    <Style x:Key="EstiloHeadersVerde" TargetType="DataGridColumnHeader">
+    <cnv:ConvertidorColorFecha x:Key="cnvColorFecha" />
 
-        <!-- PROPIEDADES VARIAS -->
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <!--  ====================================================================================================  -->
+    <!--  HEADERS VERDE  -->
+    <!--  ====================================================================================================  -->
+    <Style
+        x:Key="EstiloHeadersVerde"
+        TargetType="DataGridColumnHeader">
+
+        <!--  PROPIEDADES VARIAS  -->
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="FontSize" Value="11"/>
-        <Setter Property="FontWeight" Value="DemiBold"/>
+        <Setter Property="Height" Value="24" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="Normal" />
 
-        <!-- PLANTILLA -->
+        <!--  PLANTILLA  -->
         <Setter Property="Template">
             <Setter.Value>
-                <!-- PLANTILLA NORMAL-->
+                <!--  PLANTILLA NORMAL  -->
                 <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
-                    <!-- FONDO DE LA CABECERA-->
-                    <Border x:Name="Fondo" Grid.RowSpan="2" Background="{StaticResource orDegradadoVerde}"
-                                        BorderThickness="0.5" BorderBrush="{StaticResource VerdeMuyClaro}">
+                    <!--  FONDO DE LA CABECERA  -->
+                    <Border
+                        x:Name="Fondo"
+                        Grid.RowSpan="2"
+                        Background="{StaticResource orDegradadoVerde}"
+                        BorderBrush="Lavender"
+                        BorderThickness="0,0,0.5,0">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <!-- CONTENIDO-->
-                            <ContentPresenter Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center"
-                                                          VerticalAlignment="Center" SnapsToDevicePixels="True"/>
-                            <!-- FLECHA-->
-                            <Path x:Name="Flecha" Grid.Row="0" Grid.ColumnSpan="2"
-                                              HorizontalAlignment="Center" VerticalAlignment="Center"                                           
-                                              Width="10" Height="5" Margin="0,2,0,3"
-                                              Stretch="Fill" Opacity="0.5" Fill="Gray"
-                                              RenderTransformOrigin="0.5,0.4"
-                                              Visibility="Collapsed"
-                                              Data="M0,0 L1,0 0.5,1 z" />
-                            <Thumb x:Name="PART_LeftHeaderGripper" Grid.Column="0" Grid.RowSpan="2" 
-                                               HorizontalAlignment="Left" Style="{StaticResource EstiloSeparadores}"/>
-                            <Thumb x:Name="PART_RightHeaderGripper" Grid.Column="1" Grid.RowSpan="2" 
-                                               HorizontalAlignment="Right" Style="{StaticResource EstiloSeparadores}"/>
+                            <!--  CONTENIDO  -->
+                            <ContentPresenter
+                                Grid.RowSpan="2"
+                                Grid.ColumnSpan="2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                SnapsToDevicePixels="True" />
+                            <!--  FLECHA  -->
+                            <Path
+                                x:Name="Flecha"
+                                Grid.Row="0"
+                                Grid.ColumnSpan="2"
+                                Width="10"
+                                Height="5"
+                                Margin="0,2,0,3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M0,0 L1,0 0.5,1 z"
+                                Fill="Gray"
+                                Opacity="0.5"
+                                RenderTransformOrigin="0.5,0.4"
+                                Stretch="Fill"
+                                Visibility="Collapsed" />
+                            <Thumb
+                                x:Name="PART_LeftHeaderGripper"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                Style="{StaticResource EstiloSeparadores}" />
+                            <Thumb
+                                x:Name="PART_RightHeaderGripper"
+                                Grid.RowSpan="2"
+                                Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource EstiloSeparadores}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
 
-                        <!-- ESTADOS NORMAL-->
+                        <!--  ESTADOS NORMAL  -->
 
-                        <!-- DESACTIVADO-->
+                        <!--  DESACTIVADO  -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource GrisClaro}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource GrisClaro}" />
                         </Trigger>
 
-                        <!-- ORDEN ASCENDENTE-->
+                        <!--  ORDEN ASCENDENTE  -->
                         <Trigger Property="SortDirection" Value="Ascending">
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Flecha" Property="RenderTransform">
@@ -73,31 +102,31 @@
                             </Setter>
                         </Trigger>
 
-                        <!-- ORDEN DESCENDENTE-->
+                        <!--  ORDEN DESCENDENTE  -->
                         <Trigger Property="SortDirection" Value="Descending">
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                         </Trigger>
 
 
-                        <!-- ESTADOS MOUSE OVER-->
+                        <!--  ESTADOS MOUSE OVER  -->
 
-                        <!-- NORMAL-->
+                        <!--  NORMAL  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="SortDirection" Value="{x:Null}"/>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="{x:Null}" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}" />
                         </MultiTrigger>
 
 
-                        <!-- ORDEN ASCENDENTE-->
+                        <!--  ORDEN ASCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="SortDirection" Value="Ascending"/>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="Ascending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Flecha" Property="RenderTransform">
                                 <Setter.Value>
@@ -107,36 +136,36 @@
                         </MultiTrigger>
 
 
-                        <!-- ORDEN DESCENDENTE-->
+                        <!--  ORDEN DESCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="SortDirection" Value="Descending"/>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="Descending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                         </MultiTrigger>
 
 
-                        <!-- ESTADOS MOUSE PRESSED-->
+                        <!--  ESTADOS MOUSE PRESSED  -->
 
-                        <!-- NORMAL-->
+                        <!--  NORMAL  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsPressed" Value="True"/>
-                                <Condition Property="SortDirection" Value="{x:Null}"/>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="{x:Null}" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}" />
                         </MultiTrigger>
 
 
-                        <!-- ORDEN ASCENDENTE-->
+                        <!--  ORDEN ASCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsPressed" Value="True"/>
-                                <Condition Property="SortDirection" Value="Ascending"/>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="Ascending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Flecha" Property="RenderTransform">
                                 <Setter.Value>
@@ -146,20 +175,20 @@
                         </MultiTrigger>
 
 
-                        <!-- ORDEN DESCENDENTE-->
+                        <!--  ORDEN DESCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsPressed" Value="True"/>
-                                <Condition Property="SortDirection" Value="Descending"/>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="Descending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                         </MultiTrigger>
 
 
-                        <!-- ESTADO ES LA PRIMERA COLUMNA-->
+                        <!--  ESTADO ES LA PRIMERA COLUMNA  -->
                         <Trigger Property="DisplayIndex" Value="0">
-                            <Setter TargetName="PART_LeftHeaderGripper" Property="Visibility" Value="Collapsed"></Setter>
+                            <Setter TargetName="PART_LeftHeaderGripper" Property="Visibility" Value="Collapsed" />
                         </Trigger>
 
                     </ControlTemplate.Triggers>
@@ -170,62 +199,89 @@
 
 
 
-    <!-- ==================================================================================================== -->
-    <!-- HEADERS AZUL -->
-    <!-- ==================================================================================================== -->
-    <Style x:Key="EstiloHeadersAzul" TargetType="DataGridColumnHeader">
 
-        <!-- PROPIEDADES VARIAS -->
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <!--  ====================================================================================================  -->
+    <!--  HEADERS AZUL  -->
+    <!--  ====================================================================================================  -->
+    <Style
+        x:Key="EstiloHeadersAzul"
+        TargetType="DataGridColumnHeader">
+
+        <!--  PROPIEDADES VARIAS  -->
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="FontSize" Value="11"/>
-        <Setter Property="FontWeight" Value="DemiBold"/>
+        <Setter Property="Height" Value="24" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="Normal" />
 
-        <!-- PLANTILLA -->
+        <!--  PLANTILLA  -->
         <Setter Property="Template">
             <Setter.Value>
-                <!-- PLANTILLA NORMAL-->
+                <!--  PLANTILLA NORMAL  -->
                 <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
-                    <!-- FONDO DE LA CABECERA-->
-                    <Border x:Name="Fondo" Grid.RowSpan="2" Background="{StaticResource orDegradadoAzul}"
-                                        BorderThickness="0.5" BorderBrush="{StaticResource AzulClaro2}">
+                    <!--  FONDO DE LA CABECERA  -->
+                    <Border
+                        x:Name="Fondo"
+                        Grid.RowSpan="2"
+                        Background="{StaticResource orDegradadoAzul}"
+                        BorderBrush="Lavender"
+                        BorderThickness="0,0,0.5,0">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <!-- CONTENIDO-->
-                            <ContentPresenter Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center"
-                                                          VerticalAlignment="Center" SnapsToDevicePixels="True"/>
-                            <!-- FLECHA-->
-                            <Path x:Name="Flecha" Grid.Row="0" Grid.ColumnSpan="2"
-                                              HorizontalAlignment="Center" VerticalAlignment="Center"                                           
-                                              Width="10" Height="5" Margin="0,2,0,3"
-                                              Stretch="Fill" Opacity="0.5" Fill="Gray"
-                                              RenderTransformOrigin="0.5,0.4"
-                                              Visibility="Collapsed"
-                                              Data="M0,0 L1,0 0.5,1 z" />
-                            <Thumb x:Name="PART_LeftHeaderGripper" Grid.Column="0" Grid.RowSpan="2" 
-                                               HorizontalAlignment="Left" Style="{StaticResource EstiloSeparadores}"/>
-                            <Thumb x:Name="PART_RightHeaderGripper" Grid.Column="1" Grid.RowSpan="2" 
-                                               HorizontalAlignment="Right" Style="{StaticResource EstiloSeparadores}"/>
+                            <!--  CONTENIDO  -->
+                            <ContentPresenter
+                                Grid.RowSpan="2"
+                                Grid.ColumnSpan="2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                SnapsToDevicePixels="True" />
+                            <!--  FLECHA  -->
+                            <Path
+                                x:Name="Flecha"
+                                Grid.Row="0"
+                                Grid.ColumnSpan="2"
+                                Width="10"
+                                Height="5"
+                                Margin="0,2,0,3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M0,0 L1,0 0.5,1 z"
+                                Fill="Gray"
+                                Opacity="0.5"
+                                RenderTransformOrigin="0.5,0.4"
+                                Stretch="Fill"
+                                Visibility="Collapsed" />
+                            <Thumb
+                                x:Name="PART_LeftHeaderGripper"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                Style="{StaticResource EstiloSeparadores}" />
+                            <Thumb
+                                x:Name="PART_RightHeaderGripper"
+                                Grid.RowSpan="2"
+                                Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource EstiloSeparadores}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
 
-                        <!-- ESTADOS NORMAL-->
+                        <!--  ESTADOS NORMAL  -->
 
-                        <!-- DESACTIVADO-->
+                        <!--  DESACTIVADO  -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource GrisClaro}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource GrisClaro}" />
                         </Trigger>
 
-                        <!-- ORDEN ASCENDENTE-->
+                        <!--  ORDEN ASCENDENTE  -->
                         <Trigger Property="SortDirection" Value="Ascending">
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Flecha" Property="RenderTransform">
@@ -235,31 +291,31 @@
                             </Setter>
                         </Trigger>
 
-                        <!-- ORDEN DESCENDENTE-->
+                        <!--  ORDEN DESCENDENTE  -->
                         <Trigger Property="SortDirection" Value="Descending">
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                         </Trigger>
 
 
-                        <!-- ESTADOS MOUSE OVER-->
+                        <!--  ESTADOS MOUSE OVER  -->
 
-                        <!-- NORMAL-->
+                        <!--  NORMAL  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="SortDirection" Value="{x:Null}"/>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="{x:Null}" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoCalabaza}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoCalabaza}" />
                         </MultiTrigger>
 
 
-                        <!-- ORDEN ASCENDENTE-->
+                        <!--  ORDEN ASCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="SortDirection" Value="Ascending"/>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="Ascending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoCalabaza}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoCalabaza}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Flecha" Property="RenderTransform">
                                 <Setter.Value>
@@ -269,36 +325,36 @@
                         </MultiTrigger>
 
 
-                        <!-- ORDEN DESCENDENTE-->
+                        <!--  ORDEN DESCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="SortDirection" Value="Descending"/>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="Descending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoCalabaza}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoCalabaza}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                         </MultiTrigger>
 
 
-                        <!-- ESTADOS MOUSE PRESSED-->
+                        <!--  ESTADOS MOUSE PRESSED  -->
 
-                        <!-- NORMAL-->
+                        <!--  NORMAL  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsPressed" Value="True"/>
-                                <Condition Property="SortDirection" Value="{x:Null}"/>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="{x:Null}" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}" />
                         </MultiTrigger>
 
 
-                        <!-- ORDEN ASCENDENTE-->
+                        <!--  ORDEN ASCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsPressed" Value="True"/>
-                                <Condition Property="SortDirection" Value="Ascending"/>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="Ascending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Flecha" Property="RenderTransform">
                                 <Setter.Value>
@@ -308,20 +364,20 @@
                         </MultiTrigger>
 
 
-                        <!-- ORDEN DESCENDENTE-->
+                        <!--  ORDEN DESCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsPressed" Value="True"/>
-                                <Condition Property="SortDirection" Value="Descending"/>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="Descending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoLima}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                         </MultiTrigger>
 
 
-                        <!-- ESTADO ES LA PRIMERA COLUMNA-->
+                        <!--  ESTADO ES LA PRIMERA COLUMNA  -->
                         <Trigger Property="DisplayIndex" Value="0">
-                            <Setter TargetName="PART_LeftHeaderGripper" Property="Visibility" Value="Collapsed"></Setter>
+                            <Setter TargetName="PART_LeftHeaderGripper" Property="Visibility" Value="Collapsed" />
                         </Trigger>
 
                     </ControlTemplate.Triggers>
@@ -332,62 +388,88 @@
 
 
 
-    <!-- ==================================================================================================== -->
-    <!-- HEADERS NARANJA -->
-    <!-- ==================================================================================================== -->
-    <Style x:Key="EstiloHeadersNaranja" TargetType="DataGridColumnHeader">
+    <!--  ====================================================================================================  -->
+    <!--  HEADERS NARANJA  -->
+    <!--  ====================================================================================================  -->
+    <Style
+        x:Key="EstiloHeadersNaranja"
+        TargetType="DataGridColumnHeader">
 
-        <!-- PROPIEDADES VARIAS -->
-        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <!--  PROPIEDADES VARIAS  -->
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
         <Setter Property="VerticalContentAlignment" Value="Center" />
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="FontSize" Value="11"/>
-        <Setter Property="FontWeight" Value="DemiBold"/>
+        <Setter Property="Height" Value="24" />
+        <Setter Property="FontSize" Value="11" />
+        <Setter Property="FontWeight" Value="Normal" />
 
-        <!-- PLANTILLA -->
+        <!--  PLANTILLA  -->
         <Setter Property="Template">
             <Setter.Value>
-                <!-- PLANTILLA NORMAL-->
+                <!--  PLANTILLA NORMAL  -->
                 <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
-                    <!-- FONDO DE LA CABECERA-->
-                    <Border x:Name="Fondo" Grid.RowSpan="2" Background="{StaticResource orDegradadoNaranja}"
-                                        BorderThickness="0.5" BorderBrush="{StaticResource NaranjaClaro}">
+                    <!--  FONDO DE LA CABECERA  -->
+                    <Border
+                        x:Name="Fondo"
+                        Grid.RowSpan="2"
+                        Background="{StaticResource orDegradadoNaranja}"
+                        BorderBrush="Lavender"
+                        BorderThickness="0,0,0.5,0">
                         <Grid>
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
-                            <!-- CONTENIDO-->
-                            <ContentPresenter Grid.RowSpan="2" Grid.ColumnSpan="2" HorizontalAlignment="Center"
-                                                          VerticalAlignment="Center" SnapsToDevicePixels="True"/>
-                            <!-- FLECHA-->
-                            <Path x:Name="Flecha" Grid.Row="0" Grid.ColumnSpan="2"
-                                              HorizontalAlignment="Center" VerticalAlignment="Center"                                           
-                                              Width="10" Height="5" Margin="0,2,0,3"
-                                              Stretch="Fill" Opacity="0.5" Fill="Gray"
-                                              RenderTransformOrigin="0.5,0.4"
-                                              Visibility="Collapsed"
-                                              Data="M0,0 L1,0 0.5,1 z" />
-                            <Thumb x:Name="PART_LeftHeaderGripper" Grid.Column="0" Grid.RowSpan="2" 
-                                               HorizontalAlignment="Left" Style="{StaticResource EstiloSeparadores}"/>
-                            <Thumb x:Name="PART_RightHeaderGripper" Grid.Column="1" Grid.RowSpan="2" 
-                                               HorizontalAlignment="Right" Style="{StaticResource EstiloSeparadores}"/>
+                            <!--  CONTENIDO  -->
+                            <ContentPresenter
+                                Grid.RowSpan="2"
+                                Grid.ColumnSpan="2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                SnapsToDevicePixels="True" />
+                            <!--  FLECHA  -->
+                            <Path
+                                x:Name="Flecha"
+                                Grid.Row="0"
+                                Grid.ColumnSpan="2"
+                                Width="10"
+                                Height="5"
+                                Margin="0,2,0,3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M0,0 L1,0 0.5,1 z"
+                                Fill="Gray"
+                                Opacity="0.5"
+                                RenderTransformOrigin="0.5,0.4"
+                                Stretch="Fill"
+                                Visibility="Collapsed" />
+                            <Thumb
+                                x:Name="PART_LeftHeaderGripper"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                Style="{StaticResource EstiloSeparadores}" />
+                            <Thumb
+                                x:Name="PART_RightHeaderGripper"
+                                Grid.RowSpan="2"
+                                Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource EstiloSeparadores}" />
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
 
-                        <!-- ESTADOS NORMAL-->
+                        <!--  ESTADOS NORMAL  -->
 
-                        <!-- DESACTIVADO-->
+                        <!--  DESACTIVADO  -->
                         <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource GrisClaro}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource GrisClaro}" />
                         </Trigger>
 
-                        <!-- ORDEN ASCENDENTE-->
+                        <!--  ORDEN ASCENDENTE  -->
                         <Trigger Property="SortDirection" Value="Ascending">
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Flecha" Property="RenderTransform">
@@ -397,31 +479,31 @@
                             </Setter>
                         </Trigger>
 
-                        <!-- ORDEN DESCENDENTE-->
+                        <!--  ORDEN DESCENDENTE  -->
                         <Trigger Property="SortDirection" Value="Descending">
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                         </Trigger>
 
 
-                        <!-- ESTADOS MOUSE OVER-->
+                        <!--  ESTADOS MOUSE OVER  -->
 
-                        <!-- NORMAL-->
+                        <!--  NORMAL  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="SortDirection" Value="{x:Null}"/>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="{x:Null}" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}" />
                         </MultiTrigger>
 
 
-                        <!-- ORDEN ASCENDENTE-->
+                        <!--  ORDEN ASCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="SortDirection" Value="Ascending"/>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="Ascending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Flecha" Property="RenderTransform">
                                 <Setter.Value>
@@ -431,36 +513,36 @@
                         </MultiTrigger>
 
 
-                        <!-- ORDEN DESCENDENTE-->
+                        <!--  ORDEN DESCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsMouseOver" Value="True"/>
-                                <Condition Property="SortDirection" Value="Descending"/>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="Descending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                         </MultiTrigger>
 
 
-                        <!-- ESTADOS MOUSE PRESSED-->
+                        <!--  ESTADOS MOUSE PRESSED  -->
 
-                        <!-- NORMAL-->
+                        <!--  NORMAL  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsPressed" Value="True"/>
-                                <Condition Property="SortDirection" Value="{x:Null}"/>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="{x:Null}" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}" />
                         </MultiTrigger>
 
 
-                        <!-- ORDEN ASCENDENTE-->
+                        <!--  ORDEN ASCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsPressed" Value="True"/>
-                                <Condition Property="SortDirection" Value="Ascending"/>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="Ascending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                             <Setter TargetName="Flecha" Property="RenderTransform">
                                 <Setter.Value>
@@ -470,20 +552,20 @@
                         </MultiTrigger>
 
 
-                        <!-- ORDEN DESCENDENTE-->
+                        <!--  ORDEN DESCENDENTE  -->
                         <MultiTrigger>
                             <MultiTrigger.Conditions>
-                                <Condition Property="IsPressed" Value="True"/>
-                                <Condition Property="SortDirection" Value="Descending"/>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="Descending" />
                             </MultiTrigger.Conditions>
-                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}"/>
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource orDegradadoAzul}" />
                             <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
                         </MultiTrigger>
 
 
-                        <!-- ESTADO ES LA PRIMERA COLUMNA-->
+                        <!--  ESTADO ES LA PRIMERA COLUMNA  -->
                         <Trigger Property="DisplayIndex" Value="0">
-                            <Setter TargetName="PART_LeftHeaderGripper" Property="Visibility" Value="Collapsed"></Setter>
+                            <Setter TargetName="PART_LeftHeaderGripper" Property="Visibility" Value="Collapsed" />
                         </Trigger>
 
                     </ControlTemplate.Triggers>

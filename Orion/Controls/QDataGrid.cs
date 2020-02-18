@@ -194,8 +194,6 @@ namespace Orion.Controls {
 
         protected override void OnPreviewKeyDown(KeyEventArgs e) {
 
-            object x = e.OriginalSource;
-
             switch (e.Key) {
                 case Key.V:
                     if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
@@ -224,7 +222,6 @@ namespace Orion.Controls {
         protected override void OnMouseDoubleClick(MouseButtonEventArgs e) {
             if (DobleClick?.CanExecute(DobleClickParametro) ?? false) {
                 DobleClick.Execute(DobleClickParametro);
-
             }
             base.OnMouseDoubleClick(e);
         }

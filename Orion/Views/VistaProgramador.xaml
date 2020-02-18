@@ -156,7 +156,8 @@
             BorderThickness="1"
             FontFamily="Courier New"
             FontSize="12"
-            Text="{Binding ProgramadorVM.CampoTexto, UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding ProgramadorVM.CampoTexto,
+                           UpdateSourceTrigger=PropertyChanged}" />
 
 
         <DataGrid
@@ -171,11 +172,14 @@
             CanUserDeleteRows="False"
             CanUserReorderColumns="False"
             CanUserResizeRows="False"
-            FontSize="12"
+            FontFamily="Comic Sans MS"
+            FontSize="11"
             HeadersVisibility="Column"
+            HorizontalGridLinesBrush="Transparent"
             IsReadOnly="True"
             ItemsSource="{Binding ProgramadorVM.VistaTabla}"
-            Style="{StaticResource EstiloGrid}">
+            Style="{StaticResource EstiloGrid}"
+            VerticalGridLinesBrush="Lavender">
             <DataGrid.Resources>
                 <SolidColorBrush
                     x:Key="{x:Static SystemColors.HighlightBrushKey}"

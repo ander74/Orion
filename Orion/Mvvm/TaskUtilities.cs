@@ -5,15 +5,14 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-namespace Orion.MVVM {
+using System;
+using System.Threading.Tasks;
 
-    using System;
-    using System.Threading.Tasks;
+namespace Orion.MVVM {
 
     public static class TaskUtilities {
 
-        public static async void FireAndForgetSafeAsync(this Task task, IErrorHandler handler = null)
-        {
+        public static async void FireAndForgetSafeAsync(this Task task, IErrorHandler handler = null) {
             try {
                 await task;
             } catch (Exception ex) {

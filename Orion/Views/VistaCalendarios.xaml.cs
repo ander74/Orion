@@ -9,8 +9,8 @@ namespace Orion.Views {
 
 	using System.Windows;
 	using System.Windows.Controls;
-    using System.Windows.Data;
-    using System.Windows.Input;
+	using System.Windows.Data;
+	using System.Windows.Input;
 
 	public partial class VistaCalendarios : UserControl {
 		public VistaCalendarios() {
@@ -43,6 +43,9 @@ namespace Orion.Views {
 			BtDropAcciones.IsOpen = false;
 		}
 
+		private void BtAcciones_Click(object sender, RoutedEventArgs e) {
+			BtDropAcciones.IsOpen = false;
+		}
 
 		// AL PULSAR UNO DE LOS BOTONES DEL DESPLEGABLE CREAR PDF
 		private void BtCreandoPdf_Click(object sender, RoutedEventArgs e) {
@@ -137,46 +140,46 @@ namespace Orion.Views {
 			TablaCalendarios.Visibility = Visibility.Visible;
 		}
 
-        #endregion
-        // ====================================================================================================
+		#endregion
+		// ====================================================================================================
 
 
-        // ====================================================================================================
-        #region BOTÓN QUITAR FILTRO
-        // ====================================================================================================
+		// ====================================================================================================
+		#region BOTÓN QUITAR FILTRO
+		// ====================================================================================================
 
-        private void BtQuitarFiltro_Click(object sender, RoutedEventArgs e) {
-            var view = CollectionViewSource.GetDefaultView(TablaCalendarios.ItemsSource);
-            if (view != null && view.SortDescriptions != null) {
-                view.SortDescriptions.Clear();
-                view.Filter = null;
-            }
-            TablaCalendarios.Columns[0].SortDirection = null;
-        }
-
-
-        #endregion
-        // ====================================================================================================
+		private void BtQuitarFiltro_Click(object sender, RoutedEventArgs e) {
+			var view = CollectionViewSource.GetDefaultView(TablaCalendarios.ItemsSource);
+			if (view != null && view.SortDescriptions != null) {
+				view.SortDescriptions.Clear();
+				view.Filter = null;
+			}
+			TablaCalendarios.Columns[0].SortDirection = null;
+		}
 
 
-        // ====================================================================================================
-        #region GESTION PANEL RESUMEN Y GRÁFICOS
-        // ====================================================================================================
-
-        private void BtPanelPijama_Click(object sender, RoutedEventArgs e) {
-            PanelGraficosPijama.Visibility = Visibility.Collapsed;
-            PanelPijama.Visibility = Visibility.Visible;
-        }
+		#endregion
+		// ====================================================================================================
 
 
-        private void BtPanelGraficosResumen_Click(object sender, RoutedEventArgs e) {
-            PanelPijama.Visibility = Visibility.Collapsed;
-            PanelGraficosPijama.Visibility = Visibility.Visible;
-        }
+		// ====================================================================================================
+		#region GESTION PANEL RESUMEN Y GRÁFICOS
+		// ====================================================================================================
+
+		//private void BtPanelPijama_Click(object sender, RoutedEventArgs e) {
+		//	PanelGraficosPijama.Visibility = Visibility.Collapsed;
+		//	PanelPijama.Visibility = Visibility.Visible;
+		//}
 
 
-        #endregion
-        // ====================================================================================================
+		//private void BtPanelGraficosResumen_Click(object sender, RoutedEventArgs e) {
+		//	PanelPijama.Visibility = Visibility.Collapsed;
+		//	PanelGraficosPijama.Visibility = Visibility.Visible;
+		//}
 
-    }
+
+		#endregion
+		// ====================================================================================================
+
+	}
 }
