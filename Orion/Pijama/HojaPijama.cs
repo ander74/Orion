@@ -602,18 +602,18 @@ namespace Orion.Pijama {
         /// </summary>
         public TimeSpan AcumuladasHastaMes {
             get {
-                var h = Trabajador.Acumuladas +
-                       HastaMesActual.HorasAcumuladas +
-                       HastaMesActual.HorasReguladas -
-                       new TimeSpan(Convert.ToInt64(HastaMesActual.DiasLibreDisposicionF6 * App.Global.Convenio.JornadaMedia.Ticks));
-                return Trabajador.Acumuladas +
-                       HastaMesActual.HorasAcumuladas +
-                       HastaMesActual.HorasReguladas -
-                       new TimeSpan(Convert.ToInt64(HastaMesActual.DiasLibreDisposicionF6 * App.Global.Convenio.JornadaMedia.Ticks));
+                var horas = Trabajador.Acumuladas + HastaMesActual.HorasAcumuladas + HastaMesActual.HorasReguladas;
+                var diasF6 = HastaAñoAnterior.DiasLibreDisposicionF6;
+                // Sólo se tienen en cuenta las horas de los F6 si es el mes de noviembre, que es cuando la empresa los descuenta.
+                if (Fecha.Month == 11) {
+                    diasF6 = HastaAñoAnterior.DiasLibreDisposicionF6 + HastaMesActual.DiasLibreDisposicionF6;
+                }
+                horas -= new TimeSpan(Convert.ToInt64(diasF6 * App.Global.Convenio.JornadaMedia.Ticks));
+                return horas;
                 //return Trabajador.Acumuladas +
-                //	   HastaMesActual.HorasAcumuladas +
-                //	   HastaMesActual.HorasReguladas -
-                //	   AcumuladasHastaAñoAnterior;
+                //       HastaMesActual.HorasAcumuladas +
+                //       HastaMesActual.HorasReguladas -
+                //       new TimeSpan(Convert.ToInt64(HastaMesActual.DiasLibreDisposicionF6 * App.Global.Convenio.JornadaMedia.Ticks));
             }
         }
 

@@ -34,7 +34,7 @@ PROYECTO ORION
 
 	Códigos de las regulaciones de conductor: Si ponemos en el campo 'Motivo' uno de los números, se asigna el código sin cambiar el motivo.
 
-		0 = Ninguna regulación.
+		0 = Ninguna regulación (Manual).
 		1 = Horas Cobradas
 		2 = Regulación de año.
 

@@ -1903,6 +1903,7 @@ namespace Orion.Servicios {
                     //----------------------------------------------------------------------------------------------------
                     // DÍAS F6 AÑO
                     //----------------------------------------------------------------------------------------------------
+                    fechaInicio = mes == 12 ? new DateTime(año, 12, 1) : new DateTime(año - 1, 12, 1);
                     consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
                                                       "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
                                                       "WHERE Calendarios.MatriculaConductor = @matricula AND " +
@@ -1917,6 +1918,7 @@ namespace Orion.Servicios {
                     //----------------------------------------------------------------------------------------------------
                     // DÍAS VACACIONES AÑO
                     //----------------------------------------------------------------------------------------------------
+                    fechaInicio = new DateTime(año, 1, 1);
                     consulta = new SQLiteExpression("SELECT Count(DiasCalendario.Grafico) " +
                                                       "FROM Calendarios INNER JOIN DiasCalendario ON Calendarios._id = DiasCalendario.IdCalendario " +
                                                       "WHERE Calendarios.MatriculaConductor = @matricula AND " +
