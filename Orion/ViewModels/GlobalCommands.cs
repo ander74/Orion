@@ -5,15 +5,11 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using Orion.Config;
-using Orion.DataModels;
-using Orion.Properties;
-using Orion.Views;
-using System;
-using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Orion.Config;
+using Orion.Views;
 
 namespace Orion.ViewModels {
 
@@ -108,10 +104,10 @@ namespace Orion.ViewModels {
 			//if (iniciando && App.Global.Configuracion.CentroInicial != (int)Centros.Desconocido) {
 			//	CentroActual = (Centros)App.Global.Configuracion.CentroInicial;
 			//} else {
-				VentanaCentros ventana = new VentanaCentros();
-				ventana.Centro = CentroActual;
-				ventana.ShowDialog();
-				CentroActual = ventana.Centro;
+			VentanaCentros ventana = new VentanaCentros();
+			ventana.Centro = CentroActual;
+			ventana.ShowDialog();
+			CentroActual = ventana.Centro;
 			//}
 			//Reiniciamos todos los ViewModels para que reflejen el cambio de centro.
 			GraficosVM.Reiniciar();
@@ -304,7 +300,7 @@ namespace Orion.ViewModels {
 			Configuracion.BotonCalculadoraActivo = false;
 			// Mostramos la calculadora, no modal.
 			App.Calculadora.Show();
-			
+
 		}
 		#endregion
 
@@ -321,18 +317,20 @@ namespace Orion.ViewModels {
 
 		// Ejecución del comando
 		private void PantallaCompleta(object parametro) {
-			Window ventana = parametro as Window;
-			if (ventana == null) return;
-			if (ventana.WindowStyle == WindowStyle.ThreeDBorderWindow) {
-				ventana.WindowState = WindowState.Normal;
-				ventana.WindowStyle = WindowStyle.None;
-				ventana.WindowState = WindowState.Maximized;
-			} else {
-				ventana.WindowStyle = WindowStyle.ThreeDBorderWindow;
+			//Window ventana = parametro as Window;
+			if (parametro is Window ventana) {
+				if (ventana.WindowStyle == WindowStyle.ThreeDBorderWindow) {
+					ventana.WindowState = WindowState.Normal;
+					ventana.WindowStyle = WindowStyle.None;
+					ventana.WindowState = WindowState.Maximized;
+					MostrarBotonCerrar = true;
+				} else {
+					ventana.WindowStyle = WindowStyle.ThreeDBorderWindow;
+					MostrarBotonCerrar = false;
+				}
 			}
-			
 		}
-        #endregion
+		#endregion
 
 
 
@@ -340,5 +338,5 @@ namespace Orion.ViewModels {
 
 
 
-    }
+	}
 }

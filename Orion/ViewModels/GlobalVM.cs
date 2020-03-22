@@ -551,6 +551,19 @@ namespace Orion.ViewModels {
         }
 
 
+        //====================================================================================================
+        // OTRAS PROPIEDADES
+        //====================================================================================================
+
+        private bool _mostrarBotonCerrar;
+        public bool MostrarBotonCerrar {
+            get => _mostrarBotonCerrar;
+            set => SetValue(ref _mostrarBotonCerrar, value);
+        }
+
+
+
+
         #endregion
         // ====================================================================================================
 

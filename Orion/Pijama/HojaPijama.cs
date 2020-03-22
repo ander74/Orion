@@ -163,6 +163,7 @@ namespace Orion.Pijama {
             bool sabadotrabajado = false;   // Indica si el último sábado se ha trabajado.
             bool sabadodescansado = false;  // Indica si el último sábado se ha descansado.
             int totalDiasDescanso = 0;
+            int totalDiasInactivo = 0;
 
             TimeSpan? finalAnterior = TimeSpan.Zero; // Indica la hora final del servicio anterior.
 
@@ -238,6 +239,13 @@ namespace Orion.Pijama {
                 if (dia.Grafico == 0) {
                     // Añadimos el día a los días inactivos.
                     diasinactivos++;
+                    totalDiasInactivo++;
+                    // Si es el primer día inactivo...
+                    if (diasinactivos == 1) {
+                        // Si sólo hay un descanso anterior, se marca el fallo.
+                        if (diasdescansados == 1 && dia.DiaFecha.Day > 2)
+                            resultado += String.Format("Día {0:00}: Descanso suelto no computado.\n", primerdiadescanso);
+                    }
                     // Reiniciamos los días trabajados, descansados y borramos el final anterior.
                     diastrabajados = 0;
                     diasdescansados = 0;
@@ -331,8 +339,10 @@ namespace Orion.Pijama {
             }
 
             // TOTAL DIAS DESCANSADOS MENOS DE 8 Y MAS DE 12
-            if (totalDiasDescanso < 8) resultado += $"Menos de 8 descansos en el mes.\n";
-            if (totalDiasDescanso > 12) resultado += $"Más de 12 descansos en el mes.\n";
+            if (totalDiasInactivo == 0) {
+                if (totalDiasDescanso < 8) resultado += $"Menos de 8 descansos en el mes.\n";
+                if (totalDiasDescanso > 12) resultado += $"Más de 12 descansos en el mes.\n";
+            }
 
             return resultado;
         }

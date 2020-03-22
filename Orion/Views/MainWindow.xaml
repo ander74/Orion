@@ -202,7 +202,7 @@
             Orientation="Horizontal">
             <Button
                 Margin="0"
-                Padding="20,1"
+                Padding="15,1"
                 Command="{Binding cmdMostrarCalculadora}"
                 FontSize="16"
                 FontWeight="Bold"
@@ -221,7 +221,7 @@
             </Button>
             <Button
                 Margin="0"
-                Padding="20,1"
+                Padding="15,1"
                 Command="{Binding cmdMostrarAyuda}"
                 CommandParameter="{Binding ElementName=Ribbon,
                                            Path=SelectedItem.Header}"
@@ -240,7 +240,7 @@
             </Button>
             <Button
                 Margin="0"
-                Padding="20,1"
+                Padding="15,1"
                 Command="{Binding cmdPantallaCompleta}"
                 CommandParameter="{Binding ElementName=Ventana}"
                 Content="P"
@@ -249,6 +249,23 @@
                 Foreground="DarkGray"
                 Style="{StaticResource EstiloBotonBarraPequeña}" />
         </StackPanel>
+
+        <!--  BOTON CERRAR VENTANA  -->
+        <Button
+            Grid.Row="0"
+            Margin="0,30,5,0"
+            Padding="5,1"
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Click="BtClose_Click"
+            Content="X"
+            FontSize="16"
+            FontWeight="Bold"
+            Foreground="Red"
+            Style="{StaticResource EstiloBotonBarraPequeña}"
+            Visibility="{Binding MostrarBotonCerrar,
+                                 Converter={StaticResource VisibilityConverter}}" />
+
 
         <!--  ====================================================================================================  -->
         <!--  BARRA DE ESTADO  -->

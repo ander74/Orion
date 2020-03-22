@@ -156,5 +156,12 @@ namespace Orion.Views {
             ((GlobalVM)DataContext).cmdCambiarCentro.Execute(null);
         }
 
+
+        //****************************************************************************************************
+        // AL PULSAR EL BOTON CERRAR EN MODO PANTALLA COMPLETA
+        //****************************************************************************************************
+        private void BtClose_Click(object sender, RoutedEventArgs e) {
+            this.Close();
+        }
     }
 }
