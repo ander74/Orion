@@ -1211,7 +1211,7 @@ namespace Orion.PrintModel {
                 parrafo.Add($"{App.Global.CentroActual.ToString().ToUpper()}");
                 parrafo.Add("\n");
                 parrafo.Add(new Text($"Trabajador/a: ").SetBold());
-                parrafo.Add($"{conductor.Apellidos}, {conductor.Nombre} ({conductor.Id:000})");
+                parrafo.Add($"{conductor.Apellidos}, {conductor.Nombre} ({conductor.Matricula:000})");
                 doc.Add(parrafo);
 
                 // ==================================================
@@ -1294,7 +1294,7 @@ namespace Orion.PrintModel {
 
                 // Añadimos el número de reclamación
                 iText.Kernel.Geom.Rectangle cuadroNumReclamacion = new iText.Kernel.Geom.Rectangle(40 + ((anchoHoja - 80) / 2), 642, ((anchoHoja - 80) / 2) - 10, 20);
-                string numReclamacion = $"Nº Reclamación: {fecha:yyyyMM}{conductor.Id:000}/01";
+                string numReclamacion = $"Nº Reclamación: {fecha:yyyyMM}{conductor.Matricula:000}/01";
                 PdfTextFormField campoNumReclamacion = PdfFormField.CreateText(doc.GetPdfDocument(), cuadroNumReclamacion, "NumeroReclamacion", numReclamacion);
                 campoNumReclamacion.SetJustification(PdfFormField.ALIGN_RIGHT);
                 campoNumReclamacion.SetVisibility(PdfFormField.VISIBLE);
