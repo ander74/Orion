@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Data.SQLite;
+using Newtonsoft.Json;
 using Orion.Config;
 using Orion.Interfaces;
 
@@ -193,6 +194,7 @@ namespace Orion.Models {
             }
         }
 
+        [JsonIgnore]
         public List<Itinerario> ItinerariosBorrados { get; }
 
 
@@ -213,6 +215,7 @@ namespace Orion.Models {
         }
 
 
+        [JsonIgnore]
         public IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
@@ -224,9 +227,11 @@ namespace Orion.Models {
         }
 
 
+        [JsonIgnore]
         public IEnumerable<ISQLiteItem> Lista { get => ListaItinerarios; }
 
 
+        [JsonIgnore]
         public bool HasList { get => true; }
 
 
@@ -240,18 +245,23 @@ namespace Orion.Models {
         }
 
 
+        [JsonIgnore]
         public int ForeignId { get; set; }
 
 
+        [JsonIgnore]
         public string ForeignIdName { get => "IdLinea"; }
 
 
+        [JsonIgnore]
         public string OrderBy { get => $"Nombre ASC"; }
 
 
+        [JsonIgnore]
         public string TableName { get => "Lineas"; }
 
 
+        [JsonIgnore]
         public string ComandoInsertar {
             get {
                 if (Id == 0) {

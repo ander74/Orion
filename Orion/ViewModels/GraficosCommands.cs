@@ -13,7 +13,9 @@ namespace Orion.ViewModels {
     using System.IO;
     using System.Linq;
     using System.Windows.Input;
+    using Microsoft.Win32;
     using Models;
+    using Newtonsoft.Json;
     using PrintModel;
     using Servicios;
     using Views;
@@ -241,8 +243,12 @@ namespace Orion.ViewModels {
                     FiltroAplicado = "Domingos y Festivos";
                     break;
                 case "ReduccionJornada":
-                    VistaGraficos.Filter = (g) => { return ((g as Grafico).DiaSemana == "R"); };
+                    VistaGraficos.Filter = (g) => { return ((g as Grafico).DiaSemana == "RJ"); };
                     FiltroAplicado = "Reducciones de Jornada";
+                    break;
+                case "Reserva":
+                    VistaGraficos.Filter = (g) => { return ((g as Grafico).DiaSemana == "R"); };
+                    FiltroAplicado = "Gráficos Reserva";
                     break;
                 case "Modificados":
                     VistaGraficos.Filter = (g) => { return (g as Grafico).Diferente == true; };
@@ -258,7 +264,7 @@ namespace Orion.ViewModels {
         #endregion
 
 
-        #region AÑADIR VALORACION
+        #region AÑADIR ITINERARIO
         // Comando
         private ICommand _cmdañadirvaloracion;
         public ICommand cmdAñadirValoracion {
@@ -334,9 +340,14 @@ namespace Orion.ViewModels {
                             valoracion.Descripcion = itinerario.Descripcion;
                             valoracion.Final = contextoVentana.Inicio + new TimeSpan(0, itinerario.TiempoReal, 0);
                         } else {
-                            valoracion.Linea = Linea;
-                            valoracion.Descripcion = "Línea desconocida.";
-                            valoracion.Final = contextoVentana.Inicio;
+                            // Sacar un error y esperar si se va a continuar o no.
+                            if (Mensajes.VerMensaje("No existe el itinerario\n¿Desea continuar?", "AVISO", true) == true) {
+                                valoracion.Linea = Linea;
+                                valoracion.Descripcion = "Línea desconocida.";
+                                valoracion.Final = contextoVentana.Inicio;
+                            } else {
+                                return;
+                            }
                         }
 
                         // Si la línea es cero.
@@ -430,11 +441,49 @@ namespace Orion.ViewModels {
 
         private void CalcularValoraciones() {
             foreach (ValoracionGrafico valoracion in GraficoSeleccionado.ListaValoraciones) {
-                valoracion.Calcular();
+                var indice = GraficoSeleccionado.ListaValoraciones.IndexOf(valoracion);
+                var tiempoAnterior = valoracion.Tiempo;
+                if (indice > 0) {
+                    valoracion.Inicio = GraficoSeleccionado.ListaValoraciones[indice - 1].Final;
+                } else if (indice == 0) {
+                    valoracion.Inicio = GraficoSeleccionado.Inicio;
+                }
+                valoracion.Final = valoracion.Inicio + tiempoAnterior;
+
                 HayCambios = true;
             }
-            //Propiedades.DatosModificados = true;
         }
+        #endregion
+
+
+        #region ASIGNAR TIEMPO DE PAGO A ÍTINERARIO
+        private ICommand _cmdAsignarTiempoPago;
+
+        public ICommand cmdAsignarTiempoPago {
+            get {
+                if (_cmdAsignarTiempoPago == null) _cmdAsignarTiempoPago = new RelayCommand(p => AsignarTiempoPago(), p => PuedeAsignarTiempoPago());
+                return _cmdAsignarTiempoPago;
+            }
+        }
+
+        private bool PuedeAsignarTiempoPago() {
+            return ValoracionSeleccionada != null && ValoracionSeleccionada.Linea > 0;
+        }
+
+        private void AsignarTiempoPago() {
+            // Buscamos el itinerario.
+            Itinerario itinerario = null;
+            try {
+                itinerario = App.Global.LineasRepo.GetItinerarioByNombre(ValoracionSeleccionada.Linea);
+            } catch (Exception ex) {
+                Mensajes.VerError("GraficosCommands.AsignarTiempoPago", ex);
+            }
+            if (itinerario != null) {
+                ValoracionSeleccionada.Final = ValoracionSeleccionada.Inicio + new TimeSpan(0, itinerario.TiempoPago, 0);
+            }
+        }
+
+
         #endregion
 
 
@@ -518,9 +567,9 @@ namespace Orion.ViewModels {
         private void ModificarFechaGrupo() {
 
             // Avisamos de que se va a cambiar la fecha, y si contestamos no, salimos.
-            if (Mensajes.VerMensaje("Vas a cambiar la fecha de validez del grupo.\n" +
+            Mensajes.VerMensaje("Vas a cambiar la fecha de validez del grupo.\n" +
                                        "Esto puede alterar los calendarios que dependían de la fecha anterior\n\n" +
-                                       "¿Desea continuar?", "Cambiar fecha del grupo", true) == false) return;
+                                       "Téngalo en cuenta", "Cambiar fecha del grupo");
 
         }
         #endregion
@@ -840,10 +889,6 @@ namespace Orion.ViewModels {
         private void DeducirDiaSemana() {
             foreach (Grafico grafico in _listagraficos) {
                 if (string.IsNullOrWhiteSpace(grafico.DiaSemana)) {
-                    //    if (grafico.Numero >= App.Global.PorCentro.LunDel && grafico.Numero <= App.Global.PorCentro.LunAl) grafico.DiaSemana = "L";
-                    //    if (grafico.Numero >= App.Global.PorCentro.VieDel && grafico.Numero <= App.Global.PorCentro.VieAl) grafico.DiaSemana = "V";
-                    //    if (grafico.Numero >= App.Global.PorCentro.SabDel && grafico.Numero <= App.Global.PorCentro.SabAl) grafico.DiaSemana = "S";
-                    //    if (grafico.Numero >= App.Global.PorCentro.DomDel && grafico.Numero <= App.Global.PorCentro.DomAl) grafico.DiaSemana = "F";
                     if (App.Global.PorCentro.RangoLun.Validar(grafico.Numero)) grafico.DiaSemana = "L";
                     if (App.Global.PorCentro.RangoVie.Validar(grafico.Numero)) grafico.DiaSemana = "V";
                     if (App.Global.PorCentro.RangoSab.Validar(grafico.Numero)) grafico.DiaSemana = "S";
@@ -888,6 +933,48 @@ namespace Orion.ViewModels {
             ExcelService.getInstance().GenerarComparacionGraficos(rutaDestino, ListaGraficos, excel);
 
             if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
+        }
+        #endregion
+
+
+        #region COMANDO EXPORTAR GRUPO
+
+        // Comando
+        private ICommand _exportarGrupo;
+        public ICommand cmdExportarGrupo {
+            get {
+                if (_exportarGrupo == null) _exportarGrupo = new RelayCommand(p => ExportarGrupo(), p => PuedeExportarGrupo());
+                return _exportarGrupo;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeExportarGrupo() {
+            return ListaGraficos.Count > 0;
+        }
+
+        // Ejecución del comando
+        private void ExportarGrupo() {
+
+            // Solicitamos la ruta del archivo a guardar.
+            var ruta = "";
+            SaveFileDialog dialogo = new SaveFileDialog();
+            dialogo.Filter = "Archivos JSON|*.json|Todos los archivos|*.*";
+            dialogo.FileName = $"{GrupoSeleccionado.Validez.Year:0000}-{GrupoSeleccionado.Validez.Month:00}-{GrupoSeleccionado.Validez.Day:00} - Graficos {App.Global.CentroActual}.gra"; ;
+            dialogo.InitialDirectory = App.Global.CarpetaOrion;
+            dialogo.OverwritePrompt = true;
+            dialogo.Title = "Exportar grupo de gráficos";
+            if (dialogo.ShowDialog() != true) return;
+            ruta = dialogo.FileName;
+            // Si no hay una ruta seleccionada salimos.
+            if (string.IsNullOrEmpty(ruta)) {
+                Mensajes.VerMensaje("El archivo seleccionado no existe.", "ERROR");
+                return;
+            }
+            string datos = JsonConvert.SerializeObject(ListaGraficos, Formatting.Indented);
+            File.WriteAllText(ruta, datos, System.Text.Encoding.UTF8);
+
         }
         #endregion
 

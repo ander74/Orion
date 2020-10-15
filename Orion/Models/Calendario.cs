@@ -14,6 +14,7 @@ namespace Orion.Models {
     using System.Data.OleDb;
     using System.Data.SQLite;
     using System.Linq;
+    using Newtonsoft.Json;
     using Orion.Config;
     using Orion.Interfaces;
 
@@ -292,7 +293,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(DbDataReader lector) {
+        public virtual void FromReader(DbDataReader lector) {
             _id = lector.ToInt32("_id");
             matriculaConductor = lector.ToInt32("MatriculaConductor");
             _fecha = lector.ToDateTime("Fecha");
@@ -302,7 +303,8 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        [JsonIgnore]
+        public virtual IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("MatriculaConductor", MatriculaConductor));
@@ -314,35 +316,42 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLiteItem> Lista { get => ListaDias; }
+        [JsonIgnore]
+        public virtual IEnumerable<ISQLiteItem> Lista { get => ListaDias; }
 
 
-        public bool HasList { get => true; }
+        [JsonIgnore]
+        public virtual bool HasList { get => true; }
 
 
-        public void InicializarLista() {
+        public virtual void InicializarLista() {
             ListaDias = new NotifyCollection<DiaCalendario>();
         }
 
 
-        public void AddItemToList(ISQLiteItem item) {
+        public virtual void AddItemToList(ISQLiteItem item) {
             ListaDias.Add(item as DiaCalendario);
         }
 
 
-        public int ForeignId { get; set; }
+        [JsonIgnore]
+        public virtual int ForeignId { get; set; }
 
 
-        public string ForeignIdName { get => "IdCalendario"; }
+        [JsonIgnore]
+        public virtual string ForeignIdName { get => "IdCalendario"; }
 
 
-        public string OrderBy { get => $"MatriculaConductor ASC"; }
+        [JsonIgnore]
+        public virtual string OrderBy { get => $"MatriculaConductor ASC"; }
 
 
-        public string TableName { get => "Calendarios"; }
+        [JsonIgnore]
+        public virtual string TableName { get => "Calendarios"; }
 
 
-        public string ComandoInsertar {
+        [JsonIgnore]
+        public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO Calendarios (" +
                 "MatriculaConductor, " +
                 "Fecha, " +

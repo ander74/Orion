@@ -31,16 +31,12 @@
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
         <cnv:ConvertidorDiaSemanaGrafico x:Key="cnvDiaSemanaGrafico" />
 
-        <Style
-            x:Key="EstiloGridGraficos"
-            TargetType="DataGrid">
+        <Style x:Key="EstiloGridGraficos" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasVerde}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasGraficos}" />
         </Style>
-        <Style
-            x:Key="EstiloGridValoraciones"
-            TargetType="DataGrid">
+        <Style x:Key="EstiloGridValoraciones" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
@@ -69,8 +65,7 @@
             Height="80"
             Background="{StaticResource DegradadoCeleste0}"
             Orientation="Horizontal"
-            Visibility="{Binding VisibilidadBotones,
-                                 Converter={StaticResource cnvBoolToVisibility}}">
+            Visibility="{Binding VisibilidadBotones, Converter={StaticResource cnvBoolToVisibility}}">
 
             <!--  BOTON GUARDAR  -->
             <controls:BotonDual
@@ -80,6 +75,18 @@
                 IsActivo="{Binding EnOtroCentro}"
                 TextoActivo="Guardar"
                 TextoNormal="Guardar" />
+
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
+
+            <!--  BOTON EXPORTAR GRUPO  -->
+            <controls:BotonBarra
+                Command="{Binding GraficosVM.cmdExportarGrupo}"
+                Imagen="Imagenes/Exportar.png"
+                Titulo="Exportar Grupo" />
 
             <!--  SEPARADOR  -->
             <TextBlock
@@ -112,18 +119,17 @@
                     HorizontalAlignment="Center"
                     Click="BotonValidezGrupo_Click"
                     Command="{Binding GraficosVM.cmdModificarFechaGrupo}"
-                    Content="{Binding GraficosVM.GrupoSeleccionado.Validez,
-                                      Converter={StaticResource cnvFecha}}"
+                    Content="{Binding GraficosVM.GrupoSeleccionado.Validez, Converter={StaticResource cnvFecha}}"
                     FontFamily="Bookman Old Style"
                     FontSize="20"
                     Style="{StaticResource EstiloBotonValidezFecha}" />
             </StackPanel>
 
-            <!--  BOTON VALORACIONES DE GRÁFICOS  -->
+            <!--  BOTON ITINERARIOS DE GRÁFICOS  -->
             <controls:BotonBarra
                 Click="BtValoraciones_Click"
                 Imagen="Imagenes/AbrirPanelDerecho.png"
-                Titulo="Valorac." />
+                Titulo="Itiner." />
 
             <!--  SEPARADOR  -->
             <TextBlock
@@ -150,14 +156,10 @@
                 Titulo="Deshacer Borrar" />
 
             <!--  DESPLEGABLE ACCIONES  -->
-            <xceed:DropDownButton
-                x:Name="BtDropAcciones"
-                Style="{StaticResource EstiloBotonDesplegable}">
+            <xceed:DropDownButton x:Name="BtDropAcciones" Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/Engranajes.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/Engranajes.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtAcciones"
                             FontFamily="Comic Sans MS"
@@ -173,8 +175,7 @@
                         BorderBrush="DarkBlue"
                         BorderThickness="2"
                         CornerRadius="5"
-                        DataContext="{Binding Source={x:Reference TxtAcciones},
-                                              Path=DataContext.GraficosVM}">
+                        DataContext="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.GraficosVM}">
                         <Border
                             Margin="3"
                             Padding="5"
@@ -211,9 +212,7 @@
                                     Style="{StaticResource EstiloBotonDesplegable}">
                                     <xceed:DropDownButton.Content>
                                         <StackPanel Orientation="Vertical">
-                                            <Image
-                                                Source="Imagenes/Comparar.png"
-                                                Style="{StaticResource EstiloImagen}" />
+                                            <Image Source="Imagenes/Comparar.png" Style="{StaticResource EstiloImagen}" />
                                             <TextBlock
                                                 FontFamily="Comic Sans MS"
                                                 FontSize="10"
@@ -228,8 +227,7 @@
                                             BorderBrush="DarkBlue"
                                             BorderThickness="2"
                                             CornerRadius="5"
-                                            DataContext="{Binding Source={x:Reference TxtAcciones},
-                                                                  Path=DataContext.GraficosVM}">
+                                            DataContext="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.GraficosVM}">
                                             <Border
                                                 Margin="3"
                                                 BorderBrush="DarkGray"
@@ -292,9 +290,7 @@
                                     Style="{StaticResource EstiloBotonDesplegable}">
                                     <xceed:DropDownButton.Content>
                                         <StackPanel Orientation="Vertical">
-                                            <Image
-                                                Source="Imagenes/SeleccionarColumna.png"
-                                                Style="{StaticResource EstiloImagen}" />
+                                            <Image Source="Imagenes/SeleccionarColumna.png" Style="{StaticResource EstiloImagen}" />
                                             <TextBlock
                                                 VerticalAlignment="Center"
                                                 FontFamily="Comic Sans MS"
@@ -310,8 +306,7 @@
                                             BorderBrush="DarkBlue"
                                             BorderThickness="2"
                                             CornerRadius="5"
-                                            DataContext="{Binding Source={x:Reference TxtAcciones},
-                                                                  Path=DataContext}">
+                                            DataContext="{Binding Source={x:Reference TxtAcciones}, Path=DataContext}">
                                             <Border
                                                 Margin="3"
                                                 BorderBrush="DarkGray"
@@ -327,9 +322,7 @@
                                                         Content="No Calcular"
                                                         FontFamily="Comic Sans MS"
                                                         FontSize="10"
-                                                        IsChecked="{Binding Configuracion.MostrarGrafNoCalcular,
-                                                                            Mode=TwoWay,
-                                                                            UpdateSourceTrigger=PropertyChanged}" />
+                                                        IsChecked="{Binding Configuracion.MostrarGrafNoCalcular, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                                     <!--  TIEMPO PARTIDO  -->
                                                     <CheckBox
@@ -339,9 +332,7 @@
                                                         Content="Tiempo Partido"
                                                         FontFamily="Comic Sans MS"
                                                         FontSize="10"
-                                                        IsChecked="{Binding Configuracion.MostrarGrafTiempoPartido,
-                                                                            Mode=TwoWay,
-                                                                            UpdateSourceTrigger=PropertyChanged}" />
+                                                        IsChecked="{Binding Configuracion.MostrarGrafTiempoPartido, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                                     <!--  HORAS  -->
                                                     <CheckBox
@@ -351,9 +342,7 @@
                                                         Content="Horas"
                                                         FontFamily="Comic Sans MS"
                                                         FontSize="10"
-                                                        IsChecked="{Binding Configuracion.MostrarGrafHoras,
-                                                                            Mode=TwoWay,
-                                                                            UpdateSourceTrigger=PropertyChanged}" />
+                                                        IsChecked="{Binding Configuracion.MostrarGrafHoras, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                                     <!--  DIETAS  -->
                                                     <CheckBox
@@ -363,9 +352,7 @@
                                                         Content="Dietas"
                                                         FontFamily="Comic Sans MS"
                                                         FontSize="10"
-                                                        IsChecked="{Binding Configuracion.MostrarGrafDietas,
-                                                                            Mode=TwoWay,
-                                                                            UpdateSourceTrigger=PropertyChanged}" />
+                                                        IsChecked="{Binding Configuracion.MostrarGrafDietas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                                     <!--  PLUS LIMPIEZA  -->
                                                     <CheckBox
@@ -375,9 +362,7 @@
                                                         Content="Plus Limpieza"
                                                         FontFamily="Comic Sans MS"
                                                         FontSize="10"
-                                                        IsChecked="{Binding Configuracion.MostrarGrafPlusLimpieza,
-                                                                            Mode=TwoWay,
-                                                                            UpdateSourceTrigger=PropertyChanged}" />
+                                                        IsChecked="{Binding Configuracion.MostrarGrafPlusLimpieza, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                                     <!--  PLUS PAQUETERIA  -->
                                                     <CheckBox
@@ -387,9 +372,7 @@
                                                         Content="Plus Paquetería"
                                                         FontFamily="Comic Sans MS"
                                                         FontSize="10"
-                                                        IsChecked="{Binding Configuracion.MostrarGrafPlusPaqueteria,
-                                                                            Mode=TwoWay,
-                                                                            UpdateSourceTrigger=PropertyChanged}" />
+                                                        IsChecked="{Binding Configuracion.MostrarGrafPlusPaqueteria, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
 
                                                 </StackPanel>
@@ -409,8 +392,7 @@
                                     Width="64"
                                     Height="80"
                                     Click="BotonAcciones_Click"
-                                    Command="{Binding Source={x:Reference TablaGraficos},
-                                                      Path=ComandoAlternarModoSeleccion}"
+                                    Command="{Binding Source={x:Reference TablaGraficos}, Path=ComandoAlternarModoSeleccion}"
                                     ImagenActivo="Imagenes/SeleccionFila.png"
                                     ImagenInactivo="Imagenes/SeleccionCelda.png"
                                     TituloActivo="Seleccionar Filas"
@@ -439,20 +421,15 @@
 
             <!--  BOTON PEGAR  -->
             <controls:BotonBarra
-                Command="{Binding ElementName=TablaGraficos,
-                                  Path=ComandoPegar}"
+                Command="{Binding ElementName=TablaGraficos, Path=ComandoPegar}"
                 Imagen="Imagenes/Pegar.png"
                 Titulo="Pegar" />
 
             <!--  DESPLEGABLE FILTRAR GRÁFICOS  -->
-            <xceed:DropDownButton
-                x:Name="BtDropFiltros"
-                Style="{StaticResource EstiloBotonDesplegable}">
+            <xceed:DropDownButton x:Name="BtDropFiltros" Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/Filtrar.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/Filtrar.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtFiltrar"
                             FontFamily="Comic Sans MS"
@@ -468,8 +445,7 @@
                         BorderBrush="DarkBlue"
                         BorderThickness="2"
                         CornerRadius="5"
-                        DataContext="{Binding Source={x:Reference TxtFiltrar},
-                                              Path=DataContext.GraficosVM}">
+                        DataContext="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.GraficosVM}">
                         <Border
                             Margin="3"
                             BorderBrush="DarkGray"
@@ -552,6 +528,21 @@
                                     TextBlock.TextAlignment="Center"
                                     ToolTip="Muestra sólo los gráficos que pertenecen a reducciones de jornada." />
 
+                                <!--  BOTÓN FILTRAR RESERVA  -->
+                                <Button
+                                    Margin="6,3,6,6"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BotonFiltrado_Click"
+                                    Command="{Binding cmdAplicarFiltro}"
+                                    CommandParameter="Reserva"
+                                    Content="Gráficos reserva"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="10"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Muestra sólo los gráficos reserva." />
+
                                 <!--  BOTÓN FILTRAR MODIFICADOS  -->
                                 <Button
                                     Margin="6,3,6,6"
@@ -593,9 +584,7 @@
                 Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/GuardarPDF.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/GuardarPDF.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtCrearPdf"
                             FontFamily="Comic Sans MS"
@@ -623,8 +612,7 @@
                                     Margin="6,6,6,3"
                                     Padding="20,10"
                                     HorizontalAlignment="Stretch"
-                                    Command="{Binding Source={x:Reference TxtCrearPdf},
-                                                      Path=DataContext.GraficosVM.cmdGraficosEnPdf}"
+                                    Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdGraficosEnPdf}"
                                     Content="Tabla Gráficos"
                                     FontFamily="Comic Sans MS"
                                     FontSize="10"
@@ -636,8 +624,7 @@
                                     Margin="6,3,6,3"
                                     Padding="20,10"
                                     HorizontalAlignment="Stretch"
-                                    Command="{Binding Source={x:Reference TxtCrearPdf},
-                                                      Path=DataContext.GraficosVM.cmdGraficosIndividualesEnPdf}"
+                                    Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdGraficosIndividualesEnPdf}"
                                     Content="Gráficos Individuales"
                                     FontFamily="Comic Sans MS"
                                     FontSize="10"
@@ -649,8 +636,7 @@
                                     Margin="6,3,6,3"
                                     Padding="20,10"
                                     HorizontalAlignment="Stretch"
-                                    Command="{Binding Source={x:Reference TxtCrearPdf},
-                                                      Path=DataContext.GraficosVM.cmdEstadisticasGraficos}"
+                                    Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdEstadisticasGraficos}"
                                     Content="Estadísticas"
                                     FontFamily="Comic Sans MS"
                                     FontSize="10"
@@ -662,8 +648,7 @@
                                     Margin="6,3,6,3"
                                     Padding="20,10"
                                     HorizontalAlignment="Stretch"
-                                    Command="{Binding Source={x:Reference TxtCrearPdf},
-                                                      Path=DataContext.GraficosVM.cmdEstadisticasGruposGraficos}"
+                                    Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdEstadisticasGruposGraficos}"
                                     Content="Estadísticas Grupos"
                                     FontFamily="Comic Sans MS"
                                     FontSize="10"
@@ -679,8 +664,7 @@
                                     FirstDayOfWeek="Monday"
                                     FontFamily="Comic Sans MS"
                                     FontSize="10"
-                                    SelectedDate="{Binding Source={x:Reference TxtCrearPdf},
-                                                           Path=DataContext.GraficosVM.FechaEstadisticas}"
+                                    SelectedDate="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.FechaEstadisticas}"
                                     SelectedDateFormat="Short" />
 
 
@@ -694,8 +678,7 @@
                                     Margin="6,3,6,3"
                                     Padding="20,10"
                                     HorizontalAlignment="Stretch"
-                                    Command="{Binding Source={x:Reference TxtCrearPdf},
-                                                      Path=DataContext.GraficosVM.cmdEstadisticasGraficosPorCentros}"
+                                    Command="{Binding Source={x:Reference TxtCrearPdf}, Path=DataContext.GraficosVM.cmdEstadisticasGraficosPorCentros}"
                                     Content="Estadísticas Centros"
                                     FontFamily="Comic Sans MS"
                                     FontSize="10"
@@ -722,9 +705,7 @@
                 Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/GuardarExcel.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/GuardarExcel.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtCrearExcel"
                             FontFamily="Comic Sans MS"
@@ -752,8 +733,7 @@
                                     Margin="6,6,6,3"
                                     Padding="20,10"
                                     HorizontalAlignment="Stretch"
-                                    Command="{Binding Source={x:Reference TxtCrearExcel},
-                                                      Path=DataContext.GraficosVM.cmdCompararDietasExcel}"
+                                    Command="{Binding Source={x:Reference TxtCrearExcel}, Path=DataContext.GraficosVM.cmdCompararDietasExcel}"
                                     Content="Comparar Dietas"
                                     FontFamily="Comic Sans MS"
                                     FontSize="10"
@@ -785,10 +765,7 @@
             Source="Imagenes\Orion.png" />
 
         <!--  PANEL DATOS GRÁFICOS  -->
-        <Grid
-            Grid.Row="1"
-            Visibility="{Binding GraficosVM.HayFiltroAplicado,
-                                 Converter={StaticResource cnvBoolToVisibility}}">
+        <Grid Grid.Row="1" Visibility="{Binding GraficosVM.HayFiltroAplicado, Converter={StaticResource cnvBoolToVisibility}}">
             <Border
                 Height="Auto"
                 Margin="0,3"
@@ -835,9 +812,7 @@
             <!--  ====================================================================================================  -->
             <!--  TABLA GRAFICOS  -->
             <!--  ====================================================================================================  -->
-            <FrameworkElement
-                x:Name="ColumnaActual"
-                Visibility="Collapsed" />
+            <FrameworkElement x:Name="ColumnaActual" Visibility="Collapsed" />
             <controls:QDataGrid
                 x:Name="TablaGraficos"
                 Grid.Column="1"
@@ -861,24 +836,17 @@
                 VerticalGridLinesBrush="Lavender">
 
                 <controls:QDataGrid.Resources>
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                        Color="PaleGoldenrod" />
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                        Color="Black" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                 </controls:QDataGrid.Resources>
 
                 <controls:QDataGrid.Columns>
                     <DataGridCheckBoxColumn
                         Width="0.3*"
                         MinWidth="20"
-                        Binding="{Binding NoCalcular,
-                                          UpdateSourceTrigger=PropertyChanged}"
+                        Binding="{Binding NoCalcular, UpdateSourceTrigger=PropertyChanged}"
                         IsThreeState="False"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafNoCalcular,
-                                             Converter={StaticResource cnvBoolToVisibility}}">
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafNoCalcular, Converter={StaticResource cnvBoolToVisibility}}">
                         <DataGridCheckBoxColumn.Header>
                             <TextBlock
                                 FontSize="14"
@@ -890,19 +858,15 @@
                     <DataGridTextColumn
                         Width="1*"
                         MinWidth="60"
-                        Binding="{Binding Numero,
-                                          Converter={StaticResource cnvNumGrafico}}"
+                        Binding="{Binding Numero, Converter={StaticResource cnvNumGrafico}}"
                         Header="Número" />
 
                     <DataGridTextColumn
                         Width="0.3*"
                         MinWidth="20"
-                        Binding="{Binding DiaSemana,
-                                          Converter={StaticResource cnvDiaSemanaGrafico}}">
+                        Binding="{Binding DiaSemana, Converter={StaticResource cnvDiaSemanaGrafico}}">
                         <DataGridTextColumn.Header>
-                            <TextBlock
-                                Text="D"
-                                ToolTip="Día de la semana.&#x0a;    L=Lunes a Jueves&#x0a;    V=Viernes&#x0a;    S=Sábados&#x0a;    F=Domingos y festivos" />
+                            <TextBlock Text="D" ToolTip="Día de la semana.&#x0a;    L=Lunes a Jueves&#x0a;    V=Viernes&#x0a;    S=Sábados&#x0a;    F=Domingos y festivos&#x0a;    RJ=Reducción Jornada&#x0a;    R=Gráficos Reserva" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
 
@@ -915,33 +879,26 @@
                     <DataGridTextColumn
                         Width="1*"
                         MinWidth="60"
-                        Binding="{Binding Inicio,
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Inicio, Converter={StaticResource cnvHora}}"
                         Header="Inicio" />
 
                     <DataGridTextColumn
                         Width="1*"
                         MinWidth="60"
-                        Binding="{Binding Final,
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Final, Converter={StaticResource cnvHora}}"
                         Header="Final" />
 
                     <DataGridTextColumn
                         x:Name="ColumnaInicioPartido"
                         Width="1*"
                         MinWidth="80"
-                        Binding="{Binding InicioPartido,
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding InicioPartido, Converter={StaticResource cnvHora}}"
                         Header="Inicio Partido"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafTiempoPartido,
-                                             Converter={StaticResource cnvBoolToVisibility}}">
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafTiempoPartido, Converter={StaticResource cnvBoolToVisibility}}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding ErrorGraficoPartido}"
-                                        Value="True">
+                                    <DataTrigger Binding="{Binding ErrorGraficoPartido}" Value="True">
                                         <Setter Property="Foreground" Value="DeepPink" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -953,18 +910,13 @@
                         x:Name="ColumnaFinalPartido"
                         Width="1*"
                         MinWidth="80"
-                        Binding="{Binding FinalPartido,
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding FinalPartido, Converter={StaticResource cnvHora}}"
                         Header="Final Partido"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafTiempoPartido,
-                                             Converter={StaticResource cnvBoolToVisibility}}">
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafTiempoPartido, Converter={StaticResource cnvBoolToVisibility}}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding ErrorGraficoPartido}"
-                                        Value="True">
+                                    <DataTrigger Binding="{Binding ErrorGraficoPartido}" Value="True">
                                         <Setter Property="Foreground" Value="DeepPink" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -1010,15 +962,12 @@
                     <DataGridTextColumn
                         Width="1*"
                         MinWidth="80"
-                        Binding="{Binding Valoracion,
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Valoracion, Converter={StaticResource cnvHora}}"
                         Header="Valoración">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding ValoracionDiferente}"
-                                        Value="True">
+                                    <DataTrigger Binding="{Binding ValoracionDiferente}" Value="True">
                                         <Setter Property="Foreground" Value="DeepPink" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -1029,19 +978,13 @@
                     <DataGridTextColumn
                         Width="1*"
                         MinWidth="80"
-                        Binding="{Binding Trabajadas,
-                                          Converter={StaticResource cnvHora},
-                                          ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
+                        Binding="{Binding Trabajadas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                         Header="Trabajadas"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafHoras,
-                                             Converter={StaticResource cnvBoolToVisibility}}">
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafHoras, Converter={StaticResource cnvBoolToVisibility}}">
                         <DataGridTextColumn.ElementStyle>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
-                                    <DataTrigger
-                                        Binding="{Binding ValoracionDiferente}"
-                                        Value="True">
+                                    <DataTrigger Binding="{Binding ValoracionDiferente}" Value="True">
                                         <Setter Property="Foreground" Value="DeepPink" />
                                     </DataTrigger>
                                 </Style.Triggers>
@@ -1052,83 +995,53 @@
                     <DataGridTextColumn
                         Width="1*"
                         MinWidth="80"
-                        Binding="{Binding Acumuladas,
-                                          Converter={StaticResource cnvHora},
-                                          ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
+                        Binding="{Binding Acumuladas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                         Header="Acumuladas"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafHoras,
-                                             Converter={StaticResource cnvBoolToVisibility}}" />
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafHoras, Converter={StaticResource cnvBoolToVisibility}}" />
                     <DataGridTextColumn
                         Width="1*"
                         MinWidth="80"
-                        Binding="{Binding Nocturnas,
-                                          Converter={StaticResource cnvHora},
-                                          ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
+                        Binding="{Binding Nocturnas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                         Header="Nocturnas"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafHoras,
-                                             Converter={StaticResource cnvBoolToVisibility}}" />
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafHoras, Converter={StaticResource cnvBoolToVisibility}}" />
                     <DataGridTextColumn
                         Width="1*"
                         MinWidth="80"
-                        Binding="{Binding Desayuno,
-                                          Converter={StaticResource cnvDecimal},
-                                          ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
+                        Binding="{Binding Desayuno, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                         Header="Desayuno"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafDietas,
-                                             Converter={StaticResource cnvBoolToVisibility}}" />
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafDietas, Converter={StaticResource cnvBoolToVisibility}}" />
                     <DataGridTextColumn
                         Width="1*"
                         MinWidth="60"
-                        Binding="{Binding Comida,
-                                          Converter={StaticResource cnvDecimal},
-                                          ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
+                        Binding="{Binding Comida, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                         Header="Comida"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafDietas,
-                                             Converter={StaticResource cnvBoolToVisibility}}" />
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafDietas, Converter={StaticResource cnvBoolToVisibility}}" />
                     <DataGridTextColumn
                         Width="1*"
                         MinWidth="60"
-                        Binding="{Binding Cena,
-                                          Converter={StaticResource cnvDecimal},
-                                          ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
+                        Binding="{Binding Cena, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                         Header="Cena"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafDietas,
-                                             Converter={StaticResource cnvBoolToVisibility}}" />
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafDietas, Converter={StaticResource cnvBoolToVisibility}}" />
                     <DataGridTextColumn
                         Width="1*"
                         MinWidth="60"
-                        Binding="{Binding PlusCena,
-                                          Converter={StaticResource cnvDecimal},
-                                          ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
+                        Binding="{Binding PlusCena, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                         Header="Plus Cena"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafDietas,
-                                             Converter={StaticResource cnvBoolToVisibility}}" />
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafDietas, Converter={StaticResource cnvBoolToVisibility}}" />
                     <DataGridCheckBoxColumn
                         Width="1*"
                         MinWidth="60"
-                        Binding="{Binding PlusLimpieza,
-                                          UpdateSourceTrigger=PropertyChanged}"
+                        Binding="{Binding PlusLimpieza, UpdateSourceTrigger=PropertyChanged}"
                         Header="Limpieza"
                         IsThreeState="False"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafPlusLimpieza,
-                                             Converter={StaticResource cnvBoolToVisibility}}" />
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafPlusLimpieza, Converter={StaticResource cnvBoolToVisibility}}" />
                     <DataGridCheckBoxColumn
                         Width="1*"
                         MinWidth="60"
-                        Binding="{Binding PlusPaqueteria,
-                                          UpdateSourceTrigger=PropertyChanged}"
+                        Binding="{Binding PlusPaqueteria, UpdateSourceTrigger=PropertyChanged}"
                         Header="Paquetería"
                         IsThreeState="False"
-                        Visibility="{Binding Source={x:Reference ColumnaActual},
-                                             Path=DataContext.Configuracion.MostrarGrafPlusPaqueteria,
-                                             Converter={StaticResource cnvBoolToVisibility}}" />
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafPlusPaqueteria, Converter={StaticResource cnvBoolToVisibility}}" />
                 </controls:QDataGrid.Columns>
             </controls:QDataGrid>
 
@@ -1151,12 +1064,10 @@
                 <Border
                     x:Name="BordePanel"
                     Grid.RowSpan="2"
-                    Width="{Binding ElementName=PanelGrupos,
-                                    Path=Width}"
+                    Width="{Binding ElementName=PanelGrupos, Path=Width}"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Stretch"
-                    BorderBrush="{Binding ElementName=TablaGraficos,
-                                          Path=BorderBrush}"
+                    BorderBrush="{Binding ElementName=TablaGraficos, Path=BorderBrush}"
                     BorderThickness="1" />
 
                 <Label
@@ -1189,14 +1100,10 @@
                         <StackPanel Orientation="Horizontal">
 
                             <!--  BOTON NUEVO GRUPO DE GRÁFICOS  -->
-                            <Button
-                                Command="{Binding GraficosVM.cmdNuevoGrupo}"
-                                Style="{StaticResource EstiloBotonBarraPequeña}">
+                            <Button Command="{Binding GraficosVM.cmdNuevoGrupo}" Style="{StaticResource EstiloBotonBarraPequeña}">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <Image
-                                            Source="Imagenes/NuevoGrupo.png"
-                                            Style="{StaticResource EstiloImagenPequeña}" />
+                                        <Image Source="Imagenes/NuevoGrupo.png" Style="{StaticResource EstiloImagenPequeña}" />
                                         <TextBlock
                                             VerticalAlignment="Center"
                                             Text="Nuevo"
@@ -1207,14 +1114,10 @@
                             </Button>
 
                             <!--  BOTON BORRAR GRUPO DE GRÁFICOS  -->
-                            <Button
-                                Command="{Binding GraficosVM.cmdBorrarGrupo}"
-                                Style="{StaticResource EstiloBotonBarraPequeña}">
+                            <Button Command="{Binding GraficosVM.cmdBorrarGrupo}" Style="{StaticResource EstiloBotonBarraPequeña}">
                                 <Button.Content>
                                     <StackPanel Orientation="Horizontal">
-                                        <Image
-                                            Source="Imagenes/BorrarGrupo.png"
-                                            Style="{StaticResource EstiloImagenPequeña}" />
+                                        <Image Source="Imagenes/BorrarGrupo.png" Style="{StaticResource EstiloImagenPequeña}" />
                                         <TextBlock
                                             VerticalAlignment="Center"
                                             Text="Borrar"
@@ -1231,9 +1134,7 @@
                             HorizontalAlignment="Center"
                             Command="{Binding GraficosVM.cmdSoloAñoActualEnGrupos}"
                             Content="Sólo año actual"
-                            IsChecked="{Binding Configuracion.SoloAñoActualEnGruposGraficos,
-                                                Mode=TwoWay,
-                                                UpdateSourceTrigger=PropertyChanged}" />
+                            IsChecked="{Binding Configuracion.SoloAñoActualEnGruposGraficos, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                     </StackPanel>
 
@@ -1256,8 +1157,7 @@
                             <DataTemplate>
                                 <TextBlock
                                     Width="Auto"
-                                    Text="{Binding Validez,
-                                                   Converter={StaticResource cnvFecha}}"
+                                    Text="{Binding Validez, Converter={StaticResource cnvFecha}}"
                                     ToolTip="{Binding Notas}" />
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -1267,7 +1167,7 @@
             </Grid>
 
             <!--  ====================================================================================================  -->
-            <!--  PANEL VALORACIONES DE GRÁFICO  -->
+            <!--  PANEL ITINERARIOS DE GRÁFICO  -->
             <!--  ====================================================================================================  -->
             <Grid
                 x:Name="PanelValoraciones"
@@ -1285,19 +1185,17 @@
                 <Border
                     x:Name="BordePanelDerecho"
                     Grid.RowSpan="2"
-                    Width="{Binding ElementName=PanelValoraciones,
-                                    Path=Width}"
+                    Width="{Binding ElementName=PanelValoraciones, Path=Width}"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Stretch"
-                    BorderBrush="{Binding ElementName=TablaGraficos,
-                                          Path=BorderBrush}"
+                    BorderBrush="{Binding ElementName=TablaGraficos, Path=BorderBrush}"
                     BorderThickness="1" />
 
                 <Label
                     Grid.Row="0"
                     HorizontalAlignment="Stretch"
                     HorizontalContentAlignment="Center"
-                    Content="VALORACIONES DE GRÁFICO"
+                    Content="ITINERARIOS DE GRÁFICO"
                     FontWeight="Black" />
 
                 <CheckBox
@@ -1316,19 +1214,13 @@
                     </Grid.RowDefinitions>
 
                     <!--  BARRA DE HERRAMIENTAS  -->
-                    <StackPanel
-                        Grid.Row="0"
-                        Orientation="Horizontal">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
 
-                        <!--  BOTON AÑADIR VALORACION  -->
-                        <Button
-                            Command="{Binding GraficosVM.cmdAñadirValoracion}"
-                            Style="{StaticResource EstiloBotonBarraPequeña}">
+                        <!--  BOTON AÑADIR ITINERARIO  -->
+                        <Button Command="{Binding GraficosVM.cmdAñadirValoracion}" Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Source="Imagenes/NuevaFila.png"
-                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image Source="Imagenes/NuevaFila.png" Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Añadir"
@@ -1338,15 +1230,11 @@
                             </Button.Content>
                         </Button>
 
-                        <!--  BOTON BORRAR VALORACION  -->
-                        <Button
-                            Command="{Binding GraficosVM.cmdBorrarValoracion}"
-                            Style="{StaticResource EstiloBotonBarraPequeña}">
+                        <!--  BOTON BORRAR ITINERARIO  -->
+                        <Button Command="{Binding GraficosVM.cmdBorrarValoracion}" Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Source="Imagenes/BorrarFila.png"
-                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image Source="Imagenes/BorrarFila.png" Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Borrar"
@@ -1356,15 +1244,11 @@
                             </Button.Content>
                         </Button>
 
-                        <!--  BOTON DESHACER BORRAR VALORACIONES  -->
-                        <Button
-                            Command="{Binding GraficosVM.cmdDeshacerBorrarValoraciones}"
-                            Style="{StaticResource EstiloBotonBarraPequeña}">
+                        <!--  BOTON DESHACER BORRAR ITINERARIOS  -->
+                        <Button Command="{Binding GraficosVM.cmdDeshacerBorrarValoraciones}" Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Source="Imagenes/ActualizarTabla.png"
-                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image Source="Imagenes/ActualizarTabla.png" Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Deshacer"
@@ -1374,15 +1258,11 @@
                             </Button.Content>
                         </Button>
 
-                        <!--  BOTON CALCULAR VALORACIONES  -->
-                        <Button
-                            Command="{Binding GraficosVM.cmdCalcularValoraciones}"
-                            Style="{StaticResource EstiloBotonBarraPequeña}">
+                        <!--  BOTON CALCULAR ITINERARIOS  -->
+                        <Button Command="{Binding GraficosVM.cmdCalcularValoraciones}" Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Source="Imagenes/CalcularTabla.png"
-                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image Source="Imagenes/CalcularTabla.png" Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Calcular"
@@ -1392,6 +1272,19 @@
                             </Button.Content>
                         </Button>
 
+                        <!--  BOTON ASIGNAR TIEMPO DE PAGO  -->
+                        <Button Command="{Binding GraficosVM.cmdAsignarTiempoPago}" Style="{StaticResource EstiloBotonBarraPequeña}">
+                            <Button.Content>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="Imagenes/Cobrar.png" Style="{StaticResource EstiloImagenPequeña}" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        Text="T.Pago"
+                                        TextAlignment="Center"
+                                        TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Button.Content>
+                        </Button>
 
                     </StackPanel>
 
@@ -1423,11 +1316,10 @@
                         <TextBlock
                             FontSize="14"
                             FontWeight="Bold"
-                            Text="{Binding GraficosVM.GraficoSeleccionado.TiempoValoraciones,
-                                           Converter={StaticResource cnvHora}}" />
+                            Text="{Binding GraficosVM.GraficoSeleccionado.TiempoValoraciones, Converter={StaticResource cnvHora}}" />
                     </StackPanel>
 
-                    <!--  TABLA VALORACIONES  -->
+                    <!--  TABLA ITINERARIOS  -->
                     <controls:QDataGrid
                         x:Name="TablaValoraciones"
                         Grid.Row="2"
@@ -1454,16 +1346,11 @@
                         <controls:QDataGrid.Columns>
                             <DataGridTextColumn
                                 Width="1.5*"
-                                Binding="{Binding Inicio,
-                                                  Converter={StaticResource cnvHora},
-                                                  UpdateSourceTrigger=LostFocus}"
+                                Binding="{Binding Inicio, Converter={StaticResource cnvHora}, UpdateSourceTrigger=LostFocus}"
                                 Header="Inicio" />
                             <DataGridTextColumn
                                 Width="1.5*"
-                                Binding="{Binding Linea,
-                                                  Converter={StaticResource cnvItinerario},
-                                                  ConverterParameter={x:Static cnv:VerValores.NoCeros},
-                                                  UpdateSourceTrigger=LostFocus}"
+                                Binding="{Binding Linea, Converter={StaticResource cnvItinerario}, ConverterParameter={x:Static cnv:VerValores.NoCeros}, UpdateSourceTrigger=LostFocus}"
                                 Header="Línea" />
                             <DataGridTextColumn
                                 Width="8*"
@@ -1471,14 +1358,11 @@
                                 Header="Descripción" />
                             <DataGridTextColumn
                                 Width="1.5*"
-                                Binding="{Binding Final,
-                                                  Converter={StaticResource cnvHora}}"
+                                Binding="{Binding Final, Converter={StaticResource cnvHora}}"
                                 Header="Final" />
                             <DataGridTextColumn
                                 Width="1.5*"
-                                Binding="{Binding Tiempo,
-                                                  Converter={StaticResource cnvHora},
-                                                  ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
+                                Binding="{Binding Tiempo, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                                 Header="Tiempo" />
                         </controls:QDataGrid.Columns>
                     </controls:QDataGrid>
@@ -1491,9 +1375,7 @@
         <!--  ====================================================================================================  -->
         <!--  PANEL VALIDEZ GRÁFICO  -->
         <!--  ====================================================================================================  -->
-        <StackPanel
-            Grid.Row="2"
-            Orientation="Vertical">
+        <StackPanel Grid.Row="2" Orientation="Vertical">
             <Border
                 x:Name="PanelValidezGrupo"
                 Margin="150,0,0,0"
@@ -1520,6 +1402,7 @@
                             Margin="0"
                             Padding="10,5"
                             HorizontalAlignment="Right"
+                            Click="BotonCerrarPanel_Click"
                             Command="{Binding GraficosVM.cmdSeleccionarFechaGrupo}"
                             Content="X"
                             FontFamily="Comic Sans MS"
@@ -1536,8 +1419,7 @@
                         Focusable="False"
                         FontFamily="Comic Sans MS"
                         FontSize="12"
-                        SelectedDate="{Binding GraficosVM.GrupoSeleccionado.Validez,
-                                               Mode=TwoWay}"
+                        SelectedDate="{Binding GraficosVM.GrupoSeleccionado.Validez, Mode=TwoWay}"
                         SelectedDatesChanged="QCalendar_SelectedDatesChanged"
                         SelectionMode="SingleDate"
                         Style="{StaticResource EstiloCalendario}" />

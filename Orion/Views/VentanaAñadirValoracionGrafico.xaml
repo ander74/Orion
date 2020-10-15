@@ -1,90 +1,157 @@
-﻿<!-- =============================================== -->
-<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
-<!--                                                 -->
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
 <!--  Vea el archivo Licencia.txt para mas detalles  -->
-<!-- =============================================== -->
-<Window x:Class="Orion.Views.VentanaAñadirValoracionGrafico"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Orion.Views"
-        xmlns:convertidores="clr-namespace:Orion.Convertidores"
-        mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
-        Loaded="Ventana_Loaded"
-        Title="Añadir Valoración de Gráfico" Height="290" Width="700" x:Name="Ventana">
+<!--  ===============================================  -->
+<Window
+    x:Class="Orion.Views.VentanaAñadirValoracionGrafico"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:convertidores="clr-namespace:Orion.Convertidores"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Orion.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="Ventana"
+    Title="Añadir Itinerario de Gráfico"
+    Width="700"
+    Height="290"
+    AllowsTransparency="True"
+    Background="Transparent"
+    Loaded="Ventana_Loaded"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
 
-    <!-- RECURSOS -->
+    <!--  RECURSOS  -->
     <Window.Resources>
 
-        <convertidores:ConvertidorHora x:Key="ConvertidorHora"/>
-        <convertidores:ConvertidorDecimal x:Key="ConvertidorDecimal"/>
+        <convertidores:ConvertidorHora x:Key="ConvertidorHora" />
+        <convertidores:ConvertidorDecimal x:Key="ConvertidorDecimal" />
 
     </Window.Resources>
 
-    <Border Background="White" CornerRadius="15" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20">
+    <Border
+        Margin="20"
+        Background="White"
+        BorderBrush="DarkBlue"
+        BorderThickness="0.5"
+        CornerRadius="15">
 
         <Border.BitmapEffect>
-            <DropShadowBitmapEffect Color="LightGray" Direction="-50" ShadowDepth="10" Softness=".7" />
+            <DropShadowBitmapEffect
+                Direction="-50"
+                ShadowDepth="10"
+                Softness=".7"
+                Color="LightGray" />
         </Border.BitmapEffect>
 
         <Grid>
 
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- TÍTULO DE LA VENTANA -->
-            <Border Grid.ColumnSpan="4" Background="{StaticResource orDegradadoAzul}" MouseDown="Border_MouseDown" CornerRadius="15,15,0,0">
-                <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="4" HorizontalAlignment="Center" FontSize="24" FontWeight="Bold">
+            <!--  TÍTULO DE LA VENTANA  -->
+            <Border
+                Grid.ColumnSpan="4"
+                Background="{StaticResource orDegradadoAzul}"
+                CornerRadius="15,15,0,0"
+                MouseDown="Border_MouseDown">
+                <Label
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Grid.ColumnSpan="4"
+                    HorizontalAlignment="Center"
+                    FontSize="24"
+                    FontWeight="Bold">
                     <Label.Content>
                         <StackPanel Orientation="Horizontal">
-                            <TextBlock Text="Valoración del gráfico "/>
-                            <TextBlock Text="{Binding NumeroGrafico}"/>
+                            <TextBlock Text="Itinerario del gráfico " />
+                            <TextBlock Text="{Binding NumeroGrafico}" />
                         </StackPanel>
                     </Label.Content>
                 </Label>
             </Border>
 
-            <!-- INICIO -->
-            <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Margin="10">
-                <Label Content="Inicio" FontSize="16"/>
-                <TextBox x:Name="TbInicio" FontSize="32" HorizontalContentAlignment="Center" Padding="3"
-                     Text="{Binding Path=Inicio, Converter={StaticResource ConvertidorHora}}" GotFocus="Tb_GotFocus" KeyDown="Tb_KeyDown"/>
+            <!--  INICIO  -->
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="10"
+                Orientation="Vertical">
+                <Label Content="Inicio" FontSize="16" />
+                <TextBox
+                    x:Name="TbInicio"
+                    Padding="3"
+                    HorizontalContentAlignment="Center"
+                    FontSize="32"
+                    GotFocus="Tb_GotFocus"
+                    KeyDown="Tb_KeyDown"
+                    Text="{Binding Path=Inicio, Converter={StaticResource ConvertidorHora}}" />
             </StackPanel>
 
-            <!-- LÍNEA -->
-            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Vertical" Margin="10">
-                <Label Content="Línea" FontSize="16"/>
-                <TextBox x:Name="TbLinea" FontSize="32" HorizontalContentAlignment="Center" Padding="3" 
-                     Text="{Binding Path=Linea, Converter={StaticResource ConvertidorDecimal},
-                            ConverterParameter={x:Static convertidores:VerValores.NoCeros}}" GotFocus="Tb_GotFocus" KeyDown="Tb_KeyDown">
+            <!--  LÍNEA  -->
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="1"
+                Margin="10"
+                Orientation="Vertical">
+                <Label Content="Línea" FontSize="16" />
+                <TextBox
+                    x:Name="TbLinea"
+                    Padding="3"
+                    HorizontalContentAlignment="Center"
+                    FontSize="32"
+                    GotFocus="Tb_GotFocus"
+                    KeyDown="Tb_KeyDown"
+                    Text="{Binding Path=Linea, Converter={StaticResource ConvertidorDecimal}, ConverterParameter={x:Static convertidores:VerValores.NoCeros}}">
                     <TextBox.ToolTip>
                         <TextBlock>
-                        Para añadir un descanso utilice el código -1000 añadiéndole el tiempo de descanso.<LineBreak/>Ejemplo: -1015 (Descanso 15 minutos).
-                        </TextBlock>
+                            Para añadir un descanso utilice el código -1000 añadiéndole el tiempo de descanso.<LineBreak />
+                            Ejemplo: -1015 (Descanso 15 minutos).</TextBlock>
                     </TextBox.ToolTip>
                 </TextBox>
 
             </StackPanel>
 
-            <!-- BOTÓN CANCELAR -->
-            <Button x:Name="BtCancelar" Grid.Row="2" Grid.Column="2" Content="Cancelar" Margin="10" Height="48" FontSize="16" HorizontalAlignment="Stretch"
-                IsCancel="True" Style="{StaticResource EstiloBoton}" Focusable="False"/>
+            <!--  BOTÓN CANCELAR  -->
+            <Button
+                x:Name="BtCancelar"
+                Grid.Row="2"
+                Grid.Column="2"
+                Height="48"
+                Margin="10"
+                HorizontalAlignment="Stretch"
+                Content="Cancelar"
+                Focusable="False"
+                FontSize="16"
+                IsCancel="True"
+                Style="{StaticResource EstiloBoton}" />
 
-            <!-- BOTÓN ACEPTAR -->
-            <Button x:Name="BtAceptar" Grid.Row="2" Grid.Column="3" Content="Aceptar" Margin="10" Height="48" FontSize="16" HorizontalAlignment="Stretch"
-                IsDefault="True" Style="{StaticResource EstiloBoton}" Focusable="False"
-                Command="{Binding cmdBotonAceptar}" CommandParameter="{Binding ElementName=Ventana}"/>
+            <!--  BOTÓN ACEPTAR  -->
+            <Button
+                x:Name="BtAceptar"
+                Grid.Row="2"
+                Grid.Column="3"
+                Height="48"
+                Margin="10"
+                HorizontalAlignment="Stretch"
+                Command="{Binding cmdBotonAceptar}"
+                CommandParameter="{Binding ElementName=Ventana}"
+                Content="Aceptar"
+                Focusable="False"
+                FontSize="16"
+                IsDefault="True"
+                Style="{StaticResource EstiloBoton}" />
 
 
 

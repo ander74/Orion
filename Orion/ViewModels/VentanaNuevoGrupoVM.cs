@@ -7,8 +7,10 @@
 #endregion
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
+using Newtonsoft.Json;
 using Orion.Models;
 using Orion.Servicios;
 
@@ -206,7 +208,8 @@ namespace Orion.ViewModels {
                         return;
                     }
 
-                    CrearGrupoDeWord();
+                    //CrearGrupoDeWord();
+                    CrearGrupoExportado();
 
                     // Cerramos la ventana enviando True.
                     ventana.DialogResult = true;
@@ -231,8 +234,8 @@ namespace Orion.ViewModels {
         private void SeleccionarArchivo() {
             Microsoft.Win32.OpenFileDialog dialogo = new Microsoft.Win32.OpenFileDialog();
 
-            dialogo.DefaultExt = ".docx";
-            dialogo.Filter = "Documentos de Word|*.docx;*.doc;*.rtf|Archivos de texto|*.txt";
+            dialogo.DefaultExt = ".json";
+            dialogo.Filter = "Archivo JSON|*.json|Todos los archivos|*.*";
             dialogo.Title = "Abrir archivo de gráficos";
             dialogo.CheckFileExists = true;
             dialogo.Multiselect = false;
@@ -396,6 +399,33 @@ namespace Orion.ViewModels {
             return resultado == true;
         }
 
+        private void CrearGrupoExportado() {
+            // Si el archivo no existe, salimos.
+            if (!File.Exists(ArchivoWord)) {
+                mensajes.VerMensaje("El archivo seleccionado no existe.", "ERROR");
+                return;
+            }
+            // Creamos el grupo nuevo
+            if (String.IsNullOrEmpty(Notas.Trim())) Notas = FechaActual.ToString("dd-MM-yyyy");
+            int idgruponuevo = App.Global.Repository.NuevoGrupo(FechaActual);
+            App.Global.Repository.NuevoGrupo(FechaActual);
+            // Cargamos los graficos del archivo.
+            string datos = File.ReadAllText(ArchivoWord, System.Text.Encoding.UTF8);
+            var graficos = new List<Grafico>();
+            JsonConvert.PopulateObject(datos, graficos);
+            // Guardamos los gráficos
+            int idgraficonuevo = -1;
+            foreach (Grafico grafico in graficos) {
+                grafico.Validez = FechaActual;
+                grafico.Id = 0;
+                foreach (var valoracion in grafico.ListaValoraciones) {
+                    valoracion.Id = 0;
+                }
+                idgraficonuevo = App.Global.Repository.InsertarGrafico(grafico);
+                //TODO: Deberían insertarse las valoraciones. Si no lo hacen, hacerlo aquí.
+            }
+
+        }
 
 
 

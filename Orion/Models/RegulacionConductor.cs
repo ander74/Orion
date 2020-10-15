@@ -12,6 +12,7 @@ namespace Orion.Models {
     using System.Data.Common;
     using System.Data.OleDb;
     using System.Data.SQLite;
+    using Newtonsoft.Json;
     using Orion.Interfaces;
 
     public class RegulacionConductor : NotifyBase, ISQLiteItem {
@@ -236,7 +237,7 @@ namespace Orion.Models {
         #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
-        public void FromReader(DbDataReader lector) {
+        public virtual void FromReader(DbDataReader lector) {
             _id = lector.ToInt32("_id");
             _idconductor = lector.ToInt32("IdConductor");
             _codigo = lector.ToInt32("Codigo");
@@ -250,7 +251,8 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        [JsonIgnore]
+        public virtual IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("IdConductor", IdConductor));
@@ -265,34 +267,41 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLiteItem> Lista { get; }
+        [JsonIgnore]
+        public virtual IEnumerable<ISQLiteItem> Lista { get; }
 
 
-        public bool HasList { get => false; }
+        [JsonIgnore]
+        public virtual bool HasList { get => false; }
 
 
-        public void InicializarLista() { }
+        public virtual void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLiteItem item) { }
+        public virtual void AddItemToList(ISQLiteItem item) { }
 
 
-        public int ForeignId {
+        [JsonIgnore]
+        public virtual int ForeignId {
             get => IdConductor;
             set => IdConductor = value;
         }
 
 
-        public string ForeignIdName { get; }
+        [JsonIgnore]
+        public virtual string ForeignIdName { get; }
 
 
-        public string OrderBy { get => $"Fecha ASC"; }
+        [JsonIgnore]
+        public virtual string OrderBy { get => $"Fecha ASC"; }
 
 
-        public string TableName { get => "Regulaciones"; }
+        [JsonIgnore]
+        public virtual string TableName { get => "Regulaciones"; }
 
 
-        public string ComandoInsertar {
+        [JsonIgnore]
+        public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO Regulaciones (" +
                 "IdConductor, " +
                 "Codigo, " +

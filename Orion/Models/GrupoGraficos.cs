@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Data.SQLite;
+using Newtonsoft.Json;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -121,14 +122,15 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(DbDataReader lector) {
+        public virtual void FromReader(DbDataReader lector) {
             _validez = lector.ToDateTime("Validez");
             Nuevo = false;
             Modificado = false;
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        [JsonIgnore]
+        public virtual IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("Validez", Validez.ToString("yyyy-MM-dd")));
@@ -137,10 +139,12 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLiteItem> Lista { get; }
+        [JsonIgnore]
+        public virtual IEnumerable<ISQLiteItem> Lista { get; }
 
 
-        public bool HasList { get => false; }
+        [JsonIgnore]
+        public virtual bool HasList { get => false; }
 
 
         public void InicializarLista() { }
@@ -149,19 +153,24 @@ namespace Orion.Models {
         public void AddItemToList(ISQLiteItem item) { }
 
 
-        public int ForeignId { get; set; }
+        [JsonIgnore]
+        public virtual int ForeignId { get; set; }
 
 
-        public string ForeignIdName { get => "IdGrupo"; }
+        [JsonIgnore]
+        public virtual string ForeignIdName { get => "IdGrupo"; }
 
 
-        public string OrderBy { get => $"Validez DESC"; }
+        [JsonIgnore]
+        public virtual string OrderBy { get => $"Validez DESC"; }
 
 
-        public string TableName { get => "GruposGraficos"; }
+        [JsonIgnore]
+        public virtual string TableName { get => "GruposGraficos"; }
 
 
-        public string ComandoInsertar {
+        [JsonIgnore]
+        public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO GruposGraficos (" +
                 "Validez, " +
                 "Notas, " +

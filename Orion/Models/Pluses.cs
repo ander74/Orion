@@ -10,6 +10,7 @@ namespace Orion.Models {
     using System.Data.Common;
     using System.Data.OleDb;
     using System.Data.SQLite;
+    using Newtonsoft.Json;
     using Orion.Interfaces;
 
     public class Pluses : NotifyBase, ISQLiteItem {
@@ -176,7 +177,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(DbDataReader lector) {
+        public virtual void FromReader(DbDataReader lector) {
             _id = lector.ToInt32("_id");
             _año = lector.ToInt16("Año");
             _importedietas = lector.ToDecimal("ImporteDietas");
@@ -192,7 +193,8 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        [JsonIgnore]
+        public virtual IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("Año", Año));
@@ -209,31 +211,38 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLiteItem> Lista { get; }
+        [JsonIgnore]
+        public virtual IEnumerable<ISQLiteItem> Lista { get; }
 
 
-        public bool HasList { get => false; }
+        [JsonIgnore]
+        public virtual bool HasList { get => false; }
 
 
-        public void InicializarLista() { }
+        public virtual void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLiteItem item) { }
+        public virtual void AddItemToList(ISQLiteItem item) { }
 
 
-        public int ForeignId { get; set; }
+        [JsonIgnore]
+        public virtual int ForeignId { get; set; }
 
 
-        public string ForeignIdName { get; }
+        [JsonIgnore]
+        public virtual string ForeignIdName { get; }
 
 
-        public string OrderBy { get => $"Año ASC"; }
+        [JsonIgnore]
+        public virtual string OrderBy { get => $"Año ASC"; }
 
 
-        public string TableName { get => "Pluses"; }
+        [JsonIgnore]
+        public virtual string TableName { get => "Pluses"; }
 
 
-        public string ComandoInsertar {
+        [JsonIgnore]
+        public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO Pluses (" +
                 "Año, " +
                 "ImporteDietas, " +

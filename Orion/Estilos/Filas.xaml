@@ -14,9 +14,7 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO FILAS VERDE  -->
     <!--  ====================================================================================================  -->
-    <Style
-        x:Key="EstiloFilasVerde"
-        TargetType="DataGridRow">
+    <Style x:Key="EstiloFilasVerde" TargetType="DataGridRow">
         <Setter Property="Background" Value="{StaticResource GrisMuyClaro}" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="MinHeight" Value="24" />
@@ -34,9 +32,7 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO FILAS AZUL  -->
     <!--  ====================================================================================================  -->
-    <Style
-        x:Key="EstiloFilasAzul"
-        TargetType="DataGridRow">
+    <Style x:Key="EstiloFilasAzul" TargetType="DataGridRow">
         <Setter Property="Background" Value="{StaticResource GrisMuyClaro}" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="MinHeight" Value="24" />
@@ -54,9 +50,7 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO FILAS NARANJA  -->
     <!--  ====================================================================================================  -->
-    <Style
-        x:Key="EstiloFilasNaranja"
-        TargetType="DataGridRow">
+    <Style x:Key="EstiloFilasNaranja" TargetType="DataGridRow">
         <Setter Property="Background" Value="{StaticResource GrisMuyClaro}" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="MinHeight" Value="26" />
@@ -72,9 +66,7 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO FILAS PIJAMA  -->
     <!--  ====================================================================================================  -->
-    <Style
-        x:Key="EstiloFilasPijama"
-        TargetType="DataGridRow">
+    <Style x:Key="EstiloFilasPijama" TargetType="DataGridRow">
         <Style.Resources>
             <cnv:ConvertidorColorDia x:Key="cnvColorDia" />
         </Style.Resources>
@@ -104,9 +96,7 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO FILAS REGULACIONES CONDUCTOR  -->
     <!--  ====================================================================================================  -->
-    <Style
-        x:Key="EstiloFilasRegulacionesConductor"
-        TargetType="DataGridRow">
+    <Style x:Key="EstiloFilasRegulacionesConductor" TargetType="DataGridRow">
         <Setter Property="Background" Value="{StaticResource GrisMuyClaro}" />
         <Setter Property="Height" Value="Auto" />
         <Setter Property="MinHeight" Value="26" />
@@ -115,14 +105,10 @@
             <Trigger Property="ItemsControl.AlternationIndex" Value="1">
                 <Setter Property="Background" Value="{StaticResource VerdeMuyClaro}" />
             </Trigger>
-            <DataTrigger
-                Binding="{Binding Codigo}"
-                Value="1">
+            <DataTrigger Binding="{Binding Codigo}" Value="1">
                 <Setter Property="Foreground" Value="Red" />
             </DataTrigger>
-            <DataTrigger
-                Binding="{Binding Codigo}"
-                Value="2">
+            <DataTrigger Binding="{Binding Codigo}" Value="2">
                 <Setter Property="Foreground" Value="Blue" />
             </DataTrigger>
         </Style.Triggers>

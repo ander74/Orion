@@ -12,6 +12,7 @@ namespace Orion.Models {
     using System.Data.Common;
     using System.Data.OleDb;
     using System.Data.SQLite;
+    using Newtonsoft.Json;
     using Orion.Interfaces;
 
     public class EstadisticasGraficos : ISQLiteItem {
@@ -126,7 +127,7 @@ namespace Orion.Models {
 
 
 
-        public void FromReader(DbDataReader lector) {
+        public virtual void FromReader(DbDataReader lector) {
             Validez = lector.ToDateTime("xValidez");
             Turno = lector.ToInt32("xTurno");
             NumeroGraficos = lector.ToInt32("xNumero");
@@ -143,13 +144,16 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros { get; }
+        [JsonIgnore]
+        public virtual IEnumerable<SQLiteParameter> Parametros { get; }
 
 
-        public IEnumerable<ISQLiteItem> Lista { get; }
+        [JsonIgnore]
+        public virtual IEnumerable<ISQLiteItem> Lista { get; }
 
 
-        public bool HasList { get => false; }
+        [JsonIgnore]
+        public virtual bool HasList { get => false; }
 
 
         public void InicializarLista() { }
@@ -158,24 +162,30 @@ namespace Orion.Models {
         public void AddItemToList(ISQLiteItem item) { }
 
 
-        public int ForeignId { get; set; }
+        [JsonIgnore]
+        public virtual int ForeignId { get; set; }
 
 
-        public string ForeignIdName { get => ""; }
+        [JsonIgnore]
+        public virtual string ForeignIdName { get => ""; }
 
 
-        public string OrderBy { get => $""; }
+        [JsonIgnore]
+        public virtual string OrderBy { get => $""; }
 
 
-        public string TableName { get => ""; }
+        [JsonIgnore]
+        public virtual string TableName { get => ""; }
 
 
-        public string ComandoInsertar {
+        [JsonIgnore]
+        public virtual string ComandoInsertar {
             get => "";
         }
 
 
-        public string ComandoActualizar {
+        [JsonIgnore]
+        public virtual string ComandoActualizar {
             get => "";
         }
 

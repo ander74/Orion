@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Data.SQLite;
+using Newtonsoft.Json;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -203,6 +204,7 @@ namespace Orion.Models {
         }
 
 
+        [JsonIgnore]
         public IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
@@ -216,9 +218,11 @@ namespace Orion.Models {
         }
 
 
+        [JsonIgnore]
         public IEnumerable<ISQLiteItem> Lista { get; }
 
 
+        [JsonIgnore]
         public bool HasList { get => false; }
 
 
@@ -228,21 +232,26 @@ namespace Orion.Models {
         public void AddItemToList(ISQLiteItem item) { }
 
 
+        [JsonIgnore]
         public int ForeignId {
             get => IdItinerario;
             set => IdItinerario = value;
         }
 
 
+        [JsonIgnore]
         public string ForeignIdName { get => ""; }
 
 
+        [JsonIgnore]
         public string OrderBy { get => $"Orden ASC"; }
 
 
+        [JsonIgnore]
         public string TableName { get => "Paradas"; }
 
 
+        [JsonIgnore]
         public string ComandoInsertar {
             get {
                 if (Id == 0) {

@@ -13,6 +13,7 @@
     xmlns:local="clr-namespace:Orion.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:p="clr-namespace:Orion.Properties"
+    xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
     x:Name="vLineas"
     d:DesignHeight="400"
     d:DesignWidth="900"
@@ -31,16 +32,12 @@
         <convertidores:ConvertidorItinerario x:Key="cnvItinerario" />
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
 
-        <Style
-            x:Key="EstiloGridLineas"
-            TargetType="DataGrid">
+        <Style x:Key="EstiloGridLineas" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
         </Style>
-        <Style
-            x:Key="EstiloGridItinerarios"
-            TargetType="DataGrid">
+        <Style x:Key="EstiloGridItinerarios" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasVerde}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
@@ -82,6 +79,83 @@
                 Width="2"
                 Margin="3,5"
                 Background="LightGray" />
+
+            <!--  DESPLEGABLE EXPORTAR LINEAS  -->
+            <xceed:DropDownButton x:Name="BtExportarLineas" Style="{StaticResource EstiloBotonDesplegable}">
+                <xceed:DropDownButton.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image Source="Imagenes/Exportar.png" Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Name="TxtExportar"
+                            FontFamily="Comic Sans MS"
+                            FontSize="10"
+                            Text="Exportar Líneas"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </xceed:DropDownButton.Content>
+                <xceed:DropDownButton.DropDownContent>
+                    <Border
+                        Background="AliceBlue"
+                        BorderBrush="DarkBlue"
+                        BorderThickness="2"
+                        CornerRadius="5"
+                        DataContext="{Binding Source={x:Reference TxtExportar}, Path=DataContext.LineasVM}">
+                        <Border
+                            Margin="3"
+                            BorderBrush="DarkGray"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <StackPanel Orientation="Vertical">
+
+                                <!--  BOTÓN EXPORTAR LÍNEA  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BotonExportar_Click"
+                                    Command="{Binding cmdExportarLinea}"
+                                    Content="Exportar Línea"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="10"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Exporta la línea seleccionada." />
+
+                                <!--  BOTÓN EXPORTAR TODAS  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BotonExportar_Click"
+                                    Command="{Binding cmdExportarTodasLineas}"
+                                    Content="Exportar Todas"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="10"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Exporta todas las líneas." />
+
+
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </xceed:DropDownButton.DropDownContent>
+            </xceed:DropDownButton>
+
+            <!--  BOTON IMPORTAR LÍNEAS  -->
+            <controls:BotonBarra
+                Command="{Binding LineasVM.cmdImportarLineas}"
+                Imagen="Imagenes/Importar.png"
+                Titulo="Importar Líneas" />
+
+
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
+
 
             <!--  BOTON BORRAR LÍNEA  -->
             <controls:BotonBarra
@@ -208,18 +282,12 @@
                 VerticalGridLinesBrush="Lavender">
 
                 <DataGrid.Resources>
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                        Color="PaleGoldenrod" />
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                        Color="Black" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                 </DataGrid.Resources>
 
                 <DataGrid.InputBindings>
-                    <KeyBinding
-                        Key="Delete"
-                        Command="{Binding LineasVM.cmdBorrarCeldas}" />
+                    <KeyBinding Key="Delete" Command="{Binding LineasVM.cmdBorrarCeldas}" />
                     <KeyBinding
                         Key="V"
                         Command="{Binding LineasVM.cmdPegar}"
@@ -290,18 +358,12 @@
                 VerticalGridLinesBrush="Lavender">
 
                 <DataGrid.Resources>
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                        Color="PaleGoldenrod" />
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                        Color="Black" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                 </DataGrid.Resources>
 
                 <DataGrid.InputBindings>
-                    <KeyBinding
-                        Key="Delete"
-                        Command="{Binding LineasVM.cmdBorrarCeldas}" />
+                    <KeyBinding Key="Delete" Command="{Binding LineasVM.cmdBorrarCeldas}" />
                     <KeyBinding
                         Key="V"
                         Command="{Binding LineasVM.cmdPegar}"
@@ -312,8 +374,7 @@
                     <DataGridTextColumn
                         Width="2*"
                         MinWidth="60"
-                        Binding="{Binding Nombre,
-                                          Converter={StaticResource cnvItinerario}}"
+                        Binding="{Binding Nombre, Converter={StaticResource cnvItinerario}}"
                         Header="Itinerario" />
                     <DataGridTextColumn
                         Width="6*"
@@ -383,18 +444,12 @@
                 VerticalGridLinesBrush="Lavender">
 
                 <DataGrid.Resources>
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                        Color="PaleGoldenrod" />
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                        Color="Black" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                 </DataGrid.Resources>
 
                 <DataGrid.InputBindings>
-                    <KeyBinding
-                        Key="Delete"
-                        Command="{Binding LineasVM.cmdBorrarCeldas}" />
+                    <KeyBinding Key="Delete" Command="{Binding LineasVM.cmdBorrarCeldas}" />
                     <KeyBinding
                         Key="V"
                         Command="{Binding LineasVM.cmdPegar}"
@@ -415,8 +470,7 @@
                     <DataGridTextColumn
                         Width="2*"
                         MinWidth="60"
-                        Binding="{Binding Tiempo,
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Tiempo, Converter={StaticResource cnvHora}}"
                         Header="Tiempo" />
                 </DataGrid.Columns>
 

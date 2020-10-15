@@ -14,9 +14,7 @@
     <!--  ====================================================================================================  -->
     <!--  HEADERS VERDE  -->
     <!--  ====================================================================================================  -->
-    <Style
-        x:Key="EstiloHeadersVerde"
-        TargetType="DataGridColumnHeader">
+    <Style x:Key="EstiloHeadersVerde" TargetType="DataGridColumnHeader">
 
         <!--  PROPIEDADES VARIAS  -->
         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -203,9 +201,7 @@
     <!--  ====================================================================================================  -->
     <!--  HEADERS AZUL  -->
     <!--  ====================================================================================================  -->
-    <Style
-        x:Key="EstiloHeadersAzul"
-        TargetType="DataGridColumnHeader">
+    <Style x:Key="EstiloHeadersAzul" TargetType="DataGridColumnHeader">
 
         <!--  PROPIEDADES VARIAS  -->
         <Setter Property="HorizontalContentAlignment" Value="Center" />
@@ -391,9 +387,7 @@
     <!--  ====================================================================================================  -->
     <!--  HEADERS NARANJA  -->
     <!--  ====================================================================================================  -->
-    <Style
-        x:Key="EstiloHeadersNaranja"
-        TargetType="DataGridColumnHeader">
+    <Style x:Key="EstiloHeadersNaranja" TargetType="DataGridColumnHeader">
 
         <!--  PROPIEDADES VARIAS  -->
         <Setter Property="HorizontalContentAlignment" Value="Center" />

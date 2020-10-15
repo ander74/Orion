@@ -148,12 +148,12 @@
                     Crea un grupo de gráficos exactamente igual que el grupo de gráficos seleccionado.
                 </TextBlock>
 
-                <!--  CREAR DE WORD  -->
+                <!--  CREAR DE ARCHIVO EXPORTADO  -->
                 <RadioButton
                     x:Name="rbWord"
                     Margin="15,10,0,0"
                     VerticalContentAlignment="Center"
-                    Content="Grupo de gráficos desde Microsoft Word"
+                    Content="Grupo de gráficos desde archivo exportado"
                     FontSize="14"
                     FontWeight="Bold"
                     Foreground="LightGray"
@@ -166,12 +166,10 @@
                     Foreground="LightGray"
                     IsEnabled="False"
                     TextWrapping="Wrap">
-                    Crea un grupo de gráficos desde un archivo de Microsoft Word.
+                    Crea un grupo de gráficos desde un archivo exportado.
                 </TextBlock>
 
-                <StackPanel
-                    Margin="40,10,0,0"
-                    Orientation="Horizontal">
+                <StackPanel Margin="40,10,0,0" Orientation="Horizontal">
                     <TextBox
                         Width="380"
                         Height="25"

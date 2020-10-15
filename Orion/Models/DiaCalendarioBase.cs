@@ -12,6 +12,7 @@ namespace Orion.Models {
     using System.Data.Common;
     using System.Data.OleDb;
     using System.Data.SQLite;
+    using Newtonsoft.Json;
     using Orion.Interfaces;
 
     public class DiaCalendarioBase : NotifyBase, ISQLiteItem {
@@ -542,7 +543,8 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        [JsonIgnore]
+        public virtual IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("IdCalendario", IdCalendario));
@@ -575,34 +577,41 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLiteItem> Lista { get; }
+        [JsonIgnore]
+        public virtual IEnumerable<ISQLiteItem> Lista { get; }
 
 
-        public bool HasList { get => false; }
+        [JsonIgnore]
+        public virtual bool HasList { get => false; }
 
 
-        public void InicializarLista() { }
+        public virtual void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLiteItem item) { }
+        public virtual void AddItemToList(ISQLiteItem item) { }
 
 
-        public int ForeignId {
+        [JsonIgnore]
+        public virtual int ForeignId {
             get => IdCalendario;
             set => IdCalendario = value;
         }
 
 
-        public string ForeignIdName { get => "IdCalendario"; }
+        [JsonIgnore]
+        public virtual string ForeignIdName { get => "IdCalendario"; }
 
 
-        public string OrderBy { get => $"Dia ASC"; }
+        [JsonIgnore]
+        public virtual string OrderBy { get => $"Dia ASC"; }
 
 
-        public string TableName { get => "DiasCalendario"; }
+        [JsonIgnore]
+        public virtual string TableName { get => "DiasCalendario"; }
 
 
-        public string ComandoInsertar {
+        [JsonIgnore]
+        public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO DiasCalendario (" +
                 "IdCalendario, " +
                 "Dia, " +
@@ -658,34 +667,6 @@ namespace Orion.Models {
         }
 
 
-        //public string ComandoActualizar {
-        //    get => "UPDATE DiasCalendario SET " +
-        //        "IdCalendario = @idCalendario, " +
-        //        "Dia = @dia, " +
-        //        "DiaFecha = @diaFecha, " +
-        //        "Grafico = @grafico, " +
-        //        "Codigo = @codigo, " +
-        //        "ExcesoJornada = @excesoJornada, " +
-        //        "FacturadoPaqueteria = @facturadoPaqueteria, " +
-        //        "Limpieza = @limpieza, " +
-        //        "GraficoVinculado = @graficoVinculado, " +
-        //        "Notas = @notas, " +
-        //        "TurnoAlt = @turnoAlt, " +
-        //        "InicioAlt = @inicioAlt, " +
-        //        "FinalAlt = @finalAlt, " +
-        //        "InicioPartidoAlt = @inicioPartidoAlt, " +
-        //        "FinalPartidoAlt = @finalPartidoAlt, " +
-        //        "TrabajadasAlt = @trabajadasAlt, " +
-        //        "AcumuladasAlt = @acumuladasAlt, " +
-        //        "NocturnasAlt = @nocturnasAlt, " +
-        //        "DesayunoAlt = @desayunoAlt, " +
-        //        "ComidaAlt = @comidaAlt, " +
-        //        "CenaAlt = @cenaAlt, " +
-        //        "PlusCenaAlt = @plusCenaAlt, " +
-        //        "PlusLimpiezaAlt = @plusLimpiezaAlt, " +
-        //        "PlusPaqueteriaAlt = @plusPaqueteriaAlt " +
-        //        "WHERE _id=@id;";
-        //}
 
 
         #endregion

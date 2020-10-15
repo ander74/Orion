@@ -7,18 +7,25 @@
 #endregion
 namespace Orion.Views {
 
-	using System.Windows;
-	using System.Windows.Controls;
-	using ViewModels;
+    using System.Windows;
+    using System.Windows.Controls;
+    using ViewModels;
 
-	public partial class VistaLineas : UserControl {
-		public VistaLineas() {
-			InitializeComponent();
-		}
+    public partial class VistaLineas : UserControl {
+        public VistaLineas() {
+            InitializeComponent();
+        }
 
 
-		private void Tabla_GotFocus(object sender, RoutedEventArgs e) {
-			((GlobalVM)this.DataContext).LineasVM.TablaParaCopy = sender as DataGrid;
-		}
-	}
+        private void Tabla_GotFocus(object sender, RoutedEventArgs e) {
+            ((GlobalVM)this.DataContext).LineasVM.TablaParaCopy = sender as DataGrid;
+        }
+
+
+        // AL PULSAR UNO DE LOS BOTONES DEL DESPLEGABLE EXPORTAR
+        private void BotonExportar_Click(object sender, RoutedEventArgs e) {
+            BtExportarLineas.IsOpen = false;
+        }
+
+    }
 }

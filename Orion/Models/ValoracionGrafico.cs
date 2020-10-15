@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Data.SQLite;
+using Newtonsoft.Json;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -251,7 +252,7 @@ namespace Orion.Models {
         #region INTERFAZ SQLITE ITEM
         // ====================================================================================================
 
-        public void FromReader(DbDataReader lector) {
+        public virtual void FromReader(DbDataReader lector) {
             _id = lector.ToInt32("_id");
             _idgrafico = lector.ToInt32("IdGrafico");
             _inicio = lector.ToTimeSpanNulable("Inicio");
@@ -264,7 +265,8 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        [JsonIgnore]
+        public virtual IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("IdGrafico", IdGrafico));
@@ -278,34 +280,41 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLiteItem> Lista { get; }
+        [JsonIgnore]
+        public virtual IEnumerable<ISQLiteItem> Lista { get; }
 
 
-        public bool HasList { get => false; }
+        [JsonIgnore]
+        public virtual bool HasList { get => false; }
 
 
-        public void InicializarLista() { }
+        public virtual void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLiteItem item) { }
+        public virtual void AddItemToList(ISQLiteItem item) { }
 
 
-        public int ForeignId {
+        [JsonIgnore]
+        public virtual int ForeignId {
             get => IdGrafico;
             set => IdGrafico = value;
         }
 
 
-        public string ForeignIdName { get; }
+        [JsonIgnore]
+        public virtual string ForeignIdName { get; }
 
 
-        public string OrderBy { get => $"Inicio, Id"; }
+        [JsonIgnore]
+        public virtual string OrderBy { get => $"Inicio, _id"; }
 
 
-        public string TableName { get => "Valoraciones"; }
+        [JsonIgnore]
+        public virtual string TableName { get => "Valoraciones"; }
 
 
-        public string ComandoInsertar {
+        [JsonIgnore]
+        public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO Valoraciones (" +
                 "IdGrafico, " +
                 "Inicio, " +

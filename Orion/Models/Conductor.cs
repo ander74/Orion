@@ -14,6 +14,7 @@ namespace Orion.Models {
     using System.Data.OleDb;
     using System.Data.SQLite;
     using Config;
+    using Newtonsoft.Json;
     using Orion.Interfaces;
 
     [Author("AndresClass")]
@@ -389,7 +390,7 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public void FromReader(DbDataReader lector) {
+        public virtual void FromReader(DbDataReader lector) {
             _id = lector.ToInt32("_id");
             matricula = lector.ToInt32("Matricula");
             _nombre = lector.ToString("Nombre");
@@ -408,7 +409,8 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        [JsonIgnore]
+        public virtual IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("Matricula", Matricula));
@@ -429,35 +431,42 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLiteItem> Lista { get => ListaRegulaciones; }
+        [JsonIgnore]
+        public virtual IEnumerable<ISQLiteItem> Lista { get => ListaRegulaciones; }
 
 
-        public bool HasList { get => true; }
+        [JsonIgnore]
+        public virtual bool HasList { get => true; }
 
 
-        public void InicializarLista() {
+        public virtual void InicializarLista() {
             ListaRegulaciones = new NotifyCollection<RegulacionConductor>();
         }
 
 
-        public void AddItemToList(ISQLiteItem item) {
+        public virtual void AddItemToList(ISQLiteItem item) {
             ListaRegulaciones.Add(item as RegulacionConductor);
         }
 
 
-        public int ForeignId { get; set; }
+        [JsonIgnore]
+        public virtual int ForeignId { get; set; }
 
 
-        public string ForeignIdName { get => "IdConductor"; }
+        [JsonIgnore]
+        public virtual string ForeignIdName { get => "IdConductor"; }
 
 
-        public string OrderBy { get => $"Matricula ASC"; }
+        [JsonIgnore]
+        public virtual string OrderBy { get => $"Matricula ASC"; }
 
 
-        public string TableName { get => "Conductores"; }
+        [JsonIgnore]
+        public virtual string TableName { get => "Conductores"; }
 
 
-        public string ComandoInsertar {
+        [JsonIgnore]
+        public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO Conductores (" +
                 "Matricula, " +
                 "Nombre, " +
@@ -487,25 +496,6 @@ namespace Orion.Models {
                 "@notas, " +
                 "@id);";
         }
-
-
-        //public string ComandoActualizar {
-        //    //Corregir el _id añadiendo la matrícula.
-        //    get => "UPDATE Conductores SET " +
-        //        "Matricula = @matricula, " +
-        //        "Nombre = @nombre, " +
-        //        "Apellidos = @apellidos, " +
-        //        "Indefinido = @indefinido, " +
-        //        "Telefono = @telefono, " +
-        //        "Email = @email, " +
-        //        "Acumuladas = @acumuladas, " +
-        //        "Descansos = @descansos, " +
-        //        "DescansosNoDisfrutados = @descansosNoDisfrutados, " +
-        //        "PlusDistancia = @plusDistancia, " +
-        //        "ReduccionJornada = @reduccionJornada, " +
-        //        "Notas = @notas " +
-        //        "WHERE _id = @id;";
-        //}
 
 
         #endregion

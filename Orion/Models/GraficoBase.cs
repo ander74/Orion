@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Data.SQLite;
+using Newtonsoft.Json;
 using Orion.Config;
 using Orion.Interfaces;
 
@@ -544,7 +545,8 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros {
+        [JsonIgnore]
+        public virtual IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("IdGrupo", IdGrupo));
@@ -573,34 +575,41 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<ISQLiteItem> Lista { get; }
+        [JsonIgnore]
+        public virtual IEnumerable<ISQLiteItem> Lista { get; }
 
 
-        public bool HasList { get => false; }
+        [JsonIgnore]
+        public virtual bool HasList { get => false; }
 
 
-        public void InicializarLista() { }
+        public virtual void InicializarLista() { }
 
 
-        public void AddItemToList(ISQLiteItem item) { }
+        public virtual void AddItemToList(ISQLiteItem item) { }
 
 
-        public int ForeignId {
+        [JsonIgnore]
+        public virtual int ForeignId {
             get => IdGrupo;
             set => IdGrupo = value;
         }
 
 
-        public string ForeignIdName { get => "IdGrafico"; }
+        [JsonIgnore]
+        public virtual string ForeignIdName { get => "IdGrafico"; }
 
 
-        public string OrderBy { get => $"Numero ASC"; }
+        [JsonIgnore]
+        public virtual string OrderBy { get => $"Numero ASC"; }
 
 
-        public string TableName { get => "Graficos"; }
+        [JsonIgnore]
+        public virtual string TableName { get => "Graficos"; }
 
 
-        public string ComandoInsertar {
+        [JsonIgnore]
+        public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO Graficos (" +
                 "IdGrupo, " +
                 "NoCalcular, " +

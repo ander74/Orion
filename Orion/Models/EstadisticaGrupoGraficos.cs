@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.OleDb;
 using System.Data.SQLite;
+using Newtonsoft.Json;
 using Orion.Interfaces;
 
 namespace Orion.Models {
@@ -141,7 +142,7 @@ namespace Orion.Models {
 
 
 
-        public void FromReader(DbDataReader lector) {
+        public virtual void FromReader(DbDataReader lector) {
             Validez = lector.ToDateTime("Validez");
             CantidadGraficos = lector.ToInt32("Cantidad");
             CantidadTurnos1 = lector.ToInt32("Turnos1");
@@ -163,13 +164,16 @@ namespace Orion.Models {
         }
 
 
-        public IEnumerable<SQLiteParameter> Parametros { get; }
+        [JsonIgnore]
+        public virtual IEnumerable<SQLiteParameter> Parametros { get; }
 
 
-        public IEnumerable<ISQLiteItem> Lista { get; }
+        [JsonIgnore]
+        public virtual IEnumerable<ISQLiteItem> Lista { get; }
 
 
-        public bool HasList { get => false; }
+        [JsonIgnore]
+        public virtual bool HasList { get => false; }
 
 
         public void InicializarLista() { }
@@ -178,24 +182,30 @@ namespace Orion.Models {
         public void AddItemToList(ISQLiteItem item) { }
 
 
-        public int ForeignId { get; set; }
+        [JsonIgnore]
+        public virtual int ForeignId { get; set; }
 
 
-        public string ForeignIdName { get => ""; }
+        [JsonIgnore]
+        public virtual string ForeignIdName { get => ""; }
 
 
-        public string OrderBy { get => $""; }
+        [JsonIgnore]
+        public virtual string OrderBy { get => $""; }
 
 
-        public string TableName { get => ""; }
+        [JsonIgnore]
+        public virtual string TableName { get => ""; }
 
 
-        public string ComandoInsertar {
+        [JsonIgnore]
+        public virtual string ComandoInsertar {
             get => "";
         }
 
 
-        public string ComandoActualizar {
+        [JsonIgnore]
+        public virtual string ComandoActualizar {
             get => "";
         }
 

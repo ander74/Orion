@@ -564,17 +564,17 @@
                         </controls:GrupoOpciones.Contenido>
                     </controls:GrupoOpciones>
 
-                    <!--  OPCIONES DROPBOX  -->
+                    <!--  OPCIONES EN LA NUBE  -->
                     <controls:GrupoOpciones
                         Margin="6"
                         FondoTitulo="{StaticResource orDegradadoVioleta}"
-                        Titulo="OPCIONES DROPBOX">
+                        Titulo="OPCIONES EN LA NUBE">
                         <controls:GrupoOpciones.Contenido>
                             <StackPanel
                                 HorizontalAlignment="Center"
                                 Orientation="Vertical">
 
-                                <!--  SINCRONIZAR EN DROPBOX  -->
+                                <!--  SINCRONIZAR EN ONEDRIVE  -->
                                 <StackPanel
                                     Height="Auto"
                                     HorizontalAlignment="Left"
@@ -583,7 +583,7 @@
                                         Width="Auto"
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center"
-                                        Content="Sincronizar en Dropbox."
+                                        Content="Sincronizar en la Nube."
                                         FontSize="14"
                                         IsChecked="{Binding Configuracion.SincronizarEnDropbox,
                                                             Mode=TwoWay,
@@ -597,7 +597,7 @@
                                             Padding="12,6"
                                             Command="{Binding OpcionesVM.cmdDropboxAPc}"
                                             Style="{StaticResource EstiloBotonBarraPequeña}"
-                                            ToolTip="Copia las bases de datos que hay en la carpeta de Dropbox a la carpeta local del ordenador.">
+                                            ToolTip="Copia las bases de datos que hay en la carpeta de la nube a la carpeta local del ordenador.">
                                             <Button.Content>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Image
@@ -608,7 +608,7 @@
                                                         Margin="10,0,0,0"
                                                         VerticalAlignment="Center"
                                                         FontSize="14"
-                                                        Text="Dropbox a PC" />
+                                                        Text="De la Nube al PC" />
                                                 </StackPanel>
                                             </Button.Content>
                                         </Button>
@@ -616,7 +616,7 @@
                                             Padding="12,6"
                                             Command="{Binding OpcionesVM.cmdPcADropbox}"
                                             Style="{StaticResource EstiloBotonBarraPequeña}"
-                                            ToolTip="Copia las bases de datos que hay en la carpeta local del ordenador a la carpeta de Dropbox.">
+                                            ToolTip="Copia las bases de datos que hay en la carpeta local del ordenador a la carpeta de la Nube.">
                                             <Button.Content>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Image
@@ -627,7 +627,7 @@
                                                         Margin="10,0,0,0"
                                                         VerticalAlignment="Center"
                                                         FontSize="14"
-                                                        Text="PC a Dropbox" />
+                                                        Text="Del PC a la Nube" />
                                                 </StackPanel>
                                             </Button.Content>
                                         </Button>
@@ -635,14 +635,14 @@
                                 </StackPanel>
 
 
-                                <!--  CARPETA DE DROPBOX  -->
+                                <!--  CARPETA EN LA NUBE  -->
                                 <StackPanel
                                     Height="30"
                                     Style="{StaticResource EstiloPanelOpciones}">
                                     <TextBlock
                                         Width="130"
                                         Style="{StaticResource EstiloTextoOpciones}"
-                                        Text="Carpeta Dropbox: " />
+                                        Text="Carpeta en la Nube: " />
                                     <controls:QTextBox
                                         Width="400"
                                         Style="{StaticResource EstiloTextBoxOpciones}"

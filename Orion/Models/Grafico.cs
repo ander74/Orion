@@ -105,6 +105,7 @@ namespace Orion.Models {
 
         private void Valoraciones_ItemPropertyChanged(object sender, ItemChangedEventArgs<ValoracionGrafico> e) {
             Modificado = true;
+            PropiedadCambiada(nameof(TiempoValoraciones));
         }
 
 
@@ -205,18 +206,18 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
-        public new IEnumerable<ISQLiteItem> Lista { get => ListaValoraciones; }
+        public override IEnumerable<ISQLiteItem> Lista { get => ListaValoraciones; }
 
 
-        public new bool HasList { get => true; }
+        public override bool HasList { get => true; }
 
 
-        public new void InicializarLista() {
+        public override void InicializarLista() {
             ListaValoraciones.Clear();
         }
 
 
-        public new void AddItemToList(ISQLiteItem item) {
+        public override void AddItemToList(ISQLiteItem item) {
             ListaValoraciones.Add(item as ValoracionGrafico);
         }
 
