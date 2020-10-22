@@ -1379,11 +1379,10 @@ namespace Orion.Servicios {
                 var consultaSQL = "" +
                     "WITH " +
                     "maxValidez AS (SELECT Max(Validez) FROM Graficos WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @fecha)), " +
-                    "graficos1 AS (SELECT Grafico FROM DiasCalendario WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND Grafico > 0)," +
-                    "graficos2 AS(SELECT GraficoVinculado FROM DiasCalendario WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND GraficoVinculado > 0) " +
+                    "graficos1 AS (SELECT Grafico FROM DiasCalendario WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND Grafico > 0) " +
                     "" +
                     "SELECT @fecha as Fecha, * FROM (SELECT * FROM Graficos WHERE (Validez in maxValidez))" +
-                    "WHERE Numero > 0 AND (Numero IN graficos1 OR Numero IN graficos2) AND Numero != @comodin " +
+                    "WHERE Numero > 0 AND (Numero IN graficos1) " +
                     "ORDER BY Numero; ";
 
 
@@ -1391,10 +1390,40 @@ namespace Orion.Servicios {
                     DateTime fechaDia = new DateTime(fecha.Year, fecha.Month, dia);
                     var consulta = new SQLiteExpression(consultaSQL);
                     consulta.AddParameter("@fecha", fechaDia);
-                    consulta.AddParameter("@comodin", comodin);
                     var items = GetItems<GraficoFecha>(consulta);
                     lista.AddRange(items);
                 }
+
+                consultaSQL = "" +
+                    "WITH " +
+                    "maxValidez AS (SELECT Max(Validez) FROM Graficos WHERE strftime('%Y-%m-%d', Validez) <= strftime('%Y-%m-%d', @fecha)), " +
+                    "graficos1 AS (SELECT Numero FROM Graficos WHERE (Validez in maxValidez) AND Numero > 0) " +
+                    "" +
+                    "SELECT * FROM DiasCalendario " +
+                    "WHERE strftime('%Y-%m-%d', DiaFecha) = strftime('%Y-%m-%d', @fecha) AND Grafico NOT IN graficos1 AND Grafico > 0 " +
+                    "ORDER BY Grafico; ";
+
+                for (int dia = 1; dia <= DateTime.DaysInMonth(fecha.Year, fecha.Month); dia++) {
+                    DateTime fechaDia = new DateTime(fecha.Year, fecha.Month, dia);
+                    var consulta = new SQLiteExpression(consultaSQL);
+                    consulta.AddParameter("@fecha", fechaDia);
+                    var items = GetItems<DiaCalendarioBase>(consulta);
+                    foreach (var item in items) {
+                        var grafico = new GraficoFecha();
+                        grafico.Fecha = fechaDia;
+                        grafico.Numero = item.Grafico;
+                        grafico.Trabajadas = item.TrabajadasAlt ?? App.Global.Convenio.JornadaMedia;
+                        grafico.Acumuladas = item.AcumuladasAlt ?? TimeSpan.Zero;
+                        grafico.Nocturnas = item.NocturnasAlt ?? TimeSpan.Zero;
+                        grafico.Turno = item.TurnoAlt ?? 1;
+                        grafico.Desayuno = item.DesayunoAlt ?? 0;
+                        grafico.Comida = item.ComidaAlt ?? 0;
+                        grafico.Cena = item.CenaAlt ?? 0;
+                        grafico.PlusCena = item.PlusCenaAlt ?? 0;
+                        lista.Add(grafico);
+                    }
+                }
+
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetGraficosFromDiaCalendario), ex);
             }
@@ -1411,7 +1440,7 @@ namespace Orion.Servicios {
                     "" +
                     "SELECT Numero " +
                     "FROM Graficos " +
-                    "WHERE Numero > 0 AND Validez in maxValidez AND (DiaSemana = @diaSemana OR DiaSemana = '' OR DiaSemana IS NULL) " +
+                    "WHERE Numero > 0 AND Validez in maxValidez AND (DiaSemana = @diaSemana OR DiaSemana = 'R' OR DiaSemana = '' OR DiaSemana IS NULL) " +
                     "ORDER BY Numero; ";
 
                 List<GraficosPorDia> lista = new List<GraficosPorDia>();

@@ -56,34 +56,9 @@ namespace Orion.Views {
             }
 
             // Si hay que sincronizar con DropBox, se copian los archivos.
-            //TODO: Actualizar con el método de autenticación.
-            //var clave = ApiKeys.DropboxAppKey;
             if (App.Global.Configuracion.SincronizarEnDropbox) Respaldo.SincronizarDropbox();
 
-            // Si hay que actualizar el programa, se actualiza.
-            // TODO: Con el nuevo sistema de actualización, eliminar este bloque if y descomentar el siguiente.
-            //if (App.Global.Configuracion.ActualizarPrograma && !string.IsNullOrWhiteSpace(App.Global.Configuracion.CarpetaOrigenActualizar)) {
-            //    string archivoOrigen = Path.Combine(App.Global.Configuracion.CarpetaOrigenActualizar, "OrionUpdate.exe");
-            //    string archivoDestino = Path.Combine(Directory.GetCurrentDirectory(), "OrionUpdate.exe");
-            //    DateTime origen = File.GetLastWriteTime(archivoOrigen);
-            //    DateTime destino = File.GetLastWriteTime(archivoDestino);
-            //    if (origen > destino && File.Exists(archivoOrigen)) {
-            //        File.Copy(archivoOrigen, archivoDestino, true);
-            //    }
-            //    archivoOrigen = Path.Combine(App.Global.Configuracion.CarpetaOrigenActualizar, "Orion.exe");
-            //    archivoDestino = Path.Combine(Directory.GetCurrentDirectory(), "Orion.exe");
-            //    origen = File.GetLastWriteTime(archivoOrigen);
-            //    destino = File.GetLastWriteTime(archivoDestino);
-            //    if (origen > destino) {
-            //        // Necesita actualizar
-            //        string mensaje = "Hay una nueva versión de Orión.\n\n¿Desea actualizar ahora?";
-            //        if (MessageBox.Show(mensaje, "Actualización", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes) {
-            //            App.ActualizarAlSalir = true;
-            //            this.Close();
-            //        }
-            //    }
-            //}
-
+            // Si hay que comprobar actualizaciones
             if (App.Global.Configuracion.ActualizarPrograma && !string.IsNullOrWhiteSpace(App.Global.Configuracion.CarpetaOrigenActualizar)) {
                 var exeFile = Path.Combine(App.Global.Configuracion.CarpetaOrigenActualizar, "setup.exe");
                 if (File.Exists(exeFile)) {
@@ -141,10 +116,35 @@ namespace Orion.Views {
             }
         }
 
+
         //****************************************************************************************************
         // AL CARGAR LA VENTANA
         //****************************************************************************************************
         private void Ventana_Loaded(object sender, RoutedEventArgs e) {
+
+            // SINCRONIZACION CON ONEDRIVE
+
+            //if (App.Global.Configuracion.SincronizarEnDropbox) {
+            //    try {
+            //        App.Global.IniciarProgreso("Sincronizando con OneDrive...");
+            //        await Task.Run(() => {
+            //            if (File.Exists(App.Global.ArchivoOpcionesOneDrive)) {
+            //                string datos = File.ReadAllText(App.Global.ArchivoOpcionesOneDrive, System.Text.Encoding.UTF8);
+            //                App.Global.ServicioOneDrive.SetConfiguraciónCodificada(datos);
+            //            }
+            //            App.Global.ServicioOneDrive.AutorizarAsync().Wait();
+            //            //TODO: Sincronizar los archivos.
+            //        });
+            //    } catch (Exception ex) {
+            //        App.Global.Mensajes.VerError("MainWindow.Ventana_Loaded", ex);
+            //    } finally {
+            //        App.Global.FinalizarProgreso();
+            //    }
+            //}
+
+            // FIN ONEDRIVE
+
+
 
         }
 

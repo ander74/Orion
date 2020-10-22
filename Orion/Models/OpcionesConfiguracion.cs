@@ -503,6 +503,38 @@ namespace Orion.Models {
         // ====================================================================================================
 
 
+        // ====================================================================================================
+        #region ONE DRIVE
+        // ====================================================================================================
+
+
+        private string accessToken;
+        public string AccessToken {
+            get => accessToken;
+            set => SetValue(ref accessToken, value);
+        }
+
+
+        private DateTime tokenExpires;
+        public DateTime TokenExpires {
+            get => tokenExpires;
+            set => SetValue(ref tokenExpires, value);
+        }
+
+
+
+        private string refreshToken;
+        public string RefreshToken {
+            get => refreshToken;
+            set => SetValue(ref refreshToken, value);
+        }
+
+
+
+        #endregion
+        // ====================================================================================================
+
+
 
 
     }

@@ -22,9 +22,7 @@
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
 
-        <Style
-            x:Key="EstiloGrid"
-            TargetType="DataGrid">
+        <Style x:Key="EstiloGrid" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
@@ -74,14 +72,10 @@
                 Background="LightGray" />
 
             <!--  BOTON SQL READER  -->
-            <Button
-                Command="{Binding ProgramadorVM.cmdSqlReader}"
-                Style="{StaticResource EstiloBotonBarra}">
+            <Button Command="{Binding ProgramadorVM.cmdSqlReader}" Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/table_refresh.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/table_refresh.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Text="SQL Reader"
                             TextAlignment="Center"
@@ -91,14 +85,10 @@
             </Button>
 
             <!--  BOTON SQL NON QUERY  -->
-            <Button
-                Command="{Binding ProgramadorVM.cmdSqlNonQuery}"
-                Style="{StaticResource EstiloBotonBarra}">
+            <Button Command="{Binding ProgramadorVM.cmdSqlNonQuery}" Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/table_refresh.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/table_refresh.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Text="SQL Non Query"
                             TextAlignment="Center"
@@ -108,14 +98,10 @@
             </Button>
 
             <!--  BOTON SQL ESCALAR  -->
-            <Button
-                Command="{Binding ProgramadorVM.cmdSqlEscalar}"
-                Style="{StaticResource EstiloBotonBarra}">
+            <Button Command="{Binding ProgramadorVM.cmdSqlEscalar}" Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/table_refresh.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/table_refresh.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Text="SQL Escalar"
                             TextAlignment="Center"
@@ -156,8 +142,7 @@
             BorderThickness="1"
             FontFamily="Courier New"
             FontSize="12"
-            Text="{Binding ProgramadorVM.CampoTexto,
-                           UpdateSourceTrigger=PropertyChanged}" />
+            Text="{Binding ProgramadorVM.CampoTexto, UpdateSourceTrigger=PropertyChanged}" />
 
 
         <DataGrid
@@ -181,12 +166,8 @@
             Style="{StaticResource EstiloGrid}"
             VerticalGridLinesBrush="Lavender">
             <DataGrid.Resources>
-                <SolidColorBrush
-                    x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                    Color="PaleGoldenrod" />
-                <SolidColorBrush
-                    x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                    Color="Black" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
             </DataGrid.Resources>
 
         </DataGrid>

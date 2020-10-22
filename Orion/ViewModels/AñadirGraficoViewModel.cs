@@ -69,6 +69,7 @@ namespace Orion.ViewModels {
                         if (App.Global.PorCentro.RangoVie.Validar(_numero)) DiaSemana = "V";
                         if (App.Global.PorCentro.RangoSab.Validar(_numero)) DiaSemana = "S";
                         if (App.Global.PorCentro.RangoDom.Validar(_numero)) DiaSemana = "F";
+                        if (App.Global.PorCentro.RangoRes.Validar(_numero)) DiaSemana = "R";
                     }
                 }
             }

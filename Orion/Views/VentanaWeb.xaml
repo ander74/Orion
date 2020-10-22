@@ -1,0 +1,27 @@
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
+<!--  Vea el archivo Licencia.txt para mas detalles  -->
+<!--  ===============================================  -->
+<Window
+    x:Class="Orion.Views.VentanaWeb"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="clr-namespace:Orion"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Orion"
+    Loaded="Window_Loaded"
+    Height="500"
+    Width="527"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="SingleBorderWindow">
+
+        <WebBrowser
+            Source="about:blank"
+            Margin="2"
+            MinHeight="13"
+            MinWidth="13"
+            x:Name="webBrowser"
+            Navigating="Navegador_Navigating" />
+
+</Window>

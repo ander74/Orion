@@ -23,9 +23,7 @@
     <!--  ====================================================================================================  -->
     <UserControl.Resources>
 
-        <Style
-            x:Key="EstiloTablaEstadisticas"
-            TargetType="DataGrid">
+        <Style x:Key="EstiloTablaEstadisticas" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersNaranja}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasNaranja}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
@@ -83,9 +81,7 @@
                 Style="{StaticResource EstiloBotonDesplegable}">
                 <xc:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/SeleccionarColumna.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/SeleccionarColumna.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             VerticalAlignment="Center"
                             FontFamily="Comic Sans MS"
@@ -122,9 +118,7 @@
                                         Tag="Todos" />
                                 </StackPanel>
 
-                                <StackPanel
-                                    Margin="10,0,0,0"
-                                    Orientation="Vertical">
+                                <StackPanel Margin="10,0,0,0" Orientation="Vertical">
                                     <!--  DIAS TRABAJADOS  -->
                                     <CheckBox
                                         x:Name="ChDias"
@@ -242,9 +236,7 @@
                 Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/Copiar.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/Copiar.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Text="Copiar"
                             TextAlignment="Center"
@@ -255,14 +247,10 @@
 
 
             <!--  DESPLEGABLE FILTRAR TABLA  -->
-            <xc:DropDownButton
-                x:Name="BtFiltrar"
-                Style="{StaticResource EstiloBotonDesplegable}">
+            <xc:DropDownButton x:Name="BtFiltrar" Style="{StaticResource EstiloBotonDesplegable}">
                 <xc:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/Filtrar.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/Filtrar.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtFiltrar"
                             FontFamily="Comic Sans MS"
@@ -278,8 +266,7 @@
                         BorderBrush="DarkBlue"
                         BorderThickness="2"
                         CornerRadius="5"
-                        DataContext="{Binding Source={x:Reference TxtFiltrar},
-                                              Path=DataContext.EstadisticasTurnosVM}">
+                        DataContext="{Binding Source={x:Reference TxtFiltrar}, Path=DataContext.EstadisticasTurnosVM}">
                         <Border
                             Margin="3"
                             BorderBrush="DarkGray"
@@ -386,9 +373,7 @@
                 Style="{StaticResource EstiloBotonDesplegable}">
                 <xc:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/SeleccionarColumna.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/SeleccionarColumna.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             VerticalAlignment="Center"
                             FontFamily="Comic Sans MS"
@@ -425,9 +410,7 @@
                                         Tag="Todos" />
                                 </StackPanel>
 
-                                <StackPanel
-                                    Margin="10,0,0,0"
-                                    Orientation="Vertical">
+                                <StackPanel Margin="10,0,0,0" Orientation="Vertical">
                                     <!--  DIAS TRABAJADOS  -->
                                     <CheckBox
                                         x:Name="Ch2Turnos"
@@ -513,9 +496,7 @@
             <!--  ====================================================================================================  -->
             <!--  CABECERA TABLA  -->
             <!--  ====================================================================================================  -->
-            <Grid
-                Grid.Row="0"
-                HorizontalAlignment="Stretch">
+            <Grid Grid.Row="0" HorizontalAlignment="Stretch">
                 <Border
                     Height="Auto"
                     Margin="0,3"
@@ -566,12 +547,8 @@
                 VerticalGridLinesBrush="Lavender">
 
                 <DataGrid.Resources>
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                        Color="PaleGoldenrod" />
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                        Color="Black" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                 </DataGrid.Resources>
 
                 <DataGrid.Columns>
@@ -589,379 +566,277 @@
                         x:Name="Dias1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Dias[1],
-                                          StringFormat=00}"
+                        Binding="{Binding Dias[1], StringFormat=00}"
                         Header="Dias 1"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding Source={x:Reference Cabecera},
-                                             Path=DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados,
-                                             Converter={StaticResource cnvBoolToVisibility}}" />
+                        Visibility="{Binding Source={x:Reference Cabecera}, Path=DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados, Converter={StaticResource cnvBoolToVisibility}}" />
 
                     <DataGridTextColumn
                         x:Name="Dias2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Dias[2],
-                                          StringFormat=00}"
+                        Binding="{Binding Dias[2], StringFormat=00}"
                         Header="Dias 2"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Dias3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Dias[3],
-                                          StringFormat=00}"
+                        Binding="{Binding Dias[3], StringFormat=00}"
                         Header="Dias 3"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Dias4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Dias[4],
-                                          StringFormat=00}"
+                        Binding="{Binding Dias[4], StringFormat=00}"
                         Header="Dias 4"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="TotalDias"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding TotalDias,
-                                          StringFormat=00}"
+                        Binding="{Binding TotalDias, StringFormat=00}"
                         Header="Total"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDiasTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="Trabajadas1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Trabajadas[1],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Trabajadas[1], Converter={StaticResource cnvHora}}"
                         Header="Horas T1"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Trabajadas2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Trabajadas[2],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Trabajadas[2], Converter={StaticResource cnvHora}}"
                         Header="Horas T2"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Trabajadas3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Trabajadas[3],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Trabajadas[3], Converter={StaticResource cnvHora}}"
                         Header="Horas T3"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Trabajadas4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Trabajadas[4],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Trabajadas[4], Converter={StaticResource cnvHora}}"
                         Header="Horas T4"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding TotalTrabajadas,
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding TotalTrabajadas, Converter={StaticResource cnvHora}}"
                         Header="Total"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasTrabajadas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="Acumuladas1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Acumuladas[1],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Acumuladas[1], Converter={StaticResource cnvHora}}"
                         Header="Acum T1"
                         HeaderStyle="{StaticResource EstiloHeadersAzul}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Acumuladas2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Acumuladas[2],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Acumuladas[2], Converter={StaticResource cnvHora}}"
                         Header="Acum T2"
                         HeaderStyle="{StaticResource EstiloHeadersAzul}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Acumuladas3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Acumuladas[3],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Acumuladas[3], Converter={StaticResource cnvHora}}"
                         Header="Acum T3"
                         HeaderStyle="{StaticResource EstiloHeadersAzul}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Acumuladas4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Acumuladas[4],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Acumuladas[4], Converter={StaticResource cnvHora}}"
                         Header="Acum T4"
                         HeaderStyle="{StaticResource EstiloHeadersAzul}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding TotalAcumuladas,
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding TotalAcumuladas, Converter={StaticResource cnvHora}}"
                         Header="Total"
                         HeaderStyle="{StaticResource EstiloHeadersAzul}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasAcumuladas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="Nocturnas1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Nocturnas[1],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Nocturnas[1], Converter={StaticResource cnvHora}}"
                         Header="Noct T1"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Nocturnas2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Nocturnas[2],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Nocturnas[2], Converter={StaticResource cnvHora}}"
                         Header="Noct T2"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Nocturnas3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Nocturnas[3],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Nocturnas[3], Converter={StaticResource cnvHora}}"
                         Header="Noct T3"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="Nocturnas4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding Nocturnas[4],
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding Nocturnas[4], Converter={StaticResource cnvHora}}"
                         Header="Noct T4"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding TotalNocturnas,
-                                          Converter={StaticResource cnvHora}}"
+                        Binding="{Binding TotalNocturnas, Converter={StaticResource cnvHora}}"
                         Header="Total"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarHorasNocturnas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="ImporteDietas1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding ImporteDietas[1],
-                                          Converter={StaticResource cnvDecimal}}"
+                        Binding="{Binding ImporteDietas[1], Converter={StaticResource cnvDecimal}}"
                         Header="Dietas T1"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="ImporteDietas2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding ImporteDietas[2],
-                                          Converter={StaticResource cnvDecimal}}"
+                        Binding="{Binding ImporteDietas[2], Converter={StaticResource cnvDecimal}}"
                         Header="Dietas T2"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="ImporteDietas3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding ImporteDietas[3],
-                                          Converter={StaticResource cnvDecimal}}"
+                        Binding="{Binding ImporteDietas[3], Converter={StaticResource cnvDecimal}}"
                         Header="Dietas T3"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="ImporteDietas4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding ImporteDietas[4],
-                                          Converter={StaticResource cnvDecimal}}"
+                        Binding="{Binding ImporteDietas[4], Converter={StaticResource cnvDecimal}}"
                         Header="Dietas T4"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding TotalImporteDietas,
-                                          Converter={StaticResource cnvDecimal}}"
+                        Binding="{Binding TotalImporteDietas, Converter={StaticResource cnvDecimal}}"
                         Header="Total"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarImporteDietas, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="DiasFestivos1"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasFestivos[1],
-                                          StringFormat=00}"
+                        Binding="{Binding DiasFestivos[1], StringFormat=00}"
                         Header="Fest T1"
                         HeaderStyle="{StaticResource EstiloHeadersAzul}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="DiasFestivos2"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasFestivos[2],
-                                          StringFormat=00}"
+                        Binding="{Binding DiasFestivos[2], StringFormat=00}"
                         Header="Fest T2"
                         HeaderStyle="{StaticResource EstiloHeadersAzul}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="DiasFestivos3"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasFestivos[3],
-                                          StringFormat=00}"
+                        Binding="{Binding DiasFestivos[3], StringFormat=00}"
                         Header="Fest T3"
                         HeaderStyle="{StaticResource EstiloHeadersAzul}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="DiasFestivos4"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasFestivos[4],
-                                          StringFormat=00}"
+                        Binding="{Binding DiasFestivos[4], StringFormat=00}"
                         Header="Fest T4"
                         HeaderStyle="{StaticResource EstiloHeadersAzul}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding TotalDiasFestivos,
-                                          StringFormat=00}"
+                        Binding="{Binding TotalDiasFestivos, StringFormat=00}"
                         Header="Total"
                         HeaderStyle="{StaticResource EstiloHeadersAzul}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarFestivosTrabajados, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="DiasDescanso"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding DiasDescanso,
-                                          StringFormat=00}"
+                        Binding="{Binding DiasDescanso, StringFormat=00}"
                         Header="D.Desc"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDescansos,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDescansos, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="FindesDescansados"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding FindesDescansados,
-                                          Converter={StaticResource cnvDecimal}}"
+                        Binding="{Binding FindesDescansados, Converter={StaticResource cnvDecimal}}"
                         Header="FN.Desc"
                         HeaderStyle="{StaticResource EstiloHeadersNaranja}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDescansos,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarDescansos, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
 
                     <DataGridTextColumn
                         x:Name="PlusPaqueteria"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding PlusPaqueteria,
-                                          Converter={StaticResource cnvDecimal}}"
+                        Binding="{Binding PlusPaqueteria, Converter={StaticResource cnvDecimal}}"
                         Header="Paqu"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarPluses,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarPluses, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                     <DataGridTextColumn
                         x:Name="PlusMenorDescanso"
                         Width="*"
                         MinWidth="60"
-                        Binding="{Binding PlusMenorDescanso,
-                                          Converter={StaticResource cnvDecimal}}"
+                        Binding="{Binding PlusMenorDescanso, Converter={StaticResource cnvDecimal}}"
                         Header="M.Desc"
                         HeaderStyle="{StaticResource EstiloHeadersVerde}"
-                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarPluses,
-                                             Converter={StaticResource cnvBoolToVisibility},
-                                             Source={x:Reference Cabecera}}" />
+                        Visibility="{Binding DataContext.EstadisticasTurnosVM.MostrarPluses, Converter={StaticResource cnvBoolToVisibility}, Source={x:Reference Cabecera}}" />
                 </DataGrid.Columns>
             </DataGrid>
 

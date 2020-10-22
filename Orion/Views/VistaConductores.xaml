@@ -30,16 +30,12 @@
         <cnv:ConvertidorDecimal6 x:Key="cnvDecimal6" />
         <BooleanToVisibilityConverter x:Key="cnvVisibilidad" />
 
-        <Style
-            x:Key="EstiloGridConductores"
-            TargetType="DataGrid">
+        <Style x:Key="EstiloGridConductores" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
         </Style>
-        <Style
-            x:Key="EstiloGridRegulaciones"
-            TargetType="DataGrid">
+        <Style x:Key="EstiloGridRegulaciones" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasRegulacionesConductor}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasGraficos}" />
@@ -113,14 +109,10 @@
                 Background="LightGray" />
 
             <!--  DESPLEGABLE ACCIONES  -->
-            <xceed:DropDownButton
-                x:Name="BtDropAcciones"
-                Style="{StaticResource EstiloBotonDesplegable}">
+            <xceed:DropDownButton x:Name="BtDropAcciones" Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/Engranajes.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/Engranajes.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtAcciones"
                             FontFamily="Comic Sans MS"
@@ -136,8 +128,7 @@
                         BorderBrush="DarkBlue"
                         BorderThickness="2"
                         CornerRadius="5"
-                        DataContext="{Binding Source={x:Reference TxtAcciones},
-                                              Path=DataContext.ConductoresVM}">
+                        DataContext="{Binding Source={x:Reference TxtAcciones}, Path=DataContext.ConductoresVM}">
                         <Border
                             Margin="3"
                             Padding="5"
@@ -162,8 +153,7 @@
 
                                 <!--  BOTON ALTERNAR SELECCION TABLA CONDUCTORES  -->
                                 <controls:BotonAlterno
-                                    Command="{Binding Source={x:Reference TablaConductores},
-                                                      Path=ComandoAlternarModoSeleccion}"
+                                    Command="{Binding Source={x:Reference TablaConductores}, Path=ComandoAlternarModoSeleccion}"
                                     ImagenActivo="Imagenes/SeleccionFila.png"
                                     ImagenInactivo="Imagenes/SeleccionCelda.png"
                                     TituloActivo="Selecc. Filas"
@@ -191,8 +181,7 @@
 
             <!--  BOTON PEGAR  -->
             <controls:BotonBarra
-                Command="{Binding ElementName=TablaConductores,
-                                  Path=ComandoPegar}"
+                Command="{Binding ElementName=TablaConductores, Path=ComandoPegar}"
                 Imagen="Imagenes/Pegar.png"
                 Titulo="Pegar" />
 
@@ -264,15 +253,28 @@
                 VerticalGridLinesBrush="Lavender">
 
                 <controls:QDataGrid.Resources>
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightBrushKey}"
-                        Color="PaleGoldenrod" />
-                    <SolidColorBrush
-                        x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
-                        Color="Black" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
+                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
                 </controls:QDataGrid.Resources>
 
                 <controls:QDataGrid.Columns>
+                    <DataGridCheckBoxColumn
+                        Width="1*"
+                        MinWidth="60"
+                        Binding="{Binding Activo, UpdateSourceTrigger=PropertyChanged}"
+                        IsThreeState="False">
+                        <DataGridCheckBoxColumn.Header>
+                            <TextBlock Text="Activo" ToolTip="Indica si el conductor está activo en la empresa o no." />
+                        </DataGridCheckBoxColumn.Header>
+                    </DataGridCheckBoxColumn>
+                    <DataGridTextColumn
+                        Width="1*"
+                        MinWidth="20"
+                        Binding="{Binding Categoria}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Cat" ToolTip="Categoría.&#x0a;    C=Conducción&#x0a;    T=Taquilla" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
                     <DataGridTextColumn
                         Width="2*"
                         MinWidth="60"
@@ -301,39 +303,33 @@
                     <DataGridCheckBoxColumn
                         Width="1*"
                         MinWidth="60"
-                        Binding="{Binding Indefinido,
-                                          UpdateSourceTrigger=PropertyChanged}"
+                        Binding="{Binding Indefinido, UpdateSourceTrigger=PropertyChanged}"
                         Header="Fijo"
                         IsThreeState="False" />
                     <DataGridTextColumn
                         Width="2*"
                         MinWidth="60"
-                        Binding="{Binding Acumuladas,
-                                          Converter={StaticResource cnvSuperHora}}"
+                        Binding="{Binding Acumuladas, Converter={StaticResource cnvSuperHora}}"
                         Header="Horas" />
                     <DataGridTextColumn
                         Width="2*"
                         MinWidth="60"
-                        Binding="{Binding Descansos,
-                                          Converter={StaticResource cnvDecimal6}}"
+                        Binding="{Binding Descansos, Converter={StaticResource cnvDecimal6}}"
                         Header="DCs" />
                     <DataGridTextColumn
                         Width="2*"
                         MinWidth="60"
-                        Binding="{Binding DescansosNoDisfrutados,
-                                          Converter={StaticResource cnvDecimal6}}"
+                        Binding="{Binding DescansosNoDisfrutados, Converter={StaticResource cnvDecimal6}}"
                         Header="DNDs" />
                     <DataGridTextColumn
                         Width="2*"
                         MinWidth="60"
-                        Binding="{Binding PlusDistancia,
-                                          Converter={StaticResource cnvDecimal}}"
+                        Binding="{Binding PlusDistancia, Converter={StaticResource cnvDecimal}}"
                         Header="Plus Distancia" />
                     <DataGridCheckBoxColumn
                         Width="1*"
                         MinWidth="60"
-                        Binding="{Binding ReduccionJornada,
-                                          UpdateSourceTrigger=PropertyChanged}"
+                        Binding="{Binding ReduccionJornada, UpdateSourceTrigger=PropertyChanged}"
                         Header="R.Jor."
                         IsThreeState="False" />
                 </controls:QDataGrid.Columns>
@@ -359,12 +355,10 @@
                 <Border
                     x:Name="BordePanelDerecho"
                     Grid.RowSpan="2"
-                    Width="{Binding ElementName=PanelRegulaciones,
-                                    Path=Width}"
+                    Width="{Binding ElementName=PanelRegulaciones, Path=Width}"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Stretch"
-                    BorderBrush="{Binding ElementName=TablaConductores,
-                                          Path=BorderBrush}"
+                    BorderBrush="{Binding ElementName=TablaConductores, Path=BorderBrush}"
                     BorderThickness="1" />
 
                 <Label
@@ -390,9 +384,7 @@
                     </Grid.RowDefinitions>
 
                     <!--  BARRA DE HERRAMIENTAS  -->
-                    <StackPanel
-                        Grid.Row="0"
-                        Orientation="Horizontal">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
 
                         <!--  BOTON BORRAR REGULACION  -->
                         <Button
@@ -401,9 +393,7 @@
                             Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Source="Imagenes/BorrarFila.png"
-                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image Source="Imagenes/BorrarFila.png" Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Borrar"
@@ -414,14 +404,10 @@
                         </Button>
 
                         <!--  BOTON DESHACER BORRAR REGULACIONES  -->
-                        <Button
-                            Command="{Binding ConductoresVM.cmdDeshacerBorrarRegulaciones}"
-                            Style="{StaticResource EstiloBotonBarraPequeña}">
+                        <Button Command="{Binding ConductoresVM.cmdDeshacerBorrarRegulaciones}" Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Source="Imagenes/ActualizarTabla.png"
-                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image Source="Imagenes/ActualizarTabla.png" Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Deshacer"
@@ -432,14 +418,10 @@
                         </Button>
 
                         <!--  BOTON AÑADIR A TODOS  -->
-                        <Button
-                            Command="{Binding ConductoresVM.cmdAñadirRegulacionATodos}"
-                            Style="{StaticResource EstiloBotonBarraPequeña}">
+                        <Button Command="{Binding ConductoresVM.cmdAñadirRegulacionATodos}" Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Source="Imagenes/VariasTablas.png"
-                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image Source="Imagenes/VariasTablas.png" Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Añadir A Todos"
@@ -493,23 +475,19 @@
                         <controls:QDataGrid.Columns>
                             <DataGridTextColumn
                                 Width="2*"
-                                Binding="{Binding Fecha,
-                                                  Converter={StaticResource cnvFecha}}"
+                                Binding="{Binding Fecha, Converter={StaticResource cnvFecha}}"
                                 Header="Fecha" />
                             <DataGridTextColumn
                                 Width="1.5*"
-                                Binding="{Binding Horas,
-                                                  Converter={StaticResource cnvSuperHora}}"
+                                Binding="{Binding Horas, Converter={StaticResource cnvSuperHora}}"
                                 Header="Horas" />
                             <DataGridTextColumn
                                 Width="1.5*"
-                                Binding="{Binding Descansos,
-                                                  Converter={StaticResource cnvDecimal6}}"
+                                Binding="{Binding Descansos, Converter={StaticResource cnvDecimal6}}"
                                 Header="DCs" />
                             <DataGridTextColumn
                                 Width="1.5*"
-                                Binding="{Binding Dnds,
-                                                  Converter={StaticResource cnvDecimal6}}"
+                                Binding="{Binding Dnds, Converter={StaticResource cnvDecimal6}}"
                                 Header="DNDs" />
                             <DataGridTextColumn
                                 Width="5*"

@@ -33,6 +33,7 @@ namespace Orion.ViewModels {
         private InformesServicio Informes;
         private IFileService fileService;
 
+
         // ViewModels
         private GraficosViewModel _graficosvm;
         private ConductoresViewModel _conductoresvm;
@@ -62,6 +63,12 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         public GlobalVM() {
 
+            // Creamos los servicios
+            mensajes = new MensajesServicio();
+            Informes = new InformesServicio();
+            fileService = new FileService();
+            ServicioOneDrive = new OneDriveService();
+
             // Definimos la carpeta 'Orion' en la carpeta 'Documentos' del usuario. Si no existe, la creamos.
             CarpetaOrion = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "Orion");
             if (!Directory.Exists(CarpetaOrion)) Directory.CreateDirectory(CarpetaOrion);
@@ -69,36 +76,6 @@ namespace Orion.ViewModels {
             // Definimos la carpeta 'Configuracion' en la carpeta 'Orion'. Si no existe, la creamos.
             CarpetaConfiguracion = Path.Combine(CarpetaOrion, "Configuracion");
             if (!Directory.Exists(CarpetaConfiguracion)) Directory.CreateDirectory(CarpetaConfiguracion);
-
-            // Definimos la carpeta 'Datos' en la carpeta 'Orion' del usuario. Si no existe, la creamos.
-            //CarpetaDatos = Path.Combine(CarpetaOrion, "Datos");
-            //if (!Directory.Exists(CarpetaDatos)) Directory.CreateDirectory(CarpetaDatos);
-
-            // ----------------------------------------------------------------------------------------------------------------------------
-            // Copiar los archivos de configuración de la raiz (si existen) a la carpeta de configuracion en 'Documentos/Orion', siempre
-            // que no existan ya.
-            //
-            // El siguiente bloque se puede eliminar una vez que ya llevemos un tiempo usando las nuevas ubicaciones de los archivos.
-            // ----------------------------------------------------------------------------------------------------------------------------
-            // CONFIG
-            if (!File.Exists(ArchivoOpcionesConfiguracion) && File.Exists("Config.json"))
-                File.Copy("Config.json", ArchivoOpcionesConfiguracion);
-            // CONVENIO
-            if (!File.Exists(ArchivoOpcionesConvenio) && File.Exists("Convenio.json"))
-                File.Copy("Convenio.json", ArchivoOpcionesConvenio);
-            // ARRASATE
-            if (!File.Exists(GetArchivoPorCentroPath(Centros.Arrasate)) && File.Exists($"PorCentro{Centros.Arrasate}.json"))
-                File.Copy($"PorCentro{Centros.Arrasate}.json", GetArchivoPorCentroPath(Centros.Arrasate));
-            // DONOSTI
-            if (!File.Exists(GetArchivoPorCentroPath(Centros.Donosti)) && File.Exists($"PorCentro{Centros.Donosti}.json"))
-                File.Copy($"PorCentro{Centros.Donosti}.json", GetArchivoPorCentroPath(Centros.Donosti));
-            // BILBAO
-            if (!File.Exists(GetArchivoPorCentroPath(Centros.Bilbao)) && File.Exists($"PorCentro{Centros.Bilbao}.json"))
-                File.Copy($"PorCentro{Centros.Bilbao}.json", GetArchivoPorCentroPath(Centros.Bilbao));
-            // VITORIA
-            if (!File.Exists(GetArchivoPorCentroPath(Centros.Vitoria)) && File.Exists($"PorCentro{Centros.Vitoria}.json"))
-                File.Copy($"PorCentro{Centros.Vitoria}.json", GetArchivoPorCentroPath(Centros.Vitoria));
-            // ----------------------------------------------------------------------------------------------------------------------------
 
             // Cargamos la configuracion
             Configuracion.Cargar(ArchivoOpcionesConfiguracion);
@@ -111,10 +88,6 @@ namespace Orion.ViewModels {
             if (Configuracion.CarpetaAyuda == "") Configuracion.CarpetaAyuda = CreateAndGetCarpetaEnOrion("Ayuda");
             if (Configuracion.CarpetaCopiasSeguridad == "") Configuracion.CarpetaCopiasSeguridad = CreateAndGetCarpetaEnOrion("CopiasSeguridad");
             if (Configuracion.CarpetaOrigenActualizar == "") Configuracion.CarpetaOrigenActualizar = App.RutaInicial;
-            // Creamos los servicios
-            mensajes = new MensajesServicio();
-            Informes = new InformesServicio();
-            fileService = new FileService();
 
             // Asignamos el centro actual.
             CentroActual = (Centros)Configuracion.CentroInicial;
@@ -264,12 +237,12 @@ namespace Orion.ViewModels {
             Configuracion.Guardar(ArchivoOpcionesConfiguracion);
             Convenio.Guardar(ArchivoOpcionesConvenio);
             if (_centroactual != Centros.Desconocido) PorCentro.Guardar(ArchivoOpcionesPorCentro);
-            //App.Global.Configuracion.Save();
-            //App.Global.Convenio2.Save();
-            //PorCentro.Default.Save();
 
             // Si hay que sincronizar con DropBox, se copian los archivos.
             if (Configuracion.SincronizarEnDropbox) Respaldo.SincronizarDropbox();
+
+            // Guardamos el estado de OneDrive
+            File.WriteAllText(ArchivoOpcionesOneDrive, ServicioOneDrive.GetConfiguracionCodificada(), System.Text.Encoding.UTF8);
 
             // Intentamos cerrar la calculadora, si existe.
             if (App.Calculadora != null) App.Calculadora.Close();
@@ -484,6 +457,12 @@ namespace Orion.ViewModels {
 
 
 
+        private string paginaWeb = "about:blank";
+        public string PaginaWeb {
+            get => paginaWeb;
+            set => SetValue(ref paginaWeb, value);
+        }
+
         //====================================================================================================
         // REPOSITORIO DE DATOS
         //====================================================================================================
@@ -561,6 +540,10 @@ namespace Orion.ViewModels {
             set => SetValue(ref _mostrarBotonCerrar, value);
         }
 
+
+        public OneDriveService ServicioOneDrive { get; set; }
+
+        public IMensajes Mensajes { get => mensajes; }
 
 
 
@@ -674,6 +657,13 @@ namespace Orion.ViewModels {
         public string ArchivoOpcionesConvenio {
             get {
                 return Path.Combine(CarpetaConfiguracion, "Convenio.json");
+            }
+        }
+
+
+        public string ArchivoOpcionesOneDrive {
+            get {
+                return Path.Combine(CarpetaConfiguracion, "OneDrive.json");
             }
         }
 

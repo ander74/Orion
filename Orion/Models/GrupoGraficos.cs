@@ -170,6 +170,7 @@ namespace Orion.Models {
 
 
         [JsonIgnore]
+        [Obsolete("No se utiliza en el repositorio, ya que se extrae la consulta de los parámetros.")]
         public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO GruposGraficos (" +
                 "Validez, " +

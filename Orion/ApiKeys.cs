@@ -15,8 +15,16 @@ namespace Orion {
     /// </summary>
     public static partial class ApiKeys {
 
+        /* DROPBOX */
         public static readonly string DropboxAppKey = "";
         public static readonly string DropboxAppKeySecret = "";
+
+
+        /* ONE DRIVE */
+        public static readonly string OneDriveClientId = "";
+        public static readonly string OneDriveClientSecret = "";
+        public static readonly string OneDriveTenantId = "";
+        public static readonly string OneDriveScope = "";
 
     }
 }

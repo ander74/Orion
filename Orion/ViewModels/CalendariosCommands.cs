@@ -1050,6 +1050,7 @@ namespace Orion.ViewModels {
             return VistaCalendarios.Count > 1;
         }
 
+        [STAThread]
         private async void PdfEstadisticasMes() {
             try {
                 // Creamos las listas que se van a usar.

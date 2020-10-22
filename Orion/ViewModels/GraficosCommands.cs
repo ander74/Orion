@@ -893,6 +893,7 @@ namespace Orion.ViewModels {
                     if (App.Global.PorCentro.RangoVie.Validar(grafico.Numero)) grafico.DiaSemana = "V";
                     if (App.Global.PorCentro.RangoSab.Validar(grafico.Numero)) grafico.DiaSemana = "S";
                     if (App.Global.PorCentro.RangoDom.Validar(grafico.Numero)) grafico.DiaSemana = "F";
+                    if (App.Global.PorCentro.RangoRes.Validar(grafico.Numero)) grafico.DiaSemana = "R";
                 }
             }
         }

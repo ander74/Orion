@@ -856,6 +856,15 @@
                     </DataGridCheckBoxColumn>
 
                     <DataGridTextColumn
+                        Width="0.3*"
+                        MinWidth="20"
+                        Binding="{Binding Categoria}">
+                        <DataGridTextColumn.Header>
+                            <TextBlock Text="Cat" ToolTip="Categoría.&#x0a;    C=Conducción&#x0a;    T=Taquilla" />
+                        </DataGridTextColumn.Header>
+                    </DataGridTextColumn>
+
+                    <DataGridTextColumn
                         Width="1*"
                         MinWidth="60"
                         Binding="{Binding Numero, Converter={StaticResource cnvNumGrafico}}"

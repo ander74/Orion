@@ -156,32 +156,31 @@
                     Content="Grupo de gráficos desde archivo exportado"
                     FontSize="14"
                     FontWeight="Bold"
-                    Foreground="LightGray"
                     IsChecked="{Binding WordMarcado}"
-                    IsEnabled="False" />
+                    IsEnabled="True" />
 
                 <TextBlock
                     Margin="40,5,15,0"
                     FontSize="12"
-                    Foreground="LightGray"
-                    IsEnabled="False"
+                    IsEnabled="True"
                     TextWrapping="Wrap">
                     Crea un grupo de gráficos desde un archivo exportado.
                 </TextBlock>
 
                 <StackPanel Margin="40,10,0,0" Orientation="Horizontal">
                     <TextBox
-                        Width="380"
+                        Width="350"
                         Height="25"
                         Margin="2"
                         VerticalContentAlignment="Center"
                         Background="White"
                         FontSize="14"
                         IsEnabled="{Binding ElementName=rbWord, Path=IsChecked}"
-                        Text="{Binding ArchivoWord}" />
+                        Text="{Binding ArchivoWord, UpdateSourceTrigger=PropertyChanged}" />
                     <Button
                         Width="30"
                         Margin="2"
+                        Content="..."
                         Command="{Binding cmdSeleccionarArchivo}"
                         IsEnabled="{Binding ElementName=rbWord, Path=IsChecked}"
                         Style="{StaticResource EstiloBoton}" />

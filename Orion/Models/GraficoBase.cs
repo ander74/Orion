@@ -234,6 +234,14 @@ namespace Orion.Models {
         }
 
 
+
+        private string categoria;
+        public string Categoria {
+            get => categoria;
+            set => SetValue(ref categoria, value);
+        }
+
+
         private int _numero;
         public int Numero {
             get { return _numero; }
@@ -523,6 +531,7 @@ namespace Orion.Models {
             _idgrupo = lector.ToInt32("IdGrupo");
             validez = lector.ToDateTime("Validez");
             _nocalcular = lector.ToBool("NoCalcular");
+            categoria = lector.ToString("Categoria");
             _numero = lector.ToInt32("Numero");
             _diasemana = lector.ToString("DiaSemana");
             _turno = lector.ToInt32("Turno");
@@ -552,6 +561,7 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("IdGrupo", IdGrupo));
                 lista.Add(new SQLiteParameter("Validez", Validez.ToString("yyyy-MM-dd")));
                 lista.Add(new SQLiteParameter("NoCalcular", NoCalcular));
+                lista.Add(new SQLiteParameter("Categoria", Categoria));
                 lista.Add(new SQLiteParameter("Numero", Numero));
                 lista.Add(new SQLiteParameter("DiaSemana", DiaSemana));
                 lista.Add(new SQLiteParameter("Turno", Turno));
@@ -609,6 +619,7 @@ namespace Orion.Models {
 
 
         [JsonIgnore]
+        [Obsolete("No se utiliza en el repositorio, ya que se extrae la consulta de los parámetros.")]
         public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO Graficos (" +
                 "IdGrupo, " +

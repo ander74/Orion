@@ -6,6 +6,7 @@
 // ===============================================
 #endregion
 namespace Orion.Models {
+    using System;
     using System.Collections.Generic;
     using System.Data.Common;
     using System.Data.OleDb;
@@ -242,6 +243,7 @@ namespace Orion.Models {
 
 
         [JsonIgnore]
+        [Obsolete("No se utiliza en el repositorio, ya que se extrae la consulta de los parámetros.")]
         public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO Pluses (" +
                 "Año, " +

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Orion</RootNamespace>
     <AssemblyName>Orion</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
@@ -35,7 +35,7 @@
     <ProductName>Orion</ProductName>
     <PublisherName>AnderSoft</PublisherName>
     <SuiteName>Orion</SuiteName>
-    <ApplicationRevision>9</ApplicationRevision>
+    <ApplicationRevision>11</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -261,6 +261,12 @@
     <Compile Include="DataModels\ProcSQL.cs" />
     <Compile Include="DataModels\Respaldo.cs" />
     <Compile Include="Extensiones.cs" />
+    <Compile Include="Forms\FormsWebDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\FormsWebDialog.Designer.cs">
+      <DependentUpon>FormsWebDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Interfaces\IFileService.cs" />
     <Compile Include="Interfaces\ISQLiteItem.cs" />
     <Compile Include="Models\DescansosPorDia.cs" />
@@ -271,6 +277,7 @@
     <Compile Include="Models\GraficoFecha.cs" />
     <Compile Include="Models\GraficosPorDia.cs" />
     <Compile Include="Models\ItemResumenAnual.cs" />
+    <Compile Include="Models\OneDrive\TokenResponse.cs" />
     <Compile Include="Models\OpcionesConfiguracion.cs" />
     <Compile Include="Models\OpcionesConvenio.cs" />
     <Compile Include="Models\DiaCalendario.cs" />
@@ -309,6 +316,7 @@
     <Compile Include="PrintModel\PijamaPrintModel.cs" />
     <Compile Include="PrintModel\ReclamacionPrintModel.cs" />
     <Compile Include="Servicios\LineasRepository.cs" />
+    <Compile Include="Servicios\OneDriveService.cs" />
     <Compile Include="Servicios\OrionRepository.cs" />
     <Compile Include="Servicios\SQLiteRepository.cs" />
     <Compile Include="Servicios\DbService2.cs" />
@@ -394,6 +402,9 @@
     <Compile Include="Views\VentanaRegularAño.xaml.cs">
       <DependentUpon>VentanaRegularAño.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\VentanaWeb.xaml.cs">
+      <DependentUpon>VentanaWeb.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\VistaCalendarios.xaml.cs">
       <DependentUpon>VistaCalendarios.xaml</DependentUpon>
     </Compile>
@@ -402,6 +413,9 @@
     </Compile>
     <Compile Include="Views\VistaEstadisticas.xaml.cs">
       <DependentUpon>VistaEstadisticas.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VistaInformes.xaml.cs">
+      <DependentUpon>VistaInformes.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VistaEstadisticasTurnos.xaml.cs">
       <DependentUpon>VistaEstadisticasTurnos.xaml</DependentUpon>
@@ -556,6 +570,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\VentanaWeb.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\VistaCalendarios.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -565,6 +583,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\VistaEstadisticas.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VistaInformes.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -614,6 +636,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Forms\FormsWebDialog.resx">
+      <DependentUpon>FormsWebDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -868,7 +893,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EPPlus">
-      <Version>5.3.2</Version>
+      <Version>5.4.0</Version>
     </PackageReference>
     <PackageReference Include="Extended.Wpf.Toolkit">
       <Version>4.0.1</Version>

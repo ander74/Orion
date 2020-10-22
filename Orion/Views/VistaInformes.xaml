@@ -1,0 +1,163 @@
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
+<!--  Vea el archivo Licencia.txt para mas detalles  -->
+<!--  ===============================================  -->
+<UserControl
+    x:Class="Orion.Views.VistaInformes"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cnv="clr-namespace:Orion.Convertidores"
+    xmlns:local="clr-namespace:Orion.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit">
+
+
+    <!--  ====================================================================================================  -->
+    <!--  RECURSOS  -->
+    <!--  ====================================================================================================  -->
+    <UserControl.Resources>
+
+        <!--  CONVERTIDORES  -->
+        <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
+
+    </UserControl.Resources>
+
+
+
+    <!--  ====================================================================================================  -->
+    <!--  CONTENIDO  -->
+    <!--  ====================================================================================================  -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="6*" />
+        </Grid.ColumnDefinitions>
+
+        <!--  ··················································  -->
+        <!--  PANEL LATERAL  -->
+        <!--  ··················································  -->
+        <StackPanel Background="{StaticResource FondoCeleste1}" Orientation="Vertical">
+
+
+            <!--  GRUPO GRÁFICOS  -->
+            <ToggleButton
+                x:Name="BtGrupoGraficos"
+                Content="Gráficos"
+                Style="{StaticResource EstiloBotonGrupoInformes}" />
+            <!--  CONTENIDO GRÁFICOS  -->
+            <Grid Margin="5,5,6,5" Visibility="{Binding ElementName=BtGrupoGraficos, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+                <Border
+                    Margin="0,-10,0,0"
+                    BorderBrush="{StaticResource AzulOscuro}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,0,0" />
+
+                <!--  PANEL  -->
+                <StackPanel Margin="5" Orientation="Vertical">
+
+                    <TextBlock Text="PRUEBA" />
+
+                </StackPanel>
+            </Grid>
+
+
+            <!--  GRUPO CONDUCTORES  -->
+            <ToggleButton
+                x:Name="BtGrupoConductores"
+                Content="Conductores"
+                Style="{StaticResource EstiloBotonGrupoInformes}" />
+            <!--  CONTENIDO CONDUCTORES  -->
+            <Grid Margin="5,5,6,5" Visibility="{Binding ElementName=BtGrupoConductores, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+                <Border
+                    Margin="0,-10,0,0"
+                    BorderBrush="{StaticResource AzulOscuro}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,0,0" />
+
+                <!--  PANEL  -->
+                <StackPanel Margin="5" Orientation="Vertical">
+
+                    <TextBlock Text="PRUEBA" />
+
+                </StackPanel>
+            </Grid>
+
+
+            <!--  GRUPO CALENDARIOS  -->
+            <ToggleButton
+                x:Name="BtGrupoCalendarios"
+                Content="Calendarios"
+                Style="{StaticResource EstiloBotonGrupoInformes}" />
+            <!--  CONTENIDO CALENDARIOS  -->
+            <Grid Margin="5,5,6,5" Visibility="{Binding ElementName=BtGrupoCalendarios, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+                <Border
+                    Margin="0,-10,0,0"
+                    BorderBrush="{StaticResource AzulOscuro}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,0,0" />
+
+                <!--  PANEL  -->
+                <StackPanel Margin="5" Orientation="Vertical">
+
+                    <TextBlock Text="PRUEBA" />
+
+                </StackPanel>
+            </Grid>
+
+
+            <!--  GRUPO LÍNEAS  -->
+            <ToggleButton
+                x:Name="BtGrupoLineas"
+                Content="Líneas"
+                Style="{StaticResource EstiloBotonGrupoInformes}" />
+            <!--  CONTENIDO LÍNEAS  -->
+            <Grid Margin="5,5,6,5" Visibility="{Binding ElementName=BtGrupoLineas, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+                <Border
+                    Margin="0,-10,0,0"
+                    BorderBrush="{StaticResource AzulOscuro}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,0,0" />
+
+                <!--  PANEL  -->
+                <StackPanel Margin="5" Orientation="Vertical">
+
+                    <TextBlock Text="PRUEBA" />
+
+                </StackPanel>
+            </Grid>
+
+
+            <!--  GRUPO OTROS  -->
+            <ToggleButton
+                x:Name="BtGrupoOtros"
+                Content="Otros"
+                Style="{StaticResource EstiloBotonGrupoInformes}" />
+            <!--  CONTENIDO OTROS  -->
+            <Grid Margin="5,5,6,5" Visibility="{Binding ElementName=BtGrupoOtros, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+                <Border
+                    Margin="0,-10,0,0"
+                    BorderBrush="{StaticResource AzulOscuro}"
+                    BorderThickness="1,0,1,1"
+                    CornerRadius="0,0,0,0" />
+
+                <!--  PANEL  -->
+                <StackPanel Margin="5" Orientation="Vertical">
+
+                    <TextBlock Text="PRUEBA" />
+
+                </StackPanel>
+            </Grid>
+
+
+
+
+        </StackPanel>
+
+    </Grid>
+
+
+</UserControl>

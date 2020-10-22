@@ -740,6 +740,8 @@ namespace Orion.PrintModel {
             int totalDescansos = 0;
             int totalGraficosTotales = 0;
             int totalGraficosAsignados = 0;
+            int totalGraficosNoAsignados = 0;
+            int totalGraficosNoExisten = 0;
 
 
             // Creamos la tabla que tendrá la Hoja Pijama.
@@ -782,16 +784,17 @@ namespace Orion.PrintModel {
             }
 
             // Definimos un array de textos que se van a añadir después a la tabla.
-            string[,] celdas = new string[7, diasMes + 1];
+            string[,] celdas = new string[8, diasMes + 1];
 
             // Añadimos las celdas de encabezado para las filas
-            celdas[0, 0] = "Gráficos\nNo Asignados";
+            celdas[0, 0] = "Gráficos\nNo Asignad.";
             celdas[1, 0] = "Trabajadas";
             celdas[2, 0] = "Descansos";
-            celdas[3, 0] = "Gr.Totales";
+            celdas[3, 0] = "Gr.En Grupo";
             celdas[4, 0] = "Asignados";
-            celdas[5, 0] = "No Asignados";
-            celdas[6, 0] = "Gráficos\nNo Existen";
+            celdas[5, 0] = "No Asignad.";
+            celdas[6, 0] = "No Existen";
+            celdas[7, 0] = "Gráficos\nNo Existen";
 
             // Creamos todas las celdas.
             for (int dia = 1; dia <= diasMes; dia++) {
@@ -803,12 +806,18 @@ namespace Orion.PrintModel {
 
                 // GRÁFICOS NO ASIGNADOS
                 List<int> noAsignados = numeros.Lista.Except(graficos.Select(g => g.Numero)).ToList();
-                string graficosSinAsignar = "";
+                totalGraficosNoAsignados += noAsignados.Count;
+                string graficosSinAsignar = string.Empty;
                 foreach (int i in noAsignados) {
-                    if (graficosSinAsignar.Length == 0) graficosSinAsignar += "\n";
+                    //if (graficosSinAsignar.Length == 0) graficosSinAsignar += "\n";
                     graficosSinAsignar += $"{i:0000}\n";
                 }
-                celdas[0, dia] = graficosSinAsignar + "\n";
+                if (string.IsNullOrEmpty(graficosSinAsignar)) {
+                    graficosSinAsignar += "\n";
+                } else {
+                    graficosSinAsignar = graficosSinAsignar.Substring(0, graficosSinAsignar.Length - 1);
+                }
+                celdas[0, dia] = graficosSinAsignar;
 
                 // TRABAJADAS
                 long trabajadas = graficos.Sum(g => g.Trabajadas.Ticks);
@@ -831,26 +840,39 @@ namespace Orion.PrintModel {
                 celdas[4, dia] = $"{graficosAsignados:00}";
 
                 // GRÁFICOS NO ASIGNADOS
-                celdas[5, dia] = $"{graficosTotales - graficosAsignados:00}";
+                celdas[5, dia] = $"{noAsignados.Count:00}";
+
+                // GRÁFICOS NO EXISTEN
+                string graficosNoExisten = string.Empty;
+                int noExisten = 0;
+                foreach (var g in graficos) {
+                    if (!numeros.Lista.Any(n => n == g.Numero)) {
+                        graficosNoExisten += $"{g.Numero:0000}\n";
+                        noExisten++;
+                    }
+                }
+                totalGraficosNoExisten += noExisten;
+                celdas[6, dia] = $"{noExisten:00}";
 
                 // GRÁFICOS NO EXISTENTES
-                List<int> noExistentes = graficos.Select(g => g.Numero).Except(numeros.Lista).ToList();
-                string graficosNoExisten = "";
-                foreach (int i in noExistentes) {
-                    if (graficosNoExisten.Length == 0) graficosNoExisten += "\n";
-                    graficosNoExisten += $"{i:0000}\n";
+                if (string.IsNullOrEmpty(graficosNoExisten)) {
+                    graficosNoExisten += "\n";
+                } else {
+                    graficosNoExisten = graficosNoExisten.Substring(0, graficosNoExisten.Length - 1);
                 }
-                celdas[6, dia] = graficosNoExisten + "\n";
+                celdas[7, dia] = graficosNoExisten;
             }
 
             // AÑADIMOS LAS CELDAS A LA TABLA
-            for (int fila = 0; fila < 7; fila++) {
+            for (int fila = 0; fila < 8; fila++) {
                 for (int dia = 0; dia <= diasMes; dia++) {
                     Cell celda = new Cell().Add(new Paragraph(celdas[fila, dia]));
+                    celda.SetVerticalAlignment(VerticalAlignment.MIDDLE);
                     if (fila % 2 == 0 && dia > 0) celda.SetBackgroundColor(new DeviceRgb(204, 236, 255));
                     if (dia == 0) celda.AddStyle(estiloEncabezadoFilas);
                     if (dia == diasMes) celda.AddStyle(estiloCeldaDerecha);
-                    if (fila == 0 || fila == 6) celda.SetBorderBottom(new SolidBorder(1));
+                    if (fila == 0 || fila >= 6) celda.SetBorderBottom(new SolidBorder(1));
+                    if (fila == 0 || fila == 7) celda.SetMinHeight(30); else celda.SetMinHeight(15);
                     tabla.AddCell(celda);
                 }
             }
@@ -864,16 +886,34 @@ namespace Orion.PrintModel {
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph("Total Gráficos")).AddStyle(estiloTotalesEncabezado));
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph("Total Asignados")).AddStyle(estiloTotalesEncabezado));
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph("Total No Asignados")).AddStyle(estiloTotalesEncabezado));
-            tabla.AddCell(new Cell(1, diasMes + 1 - 15).Add(new Paragraph()).SetBorder(Border.NO_BORDER));
+            tabla.AddCell(new Cell(1, 4).Add(new Paragraph("Total No Existen")).AddStyle(estiloTotalesEncabezado));
+            tabla.AddCell(new Cell(1, diasMes + 1 - 23).Add(new Paragraph()).SetBorder(Border.NO_BORDER));
 
             // AÑADIMOS LOS TOTALES
             tabla.AddCell(new Cell(1, 3).Add(new Paragraph((string)cnvHora.Convert(new TimeSpan(totalTrabajadas), null, VerValores.HoraPlus, null))).AddStyle(estiloTotales));
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalDescansos:00}")).AddStyle(estiloTotales));
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalGraficosTotales:00}")).AddStyle(estiloTotales));
             tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalGraficosAsignados:00}")).AddStyle(estiloTotales));
-            tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalGraficosTotales - totalGraficosAsignados:00}")).AddStyle(estiloTotales));
-            tabla.AddCell(new Cell(1, diasMes + 1 - 15).Add(new Paragraph()).SetBorder(Border.NO_BORDER));
+            tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalGraficosNoAsignados:00}")).AddStyle(estiloTotales));
+            tabla.AddCell(new Cell(1, 4).Add(new Paragraph($"{totalGraficosNoExisten:00}")).AddStyle(estiloTotales));
+            tabla.AddCell(new Cell(1, diasMes + 1 - 23).Add(new Paragraph()).SetBorder(Border.NO_BORDER));
 
+            // AÑADIMOS UNA FILA VACÍA
+            tabla.AddCell(new Cell(1, diasMes + 1).Add(new Paragraph("\n\n")).SetBorder(Border.NO_BORDER));
+
+            // AÑADIMOS ACLARACIÓN
+            var tit = new Text("TRABAJADAS").SetBold();
+            var txt = new Text(" = Horas reales trabajadas asignadas a los gráficos (no al calendario) sin ajustar a la jornada media.");
+            var parrafo = new Paragraph().Add(tit).Add(txt).SetTextAlignment(TextAlignment.LEFT).SetFontSize(10);
+            tabla.AddCell(new Cell(1, diasMes + 1).Add(parrafo).SetBorder(Border.NO_BORDER));
+            tit = new Text("NO ASIGNADOS").SetBold();
+            txt = new Text(" = Gráficos que están en el grupo de gráficos y nadie los hace.");
+            parrafo = new Paragraph().Add(tit).Add(txt).SetTextAlignment(TextAlignment.LEFT).SetFontSize(10);
+            tabla.AddCell(new Cell(1, diasMes + 1).Add(parrafo).SetBorder(Border.NO_BORDER));
+            tit = new Text("NO EXISTEN").SetBold();
+            txt = new Text(" = Gráficos que alguien hace, pero que no existen en el grupo de gráficos (si no tienen trabajadas, computan la jornada media).");
+            parrafo = new Paragraph().Add(tit).Add(txt).SetTextAlignment(TextAlignment.LEFT).SetFontSize(10);
+            tabla.AddCell(new Cell(1, diasMes + 1).Add(parrafo).SetBorder(Border.NO_BORDER));
 
             return tabla;
         }

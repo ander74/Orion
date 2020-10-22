@@ -201,6 +201,20 @@ namespace Orion.Models {
         }
 
 
+        private bool activo;
+        public bool Activo {
+            get => activo;
+            set => SetValue(ref activo, value);
+        }
+
+
+        private string categoria = "C";
+        public string Categoria {
+            get => categoria;
+            set => SetValue(ref categoria, value);
+        }
+
+
         private int matricula;
         [Author("Mi Matricula")]
         public int Matricula {
@@ -392,6 +406,8 @@ namespace Orion.Models {
 
         public virtual void FromReader(DbDataReader lector) {
             _id = lector.ToInt32("_id");
+            activo = lector.ToBool("Activo");
+            categoria = lector.ToString("Categoria");
             matricula = lector.ToInt32("Matricula");
             _nombre = lector.ToString("Nombre");
             _apellidos = lector.ToString("Apellidos");
@@ -413,6 +429,8 @@ namespace Orion.Models {
         public virtual IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
+                lista.Add(new SQLiteParameter("Activo", Activo ? 1 : 0));
+                lista.Add(new SQLiteParameter("Categoria", Categoria));
                 lista.Add(new SQLiteParameter("Matricula", Matricula));
                 lista.Add(new SQLiteParameter("Nombre", Nombre));
                 lista.Add(new SQLiteParameter("Apellidos", Apellidos));
@@ -466,6 +484,7 @@ namespace Orion.Models {
 
 
         [JsonIgnore]
+        [Obsolete("No se utiliza en el repositorio, ya que se extrae la consulta de los parámetros.")]
         public virtual string ComandoInsertar {
             get => "INSERT OR REPLACE INTO Conductores (" +
                 "Matricula, " +

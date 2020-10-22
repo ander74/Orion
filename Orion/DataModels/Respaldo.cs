@@ -96,12 +96,14 @@ namespace Orion.DataModels {
         /// Evalúa las fechas de modificación de los archivos de Dropbox y locales y actualiza los más antiguos.
         /// </summary>
         public static void SincronizarDropbox() {
-            // Utilizar File.GetLastWriteTime para extraer la información de los archivos y compararlos.
+
+            // Si no hay conductores significa que el archivo local es nuevo y evitará sincronizarlo de subida.
+            var nuevo = App.Global.ConductoresVM.ListaConductores.Count == 0;
 
             // ARCHIVO DE LÍNEAS
             string local = Path.Combine(App.Global.Configuracion.CarpetaDatos, "Lineas.db3");
             string dropbox = Path.Combine(App.Global.Configuracion.CarpetaDropbox, "Lineas.db3");
-            if (File.GetLastWriteTime(local) > File.GetLastWriteTime(dropbox)) {
+            if (!nuevo && File.GetLastWriteTime(local) > File.GetLastWriteTime(dropbox)) {
                 File.Copy(local, dropbox, true);
             } else if (File.GetLastWriteTime(local) < File.GetLastWriteTime(dropbox)) {
                 File.Copy(dropbox, local, true);
@@ -109,7 +111,7 @@ namespace Orion.DataModels {
             // ARRASATE
             local = Path.Combine(App.Global.Configuracion.CarpetaDatos, "Arrasate.db3");
             dropbox = Path.Combine(App.Global.Configuracion.CarpetaDropbox, "Arrasate.db3");
-            if (File.GetLastWriteTime(local) > File.GetLastWriteTime(dropbox)) {
+            if (!nuevo && File.GetLastWriteTime(local) > File.GetLastWriteTime(dropbox)) {
                 File.Copy(local, dropbox, true);
             } else if (File.GetLastWriteTime(local) < File.GetLastWriteTime(dropbox)) {
                 File.Copy(dropbox, local, true);
@@ -117,7 +119,7 @@ namespace Orion.DataModels {
             // BILBAO
             local = Path.Combine(App.Global.Configuracion.CarpetaDatos, "Bilbao.db3");
             dropbox = Path.Combine(App.Global.Configuracion.CarpetaDropbox, "Bilbao.db3");
-            if (File.GetLastWriteTime(local) > File.GetLastWriteTime(dropbox)) {
+            if (!nuevo && File.GetLastWriteTime(local) > File.GetLastWriteTime(dropbox)) {
                 File.Copy(local, dropbox, true);
             } else if (File.GetLastWriteTime(local) < File.GetLastWriteTime(dropbox)) {
                 File.Copy(dropbox, local, true);
@@ -125,7 +127,7 @@ namespace Orion.DataModels {
             // DONOSTI
             local = Path.Combine(App.Global.Configuracion.CarpetaDatos, "Donosti.db3");
             dropbox = Path.Combine(App.Global.Configuracion.CarpetaDropbox, "Donosti.db3");
-            if (File.GetLastWriteTime(local) > File.GetLastWriteTime(dropbox)) {
+            if (!nuevo && File.GetLastWriteTime(local) > File.GetLastWriteTime(dropbox)) {
                 File.Copy(local, dropbox, true);
             } else if (File.GetLastWriteTime(local) < File.GetLastWriteTime(dropbox)) {
                 File.Copy(dropbox, local, true);
@@ -133,7 +135,7 @@ namespace Orion.DataModels {
             // VITORIA
             local = Path.Combine(App.Global.Configuracion.CarpetaDatos, "Vitoria.db3");
             dropbox = Path.Combine(App.Global.Configuracion.CarpetaDropbox, "Vitoria.db3");
-            if (File.GetLastWriteTime(local) > File.GetLastWriteTime(dropbox)) {
+            if (!nuevo && File.GetLastWriteTime(local) > File.GetLastWriteTime(dropbox)) {
                 File.Copy(local, dropbox, true);
             } else if (File.GetLastWriteTime(local) < File.GetLastWriteTime(dropbox)) {
                 File.Copy(dropbox, local, true);
