@@ -585,9 +585,14 @@ namespace Orion.ViewModels {
         private ICommand sincronizarNubePulsado;
         public ICommand cmdSincronizarNubePulsado {
             get {
-                if (sincronizarNubePulsado == null) sincronizarNubePulsado = new RelayCommand(p => SincronizarNubePulsado());
+                if (sincronizarNubePulsado == null) sincronizarNubePulsado = new RelayCommand(p => SincronizarNubePulsado(), p => PuedeSincronizarNubePulsado());
                 return sincronizarNubePulsado;
             }
+        }
+
+        private bool PuedeSincronizarNubePulsado() {
+            //if (string.IsNullOrEmpty(App.Global.Configuracion.CarpetaDropbox)) return false;
+            return true;
         }
 
         // Ejecución del comando

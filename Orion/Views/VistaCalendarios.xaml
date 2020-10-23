@@ -25,7 +25,6 @@
     <UserControl.Resources>
 
         <cnv:ConvertidorPrueba x:Key="cnvPrueba" />
-
         <cnv:ConvertidorTextoNegrita x:Key="cnvTextoNegrita" />
         <cnv:ConvertidorMinutosToHoraMixta x:Key="cnvMinutosToHoraMixta" />
         <cnv:ConvertidorColorDia x:Key="cnvColorDia" />
@@ -278,13 +277,6 @@
                                     Margin="5,3"
                                     Background="LightGray" />
 
-                                <!--  BOTON ALTERNAR SELECCION TABLA CALENDARIOS  -->
-                                <controls:BotonAlterno
-                                    Command="{Binding Source={x:Reference TablaCalendarios}, Path=ComandoAlternarModoSeleccion}"
-                                    ImagenActivo="Imagenes/SeleccionFila.png"
-                                    ImagenInactivo="Imagenes/SeleccionCelda.png"
-                                    TituloActivo="Selecc. Filas"
-                                    TituloInactivo="Selec. Celdas" />
                             </StackPanel>
                         </Border>
                     </Border>
@@ -297,18 +289,33 @@
                 Margin="3,5"
                 Background="LightGray" />
 
+            <!--  BOTON ALTERNAR SELECCION TABLA CALENDARIOS  -->
+            <!--<controls:BotonAlterno
+                Command="{Binding Source={x:Reference TablaCalendarios}, Path=ComandoAlternarModoSeleccion}"
+                ImagenActivo="Imagenes/SeleccionFila.png"
+                ImagenInactivo="Imagenes/SeleccionCelda.png"
+                TituloActivo="Selección Filas"
+                TituloInactivo="Selección Celdas" />-->
+
             <!--  BOTON COPIAR  -->
             <controls:BotonBarra
-                Command="ApplicationCommands.Copy"
-                CommandTarget="{Binding ElementName=TablaCalendarios}"
+                Command="{Binding ElementName=TablaCalendarios, Path=ComandoCopiar}"
                 Imagen="Imagenes/Copiar.png"
-                Titulo="Copiar" />
+                Titulo="Copiar"
+                ToolTip="Sólo funciona si está en modo Selección Celdas." />
 
             <!--  BOTON PEGAR  -->
             <controls:BotonBarra
                 Command="{Binding ElementName=TablaCalendarios, Path=ComandoPegar}"
                 Imagen="Imagenes/Pegar.png"
-                Titulo="Pegar" />
+                Titulo="Pegar"
+                ToolTip="Sólo funciona si está en modo Selección Celdas." />
+
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
 
             <!--  DESPLEGABLE FILTRAR TABLA  -->
             <xceed:DropDownButton x:Name="BtDropFiltros" Style="{StaticResource EstiloBotonDesplegable}">
@@ -1221,17 +1228,12 @@
             IsReadOnly="False"
             ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
             MouseDoubleClick="TablaCalendarios_MouseDoubleClick"
-            SelectedItem="{Binding CalendariosVM.CalendarioSeleccionado}"
+            ElementoSeleccionado="{Binding CalendariosVM.CalendarioSeleccionado, Mode=TwoWay}"
             SelectionMode="Extended"
-            SelectionUnit="{Binding CalendariosVM.ModoSeleccion}"
+            SelectionUnit="Cell"
             Style="{StaticResource EstiloGridCalendarios}"
             VerticalGridLinesBrush="Lavender"
             Visibility="Visible">
-
-            <controls:QDataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-            </controls:QDataGrid.Resources>
 
             <!--  COLUMNAS  -->
             <controls:QDataGrid.Columns>

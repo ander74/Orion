@@ -59,6 +59,35 @@
                 </Setter>
             </Trigger>
 
+            <!--  ESTILO DE CELDA SELECCIONADA Y SIN EL FOCO  -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsFocused" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="#66FFC757" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    SnapsToDevicePixels="True">
+                                    <ContentPresenter
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+
             <!--  ESTILO DE CELDA EN ESTADO DE EDICIÓN  -->
             <Trigger Property="IsEditing" Value="True">
                 <Setter Property="Template">
@@ -133,6 +162,34 @@
                 </Setter>
             </Trigger>
 
+            <!--  ESTILO DE CELDA SELECCIONADA Y SIN EL FOCO  -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsFocused" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="#66FFC757" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    SnapsToDevicePixels="True">
+                                    <ContentPresenter
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
             <!--  ESTILO DE CELDA EN ESTADO DE EDICIÓN  -->
             <Trigger Property="IsEditing" Value="True">
                 <Setter Property="Template">
@@ -182,6 +239,8 @@
         </Setter>
         <Style.Triggers>
 
+
+
             <!--  ESTILO SI LA VALORACIÓN DE EMPRESA ES DIFERENTE A LAS HORAS TRABAJADAS  -->
             <!--<DataTrigger Binding="{Binding ValoracionDiferente}" Value="True">
                 <Setter Property="Foreground" Value="DeepPink"/>
@@ -218,6 +277,36 @@
                     </Setter.Value>
                 </Setter>
             </Trigger>
+
+            <!--  ESTILO DE CELDA SELECCIONADA Y SIN EL FOCO  -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsFocused" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="#66FFC757" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    SnapsToDevicePixels="True">
+                                    <ContentPresenter
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+
 
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
@@ -323,6 +412,35 @@
                 </Setter>
             </Trigger>
 
+            <!--  ESTILO DE CELDA SELECCIONADA Y SIN EL FOCO  -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsFocused" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="#66FFC757" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    SnapsToDevicePixels="True">
+                                    <ContentPresenter
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+
             <MultiDataTrigger>
                 <MultiDataTrigger.Conditions>
                     <Condition Binding="{Binding HorasNegativas}" Value="True" />
@@ -406,6 +524,35 @@
                 </Setter>
             </Trigger>
 
+            <!--  ESTILO DE CELDA SELECCIONADA Y SIN EL FOCO  -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsFocused" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="#66FFC757" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    SnapsToDevicePixels="True">
+                                    <ContentPresenter
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+
             <!--  ESTILO DE CELDA EN ESTADO DE EDICIÓN  -->
             <Trigger Property="IsEditing" Value="True">
                 <Setter Property="Template">
@@ -479,6 +626,35 @@
                     </Setter.Value>
                 </Setter>
             </Trigger>
+
+            <!--  ESTILO DE CELDA SELECCIONADA Y SIN EL FOCO  -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsFocused" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="#66FFC757" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="0"
+                                    SnapsToDevicePixels="True">
+                                    <ContentPresenter
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
 
             <!--  ESTILO DE CELDA EN ESTADO DE EDICIÓN  -->
             <Trigger Property="IsEditing" Value="True">
@@ -554,6 +730,35 @@
                 </Setter>
             </Trigger>
 
+            <!--  ESTILO DE CELDA SELECCIONADA Y SIN EL FOCO  -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsFocused" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="#66FFC757" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="1,0,0,0"
+                                    SnapsToDevicePixels="True">
+                                    <ContentPresenter
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
+
             <!--  ESTILO DE CELDA EN ESTADO DE EDICIÓN  -->
             <Trigger Property="IsEditing" Value="True">
                 <Setter Property="Template">
@@ -627,6 +832,35 @@
                     </Setter.Value>
                 </Setter>
             </Trigger>
+
+            <!--  ESTILO DE CELDA SELECCIONADA Y SIN EL FOCO  -->
+            <MultiTrigger>
+                <MultiTrigger.Conditions>
+                    <Condition Property="IsSelected" Value="True" />
+                    <Condition Property="IsFocused" Value="False" />
+                </MultiTrigger.Conditions>
+                <MultiTrigger.Setters>
+                    <Setter Property="Foreground" Value="Black" />
+                    <Setter Property="Background" Value="#66FFC757" />
+                    <Setter Property="BorderThickness" Value="0" />
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type DataGridCell}">
+                                <Border
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="0,0,1,0"
+                                    SnapsToDevicePixels="True">
+                                    <ContentPresenter
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                </Border>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </MultiTrigger.Setters>
+            </MultiTrigger>
 
             <!--  ESTILO DE CELDA EN ESTADO DE EDICIÓN  -->
             <Trigger Property="IsEditing" Value="True">

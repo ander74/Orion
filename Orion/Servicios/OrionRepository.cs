@@ -237,7 +237,7 @@ namespace Orion.Servicios {
 
             // No inicializamos las bases de datos desde aquí, ya que deben actualizarse las 5 bases de datos
             // a la vez, con lo que lo tengo que hacer yo desde la pestaña programador.
-            //if (CadenaConexion != null) InicializarBaseDatosAsync().Wait();
+            if (CadenaConexion != null) InicializarBaseDatosAsync().Wait();
         }
 
         #endregion

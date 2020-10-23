@@ -74,11 +74,7 @@
 
     <Button.Content>
         <StackPanel Orientation="Vertical">
-            <Image
-                Source="{Binding ElementName=Item,
-                                 Path=Imagen}"
-                Visibility="{Binding ElementName=Item,
-                                     Path=VisibilidadImagen}">
+            <Image Source="{Binding ElementName=Item, Path=Imagen}" Visibility="{Binding ElementName=Item, Path=VisibilidadImagen}">
                 <Image.Style>
                     <Style TargetType="Image">
                         <Setter Property="Height" Value="28" />
@@ -92,12 +88,10 @@
                 </Image.Style>
             </Image>
             <TextBlock
-                Text="{Binding ElementName=Item,
-                               Path=Titulo}"
+                Text="{Binding ElementName=Item, Path=Titulo}"
                 TextAlignment="Center"
                 TextWrapping="Wrap"
-                Visibility="{Binding ElementName=Item,
-                                     Path=VisibilidadTitulo}" />
+                Visibility="{Binding ElementName=Item, Path=VisibilidadTitulo}" />
         </StackPanel>
     </Button.Content>
 </Button>

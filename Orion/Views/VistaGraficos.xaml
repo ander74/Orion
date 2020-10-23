@@ -387,19 +387,6 @@
                                     Margin="5,3"
                                     Background="LightGray" />
 
-                                <!--  BOTON ALTERNAR SELECCION TABLA GRAFICOS  -->
-                                <controls:BotonAlterno
-                                    Width="64"
-                                    Height="80"
-                                    Click="BotonAcciones_Click"
-                                    Command="{Binding Source={x:Reference TablaGraficos}, Path=ComandoAlternarModoSeleccion}"
-                                    ImagenActivo="Imagenes/SeleccionFila.png"
-                                    ImagenInactivo="Imagenes/SeleccionCelda.png"
-                                    TituloActivo="Seleccionar Filas"
-                                    TituloInactivo="Seleccionar Celdas" />
-
-
-
                             </StackPanel>
                         </Border>
                     </Border>
@@ -412,18 +399,33 @@
                 Margin="3,5"
                 Background="LightGray" />
 
+            <!--  BOTON ALTERNAR SELECCION TABLA GRAFICOS  -->
+            <!--<controls:BotonAlterno
+                Command="{Binding Source={x:Reference TablaGraficos}, Path=ComandoAlternarModoSeleccion}"
+                ImagenActivo="Imagenes/SeleccionFila.png"
+                ImagenInactivo="Imagenes/SeleccionCelda.png"
+                TituloActivo="Selección Filas"
+                TituloInactivo="Selección Celdas" />-->
+
             <!--  BOTON COPIAR  -->
             <controls:BotonBarra
-                Command="ApplicationCommands.Copy"
-                CommandTarget="{Binding ElementName=TablaGraficos}"
+                Command="{Binding ElementName=TablaGraficos, Path=ComandoCopiar}"
                 Imagen="Imagenes/Copiar.png"
-                Titulo="Copiar" />
+                Titulo="Copiar"
+                ToolTip="Sólo funciona si está en modo Selección Celdas." />
 
             <!--  BOTON PEGAR  -->
             <controls:BotonBarra
                 Command="{Binding ElementName=TablaGraficos, Path=ComandoPegar}"
                 Imagen="Imagenes/Pegar.png"
-                Titulo="Pegar" />
+                Titulo="Pegar"
+                ToolTip="Sólo funciona si está en modo Selección Celdas." />
+
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
 
             <!--  DESPLEGABLE FILTRAR GRÁFICOS  -->
             <xceed:DropDownButton x:Name="BtDropFiltros" Style="{StaticResource EstiloBotonDesplegable}">
@@ -829,16 +831,16 @@
                 HorizontalGridLinesBrush="Transparent"
                 IsReadOnly="False"
                 ItemsSource="{Binding GraficosVM.VistaGraficos}"
-                SelectedItem="{Binding GraficosVM.GraficoSeleccionado}"
+                ElementoSeleccionado="{Binding GraficosVM.GraficoSeleccionado, Mode=TwoWay}"
                 SelectionMode="Extended"
-                SelectionUnit="{Binding GraficosVM.ModoSeleccion}"
+                SelectionUnit="Cell"
                 Style="{StaticResource EstiloGridGraficos}"
                 VerticalGridLinesBrush="Lavender">
 
-                <controls:QDataGrid.Resources>
+                <!--<controls:QDataGrid.Resources>
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
                     <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-                </controls:QDataGrid.Resources>
+                </controls:QDataGrid.Resources>-->
 
                 <controls:QDataGrid.Columns>
                     <DataGridCheckBoxColumn

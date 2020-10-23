@@ -239,6 +239,7 @@ namespace Orion.Models {
             set {
                 if (_carpetadropbox != value) {
                     _carpetadropbox = value;
+                    if (string.IsNullOrEmpty(value)) SincronizarEnDropbox = false;
                     PropiedadCambiada();
                 }
             }

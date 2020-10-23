@@ -7,59 +7,58 @@
 #endregion
 namespace Orion.Views {
 
-	using System.Windows;
-	using System.Windows.Controls;
+    using System.Windows;
+    using System.Windows.Controls;
     using System.Windows.Data;
-    using Controls;
 
-	public partial class VistaConductores : UserControl {
-		public VistaConductores() {
-			InitializeComponent();
-		}
-
-
-		// ====================================================================================================
-		#region GESTIÓN PANEL REGULACIONES
-		// ====================================================================================================
-
-		// TABLA CONDUCTORES - GOT FOCUS
-		private void TablaConductores_GotFocus(object sender, RoutedEventArgs e) {
-			if (!ChPanelRegulaciones.IsChecked ?? false) PanelRegulaciones.Visibility = Visibility.Collapsed;
-		}
+    public partial class VistaConductores : UserControl {
+        public VistaConductores() {
+            InitializeComponent();
+        }
 
 
-		// CHECK REGULACIONES - CLICK
-		private void ChPanelRegulaciones_Click(object sender, RoutedEventArgs e) {
-			if (ChPanelRegulaciones.IsChecked == true) {
-				Grid.SetColumn(PanelRegulaciones, 0);
-			} else {
-				Grid.SetColumn(PanelRegulaciones, 1);
-			}
-		}
+        // ====================================================================================================
+        #region GESTIÓN PANEL REGULACIONES
+        // ====================================================================================================
+
+        // TABLA CONDUCTORES - GOT FOCUS
+        private void TablaConductores_GotFocus(object sender, RoutedEventArgs e) {
+            if (!ChPanelRegulaciones.IsChecked ?? false) PanelRegulaciones.Visibility = Visibility.Collapsed;
+        }
 
 
-		// BOTÓN REGULACIONES - CLICK
-		private void BtRegulaciones_Click(object sender, RoutedEventArgs e) {
-			if (PanelRegulaciones.IsVisible) {
-				PanelRegulaciones.Visibility = Visibility.Collapsed;
-				ChPanelRegulaciones.IsChecked = false;
-				Grid.SetColumn(PanelRegulaciones, 1);
-			} else {
-				PanelRegulaciones.Visibility = Visibility.Visible;
-			}
-		}
-
-		#endregion
-		// ====================================================================================================
+        // CHECK REGULACIONES - CLICK
+        private void ChPanelRegulaciones_Click(object sender, RoutedEventArgs e) {
+            if (ChPanelRegulaciones.IsChecked == true) {
+                Grid.SetColumn(PanelRegulaciones, 2);
+            } else {
+                Grid.SetColumn(PanelRegulaciones, 1);
+            }
+        }
 
 
-		// ====================================================================================================
-		#region GESTIÓN DESPLEGABLE ACCIONES
-		// ====================================================================================================
+        // BOTÓN REGULACIONES - CLICK
+        private void BtRegulaciones_Click(object sender, RoutedEventArgs e) {
+            if (PanelRegulaciones.IsVisible) {
+                PanelRegulaciones.Visibility = Visibility.Collapsed;
+                ChPanelRegulaciones.IsChecked = false;
+                Grid.SetColumn(PanelRegulaciones, 1);
+            } else {
+                PanelRegulaciones.Visibility = Visibility.Visible;
+            }
+        }
 
-		private void BtAccionesPulsado_Click(object sender, RoutedEventArgs e) {
-			BtDropAcciones.IsOpen = false;
-		}
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region GESTIÓN DESPLEGABLE ACCIONES
+        // ====================================================================================================
+
+        private void BtAccionesPulsado_Click(object sender, RoutedEventArgs e) {
+            BtDropAcciones.IsOpen = false;
+        }
 
         #endregion
         // ====================================================================================================

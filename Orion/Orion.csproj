@@ -35,7 +35,7 @@
     <ProductName>Orion</ProductName>
     <PublisherName>AnderSoft</PublisherName>
     <SuiteName>Orion</SuiteName>
-    <ApplicationRevision>11</ApplicationRevision>
+    <ApplicationRevision>12</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -225,6 +225,7 @@
     <Compile Include="Convertidores\ConvertidorNegritaColumnaPijama.cs" />
     <Compile Include="Convertidores\ConvertidorNegritaDiaPijama.cs" />
     <Compile Include="Convertidores\ConvertidorOcultoSiCero.cs" />
+    <Compile Include="Convertidores\ConvertidorSelectionUnitToEnabled.cs" />
     <Compile Include="Convertidores\ConvertidorTextoNegrita.cs" />
     <Compile Include="Convertidores\ConvertidorVisibilityInverter.cs" />
     <Compile Include="Convertidores\ConvertidorColorDia.cs" />

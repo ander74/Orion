@@ -91,6 +91,26 @@ namespace Orion.Controls {
 
 
         // ====================================================================================================
+        #region PROPIEDAD ELEMENTO SELECCIONADO
+        // ====================================================================================================
+
+
+        public object ElementoSeleccionado {
+            get { return (object)GetValue(ElementoSeleccionadoProperty); }
+            set { SetValue(ElementoSeleccionadoProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for ElementoSeleccionado.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ElementoSeleccionadoProperty =
+            DependencyProperty.Register("ElementoSeleccionado", typeof(object), typeof(QDataGrid), new PropertyMetadata(null, null, null));
+
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
         #region COMANDO ALTERNAR MODO SELECCION
         // ====================================================================================================
 
@@ -118,6 +138,33 @@ namespace Orion.Controls {
 
 
         // ====================================================================================================
+        #region COMANDO COPIAR
+        // ====================================================================================================
+
+        // Comando
+        private ICommand comandoCopiar;
+        public ICommand ComandoCopiar {
+            get {
+                if (comandoCopiar == null) comandoCopiar = new RelayCommand(p => Copiar(), p => PuedeCopiar());
+                return comandoCopiar;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeCopiar() {
+            return CurrentCell != null && SelectionUnit == DataGridSelectionUnit.Cell;
+        }
+
+        // Ejecución del comando
+        private void Copiar() {
+            if (ApplicationCommands.Copy.CanExecute(null, this)) ApplicationCommands.Copy.Execute(null, this);
+        }
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
         #region COMANDO PEGAR
         // ====================================================================================================
 
@@ -131,7 +178,7 @@ namespace Orion.Controls {
 
 
         private bool PuedePegar() {
-            return CurrentCell != null;
+            return CurrentCell != null && SelectionUnit == DataGridSelectionUnit.Cell;
         }
 
 
@@ -187,6 +234,7 @@ namespace Orion.Controls {
                 if (!cell.IsValid) return;
                 ColumnaActual = cell.Column.DisplayIndex;
                 FilaActual = Items.IndexOf(cell.Item);
+                if (SelectedCells.Count == 1) ElementoSeleccionado = cell.Item; else ElementoSeleccionado = null;
             }
             base.OnSelectedCellsChanged(e);
         }
@@ -195,6 +243,12 @@ namespace Orion.Controls {
         protected override void OnPreviewKeyDown(KeyEventArgs e) {
 
             switch (e.Key) {
+                case Key.C:
+                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
+                        if (PuedeCopiar()) Copiar();
+                        e.Handled = true;
+                    }
+                    break;
                 case Key.V:
                     if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
                         if (PuedePegar()) Pegar();
