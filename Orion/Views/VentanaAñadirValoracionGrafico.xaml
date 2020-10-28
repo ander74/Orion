@@ -14,12 +14,14 @@
     x:Name="Ventana"
     Title="Añadir Itinerario de Gráfico"
     Width="700"
-    Height="290"
+    Height="590"
     AllowsTransparency="True"
     Background="Transparent"
+    Left="10"
     Loaded="Ventana_Loaded"
     ResizeMode="NoResize"
-    WindowStartupLocation="CenterScreen"
+    Top="120"
+    WindowStartupLocation="Manual"
     WindowStyle="None"
     mc:Ignorable="d">
 
@@ -49,6 +51,7 @@
         <Grid>
 
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
                 <RowDefinition Height="Auto" />
@@ -88,7 +91,9 @@
                 Grid.Column="0"
                 Margin="10"
                 Orientation="Vertical">
-                <Label Content="Inicio" FontSize="16" />
+                <Label
+                    Content="Inicio"
+                    FontSize="16" />
                 <TextBox
                     x:Name="TbInicio"
                     Padding="3"
@@ -99,13 +104,15 @@
                     Text="{Binding Path=Inicio, Converter={StaticResource ConvertidorHora}}" />
             </StackPanel>
 
-            <!--  LÍNEA  -->
+            <!--  ITINERARIO  -->
             <StackPanel
                 Grid.Row="1"
                 Grid.Column="1"
                 Margin="10"
                 Orientation="Vertical">
-                <Label Content="Línea" FontSize="16" />
+                <Label
+                    Content="Itinerario"
+                    FontSize="16" />
                 <TextBox
                     x:Name="TbLinea"
                     Padding="3"
@@ -123,10 +130,101 @@
 
             </StackPanel>
 
+            <StackPanel
+                Grid.Row="2"
+                Grid.Column="0"
+                Grid.ColumnSpan="4"
+                Margin="10"
+                Orientation="Vertical">
+
+                <!--  ITINERARIOS ESPECIALES  -->
+                <TextBlock
+                    Margin="0,0,0,0"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Itinerarios especiales (número menor que 100): " />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="Los itinerarios especiales se introducen con el número de línea, punto y el itinerario." />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="Por ejemplo, si la línea 11 tiene los vacíos de Bilbao, para meter el vacío de Bilbao con" />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="número 1, se haría introduciendo 11.1" />
+
+                <!--  RELEVOS EN RUTA  -->
+                <TextBlock
+                    Margin="0,5,0,0"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Relevos en ruta" />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="Los itinerarios que relevan en ruta se introducen con el número del itinerario, punto" />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="y el número de la parada donde se releva. Por ejemplo, si el itinerario es el 101 y" />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="se hace el relevo en la parada 2, se introduce 101.2" />
+
+                <!--  DESCANSOS  -->
+                <TextBlock
+                    Margin="0,5,0,0"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Descansos: " />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="Se introduce 1, punto y el número de minutos (1.30 = Descanso de 30 min)." />
+
+                <!--  PAUSAS  -->
+                <TextBlock
+                    Margin="0,5,0,0"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Pausas: " />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="Se introduce 2, punto y el número de minutos (2.10 = Pausa de 10 min)." />
+
+                <!--  DISPONIBILIDAD  -->
+                <TextBlock
+                    Margin="0,5,0,0"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Disponibilidad: " />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="Se introduce 3, punto y el número de minutos (3.45 = Disponibilidad de 45 min)." />
+
+                <!--  RESERVA  -->
+                <TextBlock
+                    Margin="0,5,0,0"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Reserva: " />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="Se introduce 4, punto y el número de minutos (4.120 = Reserva de 120 min)." />
+
+            </StackPanel>
+
             <!--  BOTÓN CANCELAR  -->
             <Button
                 x:Name="BtCancelar"
-                Grid.Row="2"
+                Grid.Row="3"
                 Grid.Column="2"
                 Height="48"
                 Margin="10"
@@ -140,7 +238,7 @@
             <!--  BOTÓN ACEPTAR  -->
             <Button
                 x:Name="BtAceptar"
-                Grid.Row="2"
+                Grid.Row="3"
                 Grid.Column="3"
                 Height="48"
                 Margin="10"

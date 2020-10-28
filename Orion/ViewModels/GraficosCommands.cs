@@ -16,6 +16,7 @@ namespace Orion.ViewModels {
     using Microsoft.Win32;
     using Models;
     using Newtonsoft.Json;
+    using Orion.Config;
     using PrintModel;
     using Servicios;
     using Views;
@@ -304,55 +305,28 @@ namespace Orion.ViewModels {
                 contextoVentana.NumeroGrafico = GraficoSeleccionado.Numero;
 
                 // Creamos la valoración a añadir.
-                ValoracionGrafico valoracion = new ValoracionGrafico();
+                //ValoracionGrafico valoracion = new ValoracionGrafico();
 
                 // Si al mostrar la ventana, pulsamos aceptar...
                 if (ventana.ShowDialog() == true) {
+                    // Si no hay nada escrito, salimos.
+                    if (contextoVentana.Linea == 0) return;
                     //Extraemos la línea.
                     decimal Linea = contextoVentana.Linea;
-                    // Ponemos el inicio a la valoracion.
-                    valoracion.Inicio = contextoVentana.Inicio;
-                    // Si la línea es menor que cero...
-                    if (Linea < 0) {
-                        // Cambiamos el signo.
-                        Linea = Linea * -1;
-                        // Si está entre 1000 y 1999...
-                        if (Linea >= 1000 && Linea < 2000) {
-                            // Extraemos el descanso.
-                            int descanso = (int)(Linea - 1000);
-                            valoracion.Descripcion = "Descanso " + descanso.ToString() + " minutos.";
-                            valoracion.Final = contextoVentana.Inicio + new TimeSpan(0, descanso, 0);
-                        }
-                        // Si la línea es mayor que cero.
-                    } else if (Linea > 0) {
-                        // Creamos un itinerario.
-                        Itinerario itinerario = null;
-                        // Buscamos el itinerario.
-                        try {
-                            itinerario = App.Global.LineasRepo.GetItinerarioByNombre(Linea);
-                        } catch (Exception ex) {
-                            Mensajes.VerError("GraficosViewModel.AñadirValoracion", ex);
-                        }
-
-                        // Si el itinerario no es nulo (existe)...
-                        if (itinerario != null) {
-                            valoracion.Linea = Linea;
-                            valoracion.Descripcion = itinerario.Descripcion;
-                            valoracion.Final = contextoVentana.Inicio + new TimeSpan(0, itinerario.TiempoReal, 0);
+                    // Generamos el itinerario.
+                    var valoracion = Calculos.ConvertirEnItinerario(Linea, Inicio);
+                    if (valoracion == null) {
+                        // Sacar un error y esperar si se va a continuar o no.
+                        if (Mensajes.VerMensaje("No existe el itinerario\n¿Desea continuar?", "AVISO", true) == true) {
+                            valoracion = new ValoracionGrafico {
+                                Inicio = Inicio,
+                                Linea = Linea,
+                                Descripcion = "Itinerario desconocido.",
+                                Final = contextoVentana.Inicio
+                            };
                         } else {
-                            // Sacar un error y esperar si se va a continuar o no.
-                            if (Mensajes.VerMensaje("No existe el itinerario\n¿Desea continuar?", "AVISO", true) == true) {
-                                valoracion.Linea = Linea;
-                                valoracion.Descripcion = "Línea desconocida.";
-                                valoracion.Final = contextoVentana.Inicio;
-                            } else {
-                                return;
-                            }
+                            return;
                         }
-
-                        // Si la línea es cero.
-                    } else {
-                        valoracion.Final = contextoVentana.Inicio;
                     }
                     // Guardamos la valoracion
                     valoracion.IdGrafico = GraficoSeleccionado.Id;
@@ -360,6 +334,63 @@ namespace Orion.ViewModels {
                     HayCambios = true;
                     // Ponemos Inicio en la hora final
                     Inicio = valoracion.Final;
+
+
+
+                    //// Ponemos el inicio a la valoracion.
+                    //valoracion.Inicio = contextoVentana.Inicio;
+                    //// Si la línea es menor que cero...
+                    //if (Linea < 0) {
+                    //    // Cambiamos el signo.
+                    //    Linea = Linea * -1;
+                    //    // Si está entre 1000 y 1999...
+                    //    if (Linea >= 1000 && Linea < 2000) {
+                    //        // Extraemos el descanso.
+                    //        int descanso = (int)(Linea - 1000);
+                    //        valoracion.Descripcion = "Descanso " + descanso.ToString() + " minutos.";
+                    //        valoracion.Final = contextoVentana.Inicio + new TimeSpan(0, descanso, 0);
+                    //    }
+                    //    // Si la línea es mayor que cero.
+                    //} else if (Linea > 0) {
+                    //    // Creamos un itinerario.
+                    //    Itinerario itinerario = null;
+                    //    // Buscamos el itinerario.
+                    //    try {
+                    //        itinerario = App.Global.LineasRepo.GetItinerarioByNombre(Linea);
+                    //    } catch (Exception ex) {
+                    //        Mensajes.VerError("GraficosViewModel.AñadirValoracion", ex);
+                    //    }
+
+                    //    // Si el itinerario no es nulo (existe)...
+                    //    if (itinerario != null) {
+                    //        valoracion.Linea = Linea;
+                    //        valoracion.Descripcion = itinerario.Descripcion;
+                    //        valoracion.Final = contextoVentana.Inicio + new TimeSpan(0, itinerario.TiempoReal, 0);
+                    //    } else {
+                    //        // Sacar un error y esperar si se va a continuar o no.
+                    //        if (Mensajes.VerMensaje("No existe el itinerario\n¿Desea continuar?", "AVISO", true) == true) {
+                    //            valoracion.Linea = Linea;
+                    //            valoracion.Descripcion = "Línea desconocida.";
+                    //            valoracion.Final = contextoVentana.Inicio;
+                    //        } else {
+                    //            return;
+                    //        }
+                    //    }
+
+                    //    // Si la línea es cero.
+                    //} else {
+                    //    valoracion.Final = contextoVentana.Inicio;
+                    //}
+                    //// Guardamos la valoracion
+                    //valoracion.IdGrafico = GraficoSeleccionado.Id;
+                    //GraficoSeleccionado.ListaValoraciones.Add(valoracion);
+                    //HayCambios = true;
+                    //// Ponemos Inicio en la hora final
+                    //Inicio = valoracion.Final;
+
+
+
+
                 } else {
                     return;
                 }

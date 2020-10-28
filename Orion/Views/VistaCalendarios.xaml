@@ -54,29 +54,39 @@
         <cnv:ConvertidorNegritaDiaPijama x:Key="cnvNegritaDiaPijama" />
         <cnv:ConvertidorOcultoSiCero x:Key="cnvOcultoSiCero" />
 
-        <Style x:Key="EstiloGridCalendarios" TargetType="DataGrid">
+        <Style
+            x:Key="EstiloGridCalendarios"
+            TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasVerde}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasCalendarios}" />
         </Style>
-        <Style x:Key="EstiloGridPijama" TargetType="DataGrid">
+        <Style
+            x:Key="EstiloGridPijama"
+            TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
         </Style>
-        <Style x:Key="TextoPijama1" TargetType="TextBlock">
+        <Style
+            x:Key="TextoPijama1"
+            TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Comic Sans MS" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
-        <Style x:Key="TextoPijama2" TargetType="TextBlock">
+        <Style
+            x:Key="TextoPijama2"
+            TargetType="TextBlock">
             <Setter Property="FontFamily" Value="Comic Sans MS" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Width" Value="135" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
-        <Style x:Key="TextBoxPijama" TargetType="TextBox">
+        <Style
+            x:Key="TextBoxPijama"
+            TargetType="TextBox">
             <Setter Property="FontFamily" Value="Comic Sans MS" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Width" Value="75" />
@@ -86,14 +96,18 @@
             <Setter Property="HorizontalContentAlignment" Value="Center" />
         </Style>
 
-        <Style x:Key="EstiloItemResumen" TargetType="controls:ItemResumen">
+        <Style
+            x:Key="EstiloItemResumen"
+            TargetType="controls:ItemResumen">
             <Setter Property="FontFamily" Value="Comic Sans MS" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Margin" Value="5,2" />
             <Setter Property="LineaPuntos" Value="True" />
         </Style>
 
-        <Style x:Key="EstiloItemResumenDoble" TargetType="controls:ItemResumenDoble">
+        <Style
+            x:Key="EstiloItemResumenDoble"
+            TargetType="controls:ItemResumenDoble">
             <Setter Property="FontFamily" Value="Comic Sans MS" />
             <Setter Property="FontSize" Value="12" />
             <Setter Property="Margin" Value="5,2" />
@@ -216,10 +230,14 @@
                 Background="LightGray" />
 
             <!--  DESPLEGABLE ACCIONES  -->
-            <xceed:DropDownButton x:Name="BtDropAcciones" Style="{StaticResource EstiloBotonDesplegable}">
+            <xceed:DropDownButton
+                x:Name="BtDropAcciones"
+                Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Engranajes.png" Style="{StaticResource EstiloImagen}" />
+                        <Image
+                            Source="Imagenes/Engranajes.png"
+                            Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtAcciones"
                             FontFamily="Comic Sans MS"
@@ -318,10 +336,14 @@
                 Background="LightGray" />
 
             <!--  DESPLEGABLE FILTRAR TABLA  -->
-            <xceed:DropDownButton x:Name="BtDropFiltros" Style="{StaticResource EstiloBotonDesplegable}">
+            <xceed:DropDownButton
+                x:Name="BtDropFiltros"
+                Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Filtrar.png" Style="{StaticResource EstiloImagen}" />
+                        <Image
+                            Source="Imagenes/Filtrar.png"
+                            Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtFiltrar"
                             FontFamily="Comic Sans MS"
@@ -429,10 +451,14 @@
                 Background="LightGray" />
 
             <!--  DESPLEGABLE CREAR PDF  -->
-            <xceed:DropDownButton x:Name="BtDropCrearPdf" Style="{StaticResource EstiloBotonDesplegable}">
+            <xceed:DropDownButton
+                x:Name="BtDropCrearPdf"
+                Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/GuardarPDF.png" Style="{StaticResource EstiloImagen}" />
+                        <Image
+                            Source="Imagenes/GuardarPDF.png"
+                            Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtCrearPdf"
                             FontFamily="Comic Sans MS"
@@ -553,7 +579,9 @@
                 Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/GuardarExcel.png" Style="{StaticResource EstiloImagen}" />
+                        <Image
+                            Source="Imagenes/GuardarExcel.png"
+                            Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtCrearExcel"
                             FontFamily="Comic Sans MS"
@@ -698,7 +726,9 @@
                 Orientation="Vertical">
 
                 <!--  DCs PENDIENTES AÑO ANTERIOR  -->
-                <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
                     <TextBlock
                         Width="50"
                         Margin="0,5"
@@ -720,7 +750,9 @@
                 </StackPanel>
 
                 <!--  DNDs PENDIENTES AÑO ANTERIOR  -->
-                <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
                     <TextBlock
                         Width="50"
                         Margin="0,5"
@@ -751,7 +783,9 @@
                 Background="LightGray" />
 
             <!--  ANUAL  -->
-            <TextBlock Style="{StaticResource TextoVertical}" Text="ANUAL" />
+            <TextBlock
+                Style="{StaticResource TextoVertical}"
+                Text="ANUAL" />
 
             <StackPanel
                 Margin="10"
@@ -759,7 +793,9 @@
                 Orientation="Vertical">
 
                 <!--  DÍAS TRABAJADOS AÑO  -->
-                <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
                     <TextBlock
                         Width="50"
                         Margin="0,5"
@@ -781,7 +817,9 @@
                 </StackPanel>
 
                 <!--  DÍAS DESCANSO AÑO  -->
-                <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
                     <TextBlock
                         Width="50"
                         Margin="0,5"
@@ -803,7 +841,9 @@
                 </StackPanel>
 
                 <!--  DÍAS VACACIONES AÑO  -->
-                <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
                     <TextBlock
                         Width="50"
                         Margin="0,5"
@@ -833,7 +873,9 @@
                 Orientation="Vertical">
 
                 <!--  DÍAS DE BAJA AÑO  -->
-                <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
                     <TextBlock
                         Width="50"
                         Margin="0,5"
@@ -855,7 +897,9 @@
                 </StackPanel>
 
                 <!--  DÍAS DESCANSO COMPENSATORIO AÑO  -->
-                <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
                     <TextBlock
                         Width="50"
                         Margin="0,5"
@@ -877,7 +921,9 @@
                 </StackPanel>
 
                 <!--  HORAS TRABAJADAS AÑO  -->
-                <StackPanel Orientation="Horizontal" ToolTipService.ShowDuration="100000">
+                <StackPanel
+                    Orientation="Horizontal"
+                    ToolTipService.ShowDuration="100000">
                     <TextBlock
                         Width="50"
                         Margin="0,5"
@@ -966,7 +1012,9 @@
                         Orientation="Horizontal">
 
                         <!--  GRÁFICO DE APLICACION  -->
-                        <StackPanel Margin="5,0" Orientation="Horizontal">
+                        <StackPanel
+                            Margin="5,0"
+                            Orientation="Horizontal">
                             <TextBlock
                                 Width="Auto"
                                 Style="{StaticResource TextoPijama1}"
@@ -996,7 +1044,9 @@
                         </StackPanel>
 
                         <!--  DIAS DE APLICACION  -->
-                        <StackPanel Margin="5,0" Orientation="Horizontal">
+                        <StackPanel
+                            Margin="5,0"
+                            Orientation="Horizontal">
                             <TextBlock
                                 Width="Auto"
                                 Style="{StaticResource TextoPijama1}"
@@ -1016,7 +1066,9 @@
                         </StackPanel>
 
                         <!--  ACCIÓN  -->
-                        <StackPanel Margin="5,0" Orientation="Horizontal">
+                        <StackPanel
+                            Margin="5,0"
+                            Orientation="Horizontal">
                             <TextBlock
                                 Width="Auto"
                                 Style="{StaticResource TextoPijama1}"
@@ -1042,7 +1094,9 @@
                         </StackPanel>
 
                         <!--  VALOR PEDIDO  -->
-                        <StackPanel Margin="5,0" Orientation="Horizontal">
+                        <StackPanel
+                            Margin="5,0"
+                            Orientation="Horizontal">
                             <TextBlock
                                 Width="Auto"
                                 Style="{StaticResource TextoPijama1}"
@@ -1086,7 +1140,9 @@
                     </StackPanel>
 
                     <!--  BOTÓN Y NOTAS  -->
-                    <StackPanel Margin="10" Orientation="Horizontal">
+                    <StackPanel
+                        Margin="10"
+                        Orientation="Horizontal">
 
                         <!--  BOTÓN APLICAR  -->
                         <Button
@@ -1207,7 +1263,9 @@
 
 
         <!--  TABLA CALENDARIOS  -->
-        <FrameworkElement x:Name="ColumnaActual" Visibility="Collapsed" />
+        <FrameworkElement
+            x:Name="ColumnaActual"
+            Visibility="Collapsed" />
         <controls:QDataGrid
             x:Name="TablaCalendarios"
             Grid.Row="3"
@@ -1219,6 +1277,7 @@
             CanUserReorderColumns="False"
             DobleClick="{Binding CalendariosVM.cmdAbrirPijama}"
             DobleClickParametro="{Binding ElementName=TablaCalendarios, Path=CurrentColumn.Header, Mode=TwoWay}"
+            ElementoSeleccionado="{Binding CalendariosVM.CalendarioSeleccionado}"
             EnableColumnVirtualization="True"
             EnableRowVirtualization="True"
             FontFamily="Comic Sans MS"
@@ -1228,7 +1287,6 @@
             IsReadOnly="False"
             ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
             MouseDoubleClick="TablaCalendarios_MouseDoubleClick"
-            ElementoSeleccionado="{Binding CalendariosVM.CalendarioSeleccionado, Mode=TwoWay}"
             SelectionMode="Extended"
             SelectionUnit="Cell"
             Style="{StaticResource EstiloGridCalendarios}"
@@ -1262,9 +1320,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[0].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[0].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1293,7 +1355,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=01}" Text="01" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=01}"
+                            Text="01" />
                     </DataGridTextColumn.Header>
 
                 </DataGridTextColumn>
@@ -1306,9 +1370,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[1].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[1].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1337,7 +1405,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=02}" Text="02" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=02}"
+                            Text="02" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -1349,9 +1419,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[2].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[2].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1380,7 +1454,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=03}" Text="03" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=03}"
+                            Text="03" />
                     </DataGridTextColumn.Header>
 
                 </DataGridTextColumn>
@@ -1393,9 +1469,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[3].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[3].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1424,7 +1504,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=04}" Text="04" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=04}"
+                            Text="04" />
                     </DataGridTextColumn.Header>
 
                 </DataGridTextColumn>
@@ -1437,9 +1519,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[4].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[4].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1468,7 +1554,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=05}" Text="05" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=05}"
+                            Text="05" />
                     </DataGridTextColumn.Header>
 
                 </DataGridTextColumn>
@@ -1481,9 +1569,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[5].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[5].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1512,7 +1604,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=06}" Text="06" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=06}"
+                            Text="06" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -1524,9 +1618,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[6].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[6].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1555,7 +1653,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=07}" Text="07" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=07}"
+                            Text="07" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -1567,9 +1667,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[7].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[7].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1598,7 +1702,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=08}" Text="08" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=08}"
+                            Text="08" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -1610,9 +1716,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[8].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[8].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1641,7 +1751,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=09}" Text="09" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=09}"
+                            Text="09" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -1653,9 +1765,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[9].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[9].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1684,7 +1800,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=10}" Text="10" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=10}"
+                            Text="10" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -1696,9 +1814,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[10].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[10].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1727,7 +1849,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=11}" Text="11" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=11}"
+                            Text="11" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -1739,9 +1863,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[11].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[11].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1770,7 +1898,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=12}" Text="12" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=12}"
+                            Text="12" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -1782,9 +1912,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[12].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[12].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1813,7 +1947,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=13}" Text="13" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=13}"
+                            Text="13" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -1825,9 +1961,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[13].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[13].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1856,7 +1996,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=14}" Text="14" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=14}"
+                            Text="14" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -1868,9 +2010,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[14].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[14].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1899,7 +2045,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=15}" Text="15" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=15}"
+                            Text="15" />
                     </DataGridTextColumn.Header>
 
                 </DataGridTextColumn>
@@ -1912,9 +2060,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[15].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[15].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1943,7 +2095,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=16}" Text="16" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=16}"
+                            Text="16" />
                     </DataGridTextColumn.Header>
 
                 </DataGridTextColumn>
@@ -1956,9 +2110,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[16].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[16].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -1987,7 +2145,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=17}" Text="17" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=17}"
+                            Text="17" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -1999,9 +2159,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[17].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[17].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2030,7 +2194,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=18}" Text="18" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=18}"
+                            Text="18" />
                     </DataGridTextColumn.Header>
 
                 </DataGridTextColumn>
@@ -2043,9 +2209,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[18].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[18].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2074,7 +2244,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=19}" Text="19" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=19}"
+                            Text="19" />
                     </DataGridTextColumn.Header>
 
                 </DataGridTextColumn>
@@ -2087,9 +2259,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[19].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[19].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2118,7 +2294,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=20}" Text="20" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=20}"
+                            Text="20" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2130,9 +2308,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[20].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[20].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2161,7 +2343,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=21}" Text="21" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=21}"
+                            Text="21" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2173,9 +2357,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[21].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[21].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2204,7 +2392,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=22}" Text="22" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=22}"
+                            Text="22" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2216,9 +2406,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[22].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[22].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2247,7 +2441,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=23}" Text="23" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=23}"
+                            Text="23" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2259,9 +2455,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[23].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[23].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2290,7 +2490,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=24}" Text="24" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=24}"
+                            Text="24" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2302,9 +2504,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[24].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[24].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2333,7 +2539,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=25}" Text="25" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=25}"
+                            Text="25" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2345,9 +2553,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[25].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[25].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2376,7 +2588,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=26}" Text="26" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=26}"
+                            Text="26" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2388,9 +2602,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[26].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[26].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2419,7 +2637,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=27}" Text="27" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=27}"
+                            Text="27" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2431,9 +2651,13 @@
                     CanUserResize="false"
                     CanUserSort="False">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[27].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[27].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2462,7 +2686,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=28}" Text="28" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=28}"
+                            Text="28" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2475,9 +2701,13 @@
                     CanUserSort="False"
                     Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.ExisteDia29, Converter={StaticResource cnvBoolToVisibility}}">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[28].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[28].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2506,7 +2736,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=29}" Text="29" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=29}"
+                            Text="29" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2519,9 +2751,13 @@
                     CanUserSort="False"
                     Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.ExisteDia30, Converter={StaticResource cnvBoolToVisibility}}">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[29].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[29].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2550,7 +2786,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=30}" Text="30" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=30}"
+                            Text="30" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2563,9 +2801,13 @@
                     CanUserSort="False"
                     Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.ExisteDia31, Converter={StaticResource cnvBoolToVisibility}}">
                     <DataGridTextColumn.CellStyle>
-                        <Style BasedOn="{StaticResource EstiloCeldasCalendarios}" TargetType="DataGridCell">
+                        <Style
+                            BasedOn="{StaticResource EstiloCeldasCalendarios}"
+                            TargetType="DataGridCell">
                             <Style.Triggers>
-                                <DataTrigger Binding="{Binding ListaDias[30].Resaltar}" Value="True">
+                                <DataTrigger
+                                    Binding="{Binding ListaDias[30].Resaltar}"
+                                    Value="True">
                                     <Setter Property="Background" Value="Salmon" />
                                 </DataTrigger>
                             </Style.Triggers>
@@ -2594,7 +2836,9 @@
                         </Style>
                     </DataGridTextColumn.ElementStyle>
                     <DataGridTextColumn.Header>
-                        <TextBlock Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=31}" Text="31" />
+                        <TextBlock
+                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=31}"
+                            Text="31" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2607,7 +2851,9 @@
                     CanUserSort="False"
                     IsReadOnly="True">
                     <DataGridTextColumn.Header>
-                        <TextBlock Text="GD" ToolTip="Número de gráficos diferentes" />
+                        <TextBlock
+                            Text="GD"
+                            ToolTip="Número de gráficos diferentes" />
                     </DataGridTextColumn.Header>
                 </DataGridTextColumn>
 
@@ -2652,7 +2898,9 @@
                     VerticalAlignment="Center"
                     FontSize="20">
                     <ToggleButton.Style>
-                        <Style BasedOn="{StaticResource EstiloToggleBarraPequeña}" TargetType="ToggleButton">
+                        <Style
+                            BasedOn="{StaticResource EstiloToggleBarraPequeña}"
+                            TargetType="ToggleButton">
                             <Style.Triggers>
                                 <Trigger Property="IsChecked" Value="False">
                                     <Setter Property="Content" Value="&gt;" />
@@ -2687,7 +2935,9 @@
                 FontFamily="Verdana"
                 FontSize="20"
                 FontWeight="DemiBold">
-                <StackPanel VerticalAlignment="Center" Orientation="Horizontal">
+                <StackPanel
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal">
                     <Button
                         Margin="10,0"
                         Padding="10,5"
@@ -2696,15 +2946,21 @@
                         Style="{StaticResource EstiloBotonBarraPequeña}"
                         ToolTip="Mes anterior">
                         <Button.Content>
-                            <Image Source="Imagenes/Anterior.png" Style="{StaticResource EstiloImagenPequeña}" />
+                            <Image
+                                Source="Imagenes/Anterior.png"
+                                Style="{StaticResource EstiloImagenPequeña}" />
                         </Button.Content>
                     </Button>
                     <TextBlock
                         VerticalAlignment="Center"
                         Foreground="DarkRed"
                         Text="{Binding CalendariosVM.MesActual}" />
-                    <TextBlock VerticalAlignment="Center" Text="  " />
-                    <TextBlock VerticalAlignment="Center" Text="{Binding CalendariosVM.AñoActual, StringFormat=yyyy}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Text="  " />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Text="{Binding CalendariosVM.AñoActual, StringFormat=yyyy}" />
                     <Button
                         Margin="10,0"
                         Padding="10,5"
@@ -2713,7 +2969,9 @@
                         Style="{StaticResource EstiloBotonBarraPequeña}"
                         ToolTip="Mes siguiente">
                         <Button.Content>
-                            <Image Source="Imagenes/Siguiente.png" Style="{StaticResource EstiloImagenPequeña}" />
+                            <Image
+                                Source="Imagenes/Siguiente.png"
+                                Style="{StaticResource EstiloImagenPequeña}" />
                         </Button.Content>
                     </Button>
                     <Rectangle
@@ -2727,7 +2985,9 @@
                         VerticalAlignment="Center"
                         ToolTip="Mostrar/Ocultar Resumen">
                         <ToggleButton.Style>
-                            <Style BasedOn="{StaticResource EstiloToggleBarraPequeña}" TargetType="ToggleButton">
+                            <Style
+                                BasedOn="{StaticResource EstiloToggleBarraPequeña}"
+                                TargetType="ToggleButton">
                                 <Style.Triggers>
                                     <Trigger Property="IsChecked" Value="False">
                                         <Setter Property="Content" Value="&gt;&gt;" />
@@ -3099,7 +3359,9 @@
                             Grid.Column="13"
                             Margin="10,0,0,0"
                             Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center" Text="Limpieza: " />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="Limpieza: " />
                             <CheckBox
                                 Grid.Row="1"
                                 Grid.Column="13"
@@ -3116,7 +3378,9 @@
                             Grid.Column="13"
                             Margin="10,0,0,0"
                             Orientation="Horizontal">
-                            <TextBlock VerticalAlignment="Center" Text="Paquetería: " />
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                Text="Paquetería: " />
                             <CheckBox
                                 Grid.Row="1"
                                 Grid.Column="13"
@@ -3271,7 +3535,7 @@
 
 
         <!--  TABLA PIJAMA  -->
-        <DataGrid
+        <controls:QDataGrid
             x:Name="TablaPijama"
             Grid.Row="3"
             Grid.Column="0"
@@ -3280,23 +3544,18 @@
             Background="Transparent"
             CanUserReorderColumns="False"
             CanUserSortColumns="False"
+            ElementoSeleccionado="{Binding CalendariosVM.Pijama.DiaSeleccionado}"
             FontFamily="Comic Sans MS"
             FontSize="11"
             HeadersVisibility="Column"
             HorizontalGridLinesBrush="Transparent"
             IsReadOnly="True"
             ItemsSource="{Binding CalendariosVM.Pijama.ListaDias}"
-            SelectedItem="{Binding CalendariosVM.Pijama.DiaSeleccionado}"
-            SelectionMode="Single"
-            SelectionUnit="FullRow"
+            SelectionMode="Extended"
+            SelectionUnit="Cell"
             Style="{StaticResource EstiloGridPijama}"
             VerticalGridLinesBrush="Lavender"
             Visibility="Collapsed">
-
-            <DataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-            </DataGrid.Resources>
 
             <DataGrid.Columns>
                 <DataGridTextColumn
@@ -3378,9 +3637,13 @@
                     Width="*"
                     Binding="{Binding ExcesoJornada, Converter={StaticResource cnvSuperHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                     Header="Ex.Jornada" />
-                <DataGridTextColumn Width="*" Binding="{Binding GraficoTrabajado.Desayuno, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding GraficoTrabajado.Desayuno, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}">
                     <DataGridTextColumn.Header>
-                        <TextBlock Text="Desayuno" ToolTip="El importe incluye el porcentaje aplicado." />
+                        <TextBlock
+                            Text="Desayuno"
+                            ToolTip="El importe incluye el porcentaje aplicado." />
                     </DataGridTextColumn.Header>
                     <DataGridTextColumn.ElementStyle>
                         <Style TargetType="TextBlock">
@@ -3481,7 +3744,7 @@
                     Binding="{Binding OtrosPluses, Converter={StaticResource cnvDecimalEuro}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                     Header="Otros" />
             </DataGrid.Columns>
-        </DataGrid>
+        </controls:QDataGrid>
 
 
         <!--  PANEL LATERAL PIJAMA  -->
@@ -3515,7 +3778,9 @@
                     Header="Mes Actual"
                     Style="{StaticResource EstiloPestañasPijama}">
 
-                    <ScrollViewer Background="{StaticResource DegradadoCeleste1}" VerticalScrollBarVisibility="Hidden">
+                    <ScrollViewer
+                        Background="{StaticResource DegradadoCeleste1}"
+                        VerticalScrollBarVisibility="Hidden">
 
                         <StackPanel
                             x:Name="PanelPijama"
@@ -3535,13 +3800,17 @@
                                 Style="{StaticResource EstiloToggleBarraPequeña}"
                                 ToolTip="Mostrar/Ocultar" />
 
-                            <Grid Margin="5,0" Visibility="{Binding ElementName=BtHorasMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
+                            <Grid
+                                Margin="5,0"
+                                Visibility="{Binding ElementName=BtHorasMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
                                 <Border
                                     Background="AliceBlue"
                                     BorderBrush="DarkGray"
                                     BorderThickness="1"
                                     CornerRadius="5" />
-                                <StackPanel Margin="0,4" Orientation="Vertical">
+                                <StackPanel
+                                    Margin="0,4"
+                                    Orientation="Vertical">
 
                                     <!--  TRABAJADAS, ACUMULADAS Y NOCTURNAS  -->
                                     <controls:ItemResumen
@@ -3593,13 +3862,17 @@
                                 Style="{StaticResource EstiloToggleBarraPequeña}"
                                 ToolTip="Mostrar/Ocultar" />
 
-                            <Grid Margin="5,0" Visibility="{Binding ElementName=BtDiasMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
+                            <Grid
+                                Margin="5,0"
+                                Visibility="{Binding ElementName=BtDiasMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
                                 <Border
                                     Background="AliceBlue"
                                     BorderBrush="DarkGray"
                                     BorderThickness="1"
                                     CornerRadius="5" />
-                                <StackPanel Margin="0,4" Orientation="Vertical">
+                                <StackPanel
+                                    Margin="0,4"
+                                    Orientation="Vertical">
 
                                     <!--  TRABAJO Y DESCANSOS  -->
                                     <controls:ItemResumen
@@ -3730,13 +4003,17 @@
                                 Style="{StaticResource EstiloToggleBarraPequeña}"
                                 ToolTip="Mostrar/Ocultar" />
 
-                            <Grid Margin="5,0" Visibility="{Binding ElementName=BtFindesMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
+                            <Grid
+                                Margin="5,0"
+                                Visibility="{Binding ElementName=BtFindesMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
                                 <Border
                                     Background="AliceBlue"
                                     BorderBrush="DarkGray"
                                     BorderThickness="1"
                                     CornerRadius="5" />
-                                <StackPanel Margin="0,4" Orientation="Vertical">
+                                <StackPanel
+                                    Margin="0,4"
+                                    Orientation="Vertical">
 
                                     <!--  FINES DE SEMANA  -->
                                     <controls:ItemResumenDoble
@@ -3804,13 +4081,17 @@
                                 Style="{StaticResource EstiloToggleBarraPequeña}"
                                 ToolTip="Mostrar/Ocultar" />
 
-                            <Grid Margin="5,0" Visibility="{Binding ElementName=BtDietasMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
+                            <Grid
+                                Margin="5,0"
+                                Visibility="{Binding ElementName=BtDietasMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
                                 <Border
                                     Background="AliceBlue"
                                     BorderBrush="DarkGray"
                                     BorderThickness="1"
                                     CornerRadius="5" />
-                                <StackPanel Margin="0,4" Orientation="Vertical">
+                                <StackPanel
+                                    Margin="0,4"
+                                    Orientation="Vertical">
 
                                     <!--  DIETAS  -->
                                     <controls:ItemResumen
@@ -3906,9 +4187,13 @@
                     Header="Acumulado Año"
                     Style="{StaticResource EstiloPestañasPijama}">
 
-                    <ScrollViewer Background="{StaticResource DegradadoCeleste1}" VerticalScrollBarVisibility="Hidden">
+                    <ScrollViewer
+                        Background="{StaticResource DegradadoCeleste1}"
+                        VerticalScrollBarVisibility="Hidden">
 
-                        <StackPanel Orientation="Vertical" ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                        <StackPanel
+                            Orientation="Vertical"
+                            ScrollViewer.VerticalScrollBarVisibility="Hidden">
 
                             <!--  HORAS  -->
                             <ToggleButton
@@ -3923,13 +4208,17 @@
                                 Style="{StaticResource EstiloToggleBarraPequeña}"
                                 ToolTip="Mostrar/Ocultar" />
 
-                            <Grid Margin="5,0" Visibility="{Binding ElementName=BtHorasAño, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
+                            <Grid
+                                Margin="5,0"
+                                Visibility="{Binding ElementName=BtHorasAño, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
                                 <Border
                                     Background="AliceBlue"
                                     BorderBrush="DarkGray"
                                     BorderThickness="1"
                                     CornerRadius="5" />
-                                <StackPanel Margin="0,4" Orientation="Vertical">
+                                <StackPanel
+                                    Margin="0,4"
+                                    Orientation="Vertical">
 
                                     <!--  TRABAJADAS, ACUMULADAS Y NOCTURNAS  -->
                                     <controls:ItemResumen
@@ -3964,13 +4253,17 @@
                                 Style="{StaticResource EstiloToggleBarraPequeña}"
                                 ToolTip="Mostrar/Ocultar" />
 
-                            <Grid Margin="5,0" Visibility="{Binding ElementName=BtDiasAño, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
+                            <Grid
+                                Margin="5,0"
+                                Visibility="{Binding ElementName=BtDiasAño, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
                                 <Border
                                     Background="AliceBlue"
                                     BorderBrush="DarkGray"
                                     BorderThickness="1"
                                     CornerRadius="5" />
-                                <StackPanel Margin="0,4" Orientation="Vertical">
+                                <StackPanel
+                                    Margin="0,4"
+                                    Orientation="Vertical">
 
                                     <!--  TRABAJO Y DESCANSOS  -->
                                     <controls:ItemResumen
@@ -4046,7 +4339,9 @@
                     Style="{StaticResource EstiloPestañasPijama}">
 
                     <!--  PANEL GRAFICOS PIJAMA  -->
-                    <ScrollViewer Background="{StaticResource DegradadoCeleste1}" VerticalScrollBarVisibility="Hidden">
+                    <ScrollViewer
+                        Background="{StaticResource DegradadoCeleste1}"
+                        VerticalScrollBarVisibility="Hidden">
 
                         <StackPanel
                             x:Name="PanelGraficosPijama"
@@ -4109,7 +4404,9 @@
                                             MaxValue="5"
                                             MinValue="0">
                                             <ch:Axis.Separator>
-                                                <ch:Separator Step="1" Stroke="PaleGoldenrod" />
+                                                <ch:Separator
+                                                    Step="1"
+                                                    Stroke="PaleGoldenrod" />
                                             </ch:Axis.Separator>
                                         </ch:Axis>
                                     </ch:CartesianChart.AxisY>
@@ -4173,7 +4470,9 @@
                                             MaxValue="1620"
                                             MinValue="60">
                                             <ch:Axis.Separator>
-                                                <ch:Separator Step="60" Stroke="PaleGoldenrod" />
+                                                <ch:Separator
+                                                    Step="60"
+                                                    Stroke="PaleGoldenrod" />
                                             </ch:Axis.Separator>
                                         </ch:Axis>
                                     </ch:CartesianChart.AxisY>
@@ -4213,7 +4512,9 @@
                     Style="{StaticResource EstiloToggleBarraPequeña}"
                     ToolTip="Mostrar/Ocultar" />
 
-                <Grid Margin="5,0" Visibility="{Binding ElementName=BtResumenMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
+                <Grid
+                    Margin="5,0"
+                    Visibility="{Binding ElementName=BtResumenMes, Path=IsChecked, Converter={StaticResource cnvVisibilityInverter}}">
                     <Border
                         Background="AliceBlue"
                         BorderBrush="DarkGray"
@@ -4223,7 +4524,9 @@
                     <StackPanel Orientation="Vertical">
 
                         <!--  DNDs, DCs y ACUMULADAS PENDIENTES  -->
-                        <StackPanel Margin="0,5,0,0" Orientation="Horizontal">
+                        <StackPanel
+                            Margin="0,5,0,0"
+                            Orientation="Horizontal">
                             <TextBlock
                                 Width="90"
                                 FontFamily="Comic Sans MS"
@@ -4247,7 +4550,9 @@
                                 ToolTip="Horas acumuladas disponibles hasta final del mes." />
                         </StackPanel>
 
-                        <StackPanel Margin="0,5" Orientation="Horizontal">
+                        <StackPanel
+                            Margin="0,5"
+                            Orientation="Horizontal">
                             <TextBlock
                                 Width="90"
                                 FontFamily="Comic Sans MS"
@@ -4344,7 +4649,7 @@
 
         </Grid>
 
-        <!--  DECOACIÓN PANEL LATERAL PIJAMA  -->
+        <!--  DECORACIÓN PANEL LATERAL PIJAMA  -->
         <Border
             x:Name="BordePanelResumen"
             Grid.RowSpan="4"
@@ -4406,7 +4711,9 @@
                         SelectedDatesChanged="QCalendar_SelectedDatesChanged"
                         SelectionMode="SingleDate"
                         Style="{StaticResource EstiloCalendario}" />
-                    <TextBlock FontSize="10" Text="Selecciona el día 1 del mes deseado." />
+                    <TextBlock
+                        FontSize="10"
+                        Text="Selecciona el día 1 del mes deseado." />
                 </StackPanel>
             </Border>
         </StackPanel>

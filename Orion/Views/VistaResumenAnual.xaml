@@ -9,6 +9,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:ch="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
     xmlns:cnv="clr-namespace:Orion.Convertidores"
+    xmlns:controls="clr-namespace:Orion.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Orion.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -25,7 +26,9 @@
         <cnv:ConvertidorHoraMixta x:Key="cnvHoraMixta" />
         <cnv:ConvertidorDecimal x:Key="cnvDecimal" />
 
-        <Style x:Key="EstiloTablaResumen" TargetType="DataGrid">
+        <Style
+            x:Key="EstiloTablaResumen"
+            TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
@@ -100,7 +103,9 @@
                 </StackPanel>
 
                 <!--  SELECTOR DE AÑO  -->
-                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+                <StackPanel
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
                     <Button
                         Width="32"
                         Height="32"
@@ -136,7 +141,7 @@
         </Border>
 
         <!--  TABLA RESUMEN  -->
-        <DataGrid
+        <controls:QDataGrid
             x:Name="TablaResumen"
             Grid.Row="1"
             AlternationCount="2"
@@ -150,15 +155,10 @@
             HorizontalGridLinesBrush="Transparent"
             IsReadOnly="True"
             ItemsSource="{Binding ResumenAnualVM.ListaResumen}"
-            SelectionMode="Single"
-            SelectionUnit="FullRow"
+            SelectionMode="Extended"
+            SelectionUnit="Cell"
             Style="{StaticResource EstiloTablaResumen}"
             VerticalGridLinesBrush="Lavender">
-
-            <DataGrid.Resources>
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
-                <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-            </DataGrid.Resources>
 
             <DataGrid.Columns>
 
@@ -290,10 +290,12 @@
 
             </DataGrid.Columns>
 
-        </DataGrid>
+        </controls:QDataGrid>
 
         <!--  PANEL INFERIOR  -->
-        <Grid Grid.Row="2" Background="Azure">
+        <Grid
+            Grid.Row="2"
+            Background="Azure">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="5*" />
                 <ColumnDefinition Width="2*" />
@@ -488,7 +490,9 @@
                             FontSize="14"
                             FontWeight="Bold"
                             Text="DNDs Pendientes: " />
-                        <TextBlock FontSize="14" Text="{Binding ResumenAnualVM.DNDsPendientes, StringFormat=00}" />
+                        <TextBlock
+                            FontSize="14"
+                            Text="{Binding ResumenAnualVM.DNDsPendientes, StringFormat=00}" />
                     </StackPanel>
                     <!--  DCs Pendientes  -->
                     <StackPanel
@@ -500,7 +504,9 @@
                             FontSize="14"
                             FontWeight="Bold"
                             Text="DCs Pendientes: " />
-                        <TextBlock FontSize="14" Text="{Binding ResumenAnualVM.DCsPendientes, StringFormat=00}" />
+                        <TextBlock
+                            FontSize="14"
+                            Text="{Binding ResumenAnualVM.DCsPendientes, StringFormat=00}" />
                     </StackPanel>
                     <!--  Acumuladas  -->
                     <StackPanel
@@ -512,7 +518,9 @@
                             FontSize="14"
                             FontWeight="Bold"
                             Text="Acumuladas: " />
-                        <TextBlock FontSize="14" Text="{Binding ResumenAnualVM.AcumuladasPendientes, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}" />
+                        <TextBlock
+                            FontSize="14"
+                            Text="{Binding ResumenAnualVM.AcumuladasPendientes, Converter={StaticResource cnvHoraMixta}, ConverterParameter={x:Static cnv:VerValores.HoraPlus}}" />
                     </StackPanel>
                     <!--  DCs Generados  -->
                     <StackPanel
@@ -524,7 +532,9 @@
                             FontSize="14"
                             FontWeight="Bold"
                             Text="DCs Generados: " />
-                        <TextBlock FontSize="14" Text="{Binding ResumenAnualVM.DCsGenerados, Converter={StaticResource cnvDecimal}}" />
+                        <TextBlock
+                            FontSize="14"
+                            Text="{Binding ResumenAnualVM.DCsGenerados, Converter={StaticResource cnvDecimal}}" />
                     </StackPanel>
                 </Grid>
             </Border>

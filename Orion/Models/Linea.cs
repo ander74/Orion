@@ -132,6 +132,7 @@ namespace Orion.Models {
 
         private void Listaitinerarios_ItemPropertyChanged(object sender, ItemChangedEventArgs<Itinerario> e) {
             Modificado = true;
+            PropiedadCambiada(nameof(Modificado));
         }
         #endregion
 

@@ -6,6 +6,8 @@
 // ===============================================
 #endregion
 using System;
+using System.Linq;
+using Orion.Models;
 
 namespace Orion.Config {
 
@@ -227,6 +229,95 @@ namespace Orion.Config {
                 return (final > iniciopluscena ? (final - iniciopluscena).ToDecimal() : 0) * (porcentajepluscena / 100m);
             }
         }
+
+
+        // ====================================================================================================
+        #region ITINERARIOS DE GRÁFICO
+        // ====================================================================================================
+
+        public static ValoracionGrafico ConvertirEnItinerario(decimal codigo, TimeSpan? inicio) {
+            // Creamos el itinerario que se va a devolver.
+            ValoracionGrafico itinerario = new ValoracionGrafico();
+            // Ponemos el inicio al itinerario.
+            itinerario.Inicio = inicio;
+            // Desglosamos el código.
+            string textoLinea = codigo.ToString().Replace(",", ".");
+            int numeroItinerario = 0;
+            int modificador = 0;
+            if (textoLinea.Contains(".")) {
+                var codigos = textoLinea.Split('.');
+                numeroItinerario = int.Parse(codigos[0]);
+                modificador = int.Parse(codigos[1]);
+            } else {
+                numeroItinerario = int.Parse(textoLinea);
+            }
+            // Si el número de itinerario es menor que 10, se trata de un itinerario generado automáticamente.
+            // Lo evaluamos y devolvemos el itinerario correctamente.
+            if (numeroItinerario < 10) {
+                var iti = new ValoracionGrafico {
+                    Inicio = inicio,
+                    Final = inicio + new TimeSpan(0, modificador, 0),
+                    Tiempo = new TimeSpan(0, modificador, 0),
+                };
+                switch (numeroItinerario) {
+                    case 1: // Descanso
+                        iti.Descripcion = $"Descanso de {modificador} minutos.";
+                        break;
+                    case 2: // Pausa
+                        iti.Descripcion = $"Pausa de {modificador} minutos.";
+                        break;
+                    case 3: // Disponibilidad
+                        iti.Descripcion = $"Disponibilidad de {modificador} minutos.";
+                        break;
+                    case 4: // Disponibilidad
+                        iti.Descripcion = $"Reserva de {modificador} minutos.";
+                        break;
+                    default: // Sólo tiempo.
+                        iti.Descripcion = $"{modificador} minutos.";
+                        break;
+                }
+                return iti;
+            }
+            // Si el número del itinerario es menor que 100, se trata de una línea especial, con lo que buscamos la línea
+            // y devolvemos el itinerario de esa línea.
+            if (numeroItinerario < 100) {
+                var linea = App.Global.LineasVM.ListaLineas.FirstOrDefault(l => l.Nombre == numeroItinerario.ToString());
+                if (linea != null) {
+                    var iti = linea.ListaItinerarios.FirstOrDefault(i => i.Nombre == modificador);
+                    if (iti != null) {
+                        itinerario.Linea = 0;
+                        itinerario.Descripcion = iti.Descripcion;
+                        itinerario.Final = itinerario.Inicio + new TimeSpan(0, iti.TiempoReal, 0);
+                        return itinerario;
+                    }
+                }
+                // Si el número del itinerario es igual o mayor que 100 se trata de un itinerario real.
+            } else {
+                var iti = App.Global.LineasRepo.GetItinerarioByNombre(numeroItinerario);
+                if (iti != null) {
+                    // Si no hay modificador, se busca el itinerario y se aplica.
+                    if (modificador == 0) {
+                        itinerario.Linea = numeroItinerario;
+                        itinerario.Descripcion = iti.Descripcion;
+                        itinerario.Final = itinerario.Inicio + new TimeSpan(0, iti.TiempoReal, 0);
+                        return itinerario;
+                        // Si hay modificador, se busca la parada con el indice del modificador.
+                    } else {
+                        var parada = iti.ListaParadas.FirstOrDefault(p => p.Orden == modificador);
+                        if (parada != null) {
+                            itinerario.Linea = numeroItinerario;
+                            itinerario.Descripcion = iti.Descripcion + $"\nRelevo en {parada.Descripcion}";
+                            itinerario.Final = itinerario.Inicio + parada.Tiempo;
+                            return itinerario;
+                        }
+                    }
+                }
+            }
+            return null;
+        }
+
+        #endregion
+        // ====================================================================================================
 
 
 

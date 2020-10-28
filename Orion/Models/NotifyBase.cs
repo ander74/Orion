@@ -21,12 +21,6 @@ namespace Orion.Models {
 
 
         /// <summary>
-        /// Evento que se lanzará cuando los cambios en un objeto hagan necesario su guardado.
-        /// </summary>
-        public event PropertyChangedEventHandler ObjetoCambiado;
-
-
-        /// <summary>
         /// Establece el objeto como modificado e invoca el evento 'PropertyChanged'.
         /// </summary>
         public void PropiedadCambiada([CallerMemberName] string prop = "") {
@@ -37,18 +31,20 @@ namespace Orion.Models {
         /// <summary>
         /// Indica si el objeto ha cambiado.
         /// </summary>
-        private bool _modificado;
+        //private bool _modificado;
+        //[JsonIgnore]
+        //public bool Modificado {
+        //    get { return _modificado; }
+        //    set {
+        //        if (_modificado != value) {
+        //            _modificado = value;
+        //            if (_modificado) PropiedadCambiada();
+        //        }
+        //    }
+        //}
         [JsonIgnore]
-        public bool Modificado {
-            get { return _modificado; }
-            set {
-                if (_modificado != value) {
-                    _modificado = value;
-                    if (_modificado) ObjetoCambiado?.Invoke(this, new PropertyChangedEventArgs(nameof(Modificado)));
-                    PropiedadCambiada();
-                }
-            }
-        }
+        public bool Modificado { get; set; }
+
 
 
         /// <summary>

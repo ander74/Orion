@@ -180,6 +180,7 @@ namespace Orion.Models {
 
         private void Regulaciones_ItemPropertyChanged(object sender, ItemChangedEventArgs<RegulacionConductor> e) {
             Modificado = true;
+            PropiedadCambiada(nameof(Modificado));
         }
 
 

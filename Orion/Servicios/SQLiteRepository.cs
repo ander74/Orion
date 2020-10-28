@@ -204,6 +204,8 @@ namespace Orion.Servicios {
                     using (var comando2 = new SQLiteCommand(Identity, conexion)) {
                         int id = Convert.ToInt32(comando2.ExecuteScalar());
                         item.Id = id < 0 ? 0 : id;
+                        item.Modificado = false;
+                        item.Nuevo = false;
                     }
                 }
             } else {
@@ -214,6 +216,8 @@ namespace Orion.Servicios {
                     }
                     comando.Parameters.AddWithValue("@id", item.Id);
                     comando.ExecuteNonQuery();
+                    item.Modificado = false;
+                    item.Nuevo = false;
                 }
             }
             if (!ignorarLista && item.HasList) {

@@ -102,7 +102,7 @@ namespace Orion.Controls {
 
         // Using a DependencyProperty as the backing store for ElementoSeleccionado.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty ElementoSeleccionadoProperty =
-            DependencyProperty.Register("ElementoSeleccionado", typeof(object), typeof(QDataGrid), new PropertyMetadata(null, null, null));
+            DependencyProperty.Register("ElementoSeleccionado", typeof(object), typeof(QDataGrid), new FrameworkPropertyMetadata(null, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
 
 
 

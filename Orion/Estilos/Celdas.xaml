@@ -13,7 +13,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO CELDAS NORMAL  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloCeldasNormal" TargetType="DataGridCell">
+    <Style
+        x:Key="EstiloCeldasNormal"
+        TargetType="DataGridCell">
         <!--  ESTILO DE CELDA NORMAL  -->
         <Setter Property="Template">
             <Setter.Value>
@@ -116,7 +118,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO CELDAS NORMAL ALINEADA A LA IZQUIERDA  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloCeldasNormalIzquierda" TargetType="DataGridCell">
+    <Style
+        x:Key="EstiloCeldasNormalIzquierda"
+        TargetType="DataGridCell">
         <!--  ESTILO DE CELDA NORMAL  -->
         <Setter Property="Template">
             <Setter.Value>
@@ -217,7 +221,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO CELDAS GRAFICOS  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloCeldasGraficos" TargetType="DataGridCell">
+    <Style
+        x:Key="EstiloCeldasGraficos"
+        TargetType="DataGridCell">
 
         <!--  ESTILO DE CELDA NORMAL  -->
         <Setter Property="Template">
@@ -247,7 +253,9 @@
             </DataTrigger>-->
 
             <!--  ESTILO SI EL GRAFICO ES DIFERENTE AL ANTERIOR  -->
-            <DataTrigger Binding="{Binding Diferente}" Value="True">
+            <DataTrigger
+                Binding="{Binding Diferente}"
+                Value="True">
                 <Setter Property="Foreground" Value="Blue" />
                 <Setter Property="FontWeight" Value="DemiBold" />
             </DataTrigger>
@@ -346,7 +354,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO CELDAS ACUMULADAS GRAFICOS  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloCeldasAcumuladasGraficos" TargetType="DataGridCell">
+    <Style
+        x:Key="EstiloCeldasAcumuladasGraficos"
+        TargetType="DataGridCell">
         <!--  ESTILO DE CELDA NORMAL  -->
         <Setter Property="Template">
             <Setter.Value>
@@ -367,11 +377,15 @@
         </Setter>
         <Style.Triggers>
             <!--  ESTILO SI LAS HORAS SON NEGATIVAS  -->
-            <DataTrigger Binding="{Binding HorasNegativas}" Value="True">
+            <DataTrigger
+                Binding="{Binding HorasNegativas}"
+                Value="True">
                 <Setter Property="Foreground" Value="Red" />
             </DataTrigger>
             <!--  ESTILO SI EL GRAFICO ES DIFERENTE AL ANTERIOR  -->
-            <DataTrigger Binding="{Binding Diferente}" Value="True">
+            <DataTrigger
+                Binding="{Binding Diferente}"
+                Value="True">
                 <Setter Property="Foreground" Value="Blue" />
                 <Setter Property="FontWeight" Value="DemiBold" />
             </DataTrigger>
@@ -478,7 +492,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO CELDAS CALENDARIOS  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloCeldasCalendarios" TargetType="DataGridCell">
+    <Style
+        x:Key="EstiloCeldasCalendarios"
+        TargetType="DataGridCell">
         <!--  ESTILO DE CELDA NORMAL  -->
         <Setter Property="Template">
             <Setter.Value>
@@ -580,7 +596,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO CELDAS SIN BORDE  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloCeldasSinBorde" TargetType="DataGridCell">
+    <Style
+        x:Key="EstiloCeldasSinBorde"
+        TargetType="DataGridCell">
         <Setter Property="BorderBrush" Value="DarkGray" />
         <!--  ESTILO DE CELDA NORMAL  -->
         <Setter Property="Template">
@@ -683,7 +701,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO CELDAS SIN BORDE DERECHO  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloCeldasSinBordeDerecho" TargetType="DataGridCell">
+    <Style
+        x:Key="EstiloCeldasSinBordeDerecho"
+        TargetType="DataGridCell">
         <Setter Property="BorderBrush" Value="DarkGray" />
         <!--  ESTILO DE CELDA NORMAL  -->
         <Setter Property="Template">
@@ -786,7 +806,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO CELDAS SIN BORDE IZQUIERDO  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloCeldasSinBordeIzquierdo" TargetType="DataGridCell">
+    <Style
+        x:Key="EstiloCeldasSinBordeIzquierdo"
+        TargetType="DataGridCell">
         <Setter Property="BorderBrush" Value="DarkGray" />
         <!--  ESTILO DE CELDA NORMAL  -->
         <Setter Property="Template">

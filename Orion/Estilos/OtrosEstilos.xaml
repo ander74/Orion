@@ -16,14 +16,18 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO SEPARADORES DE COLUMNAS  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloSeparadores" TargetType="{x:Type Thumb}">
+    <Style
+        x:Key="EstiloSeparadores"
+        TargetType="{x:Type Thumb}">
         <Setter Property="Width" Value="8" />
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Cursor" Value="SizeWE" />
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}" />
+                    <Border
+                        Padding="{TemplateBinding Padding}"
+                        Background="{TemplateBinding Background}" />
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -33,7 +37,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO SEPARADORES DE BARRA DE ESTADO  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloSeparadorEstado" TargetType="Separator">
+    <Style
+        x:Key="EstiloSeparadorEstado"
+        TargetType="Separator">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Separator}">
@@ -52,7 +58,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO BOTON  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloBoton" TargetType="Button">
+    <Style
+        x:Key="EstiloBoton"
+        TargetType="Button">
         <Setter Property="Background" Value="{StaticResource orDegradadoGris}" />
         <Setter Property="Margin" Value="2,5" />
         <Setter Property="FontSize" Value="10" />
@@ -95,7 +103,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO BOTON BARRA  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloBotonBarra" TargetType="Button">
+    <Style
+        x:Key="EstiloBotonBarra"
+        TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Margin" Value="2,5" />
         <Setter Property="FontSize" Value="10" />
@@ -138,7 +148,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO TOGGLE BARRA  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloToggleBarra" TargetType="ToggleButton">
+    <Style
+        x:Key="EstiloToggleBarra"
+        TargetType="ToggleButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Margin" Value="2,5" />
         <Setter Property="FontSize" Value="10" />
@@ -193,7 +205,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO BOTON VALIDEZ FECHA  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloBotonValidezFecha" TargetType="Button">
+    <Style
+        x:Key="EstiloBotonValidezFecha"
+        TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Margin" Value="2,5" />
         <Setter Property="FontSize" Value="10" />
@@ -236,7 +250,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO BOTON BARRA PEQUEÑA  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloBotonBarraPequeña" TargetType="Button">
+    <Style
+        x:Key="EstiloBotonBarraPequeña"
+        TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Margin" Value="2,5" />
         <Setter Property="Padding" Value="5" />
@@ -279,7 +295,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO TOGGLE BARRA PEQUEÑA  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloToggleBarraPequeña" TargetType="ToggleButton">
+    <Style
+        x:Key="EstiloToggleBarraPequeña"
+        TargetType="ToggleButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Margin" Value="2,5" />
         <Setter Property="Padding" Value="5" />
@@ -334,7 +352,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO BOTON CONTROL ESTADÍSTICAS  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloBotonControlEstadisticas" TargetType="ToggleButton">
+    <Style
+        x:Key="EstiloBotonControlEstadisticas"
+        TargetType="ToggleButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Margin" Value="4,5,5,0" />
         <Setter Property="Padding" Value="5,8" />
@@ -382,7 +402,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO BOTON OPCION ESTADÍSTICAS  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloBotonOpcionEstadisticas" TargetType="Button">
+    <Style
+        x:Key="EstiloBotonOpcionEstadisticas"
+        TargetType="Button">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Margin" Value="5,0,5,5" />
         <Setter Property="Padding" Value="10,8" />
@@ -427,7 +449,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO TEXTO CONTROL ESTADÍSTICAS  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloTextoControlEstadisticas" TargetType="TextBlock">
+    <Style
+        x:Key="EstiloTextoControlEstadisticas"
+        TargetType="TextBlock">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="TextAlignment" Value="Center" />
     </Style>
@@ -436,7 +460,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO TEXTO OPCIÓN ESTADÍSTICAS  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloTextoOpcionEstadisticas" TargetType="TextBlock">
+    <Style
+        x:Key="EstiloTextoOpcionEstadisticas"
+        TargetType="TextBlock">
         <Setter Property="VerticalAlignment" Value="Center" />
         <Setter Property="TextAlignment" Value="Center" />
         <Setter Property="Margin" Value="15,0,0,0" />
@@ -446,7 +472,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO IMAGEN  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloImagen" TargetType="Image">
+    <Style
+        x:Key="EstiloImagen"
+        TargetType="Image">
         <Setter Property="Height" Value="28" />
         <Setter Property="Margin" Value="0,0,0,5" />
         <Style.Triggers>
@@ -460,7 +488,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO IMAGEN PEQUEÑA  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloImagenPequeña" TargetType="Image">
+    <Style
+        x:Key="EstiloImagenPequeña"
+        TargetType="Image">
         <Setter Property="Height" Value="20" />
         <Setter Property="Margin" Value="0,0,4,0" />
         <Style.Triggers>
@@ -474,7 +504,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO IMAGEN CONTROL ESTADÍSTICAS  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloImagenControlEstadisticas" TargetType="Image">
+    <Style
+        x:Key="EstiloImagenControlEstadisticas"
+        TargetType="Image">
         <Setter Property="Height" Value="16" />
         <Setter Property="Margin" Value="0,0,10,0" />
         <Setter Property="VerticalAlignment" Value="Center" />
@@ -489,7 +521,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO ETIQUETA PULSABLE  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloEtiquetaPulsable" TargetType="Label">
+    <Style
+        x:Key="EstiloEtiquetaPulsable"
+        TargetType="Label">
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
                 <Setter Property="Background" Value="{StaticResource orDegradadoNaranja}" />
@@ -501,7 +535,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO PESTAÑAS  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloPestañas" TargetType="TabItem">
+    <Style
+        x:Key="EstiloPestañas"
+        TargetType="TabItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -537,7 +573,9 @@
     </Style>
 
 
-    <Style x:Key="EstiloPestañasPijama" TargetType="TabItem">
+    <Style
+        x:Key="EstiloPestañasPijama"
+        TargetType="TabItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -573,7 +611,9 @@
     </Style>
 
 
-    <Style x:Key="EstiloPestañaProgramador" TargetType="TabItem">
+    <Style
+        x:Key="EstiloPestañaProgramador"
+        TargetType="TabItem">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="TabItem">
@@ -611,7 +651,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO CALENDARIO  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloCalendario" TargetType="Calendar">
+    <Style
+        x:Key="EstiloCalendario"
+        TargetType="Calendar">
         <Setter Property="CalendarDayButtonStyle">
             <Setter.Value>
                 <Style TargetType="CalendarDayButton">
@@ -632,7 +674,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO BOTON DESPLEGABLE  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloBotonDesplegable" TargetType="xceed:DropDownButton">
+    <Style
+        x:Key="EstiloBotonDesplegable"
+        TargetType="xceed:DropDownButton">
 
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Margin" Value="2.5" />
@@ -647,7 +691,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xceed:DropDownButton}">
-                    <Grid x:Name="MainGrid" SnapsToDevicePixels="True">
+                    <Grid
+                        x:Name="MainGrid"
+                        SnapsToDevicePixels="True">
                         <ToggleButton
                             x:Name="PART_DropDownButton"
                             Grid.Column="0"
@@ -717,8 +763,12 @@
                                 Background="{DynamicResource PopupBackground}"
                                 BorderBrush="{DynamicResource WindowBorderActive}"
                                 BorderThickness="1">
-                                <ScrollViewer x:Name="DropDownScrollViewer" VerticalScrollBarVisibility="Auto">
-                                    <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding DropDownContent}" />
+                                <ScrollViewer
+                                    x:Name="DropDownScrollViewer"
+                                    VerticalScrollBarVisibility="Auto">
+                                    <ContentPresenter
+                                        x:Name="PART_ContentPresenter"
+                                        Content="{TemplateBinding DropDownContent}" />
                                 </ScrollViewer>
                             </Border>
                         </Popup>
@@ -750,7 +800,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO BOTON DESPLEGABLE BARRA PEQUEÑA  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloBotonDesplegableBarraPequeña" TargetType="xceed:DropDownButton">
+    <Style
+        x:Key="EstiloBotonDesplegableBarraPequeña"
+        TargetType="xceed:DropDownButton">
 
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Margin" Value="2.5" />
@@ -762,7 +814,9 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type xceed:DropDownButton}">
-                    <Grid x:Name="MainGrid" SnapsToDevicePixels="True">
+                    <Grid
+                        x:Name="MainGrid"
+                        SnapsToDevicePixels="True">
                         <ToggleButton
                             x:Name="PART_DropDownButton"
                             Grid.Column="0"
@@ -832,8 +886,12 @@
                                 Background="{DynamicResource PopupBackground}"
                                 BorderBrush="{DynamicResource WindowBorderActive}"
                                 BorderThickness="1">
-                                <ScrollViewer x:Name="DropDownScrollViewer" VerticalScrollBarVisibility="Auto">
-                                    <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding DropDownContent}" />
+                                <ScrollViewer
+                                    x:Name="DropDownScrollViewer"
+                                    VerticalScrollBarVisibility="Auto">
+                                    <ContentPresenter
+                                        x:Name="PART_ContentPresenter"
+                                        Content="{TemplateBinding DropDownContent}" />
                                 </ScrollViewer>
                             </Border>
                         </Popup>
@@ -865,7 +923,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO BOTÓN COMBO BOX  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloBotonComboBox" TargetType="ToggleButton">
+    <Style
+        x:Key="EstiloBotonComboBox"
+        TargetType="ToggleButton">
         <Setter Property="Background" Value="{StaticResource DegradadoCeleste2}" />
         <Setter Property="Padding" Value="5,8" />
         <Setter Property="FontFamily" Value="Verdana" />
@@ -922,7 +982,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO COMBO BOX  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloComboBox" TargetType="ComboBox">
+    <Style
+        x:Key="EstiloComboBox"
+        TargetType="ComboBox">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="ComboBox">
@@ -971,7 +1033,9 @@
                                     BorderBrush="LightGray"
                                     BorderThickness="1"
                                     CornerRadius="4" />
-                                <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                <ScrollViewer
+                                    Margin="4,6,4,6"
+                                    SnapsToDevicePixels="True">
                                     <!--<StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained"/>-->
                                     <ItemsPresenter KeyboardNavigation.DirectionalNavigation="Contained" />
                                 </ScrollViewer>
@@ -988,7 +1052,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO TEXTO VERTICAL  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="TextoVertical" TargetType="TextBlock">
+    <Style
+        x:Key="TextoVertical"
+        TargetType="TextBlock">
         <Setter Property="FontFamily" Value="Comic Sans MS" />
         <Setter Property="FontSize" Value="9" />
         <Setter Property="FontWeight" Value="Bold" />
@@ -1007,7 +1073,9 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO BOTON GRUPO INFORMES  -->
     <!--  ====================================================================================================  -->
-    <Style x:Key="EstiloBotonGrupoInformes" TargetType="ToggleButton">
+    <Style
+        x:Key="EstiloBotonGrupoInformes"
+        TargetType="ToggleButton">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Margin" Value="4,5,5,0" />
         <Setter Property="Padding" Value="5,8" />

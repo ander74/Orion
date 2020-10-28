@@ -12,12 +12,24 @@
     <!--  ====================================================================================================  -->
     <!--  FONDOS  -->
     <!--  ====================================================================================================  -->
-    <SolidColorBrush x:Key="FondoCeleste1" Color="{StaticResource Celeste1}" />
-    <SolidColorBrush x:Key="FondoCeleste2" Color="{StaticResource Celeste2}" />
-    <SolidColorBrush x:Key="FondoCeleste3" Color="{StaticResource Celeste3}" />
-    <SolidColorBrush x:Key="FondoCeleste4" Color="{StaticResource Celeste4}" />
-    <SolidColorBrush x:Key="FondoCeleste5" Color="{StaticResource Celeste5}" />
-    <SolidColorBrush x:Key="FondoCeleste6" Color="{StaticResource Celeste6}" />
+    <SolidColorBrush
+        x:Key="FondoCeleste1"
+        Color="{StaticResource Celeste1}" />
+    <SolidColorBrush
+        x:Key="FondoCeleste2"
+        Color="{StaticResource Celeste2}" />
+    <SolidColorBrush
+        x:Key="FondoCeleste3"
+        Color="{StaticResource Celeste3}" />
+    <SolidColorBrush
+        x:Key="FondoCeleste4"
+        Color="{StaticResource Celeste4}" />
+    <SolidColorBrush
+        x:Key="FondoCeleste5"
+        Color="{StaticResource Celeste5}" />
+    <SolidColorBrush
+        x:Key="FondoCeleste6"
+        Color="{StaticResource Celeste6}" />
 
     <!--  ====================================================================================================  -->
     <!--  DEGRADADOS  -->

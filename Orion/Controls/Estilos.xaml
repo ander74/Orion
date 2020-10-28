@@ -3,7 +3,9 @@
 <!--    -->
 <!--  Vea el archivo Licencia.txt para mas detalles  -->
 <!--  ===============================================  -->
-<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <!--  ====================================================================================================  -->
     <!--#region COLORES Y FONDOS-->
@@ -21,8 +23,12 @@
         B="153"
         G="255"
         R="255" />
-    <SolidColorBrush x:Key="SolidAmarillo1" Color="{StaticResource Amarillo1}" />
-    <SolidColorBrush x:Key="SolidAmarillo2" Color="{StaticResource Amarillo2}" />
+    <SolidColorBrush
+        x:Key="SolidAmarillo1"
+        Color="{StaticResource Amarillo1}" />
+    <SolidColorBrush
+        x:Key="SolidAmarillo2"
+        Color="{StaticResource Amarillo2}" />
     <LinearGradientBrush x:Key="DegradadoAmarillo" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Amarillo1}" />
         <GradientStop Offset="1" Color="{StaticResource Amarillo2}" />
@@ -40,8 +46,12 @@
         B="255"
         G="204"
         R="152" />
-    <SolidColorBrush x:Key="SolidAzul1" Color="{StaticResource Azul1}" />
-    <SolidColorBrush x:Key="SolidAzul2" Color="{StaticResource Azul2}" />
+    <SolidColorBrush
+        x:Key="SolidAzul1"
+        Color="{StaticResource Azul1}" />
+    <SolidColorBrush
+        x:Key="SolidAzul2"
+        Color="{StaticResource Azul2}" />
     <LinearGradientBrush x:Key="DegradadoAzul" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Azul1}" />
         <GradientStop Offset="1" Color="{StaticResource Azul2}" />
@@ -59,8 +69,12 @@
         B="60"
         G="240"
         R="255" />
-    <SolidColorBrush x:Key="SolidCalabaza1" Color="{StaticResource Calabaza1}" />
-    <SolidColorBrush x:Key="SolidCalabaza2" Color="{StaticResource Calabaza2}" />
+    <SolidColorBrush
+        x:Key="SolidCalabaza1"
+        Color="{StaticResource Calabaza1}" />
+    <SolidColorBrush
+        x:Key="SolidCalabaza2"
+        Color="{StaticResource Calabaza2}" />
     <LinearGradientBrush x:Key="DegradadoCalabaza" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Calabaza1}" />
         <GradientStop Offset="1" Color="{StaticResource Calabaza2}" />
@@ -78,8 +92,12 @@
         B="255"
         G="255"
         R="204" />
-    <SolidColorBrush x:Key="SolidCian1" Color="{StaticResource Cian1}" />
-    <SolidColorBrush x:Key="SolidCian2" Color="{StaticResource Cian2}" />
+    <SolidColorBrush
+        x:Key="SolidCian1"
+        Color="{StaticResource Cian1}" />
+    <SolidColorBrush
+        x:Key="SolidCian2"
+        Color="{StaticResource Cian2}" />
     <LinearGradientBrush x:Key="DegradadoCian" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Cian1}" />
         <GradientStop Offset="1" Color="{StaticResource Cian2}" />
@@ -97,8 +115,12 @@
         B="234"
         G="234"
         R="234" />
-    <SolidColorBrush x:Key="SolidGris1" Color="{StaticResource Gris1}" />
-    <SolidColorBrush x:Key="SolidGris2" Color="{StaticResource Gris2}" />
+    <SolidColorBrush
+        x:Key="SolidGris1"
+        Color="{StaticResource Gris1}" />
+    <SolidColorBrush
+        x:Key="SolidGris2"
+        Color="{StaticResource Gris2}" />
     <LinearGradientBrush x:Key="DegradadoGris" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Gris1}" />
         <GradientStop Offset="1" Color="{StaticResource Gris2}" />
@@ -116,8 +138,12 @@
         B="51"
         G="255"
         R="204" />
-    <SolidColorBrush x:Key="SolidLima1" Color="{StaticResource Lima1}" />
-    <SolidColorBrush x:Key="SolidLima2" Color="{StaticResource Lima2}" />
+    <SolidColorBrush
+        x:Key="SolidLima1"
+        Color="{StaticResource Lima1}" />
+    <SolidColorBrush
+        x:Key="SolidLima2"
+        Color="{StaticResource Lima2}" />
     <LinearGradientBrush x:Key="DegradadoLima" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Lima1}" />
         <GradientStop Offset="1" Color="{StaticResource Lima2}" />
@@ -135,8 +161,12 @@
         B="0"
         G="165"
         R="215" />
-    <SolidColorBrush x:Key="SolidMarron1" Color="{StaticResource Marron1}" />
-    <SolidColorBrush x:Key="SolidMarron2" Color="{StaticResource Marron2}" />
+    <SolidColorBrush
+        x:Key="SolidMarron1"
+        Color="{StaticResource Marron1}" />
+    <SolidColorBrush
+        x:Key="SolidMarron2"
+        Color="{StaticResource Marron2}" />
     <LinearGradientBrush x:Key="DegradadoMarron" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Marron1}" />
         <GradientStop Offset="1" Color="{StaticResource Marron2}" />
@@ -154,8 +184,12 @@
         B="102"
         G="204"
         R="255" />
-    <SolidColorBrush x:Key="SolidNaranja1" Color="{StaticResource Naranja1}" />
-    <SolidColorBrush x:Key="SolidNaranja2" Color="{StaticResource Naranja2}" />
+    <SolidColorBrush
+        x:Key="SolidNaranja1"
+        Color="{StaticResource Naranja1}" />
+    <SolidColorBrush
+        x:Key="SolidNaranja2"
+        Color="{StaticResource Naranja2}" />
     <LinearGradientBrush x:Key="DegradadoNaranja" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Naranja1}" />
         <GradientStop Offset="1" Color="{StaticResource Naranja2}" />
@@ -173,8 +207,12 @@
         B="204"
         G="204"
         R="255" />
-    <SolidColorBrush x:Key="SolidRojo1" Color="{StaticResource Rojo1}" />
-    <SolidColorBrush x:Key="SolidRojo2" Color="{StaticResource Rojo2}" />
+    <SolidColorBrush
+        x:Key="SolidRojo1"
+        Color="{StaticResource Rojo1}" />
+    <SolidColorBrush
+        x:Key="SolidRojo2"
+        Color="{StaticResource Rojo2}" />
     <LinearGradientBrush x:Key="DegradadoRojo" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Rojo1}" />
         <GradientStop Offset="1" Color="{StaticResource Rojo2}" />
@@ -192,8 +230,12 @@
         B="255"
         G="204"
         R="255" />
-    <SolidColorBrush x:Key="SolidRosa1" Color="{StaticResource Rosa1}" />
-    <SolidColorBrush x:Key="SolidRosa2" Color="{StaticResource Rosa2}" />
+    <SolidColorBrush
+        x:Key="SolidRosa1"
+        Color="{StaticResource Rosa1}" />
+    <SolidColorBrush
+        x:Key="SolidRosa2"
+        Color="{StaticResource Rosa2}" />
     <LinearGradientBrush x:Key="DegradadoRosa" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Rosa1}" />
         <GradientStop Offset="1" Color="{StaticResource Rosa2}" />
@@ -211,8 +253,12 @@
         B="204"
         G="255"
         R="153" />
-    <SolidColorBrush x:Key="SolidVerde1" Color="{StaticResource Verde1}" />
-    <SolidColorBrush x:Key="SolidVerde2" Color="{StaticResource Verde2}" />
+    <SolidColorBrush
+        x:Key="SolidVerde1"
+        Color="{StaticResource Verde1}" />
+    <SolidColorBrush
+        x:Key="SolidVerde2"
+        Color="{StaticResource Verde2}" />
     <LinearGradientBrush x:Key="DegradadoVerde" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Verde1}" />
         <GradientStop Offset="1" Color="{StaticResource Verde2}" />
@@ -230,8 +276,12 @@
         B="255"
         G="204"
         R="204" />
-    <SolidColorBrush x:Key="SolidVioleta1" Color="{StaticResource Violeta1}" />
-    <SolidColorBrush x:Key="SolidVioleta2" Color="{StaticResource Violeta2}" />
+    <SolidColorBrush
+        x:Key="SolidVioleta1"
+        Color="{StaticResource Violeta1}" />
+    <SolidColorBrush
+        x:Key="SolidVioleta2"
+        Color="{StaticResource Violeta2}" />
     <LinearGradientBrush x:Key="DegradadoVioleta" StartPoint="0.5,0" EndPoint="0.5,1">
         <GradientStop Offset="0" Color="{StaticResource Violeta1}" />
         <GradientStop Offset="1" Color="{StaticResource Violeta2}" />
@@ -245,7 +295,9 @@
     <!--#region BOTONES BARRA-->
     <!--  ====================================================================================================  -->
 
-    <Style x:Key="EstiloBotonBarraBase" TargetType="ButtonBase">
+    <Style
+        x:Key="EstiloBotonBarraBase"
+        TargetType="ButtonBase">
         <Setter Property="Background" Value="Transparent" />
         <Setter Property="Focusable" Value="False" />
         <Setter Property="Template">
@@ -383,7 +435,9 @@
     <!--#region IMÁGENES-->
     <!--  ====================================================================================================  -->
 
-    <Style x:Key="EstiloImagen" TargetType="Image">
+    <Style
+        x:Key="EstiloImagen"
+        TargetType="Image">
         <Setter Property="Height" Value="28" />
         <Setter Property="Margin" Value="0,0,0,5" />
         <Style.Triggers>

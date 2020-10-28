@@ -32,12 +32,16 @@
         <convertidores:ConvertidorItinerario x:Key="cnvItinerario" />
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
 
-        <Style x:Key="EstiloGridLineas" TargetType="DataGrid">
+        <Style
+            x:Key="EstiloGridLineas"
+            TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
         </Style>
-        <Style x:Key="EstiloGridItinerarios" TargetType="DataGrid">
+        <Style
+            x:Key="EstiloGridItinerarios"
+            TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasVerde}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
@@ -81,10 +85,14 @@
                 Background="LightGray" />
 
             <!--  DESPLEGABLE EXPORTAR LINEAS  -->
-            <xceed:DropDownButton x:Name="BtExportarLineas" Style="{StaticResource EstiloBotonDesplegable}">
+            <xceed:DropDownButton
+                x:Name="BtExportarLineas"
+                Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Exportar.png" Style="{StaticResource EstiloImagen}" />
+                        <Image
+                            Source="Imagenes/Exportar.png"
+                            Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtExportar"
                             FontFamily="Comic Sans MS"
@@ -256,7 +264,7 @@
                 FontSize="14"
                 FontWeight="Bold" />
 
-            <DataGrid
+            <controls:QDataGrid
                 x:Name="TablaLineas"
                 Grid.Row="1"
                 Grid.Column="0"
@@ -268,6 +276,7 @@
                 CanUserAddRows="True"
                 CanUserReorderColumns="False"
                 CanUserSortColumns="False"
+                ElementoSeleccionado="{Binding LineasVM.LineaSeleccionada}"
                 FontFamily="Comic Sans MS"
                 FontSize="11"
                 GotFocus="Tabla_GotFocus"
@@ -275,24 +284,10 @@
                 HorizontalGridLinesBrush="Transparent"
                 IsReadOnly="False"
                 ItemsSource="{Binding LineasVM.ListaLineas}"
-                SelectedItem="{Binding LineasVM.LineaSeleccionada}"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
+                SelectionMode="Extended"
+                SelectionUnit="Cell"
                 Style="{StaticResource EstiloGridLineas}"
                 VerticalGridLinesBrush="Lavender">
-
-                <DataGrid.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-                </DataGrid.Resources>
-
-                <DataGrid.InputBindings>
-                    <KeyBinding Key="Delete" Command="{Binding LineasVM.cmdBorrarCeldas}" />
-                    <KeyBinding
-                        Key="V"
-                        Command="{Binding LineasVM.cmdPegar}"
-                        Modifiers="Ctrl" />
-                </DataGrid.InputBindings>
 
                 <DataGrid.Columns>
                     <DataGridTextColumn
@@ -307,7 +302,7 @@
                         Header="Descripción" />
                 </DataGrid.Columns>
 
-            </DataGrid>
+            </controls:QDataGrid>
 
 
             <!--  ====================================================================================================  -->
@@ -333,7 +328,7 @@
                 </Label.Content>
             </Label>
 
-            <DataGrid
+            <controls:QDataGrid
                 x:Name="TablaItinerarios"
                 Grid.Row="3"
                 Grid.Column="0"
@@ -344,6 +339,7 @@
                 CanUserAddRows="True"
                 CanUserReorderColumns="False"
                 CanUserSortColumns="False"
+                ElementoSeleccionado="{Binding LineasVM.ItinerarioSeleccionado}"
                 FontFamily="Comic Sans MS"
                 FontSize="11"
                 GotFocus="Tabla_GotFocus"
@@ -351,24 +347,10 @@
                 HorizontalGridLinesBrush="Transparent"
                 IsReadOnly="False"
                 ItemsSource="{Binding LineasVM.LineaSeleccionada.ListaItinerarios}"
-                SelectedItem="{Binding LineasVM.ItinerarioSeleccionado}"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
+                SelectionMode="Extended"
+                SelectionUnit="Cell"
                 Style="{StaticResource EstiloGridItinerarios}"
                 VerticalGridLinesBrush="Lavender">
-
-                <DataGrid.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-                </DataGrid.Resources>
-
-                <DataGrid.InputBindings>
-                    <KeyBinding Key="Delete" Command="{Binding LineasVM.cmdBorrarCeldas}" />
-                    <KeyBinding
-                        Key="V"
-                        Command="{Binding LineasVM.cmdPegar}"
-                        Modifiers="Ctrl" />
-                </DataGrid.InputBindings>
 
                 <DataGrid.Columns>
                     <DataGridTextColumn
@@ -393,7 +375,7 @@
                         Header="T.Pago" />
                 </DataGrid.Columns>
 
-            </DataGrid>
+            </controls:QDataGrid>
 
 
             <!--  ====================================================================================================  -->
@@ -419,7 +401,7 @@
                 </Label.Content>
             </Label>
 
-            <DataGrid
+            <controls:QDataGrid
                 x:Name="TablaParadas"
                 Grid.Row="3"
                 Grid.Column="1"
@@ -430,6 +412,7 @@
                 CanUserAddRows="True"
                 CanUserReorderColumns="False"
                 CanUserSortColumns="False"
+                ElementoSeleccionado="{Binding LineasVM.ParadaSeleccionada}"
                 FontFamily="Comic Sans MS"
                 FontSize="11"
                 GotFocus="Tabla_GotFocus"
@@ -437,24 +420,10 @@
                 HorizontalGridLinesBrush="Transparent"
                 IsReadOnly="False"
                 ItemsSource="{Binding LineasVM.ItinerarioSeleccionado.ListaParadas}"
-                SelectedItem="{Binding LineasVM.ParadaSeleccionada}"
-                SelectionMode="Single"
-                SelectionUnit="FullRow"
+                SelectionMode="Extended"
+                SelectionUnit="Cell"
                 Style="{StaticResource EstiloGridItinerarios}"
                 VerticalGridLinesBrush="Lavender">
-
-                <DataGrid.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
-                </DataGrid.Resources>
-
-                <DataGrid.InputBindings>
-                    <KeyBinding Key="Delete" Command="{Binding LineasVM.cmdBorrarCeldas}" />
-                    <KeyBinding
-                        Key="V"
-                        Command="{Binding LineasVM.cmdPegar}"
-                        Modifiers="Ctrl" />
-                </DataGrid.InputBindings>
 
                 <DataGrid.Columns>
                     <DataGridTextColumn
@@ -474,7 +443,7 @@
                         Header="Tiempo" />
                 </DataGrid.Columns>
 
-            </DataGrid>
+            </controls:QDataGrid>
 
         </Grid>
 

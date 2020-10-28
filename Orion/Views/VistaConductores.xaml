@@ -30,12 +30,16 @@
         <cnv:ConvertidorDecimal6 x:Key="cnvDecimal6" />
         <BooleanToVisibilityConverter x:Key="cnvVisibilidad" />
 
-        <Style x:Key="EstiloGridConductores" TargetType="DataGrid">
+        <Style
+            x:Key="EstiloGridConductores"
+            TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
         </Style>
-        <Style x:Key="EstiloGridRegulaciones" TargetType="DataGrid">
+        <Style
+            x:Key="EstiloGridRegulaciones"
+            TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasRegulacionesConductor}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasGraficos}" />
@@ -109,10 +113,14 @@
                 Background="LightGray" />
 
             <!--  DESPLEGABLE ACCIONES  -->
-            <xceed:DropDownButton x:Name="BtDropAcciones" Style="{StaticResource EstiloBotonDesplegable}">
+            <xceed:DropDownButton
+                x:Name="BtDropAcciones"
+                Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Engranajes.png" Style="{StaticResource EstiloImagen}" />
+                        <Image
+                            Source="Imagenes/Engranajes.png"
+                            Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtAcciones"
                             FontFamily="Comic Sans MS"
@@ -183,7 +191,7 @@
             <controls:BotonBarra
                 Command="{Binding ElementName=TablaConductores, Path=ComandoPegar}"
                 Imagen="Imagenes/Pegar.png"
-                Titulo="Pegar" 
+                Titulo="Pegar"
                 ToolTip="Sólo funciona si está en modo Selección Celdas." />
 
             <!--  SEPARADOR  -->
@@ -246,6 +254,7 @@
                 Background="Transparent"
                 CanUserAddRows="{Binding ConductoresVM.HayGrupo}"
                 CanUserReorderColumns="False"
+                ElementoSeleccionado="{Binding ConductoresVM.ConductorSeleccionado}"
                 FontFamily="Comic Sans MS"
                 FontSize="11"
                 GotFocus="TablaConductores_GotFocus"
@@ -253,7 +262,6 @@
                 HorizontalGridLinesBrush="Transparent"
                 IsReadOnly="False"
                 ItemsSource="{Binding ConductoresVM.VistaConductores}"
-                ElementoSeleccionado="{Binding ConductoresVM.ConductorSeleccionado, Mode=TwoWay}"
                 SelectionMode="Extended"
                 SelectionUnit="Cell"
                 Style="{StaticResource EstiloGridConductores}"
@@ -266,7 +274,9 @@
                         Binding="{Binding Activo, UpdateSourceTrigger=PropertyChanged}"
                         IsThreeState="False">
                         <DataGridCheckBoxColumn.Header>
-                            <TextBlock Text="Activo" ToolTip="Indica si el conductor está activo en la empresa o no." />
+                            <TextBlock
+                                Text="Activo"
+                                ToolTip="Indica si el conductor está activo en la empresa o no." />
                         </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn
@@ -274,7 +284,9 @@
                         MinWidth="20"
                         Binding="{Binding Categoria}">
                         <DataGridTextColumn.Header>
-                            <TextBlock Text="Cat" ToolTip="Categoría.&#x0a;    C=Conducción&#x0a;    T=Taquilla" />
+                            <TextBlock
+                                Text="Cat"
+                                ToolTip="Categoría.&#x0a;    C=Conducción&#x0a;    T=Taquilla" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
@@ -386,7 +398,9 @@
                     </Grid.RowDefinitions>
 
                     <!--  BARRA DE HERRAMIENTAS  -->
-                    <StackPanel Grid.Row="0" Orientation="Horizontal">
+                    <StackPanel
+                        Grid.Row="0"
+                        Orientation="Horizontal">
 
                         <!--  BOTON BORRAR REGULACION  -->
                         <Button
@@ -395,7 +409,9 @@
                             Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="Imagenes/BorrarFila.png" Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image
+                                        Source="Imagenes/BorrarFila.png"
+                                        Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Borrar"
@@ -406,10 +422,14 @@
                         </Button>
 
                         <!--  BOTON DESHACER BORRAR REGULACIONES  -->
-                        <Button Command="{Binding ConductoresVM.cmdDeshacerBorrarRegulaciones}" Style="{StaticResource EstiloBotonBarraPequeña}">
+                        <Button
+                            Command="{Binding ConductoresVM.cmdDeshacerBorrarRegulaciones}"
+                            Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="Imagenes/ActualizarTabla.png" Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image
+                                        Source="Imagenes/ActualizarTabla.png"
+                                        Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Deshacer"
@@ -420,10 +440,14 @@
                         </Button>
 
                         <!--  BOTON AÑADIR A TODOS  -->
-                        <Button Command="{Binding ConductoresVM.cmdAñadirRegulacionATodos}" Style="{StaticResource EstiloBotonBarraPequeña}">
+                        <Button
+                            Command="{Binding ConductoresVM.cmdAñadirRegulacionATodos}"
+                            Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Source="Imagenes/VariasTablas.png" Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image
+                                        Source="Imagenes/VariasTablas.png"
+                                        Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Añadir A Todos"
@@ -464,13 +488,13 @@
                         CanUserReorderColumns="False"
                         CanUserResizeRows="False"
                         CanUserSortColumns="False"
+                        ElementoSeleccionado="{Binding ConductoresVM.RegulacionSeleccionada}"
                         FontSize="10"
                         HeadersVisibility="Column"
                         IsReadOnly="False"
                         ItemsSource="{Binding ConductoresVM.ConductorSeleccionado.ListaRegulaciones}"
-                        SelectedItem="{Binding ConductoresVM.RegulacionSeleccionada}"
-                        SelectionMode="Single"
-                        SelectionUnit="FullRow"
+                        SelectionMode="Extended"
+                        SelectionUnit="Cell"
                         Style="{StaticResource EstiloGridRegulaciones}"
                         VerticalScrollBarVisibility="Disabled">
 

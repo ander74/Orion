@@ -62,7 +62,6 @@ namespace Orion.ViewModels {
 
         public void GuardarLineas() {
             try {
-                HayCambios = false;
                 if (ListaLineas != null && ListaLineas.Count > 0) {
                     var lista = ListaLineas.Where(item => item.Nuevo || item.Modificado);
                     if (lista.Count() > 0) {
@@ -75,6 +74,7 @@ namespace Orion.ViewModels {
                         }
                     }
                 }
+                HayCambios = false;
                 if (_listalineasborradas.Count > 0) {
                     App.Global.LineasRepo.BorrarLineas(_listalineasborradas);
                     _listalineasborradas.Clear();

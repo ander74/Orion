@@ -146,6 +146,7 @@ namespace Orion.Models {
 
         private void Listaparadas_ItemPropertyChanged(object sender, ItemChangedEventArgs<Parada> e) {
             Modificado = true;
+            PropiedadCambiada(nameof(Modificado));
         }
 
         #endregion
@@ -242,9 +243,9 @@ namespace Orion.Models {
             set {
                 if (_listaparadas != value) {
                     _listaparadas = value;
-                    Modificado = true;
                     _listaparadas.CollectionChanged += Listaparadas_CollectionChanged;
                     _listaparadas.ItemPropertyChanged += Listaparadas_ItemPropertyChanged;
+                    Modificado = true;
                     PropiedadCambiada();
                 }
             }

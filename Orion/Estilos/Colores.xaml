@@ -29,7 +29,9 @@
         B="192"
         G="192"
         R="192" />
-    <SolidColorBrush x:Key="BrushGris1" Color="{StaticResource Gris1}" />
+    <SolidColorBrush
+        x:Key="BrushGris1"
+        Color="{StaticResource Gris1}" />
 
     <!--  ====================================================================================================  -->
     <!--  COLORES AZULES  -->
@@ -220,6 +222,8 @@
         G="204"
         R="204" />
 
-    <SolidColorBrush x:Key="BrushVerde1" Color="{StaticResource orVerde2}" />
+    <SolidColorBrush
+        x:Key="BrushVerde1"
+        Color="{StaticResource orVerde2}" />
 
 </ResourceDictionary>
