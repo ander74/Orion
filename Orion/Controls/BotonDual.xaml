@@ -87,8 +87,7 @@
                 </Image.Style>
             </Image>
             <TextBlock
-                Text="{Binding ElementName=Item,
-                               Path=TextoFinal}"
+                Text="{Binding ElementName=Item, Path=TextoFinal}"
                 TextAlignment="Center"
                 TextWrapping="Wrap" />
         </StackPanel>

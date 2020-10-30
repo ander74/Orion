@@ -19,6 +19,8 @@
             <Setter Property="Focusable" Value="False" />
             <Setter Property="Width" Value="58" />
             <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0.5" />
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Background">
@@ -58,7 +60,7 @@
         <ControlTemplate TargetType="Button">
             <Border
                 Background="{TemplateBinding Background}"
-                BorderBrush="Transparent"
+                BorderBrush="{TemplateBinding BorderBrush}"
                 BorderThickness="{TemplateBinding BorderThickness}"
                 CornerRadius="5">
                 <ContentPresenter
@@ -74,7 +76,9 @@
 
     <Button.Content>
         <StackPanel Orientation="Vertical">
-            <Image Source="{Binding ElementName=Item, Path=Imagen}" Visibility="{Binding ElementName=Item, Path=VisibilidadImagen}">
+            <Image
+                Source="{Binding ElementName=Item, Path=Imagen}"
+                Visibility="{Binding ElementName=Item, Path=VisibilidadImagen}">
                 <Image.Style>
                     <Style TargetType="Image">
                         <Setter Property="Height" Value="28" />

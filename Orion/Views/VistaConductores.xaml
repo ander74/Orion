@@ -249,23 +249,16 @@
             <controls:QDataGrid
                 x:Name="TablaConductores"
                 Grid.Column="1"
-                AlternationCount="2"
-                AutoGenerateColumns="False"
-                Background="Transparent"
                 CanUserAddRows="{Binding ConductoresVM.HayGrupo}"
                 CanUserReorderColumns="False"
                 ElementoSeleccionado="{Binding ConductoresVM.ConductorSeleccionado}"
                 FontFamily="Comic Sans MS"
                 FontSize="11"
+                Foreground="Black"
                 GotFocus="TablaConductores_GotFocus"
-                HeadersVisibility="Column"
-                HorizontalGridLinesBrush="Transparent"
                 IsReadOnly="False"
                 ItemsSource="{Binding ConductoresVM.VistaConductores}"
-                SelectionMode="Extended"
-                SelectionUnit="Cell"
-                Style="{StaticResource EstiloGridConductores}"
-                VerticalGridLinesBrush="Lavender">
+                Style="{StaticResource EstiloGridConductores}">
 
                 <controls:QDataGrid.Columns>
                     <DataGridCheckBoxColumn
@@ -480,8 +473,6 @@
                         Grid.Row="2"
                         Margin="4"
                         HorizontalAlignment="Left"
-                        AlternationCount="2"
-                        AutoGenerateColumns="False"
                         Background="{StaticResource GrisMuyClaro}"
                         BorderThickness="1"
                         CanUserAddRows="{Binding ConductoresVM.HayConductor}"
@@ -490,11 +481,9 @@
                         CanUserSortColumns="False"
                         ElementoSeleccionado="{Binding ConductoresVM.RegulacionSeleccionada}"
                         FontSize="10"
-                        HeadersVisibility="Column"
+                        Foreground="Black"
                         IsReadOnly="False"
                         ItemsSource="{Binding ConductoresVM.ConductorSeleccionado.ListaRegulaciones}"
-                        SelectionMode="Extended"
-                        SelectionUnit="Cell"
                         Style="{StaticResource EstiloGridRegulaciones}"
                         VerticalScrollBarVisibility="Disabled">
 

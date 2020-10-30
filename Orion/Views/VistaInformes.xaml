@@ -10,7 +10,10 @@
     xmlns:cnv="clr-namespace:Orion.Convertidores"
     xmlns:local="clr-namespace:Orion.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit">
+    xmlns:viewmodels="clr-namespace:Orion.ViewModels.PageViewModels"
+    xmlns:views="clr-namespace:Orion.Views.Pages"
+    xmlns:xceed="http://schemas.xceed.com/wpf/xaml/toolkit"
+    DataContext="{Binding InformesVM}">
 
 
     <!--  ====================================================================================================  -->
@@ -20,6 +23,58 @@
 
         <!--  CONVERTIDORES  -->
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
+
+        <!--  ESTILOS  -->
+        <Style
+            x:Key="EstiloBotonPanel"
+            TargetType="Button">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Focusable" Value="False" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="HorizontalContentAlignment" Value="Left" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="Transparent"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="1">
+                            <ContentPresenter
+                                x:Name="contentPresenter"
+                                Margin="{TemplateBinding Padding}"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                Content="{TemplateBinding Content}"
+                                ContentTemplate="{TemplateBinding ContentTemplate}" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="{StaticResource orDegradadoGris}" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="{StaticResource orDegradadoMarron}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+
+
+        <!--  PAGE NAVIGATION  -->
+        <!--  Aquí va un DataTemplate por cada página que se vaya a poner.  -->
+        <DataTemplate DataType="{x:Type viewmodels:CompararGraficosPageVM}">
+            <views:CompararGraficosPage />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:ConductoresPageViewModel}">
+            <views:ConductoresPage />
+        </DataTemplate>
 
     </UserControl.Resources>
 
@@ -40,7 +95,9 @@
         <!--  ··················································  -->
         <!--  PANEL LATERAL  -->
         <!--  ··················································  -->
-        <StackPanel Background="{StaticResource FondoCeleste1}" Orientation="Vertical">
+        <StackPanel
+            Background="{StaticResource FondoCeleste1}"
+            Orientation="Vertical">
 
 
             <!--  GRUPO GRÁFICOS  -->
@@ -49,19 +106,38 @@
                 Content="Gráficos"
                 Style="{StaticResource EstiloBotonGrupoInformes}" />
             <!--  CONTENIDO GRÁFICOS  -->
-            <Grid Margin="5,5,6,5" Visibility="{Binding ElementName=BtGrupoGraficos, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+            <Grid
+                x:Name="gridGraficos"
+                Margin="5,5,6,5"
+                Visibility="{Binding ElementName=BtGrupoGraficos, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <Border
+                    Grid.RowSpan="{Binding ElementName=gridGraficos, Path=RowDefinitions.Count}"
                     Margin="0,-10,0,0"
                     BorderBrush="{StaticResource AzulOscuro}"
                     BorderThickness="1,0,1,1"
                     CornerRadius="0,0,0,0" />
 
-                <!--  PANEL  -->
-                <StackPanel Margin="5" Orientation="Vertical">
+                <!--  COMPARAR GRUPOS  -->
+                <Button
+                    Grid.Row="0"
+                    Command="{Binding CmdCambiarViewModel}"
+                    CommandParameter="CompararGrupos"
+                    Content="Comparar Grupos"
+                    Style="{StaticResource EstiloBotonPanel}" />
 
-                    <TextBlock Text="PRUEBA" />
+                <!--    -->
+                <Button
+                    Grid.Row="1"
+                    Command="{Binding CmdCambiarViewModel}"
+                    CommandParameter="Otro"
+                    Content="Otro"
+                    Style="{StaticResource EstiloBotonPanel}" />
 
-                </StackPanel>
+
             </Grid>
 
 
@@ -71,7 +147,9 @@
                 Content="Conductores"
                 Style="{StaticResource EstiloBotonGrupoInformes}" />
             <!--  CONTENIDO CONDUCTORES  -->
-            <Grid Margin="5,5,6,5" Visibility="{Binding ElementName=BtGrupoConductores, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+            <Grid
+                Margin="5,5,6,5"
+                Visibility="{Binding ElementName=BtGrupoConductores, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
                 <Border
                     Margin="0,-10,0,0"
                     BorderBrush="{StaticResource AzulOscuro}"
@@ -79,7 +157,9 @@
                     CornerRadius="0,0,0,0" />
 
                 <!--  PANEL  -->
-                <StackPanel Margin="5" Orientation="Vertical">
+                <StackPanel
+                    Margin="5"
+                    Orientation="Vertical">
 
                     <TextBlock Text="PRUEBA" />
 
@@ -93,7 +173,9 @@
                 Content="Calendarios"
                 Style="{StaticResource EstiloBotonGrupoInformes}" />
             <!--  CONTENIDO CALENDARIOS  -->
-            <Grid Margin="5,5,6,5" Visibility="{Binding ElementName=BtGrupoCalendarios, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+            <Grid
+                Margin="5,5,6,5"
+                Visibility="{Binding ElementName=BtGrupoCalendarios, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
                 <Border
                     Margin="0,-10,0,0"
                     BorderBrush="{StaticResource AzulOscuro}"
@@ -101,7 +183,9 @@
                     CornerRadius="0,0,0,0" />
 
                 <!--  PANEL  -->
-                <StackPanel Margin="5" Orientation="Vertical">
+                <StackPanel
+                    Margin="5"
+                    Orientation="Vertical">
 
                     <TextBlock Text="PRUEBA" />
 
@@ -115,7 +199,9 @@
                 Content="Líneas"
                 Style="{StaticResource EstiloBotonGrupoInformes}" />
             <!--  CONTENIDO LÍNEAS  -->
-            <Grid Margin="5,5,6,5" Visibility="{Binding ElementName=BtGrupoLineas, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+            <Grid
+                Margin="5,5,6,5"
+                Visibility="{Binding ElementName=BtGrupoLineas, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
                 <Border
                     Margin="0,-10,0,0"
                     BorderBrush="{StaticResource AzulOscuro}"
@@ -123,7 +209,9 @@
                     CornerRadius="0,0,0,0" />
 
                 <!--  PANEL  -->
-                <StackPanel Margin="5" Orientation="Vertical">
+                <StackPanel
+                    Margin="5"
+                    Orientation="Vertical">
 
                     <TextBlock Text="PRUEBA" />
 
@@ -137,7 +225,9 @@
                 Content="Otros"
                 Style="{StaticResource EstiloBotonGrupoInformes}" />
             <!--  CONTENIDO OTROS  -->
-            <Grid Margin="5,5,6,5" Visibility="{Binding ElementName=BtGrupoOtros, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+            <Grid
+                Margin="5,5,6,5"
+                Visibility="{Binding ElementName=BtGrupoOtros, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
                 <Border
                     Margin="0,-10,0,0"
                     BorderBrush="{StaticResource AzulOscuro}"
@@ -145,7 +235,9 @@
                     CornerRadius="0,0,0,0" />
 
                 <!--  PANEL  -->
-                <StackPanel Margin="5" Orientation="Vertical">
+                <StackPanel
+                    Margin="5"
+                    Orientation="Vertical">
 
                     <TextBlock Text="PRUEBA" />
 
@@ -157,6 +249,21 @@
 
         </StackPanel>
 
+        <!--  ··················································  -->
+        <!--  CONTENIDO  -->
+        <!--  ··················································  -->
+        <ContentControl
+            Grid.Column="1"
+            Background="WhiteSmoke"
+            Content="{Binding CurrentPageViewModel}" />
+
+        <!--  ··················································  -->
+        <!--  SEPARADOR  -->
+        <!--  ··················································  -->
+        <Frame
+            Width="0.5"
+            HorizontalAlignment="Right"
+            Background="DarkSlateBlue" />
     </Grid>
 
 

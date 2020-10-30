@@ -45,6 +45,7 @@ namespace Orion.ViewModels {
         private FestivosViewModel _festivosvm;
         private ProgramadorViewModel _programador;
         private EstadisticasTurnosViewModel _estadisticasTurnos;
+        private InformesViewModel _informes;
 
         // Repositorios
         private OrionRepository bilbaoRepository;
@@ -629,6 +630,14 @@ namespace Orion.ViewModels {
             get {
                 _estadisticasTurnos = _estadisticasTurnos ?? new EstadisticasTurnosViewModel(mensajes);
                 return _estadisticasTurnos;
+            }
+        }
+
+
+        public InformesViewModel InformesVM {
+            get {
+                _informes = _informes ?? new InformesViewModel(mensajes);
+                return _informes;
             }
         }
 

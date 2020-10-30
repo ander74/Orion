@@ -1,0 +1,168 @@
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
+<!--  Vea el archivo Licencia.txt para mas detalles  -->
+<!--  ===============================================  -->
+<UserControl
+    x:Class="Orion.Views.Pages.CompararGraficosPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Orion.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Orion.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Name="Ventana"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    Background="Transparent"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+
+        <!--  MENÚ CONTEXTUAL      Lo he dejado para ver el binding cómo se hace  -->
+        <!--<ContextMenu
+            x:Key="Menu"
+            DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+            <MenuItem
+                Command="{Binding ComandoCopiar}"
+                Header="Copiar" />
+            <MenuItem
+                Command="{Binding ComandoPegar}"
+                Header="Pegar" />
+        </ContextMenu>-->
+
+
+        <Style
+            x:Key="EstiloIzquierda"
+            BasedOn="{StaticResource QDatagridCells}"
+            TargetType="DataGridCell">
+            <Setter Property="Template" Value="{StaticResource CellTemplateLeft}" />
+        </Style>
+
+
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <TextBlock
+            Grid.ColumnSpan="2"
+            Margin="10"
+            FontSize="24"
+            FontWeight="Bold"
+            Text="Comparación de grupos de gráficos" />
+
+
+        <StackPanel
+            Grid.Row="1"
+            Orientation="Vertical">
+
+            <StackPanel
+                Margin="20,20,20,20"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    Text="Grupo 1:  " />
+                <ComboBox
+                    Height="24"
+                    MinWidth="120"
+                    HorizontalContentAlignment="Center"
+                    DisplayMemberPath="Validez"
+                    FontSize="16"
+                    ItemStringFormat="dd-MM-yyyy"
+                    ItemsSource="{Binding GraficosVM.ListaGrupos}"
+                    SelectedItem="{Binding GrupoSeleccionado1}" />
+                <!--</StackPanel>
+            <StackPanel
+                Margin="20,20,20,0"
+                VerticalAlignment="Center"
+                Orientation="Horizontal">-->
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    Text="     " />
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="16"
+                    Text="Grupo 2:  " />
+                <ComboBox
+                    Height="24"
+                    MinWidth="120"
+                    HorizontalContentAlignment="Center"
+                    DisplayMemberPath="Validez"
+                    FontSize="16"
+                    ItemStringFormat="dd-MM-yyyy"
+                    ItemsSource="{Binding GraficosVM.ListaGrupos}"
+                    SelectedItem="{Binding GrupoSeleccionado2}" />
+            </StackPanel>
+
+            <StackPanel
+                Margin="20,0,20,0"
+                Orientation="Horizontal">
+
+                <controls:BotonBarra
+                    Height="80"
+                    BorderBrush="LightGray"
+                    Command="{Binding CmdComparar}"
+                    Imagen="/Views/Imagenes/Adelante.png"
+                    Titulo="Comparar" />
+
+
+            </StackPanel>
+
+
+            <TextBlock
+                Margin="20,20,20,0"
+                FontSize="14"
+                Text="Genera un informe con la diferencia que hay entre dos grupos de gráficos, comparando turno, inicio, final, inicio partido, final partido y valoración de los gráficos que se encuentren en ambos grupos."
+                TextWrapping="Wrap" />
+
+            <TextBlock
+                Margin="20,10,20,0"
+                FontSize="14"
+                Text="También se marcan los gráficos que no estén en uno de los dos grupos."
+                TextWrapping="Wrap" />
+
+            <TextBlock
+                Margin="20,19,20,0"
+                FontSize="14"
+                Text="Los gráficos que son iguales en ambos grupos no aparecen en el informe."
+                TextWrapping="Wrap" />
+
+        </StackPanel>
+
+        <controls:QDataGrid
+            Grid.Row="1"
+            Grid.Column="1"
+            Margin="5"
+            CanUserAddRows="False"
+            CanUserDeleteRows="False"
+            CanUserReorderColumns="False"
+            CanUserSortColumns="False"
+            IsReadOnly="True"
+            ItemsSource="{Binding GraficosComparados}">
+            <controls:QDataGrid.Columns>
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Numero}"
+                    Header="Número" />
+                <DataGridTextColumn
+                    Width="4*"
+                    Binding="{Binding Diferencias}"
+                    CellStyle="{StaticResource EstiloIzquierda}"
+                    Header="Diferencias" />
+            </controls:QDataGrid.Columns>
+        </controls:QDataGrid>
+
+    </Grid>
+
+</UserControl>

@@ -270,24 +270,17 @@
                 Grid.Column="0"
                 Grid.ColumnSpan="2"
                 Margin="3,0,3,0"
-                AlternationCount="2"
-                AutoGenerateColumns="False"
-                Background="Transparent"
                 CanUserAddRows="True"
                 CanUserReorderColumns="False"
                 CanUserSortColumns="False"
                 ElementoSeleccionado="{Binding LineasVM.LineaSeleccionada}"
                 FontFamily="Comic Sans MS"
                 FontSize="11"
+                Foreground="Black"
                 GotFocus="Tabla_GotFocus"
-                HeadersVisibility="Column"
-                HorizontalGridLinesBrush="Transparent"
                 IsReadOnly="False"
                 ItemsSource="{Binding LineasVM.ListaLineas}"
-                SelectionMode="Extended"
-                SelectionUnit="Cell"
-                Style="{StaticResource EstiloGridLineas}"
-                VerticalGridLinesBrush="Lavender">
+                Style="{StaticResource EstiloGridLineas}">
 
                 <DataGrid.Columns>
                     <DataGridTextColumn
@@ -333,24 +326,17 @@
                 Grid.Row="3"
                 Grid.Column="0"
                 Margin="3,0,3,0"
-                AlternationCount="2"
-                AutoGenerateColumns="False"
-                Background="Transparent"
                 CanUserAddRows="True"
                 CanUserReorderColumns="False"
                 CanUserSortColumns="False"
                 ElementoSeleccionado="{Binding LineasVM.ItinerarioSeleccionado}"
                 FontFamily="Comic Sans MS"
                 FontSize="11"
+                Foreground="Black"
                 GotFocus="Tabla_GotFocus"
-                HeadersVisibility="Column"
-                HorizontalGridLinesBrush="Transparent"
                 IsReadOnly="False"
                 ItemsSource="{Binding LineasVM.LineaSeleccionada.ListaItinerarios}"
-                SelectionMode="Extended"
-                SelectionUnit="Cell"
-                Style="{StaticResource EstiloGridItinerarios}"
-                VerticalGridLinesBrush="Lavender">
+                Style="{StaticResource EstiloGridItinerarios}">
 
                 <DataGrid.Columns>
                     <DataGridTextColumn
@@ -406,24 +392,17 @@
                 Grid.Row="3"
                 Grid.Column="1"
                 Margin="3,0,3,0"
-                AlternationCount="2"
-                AutoGenerateColumns="False"
-                Background="Transparent"
                 CanUserAddRows="True"
                 CanUserReorderColumns="False"
                 CanUserSortColumns="False"
                 ElementoSeleccionado="{Binding LineasVM.ParadaSeleccionada}"
                 FontFamily="Comic Sans MS"
                 FontSize="11"
+                Foreground="Black"
                 GotFocus="Tabla_GotFocus"
-                HeadersVisibility="Column"
-                HorizontalGridLinesBrush="Transparent"
                 IsReadOnly="False"
                 ItemsSource="{Binding LineasVM.ItinerarioSeleccionado.ListaParadas}"
-                SelectionMode="Extended"
-                SelectionUnit="Cell"
-                Style="{StaticResource EstiloGridItinerarios}"
-                VerticalGridLinesBrush="Lavender">
+                Style="{StaticResource EstiloGridItinerarios}">
 
                 <DataGrid.Columns>
                     <DataGridTextColumn

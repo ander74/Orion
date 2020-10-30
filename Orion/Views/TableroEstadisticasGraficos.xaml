@@ -269,7 +269,9 @@
                         Labels="{Binding EtiquetasTurnos}"
                         Position="LeftBottom">
                         <ch:Axis.Separator>
-                            <ch:Separator Width="20" Step="1" />
+                            <ch:Separator
+                                Width="20"
+                                Step="1" />
                         </ch:Axis.Separator>
                     </ch:Axis>
                 </ch:CartesianChart.AxisX>
@@ -350,7 +352,9 @@
                         MaxValue="324000000000"
                         MinValue="0">
                         <ch:Axis.Separator>
-                            <ch:Separator Step="36000000000" Stroke="PaleGoldenrod" />
+                            <ch:Separator
+                                Step="36000000000"
+                                Stroke="PaleGoldenrod" />
                         </ch:Axis.Separator>
                         <ch:Axis.Sections>
                             <ch:AxisSection
@@ -368,7 +372,9 @@
                         Labels="{Binding EtiquetasHoraMedia}"
                         Position="LeftBottom">
                         <ch:Axis.Separator>
-                            <ch:Separator Width="20" Step="1" />
+                            <ch:Separator
+                                Width="20"
+                                Step="1" />
                         </ch:Axis.Separator>
                     </ch:Axis>
                 </ch:CartesianChart.AxisX>

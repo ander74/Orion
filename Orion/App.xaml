@@ -22,6 +22,7 @@
                 <ResourceDictionary Source="Estilos/Celdas.xaml" />
                 <ResourceDictionary Source="Estilos/OtrosEstilos.xaml" />
                 <ResourceDictionary Source="Estilos/Cabeceras.xaml" />
+                <ResourceDictionary Source="Estilos/QDatagrid.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

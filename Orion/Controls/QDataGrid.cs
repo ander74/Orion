@@ -6,13 +6,15 @@
 // ===============================================
 #endregion
 namespace Orion.Controls {
-
+    using System;
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
     using System.Windows.Input;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
     using Config;
     using Orion.ViewModels;
 
@@ -23,6 +25,42 @@ namespace Orion.Controls {
         #region CONSTRUCTOR
         // ====================================================================================================
 
+        public QDataGrid() {
+
+            // Establecemos las propiedades predeterminadas.
+            this.AlternationCount = 2;
+            this.AutoGenerateColumns = false;
+            this.Background = Brushes.Transparent;
+            this.BorderBrush = Brushes.Lavender;
+            this.BorderThickness = new Thickness(0.5d);
+            this.FontFamily = new FontFamily("Tahoma");
+            this.FontSize = 13d;
+            this.Foreground = Brushes.DimGray;
+            this.HeadersVisibility = DataGridHeadersVisibility.Column;
+            this.HorizontalGridLinesBrush = Brushes.Transparent;
+            this.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            this.SelectionMode = DataGridSelectionMode.Extended;
+            this.SelectionUnit = DataGridSelectionUnit.Cell;
+            this.VerticalGridLinesBrush = Brushes.Lavender;
+            this.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+
+            // Asignamos el estilo.
+            this.Style = (Style)App.Current.Resources["QDatagridStyle"];
+
+
+            // Creamos el menú contextual.
+            this.ContextMenu = new ContextMenu();
+            this.ContextMenu.Items.Add(new MenuItem {
+                Header = "Copiar",
+                Icon = new Image { Source = new BitmapImage(new Uri("/Orion;component/Views/Imagenes/Copiar.png", UriKind.Relative)) },
+                Command = ComandoCopiar
+            });
+            this.ContextMenu.Items.Add(new MenuItem {
+                Header = "Pegar",
+                Icon = new Image { Source = new BitmapImage(new Uri("/Orion;component/Views/Imagenes/Pegar.png", UriKind.Relative)) },
+                Command = ComandoPegar
+            });
+        }
 
         #endregion
         // ====================================================================================================
@@ -94,7 +132,6 @@ namespace Orion.Controls {
         #region PROPIEDAD ELEMENTO SELECCIONADO
         // ====================================================================================================
 
-
         public object ElementoSeleccionado {
             get { return (object)GetValue(ElementoSeleccionadoProperty); }
             set { SetValue(ElementoSeleccionadoProperty, value); }
@@ -145,21 +182,21 @@ namespace Orion.Controls {
         private ICommand comandoCopiar;
         public ICommand ComandoCopiar {
             get {
-                if (comandoCopiar == null) comandoCopiar = new RelayCommand(p => Copiar(), p => PuedeCopiar());
+                //if (comandoCopiar == null) comandoCopiar = new RelayCommand(p => Copiar(), p => PuedeCopiar());
+                if (comandoCopiar == null) {
+                    comandoCopiar = new RoutedCommand("Copiar", typeof(QDataGrid), new InputGestureCollection { new KeyGesture(Key.C, ModifierKeys.Control) });
+                    this.CommandBindings.Add(new CommandBinding(comandoCopiar, Copiar, PuedeCopiar));
+                }
                 return comandoCopiar;
             }
         }
-
-
-        // Se puede ejecutar el comando
-        private bool PuedeCopiar() {
-            return CurrentCell != null && SelectionUnit == DataGridSelectionUnit.Cell;
+        private void PuedeCopiar(object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = SelectedCells?.Count > 0;
         }
-
-        // Ejecución del comando
-        private void Copiar() {
+        private void Copiar(object sender, ExecutedRoutedEventArgs e) {
             if (ApplicationCommands.Copy.CanExecute(null, this)) ApplicationCommands.Copy.Execute(null, this);
         }
+
         #endregion
         // ====================================================================================================
 
@@ -171,18 +208,17 @@ namespace Orion.Controls {
         private ICommand comandoPegar;
         public ICommand ComandoPegar {
             get {
-                if (comandoPegar == null) comandoPegar = new RelayCommand(p => Pegar(), p => PuedePegar());
+                if (comandoPegar == null) {
+                    comandoPegar = new RoutedCommand("Pegar", typeof(QDataGrid), new InputGestureCollection { new KeyGesture(Key.V, ModifierKeys.Control) });
+                    this.CommandBindings.Add(new CommandBinding(comandoPegar, Pegar, PuedePegar));
+                }
                 return comandoPegar;
             }
         }
-
-
-        private bool PuedePegar() {
-            return CurrentCell != null && SelectionUnit == DataGridSelectionUnit.Cell;
+        private void PuedePegar(object sender, CanExecuteRoutedEventArgs e) {
+            e.CanExecute = SelectedCells?.Count > 0 && IsReadOnly == false;
         }
-
-
-        private void Pegar() {
+        private void Pegar(object sender, ExecutedRoutedEventArgs e) {
             // Recuperamos las filas del portapapeles.
             List<string[]> portapapeles = Utils.parseClipboard();
             if (portapapeles == null) return;
@@ -243,18 +279,18 @@ namespace Orion.Controls {
         protected override void OnPreviewKeyDown(KeyEventArgs e) {
 
             switch (e.Key) {
-                case Key.C:
-                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
-                        if (PuedeCopiar()) Copiar();
-                        e.Handled = true;
-                    }
-                    break;
-                case Key.V:
-                    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
-                        if (PuedePegar()) Pegar();
-                        e.Handled = true;
-                    }
-                    break;
+                //case Key.C:
+                //    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
+                //        if (PuedeCopiar()) Copiar();
+                //        e.Handled = true;
+                //    }
+                //    break;
+                //case Key.V:
+                //    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
+                //        if (PuedePegar()) Pegar();
+                //        e.Handled = true;
+                //    }
+                //    break;
                 case Key.Delete:
                     if (SelectionUnit == DataGridSelectionUnit.FullRow) {
                         CurrentColumn?.OnPastingCellClipboardContent(Items[Items.IndexOf(CurrentItem)], string.Empty);

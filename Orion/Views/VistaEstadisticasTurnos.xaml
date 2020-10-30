@@ -23,7 +23,9 @@
     <!--  ====================================================================================================  -->
     <UserControl.Resources>
 
-        <Style x:Key="EstiloTablaEstadisticas" TargetType="DataGrid">
+        <Style
+            x:Key="EstiloTablaEstadisticas"
+            TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersNaranja}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasNaranja}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
@@ -81,7 +83,9 @@
                 Style="{StaticResource EstiloBotonDesplegable}">
                 <xc:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/SeleccionarColumna.png" Style="{StaticResource EstiloImagen}" />
+                        <Image
+                            Source="Imagenes/SeleccionarColumna.png"
+                            Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             VerticalAlignment="Center"
                             FontFamily="Comic Sans MS"
@@ -118,7 +122,9 @@
                                         Tag="Todos" />
                                 </StackPanel>
 
-                                <StackPanel Margin="10,0,0,0" Orientation="Vertical">
+                                <StackPanel
+                                    Margin="10,0,0,0"
+                                    Orientation="Vertical">
                                     <!--  DIAS TRABAJADOS  -->
                                     <CheckBox
                                         x:Name="ChDias"
@@ -236,7 +242,9 @@
                 Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Copiar.png" Style="{StaticResource EstiloImagen}" />
+                        <Image
+                            Source="Imagenes/Copiar.png"
+                            Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Text="Copiar"
                             TextAlignment="Center"
@@ -247,10 +255,14 @@
 
 
             <!--  DESPLEGABLE FILTRAR TABLA  -->
-            <xc:DropDownButton x:Name="BtFiltrar" Style="{StaticResource EstiloBotonDesplegable}">
+            <xc:DropDownButton
+                x:Name="BtFiltrar"
+                Style="{StaticResource EstiloBotonDesplegable}">
                 <xc:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/Filtrar.png" Style="{StaticResource EstiloImagen}" />
+                        <Image
+                            Source="Imagenes/Filtrar.png"
+                            Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtFiltrar"
                             FontFamily="Comic Sans MS"
@@ -373,7 +385,9 @@
                 Style="{StaticResource EstiloBotonDesplegable}">
                 <xc:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image Source="Imagenes/SeleccionarColumna.png" Style="{StaticResource EstiloImagen}" />
+                        <Image
+                            Source="Imagenes/SeleccionarColumna.png"
+                            Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             VerticalAlignment="Center"
                             FontFamily="Comic Sans MS"
@@ -410,7 +424,9 @@
                                         Tag="Todos" />
                                 </StackPanel>
 
-                                <StackPanel Margin="10,0,0,0" Orientation="Vertical">
+                                <StackPanel
+                                    Margin="10,0,0,0"
+                                    Orientation="Vertical">
                                     <!--  DIAS TRABAJADOS  -->
                                     <CheckBox
                                         x:Name="Ch2Turnos"
@@ -496,7 +512,9 @@
             <!--  ====================================================================================================  -->
             <!--  CABECERA TABLA  -->
             <!--  ====================================================================================================  -->
-            <Grid Grid.Row="0" HorizontalAlignment="Stretch">
+            <Grid
+                Grid.Row="0"
+                HorizontalAlignment="Stretch">
                 <Border
                     Height="Auto"
                     Margin="0,3"
@@ -547,8 +565,12 @@
                 VerticalGridLinesBrush="Lavender">
 
                 <DataGrid.Resources>
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="PaleGoldenrod" />
-                    <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" Color="Black" />
+                    <SolidColorBrush
+                        x:Key="{x:Static SystemColors.HighlightBrushKey}"
+                        Color="PaleGoldenrod" />
+                    <SolidColorBrush
+                        x:Key="{x:Static SystemColors.HighlightTextBrushKey}"
+                        Color="Black" />
                 </DataGrid.Resources>
 
                 <DataGrid.Columns>

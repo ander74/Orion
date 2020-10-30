@@ -576,4 +576,194 @@
 
 
 
+    <!--  ====================================================================================================  -->
+    <!--  HEADERS GRIS  -->
+    <!--  ====================================================================================================  -->
+    <Style
+        x:Key="EstiloHeadersGris"
+        TargetType="DataGridColumnHeader">
+
+        <!--  PROPIEDADES VARIAS  -->
+        <Setter Property="HorizontalContentAlignment" Value="Center" />
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Height" Value="24" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="Foreground" Value="Black" />
+        <Setter Property="FontWeight" Value="Normal" />
+
+        <!--  PLANTILLA  -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <!--  PLANTILLA NORMAL  -->
+                <ControlTemplate TargetType="{x:Type DataGridColumnHeader}">
+                    <!--  FONDO DE LA CABECERA  -->
+                    <Border
+                        x:Name="Fondo"
+                        Grid.RowSpan="2"
+                        Background="Gainsboro"
+                        BorderBrush="Silver"
+                        BorderThickness="0,0,0.5,0">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <!--  CONTENIDO  -->
+                            <ContentPresenter
+                                Grid.RowSpan="2"
+                                Grid.ColumnSpan="2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                SnapsToDevicePixels="True" />
+                            <!--  FLECHA  -->
+                            <Path
+                                x:Name="Flecha"
+                                Grid.Row="0"
+                                Grid.ColumnSpan="2"
+                                Width="10"
+                                Height="5"
+                                Margin="0,2,0,3"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Data="M0,0 L1,0 0.5,1 z"
+                                Fill="Gray"
+                                Opacity="0.5"
+                                RenderTransformOrigin="0.5,0.4"
+                                Stretch="Fill"
+                                Visibility="Collapsed" />
+                            <Thumb
+                                x:Name="PART_LeftHeaderGripper"
+                                Grid.RowSpan="2"
+                                Grid.Column="0"
+                                HorizontalAlignment="Left"
+                                Style="{StaticResource EstiloSeparadores}" />
+                            <Thumb
+                                x:Name="PART_RightHeaderGripper"
+                                Grid.RowSpan="2"
+                                Grid.Column="1"
+                                HorizontalAlignment="Right"
+                                Style="{StaticResource EstiloSeparadores}" />
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+
+                        <!--  ESTADOS NORMAL  -->
+
+                        <!--  DESACTIVADO  -->
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Fondo" Property="Background" Value="{StaticResource GrisClaro}" />
+                        </Trigger>
+
+                        <!--  ORDEN ASCENDENTE  -->
+                        <Trigger Property="SortDirection" Value="Ascending">
+                            <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Flecha" Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="180" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+
+                        <!--  ORDEN DESCENDENTE  -->
+                        <Trigger Property="SortDirection" Value="Descending">
+                            <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
+                        </Trigger>
+
+
+                        <!--  ESTADOS MOUSE OVER  -->
+
+                        <!--  NORMAL  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="{x:Null}" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Fondo" Property="Background" Value="DarkGray" />
+                        </MultiTrigger>
+
+
+                        <!--  ORDEN ASCENDENTE  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="Ascending" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Fondo" Property="Background" Value="DarkGray" />
+                            <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Flecha" Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="180" />
+                                </Setter.Value>
+                            </Setter>
+                        </MultiTrigger>
+
+
+                        <!--  ORDEN DESCENDENTE  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="True" />
+                                <Condition Property="SortDirection" Value="Descending" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Fondo" Property="Background" Value="DarkGray" />
+                            <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
+
+
+                        <!--  ESTADOS MOUSE PRESSED  -->
+
+                        <!--  NORMAL  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="{x:Null}" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Fondo" Property="Background" Value="LightSlateGray" />
+                        </MultiTrigger>
+
+
+                        <!--  ORDEN ASCENDENTE  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="Ascending" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Fondo" Property="Background" Value="LightSlateGray" />
+                            <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
+                            <Setter TargetName="Flecha" Property="RenderTransform">
+                                <Setter.Value>
+                                    <RotateTransform Angle="180" />
+                                </Setter.Value>
+                            </Setter>
+                        </MultiTrigger>
+
+
+                        <!--  ORDEN DESCENDENTE  -->
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsPressed" Value="True" />
+                                <Condition Property="SortDirection" Value="Descending" />
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Fondo" Property="Background" Value="LightSlateGray" />
+                            <Setter TargetName="Flecha" Property="Visibility" Value="Visible" />
+                        </MultiTrigger>
+
+
+                        <!--  ESTADO ES LA PRIMERA COLUMNA  -->
+                        <Trigger Property="DisplayIndex" Value="0">
+                            <Setter TargetName="PART_LeftHeaderGripper" Property="Visibility" Value="Collapsed" />
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+
+
 </ResourceDictionary>

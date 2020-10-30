@@ -219,6 +219,17 @@
                     FontSize="12"
                     Text="Se introduce 4, punto y el número de minutos (4.120 = Reserva de 120 min)." />
 
+                <!--  TIEMPO DE PARTICIÓN  -->
+                <TextBlock
+                    Margin="0,5,0,0"
+                    FontSize="12"
+                    FontWeight="Bold"
+                    Text="Tiempo de partición (gráficos partidos): " />
+                <TextBlock
+                    Margin="10,0,0,0"
+                    FontSize="12"
+                    Text="Se introduce 5, punto y el número de minutos (5.75 = Tiempo de partición de 75 min)." />
+
             </StackPanel>
 
             <!--  BOTÓN CANCELAR  -->

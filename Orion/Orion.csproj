@@ -35,7 +35,7 @@
     <ProductName>Orion</ProductName>
     <PublisherName>AnderSoft</PublisherName>
     <SuiteName>Orion</SuiteName>
-    <ApplicationRevision>13</ApplicationRevision>
+    <ApplicationRevision>15</ApplicationRevision>
     <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
@@ -344,10 +344,14 @@
     <Compile Include="ViewModels\GlobalVM.cs" />
     <Compile Include="ViewModels\GraficosCommands.cs" />
     <Compile Include="ViewModels\GraficosViewModel.cs" />
+    <Compile Include="ViewModels\InformesViewModel.cs" />
     <Compile Include="ViewModels\LineasCommands.cs" />
     <Compile Include="ViewModels\LineasViewModel.cs" />
     <Compile Include="ViewModels\OpcionesCommands.cs" />
     <Compile Include="ViewModels\OpcionesViewModel.cs" />
+    <Compile Include="ViewModels\PageViewModels\ConductoresPageViewModel.cs" />
+    <Compile Include="ViewModels\PageViewModels\CompararGraficosPageVM.cs" />
+    <Compile Include="ViewModels\PageViewModels\PageViewModelBase.cs" />
     <Compile Include="ViewModels\ProgramadorViewModel.cs" />
     <Compile Include="ViewModels\ReclamacionesViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
@@ -361,6 +365,12 @@
     <Compile Include="ViewModels\VentanaRegularAñoVM.cs" />
     <Compile Include="Servicios\MensajesServicio.cs" />
     <Compile Include="Controls\QTextBox.cs" />
+    <Compile Include="Views\Pages\ConductoresPage.xaml.cs">
+      <DependentUpon>ConductoresPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Pages\CompararGraficosPage.xaml.cs">
+      <DependentUpon>CompararGraficosPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TableroEstadisticasGraficos.xaml.cs">
       <DependentUpon>TableroEstadisticasGraficos.xaml</DependentUpon>
     </Compile>
@@ -503,6 +513,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Estilos\QDatagrid.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -515,6 +529,14 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\Pages\ConductoresPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Pages\CompararGraficosPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TableroEstadisticasGraficos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -934,6 +956,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

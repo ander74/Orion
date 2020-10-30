@@ -842,24 +842,17 @@
             <controls:QDataGrid
                 x:Name="TablaGraficos"
                 Grid.Column="1"
-                AlternationCount="2"
-                AutoGenerateColumns="False"
-                Background="Transparent"
                 BorderBrush="{x:Null}"
                 CanUserAddRows="{Binding GraficosVM.HayGrupo}"
                 CanUserReorderColumns="False"
                 ElementoSeleccionado="{Binding GraficosVM.GraficoSeleccionado}"
                 FontFamily="Comic Sans MS"
                 FontSize="11"
+                Foreground="Black"
                 GotFocus="TablaGraficos_GotFocus"
-                HeadersVisibility="Column"
-                HorizontalGridLinesBrush="Transparent"
                 IsReadOnly="False"
                 ItemsSource="{Binding GraficosVM.VistaGraficos}"
-                SelectionMode="Extended"
-                SelectionUnit="Cell"
-                Style="{StaticResource EstiloGridGraficos}"
-                VerticalGridLinesBrush="Lavender">
+                Style="{StaticResource EstiloGridGraficos}">
 
                 <controls:QDataGrid.Columns>
                     <DataGridCheckBoxColumn
@@ -1362,8 +1355,6 @@
                         Grid.Row="2"
                         Margin="4"
                         HorizontalAlignment="Left"
-                        AlternationCount="2"
-                        AutoGenerateColumns="False"
                         Background="{StaticResource GrisMuyClaro}"
                         BorderThickness="1"
                         CanUserAddRows="{Binding GraficosVM.HayGrafico}"
@@ -1372,11 +1363,9 @@
                         CanUserSortColumns="False"
                         ElementoSeleccionado="{Binding GraficosVM.ValoracionSeleccionada}"
                         FontSize="10"
-                        HeadersVisibility="Column"
+                        Foreground="Black"
                         IsReadOnly="False"
                         ItemsSource="{Binding GraficosVM.GraficoSeleccionado.ListaValoraciones}"
-                        SelectionMode="Extended"
-                        SelectionUnit="Cell"
                         Style="{StaticResource EstiloGridValoraciones}"
                         VerticalScrollBarVisibility="Disabled">
 

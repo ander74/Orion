@@ -1271,9 +1271,6 @@
             Grid.Row="3"
             Grid.Column="0"
             Grid.ColumnSpan="2"
-            AlternationCount="2"
-            AutoGenerateColumns="False"
-            Background="Transparent"
             CanUserReorderColumns="False"
             DobleClick="{Binding CalendariosVM.cmdAbrirPijama}"
             DobleClickParametro="{Binding ElementName=TablaCalendarios, Path=CurrentColumn.Header, Mode=TwoWay}"
@@ -1282,15 +1279,10 @@
             EnableRowVirtualization="True"
             FontFamily="Comic Sans MS"
             FontSize="11"
-            HeadersVisibility="Column"
-            HorizontalGridLinesBrush="Transparent"
             IsReadOnly="False"
             ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
             MouseDoubleClick="TablaCalendarios_MouseDoubleClick"
-            SelectionMode="Extended"
-            SelectionUnit="Cell"
             Style="{StaticResource EstiloGridCalendarios}"
-            VerticalGridLinesBrush="Lavender"
             Visibility="Visible">
 
             <!--  COLUMNAS  -->
@@ -3539,22 +3531,14 @@
             x:Name="TablaPijama"
             Grid.Row="3"
             Grid.Column="0"
-            AlternationCount="2"
-            AutoGenerateColumns="False"
-            Background="Transparent"
             CanUserReorderColumns="False"
             CanUserSortColumns="False"
             ElementoSeleccionado="{Binding CalendariosVM.Pijama.DiaSeleccionado}"
             FontFamily="Comic Sans MS"
             FontSize="11"
-            HeadersVisibility="Column"
-            HorizontalGridLinesBrush="Transparent"
             IsReadOnly="True"
             ItemsSource="{Binding CalendariosVM.Pijama.ListaDias}"
-            SelectionMode="Extended"
-            SelectionUnit="Cell"
             Style="{StaticResource EstiloGridPijama}"
-            VerticalGridLinesBrush="Lavender"
             Visibility="Collapsed">
 
             <DataGrid.Columns>

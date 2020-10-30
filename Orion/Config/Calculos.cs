@@ -176,7 +176,7 @@ namespace Orion.Config {
                 // Si el turno es 2
                 if (turno == 2) {
                     if (inicio == iniciocomidacontinuo) {
-                        resultado = 1m;
+                        resultado = 0.5m;
                     } else if (inicio.Value.TotalMinutes >= (iniciocomidacontinuo.TotalMinutes + 5) &&
                                inicio.Value.TotalMinutes < (iniciocomidacontinuo.TotalMinutes + 30)) {
 
@@ -271,6 +271,9 @@ namespace Orion.Config {
                         break;
                     case 4: // Disponibilidad
                         iti.Descripcion = $"Reserva de {modificador} minutos.";
+                        break;
+                    case 5: // Tiempo de particion
+                        iti.Descripcion = $"Tiempo de partición de {modificador} minutos.";
                         break;
                     default: // Sólo tiempo.
                         iti.Descripcion = $"{modificador} minutos.";
