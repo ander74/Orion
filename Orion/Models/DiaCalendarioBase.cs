@@ -322,6 +322,34 @@ namespace Orion.Models {
         #region PROPIEDADES ALTERNATIVO
         // ====================================================================================================
 
+        private int? _graficoalt = null;
+        public int? GraficoAlt {
+            get { return _graficoalt; }
+            set {
+                if (_graficoalt != value) {
+                    _graficoalt = value;
+                    Modificado = true;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+        public Tuple<int, int> ComboGraficoAlt {
+            get { return new Tuple<int, int>(GraficoAlt ?? 0, 0); }
+            set {
+                if (value.Item1 == 0) {
+                    GraficoAlt = null;
+                } else {
+                    if (GraficoAlt != value.Item1 && value.Item1 != 0) {
+                        GraficoAlt = value.Item1;
+                    }
+                }
+            }
+        }
+
+
+
+
         private int? turnoalt = null;
         public int? TurnoAlt {
             get { return turnoalt; }
@@ -525,6 +553,7 @@ namespace Orion.Models {
             _graficovinculado = lector.ToInt16("GraficoVinculado");
             _notas = lector.ToString("Notas");
             turnoalt = lector.ToInt16Nulable("TurnoAlt");
+            //_graficoalt = lector.ToInt16Nulable("GraficoAlt");
             inicioalt = lector.ToTimeSpanNulable("InicioAlt");
             finalalt = lector.ToTimeSpanNulable("FinalAlt");
             iniciopartidoalt = lector.ToTimeSpanNulable("InicioPartidoAlt");
@@ -557,6 +586,7 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("Limpieza", Limpieza == null ? (object)DBNull.Value : Limpieza == true ? 1 : 0));
                 lista.Add(new SQLiteParameter("GraficoVinculado", GraficoVinculado));
                 lista.Add(new SQLiteParameter("Notas", Notas.TrimEnd(new char[] { ' ', '\n', '\r', '\t' })));
+                //lista.Add(new SQLiteParameter("GraficoAlt", GraficoAlt.HasValue ? GraficoAlt : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("TurnoAlt", TurnoAlt.HasValue ? TurnoAlt : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("InicioAlt", InicioAlt.HasValue ? InicioAlt.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("FinalAlt", FinalAlt.HasValue ? FinalAlt.Value.Ticks : (object)DBNull.Value));

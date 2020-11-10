@@ -1,297 +1,276 @@
-﻿<!-- =============================================== -->
-<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
-<!--                                                 -->
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
 <!--  Vea el archivo Licencia.txt para mas detalles  -->
-<!-- =============================================== -->
-<Window x:Class="Orion.Views.VentanaReclamaciones"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:cnv="clr-namespace:Orion.Convertidores"
-        xmlns:local="clr-namespace:Orion.ViewModels"
-        mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
-        Title="Reclamaciones" Height="600" Width="950">
+<!--  ===============================================  -->
+<Window
+    x:Class="Orion.Views.VentanaReclamaciones"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cnv="clr-namespace:Orion.Convertidores"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Orion.ViewModels"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Reclamaciones"
+    Width="950"
+    Height="600"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
 
 
-    <!-- ==================================================================================================== -->
-    <!-- RECURSOS -->
-    <!-- ==================================================================================================== -->
+    <!--  ====================================================================================================  -->
+    <!--  RECURSOS  -->
+    <!--  ====================================================================================================  -->
     <Window.Resources>
 
-        <!-- CONVERTIDORES -->
-        <cnv:ConvertidorSuperHora x:Key="cnvSuperHora"/>
-        <cnv:ConvertidorDecimal x:Key="cnvDecimal"/>
-        <cnv:ConvertidorNumeroGrafico x:Key="cnvNumeroGrafico"/>
-        <cnv:ConvertidorFecha x:Key="cnvFecha"/>
-        <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility"/>
+        <!--  CONVERTIDORES  -->
+        <cnv:ConvertidorSuperHora x:Key="cnvSuperHora" />
+        <cnv:ConvertidorDecimal x:Key="cnvDecimal" />
+        <cnv:ConvertidorNumeroGrafico x:Key="cnvNumeroGrafico" />
+        <cnv:ConvertidorFecha x:Key="cnvFecha" />
+        <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
 
-        <!-- ESTILOS -->
-        <Style x:Key="EstiloGrid" TargetType="DataGrid">
-            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}"/>
-            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasVerde}"/>
-            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasGraficos}"/>
+        <!--  ESTILOS  -->
+        <Style
+            x:Key="EstiloGrid"
+            TargetType="DataGrid">
+            <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}" />
+            <Setter Property="RowStyle" Value="{StaticResource EstiloFilasVerde}" />
+            <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasGraficos}" />
         </Style>
 
-        <Style x:Key="EstiloChkConceptos" TargetType="CheckBox">
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Width" Value="200"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Style
+            x:Key="EstiloChkConceptos"
+            TargetType="CheckBox">
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="Width" Value="200" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
 
-        <Style x:Key="EstiloTbConceptos" TargetType="TextBox">
-            <Setter Property="Margin" Value="3"/>
-            <Setter Property="Padding" Value="3"/>
-            <Setter Property="Width" Value="75"/>
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Style
+            x:Key="EstiloTbConceptos"
+            TargetType="TextBox">
+            <Setter Property="Margin" Value="3" />
+            <Setter Property="Padding" Value="3" />
+            <Setter Property="Width" Value="75" />
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
 
     </Window.Resources>
 
 
-    <!-- ==================================================================================================== -->
-    <!-- CONTENIDO VENTANA -->
-    <!-- ==================================================================================================== -->
-    <Border Background="White" CornerRadius="15" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20">
+    <!--  ====================================================================================================  -->
+    <!--  CONTENIDO VENTANA  -->
+    <!--  ====================================================================================================  -->
+    <Border
+        Margin="20"
+        Background="White"
+        BorderBrush="DarkBlue"
+        BorderThickness="0.5"
+        CornerRadius="15">
 
         <Border.BitmapEffect>
-            <DropShadowBitmapEffect Color="LightGray" Direction="-50" ShadowDepth="10" Softness=".7" />
+            <DropShadowBitmapEffect
+                Direction="-50"
+                ShadowDepth="10"
+                Softness=".7"
+                Color="LightGray" />
         </Border.BitmapEffect>
 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
-            <!-- ================================================== -->
-            <!-- CABECERA -->
-            <!-- ================================================== -->
+            <!--  ==================================================  -->
+            <!--  CABECERA  -->
+            <!--  ==================================================  -->
             <!--<StackPanel Orientation="Horizontal" Grid.ColumnSpan="3" Background="{StaticResource orDegradadoVioleta}" MouseDown="StackPanel_MouseDown">
-                --><!--<Label FontFamily="Verdana" FontSize="20" FontWeight="Bold" Margin="10">
+            -->
+            <!--<Label FontFamily="Verdana" FontSize="20" FontWeight="Bold" Margin="10">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="{Binding NumeroTrabajador, StringFormat=000}"/>
                     <TextBlock Text=" : "/>
                     <TextBlock Text="{Binding NombreTrabajador}"/>
                 </StackPanel>
-            </Label>--><!--
+            </Label>-->
+            <!--
                 <TextBlock FontFamily="Verdana" FontSize="20" FontWeight="Bold" Margin="10" Text="Reclamación de conceptos"/>
             </StackPanel>-->
-            <Border Grid.ColumnSpan="3" Background="{StaticResource orDegradadoVioleta}" MouseDown="Border_MouseDown" CornerRadius="15,15,0,0">
-                <TextBlock FontFamily="Verdana" FontSize="14" FontWeight="Bold" Margin="10" Text="Reclamación de Conceptos"/>
+            <Border
+                Grid.ColumnSpan="3"
+                Background="{StaticResource orDegradadoVioleta}"
+                CornerRadius="15,15,0,0"
+                MouseDown="Border_MouseDown">
+                <TextBlock
+                    Margin="10"
+                    FontFamily="Verdana"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Text="Reclamación de Conceptos" />
             </Border>
 
-            <!-- ================================================== -->
-            <!-- IMPORTES -->
-            <!-- ================================================== -->
-            <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="1" Margin="3">
+            <!--  ==================================================  -->
+            <!--  IMPORTES  -->
+            <!--  ==================================================  -->
+            <StackPanel
+                Grid.Row="1"
+                Grid.Column="0"
+                Margin="3"
+                Orientation="Vertical">
 
-                <!-- PLUSES A RECLAMAR -->
-                <TextBlock Margin="3,6,3,3" FontSize="14" FontWeight="Bold" Foreground="DarkRed" Text="Importes a reclamar"/>
-                <StackPanel Orientation="Vertical" Margin="10,0,0,0" HorizontalAlignment="Left">
+                <!--  PLUSES A RECLAMAR  -->
+                <TextBlock
+                    Margin="3,6,3,3"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="DarkRed"
+                    Text="Importes a reclamar" />
+                <StackPanel
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Vertical">
 
-                    <!-- DIETAS -->
+                    <!--  DIETAS  -->
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Dietas" IsChecked="{Binding DietasChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Dietas, Converter={StaticResource cnvDecimal}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                        <CheckBox
+                            Content="Dietas"
+                            IsChecked="{Binding DietasChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Dietas, Converter={StaticResource cnvDecimal}}" />
                     </StackPanel>
 
-                    <!-- PLUS SÁBADOS -->
+                    <!--  PLUS SÁBADOS  -->
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Plus sábados" IsChecked="{Binding SabadosChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Sabados, Converter={StaticResource cnvDecimal}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                        <CheckBox
+                            Content="Plus sábados"
+                            IsChecked="{Binding SabadosChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Sabados, Converter={StaticResource cnvDecimal}}" />
                     </StackPanel>
 
-                    <!-- PLUS FESTIVOS -->
+                    <!--  PLUS FESTIVOS  -->
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Plus Festivos" IsChecked="{Binding FestivosChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Festivos, Converter={StaticResource cnvDecimal}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                        <CheckBox
+                            Content="Plus Festivos"
+                            IsChecked="{Binding FestivosChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Festivos, Converter={StaticResource cnvDecimal}}" />
                     </StackPanel>
 
-                    <!-- PLUS MENOR DESCANSO -->
+                    <!--  PLUS MENOR DESCANSO  -->
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Plus Menor descanso" IsChecked="{Binding MenorDescansoChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding MenorDescanso, Converter={StaticResource cnvDecimal}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                        <CheckBox
+                            Content="Plus Menor descanso"
+                            IsChecked="{Binding MenorDescansoChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding MenorDescanso, Converter={StaticResource cnvDecimal}}" />
                     </StackPanel>
 
-                    <!-- PLUS LIMPIEZA -->
+                    <!--  PLUS LIMPIEZA  -->
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Plus de limpieza" IsChecked="{Binding LimpiezaChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Limpieza, Converter={StaticResource cnvDecimal}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                        <CheckBox
+                            Content="Plus de limpieza"
+                            IsChecked="{Binding LimpiezaChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Limpieza, Converter={StaticResource cnvDecimal}}" />
                     </StackPanel>
 
-                    <!-- PLUS PAQUETERÍA -->
+                    <!--  PLUS PAQUETERÍA  -->
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Plus de paquetería" IsChecked="{Binding PaqueteriaChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Paqueteria, Converter={StaticResource cnvDecimal}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                        <CheckBox
+                            Content="Plus de paquetería"
+                            IsChecked="{Binding PaqueteriaChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Paqueteria, Converter={StaticResource cnvDecimal}}" />
                     </StackPanel>
 
-                    <!-- PLUS NOCTURNIDAD -->
+                    <!--  PLUS NOCTURNIDAD  -->
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Plus de nocturnidad" IsChecked="{Binding NocturnidadChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Nocturnidad, Converter={StaticResource cnvDecimal}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                        <CheckBox
+                            Content="Plus de nocturnidad"
+                            IsChecked="{Binding NocturnidadChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Nocturnidad, Converter={StaticResource cnvDecimal}}" />
                     </StackPanel>
 
-                    <!-- PLUS VIAJE -->
+                    <!--  PLUS VIAJE  -->
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Plus de viaje" IsChecked="{Binding ViajeChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Viaje, Converter={StaticResource cnvDecimal}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                        <CheckBox
+                            Content="Plus de viaje"
+                            IsChecked="{Binding ViajeChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Viaje, Converter={StaticResource cnvDecimal}}" />
                     </StackPanel>
 
-                    <!-- PLUS DE NAVIDAD -->
+                    <!--  PLUS DE NAVIDAD  -->
                     <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Plus de Navidad" IsChecked="{Binding NavidadChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Navidad, Converter={StaticResource cnvDecimal}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                </StackPanel>
-
-            </StackPanel>
-
-
-            <!-- ================================================== -->
-            <!-- DÍAS -->
-            <!-- ================================================== -->
-            <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Margin="3">
-
-                <!-- DÍAS A RECLAMAR -->
-                <TextBlock Margin="3,6,3,3" FontSize="14" FontWeight="Bold" Foreground="DarkRed" Text="Días a reclamar"/>
-                <StackPanel Orientation="Vertical" Margin="10,0,0,0" HorizontalAlignment="Left">
-
-                    <!-- DESCANSOS -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Descansos" IsChecked="{Binding DescansosChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Descansos, StringFormat=00}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                    <!-- VACACIONES  -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Vacaciones" IsChecked="{Binding VacacionesChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Vacaciones, StringFormat=00}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                    <!-- DESCANSOS NO DISFRUTADOS  -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Descansos no disfrutados" IsChecked="{Binding DescansosNoDisfrutadosChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding DescansosNoDisfrutados, StringFormat=00}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                    <!-- DÍAS ENFERMEDAD -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Días de enfermedad" IsChecked="{Binding EnfermoChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Enfermo, StringFormat=00}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                    <!-- DESCANSOS SUELTOS -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Descansos sueltos" IsChecked="{Binding DescansosSueltosChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding DescansosSueltos, StringFormat=00}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                    <!-- DESCANSOS COMPENSATORIOS -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Descansos compensatorios" IsChecked="{Binding DescansosCompensatoriosChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding DescansosCompensatorios, StringFormat=00}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                    <!-- DÍAS PERMISO -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Días de permiso" IsChecked="{Binding PermisoChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Permiso, StringFormat=00}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                    <!-- DÍAS LIBRE DISPOSICIÓN -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Días de libre disposición" IsChecked="{Binding LibreDisposicionChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding LibreDisposicion, StringFormat=00}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                    <!-- DÍAS DE COMITÉ -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Días de comité" IsChecked="{Binding ComiteChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Comite, StringFormat=00}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                </StackPanel>
-
-            </StackPanel>
-
-
-            <!-- ================================================== -->
-            <!-- HORAS -->
-            <!-- ================================================== -->
-            <StackPanel Orientation="Vertical" Grid.Column="0" Grid.Row="2" Margin="3">
-
-                <!-- HORAS A RECLAMAR -->
-                <TextBlock Margin="3,6,3,3" FontSize="14" FontWeight="Bold" Foreground="DarkRed" Text="Horas a reclamar"/>
-                <StackPanel Orientation="Vertical" Margin="10,0,0,0" HorizontalAlignment="Left">
-
-                    <!-- HORAS TRABAJADAS -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Horas trabajadas" IsChecked="{Binding TrabajadasChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Trabajadas, Converter={StaticResource cnvSuperHora}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                    <!-- HORAS ACUMULADAS -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Horas acumuladas" IsChecked="{Binding AcumuladasChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Acumuladas, Converter={StaticResource cnvSuperHora}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                </StackPanel>
-
-            </StackPanel>
-
-            <StackPanel Orientation="Vertical" Grid.Column="1" Grid.Row="2" Margin="3">
-
-                <!-- HORAS A RECLAMAR -->
-                <TextBlock Margin="3,6,3,3" FontSize="14" FontWeight="Bold" Foreground="DarkRed" Text=""/>
-                <StackPanel Orientation="Vertical" Margin="10,0,0,0" HorizontalAlignment="Left">
-
-                    <!-- HORAS NOCTURNAS -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Horas nocturnas" IsChecked="{Binding NocturnasChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Nocturnas, Converter={StaticResource cnvSuperHora}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
-                    </StackPanel>
-
-                    <!-- HORAS COBRADAS -->
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox Style="{StaticResource EstiloChkConceptos}" Content="Horas cobradas" IsChecked="{Binding CobradasChecked}"/>
-                        <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding Cobradas, Converter={StaticResource cnvSuperHora}}"
-                             GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                        <CheckBox
+                            Content="Plus de Navidad"
+                            IsChecked="{Binding NavidadChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Navidad, Converter={StaticResource cnvDecimal}}" />
                     </StackPanel>
 
                 </StackPanel>
@@ -299,16 +278,288 @@
             </StackPanel>
 
 
-            <!-- ================================================== -->
-            <!-- GRÁFICOS -->
-            <!-- ================================================== -->
-            <StackPanel Orientation="Vertical" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Margin="3">
+            <!--  ==================================================  -->
+            <!--  DÍAS  -->
+            <!--  ==================================================  -->
+            <StackPanel
+                Grid.Row="1"
+                Grid.RowSpan="2"
+                Grid.Column="1"
+                Margin="3"
+                Orientation="Vertical">
 
-                <!-- DÍAS A RECLAMAR -->
-                <TextBlock Margin="3,6,3,3" FontSize="14" FontWeight="Bold" Foreground="DarkRed" Text="Gráficos a reclamar"/>
-                <StackPanel Orientation="Vertical" Margin="10,0,0,0" HorizontalAlignment="Stretch">
+                <!--  DÍAS A RECLAMAR  -->
+                <TextBlock
+                    Margin="3,6,3,3"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="DarkRed"
+                    Text="Días a reclamar" />
+                <StackPanel
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Vertical">
 
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <!--  DESCANSOS  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Descansos"
+                            IsChecked="{Binding DescansosChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Descansos, StringFormat=00}" />
+                    </StackPanel>
+
+                    <!--  VACACIONES  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Vacaciones"
+                            IsChecked="{Binding VacacionesChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Vacaciones, StringFormat=00}" />
+                    </StackPanel>
+
+                    <!--  DESCANSOS NO DISFRUTADOS  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Descansos no disfrutados"
+                            IsChecked="{Binding DescansosNoDisfrutadosChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding DescansosNoDisfrutados, StringFormat=00}" />
+                    </StackPanel>
+
+                    <!--  DÍAS ENFERMEDAD  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Días de enfermedad"
+                            IsChecked="{Binding EnfermoChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Enfermo, StringFormat=00}" />
+                    </StackPanel>
+
+                    <!--  DESCANSOS SUELTOS  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Descansos sueltos"
+                            IsChecked="{Binding DescansosSueltosChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding DescansosSueltos, StringFormat=00}" />
+                    </StackPanel>
+
+                    <!--  DESCANSOS COMPENSATORIOS  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Descansos compensatorios"
+                            IsChecked="{Binding DescansosCompensatoriosChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding DescansosCompensatorios, StringFormat=00}" />
+                    </StackPanel>
+
+                    <!--  DÍAS PERMISO  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Días de permiso"
+                            IsChecked="{Binding PermisoChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Permiso, StringFormat=00}" />
+                    </StackPanel>
+
+                    <!--  DÍAS LIBRE DISPOSICIÓN  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Días de libre disposición"
+                            IsChecked="{Binding LibreDisposicionChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding LibreDisposicion, StringFormat=00}" />
+                    </StackPanel>
+
+                    <!--  DÍAS DE COMITÉ  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Días de comité"
+                            IsChecked="{Binding ComiteChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Comite, StringFormat=00}" />
+                    </StackPanel>
+
+                </StackPanel>
+
+            </StackPanel>
+
+
+            <!--  ==================================================  -->
+            <!--  HORAS  -->
+            <!--  ==================================================  -->
+            <StackPanel
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="3"
+                Orientation="Vertical">
+
+                <!--  HORAS A RECLAMAR  -->
+                <TextBlock
+                    Margin="3,6,3,3"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="DarkRed"
+                    Text="Horas a reclamar" />
+                <StackPanel
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Vertical">
+
+                    <!--  HORAS TRABAJADAS  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Horas trabajadas"
+                            IsChecked="{Binding TrabajadasChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Trabajadas, Converter={StaticResource cnvSuperHora}}" />
+                    </StackPanel>
+
+                    <!--  HORAS ACUMULADAS  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Horas acumuladas"
+                            IsChecked="{Binding AcumuladasChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Acumuladas, Converter={StaticResource cnvSuperHora}}" />
+                    </StackPanel>
+
+                </StackPanel>
+
+            </StackPanel>
+
+            <StackPanel
+                Grid.Row="2"
+                Grid.Column="1"
+                Margin="3"
+                Orientation="Vertical">
+
+                <!--  HORAS A RECLAMAR  -->
+                <TextBlock
+                    Margin="3,6,3,3"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="DarkRed"
+                    Text="" />
+                <StackPanel
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Left"
+                    Orientation="Vertical">
+
+                    <!--  HORAS NOCTURNAS  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Horas nocturnas"
+                            IsChecked="{Binding NocturnasChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Nocturnas, Converter={StaticResource cnvSuperHora}}" />
+                    </StackPanel>
+
+                    <!--  HORAS COBRADAS  -->
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox
+                            Content="Horas cobradas"
+                            IsChecked="{Binding CobradasChecked}"
+                            Style="{StaticResource EstiloChkConceptos}" />
+                        <TextBox
+                            GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                            KeyDown="TextBox_KeyDown"
+                            PreviewMouseDown="TextBox_PreviewMouseDown"
+                            Style="{StaticResource EstiloTbConceptos}"
+                            Text="{Binding Cobradas, Converter={StaticResource cnvSuperHora}}" />
+                    </StackPanel>
+
+                </StackPanel>
+
+            </StackPanel>
+
+
+            <!--  ==================================================  -->
+            <!--  GRÁFICOS  -->
+            <!--  ==================================================  -->
+            <StackPanel
+                Grid.Row="1"
+                Grid.RowSpan="2"
+                Grid.Column="2"
+                Margin="3"
+                Orientation="Vertical">
+
+                <!--  DÍAS A RECLAMAR  -->
+                <TextBlock
+                    Margin="3,6,3,3"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="DarkRed"
+                    Text="Gráficos a reclamar" />
+                <StackPanel
+                    Margin="10,0,0,0"
+                    HorizontalAlignment="Stretch"
+                    Orientation="Vertical">
+
+                    <StackPanel
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal">
                         <!--<TextBlock Margin="2" FontSize="14" FontWeight="Bold" VerticalAlignment="Center" Text="Día: "/>
                     <TextBox Margin="2" Width="50" FontSize="16" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
                      Text="21"/>
@@ -320,19 +571,39 @@
 
                         <!--<Button Style="{StaticResource EstiloBoton}" FontSize="20" FontWeight="Bold" Foreground="DarkGreen"
                             Padding="20,0,20,3" Margin="2" Content="+"/>-->
-                        <Button Style="{StaticResource EstiloBoton}" FontSize="14" FontWeight="Normal" Command="{Binding cmdBorrarDiaGrafico}"
-                            Padding="20,3,20,6" Margin="2" Content="Borrar"/>
+                        <Button
+                            Margin="2"
+                            Padding="20,3,20,6"
+                            Command="{Binding cmdBorrarDiaGrafico}"
+                            Content="Borrar"
+                            FontSize="14"
+                            FontWeight="Normal"
+                            Style="{StaticResource EstiloBoton}" />
 
                     </StackPanel>
 
-                    <DataGrid Margin="0,10,10,10" ItemsSource="{Binding ListaGraficos}" Style="{StaticResource EstiloGrid}"
-                          AutoGenerateColumns="False" CanUserDeleteRows="False" CanUserReorderColumns="False" CanUserSortColumns="False"
-                          HeadersVisibility="Column" SelectionMode="Extended" SelectionUnit="FullRow"
-                          SelectedItem="{Binding DiaGraficoSeleccionado}">
+                    <DataGrid
+                        Margin="0,10,10,10"
+                        AutoGenerateColumns="False"
+                        CanUserDeleteRows="False"
+                        CanUserReorderColumns="False"
+                        CanUserSortColumns="False"
+                        HeadersVisibility="Column"
+                        ItemsSource="{Binding ListaGraficos}"
+                        SelectedItem="{Binding DiaGraficoSeleccionado}"
+                        SelectionMode="Extended"
+                        SelectionUnit="FullRow"
+                        Style="{StaticResource EstiloGrid}">
 
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Día" Width="1*" Binding="{Binding Dia}"/>
-                            <DataGridTextColumn Header="Gráf. en pijama" Width="2*" Binding="{Binding Grafico, Converter={StaticResource cnvNumeroGrafico}}"/>
+                            <DataGridTextColumn
+                                Width="1*"
+                                Binding="{Binding Dia}"
+                                Header="Día" />
+                            <DataGridTextColumn
+                                Width="2*"
+                                Binding="{Binding Grafico, Converter={StaticResource cnvNumeroGrafico}}"
+                                Header="Gráf. en pijama" />
                         </DataGrid.Columns>
 
                     </DataGrid>
@@ -343,45 +614,111 @@
             </StackPanel>
 
 
-            <!-- ================================================== -->
-            <!-- NOTAS -->
-            <!-- ================================================== -->
-            <Border Grid.ColumnSpan="2" Grid.Row="1" Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Left"
-                Background="AliceBlue" BorderBrush="DarkBlue" BorderThickness="2" CornerRadius="5" Margin="5" Height="200" Width="465"
+            <!--  ==================================================  -->
+            <!--  NOTAS  -->
+            <!--  ==================================================  -->
+            <Border
+                Grid.Row="1"
+                Grid.RowSpan="2"
+                Grid.ColumnSpan="2"
+                Width="465"
+                Height="200"
+                Margin="5"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Background="AliceBlue"
+                BorderBrush="DarkBlue"
+                BorderThickness="2"
+                CornerRadius="5"
                 Visibility="{Binding VisibilidadNotas, Converter={StaticResource cnvBoolToVisibility}}">
                 <StackPanel Orientation="Vertical">
-                    <TextBlock Margin="10,6,3,3" FontSize="14" FontWeight="Bold" Foreground="DarkRed" Text="Notas"/>
-                    <TextBox x:Name="TbNotas" Background="Transparent" BorderThickness="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                         Margin="10" FontFamily="Verdana" FontSize="12" TextWrapping="Wrap" AcceptsReturn="True" MaxLines="9" TabIndex="0"
-                             IsVisibleChanged="TbNotas_IsVisibleChanged"
-                         Text="{Binding Notas}"/>
+                    <TextBlock
+                        Margin="10,6,3,3"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Foreground="DarkRed"
+                        Text="Notas" />
+                    <TextBox
+                        x:Name="TbNotas"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch"
+                        AcceptsReturn="True"
+                        Background="Transparent"
+                        BorderThickness="0"
+                        FontFamily="Verdana"
+                        FontSize="12"
+                        IsVisibleChanged="TbNotas_IsVisibleChanged"
+                        MaxLines="9"
+                        TabIndex="0"
+                        Text="{Binding Notas}"
+                        TextWrapping="Wrap" />
                 </StackPanel>
             </Border>
 
 
-            <!-- ================================================== -->
-            <!-- BOTÓN NOTAS Y FECHA DE RECLAMACIÓN -->
-            <!-- ================================================== -->
-            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" Grid.Row="3" Margin="13,3,3,3" VerticalAlignment="Top">
+            <!--  ==================================================  -->
+            <!--  BOTÓN NOTAS Y FECHA DE RECLAMACIÓN  -->
+            <!--  ==================================================  -->
+            <StackPanel
+                Grid.Row="3"
+                Grid.ColumnSpan="2"
+                Margin="13,3,3,3"
+                VerticalAlignment="Top"
+                Orientation="Horizontal">
 
-                <Button Style="{StaticResource EstiloBoton}" FontSize="14" FontWeight="Normal" Command="{Binding cmdMostrarNotas}"
-                    VerticalAlignment="Center" Padding="20,3,20,6" Margin="2" Content="Notas"/>
-                <TextBlock Margin="20,6,3,3" FontSize="14" FontWeight="Bold" Foreground="DarkRed" Text="Fecha de la reclamación: "
-                       VerticalAlignment="Center"/>
-                <TextBox Style="{StaticResource EstiloTbConceptos}" Text="{Binding FechaReclamacion, Converter={StaticResource cnvFecha}}"
-                     VerticalAlignment="Center" Width="125"
-                     GotKeyboardFocus="TextBox_GotKeyboardFocus" PreviewMouseDown="TextBox_PreviewMouseDown" KeyDown="TextBox_KeyDown"/>
+                <Button
+                    Margin="2"
+                    Padding="20,3,20,6"
+                    VerticalAlignment="Center"
+                    Command="{Binding cmdMostrarNotas}"
+                    Content="Notas"
+                    FontSize="14"
+                    FontWeight="Normal"
+                    Style="{StaticResource EstiloBoton}" />
+                <TextBlock
+                    Margin="20,6,3,3"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Foreground="DarkRed"
+                    Text="Fecha de la reclamación: " />
+                <TextBox
+                    Width="125"
+                    VerticalAlignment="Center"
+                    GotKeyboardFocus="TextBox_GotKeyboardFocus"
+                    KeyDown="TextBox_KeyDown"
+                    PreviewMouseDown="TextBox_PreviewMouseDown"
+                    Style="{StaticResource EstiloTbConceptos}"
+                    Text="{Binding FechaReclamacion, Converter={StaticResource cnvFecha}}" />
 
             </StackPanel>
 
-            <!-- ================================================== -->
-            <!-- BOTONES DE VENTANA -->
-            <!-- ================================================== -->
-            <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="3" Margin="10" HorizontalAlignment="Right">
-                <Button Style="{StaticResource EstiloBoton}" FontFamily="Arial" FontSize="14" Padding="20,10" Content="Cancelar"
-                        Focusable="True" Click="Cancelar_Click"/>
-                <Button Style="{StaticResource EstiloBoton}" FontFamily="Arial" FontSize="14" Padding="20,10" Content="Aceptar"
-                        Focusable="True" Click="Aceptar_Click"/>
+            <!--  ==================================================  -->
+            <!--  BOTONES DE VENTANA  -->
+            <!--  ==================================================  -->
+            <StackPanel
+                Grid.Row="3"
+                Grid.Column="2"
+                Margin="10"
+                HorizontalAlignment="Right"
+                Orientation="Horizontal">
+                <Button
+                    Padding="20,10"
+                    Click="Cancelar_Click"
+                    Content="Cancelar"
+                    Focusable="True"
+                    FontFamily="Arial"
+                    FontSize="14"
+                    Style="{StaticResource EstiloBoton}" />
+                <Button
+                    Padding="20,10"
+                    Click="Aceptar_Click"
+                    Content="Aceptar"
+                    Focusable="True"
+                    FontFamily="Arial"
+                    FontSize="14"
+                    Style="{StaticResource EstiloBoton}" />
             </StackPanel>
 
 

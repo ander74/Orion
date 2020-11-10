@@ -167,7 +167,9 @@
                     Crea un grupo de gráficos desde un archivo exportado.
                 </TextBlock>
 
-                <StackPanel Margin="40,10,0,0" Orientation="Horizontal">
+                <StackPanel
+                    Margin="40,10,0,0"
+                    Orientation="Horizontal">
                     <TextBox
                         Width="350"
                         Height="25"
@@ -180,8 +182,8 @@
                     <Button
                         Width="30"
                         Margin="2"
-                        Content="..."
                         Command="{Binding cmdSeleccionarArchivo}"
+                        Content="..."
                         IsEnabled="{Binding ElementName=rbWord, Path=IsChecked}"
                         Style="{StaticResource EstiloBoton}" />
                 </StackPanel>

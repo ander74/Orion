@@ -238,8 +238,9 @@ namespace Orion.Config {
         public static ValoracionGrafico ConvertirEnItinerario(decimal codigo, TimeSpan? inicio) {
             // Creamos el itinerario que se va a devolver.
             ValoracionGrafico itinerario = new ValoracionGrafico();
-            // Ponemos el inicio al itinerario.
+            // Ponemos el inicio al itinerario y el código.
             itinerario.Inicio = inicio;
+            itinerario.Linea = codigo;
             // Desglosamos el código.
             string textoLinea = codigo.ToString().Replace(",", ".");
             int numeroItinerario = 0;
@@ -256,6 +257,7 @@ namespace Orion.Config {
             if (numeroItinerario < 10) {
                 var iti = new ValoracionGrafico {
                     Inicio = inicio,
+                    Linea = codigo,
                     Final = inicio + new TimeSpan(0, modificador, 0),
                     Tiempo = new TimeSpan(0, modificador, 0),
                 };
@@ -288,7 +290,6 @@ namespace Orion.Config {
                 if (linea != null) {
                     var iti = linea.ListaItinerarios.FirstOrDefault(i => i.Nombre == modificador);
                     if (iti != null) {
-                        itinerario.Linea = 0;
                         itinerario.Descripcion = iti.Descripcion;
                         itinerario.Final = itinerario.Inicio + new TimeSpan(0, iti.TiempoReal, 0);
                         return itinerario;
@@ -300,7 +301,6 @@ namespace Orion.Config {
                 if (iti != null) {
                     // Si no hay modificador, se busca el itinerario y se aplica.
                     if (modificador == 0) {
-                        itinerario.Linea = numeroItinerario;
                         itinerario.Descripcion = iti.Descripcion;
                         itinerario.Final = itinerario.Inicio + new TimeSpan(0, iti.TiempoReal, 0);
                         return itinerario;
@@ -308,7 +308,6 @@ namespace Orion.Config {
                     } else {
                         var parada = iti.ListaParadas.FirstOrDefault(p => p.Orden == modificador);
                         if (parada != null) {
-                            itinerario.Linea = numeroItinerario;
                             itinerario.Descripcion = iti.Descripcion + $"\nRelevo en {parada.Descripcion}";
                             itinerario.Final = itinerario.Inicio + parada.Tiempo;
                             return itinerario;

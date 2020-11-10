@@ -198,9 +198,7 @@
     <Compile Include="Controls\BotonDual.xaml.cs">
       <DependentUpon>BotonDual.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GrupoOpciones.xaml.cs">
-      <DependentUpon>GrupoOpciones.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Controls\HeadingGroup.cs" />
     <Compile Include="Controls\ItemResumen.xaml.cs">
       <DependentUpon>ItemResumen.xaml</DependentUpon>
     </Compile>
@@ -215,6 +213,7 @@
     <Compile Include="Controls\TextoValorH.xaml.cs">
       <DependentUpon>TextoValorH.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\VerticalButton.cs" />
     <Compile Include="Convertidores\ConvertidorColorColumnaPijama.cs" />
     <Compile Include="Convertidores\ConvertidorColorFecha.cs" />
     <Compile Include="Convertidores\ConvertidorDecimal6.cs" />
@@ -227,6 +226,7 @@
     <Compile Include="Convertidores\ConvertidorOcultoSiCero.cs" />
     <Compile Include="Convertidores\ConvertidorSelectionUnitToEnabled.cs" />
     <Compile Include="Convertidores\ConvertidorTextoNegrita.cs" />
+    <Compile Include="Convertidores\ConvertidorTurno4Visibility.cs" />
     <Compile Include="Convertidores\ConvertidorVisibilityInverter.cs" />
     <Compile Include="Convertidores\ConvertidorColorDia.cs" />
     <Compile Include="Convertidores\ConvertidorColorDiaPijama.cs" />
@@ -305,6 +305,8 @@
     <Compile Include="Mvvm\ICommandAsync.cs" />
     <Compile Include="Mvvm\IErrorHandler.cs" />
     <Compile Include="Mvvm\TaskUtilities.cs" />
+    <Compile Include="PdfExcel\Enumeraciones.cs" />
+    <Compile Include="PdfExcel\PdfExcelHelper.cs" />
     <Compile Include="Pijama\BdPijamas.cs" />
     <Compile Include="Pijama\DiaPijama.cs" />
     <Compile Include="Pijama\DiaPijamaBasico.cs" />
@@ -312,6 +314,7 @@
     <Compile Include="Pijama\ResumenDias.cs" />
     <Compile Include="Pijama\ResumenPijama.cs" />
     <Compile Include="PrintModel\CalendarioPrintModel.cs" />
+    <Compile Include="PdfExcel\PdfCellInfo.cs" />
     <Compile Include="PrintModel\GraficosPrintModel.cs" />
     <Compile Include="PrintModel\PdfTools.cs" />
     <Compile Include="PrintModel\PijamaPrintModel.cs" />
@@ -319,6 +322,8 @@
     <Compile Include="Servicios\LineasRepository.cs" />
     <Compile Include="Servicios\OneDriveService.cs" />
     <Compile Include="Servicios\OrionRepository.cs" />
+    <Compile Include="Servicios\PdfService.cs" />
+    <Compile Include="PdfExcel\PdfTableData.cs" />
     <Compile Include="Servicios\SQLiteRepository.cs" />
     <Compile Include="Servicios\DbService2.cs" />
     <Compile Include="Servicios\ExcelService.cs" />
@@ -469,10 +474,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\GrupoOpciones.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\ItemResumen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -512,6 +513,10 @@
     <Page Include="Estilos\Fondos.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Estilos\QControlsStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Estilos\QDatagrid.xaml">
       <SubType>Designer</SubType>

@@ -55,10 +55,10 @@ namespace Orion.ViewModels {
                         App.Global.Configuracion.SincronizarEnDropbox = false;
                     }
                     return;
-                case "Ayuda":
-                    dialogo.Description = "Ubicación de la Ayuda";
-                    dialogo.SelectedPath = App.Global.Configuracion.CarpetaAyuda;
-                    if (dialogo.ShowDialog() == DialogResult.OK) App.Global.Configuracion.CarpetaAyuda = dialogo.SelectedPath;
+                case "Avanza":
+                    dialogo.Description = "Ubicación Carpeta Avanza";
+                    dialogo.SelectedPath = App.Global.Configuracion.CarpetaAvanza;
+                    if (dialogo.ShowDialog() == DialogResult.OK) App.Global.Configuracion.CarpetaAvanza = dialogo.SelectedPath;
                     return;
                 case "Informes":
                     dialogo.Description = "Ubicación Hojas Pijama";

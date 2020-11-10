@@ -1,76 +1,145 @@
-﻿<!-- =============================================== -->
-<!--     Copyright 2017 - Orion 1.0 - A. Herrero     -->
-<!--                                                 -->
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
 <!--  Vea el archivo Licencia.txt para mas detalles  -->
-<!-- =============================================== -->
-<Window x:Class="Orion.Views.VentanaCentros"
-        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Orion.Views"
-        mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="NoResize" Background="Transparent" AllowsTransparency="True"
-        Title="Centros de Trabajo" Height="320" Width="250">
+<!--  ===============================================  -->
+<Window
+    x:Class="Orion.Views.VentanaCentros"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Orion.Views"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    Title="Centros de Trabajo"
+    Width="250"
+    Height="320"
+    AllowsTransparency="True"
+    Background="Transparent"
+    ResizeMode="NoResize"
+    WindowStartupLocation="CenterScreen"
+    WindowStyle="None"
+    mc:Ignorable="d">
 
-    <Border Background="{StaticResource DegradadoCeleste0}" CornerRadius="15" BorderBrush="DarkBlue" BorderThickness="0.5" Margin="20">
+    <Border
+        Margin="20"
+        Background="{StaticResource DegradadoCeleste0}"
+        BorderBrush="DarkBlue"
+        BorderThickness="0.5"
+        CornerRadius="15">
 
         <Border.BitmapEffect>
-            <DropShadowBitmapEffect Color="LightGray" Direction="-50" ShadowDepth="10" Softness=".7" />
+            <DropShadowBitmapEffect
+                Direction="-50"
+                ShadowDepth="10"
+                Softness=".7"
+                Color="LightGray" />
         </Border.BitmapEffect>
 
 
-        <!-- VENTANA DE CENTROS -->
-        <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
+        <!--  VENTANA DE CENTROS  -->
+        <StackPanel
+            HorizontalAlignment="Stretch"
+            Orientation="Vertical">
 
-            <!-- ================================================== -->
-            <!-- TÍTULO -->
-            <!-- ================================================== -->
-            <Border Background="{StaticResource orDegradadoAzul}" MouseDown="Border_MouseDown" CornerRadius="15,15,0,0">
+            <!--  ==================================================  -->
+            <!--  TÍTULO  -->
+            <!--  ==================================================  -->
+            <Border
+                Background="{StaticResource orDegradadoAzul}"
+                CornerRadius="15,15,0,0"
+                MouseDown="Border_MouseDown">
                 <Grid>
-                    <TextBlock FontFamily="Verdana" FontSize="14" FontWeight="Bold" Margin="10" Text="Centros de Trabajo"/>
-                    <Button Name="Cerrar" Style="{StaticResource EstiloBotonBarraPequeña}" HorizontalAlignment="Right" Padding="6" Click="Boton_Click">
-                        <Image Source="Imagenes/Cerrar.png" Width="16"/>
+                    <TextBlock
+                        Margin="10"
+                        FontFamily="Verdana"
+                        FontSize="14"
+                        FontWeight="Bold"
+                        Text="Centros de Trabajo" />
+                    <Button
+                        Name="Cerrar"
+                        Padding="6"
+                        HorizontalAlignment="Right"
+                        Click="Boton_Click"
+                        Style="{StaticResource EstiloBotonBarraPequeña}">
+                        <Image
+                            Width="16"
+                            Source="Imagenes/Cerrar.png" />
                     </Button>
                 </Grid>
             </Border>
 
 
-            <!-- BILBAO -->
-            <Button Name="Bilbao" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click" HorizontalAlignment="Center">
+            <!--  BILBAO  -->
+            <Button
+                Name="Bilbao"
+                Width="200"
+                Height="48"
+                HorizontalAlignment="Center"
+                Click="Boton_Click"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Imagenes\Logos\LogoBilbao.png" Height="32" Margin="0,0,15,0"/>
+                        <Image
+                            Height="32"
+                            Margin="0,0,15,0"
+                            Source="Imagenes\Logos\LogoBilbao.png" />
                         <TextBlock FontSize="28">Bilbao</TextBlock>
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <!-- DONOSTI -->
-            <Button Name="Donosti" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click" HorizontalAlignment="Center">
+            <!--  DONOSTI  -->
+            <Button
+                Name="Donosti"
+                Width="200"
+                Height="48"
+                HorizontalAlignment="Center"
+                Click="Boton_Click"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Imagenes\Logos\LogoDonosti.png" Height="32" Margin="0,0,15,0"/>
+                        <Image
+                            Height="32"
+                            Margin="0,0,15,0"
+                            Source="Imagenes\Logos\LogoDonosti.png" />
                         <TextBlock FontSize="28">Donosti</TextBlock>
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <!-- ARRASATE -->
-            <Button Name="Arrasate" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click" HorizontalAlignment="Center">
+            <!--  ARRASATE  -->
+            <Button
+                Name="Arrasate"
+                Width="200"
+                Height="48"
+                HorizontalAlignment="Center"
+                Click="Boton_Click"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Imagenes\Logos\LogoArrasate.png" Height="32" Margin="0,0,15,0"/>
+                        <Image
+                            Height="32"
+                            Margin="0,0,15,0"
+                            Source="Imagenes\Logos\LogoArrasate.png" />
                         <TextBlock FontSize="28">Arrasate</TextBlock>
                     </StackPanel>
                 </Button.Content>
             </Button>
 
-            <!-- GASTEIZ -->
-            <Button Name="Vitoria" Style="{StaticResource EstiloBotonBarra}" Width="200" Height="48" Click="Boton_Click" HorizontalAlignment="Center">
+            <!--  GASTEIZ  -->
+            <Button
+                Name="Vitoria"
+                Width="200"
+                Height="48"
+                HorizontalAlignment="Center"
+                Click="Boton_Click"
+                Style="{StaticResource EstiloBotonBarra}">
                 <Button.Content>
                     <StackPanel Orientation="Horizontal">
-                        <Image Source="Imagenes\Logos\LogoGasteiz.png" Height="32" Margin="0,0,15,0"/>
+                        <Image
+                            Height="32"
+                            Margin="0,0,15,0"
+                            Source="Imagenes\Logos\LogoGasteiz.png" />
                         <TextBlock FontSize="28">Gasteiz</TextBlock>
                     </StackPanel>
                 </Button.Content>

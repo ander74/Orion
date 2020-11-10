@@ -61,9 +61,11 @@ namespace Orion.ViewModels {
         public void CargarGraficos() {
             if (App.Global.CadenaConexion == null || GrupoSeleccionado == null) {
                 ListaGraficos.Clear();
+                GrupoComparado = "Ninguno";
                 return;
             }
             ListaGraficos = new NotifyCollection<Grafico>(App.Global.Repository.GetGraficos(GrupoSeleccionado.Validez));
+            GrupoComparado = "Ninguno";
         }
 
         public void CargarGrupos() {
@@ -287,20 +289,47 @@ namespace Orion.ViewModels {
         }
 
 
-        private string _filtroAplicado = "Ninguno";
-        public string FiltroAplicado {
-            get { return _filtroAplicado; }
+
+
+        private string grupoComparado = "Ninguno";
+        public string GrupoComparado {
+            get => grupoComparado;
             set {
-                if (_filtroAplicado != value) {
-                    _filtroAplicado = value;
-                    PropiedadCambiada();
-                    PropiedadCambiada(nameof(HayFiltroAplicado));
+                if (SetValue(ref grupoComparado, value)) {
+                    PropiedadCambiada(nameof(HayGrupoComparado));
+                    PropiedadCambiada(nameof(MostrarDatosGraficos));
+                    PropiedadCambiada(nameof(MostrarSeparadorFiltro));
                 }
             }
         }
 
+
+        private string _filtroAplicado = "Ninguno";
+        public string FiltroAplicado {
+            get => _filtroAplicado;
+            set {
+                if (SetValue(ref _filtroAplicado, value)) {
+                    PropiedadCambiada(nameof(HayFiltroAplicado));
+                    PropiedadCambiada(nameof(MostrarDatosGraficos));
+                    PropiedadCambiada(nameof(MostrarSeparadorFiltro));
+                }
+            }
+        }
+
+        public bool HayGrupoComparado {
+            get => grupoComparado != "Ninguno";
+        }
+
         public bool HayFiltroAplicado {
-            get => FiltroAplicado != "Ninguno";
+            get => _filtroAplicado != "Ninguno";
+        }
+
+        public bool MostrarDatosGraficos {
+            get => grupoComparado != "Ninguno" || _filtroAplicado != "Ninguno";
+        }
+
+        public bool MostrarSeparadorFiltro {
+            get => grupoComparado != "Ninguno" && _filtroAplicado != "Ninguno";
         }
 
 

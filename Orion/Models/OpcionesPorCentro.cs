@@ -18,102 +18,6 @@ namespace Orion.Models {
         #region GRÁFICOS
         // ====================================================================================================
 
-        //private int _lundel = 0;
-        //public int LunDel {
-        //    get { return _lundel; }
-        //    set {
-        //        if (_lundel != value) {
-        //            _lundel = value;
-        //            PropiedadCambiada();
-        //        }
-        //    }
-        //}
-
-
-        //private int _lunal = 499;
-        //public int LunAl {
-        //    get { return _lunal; }
-        //    set {
-        //        if (_lunal != value) {
-        //            _lunal = value;
-        //            PropiedadCambiada();
-        //        }
-        //    }
-        //}
-
-
-        //private int _viedel = 500;
-        //public int VieDel {
-        //    get { return _viedel; }
-        //    set {
-        //        if (_viedel != value) {
-        //            _viedel = value;
-        //            PropiedadCambiada();
-        //        }
-        //    }
-        //}
-
-
-        //private int _vieal = 599;
-        //public int VieAl {
-        //    get { return _vieal; }
-        //    set {
-        //        if (_vieal != value) {
-        //            _vieal = value;
-        //            PropiedadCambiada();
-        //        }
-        //    }
-        //}
-
-
-        //private int _sabdel = 600;
-        //public int SabDel {
-        //    get { return _sabdel; }
-        //    set {
-        //        if (_sabdel != value) {
-        //            _sabdel = value;
-        //            PropiedadCambiada();
-        //        }
-        //    }
-        //}
-
-
-        //private int _sabal = 699;
-        //public int SabAl {
-        //    get { return _sabal; }
-        //    set {
-        //        if (_sabal != value) {
-        //            _sabal = value;
-        //            PropiedadCambiada();
-        //        }
-        //    }
-        //}
-
-
-        //private int _domdel = 700;
-        //public int DomDel {
-        //    get { return _domdel; }
-        //    set {
-        //        if (_domdel != value) {
-        //            _domdel = value;
-        //            PropiedadCambiada();
-        //        }
-        //    }
-        //}
-
-
-        //private int _domal = 799;
-        //public int DomAl {
-        //    get { return _domal; }
-        //    set {
-        //        if (_domal != value) {
-        //            _domal = value;
-        //            PropiedadCambiada();
-        //        }
-        //    }
-        //}
-
-
         private int _comodin = 999;
         public int Comodin {
             get { return _comodin; }
@@ -134,40 +38,41 @@ namespace Orion.Models {
         #region NUEVOS GRAFICOS
         // ====================================================================================================
 
-        // ESTO SE CAMBIARÁ POR EL SIGUIENTE BLOQUE COMENTADO CUANDO YA ESTÉ OPERATIVO.
-        //private string lun;
-        //public string Lun {
-        //    get => string.IsNullOrEmpty(lun) ? $"{LunDel}-{LunAl}" : lun;
-        //    set => lun = value;
-        //}
 
-        //private string vie;
-        //public string Vie {
-        //    get => string.IsNullOrEmpty(vie) ? $"{VieDel}-{VieAl}" : vie;
-        //    set => vie = value;
-        //}
 
-        //private string sab;
-        //public string Sab {
-        //    get => string.IsNullOrEmpty(sab) ? $"{SabDel}-{SabAl}" : sab;
-        //    set => sab = value;
-        //}
+        private string lun = "3000-3499";
+        public string Lun {
+            get => lun;
+            set => SetValue(ref lun, value);
+        }
 
-        //private string dom;
-        //public string Dom {
-        //    get => string.IsNullOrEmpty(dom) ? $"{DomDel}-{DomAl}" : dom;
-        //    set => dom = value;
-        //}
 
-        public string Lun { get; set; } = "3000-3499";
+        private string vie = "3500-3599";
+        public string Vie {
+            get => vie;
+            set => SetValue(ref vie, value);
+        }
 
-        public string Vie { get; set; } = "3500-3599";
 
-        public string Sab { get; set; } = "3600-3699";
+        private string sab = "3600-3699";
+        public string Sab {
+            get => sab;
+            set => SetValue(ref sab, value);
+        }
 
-        public string Dom { get; set; } = "3700-3799";
 
-        public string Res { get; set; } = "3900-3999";
+        private string dom = "3700-3799";
+        public string Dom {
+            get => dom;
+            set => SetValue(ref dom, value);
+        }
+
+
+        private string res = "3900-3999";
+        public string Res {
+            get => res;
+            set => SetValue(ref res, value);
+        }
 
 
         [JsonIgnore]

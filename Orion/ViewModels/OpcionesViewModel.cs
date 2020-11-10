@@ -33,6 +33,8 @@ namespace Orion.ViewModels {
             CargarDatos();
             AñoPluses = DateTime.Now.Year;
             App.Global.Configuracion.PropertyChanged += Configuracion_PropertyChanged;
+            App.Global.Convenio.PropertyChanged += Configuracion_PropertyChanged;
+            App.Global.PorCentro.PropertyChanged += Configuracion_PropertyChanged;
         }
 
         #endregion
@@ -104,6 +106,7 @@ namespace Orion.ViewModels {
 
         private void Configuracion_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             if (e.PropertyName == nameof(App.Global.Configuracion.CarpetaDropbox)) PropiedadCambiada(nameof(SePuedeSincronizarNube));
+            HayCambios = true;
         }
 
 

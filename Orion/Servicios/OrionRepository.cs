@@ -1073,7 +1073,21 @@ namespace Orion.Servicios {
         }
 
 
+        public IEnumerable<GraficoBase> GetGraficosVariasFechas(IEnumerable<GrupoGraficos> grupos) {
+            try {
+                var subconsulta = string.Empty;
+                foreach (var grupo in grupos) {
+                    subconsulta += $"strftime('%Y-%m-%d', '{grupo.Validez:yyyy-MM-dd}'), ";
+                }
+                subconsulta = subconsulta.Substring(0, subconsulta.Count() - 2);
+                var consulta = new SQLiteExpression($"SELECT * FROM Graficos WHERE strftime('%Y-%m-%d', Validez) IN ({subconsulta}) AND Numero <> 0 ORDER BY Numero");
+                return GetItems<GraficoBase>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetGraficos), ex);
+            }
+            return new List<GraficoBase>();
 
+        }
 
 
 

@@ -845,66 +845,64 @@ namespace Orion.ViewModels {
                 string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}.pdf", Pijama.Fecha, Pijama.Trabajador.Matricula);
                 string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, Pijama.TextoTrabajador.Replace(":", " -"));
                 if (ruta != "") {
-                    if (File.Exists(ruta)) {
-                        Process.Start(ruta);
-                    } else {
-                        iText.Layout.Document doc = Informes.GetNuevoPdf(ruta);
-                        doc.GetPdfDocument().GetDocumentInfo().SetTitle("Reclamación");
-                        doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
-                        doc.SetMargins(40, 40, 40, 40);
-                        // Extraemos las reclamaciones.
-                        List<Reclamacion> listaReclamaciones = new List<Reclamacion>();
-                        foreach (var dia in Pijama.ListaDias) {
-                            // ACUMULADAS
-                            if (dia.AcumuladasAlt.HasValue && dia.AcumuladasAlt.Value < dia.GraficoOriginal.Acumuladas) {
-                                listaReclamaciones.Add(new Reclamacion {
-                                    Concepto = $"Horas acumuladas del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
-                                    EnPijama = dia.AcumuladasAlt.ToTexto(),
-                                    Real = dia.GraficoOriginal.Acumuladas.ToTexto(),
-                                    Diferencia = (dia.GraficoOriginal.Acumuladas - dia.AcumuladasAlt).ToTexto()
-                                });
-                            }
-                            // DESAYUNO
-                            if (dia.DesayunoAlt.HasValue && dia.DesayunoAlt.Value < dia.GraficoOriginal.Desayuno) {
-                                listaReclamaciones.Add(new Reclamacion {
-                                    Concepto = $"Dieta de desayuno del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
-                                    EnPijama = dia.DesayunoAlt.Value.ToString("0.00"),
-                                    Real = dia.GraficoOriginal.Desayuno.ToString("0.00"),
-                                    Diferencia = (dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value).ToString("0.00")
-                                });
-                            }
-                            // COMIDA
-                            if (dia.ComidaAlt.HasValue && dia.ComidaAlt.Value < dia.GraficoOriginal.Comida) {
-                                listaReclamaciones.Add(new Reclamacion {
-                                    Concepto = $"Dieta de comida del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
-                                    EnPijama = dia.ComidaAlt.Value.ToString("0.00"),
-                                    Real = dia.GraficoOriginal.Comida.ToString("0.00"),
-                                    Diferencia = (dia.GraficoOriginal.Comida - dia.ComidaAlt.Value).ToString("0.00")
-                                });
-                            }
-                            // CENA
-                            if (dia.CenaAlt.HasValue && dia.CenaAlt.Value < dia.GraficoOriginal.Cena) {
-                                listaReclamaciones.Add(new Reclamacion {
-                                    Concepto = $"Dieta de cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
-                                    EnPijama = dia.CenaAlt.Value.ToString("0.00"),
-                                    Real = dia.GraficoOriginal.Cena.ToString("0.00"),
-                                    Diferencia = (dia.GraficoOriginal.Cena - dia.CenaAlt.Value).ToString("0.00")
-                                });
-                            }
-                            // PLUS CENA
-                            if (dia.PlusCenaAlt.HasValue && dia.PlusCenaAlt.Value < dia.GraficoOriginal.PlusCena) {
-                                listaReclamaciones.Add(new Reclamacion {
-                                    Concepto = $"Plus Cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
-                                    EnPijama = dia.PlusCenaAlt.Value.ToString("0.00"),
-                                    Real = dia.GraficoOriginal.PlusCena.ToString("0.00"),
-                                    Diferencia = (dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value).ToString("0.00")
-                                });
-                            }
+                    if (File.Exists(ruta)) File.Delete(ruta);
+                    iText.Layout.Document doc = Informes.GetNuevoPdf(ruta);
+                    doc.GetPdfDocument().GetDocumentInfo().SetTitle("Reclamación");
+                    doc.GetPdfDocument().GetDocumentInfo().SetSubject($"{FechaActual.ToString("MMMM-yyyy").ToUpper()}");
+                    doc.SetMargins(40, 40, 40, 40);
+                    // Extraemos las reclamaciones.
+                    List<Reclamacion> listaReclamaciones = new List<Reclamacion>();
+                    foreach (var dia in Pijama.ListaDias) {
+                        // ACUMULADAS
+                        if (dia.AcumuladasAlt.HasValue && dia.AcumuladasAlt.Value < dia.GraficoOriginal.Acumuladas) {
+                            listaReclamaciones.Add(new Reclamacion {
+                                Concepto = $"Horas acumuladas del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                EnPijama = dia.AcumuladasAlt.ToTexto(),
+                                Real = dia.GraficoOriginal.Acumuladas.ToTexto(),
+                                Diferencia = (dia.GraficoOriginal.Acumuladas - dia.AcumuladasAlt).ToTexto()
+                            });
                         }
-                        await PijamaPrintModel.CrearReclamacionEnPdf(doc, Pijama.Fecha, Pijama.Trabajador, listaReclamaciones);
-                        doc.Close();
-                        Process.Start(ruta);
+                        // DESAYUNO
+                        if (dia.DesayunoAlt.HasValue && dia.DesayunoAlt.Value < dia.GraficoOriginal.Desayuno) {
+                            listaReclamaciones.Add(new Reclamacion {
+                                Concepto = $"Dieta de desayuno del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                EnPijama = dia.DesayunoAlt.Value.ToString("0.00"),
+                                Real = dia.GraficoOriginal.Desayuno.ToString("0.00"),
+                                Diferencia = (dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value).ToString("0.00")
+                            });
+                        }
+                        // COMIDA
+                        if (dia.ComidaAlt.HasValue && dia.ComidaAlt.Value < dia.GraficoOriginal.Comida) {
+                            listaReclamaciones.Add(new Reclamacion {
+                                Concepto = $"Dieta de comida del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                EnPijama = dia.ComidaAlt.Value.ToString("0.00"),
+                                Real = dia.GraficoOriginal.Comida.ToString("0.00"),
+                                Diferencia = (dia.GraficoOriginal.Comida - dia.ComidaAlt.Value).ToString("0.00")
+                            });
+                        }
+                        // CENA
+                        if (dia.CenaAlt.HasValue && dia.CenaAlt.Value < dia.GraficoOriginal.Cena) {
+                            listaReclamaciones.Add(new Reclamacion {
+                                Concepto = $"Dieta de cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                EnPijama = dia.CenaAlt.Value.ToString("0.00"),
+                                Real = dia.GraficoOriginal.Cena.ToString("0.00"),
+                                Diferencia = (dia.GraficoOriginal.Cena - dia.CenaAlt.Value).ToString("0.00")
+                            });
+                        }
+                        // PLUS CENA
+                        if (dia.PlusCenaAlt.HasValue && dia.PlusCenaAlt.Value < dia.GraficoOriginal.PlusCena) {
+                            listaReclamaciones.Add(new Reclamacion {
+                                Concepto = $"Plus Cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                EnPijama = dia.PlusCenaAlt.Value.ToString("0.00"),
+                                Real = dia.GraficoOriginal.PlusCena.ToString("0.00"),
+                                Diferencia = (dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value).ToString("0.00")
+                            });
+                        }
                     }
+                    await PijamaPrintModel.CrearReclamacionEnPdf(doc, Pijama.Fecha, Pijama.Trabajador, listaReclamaciones);
+                    doc.Close();
+                    Process.Start(ruta);
+
                 }
             } catch (Exception ex) {
                 Mensajes.VerError("CalendariosCommands.Reclamacion", ex);
@@ -1347,6 +1345,88 @@ namespace Orion.ViewModels {
         }
         #endregion
 
+
+        #region COMANDO CORREGIR CALENDARIOS
+
+        // Comando
+        private ICommand corregirCalendarios;
+        public ICommand cmdCorregirCalendarios {
+            get {
+                if (corregirCalendarios == null) corregirCalendarios = new RelayCommand(p => CorregirCalendarios(), p => PuedeCorregirCalendarios());
+                return corregirCalendarios;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeCorregirCalendarios() {
+            return ListaCalendarios.Any();
+        }
+
+        // Ejecución del comando
+        private void CorregirCalendarios() {
+
+            foreach (var cal in ListaCalendarios) {
+                var matricula = cal.MatriculaConductor;
+                var archivo = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Horas Conductores\\{matricula:000}\\{matricula:000} - {FechaActual.Year}.xlsx");
+                if (!File.Exists(archivo)) continue;
+                var horas = ExcelService.getInstance().GetHorasConductor(archivo, FechaActual.Year, FechaActual.Month);
+                foreach (var hora in horas) {
+                    var dia = cal.ListaDias.FirstOrDefault(d => d.DiaFecha.Day == hora.Dia.Day);
+                    if (dia.Grafico != hora.Grafico) dia.Grafico = hora.Grafico;
+                    if (dia.Grafico > 0) {
+                        var grafico = App.Global.Repository.GetGrafico(dia.Grafico, dia.DiaFecha);
+                        if (grafico != null) {
+                            if (hora.Trabajadas.Ticks >= 0 && grafico.Trabajadas + dia.ExcesoJornada != hora.Trabajadas) dia.TrabajadasAlt = hora.Trabajadas;
+                            if (hora.Acumuladas.Ticks >= 0 && grafico.Acumuladas != hora.Acumuladas) dia.AcumuladasAlt = hora.Acumuladas;
+                            if (hora.Desayuno >= 0 && grafico.Desayuno != hora.Desayuno) dia.DesayunoAlt = hora.Desayuno;
+                            if (hora.Comida >= 0 && grafico.Comida != hora.Comida) dia.ComidaAlt = hora.Comida;
+                            if (hora.Cena >= 0 && grafico.Cena != hora.Cena) dia.CenaAlt = hora.Cena;
+                            if (hora.PlusCena >= 0 && grafico.PlusCena != hora.PlusCena) dia.PlusCenaAlt = hora.PlusCena;
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
+
+        #region COMANDO LIMPIAR ALTERNATIVOS
+
+        // Comando
+        private ICommand cmdlimpiarAlternativos;
+        public ICommand cmdLimpiarAlternativos {
+            get {
+                if (cmdlimpiarAlternativos == null) cmdlimpiarAlternativos = new RelayCommand(p => LimpiarAlternativos(), p => PuedeLimpiarAlternativos());
+                return cmdlimpiarAlternativos;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeLimpiarAlternativos() {
+            return DiaCalendarioSeleccionado != null;
+        }
+
+        // Ejecución del comando
+        private void LimpiarAlternativos() {
+            DiaCalendarioSeleccionado.GraficoAlt = null;
+            DiaCalendarioSeleccionado.TurnoAlt = null;
+            DiaCalendarioSeleccionado.InicioAlt = null;
+            DiaCalendarioSeleccionado.FinalAlt = null;
+            DiaCalendarioSeleccionado.InicioPartidoAlt = null;
+            DiaCalendarioSeleccionado.FinalPartidoAlt = null;
+            DiaCalendarioSeleccionado.TrabajadasAlt = null;
+            DiaCalendarioSeleccionado.AcumuladasAlt = null;
+            DiaCalendarioSeleccionado.NocturnasAlt = null;
+            DiaCalendarioSeleccionado.DesayunoAlt = null;
+            DiaCalendarioSeleccionado.ComidaAlt = null;
+            DiaCalendarioSeleccionado.CenaAlt = null;
+            DiaCalendarioSeleccionado.PlusCenaAlt = null;
+            DiaCalendarioSeleccionado.PlusLimpiezaAlt = null;
+            DiaCalendarioSeleccionado.PlusPaqueteriaAlt = null;
+        }
+        #endregion
 
 
 

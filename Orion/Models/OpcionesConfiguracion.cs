@@ -197,16 +197,24 @@ namespace Orion.Models {
         #region CARPETAS Y ARCHIVOS
         // ====================================================================================================
 
-        private string _carpetaayuda = "";
-        public string CarpetaAyuda {
-            get { return _carpetaayuda; }
-            set {
-                if (_carpetaayuda != value) {
-                    _carpetaayuda = value;
-                    PropiedadCambiada();
-                }
-            }
+
+        private string carpetaAvanza;
+        public string CarpetaAvanza {
+            get => carpetaAvanza;
+            set => SetValue(ref carpetaAvanza, value);
         }
+
+
+        //private string _carpetaayuda = "";
+        //public string CarpetaAyuda {
+        //    get { return _carpetaayuda; }
+        //    set {
+        //        if (_carpetaayuda != value) {
+        //            _carpetaayuda = value;
+        //            PropiedadCambiada();
+        //        }
+        //    }
+        //}
 
 
         private string _carpetacopiasseguridad = "";

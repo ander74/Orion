@@ -8,7 +8,6 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using Orion.Config;
 using Orion.Views;
 
 namespace Orion.ViewModels {
@@ -119,39 +118,39 @@ namespace Orion.ViewModels {
         #endregion
 
 
-        #region MOSTRAR AYUDA
-        //Comando
-        private ICommand _cmdmostrarayuda;
-        public ICommand cmdMostrarAyuda {
-            get {
-                if (_cmdmostrarayuda == null) _cmdmostrarayuda = new RelayCommand(p => MostrarAyuda(p), p => PuedeMostrarAyuda(p));
-                return _cmdmostrarayuda;
-            }
-        }
+        //#region MOSTRAR AYUDA
+        ////Comando
+        //private ICommand _cmdmostrarayuda;
+        //public ICommand cmdMostrarAyuda {
+        //    get {
+        //        if (_cmdmostrarayuda == null) _cmdmostrarayuda = new RelayCommand(p => MostrarAyuda(p), p => PuedeMostrarAyuda(p));
+        //        return _cmdmostrarayuda;
+        //    }
+        //}
 
-        // Puede ejecutar el comando
-        public bool PuedeMostrarAyuda(object parametro) {
-            if (VisibilidadAyuda == Visibility.Visible) return false;
-            return true;
-        }
+        //// Puede ejecutar el comando
+        //public bool PuedeMostrarAyuda(object parametro) {
+        //    if (VisibilidadAyuda == Visibility.Visible) return false;
+        //    return true;
+        //}
 
-        // Ejecución del comando
-        private void MostrarAyuda(object parametro) {
-            // Si no hay parámetro, salimos.
-            if (parametro == null || !(parametro is string)) return;
-            // Definimos el parámetro y lo evaluamos
-            string ayuda = (string)parametro;
-            // Mostramos el panel
-            PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Index.html");
-            if (ayuda == "Gráficos") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Graficos.html");
-            if (ayuda == "Conductores") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Conductores.html");
-            if (ayuda == "Calendarios") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Calendarios.html");
-            if (ayuda == "Pijama") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Pijama.html");
-            if (ayuda == "Líneas") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Lineas.html");
-            if (ayuda == "Opciones") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Opciones.html");
-            VisibilidadAyuda = Visibility.Visible;
-        }
-        #endregion
+        //// Ejecución del comando
+        //private void MostrarAyuda(object parametro) {
+        //    // Si no hay parámetro, salimos.
+        //    if (parametro == null || !(parametro is string)) return;
+        //    // Definimos el parámetro y lo evaluamos
+        //    string ayuda = (string)parametro;
+        //    // Mostramos el panel
+        //    PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Index.html");
+        //    if (ayuda == "Gráficos") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Graficos.html");
+        //    if (ayuda == "Conductores") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Conductores.html");
+        //    if (ayuda == "Calendarios") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Calendarios.html");
+        //    if (ayuda == "Pijama") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Pijama.html");
+        //    if (ayuda == "Líneas") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Lineas.html");
+        //    if (ayuda == "Opciones") PaginaAyuda = Utils.CombinarCarpetas(App.Global.Configuracion.CarpetaAyuda, "Opciones.html");
+        //    VisibilidadAyuda = Visibility.Visible;
+        //}
+        //#endregion
 
 
         #region CERRAR AYUDA

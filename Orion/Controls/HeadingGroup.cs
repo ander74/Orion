@@ -5,37 +5,26 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+
 namespace Orion.Controls {
 
-    using System.Windows.Media;
-    using System.Windows;
-    using System.Windows.Controls;
+    public class HeadingGroup : ContentControl {
 
-    public partial class GrupoOpciones : UserControl {
-
-
-        // ====================================================================================================
-        #region CONSTRUCTOR
-        // ====================================================================================================
-
-        public GrupoOpciones() {
-            InitializeComponent();
-        }
-
-        #endregion
-        // ====================================================================================================
 
 
         // ====================================================================================================
         #region PROPEIDADES
         // ====================================================================================================
-               
+
         public Brush ColorBorde {
             get { return (Brush)GetValue(ColorBordeProperty); }
             set { SetValue(ColorBordeProperty, value); }
         }
         public static readonly DependencyProperty ColorBordeProperty =
-            DependencyProperty.Register("ColorBorde", typeof(Brush), typeof(GrupoOpciones), new PropertyMetadata(Brushes.DarkBlue));
+            DependencyProperty.Register("ColorBorde", typeof(Brush), typeof(HeadingGroup), new PropertyMetadata(Brushes.DarkBlue));
 
 
         public object Titulo {
@@ -43,7 +32,7 @@ namespace Orion.Controls {
             set { SetValue(TituloProperty, value); }
         }
         public static readonly DependencyProperty TituloProperty =
-            DependencyProperty.Register("Titulo", typeof(object), typeof(GrupoOpciones), new PropertyMetadata());
+            DependencyProperty.Register("Titulo", typeof(object), typeof(HeadingGroup), new PropertyMetadata());
 
 
         public object Contenido {
@@ -51,7 +40,7 @@ namespace Orion.Controls {
             set { SetValue(ContenidoProperty, value); }
         }
         public static readonly DependencyProperty ContenidoProperty =
-            DependencyProperty.Register("Contenido", typeof(object), typeof(GrupoOpciones), new PropertyMetadata(0));
+            DependencyProperty.Register("Contenido", typeof(object), typeof(HeadingGroup), new PropertyMetadata(0));
 
 
         public Brush FondoTitulo {
@@ -59,7 +48,7 @@ namespace Orion.Controls {
             set { SetValue(FondoTituloProperty, value); }
         }
         public static readonly DependencyProperty FondoTituloProperty =
-            DependencyProperty.Register("FondoTitulo", typeof(Brush), typeof(GrupoOpciones), new PropertyMetadata());
+            DependencyProperty.Register("FondoTitulo", typeof(Brush), typeof(HeadingGroup), new PropertyMetadata());
 
 
         public HorizontalAlignment AlineacionTitulo {
@@ -67,7 +56,7 @@ namespace Orion.Controls {
             set { SetValue(AlineacionTituloProperty, value); }
         }
         public static readonly DependencyProperty AlineacionTituloProperty =
-            DependencyProperty.Register("AlineacionTitulo", typeof(HorizontalAlignment), typeof(GrupoOpciones), new PropertyMetadata(HorizontalAlignment.Center));
+            DependencyProperty.Register("AlineacionTitulo", typeof(HorizontalAlignment), typeof(HeadingGroup), new PropertyMetadata(HorizontalAlignment.Center));
 
 
         public int FontSizeTitulo {
@@ -75,7 +64,7 @@ namespace Orion.Controls {
             set { SetValue(FontSizeTituloProperty, value); }
         }
         public static readonly DependencyProperty FontSizeTituloProperty =
-            DependencyProperty.Register("FontSizeTitulo", typeof(int), typeof(GrupoOpciones), new PropertyMetadata(16));
+            DependencyProperty.Register("FontSizeTitulo", typeof(int), typeof(HeadingGroup), new PropertyMetadata(16));
 
 
         #endregion

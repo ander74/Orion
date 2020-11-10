@@ -30,7 +30,7 @@ namespace Orion.ViewModels {
         private string _textoestado = "Version Desconocida";
         private string _textodetalle;
         private MensajesServicio mensajes;
-        private InformesServicio Informes;
+        public InformesServicio Informes; // Se hace público para acceder a él vía instancia.
         private IFileService fileService;
 
 
@@ -86,7 +86,7 @@ namespace Orion.ViewModels {
             if (Configuracion.CarpetaDatos == "") Configuracion.CarpetaDatos = CreateAndGetCarpetaEnOrion("Datos");
             //if (Configuracion.CarpetaDropbox == "") Configuracion.CarpetaDropbox = CreateAndGetCarpetaEnOrion("Dropbox");
             if (Configuracion.CarpetaInformes == "") Configuracion.CarpetaInformes = CreateAndGetCarpetaEnOrion("Informes");
-            if (Configuracion.CarpetaAyuda == "") Configuracion.CarpetaAyuda = CreateAndGetCarpetaEnOrion("Ayuda");
+            //if (Configuracion.CarpetaAvanza == "") Configuracion.CarpetaAvanza = CreateAndGetCarpetaEnOrion("Avanza");
             if (Configuracion.CarpetaCopiasSeguridad == "") Configuracion.CarpetaCopiasSeguridad = CreateAndGetCarpetaEnOrion("CopiasSeguridad");
             if (Configuracion.CarpetaOrigenActualizar == "") Configuracion.CarpetaOrigenActualizar = App.RutaInicial;
 
@@ -305,7 +305,6 @@ namespace Orion.ViewModels {
                 }
             }
         }
-
 
         private bool enOtroCentro;
         public bool EnOtroCentro {
@@ -718,6 +717,7 @@ namespace Orion.ViewModels {
                 }
             }
         }
+
 
 
         #endregion

@@ -91,7 +91,9 @@
             <!--  ==================================================  -->
             <!--  BOTONES  -->
             <!--  ==================================================  -->
-            <Border Grid.Row="2" CornerRadius="0,0,15,15">
+            <Border
+                Grid.Row="2"
+                CornerRadius="0,0,15,15">
                 <StackPanel
                     Margin="10"
                     HorizontalAlignment="Right"

@@ -556,7 +556,11 @@ namespace Orion.ViewModels {
 
         private void CompararGrupo() {
 
-            if (GrupoSeleccionado.Validez.Ticks == GrupoComparacionSeleccionado.Validez.Ticks) return;
+            if (GrupoSeleccionado.Validez.Ticks == GrupoComparacionSeleccionado.Validez.Ticks) {
+                GrupoComparado = "Ninguno";
+                foreach (var grafico in ListaGraficos) grafico.Diferente = false;
+                return;
+            }
 
             List<Grafico> anteriores = null;
             try {
@@ -574,6 +578,7 @@ namespace Orion.ViewModels {
                     grafico.Diferente = true;
                 }
             }
+            GrupoComparado = $"{GrupoComparacionSeleccionado.Validez:dd-MM-yyyy}";
         }
         #endregion
 

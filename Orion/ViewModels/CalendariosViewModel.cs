@@ -25,6 +25,9 @@ namespace Orion.ViewModels {
         // ====================================================================================================
         private List<Calendario> _listaborrados = new List<Calendario>();
 
+        private string claveGraficosAsociados;
+        private List<GraficoBase> listaGraficosAsociados = new List<GraficoBase>();
+
         // SERVICIOS
         private IMensajes Mensajes;
         private InformesServicio Informes;
@@ -67,6 +70,18 @@ namespace Orion.ViewModels {
                 // Añadimos el campo indefinido.
                 c.ConductorIndefinido = App.Global.ConductoresVM.IsIndefinido(c.MatriculaConductor);
             }
+
+            // Cargamos los gráficos asociados, si no están cargados ya.
+            var grupos = App.Global.GraficosVM.ListaGrupos;
+            var maxValidez = grupos.Where(g => g.Validez <= FechaActual).Max(gg => gg.Validez);
+            var gruposGraficos = grupos.Where(g => g.Validez >= maxValidez && g.Validez < FechaActual.AddMonths(1));
+            var clave = string.Empty;
+            foreach (var grupo in gruposGraficos) clave += $"{grupo.Validez:ddMMyyyy} ";
+            if (!clave.Equals(claveGraficosAsociados)) {
+                claveGraficosAsociados = clave;
+                listaGraficosAsociados = App.Global.Repository.GetGraficosVariasFechas(gruposGraficos).ToList();
+            }
+
             HayCambios = false; // Hay que ponerlo en false, ya que el foreach anterior modifica propiedades.
             CalendarioSeleccionado = null;
             PropiedadCambiada(nameof(Detalle));

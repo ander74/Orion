@@ -30,6 +30,7 @@
         <cnv:ConvertidorItinerario x:Key="cnvItinerario" />
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
         <cnv:ConvertidorDiaSemanaGrafico x:Key="cnvDiaSemanaGrafico" />
+        <cnv:ConvertidorTurno4Visibility x:Key="cnvTurno4Visibility" />
 
         <Style
             x:Key="EstiloGridGraficos"
@@ -119,6 +120,7 @@
                     x:Name="BotonValidezGrupo"
                     Width="Auto"
                     Height="Auto"
+                    MinWidth="150"
                     Padding="15,3"
                     HorizontalAlignment="Center"
                     Click="BotonValidezGrupo_Click"
@@ -423,15 +425,13 @@
             <controls:BotonBarra
                 Command="{Binding ElementName=TablaGraficos, Path=ComandoCopiar}"
                 Imagen="Imagenes/Copiar.png"
-                Titulo="Copiar"
-                ToolTip="Sólo funciona si está en modo Selección Celdas." />
+                Titulo="Copiar" />
 
             <!--  BOTON PEGAR  -->
             <controls:BotonBarra
                 Command="{Binding ElementName=TablaGraficos, Path=ComandoPegar}"
                 Imagen="Imagenes/Pegar.png"
-                Titulo="Pegar"
-                ToolTip="Sólo funciona si está en modo Selección Celdas." />
+                Titulo="Pegar" />
 
             <!--  SEPARADOR  -->
             <TextBlock
@@ -789,7 +789,7 @@
         <!--  PANEL DATOS GRÁFICOS  -->
         <Grid
             Grid.Row="1"
-            Visibility="{Binding GraficosVM.HayFiltroAplicado, Converter={StaticResource cnvBoolToVisibility}}">
+            Visibility="{Binding GraficosVM.MostrarDatosGraficos, Converter={StaticResource cnvBoolToVisibility}}">
             <Border
                 Height="Auto"
                 Margin="0,3"
@@ -811,12 +811,31 @@
                                 Margin="4,0"
                                 VerticalAlignment="Center"
                                 FontWeight="Bold"
-                                Text="Filtro aplicado:" />
+                                Text="Filtro aplicado:"
+                                Visibility="{Binding GraficosVM.HayFiltroAplicado, Converter={StaticResource cnvBoolToVisibility}}" />
                             <TextBlock
-                                Width="300"
                                 Margin="4,0"
                                 VerticalAlignment="Center"
-                                Text="{Binding GraficosVM.FiltroAplicado}" />
+                                Text="{Binding GraficosVM.FiltroAplicado}"
+                                Visibility="{Binding GraficosVM.HayFiltroAplicado, Converter={StaticResource cnvBoolToVisibility}}" />
+                            <!--  SEPARADOR  -->
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text=" / "
+                                Visibility="{Binding GraficosVM.MostrarSeparadorFiltro, Converter={StaticResource cnvBoolToVisibility}}" />
+                            <!--  FILTRO APLICADO  -->
+                            <TextBlock
+                                Margin="4,0"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="Grupo comparado:"
+                                Visibility="{Binding GraficosVM.HayGrupoComparado, Converter={StaticResource cnvBoolToVisibility}}" />
+                            <TextBlock
+                                Margin="4,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding GraficosVM.GrupoComparado}"
+                                Visibility="{Binding GraficosVM.HayGrupoComparado, Converter={StaticResource cnvBoolToVisibility}}" />
                         </StackPanel>
                     </Label>
 
@@ -1347,6 +1366,16 @@
                             FontSize="14"
                             FontWeight="Bold"
                             Text="{Binding GraficosVM.GraficoSeleccionado.TiempoValoraciones, Converter={StaticResource cnvHora}}" />
+                        <TextBlock
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Text="   Trabajadas: "
+                            Visibility="{Binding GraficosVM.GraficoSeleccionado.Turno, Converter={StaticResource cnvTurno4Visibility}}" />
+                        <TextBlock
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Text="{Binding GraficosVM.GraficoSeleccionado.Trabajadas, Converter={StaticResource cnvHora}}"
+                            Visibility="{Binding GraficosVM.GraficoSeleccionado.Turno, Converter={StaticResource cnvTurno4Visibility}}" />
                     </StackPanel>
 
                     <!--  TABLA ITINERARIOS  -->

@@ -232,7 +232,7 @@
                         Style="{StaticResource EstiloImagenPequeña}" />
                 </Button.Content>
             </Button>
-            <Button
+            <!--<Button
                 Margin="0"
                 Padding="15,1"
                 Command="{Binding cmdMostrarAyuda}"
@@ -249,7 +249,7 @@
                         Source="Imagenes/Ayuda.png"
                         Style="{StaticResource EstiloImagenPequeña}" />
                 </Button.Content>
-            </Button>
+            </Button>-->
             <Button
                 Margin="0"
                 Padding="15,1"
@@ -313,7 +313,9 @@
                 FontSize="13"
                 Visibility="{Binding VisibilidadBarraProgreso, Converter={StaticResource VisibilityInverter}}" />
 
-            <StackPanel Orientation="Horizontal" Visibility="{Binding VisibilidadBarraProgreso}">
+            <StackPanel
+                Orientation="Horizontal"
+                Visibility="{Binding VisibilidadBarraProgreso}">
                 <TextBlock
                     Margin="10,0"
                     HorizontalAlignment="Center"
@@ -343,10 +345,18 @@
                 FontFamily="Times New Roman"
                 FontSize="13">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="{Binding GraficosVM.Detalle}" Visibility="{Binding ElementName=TabGraficos, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
-                    <TextBlock Text="{Binding ConductoresVM.Detalle}" Visibility="{Binding ElementName=TabConductores, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
-                    <TextBlock Text="{Binding CalendariosVM.Detalle}" Visibility="{Binding ElementName=TabCalendarios, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
-                    <TextBlock Text="{Binding LineasVM.Detalle}" Visibility="{Binding ElementName=TabLineas, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+                    <TextBlock
+                        Text="{Binding GraficosVM.Detalle}"
+                        Visibility="{Binding ElementName=TabGraficos, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+                    <TextBlock
+                        Text="{Binding ConductoresVM.Detalle}"
+                        Visibility="{Binding ElementName=TabConductores, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+                    <TextBlock
+                        Text="{Binding CalendariosVM.Detalle}"
+                        Visibility="{Binding ElementName=TabCalendarios, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
+                    <TextBlock
+                        Text="{Binding LineasVM.Detalle}"
+                        Visibility="{Binding ElementName=TabLineas, Path=IsSelected, Converter={StaticResource VisibilityConverter}}" />
                 </StackPanel>
             </Label>
 
@@ -369,7 +379,7 @@
         <!--  ====================================================================================================  -->
         <!--  PANEL DE AYUDA  -->
         <!--  ====================================================================================================  -->
-        <Grid
+        <!--<Grid
             Grid.Row="0"
             Height="{Binding TamañoAyuda}"
             Margin="10,30,10,0"
@@ -492,7 +502,7 @@
                 Margin="10,6,10,10"
                 local:WebBrowserUtility.BindableSource="{Binding PaginaAyuda}" />
 
-        </Grid>
+        </Grid>-->
 
 
         <!--  ====================================================================================================  -->

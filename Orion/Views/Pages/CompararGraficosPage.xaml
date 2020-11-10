@@ -81,11 +81,6 @@
                     ItemStringFormat="dd-MM-yyyy"
                     ItemsSource="{Binding GraficosVM.ListaGrupos}"
                     SelectedItem="{Binding GrupoSeleccionado1}" />
-                <!--</StackPanel>
-            <StackPanel
-                Margin="20,20,20,0"
-                VerticalAlignment="Center"
-                Orientation="Horizontal">-->
                 <TextBlock
                     VerticalAlignment="Center"
                     FontSize="16"
@@ -109,13 +104,23 @@
                 Margin="20,0,20,0"
                 Orientation="Horizontal">
 
-                <controls:BotonBarra
+                <controls:VerticalButton
+                    Title="Comparar"
                     Height="80"
-                    BorderBrush="LightGray"
                     Command="{Binding CmdComparar}"
-                    Imagen="/Views/Imagenes/Adelante.png"
-                    Titulo="Comparar" />
+                    Image="/Views/Imagenes/Adelante.png" />
 
+                <controls:VerticalButton
+                    Title="Generar PDF"
+                    Height="80"
+                    Command="{Binding CmdGenerarPdf}"
+                    Image="/Views/Imagenes/GuardarPDF.png" />
+
+                <controls:VerticalButton
+                    Title="Generar Excel"
+                    Height="80"
+                    Command="{Binding CmdGenerarExcel}"
+                    Image="/Views/Imagenes/GuardarExcel.png" />
 
             </StackPanel>
 
@@ -153,11 +158,11 @@
             <controls:QDataGrid.Columns>
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding Numero}"
+                    Binding="{Binding Item1}"
                     Header="Número" />
                 <DataGridTextColumn
                     Width="4*"
-                    Binding="{Binding Diferencias}"
+                    Binding="{Binding Item2}"
                     CellStyle="{StaticResource EstiloIzquierda}"
                     Header="Diferencias" />
             </controls:QDataGrid.Columns>

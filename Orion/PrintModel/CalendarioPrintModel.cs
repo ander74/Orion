@@ -22,6 +22,7 @@ namespace Orion.PrintModel {
     using Orion.Config;
     using Orion.Convertidores;
     using Orion.Models;
+    using Orion.PdfExcel;
     using Orion.Servicios;
 
     public static class CalendarioPrintModel {
@@ -68,39 +69,14 @@ namespace Orion.PrintModel {
         // ====================================================================================================
 
         private static Table GetTablaCalendarios(ListCollectionView listaCalendarios, DateTime fecha) {
-            // Fuente a utilizar en la tabla.
-            PdfFont helvetica = PdfFontFactory.CreateFont(StandardFonts.HELVETICA);
-            // Estilo de la tabla.
-            Style estiloTabla = new Style();
-            estiloTabla.SetTextAlignment(TextAlignment.CENTER)
-                       .SetVerticalAlignment(VerticalAlignment.MIDDLE)
-                       .SetMargins(0, 0, 0, 0)
-                       .SetPaddings(0, 0, 0, 0)
-                       .SetWidth(UnitValue.CreatePercentValue(100))
-                       .SetFont(helvetica)
-                       .SetFontSize(7);
-            // Estilo titulos
-            Style estiloTitulos = new Style();
-            estiloTitulos.SetBold()
-                         .SetBorder(Border.NO_BORDER)
-                         .SetFontSize(14);
-            // Estilo de las celdas de encabezado.
-            Style estiloEncabezados = new Style();
-            estiloEncabezados.SetBackgroundColor(new DeviceRgb(255, 153, 102))
-                             .SetBold()
-                             .SetFontSize(8);
-            // Estilo de las celdas de conductor.
-            Style estiloConductor = new Style();
-            estiloConductor.SetBorderLeft(new SolidBorder(1))
-                           .SetBorderRight(new SolidBorder(1));
-            // Estilo de las celdas de dia.
-            Style estiloDia = new Style();
-            estiloDia.SetBorderTop(new SolidBorder(1))
-                     .SetBorderBottom(new SolidBorder(1));
 
-            // Creamos la tabla con el encabezado con el logo UGT.
-            string textoEncabezado = $"CALENDARIOS\n{fecha:MMMM - yyyy} ({App.Global.CentroActual.ToString()})".ToUpper();
-            Table tablaEncabezado = InformesServicio.GetTablaEncabezadoSindicato(textoEncabezado);
+            // Creamos la tabla PDF
+            string textoEncabezado = $"CALENDARIOS\n{fecha:MMMM - yyyy} ({App.Global.CentroActual})".ToUpper();
+            var tablaPdf = new PdfTableData(textoEncabezado) {
+                LogoPath = App.Global.Configuracion.RutaLogoSindicato,
+                HeadersBackground = System.Windows.Media.Color.FromRgb(255, 153, 102),
+                AlternateRowsBackground = System.Windows.Media.Color.FromRgb(252, 228, 214)
+            };
 
             // Definimos los parámetros de la tabla en función de los días del mes.
             float[] ancho = null;
@@ -119,50 +95,51 @@ namespace Orion.PrintModel {
                     ancho = Anchos31;
                     break;
             }
-            // Creamos la tabla
-            Table tabla = new Table(UnitValue.CreatePercentArray(ancho));
-            // Asignamos el estilo a la tabla.
-            tabla.AddStyle(estiloTabla);
+            tablaPdf.ColumnWidths = ancho;
 
-            // Insertamos los títulos.
-            tabla.AddHeaderCell(new Cell(1, diasMes + 1).Add(tablaEncabezado).AddStyle(estiloTitulos));
+            // Listas
+            var listaHeaders = new List<PdfCellInfo>();
+            var listaDatos = new List<List<PdfCellInfo>>();
 
-            // Añadimos las celdas de encabezado.
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Conductor")).AddStyle(estiloEncabezados).AddStyle(estiloConductor).AddStyle(estiloDia));
+            // Encabezado
+            listaHeaders.Add(new PdfCellInfo("Conductor") {
+                Borders = (PdfBorder.DEFAULT, PdfBorder.DEFAULT, PdfBorder.SOLID_MEDIO, PdfBorder.DEFAULT)
+            });
             for (int i = 1; i <= diasMes; i++) {
-                // Definimos el estilo para la última celda.
-                Style estiloUltima = new Style();
-                if (i == diasMes) estiloUltima.SetBorderRight(new SolidBorder(1));
-                tabla.AddHeaderCell(new Cell().Add(new Paragraph($"{i:00}")).AddStyle(estiloEncabezados).AddStyle(estiloDia).AddStyle(estiloUltima));
+                object[] valores = new object[] { new Tuple<int, int>(1, 0), fecha, i };
+                System.Windows.Media.Color color = ((System.Windows.Media.SolidColorBrush)cnvColorDia.Convert(valores, null, null, null)).Color;
+                listaHeaders.Add(new PdfCellInfo($"{i:00}") {
+                    TextFontColor = color,
+                    ExcelNumberFormat = "00",
+                });
             }
-            // Añadimos las celdas con los calendarios.
-            int indice = 1;
+            // Calendarios
             foreach (Object obj in listaCalendarios) {
-                // Estilo Fondo Alternativo
-                Style estiloFondo = new Style().SetBackgroundColor(ColorConstants.WHITE);
-                if (indice % 2 == 0) estiloFondo.SetBackgroundColor(new DeviceRgb(252, 228, 214));
-                indice++;
                 Calendario cal = obj as Calendario;
                 if (cal == null) continue;
-                // Escribimos el conductor.
-                tabla.AddCell(new Cell().Add(new Paragraph($"{cal.MatriculaConductor:000}")).AddStyle(estiloConductor).AddStyle(estiloFondo));
-                // Escribimos los días.
+                var lista = new List<PdfCellInfo>();
+                lista.Add(new PdfCellInfo($"{cal.MatriculaConductor:000}") {
+                    Borders = (PdfBorder.DEFAULT, PdfBorder.DEFAULT, PdfBorder.SOLID_MEDIO, PdfBorder.DEFAULT),
+                    IsBold = true,
+                    TextFontColor = System.Windows.Media.Colors.Black,
+                    ExcelNumberFormat = "000",
+                });
                 for (int i = 1; i <= diasMes; i++) {
-                    // Definimos el estilo para la última celda.
-                    Style estiloUltima = new Style();
-                    if (i == diasMes) estiloUltima.SetBorderRight(new SolidBorder(1));
-                    // Definimos los datos para extraer el color.
                     object[] valores = new object[] { cal.ListaDias[i - 1].ComboGrafico, cal.Fecha, cal.ListaDias[i - 1].Dia };
-                    System.Windows.Media.Color c = ((System.Windows.Media.SolidColorBrush)cnvColorDia.Convert(valores, null, null, null)).Color;
-                    tabla.AddCell(new Cell().Add(new Paragraph($"{cnvNumGrafico.Convert(cal.ListaDias[i - 1].Grafico, null, null, null)}"))
-                                            .SetFontColor(new DeviceRgb(c.R, c.G, c.B)).AddStyle(estiloFondo).AddStyle(estiloUltima));
+                    System.Windows.Media.Color color = ((System.Windows.Media.SolidColorBrush)cnvColorDia.Convert(valores, null, null, null)).Color;
+                    lista.Add(new PdfCellInfo() {
+                        Value = $"{cnvNumGrafico.Convert(cal.ListaDias[i - 1].Grafico, null, null, null)}",
+                        TextFontColor = color,
+                    });
                 }
+                listaDatos.Add(lista);
             }
-            // Ponemos los bordes de la tabla.
-            tabla.SetBorderBottom(new SolidBorder(1));
-            // Devolvemos la tabla.
-            return tabla;
+            tablaPdf.Headers = listaHeaders;
+            tablaPdf.Data = listaDatos;
+            PdfExcelHelper.GetInstance().SaveAsExcel(tablaPdf, @"\\Mac\Compartida\Prueba Excel en Orion.xlsx");
+            return PdfExcelHelper.GetInstance().GetPdfTable(tablaPdf);
         }
+
 
 
         private static Table GetTablaFallosCalendario(ListCollectionView listaCalendarios, DateTime fecha) {

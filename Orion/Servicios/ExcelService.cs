@@ -30,9 +30,10 @@ namespace Orion.Servicios {
 
         private static string[] meses = { "Desconocido", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
 
+        private static string[] mesesAbr = { "DES", "ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC" };
+
         #endregion
         // ====================================================================================================
-
 
 
         // ====================================================================================================
@@ -107,6 +108,10 @@ namespace Orion.Servicios {
                     return "Sábados";
                 case "F":
                     return "Festivos";
+                case "R":
+                    return "Reserva";
+                case "RJ":
+                    return "Reducción Jornada";
             }
             return "Desconocido";
         }
@@ -242,6 +247,64 @@ namespace Orion.Servicios {
         }
 
 
+        public List<HorasConductor> GetHorasConductor(string excelFile, int año, int mes) {
+            if (!File.Exists(excelFile)) return null;
+            var diasMes = DateTime.DaysInMonth(año, mes);
+            var lista = new List<HorasConductor>();
+            ConvertidorNumeroGraficoCalendario converter = new ConvertidorNumeroGraficoCalendario();
+
+            using (var excel = new ExcelPackage(new FileInfo(excelFile))) {
+                if (excel.Workbook.Worksheets.Any(h => h.Name == mesesAbr[mes])) {
+                    var hoja = excel.Workbook.Worksheets[mesesAbr[mes]];
+                    for (int dia = 1; dia <= diasMes; dia++) {
+                        HorasConductor horas = new HorasConductor();
+                        horas.Dia = new DateTime(año, mes, dia);
+                        var valor = hoja.Cells[dia + 1, 2].Text;// GetValue<string>() ?? "";
+                        var comboGrafico = (Tuple<int, int>)converter.ConvertBack(valor, null, null, null);
+                        horas.Grafico = comboGrafico.Item1;
+                        valor = hoja.Cells[dia + 1, 3].Text;
+                        if (TimeSpan.TryParse(valor, out TimeSpan trabajadas)) horas.Trabajadas = trabajadas; else horas.Trabajadas = new TimeSpan(-1);
+                        valor = hoja.Cells[dia + 1, 4].Text;
+                        if (TimeSpan.TryParse(valor, out TimeSpan acumuladas)) horas.Acumuladas = acumuladas; else horas.Acumuladas = new TimeSpan(-1);
+                        valor = hoja.Cells[dia + 1, 5].Text;
+                        if (decimal.TryParse(valor, out decimal desayuno)) horas.Desayuno = desayuno; else horas.Desayuno = -1;
+                        valor = hoja.Cells[dia + 1, 6].Text;
+                        if (decimal.TryParse(valor, out decimal comida)) horas.Comida = comida; else horas.Comida = -1;
+                        valor = hoja.Cells[dia + 1, 7].Text;
+                        if (decimal.TryParse(valor, out decimal cena)) horas.Cena = cena; else horas.Cena = -1;
+                        valor = hoja.Cells[dia + 1, 8].Text;
+                        if (decimal.TryParse(valor, out decimal pluscena)) horas.PlusCena = pluscena; else horas.PlusCena = -1;
+                        lista.Add(horas);
+                    }
+                }
+            }
+            return lista;
+        }
+
+
+
+
+        public class HorasConductor {
+
+            public DateTime Dia { get; set; }
+
+            public int Grafico { get; set; }
+
+            public TimeSpan Trabajadas { get; set; }
+
+            public TimeSpan Acumuladas { get; set; }
+
+            public decimal Desayuno { get; set; }
+
+            public decimal Comida { get; set; }
+
+            public decimal Cena { get; set; }
+
+            public decimal PlusCena { get; set; }
+
+
+
+        }
 
 
         #endregion

@@ -10,18 +10,18 @@
     xmlns:local="clr-namespace:Orion"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Title="Orion"
-    Loaded="Window_Loaded"
-    Height="500"
     Width="527"
+    Height="500"
+    Loaded="Window_Loaded"
     WindowStartupLocation="CenterScreen"
     WindowStyle="SingleBorderWindow">
 
-        <WebBrowser
-            Source="about:blank"
-            Margin="2"
-            MinHeight="13"
-            MinWidth="13"
-            x:Name="webBrowser"
-            Navigating="Navegador_Navigating" />
+    <WebBrowser
+        x:Name="webBrowser"
+        MinWidth="13"
+        MinHeight="13"
+        Margin="2"
+        Navigating="Navegador_Navigating"
+        Source="about:blank" />
 
 </Window>

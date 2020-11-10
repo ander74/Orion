@@ -574,6 +574,7 @@
 
             <!--  DESPLEGABLE CREAR EXCEL  -->
             <xceed:DropDownButton
+                x:Name="BtDropExcel"
                 Focusable="False"
                 IsTabStop="False"
                 Style="{StaticResource EstiloBotonDesplegable}">
@@ -609,6 +610,7 @@
                                     Margin="6,6,6,3"
                                     Padding="20,10"
                                     HorizontalAlignment="Stretch"
+                                    Click="BtDropExcel_Click"
                                     Command="{Binding Source={x:Reference TxtCrearExcel}, Path=DataContext.CalendariosVM.cmdCompararCalendarioExcel}"
                                     Content="Comparar Calendario"
                                     FontFamily="Comic Sans MS"
@@ -621,8 +623,29 @@
                                     Margin="6,6,6,3"
                                     Padding="20,10"
                                     HorizontalAlignment="Stretch"
+                                    Click="BtDropExcel_Click"
                                     Command="{Binding Source={x:Reference TxtCrearExcel}, Path=DataContext.CalendariosVM.cmdCompararCalendariosExcelAnual}"
                                     Content="Comparar Calendario Anual"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="11"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center" />
+
+                                <!--  SEPARADOR  -->
+                                <TextBlock
+                                    Height="2"
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    Background="LightGray" />
+
+                                <!--  BOTON COMPARAR CALENDARIO ANUAL  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtDropExcel_Click"
+                                    Command="{Binding Source={x:Reference TxtCrearExcel}, Path=DataContext.CalendariosVM.cmdCorregirCalendarios}"
+                                    Content="Corregir Calendarios"
                                     FontFamily="Comic Sans MS"
                                     FontSize="11"
                                     Style="{StaticResource EstiloBotonBarraPequeña}"
@@ -3095,6 +3118,8 @@
                             HorizontalContentAlignment="Center"
                             Text="{Binding CalendariosVM.DiaCalendarioSeleccionado.GraficoVinculado, Converter={StaticResource cnvNumGrafico}}" />
 
+
+
                     </StackPanel>
                 </Label>
 
@@ -3126,9 +3151,17 @@
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
                         <!--  ENCABEZADOS  -->
+                        <TextBlock
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Width="50"
+                            Padding="4"
+                            VerticalAlignment="Bottom"
+                            Text="Gráfico" />
                         <TextBlock
                             Grid.Row="0"
                             Grid.Column="1"
@@ -3215,7 +3248,7 @@
                             Text="P.Cena" />
 
                         <!--  VALORES  -->
-                        <Label
+                        <!--<Label
                             Grid.Row="1"
                             Grid.Column="0"
                             Width="60"
@@ -3225,7 +3258,17 @@
                             HorizontalContentAlignment="Center"
                             VerticalContentAlignment="Center"
                             Content="{Binding Pijama.DiaSeleccionado.ComboGrafico, Converter={StaticResource cnvNumGraficoPijama}}"
-                            FontWeight="Bold" />
+                            FontWeight="Bold" />-->
+                        <controls:QTextBox
+                            Grid.Row="1"
+                            Grid.Column="0"
+                            Width="50"
+                            Margin="4,0"
+                            Padding="3"
+                            VerticalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            FontSize="12"
+                            Text="{Binding Pijama.DiaSeleccionado.ComboGraficoAlt, Converter={StaticResource cnvNumGraficoPijama}}" />
                         <controls:QTextBox
                             Grid.Row="1"
                             Grid.Column="1"
@@ -3347,7 +3390,7 @@
                             FontSize="12"
                             Text="{Binding DiaCalendarioSeleccionado.PlusCenaAlt, Converter={StaticResource cnvDecimalNulable}}" />
                         <StackPanel
-                            Grid.Row="0"
+                            Grid.Row="1"
                             Grid.Column="13"
                             Margin="10,0,0,0"
                             Orientation="Horizontal">
@@ -3366,7 +3409,7 @@
                                 IsThreeState="True" />
                         </StackPanel>
                         <StackPanel
-                            Grid.Row="1"
+                            Grid.Row="2"
                             Grid.Column="13"
                             Margin="10,0,0,0"
                             Orientation="Horizontal">
@@ -3386,6 +3429,16 @@
                         </StackPanel>
 
                         <!--  GRÁFICO original  -->
+                        <Label
+                            Grid.Row="2"
+                            Grid.Column="0"
+                            Width="50"
+                            Margin="0"
+                            Padding="4"
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top"
+                            HorizontalContentAlignment="Center"
+                            Content="{Binding Pijama.DiaSeleccionado.ComboGrafico, Converter={StaticResource cnvNumGraficoPijama}}" />
                         <Label
                             Grid.Row="2"
                             Grid.Column="1"
@@ -3517,6 +3570,15 @@
                             HorizontalContentAlignment="Center"
                             Content=" " />
 
+                        <!--  LIMPIAR ALTERNATIVOS  -->
+                        <controls:VerticalButton
+                            Title="Borrar Altern."
+                            Grid.Row="0"
+                            Grid.RowSpan="3"
+                            Grid.Column="14"
+                            Margin="5"
+                            Command="{Binding cmdLimpiarAlternativos}"
+                            FontSize="10" />
 
                     </Grid>
                 </Label>

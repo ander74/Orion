@@ -9,6 +9,7 @@ namespace Orion.Controls {
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Reflection;
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
@@ -19,6 +20,7 @@ namespace Orion.Controls {
     using Orion.ViewModels;
 
     public class QDataGrid : DataGrid {
+
 
 
         // ====================================================================================================
@@ -47,18 +49,22 @@ namespace Orion.Controls {
             // Asignamos el estilo.
             this.Style = (Style)App.Current.Resources["QDatagridStyle"];
 
+            // Extraemos el Assembly Name
+            var assemblyName = Assembly.GetEntryAssembly().GetName().Name;
 
             // Creamos el menú contextual.
             this.ContextMenu = new ContextMenu();
+
             this.ContextMenu.Items.Add(new MenuItem {
                 Header = "Copiar",
-                Icon = new Image { Source = new BitmapImage(new Uri("/Orion;component/Views/Imagenes/Copiar.png", UriKind.Relative)) },
-                Command = ComandoCopiar
+                Icon = new Image { Source = new BitmapImage(new Uri($"/{assemblyName};component/Views/Imagenes/Copiar.png", UriKind.Relative)) },
+                Command = CmdCopiar
             });
+
             this.ContextMenu.Items.Add(new MenuItem {
                 Header = "Pegar",
-                Icon = new Image { Source = new BitmapImage(new Uri("/Orion;component/Views/Imagenes/Pegar.png", UriKind.Relative)) },
-                Command = ComandoPegar
+                Icon = new Image { Source = new BitmapImage(new Uri($"/{assemblyName};component/Views/Imagenes/Pegar.png", UriKind.Relative)) },
+                Command = CmdPegar
             });
         }
 
@@ -178,24 +184,34 @@ namespace Orion.Controls {
         #region COMANDO COPIAR
         // ====================================================================================================
 
-        // Comando
+        // Routed Command
+        private ICommand cmdCopiar;
+        public ICommand CmdCopiar {
+            get {
+                if (cmdCopiar == null) {
+                    cmdCopiar = new RoutedUICommand("Copiar", "CmdCopiar", typeof(QDataGrid), new InputGestureCollection { new KeyGesture(Key.C, ModifierKeys.Control) });
+                    this.CommandBindings.Add(new CommandBinding(cmdCopiar, Copiar, PuedeCopiar));
+                }
+                return cmdCopiar;
+            }
+        }
+        // Relay Command
         private ICommand comandoCopiar;
         public ICommand ComandoCopiar {
             get {
-                //if (comandoCopiar == null) comandoCopiar = new RelayCommand(p => Copiar(), p => PuedeCopiar());
-                if (comandoCopiar == null) {
-                    comandoCopiar = new RoutedCommand("Copiar", typeof(QDataGrid), new InputGestureCollection { new KeyGesture(Key.C, ModifierKeys.Control) });
-                    this.CommandBindings.Add(new CommandBinding(comandoCopiar, Copiar, PuedeCopiar));
-                }
+                if (comandoCopiar == null) comandoCopiar = new RelayCommand(p => CmdCopiar.Execute(p), p => CmdCopiar.CanExecute(p));
                 return comandoCopiar;
             }
         }
+
+        // Métodos Compartidos
         private void PuedeCopiar(object sender, CanExecuteRoutedEventArgs e) {
-            e.CanExecute = SelectedCells?.Count > 0;
+            e.CanExecute = true;// SelectedCells?.Count > 0;
         }
         private void Copiar(object sender, ExecutedRoutedEventArgs e) {
             if (ApplicationCommands.Copy.CanExecute(null, this)) ApplicationCommands.Copy.Execute(null, this);
         }
+
 
         #endregion
         // ====================================================================================================
@@ -205,52 +221,86 @@ namespace Orion.Controls {
         #region COMANDO PEGAR
         // ====================================================================================================
 
+        // Routed Command
+        private ICommand cmdPegar;
+        public ICommand CmdPegar {
+            get {
+                if (cmdPegar == null) {
+                    cmdPegar = new RoutedUICommand("Pegar", "CmdPegar", typeof(QDataGrid), new InputGestureCollection { new KeyGesture(Key.V, ModifierKeys.Control) });
+                    this.CommandBindings.Add(new CommandBinding(cmdPegar, Pegar, PuedePegar));
+                }
+                return cmdPegar;
+            }
+        }
+
+        // Relay Command
         private ICommand comandoPegar;
         public ICommand ComandoPegar {
             get {
-                if (comandoPegar == null) {
-                    comandoPegar = new RoutedCommand("Pegar", typeof(QDataGrid), new InputGestureCollection { new KeyGesture(Key.V, ModifierKeys.Control) });
-                    this.CommandBindings.Add(new CommandBinding(comandoPegar, Pegar, PuedePegar));
-                }
+                if (comandoPegar == null) comandoPegar = new RelayCommand(p => CmdPegar.Execute(p), p => CmdPegar.CanExecute(p));
                 return comandoPegar;
             }
         }
+
+        // Métodos Compartidos
         private void PuedePegar(object sender, CanExecuteRoutedEventArgs e) {
             e.CanExecute = SelectedCells?.Count > 0 && IsReadOnly == false;
         }
         private void Pegar(object sender, ExecutedRoutedEventArgs e) {
-            // Recuperamos las filas del portapapeles.
-            List<string[]> portapapeles = Utils.parseClipboard();
-            if (portapapeles == null) return;
-            // Establecemos la fila y la columna actual.
-            int filagrid = Items.IndexOf(CurrentItem);
-            if (filagrid == -1) return;
-            int columnagrid = Columns.IndexOf(CurrentColumn);
+            // Si no hay texto en el portapapeles, salimos
+            if (!Clipboard.ContainsText()) return;
             bool hayNuevaFila = false;
             ICollectionView cv = CollectionViewSource.GetDefaultView(Items);
             IEditableCollectionView iecv = cv as IEditableCollectionView;
-            // Iteramos por las filas del portapapeles.
-            foreach (string[] fila in portapapeles) {
-                // Si estamos en la última fila, añadimos una fila más.
-                if (filagrid == Items.Count) {
-                    if (!CanUserAddRows) continue;
-                    if (iecv != null) {
-                        hayNuevaFila = true;
-                        iecv.AddNew();
-                        iecv.CommitNew();
+            // Si hay más de una celda seleccionada copiamos el portapapeles en cada celda.
+            if (this.SelectedCells.Count > 1) {
+                foreach (var celda in this.SelectedCells) {
+                    var col = Columns.IndexOf(celda.Column);
+                    var fil = Items.IndexOf(celda.Item);
+                    // Si estamos en la última fila, añadimos una fila más.
+                    if (fil == Items.Count) {
+                        if (!CanUserAddRows) continue;
+                        if (iecv != null) {
+                            hayNuevaFila = true;
+                            iecv.AddNew();
+                            iecv.CommitNew();
+                        }
                     }
+                    DataGridColumn column = ColumnFromDisplayIndex(col);
+                    column.OnPastingCellClipboardContent(celda.Item, Clipboard.GetText());
+                    if (hayNuevaFila) iecv.CommitNew();
                 }
-                // Establecemos la columna inicial en la que se va a pegar.
-                int columna = columnagrid;
-                // Iteramos por cada campo de la fila del portapapeles
-                foreach (string texto in fila) {
-                    if (columna > Columns.Count - 1) continue;
-                    DataGridColumn column = ColumnFromDisplayIndex(columna);
-                    column.OnPastingCellClipboardContent(Items[filagrid], texto);
-                    columna++;
+            } else {
+                // Recuperamos las filas del portapapeles.
+                List<string[]> portapapeles = Utils.parseClipboard();
+                if (portapapeles == null) return;
+                // Establecemos la fila y la columna actual.
+                int filagrid = Items.IndexOf(CurrentItem);
+                if (filagrid == -1) return;
+                int columnagrid = Columns.IndexOf(CurrentColumn);
+                // Iteramos por las filas del portapapeles.
+                foreach (string[] fila in portapapeles) {
+                    // Si estamos en la última fila, añadimos una fila más.
+                    if (filagrid == Items.Count) {
+                        if (!CanUserAddRows) continue;
+                        if (iecv != null) {
+                            hayNuevaFila = true;
+                            iecv.AddNew();
+                            iecv.CommitNew();
+                        }
+                    }
+                    // Establecemos la columna inicial en la que se va a pegar.
+                    int columna = columnagrid;
+                    // Iteramos por cada campo de la fila del portapapeles
+                    foreach (string texto in fila) {
+                        if (columna > Columns.Count - 1) continue;
+                        DataGridColumn column = ColumnFromDisplayIndex(columna);
+                        column.OnPastingCellClipboardContent(Items[filagrid], texto);
+                        columna++;
+                    }
+                    filagrid++;
+                    if (hayNuevaFila) iecv.CommitNew();
                 }
-                filagrid++;
-                if (hayNuevaFila) iecv.CommitNew();
             }
             // Hacemos commit a la edición del datagrid.
             this.CommitEdit();
