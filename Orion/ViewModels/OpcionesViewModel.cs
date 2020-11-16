@@ -6,6 +6,7 @@
 // ===============================================
 #endregion
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows;
@@ -22,6 +23,9 @@ namespace Orion.ViewModels {
         #region CAMPOS PRIVADOS
         // ====================================================================================================
         private IMensajes mensajes;
+
+        private List<ArticuloConvenio> articulosEliminados = new List<ArticuloConvenio>();
+
         #endregion
 
 
@@ -46,14 +50,24 @@ namespace Orion.ViewModels {
         public void CargarDatos() {
             if (App.Global.CadenaConexion == null) {
                 ListaPluses = new NotifyCollection<Pluses>();
-                return;
+            } else {
+                ListaPluses = new NotifyCollection<Pluses>(App.Global.Repository.GetPluses());
             }
-            ListaPluses = new NotifyCollection<Pluses>(App.Global.Repository.GetPluses());
+            if (App.Global.CadenaConexionLineas == null) {
+                ArticulosConvenio = new NotifyCollection<ArticuloConvenio>();
+            } else {
+                ArticulosConvenio = new NotifyCollection<ArticuloConvenio>(App.Global.LineasRepo.GetArticulosConvenio());
+            }
         }
 
 
         public void GuardarDatos() {
             App.Global.Repository.GuardarPluses(ListaPluses.Where(item => item.Nuevo || item.Modificado));
+            App.Global.LineasRepo.GuardarArticulosConvenio(ArticulosConvenio.Where(item => item.Nuevo || item.Modificado));
+            if (articulosEliminados.Any()) {
+                App.Global.LineasRepo.BorrarArticulosConvenio(articulosEliminados);
+                articulosEliminados.Clear();
+            }
             HayCambios = false;
         }
 
@@ -106,6 +120,10 @@ namespace Orion.ViewModels {
 
         private void Configuracion_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e) {
             if (e.PropertyName == nameof(App.Global.Configuracion.CarpetaDropbox)) PropiedadCambiada(nameof(SePuedeSincronizarNube));
+            HayCambios = true;
+        }
+
+        private void ArticulosConvenio_ItemPropertyChanged(object sender, ItemChangedEventArgs<ArticuloConvenio> e) {
             HayCambios = true;
         }
 
@@ -211,6 +229,93 @@ namespace Orion.ViewModels {
 
         public bool SePuedeSincronizarNube {
             get => !string.IsNullOrEmpty(App.Global.Configuracion.CarpetaDropbox);
+        }
+
+
+        // ARTÍCULOS CONVENIO
+        // ----------------------------------------------------------------------------------------------------
+
+
+        private NotifyCollection<ArticuloConvenio> articulosConvenio;
+        public NotifyCollection<ArticuloConvenio> ArticulosConvenio {
+            get => articulosConvenio;
+            set {
+                if (SetValue(ref articulosConvenio, value)) {
+                    articulosConvenio.ItemPropertyChanged += ArticulosConvenio_ItemPropertyChanged;
+                }
+            }
+        }
+
+        private ArticuloConvenio articuloSelecionado;
+        public ArticuloConvenio ArticuloSeleccionado {
+            get => articuloSelecionado;
+            set {
+                if (SetValue(ref articuloSelecionado, value)) {
+                    PropiedadCambiada(nameof(FuncionRelacionadaSeleccionada));
+                }
+            }
+        }
+
+
+        public FuncionRelacionada FuncionRelacionadaSeleccionada {
+            get => FuncionesRelacionadas.FirstOrDefault(f => f.Codigo == (ArticuloSeleccionado?.CodigoFuncionRelacionada ?? 0));
+            set {
+                if (ArticuloSeleccionado != null) {
+                    ArticuloSeleccionado.CodigoFuncionRelacionada = value.Codigo;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
+
+        private List<FuncionRelacionada> funcionesRelacionadas;
+        public List<FuncionRelacionada> FuncionesRelacionadas {
+            get {
+                if (funcionesRelacionadas == null) {
+                    funcionesRelacionadas = new List<FuncionRelacionada> {
+                        new FuncionRelacionada(0, "ninguna", "Ninguna"),
+                        new FuncionRelacionada(1, "jornadaMedia", "Jornada Media"),
+                        new FuncionRelacionada(2, "nocturnas", "Horas Nocturnas"),
+                        new FuncionRelacionada(3, "dietaDesayuno", "Dieta Desayuno"),
+                        new FuncionRelacionada(4, "dietaComida", "Dieta Comida"),
+                        new FuncionRelacionada(5, "dietaCena", "Dieta Cena"),
+                        new FuncionRelacionada(6, "horasCobradas", "Horas Cobradas"),
+                        new FuncionRelacionada(7, "jornada", "Jornada"),
+                        new FuncionRelacionada(8, "descansos", "Descansos"),
+                        new FuncionRelacionada(9, "vacaciones", "Vacaciones"),
+                        new FuncionRelacionada(10, "findes", "Fines de semana"),
+                        new FuncionRelacionada(11, "limpieza", "Plus de limpieza"),
+                        new FuncionRelacionada(12, "plusViaje", "Plus de viaje"),
+                        new FuncionRelacionada(13, "importeDietas", "Importe Dietas"),
+                        new FuncionRelacionada(14, "plusSabados", "Plus Sábados"),
+                        new FuncionRelacionada(15, "plusFestivos", "Plus Festivos"),
+                        new FuncionRelacionada(16, "plusNocturnidad", "Plus Nocturnidad"),
+                        new FuncionRelacionada(17, "plusMenorDescanso", "Plus de menor descanso"),
+                        new FuncionRelacionada(18, "plusPaqueteria", "Plus Paqueteria"),
+                        new FuncionRelacionada(19, "plusNavidad", "Plus de Navidad"),
+                    };
+                }
+                return funcionesRelacionadas;
+            }
+        }
+
+        public class FuncionRelacionada {
+
+            public FuncionRelacionada() { }
+
+            public FuncionRelacionada(int codigo, string tag, string texto) {
+                this.Codigo = codigo;
+                this.Tag = tag;
+                this.Texto = texto;
+            }
+
+            public int Codigo { get; set; }
+
+            public string Tag { get; set; }
+
+            public string Texto { get; set; }
+
         }
 
 

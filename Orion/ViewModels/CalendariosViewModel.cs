@@ -27,6 +27,7 @@ namespace Orion.ViewModels {
 
         private string claveGraficosAsociados;
         private List<GraficoBase> listaGraficosAsociados = new List<GraficoBase>();
+        private IEnumerable<GrupoGraficos> gruposGraficos;
 
         // SERVICIOS
         private IMensajes Mensajes;
@@ -66,15 +67,17 @@ namespace Orion.ViewModels {
             }
             ListaCalendarios = new NotifyCollection<Calendario>(App.Global.Repository.GetCalendarios(FechaActual.Year, FechaActual.Month));
 
-            foreach (Calendario c in ListaCalendarios) {
-                // Añadimos el campo indefinido.
-                c.ConductorIndefinido = App.Global.ConductoresVM.IsIndefinido(c.MatriculaConductor);
+            foreach (Calendario calendario in ListaCalendarios) {
+                // Añadimos el campo indefinido y la categoria
+                var conductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == calendario.MatriculaConductor);
+                calendario.ConductorIndefinido = conductor.Indefinido;
+                calendario.CategoriaConductor = conductor.Categoria;
             }
 
             // Cargamos los gráficos asociados, si no están cargados ya.
             var grupos = App.Global.GraficosVM.ListaGrupos;
             var maxValidez = grupos.Where(g => g.Validez <= FechaActual).Max(gg => gg.Validez);
-            var gruposGraficos = grupos.Where(g => g.Validez >= maxValidez && g.Validez < FechaActual.AddMonths(1));
+            gruposGraficos = grupos.Where(g => g.Validez >= maxValidez && g.Validez < FechaActual.AddMonths(1));
             var clave = string.Empty;
             foreach (var grupo in gruposGraficos) clave += $"{grupo.Validez:ddMMyyyy} ";
             if (!clave.Equals(claveGraficosAsociados)) {
@@ -85,6 +88,7 @@ namespace Orion.ViewModels {
             HayCambios = false; // Hay que ponerlo en false, ya que el foreach anterior modifica propiedades.
             CalendarioSeleccionado = null;
             PropiedadCambiada(nameof(Detalle));
+            PropiedadCambiada(nameof(GruposGraficos));
         }
 
         public bool EsFestivo(DateTime fecha) {
@@ -347,6 +351,17 @@ namespace Orion.ViewModels {
         }
 
 
+        public string GruposGraficos {
+            get {
+                if (gruposGraficos == null && !gruposGraficos.Any()) return "Ninguno";
+                var texto = string.Empty;
+                foreach (var grupo in gruposGraficos.OrderBy(g => g.Validez)) {
+                    texto += $"{grupo.Validez:dd-MM-yy} | ";
+                }
+                return texto.Substring(0, texto.Length - 3);
+            }
+        }
+
         private Pijama.HojaPijama _pijama;
         public Pijama.HojaPijama Pijama {
             get { return _pijama; }
@@ -362,10 +377,16 @@ namespace Orion.ViewModels {
         public String Detalle {
             get {
                 string texto = $"Calendarios: {ListaCalendarios.Count.ToString()}";
-                if (CalendarioSeleccionado != null) {
-                    texto += $" => {CalendarioSeleccionado.MatriculaConductor}" +
-                             $"  |  Exceso = {ExcesoJornada.ToTexto()}";
-                }
+                int condFijos = ListaCalendarios.Count(c => c.CategoriaConductor == "C" && c.ConductorIndefinido);
+                int condEventuales = ListaCalendarios.Count(c => c.CategoriaConductor == "C" && !c.ConductorIndefinido);
+                int taquFijos = ListaCalendarios.Count(c => c.CategoriaConductor == "T" && c.ConductorIndefinido);
+                int taquEventuales = ListaCalendarios.Count(c => c.CategoriaConductor == "T" && !c.ConductorIndefinido);
+                texto += $"  |  Conducción: {condFijos + condEventuales} => Fijos: {condFijos} - Eventuales: {condEventuales}  /  " +
+                    $"Taquilla: {taquFijos + taquEventuales} => Fijos: {taquFijos} - Eventuales: {taquEventuales}";
+                //if (CalendarioSeleccionado != null) {
+                //    texto += $"  |  Matricula: {CalendarioSeleccionado.MatriculaConductor}" +
+                //             $"  |  Exceso: {ExcesoJornada.ToTexto()}";
+                //}
                 return texto;
             }
         }
@@ -409,6 +430,9 @@ namespace Orion.ViewModels {
 
         #endregion
         // ====================================================================================================
+
+
+
 
     }
 }

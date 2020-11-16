@@ -57,6 +57,9 @@ namespace Orion.Views {
         }
 
 
+        private void BtDropCorregir_Click(object sender, RoutedEventArgs e) {
+            BtDropCorregir.IsOpen = false;
+        }
 
 
 
@@ -109,6 +112,7 @@ namespace Orion.Views {
             BotonesCalendarios.Visibility = Visibility.Collapsed;
             PanelAccionesPorLotes.Visibility = Visibility.Collapsed;
             TablaCalendarios.Visibility = Visibility.Collapsed;
+            PanelFiltroAplicado.Visibility = Visibility.Collapsed;
             // MOSTRAR
             BotonesPijama.Visibility = Visibility.Visible;
             PanelConductorPijama.Visibility = Visibility.Visible;
@@ -123,6 +127,7 @@ namespace Orion.Views {
             BotonesCalendarios.Visibility = Visibility.Collapsed;
             PanelAccionesPorLotes.Visibility = Visibility.Collapsed;
             TablaCalendarios.Visibility = Visibility.Collapsed;
+            PanelFiltroAplicado.Visibility = Visibility.Collapsed;
             // MOSTRAR
             BotonesPijama.Visibility = Visibility.Visible;
             PanelConductorPijama.Visibility = Visibility.Visible;
@@ -145,6 +150,7 @@ namespace Orion.Views {
             BotonesCalendarios.Visibility = Visibility.Visible;
             PanelAccionesPorLotes.Visibility = Visibility.Visible;
             TablaCalendarios.Visibility = Visibility.Visible;
+            PanelFiltroAplicado.Visibility = Visibility.Visible;
         }
 
         #endregion

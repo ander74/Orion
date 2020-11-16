@@ -235,7 +235,6 @@ namespace Orion.Pijama {
 
         public bool TieneHorarioAlternativo {
             get {
-                if (GraficoAlt.HasValue) return true;
                 if (TurnoAlt.HasValue || InicioAlt.HasValue || FinalAlt.HasValue) return true;
                 if (InicioPartidoAlt.HasValue || FinalPartidoAlt.HasValue) return true;
                 return false;

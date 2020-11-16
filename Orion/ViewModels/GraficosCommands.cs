@@ -48,6 +48,8 @@ namespace Orion.ViewModels {
             // Creamos las variables auxiliares
             bool incrementar = true;
             bool deducir = true;
+            bool resetTiempoVacio = false;
+            TimeSpan tiempoVacio = TimeSpan.Zero;
             int numero = 0;
             if (ListaGraficos.Count > 0) numero = ListaGraficos.Max(g => g.Numero);
 
@@ -58,6 +60,8 @@ namespace Orion.ViewModels {
                 ventana.DataContext = new AñadirGraficoViewModel(Mensajes);
                 ((AñadirGraficoViewModel)ventana.DataContext).IncrementarNumeroMarcado = incrementar;
                 ((AñadirGraficoViewModel)ventana.DataContext).DeducirTurnoMarcado = deducir;
+                ((AñadirGraficoViewModel)ventana.DataContext).ResetTiempoVacioMarcado = resetTiempoVacio;
+                ((AñadirGraficoViewModel)ventana.DataContext).TiempoVacio = tiempoVacio;
                 ((AñadirGraficoViewModel)ventana.DataContext).Numero = ((AñadirGraficoViewModel)ventana.DataContext).IncrementarNumeroMarcado ? numero + 1 : numero;
                 // Si al mostrar la ventana, pulsamos aceptar...
                 if (ventana.ShowDialog() == true) {
@@ -65,12 +69,14 @@ namespace Orion.ViewModels {
                     Grafico grafico = ((AñadirGraficoViewModel)ventana.DataContext).GraficoActual;
                     //grafico.IdGrupo = GrupoSeleccionado.Id;
                     grafico.Validez = GrupoSeleccionado.Validez;
-                    grafico.DiaSemana = "";
+                    //grafico.DiaSemana = ""; //TODO: No se por qué se quita aquí el día de la semana.
                     ListaGraficos.Add(grafico);
                     // Establecemos las variables.
                     incrementar = ((AñadirGraficoViewModel)ventana.DataContext).IncrementarNumeroMarcado;
                     deducir = ((AñadirGraficoViewModel)ventana.DataContext).DeducirTurnoMarcado;
                     numero = ((AñadirGraficoViewModel)ventana.DataContext).Numero;
+                    resetTiempoVacio = ((AñadirGraficoViewModel)ventana.DataContext).ResetTiempoVacioMarcado;
+                    tiempoVacio = resetTiempoVacio ? TimeSpan.Zero : ((AñadirGraficoViewModel)ventana.DataContext).TiempoVacio;
                 } else {
                     return;
                 }
@@ -471,6 +477,25 @@ namespace Orion.ViewModels {
         }
 
         private void CalcularValoraciones() {
+
+            // Si en las opciones dice que se añada tiempo de pago al ultimo itinerario, se añade.
+            if (true) { //TODO: Implementar la opción.
+                var valoracion = GraficoSeleccionado.ListaValoraciones.LastOrDefault(v => v.Linea > 100);
+                // Si la línea tienes decimales (releva en parada intermedia) no se procesa.
+                // La forma de saber si un número decimal tiene o no decimales es sacar el resto de dividir entre 1. Si es cero, no tiene decimales.
+                if (valoracion.Linea % 1 == 0) {
+                    Itinerario itinerario = null;
+                    try {
+                        itinerario = App.Global.LineasRepo.GetItinerarioByNombre(valoracion.Linea);
+                    } catch (Exception ex) {
+                        Mensajes.VerError("GraficosCommands.CalcularValoraciones", ex);
+                    }
+                    if (itinerario != null) {
+                        valoracion.Final = valoracion.Inicio + new TimeSpan(0, itinerario.TiempoPago, 0);
+                    }
+                }
+            }
+
             foreach (ValoracionGrafico valoracion in GraficoSeleccionado.ListaValoraciones) {
                 var indice = GraficoSeleccionado.ListaValoraciones.IndexOf(valoracion);
                 var tiempoAnterior = valoracion.Tiempo;

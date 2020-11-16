@@ -209,6 +209,13 @@ namespace Orion.Models {
         }
 
 
+        private string categoriaConductor = "C";
+        public string CategoriaConductor {
+            get => categoriaConductor;
+            set => SetValue(ref categoriaConductor, value);
+        }
+
+
         private DateTime _fecha;
         public DateTime Fecha {
             get { return _fecha; }

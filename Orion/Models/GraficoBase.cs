@@ -389,6 +389,13 @@ namespace Orion.Models {
         }
 
 
+        private TimeSpan tiempoVacio;
+        public TimeSpan TiempoVacio {
+            get => tiempoVacio;
+            set => SetValue(ref tiempoVacio, value);
+        }
+
+
         private TimeSpan _trabajadasConvenio;
         public TimeSpan TrabajadasConvenio {
             get { return _trabajadasConvenio; }
@@ -541,6 +548,7 @@ namespace Orion.Models {
             _finalpartido = lector.ToTimeSpanNulable("FinalPartido");
             _valoracion = lector.ToTimeSpan("Valoracion");
             _trabajadas = lector.ToTimeSpan("Trabajadas");
+            //tiempoVacio = lector.ToTimeSpan("TiempoVacio");
             _acumuladas = lector.ToTimeSpan("Acumuladas");
             _nocturnas = lector.ToTimeSpan("Nocturnas");
             _desayuno = lector.ToDecimal("Desayuno");
@@ -571,6 +579,7 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("FinalPartido", FinalPartido.HasValue ? FinalPartido.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("Valoracion", Valoracion.Ticks));
                 lista.Add(new SQLiteParameter("Trabajadas", Trabajadas.Ticks));
+                //lista.Add(new SQLiteParameter("TiempoVacio", TiempoVacio.Ticks));
                 lista.Add(new SQLiteParameter("Acumuladas", Acumuladas.Ticks));
                 lista.Add(new SQLiteParameter("Nocturnas", Nocturnas.Ticks));
                 lista.Add(new SQLiteParameter("Desayuno", Desayuno.ToString("0.0000").Replace(",", ".")));

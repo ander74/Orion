@@ -11,6 +11,7 @@
     xmlns:cnv="clr-namespace:Orion.Convertidores"
     xmlns:controls="clr-namespace:Orion.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:diag="clr-namespace:System.Diagnostics;assembly=mscorlib"
     xmlns:local="clr-namespace:Orion.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:sys="clr-namespace:System;assembly=mscorlib"
@@ -631,27 +632,6 @@
                                     Style="{StaticResource EstiloBotonBarraPequeña}"
                                     TextBlock.TextAlignment="Center" />
 
-                                <!--  SEPARADOR  -->
-                                <TextBlock
-                                    Height="2"
-                                    Margin="6,6,6,3"
-                                    Padding="20,10"
-                                    Background="LightGray" />
-
-                                <!--  BOTON COMPARAR CALENDARIO ANUAL  -->
-                                <Button
-                                    Margin="6,6,6,3"
-                                    Padding="20,10"
-                                    HorizontalAlignment="Stretch"
-                                    Click="BtDropExcel_Click"
-                                    Command="{Binding Source={x:Reference TxtCrearExcel}, Path=DataContext.CalendariosVM.cmdCorregirCalendarios}"
-                                    Content="Corregir Calendarios"
-                                    FontFamily="Comic Sans MS"
-                                    FontSize="11"
-                                    Style="{StaticResource EstiloBotonBarraPequeña}"
-                                    TextBlock.TextAlignment="Center" />
-
-
                             </StackPanel>
                         </Border>
                     </Border>
@@ -725,6 +705,74 @@
                 Width="2"
                 Margin="3,5"
                 Background="LightGray" />
+
+            <!--  DESPLEGABLE CORREGIR  -->
+            <xceed:DropDownButton
+                x:Name="BtDropCorregir"
+                Focusable="False"
+                IsTabStop="False"
+                Style="{StaticResource EstiloBotonDesplegable}">
+                <xceed:DropDownButton.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Source="Imagenes/ActualizarConductor.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Name="TxtCorregir"
+                            FontFamily="Comic Sans MS"
+                            FontSize="11"
+                            Text="Correcc. Conduct."
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </xceed:DropDownButton.Content>
+                <xceed:DropDownButton.DropDownContent>
+                    <Border
+                        Background="AliceBlue"
+                        BorderBrush="DarkBlue"
+                        BorderThickness="2"
+                        CornerRadius="5">
+                        <Border
+                            Margin="3"
+                            BorderBrush="DarkGray"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <StackPanel Orientation="Vertical">
+
+                                <!--  BOTON COMPARAR CORRECCIONES  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtDropCorregir_Click"
+                                    Command="{Binding Source={x:Reference TxtCorregir}, Path=DataContext.CalendariosVM.cmdCompararCorrecciones}"
+                                    Content="Comparar Calendarios"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="11"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center" />
+
+                                <!--  BOTON APLICAR CORRECCIONES  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtDropCorregir_Click"
+                                    Command="{Binding Source={x:Reference TxtCorregir}, Path=DataContext.CalendariosVM.cmdAplicarCorrecciones}"
+                                    Content="Aplicar Correcciones"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="11"
+                                    Foreground="OrangeRed"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center" />
+
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </xceed:DropDownButton.DropDownContent>
+            </xceed:DropDownButton>
+
+
 
             <!--  BOTON RECLAMAR  -->
             <controls:BotonBarra
@@ -1249,10 +1297,11 @@
 
         <!--  PANEL FILTRO APLICADO  -->
         <Grid
+            x:Name="PanelFiltroAplicado"
             Grid.Row="2"
             Grid.Column="0"
             HorizontalAlignment="Stretch"
-            Visibility="{Binding CalendariosVM.HayFiltroAplicado, Converter={StaticResource cnvBoolToVisibility}}">
+            Visibility="Visible">
             <Border
                 Height="Auto"
                 Margin="0,3"
@@ -1261,25 +1310,53 @@
                 BorderBrush="DarkBlue"
                 BorderThickness="0.5"
                 CornerRadius="4">
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Label
+                        Grid.Column="0"
+                        HorizontalAlignment="Left"
+                        VerticalContentAlignment="Center"
+                        FontFamily="Verdana"
+                        FontSize="14"
+                        FontWeight="Normal">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Margin="4,0"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="Filtro aplicado:" />
+                            <TextBlock
+                                Width="Auto"
+                                Margin="4,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding CalendariosVM.FiltroAplicado}" />
+                        </StackPanel>
+                    </Label>
+                    <Label
+                        Grid.Column="1"
+                        HorizontalAlignment="Right"
+                        VerticalContentAlignment="Center"
+                        FontFamily="Verdana"
+                        FontSize="14"
+                        FontWeight="Normal">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock
+                                Margin="4,0"
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="Grupos de Gráficos:" />
+                            <TextBlock
+                                Width="Auto"
+                                Margin="4,0"
+                                VerticalAlignment="Center"
+                                Text="{Binding CalendariosVM.GruposGraficos}" />
+                        </StackPanel>
+                    </Label>
 
-                <Label
-                    VerticalContentAlignment="Center"
-                    FontFamily="Verdana"
-                    FontSize="14"
-                    FontWeight="Normal">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock
-                            Margin="4,0"
-                            VerticalAlignment="Center"
-                            FontWeight="Bold"
-                            Text="Filtro aplicado:" />
-                        <TextBlock
-                            Width="300"
-                            Margin="4,0"
-                            VerticalAlignment="Center"
-                            Text="{Binding CalendariosVM.FiltroAplicado}" />
-                    </StackPanel>
-                </Label>
+                </Grid>
 
             </Border>
         </Grid>
@@ -3259,16 +3336,6 @@
                             VerticalContentAlignment="Center"
                             Content="{Binding Pijama.DiaSeleccionado.ComboGrafico, Converter={StaticResource cnvNumGraficoPijama}}"
                             FontWeight="Bold" />-->
-                        <controls:QTextBox
-                            Grid.Row="1"
-                            Grid.Column="0"
-                            Width="50"
-                            Margin="4,0"
-                            Padding="3"
-                            VerticalAlignment="Center"
-                            HorizontalContentAlignment="Center"
-                            FontSize="12"
-                            Text="{Binding Pijama.DiaSeleccionado.ComboGraficoAlt, Converter={StaticResource cnvNumGraficoPijama}}" />
                         <controls:QTextBox
                             Grid.Row="1"
                             Grid.Column="1"

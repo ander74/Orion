@@ -262,18 +262,18 @@ namespace Orion.Servicios {
                         var valor = hoja.Cells[dia + 1, 2].Text;// GetValue<string>() ?? "";
                         var comboGrafico = (Tuple<int, int>)converter.ConvertBack(valor, null, null, null);
                         horas.Grafico = comboGrafico.Item1;
-                        valor = hoja.Cells[dia + 1, 3].Text;
-                        if (TimeSpan.TryParse(valor, out TimeSpan trabajadas)) horas.Trabajadas = trabajadas; else horas.Trabajadas = new TimeSpan(-1);
-                        valor = hoja.Cells[dia + 1, 4].Text;
-                        if (TimeSpan.TryParse(valor, out TimeSpan acumuladas)) horas.Acumuladas = acumuladas; else horas.Acumuladas = new TimeSpan(-1);
-                        valor = hoja.Cells[dia + 1, 5].Text;
-                        if (decimal.TryParse(valor, out decimal desayuno)) horas.Desayuno = desayuno; else horas.Desayuno = -1;
-                        valor = hoja.Cells[dia + 1, 6].Text;
-                        if (decimal.TryParse(valor, out decimal comida)) horas.Comida = comida; else horas.Comida = -1;
-                        valor = hoja.Cells[dia + 1, 7].Text;
-                        if (decimal.TryParse(valor, out decimal cena)) horas.Cena = cena; else horas.Cena = -1;
-                        valor = hoja.Cells[dia + 1, 8].Text;
-                        if (decimal.TryParse(valor, out decimal pluscena)) horas.PlusCena = pluscena; else horas.PlusCena = -1;
+                        valor = hoja.Cells[dia + 1, 3].Text.Replace('.', ':');
+                        if (TimeSpan.TryParse(valor, out TimeSpan trabajadas)) horas.Trabajadas = trabajadas; else horas.Trabajadas = TimeSpan.Zero;
+                        valor = hoja.Cells[dia + 1, 4].Text.Replace('.', ':');
+                        if (TimeSpan.TryParse(valor, out TimeSpan acumuladas)) horas.Acumuladas = acumuladas; else horas.Acumuladas = TimeSpan.Zero;
+                        valor = hoja.Cells[dia + 1, 5].Text.Replace('.', ',');
+                        if (decimal.TryParse(valor, out decimal desayuno)) horas.Desayuno = desayuno; else horas.Desayuno = 0;
+                        valor = hoja.Cells[dia + 1, 6].Text.Replace('.', ',');
+                        if (decimal.TryParse(valor, out decimal comida)) horas.Comida = comida; else horas.Comida = 0;
+                        valor = hoja.Cells[dia + 1, 7].Text.Replace('.', ',');
+                        if (decimal.TryParse(valor, out decimal cena)) horas.Cena = cena; else horas.Cena = 0;
+                        valor = hoja.Cells[dia + 1, 8].Text.Replace('.', ',');
+                        if (decimal.TryParse(valor, out decimal pluscena)) horas.PlusCena = pluscena; else horas.PlusCena = 0;
                         lista.Add(horas);
                     }
                 }

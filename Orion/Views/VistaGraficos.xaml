@@ -1013,6 +1013,12 @@
 
                     <DataGridTextColumn
                         Width="1*"
+                        MinWidth="60"
+                        Binding="{Binding TiempoVacio, Converter={StaticResource cnvHora}}"
+                        Header="T.Vacío" />
+
+                    <DataGridTextColumn
+                        Width="1*"
                         MinWidth="80"
                         Binding="{Binding Acumuladas, Converter={StaticResource cnvHora}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                         Header="Acumuladas"

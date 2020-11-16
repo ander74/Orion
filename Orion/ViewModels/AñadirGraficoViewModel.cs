@@ -41,14 +41,15 @@ namespace Orion.ViewModels {
         public Grafico GraficoActual {
             get {
                 _graficoActual = new Grafico {
-                    Numero = Numero,
-                    DiaSemana = DiaSemana,
-                    Turno = Turno,
-                    Valoracion = Valoracion,
-                    Inicio = Inicio,
-                    Final = Final,
-                    InicioPartido = InicioPartido,
-                    FinalPartido = FinalPartido
+                    Numero = this.Numero,
+                    DiaSemana = this.DiaSemana,
+                    Turno = this.Turno,
+                    Valoracion = this.Valoracion,
+                    Inicio = this.Inicio,
+                    Final = this.Final,
+                    InicioPartido = this.InicioPartido,
+                    FinalPartido = this.FinalPartido,
+                    TiempoVacio = this.TiempoVacio,
                 };
                 return _graficoActual;
             }
@@ -134,6 +135,13 @@ namespace Orion.ViewModels {
         }
 
 
+        private TimeSpan tiempoVacio;
+        public TimeSpan TiempoVacio {
+            get => tiempoVacio;
+            set => SetValue(ref tiempoVacio, value);
+        }
+
+
         private TimeSpan? _inicioPartido;
         public TimeSpan? InicioPartido {
             get { return _inicioPartido; }
@@ -167,6 +175,9 @@ namespace Orion.ViewModels {
         public bool DeducirTurnoMarcado { get; set; }
 
         public bool DeducirDiaSemanaMarcado { get; set; }
+
+        public bool ResetTiempoVacioMarcado { get; set; }
+
 
         #endregion
 

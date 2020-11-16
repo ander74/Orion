@@ -138,13 +138,14 @@ namespace Orion.ViewModels {
             if (e.NewItems != null) {
                 foreach (Conductor conductor in e.NewItems) {
                     conductor.Nuevo = true;
-                    HayCambios = true;
                 }
+                HayCambios = true;
             }
         }
 
         private void ListaConductores_ItemPropertyChanged(object sender, ItemChangedEventArgs<Conductor> e) {
             HayCambios = true;
+            PropiedadCambiada(nameof(Detalle));
         }
 
         #endregion
@@ -248,9 +249,12 @@ namespace Orion.ViewModels {
 
         public String Detalle {
             get {
-                int eventuales = ListaConductores.Count(c => c.Indefinido == false);
-                string texto = "Conductores: " + ListaConductores.Count.ToString();
-                texto += "  |  Eventuales: " + eventuales.ToString();
+                int condFijos = ListaConductores.Count(c => c.Categoria == "C" && c.Indefinido);
+                int condEventuales = ListaConductores.Count(c => c.Categoria == "C" && !c.Indefinido);
+                int taquFijos = ListaConductores.Count(c => c.Categoria == "T" && c.Indefinido);
+                int taquEventuales = ListaConductores.Count(c => c.Categoria == "T" && !c.Indefinido);
+                string texto = $"Conducción: {condFijos + condEventuales} => Fijos: {condFijos} - Eventuales: {condEventuales}  /  " +
+                    $"Taquilla: {taquFijos + taquEventuales} => Fijos: {taquFijos} - Eventuales: {taquEventuales}";
                 return texto;
 
             }

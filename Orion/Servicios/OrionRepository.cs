@@ -61,6 +61,8 @@ namespace Orion.Servicios {
 
         public const string CrearTablaConductores = "CREATE TABLE IF NOT EXISTS Conductores (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            //"Activo INTEGER DEFAULT 1, " +
+            //"Categoria TEXT DEFAULT 'C', " +
             "Matricula INTEGER DEFAULT 0, " +
             "Nombre TEXT DEFAULT '', " +
             "Apellidos TEXT DEFAULT '', " +
@@ -120,17 +122,17 @@ namespace Orion.Servicios {
             "IdGrupo INTEGER DEFAULT 0, " +
             "Validez TEXT DEFAULT '', " +
             "NoCalcular INTEGER DEFAULT 0, " +
+            //"Categoria TEXT DEFAULT 'C', " +
             "Numero INTEGER DEFAULT 0, " +
             "DiaSemana TEXT DEFAULT '', " +
             "Turno INTEGER DEFAULT 0, " +
-            "DescuadreInicio INTEGER DEFAULT 0, " +
             "Inicio INTEGER DEFAULT NULL, " +
             "Final INTEGER DEFAULT NULL, " +
-            "DescuadreFinal INTEGER DEFAULT 0, " +
             "InicioPartido DEFAULT NULL, " +
             "FinalPartido DEFAULT NULL, " +
             "Valoracion INTEGER DEFAULT 0, " +
             "Trabajadas INTEGER DEFAULT 0, " +
+            //"TiempoVacio INTEGER DEFAULT 0, " +
             "Acumuladas INTEGER DEFAULT 0, " +
             "Nocturnas INTEGER DEFAULT 0, " +
             "Desayuno REAL DEFAULT 0, " +

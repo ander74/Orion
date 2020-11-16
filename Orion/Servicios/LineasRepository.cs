@@ -7,8 +7,8 @@
 #endregion
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Data.SQLite;
+using System.Threading.Tasks;
 using Orion.Config;
 using Orion.Models;
 
@@ -46,6 +46,16 @@ namespace Orion.Servicios {
             "Descripcion TEXT DEFAULT '', " +
             "Tiempo INTEGER DEFAULT 0 " +
             ");";
+
+
+        public const string CrearTablaArticulosConvenio = "CREATE TABLE IF NOT EXISTS ArticulosConvenio (" +
+            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+            "Numero REAL DEFAULT 0, " +
+            "Titulo TEXT DEFAULT '', " +
+            "Texto TEXT DEFAULT '', " +
+            "CodigoFuncionRelacionada INTEGER DEFAULT 0 " +
+            ");";
+
 
 
         #endregion
@@ -95,6 +105,7 @@ namespace Orion.Servicios {
                 using (var comando = new SQLiteCommand(CrearTablaLineas, conexion)) await comando.ExecuteNonQueryAsync();
                 using (var comando = new SQLiteCommand(CrearTablaItinerarios, conexion)) await comando.ExecuteNonQueryAsync();
                 using (var comando = new SQLiteCommand(CrearTablaParadas, conexion)) await comando.ExecuteNonQueryAsync();
+                using (var comando = new SQLiteCommand(CrearTablaArticulosConvenio, conexion)) await comando.ExecuteNonQueryAsync();
             }
         }
 
@@ -187,6 +198,42 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
         // Al gestionarse las paradas desde los itinerarios, no son necesarios métodos en este apartado.
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region BD ARTÍCULOS CONVENIO
+        // ====================================================================================================
+
+        public IEnumerable<ArticuloConvenio> GetArticulosConvenio() {
+            try {
+                return GetItems<ArticuloConvenio>();
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetArticulosConvenio), ex);
+            }
+            return new List<ArticuloConvenio>();
+        }
+
+
+        public void GuardarArticulosConvenio(IEnumerable<ArticuloConvenio> lista) {
+            try {
+                GuardarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GuardarArticulosConvenio), ex);
+            }
+        }
+
+
+        public void BorrarArticulosConvenio(IEnumerable<ArticuloConvenio> lista) {
+            try {
+                BorrarItems(lista);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.BorrarArticulosConvenio), ex);
+            }
+        }
+
 
         #endregion
         // ====================================================================================================

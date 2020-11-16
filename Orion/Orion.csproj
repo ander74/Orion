@@ -35,10 +35,9 @@
     <ProductName>Orion</ProductName>
     <PublisherName>AnderSoft</PublisherName>
     <SuiteName>Orion</SuiteName>
-    <ApplicationRevision>15</ApplicationRevision>
-    <ApplicationVersion>1.1.0.%2a</ApplicationVersion>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.2.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
-    <CreateDesktopShortcut>true</CreateDesktopShortcut>
     <PublishWizardCompleted>true</PublishWizardCompleted>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -223,6 +222,7 @@
     <Compile Include="Convertidores\ConvertidorMinutosToHoraMixta.cs" />
     <Compile Include="Convertidores\ConvertidorNegritaColumnaPijama.cs" />
     <Compile Include="Convertidores\ConvertidorNegritaDiaPijama.cs" />
+    <Compile Include="Convertidores\ConvertidorNumeroArticuloConvenio.cs" />
     <Compile Include="Convertidores\ConvertidorOcultoSiCero.cs" />
     <Compile Include="Convertidores\ConvertidorSelectionUnitToEnabled.cs" />
     <Compile Include="Convertidores\ConvertidorTextoNegrita.cs" />
@@ -270,6 +270,7 @@
     </Compile>
     <Compile Include="Interfaces\IFileService.cs" />
     <Compile Include="Interfaces\ISQLiteItem.cs" />
+    <Compile Include="Models\ArticuloConvenio.cs" />
     <Compile Include="Models\DescansosPorDia.cs" />
     <Compile Include="Models\DiaCalendarioEstadistica.cs" />
     <Compile Include="Models\EstadisticaCalendario.cs" />
@@ -307,6 +308,7 @@
     <Compile Include="Mvvm\TaskUtilities.cs" />
     <Compile Include="PdfExcel\Enumeraciones.cs" />
     <Compile Include="PdfExcel\PdfExcelHelper.cs" />
+    <Compile Include="PdfExcel\PdfExcelService.cs" />
     <Compile Include="Pijama\BdPijamas.cs" />
     <Compile Include="Pijama\DiaPijama.cs" />
     <Compile Include="Pijama\DiaPijamaBasico.cs" />
@@ -319,6 +321,7 @@
     <Compile Include="PrintModel\PdfTools.cs" />
     <Compile Include="PrintModel\PijamaPrintModel.cs" />
     <Compile Include="PrintModel\ReclamacionPrintModel.cs" />
+    <Compile Include="Servicios\ConvenioService.cs" />
     <Compile Include="Servicios\LineasRepository.cs" />
     <Compile Include="Servicios\OneDriveService.cs" />
     <Compile Include="Servicios\OrionRepository.cs" />
@@ -357,6 +360,7 @@
     <Compile Include="ViewModels\PageViewModels\ConductoresPageViewModel.cs" />
     <Compile Include="ViewModels\PageViewModels\CompararGraficosPageVM.cs" />
     <Compile Include="ViewModels\PageViewModels\PageViewModelBase.cs" />
+    <Compile Include="ViewModels\PageViewModels\ResumenAnualPageVM.cs" />
     <Compile Include="ViewModels\ProgramadorViewModel.cs" />
     <Compile Include="ViewModels\ReclamacionesViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
@@ -376,11 +380,17 @@
     <Compile Include="Views\Pages\CompararGraficosPage.xaml.cs">
       <DependentUpon>CompararGraficosPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\Pages\ResumenAnualPage.xaml.cs">
+      <DependentUpon>ResumenAnualPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\TableroEstadisticasGraficos.xaml.cs">
       <DependentUpon>TableroEstadisticasGraficos.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VentanaAcercaDe.xaml.cs">
       <DependentUpon>VentanaAcercaDe.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\VentanaArticuloConvenio.xaml.cs">
+      <DependentUpon>VentanaArticuloConvenio.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\VentanaAñadirGrafico.xaml.cs">
       <DependentUpon>VentanaAñadirGrafico.xaml</DependentUpon>
@@ -542,11 +552,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Pages\ResumenAnualPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\TableroEstadisticasGraficos.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\VentanaAcercaDe.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\VentanaArticuloConvenio.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -671,6 +689,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="..\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="Orion.licenseheader" />
     <None Include="Orion_TemporaryKey.pfx" />
     <None Include="Properties\Settings.settings">
@@ -961,7 +982,108 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <PublishFile Include="cs-CZ\Xceed.Wpf.AvalonDock.resources">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Satellite</FileType>
+    </PublishFile>
+    <PublishFile Include="de\Xceed.Wpf.AvalonDock.resources">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Satellite</FileType>
+    </PublishFile>
+    <PublishFile Include="fr\Xceed.Wpf.AvalonDock.resources">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Satellite</FileType>
+    </PublishFile>
+    <PublishFile Include="hu\Xceed.Wpf.AvalonDock.resources">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Satellite</FileType>
+    </PublishFile>
+    <PublishFile Include="it\Xceed.Wpf.AvalonDock.resources">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Satellite</FileType>
+    </PublishFile>
+    <PublishFile Include="pt-BR\Xceed.Wpf.AvalonDock.resources">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Satellite</FileType>
+    </PublishFile>
+    <PublishFile Include="ro\Xceed.Wpf.AvalonDock.resources">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Satellite</FileType>
+    </PublishFile>
+    <PublishFile Include="ru\Xceed.Wpf.AvalonDock.resources">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Satellite</FileType>
+    </PublishFile>
+    <PublishFile Include="sv\Xceed.Wpf.AvalonDock.resources">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Satellite</FileType>
+    </PublishFile>
+    <PublishFile Include="zh-Hans\Xceed.Wpf.AvalonDock.resources">
+      <Visible>False</Visible>
+      <Group>
+      </Group>
+      <TargetPath>
+      </TargetPath>
+      <PublishState>Exclude</PublishState>
+      <IncludeHash>True</IncludeHash>
+      <FileType>Satellite</FileType>
+    </PublishFile>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

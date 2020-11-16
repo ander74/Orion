@@ -212,7 +212,7 @@ namespace Orion.Models {
         private string categoria = "C";
         public string Categoria {
             get => categoria;
-            set => SetValue(ref categoria, value);
+            set => SetValue(ref categoria, value.ToUpper());
         }
 
 

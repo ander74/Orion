@@ -136,8 +136,12 @@ namespace Orion.ViewModels.PageViewModels {
                 });
                 celdas2.Add(new PdfCellInfo() { IsMerged = true });
                 // GRUPO
-                celdas1.Add(new PdfCellInfo($"{GrupoSeleccionado1.Validez:dd-MM-yyyy}"));
-                celdas2.Add(new PdfCellInfo($"{GrupoSeleccionado2.Validez:dd-MM-yyyy}"));
+                celdas1.Add(new PdfCellInfo($"{GrupoSeleccionado1.Validez:dd-MM-yyyy}") {
+                    TextFontColor = g1 == null ? Colors.Red : Colors.DimGray,
+                });
+                celdas2.Add(new PdfCellInfo($"{GrupoSeleccionado2.Validez:dd-MM-yyyy}") {
+                    TextFontColor = g2 == null ? Colors.Red : Colors.DimGray,
+                });
                 // TURNO
                 celdas1.Add(new PdfCellInfo(g1?.Turno.ToString() ?? string.Empty) {
                     TextFontColor = g1?.Turno == g2?.Turno ? Colors.DimGray : Colors.Red

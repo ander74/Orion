@@ -17,9 +17,11 @@ namespace Orion.ViewModels {
     using Convertidores;
     using Models;
     using Orion.Config;
+    using Orion.PdfExcel;
     using PrintModel;
     using Servicios;
     using Views;
+    using static Orion.Servicios.ExcelService;
 
     public partial class CalendariosViewModel {
 
@@ -1346,51 +1348,6 @@ namespace Orion.ViewModels {
         #endregion
 
 
-        #region COMANDO CORREGIR CALENDARIOS
-
-        // Comando
-        private ICommand corregirCalendarios;
-        public ICommand cmdCorregirCalendarios {
-            get {
-                if (corregirCalendarios == null) corregirCalendarios = new RelayCommand(p => CorregirCalendarios(), p => PuedeCorregirCalendarios());
-                return corregirCalendarios;
-            }
-        }
-
-
-        // Se puede ejecutar el comando
-        private bool PuedeCorregirCalendarios() {
-            return ListaCalendarios.Any();
-        }
-
-        // Ejecución del comando
-        private void CorregirCalendarios() {
-
-            foreach (var cal in ListaCalendarios) {
-                var matricula = cal.MatriculaConductor;
-                var archivo = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Horas Conductores\\{matricula:000}\\{matricula:000} - {FechaActual.Year}.xlsx");
-                if (!File.Exists(archivo)) continue;
-                var horas = ExcelService.getInstance().GetHorasConductor(archivo, FechaActual.Year, FechaActual.Month);
-                foreach (var hora in horas) {
-                    var dia = cal.ListaDias.FirstOrDefault(d => d.DiaFecha.Day == hora.Dia.Day);
-                    if (dia.Grafico != hora.Grafico) dia.Grafico = hora.Grafico;
-                    if (dia.Grafico > 0) {
-                        var grafico = App.Global.Repository.GetGrafico(dia.Grafico, dia.DiaFecha);
-                        if (grafico != null) {
-                            if (hora.Trabajadas.Ticks >= 0 && grafico.Trabajadas + dia.ExcesoJornada != hora.Trabajadas) dia.TrabajadasAlt = hora.Trabajadas;
-                            if (hora.Acumuladas.Ticks >= 0 && grafico.Acumuladas != hora.Acumuladas) dia.AcumuladasAlt = hora.Acumuladas;
-                            if (hora.Desayuno >= 0 && grafico.Desayuno != hora.Desayuno) dia.DesayunoAlt = hora.Desayuno;
-                            if (hora.Comida >= 0 && grafico.Comida != hora.Comida) dia.ComidaAlt = hora.Comida;
-                            if (hora.Cena >= 0 && grafico.Cena != hora.Cena) dia.CenaAlt = hora.Cena;
-                            if (hora.PlusCena >= 0 && grafico.PlusCena != hora.PlusCena) dia.PlusCenaAlt = hora.PlusCena;
-                        }
-                    }
-                }
-            }
-        }
-        #endregion
-
-
         #region COMANDO LIMPIAR ALTERNATIVOS
 
         // Comando
@@ -1410,7 +1367,6 @@ namespace Orion.ViewModels {
 
         // Ejecución del comando
         private void LimpiarAlternativos() {
-            DiaCalendarioSeleccionado.GraficoAlt = null;
             DiaCalendarioSeleccionado.TurnoAlt = null;
             DiaCalendarioSeleccionado.InicioAlt = null;
             DiaCalendarioSeleccionado.FinalAlt = null;
@@ -1427,6 +1383,117 @@ namespace Orion.ViewModels {
             DiaCalendarioSeleccionado.PlusPaqueteriaAlt = null;
         }
         #endregion
+
+
+        #region COMANDO APLICAR CORRECCIONES
+
+        // Comando
+        private ICommand aplicarCorrecciones;
+        public ICommand cmdAplicarCorrecciones {
+            get {
+                if (aplicarCorrecciones == null) aplicarCorrecciones = new RelayCommand(p => AplicarCorrecciones(), p => PuedeAplicarCorrecciones());
+                return aplicarCorrecciones;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeAplicarCorrecciones() {
+            return CalendarioSeleccionado != null;
+        }
+
+        // Ejecución del comando
+        private void AplicarCorrecciones() {
+
+            var matricula = CalendarioSeleccionado.MatriculaConductor;
+            var response = Mensajes.VerMensaje($"Va a ajustar el calendario de {matricula:000} según el excel compartido.\n\n¿Desea Continuar?", "ATENCIÓN", true);
+            if (response != true) return;
+            var archivo = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Horas Conductores\\{matricula:000}\\{matricula:000} - {FechaActual.Year}.xlsx");
+            if (!File.Exists(archivo)) {
+                Mensajes.VerMensaje("No hay comparaciones del conductor.", "ATENCIÓN");
+                return;
+            }
+            var horas = ExcelService.getInstance().GetHorasConductor(archivo, FechaActual.Year, FechaActual.Month);
+            if (horas == null) {
+                Mensajes.VerMensaje("No hay comparaciones del conductor.", "ATENCIÓN");
+                return;
+            }
+            foreach (var hora in horas) {
+                var dia = CalendarioSeleccionado.ListaDias.FirstOrDefault(d => d.DiaFecha.Day == hora.Dia.Day);
+                if (dia.Grafico != hora.Grafico) dia.Grafico = hora.Grafico;
+                if (dia.Grafico > 0) {
+                    var grafico = App.Global.Repository.GetGrafico(dia.Grafico, dia.DiaFecha);
+                    if (grafico != null) {
+                        if (hora.Trabajadas.Ticks >= 0 && grafico.Trabajadas + dia.ExcesoJornada != hora.Trabajadas) dia.TrabajadasAlt = hora.Trabajadas;
+                        if (hora.Acumuladas.Ticks >= 0 && grafico.Acumuladas != hora.Acumuladas) dia.AcumuladasAlt = hora.Acumuladas;
+                        if (hora.Desayuno >= 0 && grafico.Desayuno != hora.Desayuno) dia.DesayunoAlt = hora.Desayuno;
+                        if (hora.Comida >= 0 && grafico.Comida != hora.Comida) dia.ComidaAlt = hora.Comida;
+                        if (hora.Cena >= 0 && grafico.Cena != hora.Cena) dia.CenaAlt = hora.Cena;
+                        if (hora.PlusCena >= 0 && grafico.PlusCena != hora.PlusCena) dia.PlusCenaAlt = hora.PlusCena;
+                    }
+                }
+            }
+        }
+        #endregion
+
+
+        #region COMANDO COMPARAR CORRECCIONES
+
+        // Comando
+        private ICommand compararCorrecciones;
+        public ICommand cmdCompararCorrecciones {
+            get {
+                if (compararCorrecciones == null) compararCorrecciones = new RelayCommand(p => CompararCorrecciones(), p => PuedeCompararCorrecciones());
+                return compararCorrecciones;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeCompararCorrecciones() {
+            return true;
+        }
+
+        // Ejecución del comando
+        private void CompararCorrecciones() {
+            if (string.IsNullOrEmpty(App.Global.Configuracion.CarpetaAvanza)) {
+                Mensajes.VerMensaje("Por favor\n\nDefina la ruta de la carpeta AVANZA en las opciones.", "ATENCIÓN");
+                return;
+            }
+            var matricula = CalendarioSeleccionado.MatriculaConductor;
+            var archivo = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Horas Conductores\\{matricula:000}\\{matricula:000} - {FechaActual.Year}.xlsx");
+            if (!File.Exists(archivo)) {
+                Mensajes.VerMensaje("No hay comparaciones del conductor.", "ATENCIÓN");
+                return;
+            }
+            var horas = ExcelService.getInstance().GetHorasConductor(archivo, FechaActual.Year, FechaActual.Month);
+            if (horas == null) {
+                Mensajes.VerMensaje("No hay comparaciones del conductor.", "ATENCIÓN");
+                return;
+            }
+            var pijama = new List<HorasConductor>();
+            foreach (var dia in Pijama.ListaDias) {
+                pijama.Add(new HorasConductor {
+                    Dia = dia.DiaFecha,
+                    Grafico = dia.GraficoTrabajado.Numero,
+                    Trabajadas = dia.GraficoTrabajado.Trabajadas,
+                    Acumuladas = dia.GraficoTrabajado.Acumuladas,
+                    Desayuno = dia.GraficoTrabajado.Desayuno,
+                    Comida = dia.GraficoTrabajado.Comida,
+                    Cena = dia.GraficoTrabajado.Cena,
+                    PlusCena = dia.GraficoTrabajado.PlusCena,
+                });
+            }
+            var pdf = Path.Combine(Path.GetTempPath(), $"Comparacion Correcciones-{matricula}-{FechaActual.Month:00}.pdf");
+            iText.Layout.Document doc = Informes.GetNuevoPdf(pdf);
+            doc.SetMargins(25, 25, 25, 25);
+            var tabla = PdfExcelService.GetInstance().GetComparacionCorreccionesConductor(matricula, pijama, horas);
+            doc.Add(PdfExcelHelper.GetInstance().GetPdfTable(tabla));
+            doc.Close();
+            Process.Start(pdf);
+        }
+        #endregion
+
 
 
 

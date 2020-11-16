@@ -61,15 +61,15 @@ namespace Orion.Convertidores {
                     case "f6": case "f4": grafico = -7; break;
                     case "dnd": case "df": grafico = -8; break;
                     case "per": grafico = -9; break;
-                    case "ejd": grafico = -10; break;
-                    case "efn": grafico = -11; break;
-                    case "ovjd": grafico = -12; break;
-                    case "ovfn": grafico = -13; break;
+                    case "ejd": case "e(jd)": grafico = -10; break;
+                    case "efn": case "e(fn)": grafico = -11; break;
+                    case "ovjd": case "ov(jd)": grafico = -12; break;
+                    case "ovfn": case "ov(fn)": grafico = -13; break;
                     case "f6dc": case "dcf6": grafico = -14; break;
                     case "for": case "cap": grafico = -15; break;
                     case "ova": grafico = -16; break;
-                    case "ovajd": grafico = -17; break;
-                    case "ovafn": grafico = -18; break;
+                    case "ovajd": case "ova(jd)": grafico = -17; break;
+                    case "ovafn": case "ova(fn)": grafico = -18; break;
                     default: Int32.TryParse(texto, out grafico); break;
                 }
 

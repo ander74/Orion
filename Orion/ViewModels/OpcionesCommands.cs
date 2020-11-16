@@ -625,5 +625,82 @@ namespace Orion.ViewModels {
         #endregion
 
 
+
+        #region COMANDO BORRAR ARTICULO CONVENIO
+
+        // Comando
+        private ICommand cmdBorrarArticuloConvenio;
+        public ICommand CmdBorrarArticuloConvenio {
+            get {
+                if (cmdBorrarArticuloConvenio == null) cmdBorrarArticuloConvenio = new RelayCommand(p => BorrarArticuloConvenio(), p => PuedeBorrarArticuloConvenio());
+                return cmdBorrarArticuloConvenio;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeBorrarArticuloConvenio() {
+            return ArticuloSeleccionado != null;
+        }
+
+        // Ejecución del comando
+        private void BorrarArticuloConvenio() {
+            articulosEliminados.Add(ArticuloSeleccionado);
+            ArticulosConvenio.Remove(ArticuloSeleccionado);
+            ArticuloSeleccionado = null;
+        }
+        #endregion
+
+
+
+        #region COMANDO DESHACER BORRAR ARTíCULOS CONVENIO
+
+        // Comando
+        private ICommand cmdDeshacerBorrarArticuloConvenio;
+        public ICommand CmdDeshacerBorrarArticuloConvenio {
+            get {
+                if (cmdDeshacerBorrarArticuloConvenio == null) cmdDeshacerBorrarArticuloConvenio = new RelayCommand(p => DeshacerBorrarArticuloConvenio(), p => PuedeDeshacerBorrarArticuloConvenio());
+                return cmdDeshacerBorrarArticuloConvenio;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeDeshacerBorrarArticuloConvenio() {
+            return articulosEliminados.Count > 0;
+        }
+
+        // Ejecución del comando
+        private void DeshacerBorrarArticuloConvenio() {
+            foreach (var articulo in articulosEliminados) {
+                ArticulosConvenio.Add(articulo);
+            }
+            articulosEliminados.Clear();
+        }
+        #endregion
+
+
+
+        #region COMANDO 
+
+        // Comando
+        private ICommand cmdMostrarArticuloConvenio;
+        public ICommand CmdMostrarArticuloConvenio {
+            get {
+                if (cmdMostrarArticuloConvenio == null) cmdMostrarArticuloConvenio = new RelayCommand(p => MostrarArticuloConvenio(p));
+                return cmdMostrarArticuloConvenio;
+            }
+        }
+        // Ejecución del comando
+        private void MostrarArticuloConvenio(object parametro) {
+            if (parametro is string tag) {
+                var codigo = FuncionesRelacionadas.FirstOrDefault(f => f.Tag == tag)?.Codigo ?? 0;
+                mensajes.VerArticuloConvenio(codigo);
+            }
+        }
+        #endregion
+
+
+
     }
 }

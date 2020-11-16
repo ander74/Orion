@@ -669,6 +669,13 @@ namespace Orion.ViewModels {
         }
 
 
+        public string ArchivoTextoConvenio {
+            get {
+                return Path.Combine(CarpetaConfiguracion, "TextoConvenio.json");
+            }
+        }
+
+
         public string ArchivoOpcionesOneDrive {
             get {
                 return Path.Combine(CarpetaConfiguracion, "OneDrive.json");

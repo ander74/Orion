@@ -5,32 +5,54 @@
 //  Vea el archivo Licencia.txt para más detalles 
 // ===============================================
 #endregion
-using System.Windows.Input;
-using Orion.Models;
-using Orion.Servicios;
-using Orion.ViewModels.PageViewModels;
 
-namespace Orion.ViewModels {
 
-    public class InformesViewModel : NotifyBase {
+namespace Orion.Servicios {
+
+
+    public class ConvenioService {
+
 
         // ====================================================================================================
-        #region CAMPOS PRIVADOS
+        #region SINGLETON
         // ====================================================================================================
 
-        private readonly IMensajes mensajes;
+        private static ConvenioService instance;
+
+        private ConvenioService() { }
+
+        public static ConvenioService GetInstance() {
+            if (instance == null) instance = new ConvenioService();
+            return instance;
+        }
+
 
         #endregion
         // ====================================================================================================
 
 
         // ====================================================================================================
-        #region CONSTRUCTOR
+        #region MÉTODOS PÚBLICOS
         // ====================================================================================================
 
-        public InformesViewModel(IMensajes mensajes) {
-            this.mensajes = mensajes;
-        }
+        //public bool ExisteArticulo(int numero) => Articulos.Any(a => a.Numero == numero);
+
+        //public ArticuloConvenio GetArticulo(int numero) => Articulos.FirstOrDefault(a => a.Numero == numero);
+
+
+        //public void LoadConvenio(string ruta) {
+        //    if (File.Exists(ruta)) {
+        //        string datos = File.ReadAllText(ruta, System.Text.Encoding.UTF8);
+        //        JsonConvert.PopulateObject(datos, Articulos);
+        //    }
+        //}
+
+
+        //public void SaveConvenio(string ruta) {
+        //    string datos = JsonConvert.SerializeObject(Articulos, Formatting.Indented);
+        //    File.WriteAllText(ruta, datos, System.Text.Encoding.UTF8);
+        //}
+
 
         #endregion
         // ====================================================================================================
@@ -41,11 +63,6 @@ namespace Orion.ViewModels {
         // ====================================================================================================
 
 
-        private PageViewModelBase currentPageViewModel;
-        public PageViewModelBase CurrentPageViewModel {
-            get => currentPageViewModel;
-            set => SetValue(ref currentPageViewModel, value);
-        }
 
 
         #endregion
@@ -53,41 +70,15 @@ namespace Orion.ViewModels {
 
 
         // ====================================================================================================
-        #region COMANDOS
+        #region CLASE ARTICULO CONVENIO
         // ====================================================================================================
 
+        public class ArticuloConvenio {
 
-        #region COMANDO 
-        // Comando
-        private ICommand cmdCambiarViewModel;
-        public ICommand CmdCambiarViewModel {
-            get {
-                if (cmdCambiarViewModel == null) cmdCambiarViewModel = new RelayCommand(p => CambiarViewModel(p));
-                return cmdCambiarViewModel;
-            }
         }
-        // Ejecución del comando
-        private void CambiarViewModel(object parametro) {
-            if (parametro is string s) {
-                switch (s) {
-                    case "CompararGrupos":
-                        CurrentPageViewModel = CompararGraficosPageVM.GetInstance();
-                        break;
-                    case "ResumenAnual":
-                        CurrentPageViewModel = ResumenAnualPageVM.GetInstance();
-                        break;
-                    default:
-                        CurrentPageViewModel = null;
-                        break;
-                }
-            }
-        }
-        #endregion
-
 
         #endregion
         // ====================================================================================================
-
 
     }
 }

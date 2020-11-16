@@ -72,6 +72,10 @@
             <views:CompararGraficosPage />
         </DataTemplate>
 
+        <DataTemplate DataType="{x:Type viewmodels:ResumenAnualPageVM}">
+            <views:ResumenAnualPage />
+        </DataTemplate>
+
         <DataTemplate DataType="{x:Type viewmodels:ConductoresPageViewModel}">
             <views:ConductoresPage />
         </DataTemplate>
@@ -107,7 +111,6 @@
                 Style="{StaticResource EstiloBotonGrupoInformes}" />
             <!--  CONTENIDO GRÁFICOS  -->
             <Grid
-                x:Name="gridGraficos"
                 Margin="5,5,6,5"
                 Visibility="{Binding ElementName=BtGrupoGraficos, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
                 <Grid.RowDefinitions>
@@ -115,7 +118,7 @@
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Border
-                    Grid.RowSpan="{Binding ElementName=gridGraficos, Path=RowDefinitions.Count}"
+                    Grid.RowSpan="{Binding RowDefinitions.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
                     Margin="0,-10,0,0"
                     BorderBrush="{StaticResource AzulOscuro}"
                     BorderThickness="1,0,1,1"
@@ -150,20 +153,17 @@
             <Grid
                 Margin="5,5,6,5"
                 Visibility="{Binding ElementName=BtGrupoConductores, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <Border
+                    Grid.RowSpan="{Binding RowDefinitions.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
                     Margin="0,-10,0,0"
                     BorderBrush="{StaticResource AzulOscuro}"
                     BorderThickness="1,0,1,1"
                     CornerRadius="0,0,0,0" />
 
-                <!--  PANEL  -->
-                <StackPanel
-                    Margin="5"
-                    Orientation="Vertical">
-
-                    <TextBlock Text="PRUEBA" />
-
-                </StackPanel>
+                <TextBlock Text="PRUEBA" />
             </Grid>
 
 
@@ -176,20 +176,25 @@
             <Grid
                 Margin="5,5,6,5"
                 Visibility="{Binding ElementName=BtGrupoCalendarios, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <Border
+                    Grid.RowSpan="{Binding RowDefinitions.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
                     Margin="0,-10,0,0"
                     BorderBrush="{StaticResource AzulOscuro}"
                     BorderThickness="1,0,1,1"
                     CornerRadius="0,0,0,0" />
 
-                <!--  PANEL  -->
-                <StackPanel
-                    Margin="5"
-                    Orientation="Vertical">
+                <!--  RESUMEN ANUAL  -->
+                <Button
+                    Grid.Row="0"
+                    Command="{Binding CmdCambiarViewModel}"
+                    CommandParameter="ResumenAnual"
+                    Content="Resumen Anual"
+                    Style="{StaticResource EstiloBotonPanel}" />
 
-                    <TextBlock Text="PRUEBA" />
 
-                </StackPanel>
             </Grid>
 
 
@@ -202,20 +207,17 @@
             <Grid
                 Margin="5,5,6,5"
                 Visibility="{Binding ElementName=BtGrupoLineas, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <Border
+                    Grid.RowSpan="{Binding RowDefinitions.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
                     Margin="0,-10,0,0"
                     BorderBrush="{StaticResource AzulOscuro}"
                     BorderThickness="1,0,1,1"
                     CornerRadius="0,0,0,0" />
 
-                <!--  PANEL  -->
-                <StackPanel
-                    Margin="5"
-                    Orientation="Vertical">
-
-                    <TextBlock Text="PRUEBA" />
-
-                </StackPanel>
+                <TextBlock Text="PRUEBA" />
             </Grid>
 
 
@@ -228,20 +230,19 @@
             <Grid
                 Margin="5,5,6,5"
                 Visibility="{Binding ElementName=BtGrupoOtros, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
                 <Border
+                    Grid.RowSpan="{Binding RowDefinitions.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
                     Margin="0,-10,0,0"
                     BorderBrush="{StaticResource AzulOscuro}"
                     BorderThickness="1,0,1,1"
                     CornerRadius="0,0,0,0" />
 
                 <!--  PANEL  -->
-                <StackPanel
-                    Margin="5"
-                    Orientation="Vertical">
-
-                    <TextBlock Text="PRUEBA" />
-
-                </StackPanel>
+                <TextBlock Text="PRUEBA" />
             </Grid>
 
 

@@ -264,7 +264,6 @@ namespace Orion.PdfExcel {
         #region MÉTODOS PÚBLICOS
         // ====================================================================================================
 
-
         /// <summary>
         /// Devuelve el <see cref="Style"/> que se debe aplicar a una celda usando las propiedades 
         /// del objeto <see cref="PdfCellInfo"/>.
