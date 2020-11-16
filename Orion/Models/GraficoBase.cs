@@ -538,7 +538,7 @@ namespace Orion.Models {
             _idgrupo = lector.ToInt32("IdGrupo");
             validez = lector.ToDateTime("Validez");
             _nocalcular = lector.ToBool("NoCalcular");
-            //categoria = lector.ToString("Categoria");
+            categoria = lector.ToString("Categoria");
             _numero = lector.ToInt32("Numero");
             _diasemana = lector.ToString("DiaSemana");
             _turno = lector.ToInt32("Turno");
@@ -548,7 +548,7 @@ namespace Orion.Models {
             _finalpartido = lector.ToTimeSpanNulable("FinalPartido");
             _valoracion = lector.ToTimeSpan("Valoracion");
             _trabajadas = lector.ToTimeSpan("Trabajadas");
-            //tiempoVacio = lector.ToTimeSpan("TiempoVacio");
+            tiempoVacio = lector.ToTimeSpan("TiempoVacio");
             _acumuladas = lector.ToTimeSpan("Acumuladas");
             _nocturnas = lector.ToTimeSpan("Nocturnas");
             _desayuno = lector.ToDecimal("Desayuno");
@@ -569,7 +569,7 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("IdGrupo", IdGrupo));
                 lista.Add(new SQLiteParameter("Validez", Validez.ToString("yyyy-MM-dd")));
                 lista.Add(new SQLiteParameter("NoCalcular", NoCalcular));
-                //lista.Add(new SQLiteParameter("Categoria", Categoria));
+                lista.Add(new SQLiteParameter("Categoria", Categoria));
                 lista.Add(new SQLiteParameter("Numero", Numero));
                 lista.Add(new SQLiteParameter("DiaSemana", DiaSemana));
                 lista.Add(new SQLiteParameter("Turno", Turno));
@@ -579,7 +579,7 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("FinalPartido", FinalPartido.HasValue ? FinalPartido.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("Valoracion", Valoracion.Ticks));
                 lista.Add(new SQLiteParameter("Trabajadas", Trabajadas.Ticks));
-                //lista.Add(new SQLiteParameter("TiempoVacio", TiempoVacio.Ticks));
+                lista.Add(new SQLiteParameter("TiempoVacio", TiempoVacio.Ticks));
                 lista.Add(new SQLiteParameter("Acumuladas", Acumuladas.Ticks));
                 lista.Add(new SQLiteParameter("Nocturnas", Nocturnas.Ticks));
                 lista.Add(new SQLiteParameter("Desayuno", Desayuno.ToString("0.0000").Replace(",", ".")));

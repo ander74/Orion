@@ -61,8 +61,8 @@ namespace Orion.Servicios {
 
         public const string CrearTablaConductores = "CREATE TABLE IF NOT EXISTS Conductores (" +
             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            //"Activo INTEGER DEFAULT 1, " +
-            //"Categoria TEXT DEFAULT 'C', " +
+            "Activo INTEGER DEFAULT 1, " +
+            "Categoria TEXT DEFAULT 'C', " +
             "Matricula INTEGER DEFAULT 0, " +
             "Nombre TEXT DEFAULT '', " +
             "Apellidos TEXT DEFAULT '', " +
@@ -106,7 +106,30 @@ namespace Orion.Servicios {
             "PlusCenaAlt REAL DEFAULT NULL, " +
             "PlusLimpiezaAlt INTEGER DEFAULT NULL, " +
             "PlusPaqueteriaAlt INTEGER DEFAULT NULL, " +
-            "Notas TEXT DEFAULT ''" +
+            "Notas TEXT DEFAULT '', " +
+            //NUEVAS
+            "CategoriaGrafico TEXT DEFAULT 'C', " +
+            "Turno INTEGER DEFAULT 0, " +
+            "Inicio INTEGER DEFAULT NULL, " +
+            "Final INTEGER DEFAULT NULL, " +
+            "InicioPartido INTEGER DEFAULT NULL, " +
+            "FinalPartido INTEGER DEFAULT NULL, " +
+            "TrabajadasPartido INTEGER DEFAULT 0, " +
+            "TiempoPartido INTEGER DEFAULT 0, " +
+            "Valoracion INTEGER DEFAULT 0, " +
+            "Trabajadas INTEGER DEFAULT 0, " +
+            "TrabajadasConvenio INTEGER DEFAULT 0, " +
+            "TrabajadasReales INTEGER DEFAULT 0, " +
+            "TiempoVacio INTEGER DEFAULT 0, " +
+            "Acumuladas INTEGER DEFAULT 0, " +
+            "Nocturnas INTEGER DEFAULT 0, " +
+            "Desayuno REAL DEFAULT 0, " +
+            "Comida REAL DEFAULT 0, " +
+            "Cena REAL DEFAULT 0, " +
+            "PlusCena REAL DEFAULT 0, " +
+            "PlusLimpieza INTEGER DEFAULT 0, " +
+            "PlusPaqueteria INTEGER DEFAULT 0 " +
+
             ");";
 
 
@@ -122,17 +145,17 @@ namespace Orion.Servicios {
             "IdGrupo INTEGER DEFAULT 0, " +
             "Validez TEXT DEFAULT '', " +
             "NoCalcular INTEGER DEFAULT 0, " +
-            //"Categoria TEXT DEFAULT 'C', " +
+            "Categoria TEXT DEFAULT 'C', " +
             "Numero INTEGER DEFAULT 0, " +
             "DiaSemana TEXT DEFAULT '', " +
             "Turno INTEGER DEFAULT 0, " +
             "Inicio INTEGER DEFAULT NULL, " +
             "Final INTEGER DEFAULT NULL, " +
-            "InicioPartido DEFAULT NULL, " +
-            "FinalPartido DEFAULT NULL, " +
+            "InicioPartido INTEGER DEFAULT NULL, " +
+            "FinalPartido INTEGER DEFAULT NULL, " +
             "Valoracion INTEGER DEFAULT 0, " +
             "Trabajadas INTEGER DEFAULT 0, " +
-            //"TiempoVacio INTEGER DEFAULT 0, " +
+            "TiempoVacio INTEGER DEFAULT 0, " +
             "Acumuladas INTEGER DEFAULT 0, " +
             "Nocturnas INTEGER DEFAULT 0, " +
             "Desayuno REAL DEFAULT 0, " +

@@ -314,6 +314,173 @@ namespace Orion.Models {
             }
         }
 
+
+        // PROPIEDADES AÑADIDAS POSTERIORMENTE
+
+        private string categoriaGrafico = "C";
+        public string CategoriaGrafico {
+            get => categoriaGrafico;
+            set => SetValue(ref categoriaGrafico, value);
+        }
+
+
+        private int? turno;
+        public int? Turno {
+            get => turno;
+            set => SetValue(ref turno, value);
+        }
+
+
+        private TimeSpan? inicio;
+        public TimeSpan? Inicio {
+            get => inicio;
+            set => SetValue(ref inicio, value);
+        }
+
+
+        private TimeSpan? final;
+        public TimeSpan? Final {
+            get => final;
+            set => SetValue(ref final, value);
+        }
+
+
+        private TimeSpan? inicioPartido;
+        public TimeSpan? InicioPartido {
+            get => inicioPartido;
+            set => SetValue(ref inicioPartido, value);
+        }
+
+
+        private TimeSpan? finalPartido;
+        public TimeSpan? FinalPartido {
+            get => finalPartido;
+            set => SetValue(ref finalPartido, value);
+        }
+
+
+        private TimeSpan trabajadasPartido;
+        public TimeSpan TrabajadasPartido {
+            get => trabajadasPartido;
+            set {
+                if (trabajadasPartido != value) {
+                    trabajadasPartido = value;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
+        private TimeSpan tiempopartido;
+        public TimeSpan TiempoPartido {
+            get { return tiempopartido; }
+            set {
+                if (tiempopartido != value) {
+                    tiempopartido = value;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
+        private TimeSpan valoracion;
+        public TimeSpan Valoracion {
+            get { return valoracion; }
+            set {
+                if (!value.Equals(valoracion)) {
+                    valoracion = value;
+                    Modificado = true;
+                    PropiedadCambiada();
+                }
+            }
+        }
+
+
+        private TimeSpan trabajadas;
+        public TimeSpan Trabajadas {
+            get => trabajadas;
+            set => SetValue(ref trabajadas, value);
+        }
+
+
+        private TimeSpan trabajadasConvenio;
+        public TimeSpan TrabajadasConvenio {
+            get => trabajadasConvenio;
+            set => SetValue(ref trabajadasConvenio, value);
+        }
+
+
+        private TimeSpan trabajadasReales;
+        public TimeSpan TrabajadasReales {
+            get => trabajadasReales;
+            set => SetValue(ref trabajadasReales, value);
+        }
+
+
+        private TimeSpan tiempoVacio;
+        public TimeSpan TiempoVacio {
+            get => tiempoVacio;
+            set => SetValue(ref tiempoVacio, value);
+        }
+
+
+        private TimeSpan acumuladas;
+        public TimeSpan Acumuladas {
+            get => acumuladas;
+            set => SetValue(ref acumuladas, value);
+        }
+
+
+        private TimeSpan nocturnas;
+        public TimeSpan Nocturnas {
+            get => nocturnas;
+            set => SetValue(ref nocturnas, value);
+        }
+
+
+        private decimal desayuno;
+        public decimal Desayuno {
+            get => desayuno;
+            set => SetValue(ref desayuno, value);
+        }
+
+
+        private decimal comida;
+        public decimal Comida {
+            get => comida;
+            set => SetValue(ref comida, value);
+        }
+
+
+        private decimal cena;
+        public decimal Cena {
+            get => cena;
+            set => SetValue(ref cena, value);
+        }
+
+
+        private decimal plusCena;
+        public decimal PlusCena {
+            get => plusCena;
+            set => SetValue(ref plusCena, value);
+        }
+
+
+        private bool plusLimpieza;
+        public bool PlusLimpieza {
+            get => plusLimpieza;
+            set => SetValue(ref plusLimpieza, value);
+        }
+
+
+        private bool plusPaqueteria;
+        public bool PlusPaqueteria {
+            get => plusPaqueteria;
+            set => SetValue(ref plusPaqueteria, value);
+        }
+
+
+
         #endregion
         // ====================================================================================================
 
@@ -538,6 +705,29 @@ namespace Orion.Models {
             pluscenaalt = lector.ToDecimalNulable("PlusCenaAlt");
             pluslimpiezaalt = lector.ToBoolNulable("PlusLimpiezaAlt");
             pluspaqueteriaalt = lector.ToBoolNulable("PlusPaqueteriaAlt");
+            //NUEVAS
+            categoriaGrafico = lector.ToString("CategoriaGrafico");
+            turno = lector.ToInt32("Turno");
+            inicio = lector.ToTimeSpanNulable("Inicio");
+            final = lector.ToTimeSpanNulable("Final");
+            inicioPartido = lector.ToTimeSpanNulable("InicioPartido");
+            finalPartido = lector.ToTimeSpanNulable("FinalPartido");
+            trabajadasPartido = lector.ToTimeSpan("TrabajadasPartido");
+            tiempopartido = lector.ToTimeSpan("TiempoPartido");
+            valoracion = lector.ToTimeSpan("Valoracion");
+            trabajadas = lector.ToTimeSpan("Trabajadas");
+            trabajadasConvenio = lector.ToTimeSpan("TrabajadasConvenio");
+            trabajadasReales = lector.ToTimeSpan("TrabajadasReales");
+            tiempoVacio = lector.ToTimeSpan("TiempoVacio");
+            acumuladas = lector.ToTimeSpan("Acumuladas");
+            nocturnas = lector.ToTimeSpan("Nocturnas");
+            desayuno = lector.ToDecimal("Desayuno");
+            comida = lector.ToDecimal("Comida");
+            cena = lector.ToDecimal("Cena");
+            plusCena = lector.ToDecimal("PlusCena");
+            plusLimpieza = lector.ToBool("PlusLimpieza");
+            plusPaqueteria = lector.ToBool("PlusPaqueteria");
+
             Nuevo = false;
             Modificado = false;
         }
@@ -571,6 +761,29 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("PlusCenaAlt", PlusCenaAlt.HasValue ? PlusCenaAlt.Value.ToString("0.0000").Replace(",", ".") : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("PlusLimpiezaAlt", PlusLimpiezaAlt.HasValue ? PlusLimpiezaAlt.Value : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("PlusPaqueteriaAlt", PlusPaqueteriaAlt.HasValue ? PlusPaqueteriaAlt.Value : (object)DBNull.Value));
+                //NUEVAS
+                lista.Add(new SQLiteParameter("CategoriaGrafico", CategoriaGrafico));
+                lista.Add(new SQLiteParameter("Turno", Turno));
+                lista.Add(new SQLiteParameter("Inicio", Inicio.HasValue ? Inicio.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("Final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("InicioPartido", InicioPartido.HasValue ? InicioPartido.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("FinalPartido", FinalPartido.HasValue ? FinalPartido.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("TrabajadasPartido", TrabajadasPartido.Ticks));
+                lista.Add(new SQLiteParameter("TiempoPartido", TiempoPartido.Ticks));
+                lista.Add(new SQLiteParameter("Valoracion", Valoracion.Ticks));
+                lista.Add(new SQLiteParameter("Trabajadas", Trabajadas.Ticks));
+                lista.Add(new SQLiteParameter("TrabajadasConvenio", TrabajadasConvenio.Ticks));
+                lista.Add(new SQLiteParameter("TrabajadasReales", TrabajadasReales.Ticks));
+                lista.Add(new SQLiteParameter("TiempoVacio", TiempoVacio.Ticks));
+                lista.Add(new SQLiteParameter("Acumuladas", Acumuladas.Ticks));
+                lista.Add(new SQLiteParameter("Nocturnas", Nocturnas.Ticks));
+                lista.Add(new SQLiteParameter("Desayuno", Desayuno.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("Comida", Comida.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("Cena", Cena.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("PlusCena", PlusCena.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza));
+                lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria));
+
                 //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
