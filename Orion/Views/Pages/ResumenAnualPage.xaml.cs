@@ -20,12 +20,13 @@ namespace Orion.Views.Pages {
         #region CAMPOS PRIVADOS
         // ====================================================================================================
 
-        List<CheckBox> ListaCbHoras = new List<CheckBox>();
-        List<CheckBox> ListaCbDias = new List<CheckBox>();
+        List<CheckBox> ListaCbHoras;
+        List<CheckBox> ListaCbDias;
+        List<CheckBox> ListaCbFindes;
+        List<CheckBox> ListaCbPluses;
 
         #endregion
         // ====================================================================================================
-
 
 
         // ====================================================================================================
@@ -35,13 +36,51 @@ namespace Orion.Views.Pages {
         public ResumenAnualPage() {
             InitializeComponent();
             // Lista Horas
-            ListaCbHoras.Add(cbHorasTrabajadas);
-            ListaCbHoras.Add(cbHorasAcumuladas);
-            ListaCbHoras.Add(cbHorasNocturnas);
+            ListaCbHoras = new List<CheckBox> {
+                cbHorasTrabajadas,
+                cbHorasAcumuladas,
+                cbHorasNocturnas,
+                cbHorasCobradas,
+                cbOtrasHoras,
+                cbExcesosJornada,
+            };
             // Lista Días
-            ListaCbDias.Add(cbDiasActivos);
-            ListaCbDias.Add(cbDiasInactivos);
-            ListaCbDias.Add(cbDiasTrabajados);
+            ListaCbDias = new List<CheckBox> {
+                cbDiasActivos,
+                cbDiasInactivos,
+                cbDiasTrabajados,
+                cbDiasJD,
+                cbDiasFN,
+                cbDiasDS,
+                cbDiasTrabajadosJD,
+                cbDiasOV,
+                cbDiasDC,
+                cbDiasDND,
+                cbDiasE,
+                cbDiasPER,
+                cbDiasF6,
+                cbDiasComite,
+                cbDiasComiteJD,
+                cbDiasComiteDC,
+            };
+            // Lista Findes
+            ListaCbFindes = new List<CheckBox> {
+                cbSabadosTrabajados,
+                cbSabadosDescansados,
+                cbDomingosTrabajados,
+                cbDomingosDescansados,
+                cbFestivosTrabajados,
+                cbFestivosDescansados,
+                cbFindesCompletos,
+            };
+            // Lista Pluses
+            ListaCbPluses = new List<CheckBox> {
+                cbPlusesSabado,
+                cbPlusesFestivo,
+                cbPlusesLimpieza,
+                cbPlusesNocturnidad,
+                cbVariablesVacaciones,
+            };
         }
 
         #endregion
@@ -59,6 +98,12 @@ namespace Orion.Views.Pages {
             // Días
             cbDias.IsChecked = false;
             changeDias();
+            // Findes
+            cbFindes.IsChecked = false;
+            changeFindes();
+            // Pluses
+            cbPluses.IsChecked = false;
+            changePluses();
         }
 
 
@@ -67,18 +112,25 @@ namespace Orion.Views.Pages {
 
 
         // ====================================================================================================
-        #region PRESETS
+        #region PRESETS Y VACIAR
         // ====================================================================================================
 
-        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+        private void ComboPresets_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             var item = ((ComboBox)sender).SelectedItem as ComboBoxItem;
             if (item == null) return;
             switch (item.Tag) {
-                case "Horas":
+                case "VariablesVacaciones":
                     DesSelectAll();
-                    cbHorasTrabajadas.IsChecked = true;
-                    cbHorasAcumuladas.IsChecked = true;
-                    checkHorasState();
+                    cbSabadosTrabajados.IsChecked = true;
+                    cbPlusesSabado.IsChecked = true;
+                    cbDomingosTrabajados.IsChecked = true;
+                    cbFestivosTrabajados.IsChecked = true;
+                    cbPlusesFestivo.IsChecked = true;
+                    cbPlusesLimpieza.IsChecked = true;
+                    cbPlusesNocturnidad.IsChecked = true;
+                    cbVariablesVacaciones.IsChecked = true;
+                    checkFindesState();
+                    checkPlusesState();
                     break;
                 case "Dias":
                     DesSelectAll();
@@ -90,9 +142,16 @@ namespace Orion.Views.Pages {
             }
         }
 
+        private void BtVaciar_Click(object sender, System.Windows.RoutedEventArgs e) {
+            DesSelectAll();
+            ComboPresets.SelectedIndex = -1;
+        }
+
+
+
+
         #endregion
         // ====================================================================================================
-
 
 
         // ====================================================================================================
@@ -120,12 +179,12 @@ namespace Orion.Views.Pages {
 
         private void cbHoras_Click(object sender, System.Windows.RoutedEventArgs e) {
             changeHoras();
-            if (cbHoras.IsChecked != null) ComboPresets.SelectedIndex = 0;
+            if (cbHoras.IsChecked != null) ComboPresets.SelectedIndex = -1;
         }
 
         private void UnaHora_Click(object sender, System.Windows.RoutedEventArgs e) {
             checkHorasState();
-            ComboPresets.SelectedIndex = 0;
+            ComboPresets.SelectedIndex = -1;
         }
 
 
@@ -158,18 +217,114 @@ namespace Orion.Views.Pages {
 
         private void cbDias_Click(object sender, System.Windows.RoutedEventArgs e) {
             changeDias();
-            if (cbDias.IsChecked != null) ComboPresets.SelectedIndex = 0;
+            if (cbDias.IsChecked != null) ComboPresets.SelectedIndex = -1;
         }
 
         private void cbUnDia_Click(object sender, System.Windows.RoutedEventArgs e) {
             checkDiasState();
-            ComboPresets.SelectedIndex = 0;
+            ComboPresets.SelectedIndex = -1;
         }
 
 
 
         #endregion
         // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region FINES DE SEMANA
+        // ====================================================================================================
+
+        private void checkFindesState() {
+            if (!ListaCbFindes.Any(c => c.IsChecked == true)) {
+                cbFindes.IsChecked = false;
+            } else if (!ListaCbFindes.Any(c => c.IsChecked == false)) {
+                cbFindes.IsChecked = true;
+            } else {
+                cbFindes.IsChecked = null;
+            }
+        }
+
+        private void changeFindes() {
+            if (cbFindes.IsChecked == true) {
+                foreach (var cb in ListaCbFindes) cb.IsChecked = true;
+            } else if (cbFindes.IsChecked == false) {
+                foreach (var cb in ListaCbFindes) cb.IsChecked = false;
+            }
+        }
+
+
+        private void cbFindes_Click(object sender, System.Windows.RoutedEventArgs e) {
+            changeFindes();
+            if (cbFindes.IsChecked != null) ComboPresets.SelectedIndex = -1;
+        }
+
+        private void UnFinde_Click(object sender, System.Windows.RoutedEventArgs e) {
+            checkFindesState();
+            ComboPresets.SelectedIndex = -1;
+        }
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region PLUSES
+        // ====================================================================================================
+
+        private void checkPlusesState() {
+            if (!ListaCbPluses.Any(c => c.IsChecked == true)) {
+                cbPluses.IsChecked = false;
+            } else if (!ListaCbPluses.Any(c => c.IsChecked == false)) {
+                cbPluses.IsChecked = true;
+            } else {
+                cbPluses.IsChecked = null;
+            }
+        }
+
+        private void changePluses() {
+            if (cbPluses.IsChecked == true) {
+                foreach (var cb in ListaCbPluses) cb.IsChecked = true;
+            } else if (cbPluses.IsChecked == false) {
+                foreach (var cb in ListaCbPluses) cb.IsChecked = false;
+            }
+        }
+
+        private void cbPluses_Click(object sender, System.Windows.RoutedEventArgs e) {
+            changePluses();
+            if (cbPluses.IsChecked != null) ComboPresets.SelectedIndex = -1;
+        }
+
+        private void cbUnPlus_Click(object sender, System.Windows.RoutedEventArgs e) {
+            checkPlusesState();
+            ComboPresets.SelectedIndex = -1;
+        }
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region DESTINO DEL RESUMEN
+        // ====================================================================================================
+
+        private void ComboDestino_SelectionChanged(object sender, SelectionChangedEventArgs e) {
+            if (sender is ComboBox combo) {
+                if (combo.SelectedIndex == 3) {
+                    if (cbIncluirTaquilla != null) cbIncluirTaquilla.IsEnabled = false;
+                    if (ComboTrabajadores != null) ComboTrabajadores.IsEnabled = true;
+                } else {
+                    if (cbIncluirTaquilla != null) cbIncluirTaquilla.IsEnabled = true;
+                    if (ComboTrabajadores != null) ComboTrabajadores.IsEnabled = false;
+                }
+            }
+        }
+
+
+        #endregion
+        // ====================================================================================================
+
 
 
     }

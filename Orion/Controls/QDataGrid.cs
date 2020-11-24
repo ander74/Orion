@@ -16,12 +16,12 @@ namespace Orion.Controls {
     using System.Windows.Input;
     using System.Windows.Media;
     using System.Windows.Media.Imaging;
-    using Config;
+    using Orion.Config;
     using Orion.ViewModels;
 
     public class QDataGrid : DataGrid {
 
-
+        //TODO: Documentar esta clase.
 
         // ====================================================================================================
         #region CONSTRUCTOR
@@ -46,6 +46,7 @@ namespace Orion.Controls {
             this.VerticalGridLinesBrush = Brushes.Lavender;
             this.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
 
+
             // Asignamos el estilo.
             this.Style = (Style)App.Current.Resources["QDatagridStyle"];
 
@@ -66,6 +67,9 @@ namespace Orion.Controls {
                 Icon = new Image { Source = new BitmapImage(new Uri($"/{assemblyName};component/Views/Imagenes/Pegar.png", UriKind.Relative)) },
                 Command = CmdPegar
             });
+
+            // Establecemos los colores de la columna.
+
         }
 
         #endregion
@@ -315,32 +319,19 @@ namespace Orion.Controls {
         // ====================================================================================================
 
         protected override void OnSelectedCellsChanged(SelectedCellsChangedEventArgs e) {
-            if (e.AddedCells != null && e.AddedCells.Count > 0) {
-                var cell = e.AddedCells[0];
-                if (!cell.IsValid) return;
-                ColumnaActual = cell.Column.DisplayIndex;
-                FilaActual = Items.IndexOf(cell.Item);
-                if (SelectedCells.Count == 1) ElementoSeleccionado = cell.Item; else ElementoSeleccionado = null;
+            if (CurrentCell.IsValid) {
+                ColumnaActual = CurrentCell.Column.DisplayIndex;
+                FilaActual = Items.IndexOf(CurrentCell.Item);
+                ElementoSeleccionado = CurrentCell.Item.GetType().Name == "NamedObject" ? null : CurrentCell.Item;
             }
             base.OnSelectedCellsChanged(e);
+
         }
 
 
         protected override void OnPreviewKeyDown(KeyEventArgs e) {
 
             switch (e.Key) {
-                //case Key.C:
-                //    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
-                //        if (PuedeCopiar()) Copiar();
-                //        e.Handled = true;
-                //    }
-                //    break;
-                //case Key.V:
-                //    if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) {
-                //        if (PuedePegar()) Pegar();
-                //        e.Handled = true;
-                //    }
-                //    break;
                 case Key.Delete:
                     if (SelectionUnit == DataGridSelectionUnit.FullRow) {
                         CurrentColumn?.OnPastingCellClipboardContent(Items[Items.IndexOf(CurrentItem)], string.Empty);
@@ -369,6 +360,7 @@ namespace Orion.Controls {
 
         #endregion
         // ====================================================================================================
+
 
     }
 }

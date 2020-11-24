@@ -28,9 +28,9 @@ namespace Orion.Servicios {
 
         private static ExcelService instance;
 
-        private static string[] meses = { "Desconocido", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
+        public static string[] meses = { "Desconocido", "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" };
 
-        private static string[] mesesAbr = { "DES", "ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC" };
+        public static string[] mesesAbr = { "DES", "ENE", "FEB", "MAR", "ABR", "MAY", "JUN", "JUL", "AGO", "SEP", "OCT", "NOV", "DIC" };
 
         #endregion
         // ====================================================================================================
@@ -98,6 +98,7 @@ namespace Orion.Servicios {
             return lista;
         }
 
+
         private string parseDiaSemana(string tipoDia) {
             switch (tipoDia) {
                 case "L":
@@ -117,17 +118,22 @@ namespace Orion.Servicios {
         }
 
 
+        /// <summary>
+        /// Extrae la lista de calendarios que hay en el excel, de acuerdo a la plantilla 
+        /// que se genera con el método <see cref="GenerarPlantillaCalendariosExcel"/>
+        /// </summary>
         private List<Calendario> getCalendarios(string excelFile, int año, int mes) {
 
             var fileInfo = new FileInfo(excelFile);
             int diasMes = DateTime.DaysInMonth(año, mes);
             List<Calendario> lista = new List<Calendario>();
+            if (!File.Exists(excelFile)) return lista;
             ConvertidorNumeroGraficoCalendario converter = new ConvertidorNumeroGraficoCalendario();
 
             using (var excel = new ExcelPackage(fileInfo)) {
-                if (excel.Workbook.Worksheets.Any(h => h.Name == meses[mes])) {
-                    var hoja = excel.Workbook.Worksheets[meses[mes]];
-                    for (int fila = 2; fila <= hoja.Dimension.End.Row; fila++) {
+                if (excel.Workbook.Worksheets.Any(h => h.Name == mesesAbr[mes])) {
+                    var hoja = excel.Workbook.Worksheets[mesesAbr[mes]];
+                    for (int fila = 3; fila <= hoja.Dimension.End.Row; fila++) {
                         Calendario calendario = new Calendario();
                         calendario.Fecha = new DateTime(año, mes, 1);
                         calendario.MatriculaConductor = hoja.Cells[fila, 1].GetValue<int>();
@@ -147,13 +153,16 @@ namespace Orion.Servicios {
         }
 
 
-        private void rellenarHojaComparacionCalendarios(ref ExcelWorksheet hoja, IEnumerable<Calendario> listaCalendarios, IEnumerable<Calendario> listaExcel, int año, int mes) {
+        /// <summary>
+        /// Rellena la hoja excel que se pasa con la comparación de las dos listas de calendarios.
+        /// </summary>
+        private void rellenarHojaComparacionCalendarios(ref ExcelWorksheet hoja, IEnumerable<Calendario> listaCalendarios, IEnumerable<Calendario> listaExcel, int año, int mes, string titulo, string tipoCalendario) {
 
             int diasMes = DateTime.DaysInMonth(año, mes);
             ConvertidorNumeroGraficoCalendario converter = new ConvertidorNumeroGraficoCalendario();
 
             // Título y Leyenda
-            hoja.Cells["A1"].Value = $"Comparación Calendarios ({meses[mes]} - {año})";
+            hoja.Cells["A1"].Value = titulo;
             hoja.Cells["A1"].Style.Font.Size = 20;
             hoja.Cells["L1:U1"].Merge = true;
             hoja.Cells["L1"].Style.Font.Size = 10;
@@ -162,7 +171,7 @@ namespace Orion.Servicios {
             string texto1 = "Fila superior";
             string texto2 = " = Calendarios en Orión.\r\n";
             string texto3 = "Fila inferior";
-            string texto4 = " = Calendarios en el excel.";
+            string texto4 = $" = Calendarios en {tipoCalendario}.";
             hoja.Cells["L1"].IsRichText = true;
             hoja.Cells["L1"].RichText.Add(texto1).Bold = true;
             hoja.Cells["L1"].RichText.Add(texto2).Bold = false;
@@ -319,9 +328,6 @@ namespace Orion.Servicios {
         /// <summary>
         /// Genera un excel con la comparación de los gráficos de dos archivos.
         /// </summary>
-        /// <param name="destino"></param>
-        /// <param name="excelGraficosSimples"></param>
-        /// <param name="excelGraficosDietas"></param>
         public void GenerarComparacionGraficos(string destino, IEnumerable<GraficoBase> listaGraficos, string excelGraficosDietas) {
             // Cargamos los gráficos del excel
             var graficosDietas = getGraficosDietas(excelGraficosDietas);
@@ -464,6 +470,7 @@ namespace Orion.Servicios {
         }
 
 
+        [Obsolete("Ya no se utiliza este método.")]
         public void GenerarComparacionCalendarios(string destino, IEnumerable<Calendario> listaCalendarios, string excelCalendarios, int año, int mes) {
             var listaExcel = getCalendarios(excelCalendarios, año, mes);
 
@@ -471,13 +478,13 @@ namespace Orion.Servicios {
                 // Creamos la hoja del mes
                 var hoja = excelApp.Workbook.Worksheets.Add($"{meses[mes]}");
                 // Rellenamos la hoja
-                rellenarHojaComparacionCalendarios(ref hoja, listaCalendarios, listaExcel, año, mes);
+                rellenarHojaComparacionCalendarios(ref hoja, listaCalendarios, listaExcel, año, mes, "", "");
                 // Guardamos el libro y cerramos la aplicación.
                 excelApp.SaveAs(new FileInfo(destino));
             }
         }
 
-
+        [Obsolete("Ya no se utiliza este método.")]
         public void GenerarComparacionCalendariosAnual(string destino, string excelCalendarios, int año) {
 
             using (var excelApp = new ExcelPackage()) {
@@ -487,7 +494,7 @@ namespace Orion.Servicios {
                     // Creamos la hoja del mes
                     var hoja = excelApp.Workbook.Worksheets.Add($"{meses[mes]}");
                     // Rellenamos la hoja
-                    rellenarHojaComparacionCalendarios(ref hoja, listaCalendarios, listaExcel, año, mes);
+                    rellenarHojaComparacionCalendarios(ref hoja, listaCalendarios, listaExcel, año, mes, "", "");
                 }
 
                 // Guardamos el libro y cerramos la aplicación.
@@ -495,6 +502,45 @@ namespace Orion.Servicios {
             }
         }
 
+
+        /// <summary>
+        /// Compara los calendarios que se encuentra en el archivo excel con la lista de calendarios, generando un nuevo excel.
+        /// </summary>
+        public void GenerarComparacionCalendario(string rutaDestino, string rutaExcel, IEnumerable<Calendario> listaCalendarios, DateTime fecha, string titulo, string tipoCalendario) {
+
+            var listaExcel = getCalendarios(rutaExcel, fecha.Year, fecha.Month);
+
+            using (var excelApp = new ExcelPackage()) {
+                // Creamos la hoja del mes
+                var hoja = excelApp.Workbook.Worksheets.Add($"{mesesAbr[fecha.Month]}");
+                // Rellenamos la hoja
+                rellenarHojaComparacionCalendarios(ref hoja, listaCalendarios, listaExcel, fecha.Year, fecha.Month, titulo, tipoCalendario);
+                // Aplicamos el nivel de zoom
+                hoja.View.ZoomScale = 70;
+                // Guardamos el libro y cerramos la aplicación.
+                excelApp.SaveAs(new FileInfo(rutaDestino));
+            }
+        }
+
+
+        public void GenerarComparacionCalendarioAnual(string rutaDestino, string rutaExcel, DateTime fecha, string titulo, string tipoCalendario) {
+            using (var excelApp = new ExcelPackage()) {
+                for (int mes = 1; mes <= 12; mes++) {
+                    // Extraemos los calendarios del excel.
+                    var listaExcel = getCalendarios(rutaExcel, fecha.Year, mes);
+                    // Extraemos los Calendarios del repositorio
+                    var listaCalendarios = App.Global.Repository.GetCalendarios(fecha.Year, mes);
+                    // Creamos la hoja del mes
+                    var hoja = excelApp.Workbook.Worksheets.Add($"{mesesAbr[mes]}");
+                    // Rellenamos la hoja
+                    rellenarHojaComparacionCalendarios(ref hoja, listaCalendarios, listaExcel, fecha.Year, mes, titulo, tipoCalendario);
+                    // Aplicamos el nivel de zoom
+                    hoja.View.ZoomScale = 70;
+                }
+                // Guardamos el libro y cerramos la aplicación.
+                excelApp.SaveAs(new FileInfo(rutaDestino));
+            }
+        }
 
         public void GenerarEstadisticasCalendario(string destino, IEnumerable<EstadisticaPorTurnos> listaEstadisticas, string titulo) {
             // Variables que se van a utilizar.
@@ -1036,6 +1082,55 @@ namespace Orion.Servicios {
         }
 
 
+        /// <summary>
+        /// Genera un excel con 12 meses que se usará como plantilla para leer y escribir calendarios.
+        /// </summary>
+        public void GenerarPlantillaCalendariosExcel(string ruta, DateTime fecha, string titulo) {
+            using (var excelApp = new ExcelPackage()) {
+                // Una hoja por mes
+                for (int mes = 1; mes <= 12; mes++) {
+                    var hoja = excelApp.Workbook.Worksheets.Add(mesesAbr[mes]);
+                    hoja.View.ZoomScale = 70;
+                    hoja.DefaultRowHeight = 20;
+                    hoja.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    hoja.Cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    hoja.Cells.Style.Font.Size = 12;
+                    hoja.Row(1).Height = 50;
+                    hoja.Row(2).Height = 25;
+                    hoja.Column(1).Width = 12;
+                    // Título
+                    hoja.Cells[1, 1].Style.Font.Bold = true;
+                    hoja.Cells[1, 1].Style.Font.Size = 20;
+                    hoja.Cells[1, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Left;
+                    hoja.Cells[1, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    hoja.Cells[1, 1].Value = titulo;
+                    // Conducor
+                    //hoja.Cells[2, 1].Style.Font.Bold = true;
+                    hoja.Cells[2, 1].Style.Font.Size = 14;
+                    hoja.Cells[2, 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    hoja.Cells[2, 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    hoja.Cells[2, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                    hoja.Cells[2, 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
+                    hoja.Cells[2, 1].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                    hoja.Cells[2, 1].Value = "Conductor";
+                    // Días
+                    for (int dia = 1; dia <= DateTime.DaysInMonth(fecha.Year, mes); dia++) {
+                        hoja.Column(dia + 1).Width = 7;
+                        hoja.Cells[2, dia + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        hoja.Cells[2, dia + 1].Style.Fill.BackgroundColor.SetColor(Color.FromArgb(169, 208, 142));
+                        hoja.Cells[2, dia + 1].Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                        hoja.Cells[2, dia + 1].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                        //hoja.Cells[2, dia + 1].Style.Font.Bold = true;
+                        hoja.Cells[2, dia + 1].Style.Font.Size = 14;
+                        hoja.Cells[2, dia + 1].Style.Border.BorderAround(ExcelBorderStyle.Thin);
+                        hoja.Cells[2, dia + 1].Style.Numberformat.Format = "00";
+                        hoja.Cells[2, dia + 1].Value = dia;
+                    }
+                }
+                excelApp.Workbook.Worksheets[mesesAbr[fecha.Month]].Select();
+                excelApp.SaveAs(new FileInfo(ruta));
+            }
+        }
 
         #endregion
         // ====================================================================================================

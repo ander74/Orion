@@ -7,6 +7,7 @@
     x:Class="Orion.Views.Pages.ResumenAnualPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Orion.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="clr-namespace:Orion.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -21,67 +22,61 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
 
         <!--  TÍTULO  -->
         <TextBlock
-            Grid.ColumnSpan="2"
+            Grid.ColumnSpan="4"
             Margin="10"
             FontSize="24"
             FontWeight="Bold"
             Text="Resumen Anual de Calendarios" />
 
-        <!--  PRESETS DE OPCIONES  -->
-        <StackPanel
-            Grid.Row="1"
-            Grid.Column="0"
-            Margin="5,20,5,5"
+        <!--<StackPanel
+            Grid.ColumnSpan="4"
+            Margin="10"
+            HorizontalAlignment="Right"
             Orientation="Horizontal">
+            <TextBlock
+                FontSize="24"
+                FontWeight="Bold"
+                Text="{Binding CalendariosVM.MesActual}" />
 
             <TextBlock
-                VerticalAlignment="Center"
-                FontSize="16"
-                Text="Preseleccionados: " />
+                FontSize="24"
+                FontWeight="Bold"
+                Text=" - " />
 
-            <ComboBox
-                x:Name="ComboPresets"
-                Height="24"
-                MinWidth="200"
-                VerticalAlignment="Center"
-                FontSize="16"
-                SelectionChanged="ComboBox_SelectionChanged">
-                <ComboBoxItem
-                    Content="Ninguno"
-                    IsSelected="True"
-                    Tag="None" />
-                <ComboBoxItem
-                    Content="Horas"
-                    Tag="Horas" />
-                <ComboBoxItem
-                    Content="Días"
-                    Tag="Dias" />
-            </ComboBox>
-
-        </StackPanel>
+            <TextBlock
+                FontSize="24"
+                FontWeight="Bold"
+                Text="{Binding CalendariosVM.AñoActual}" />
+        </StackPanel>-->
 
         <!--  OPCIONES  -->
         <ScrollViewer
-            Grid.Row="2"
+            Grid.Row="1"
+            Grid.RowSpan="2"
             Grid.Column="0"
-            Margin="15,10,10,10">
+            Margin="15,10,10,10"
+            VerticalScrollBarVisibility="Auto">
 
             <StackPanel Orientation="Vertical">
 
-                <!--  HORAS  -->
+                <!--#region HORAS-->
+
                 <CheckBox
                     x:Name="cbHoras"
                     Margin="5"
+                    VerticalContentAlignment="Center"
                     Click="cbHoras_Click"
                     Content="Horas"
                     FontSize="14"
@@ -90,32 +85,195 @@
                 <CheckBox
                     x:Name="cbHorasTrabajadas"
                     Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
                     Click="UnaHora_Click"
-                    Content="Horas Trabajadas"
+                    Content="Horas trabajadas"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbHorasAcumuladas"
                     Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
                     Click="UnaHora_Click"
-                    Content="Horas Acumuladas"
+                    Content="Horas acumuladas"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbHorasNocturnas"
                     Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
                     Click="UnaHora_Click"
-                    Content="Horas Nocturnas"
+                    Content="Horas nocturnas"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbHorasCobradas"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnaHora_Click"
+                    Content="Horas cobradas"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbOtrasHoras"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnaHora_Click"
+                    Content="Otras horas"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbExcesosJornada"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnaHora_Click"
+                    Content="Excesos de jornada"
                     FontSize="12" />
 
                 <!--  SEPARADOR  -->
                 <TextBlock
                     Height="1"
-                    Margin="5"
-                    Background="Gainsboro" />
+                    Margin="5" />
 
-                <!--  DÍAS  -->
+                <!--#endregion-->
+
+
+                <!--#region FINES DE SEMANA-->
+
+                <CheckBox
+                    x:Name="cbFindes"
+                    Margin="5"
+                    VerticalContentAlignment="Center"
+                    Click="cbFindes_Click"
+                    Content="Fines de semana"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    IsThreeState="True" />
+                <CheckBox
+                    x:Name="cbSabadosTrabajados"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnFinde_Click"
+                    Content="Sábados trabajados"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbSabadosDescansados"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnFinde_Click"
+                    Content="Sábados descansados"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDomingosTrabajados"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnFinde_Click"
+                    Content="Domingos trabajados"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDomingosDescansados"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnFinde_Click"
+                    Content="Domingos descansados"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbFestivosTrabajados"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnFinde_Click"
+                    Content="Festivos trabajados"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbFestivosDescansados"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnFinde_Click"
+                    Content="Festivos descansados"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbFindesCompletos"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnFinde_Click"
+                    Content="Fines de semana completos"
+                    FontSize="12" />
+
+                <!--  SEPARADOR  -->
+                <TextBlock
+                    Height="1"
+                    Margin="5" />
+
+                <!--#endregion-->
+
+
+                <!--#region PLUSES-->
+                <CheckBox
+                    x:Name="cbPluses"
+                    Margin="5"
+                    VerticalContentAlignment="Center"
+                    Click="cbPluses_Click"
+                    Content="Pluses"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    IsThreeState="True" />
+                <CheckBox
+                    x:Name="cbPlusesSabado"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnPlus_Click"
+                    Content="Pluses de sábado"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbPlusesFestivo"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnPlus_Click"
+                    Content="Pluses de festivo"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbPlusesNocturnidad"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnPlus_Click"
+                    Content="Pluses de nocturnidad"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbPlusesLimpieza"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnPlus_Click"
+                    Content="Pluses de limpieza"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbVariablesVacaciones"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnPlus_Click"
+                    Content="Variables de vacaciones"
+                    FontSize="12" />
+
+                <!--  SEPARADOR  -->
+                <TextBlock
+                    Height="1"
+                    Margin="5" />
+
+                <!--#endregion-->
+
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+        <ScrollViewer
+            Grid.Row="1"
+            Grid.RowSpan="2"
+            Grid.Column="1"
+            Margin="15,10,10,10"
+            VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Orientation="Vertical">
+
+                <!--#region DÍAS-->
                 <CheckBox
                     x:Name="cbDias"
                     Margin="5"
+                    VerticalContentAlignment="Center"
                     Click="cbDias_Click"
                     Content="Días"
                     FontSize="14"
@@ -124,26 +282,273 @@
                 <CheckBox
                     x:Name="cbDiasActivos"
                     Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
-                    Content="Días Activos"
+                    Content="Días activos"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasInactivos"
                     Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
-                    Content="Días Inactivos"
+                    Content="Días inactivos"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasTrabajados"
                     Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
-                    Content="Días Trabajados"
+                    Content="Días trabajados"
                     FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasJD"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días de descanso (J-D)"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasFN"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días de descanso en fin de semana (FN)"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasDS"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días de descanso sueltos (DS)"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasTrabajadosJD"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días trabajados en J-D"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasOV"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días de vacaciones (O-V)"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasDC"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Descansos compensatorios (DC)"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasDND"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Descansos no disfrutados (DND o DF)"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasE"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días de enfermedad"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasPER"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días de permiso"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasF6"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días libre dispośición (F6)"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasComite"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días de comité"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasComiteJD"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días de comité en J-D"
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasComiteDC"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días de comité en DC"
+                    FontSize="12" />
+
+                <!--  SEPARADOR  -->
+                <TextBlock
+                    Height="1"
+                    Margin="5" />
+
+                <!--#endregion-->
 
 
             </StackPanel>
 
         </ScrollViewer>
+
+
+        <!--  PANEL DE GESTIÓN  -->
+
+        <ScrollViewer
+            Grid.Row="1"
+            Grid.Column="3"
+            MinWidth="350"
+            Margin="20"
+            VerticalAlignment="Top"
+            VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Orientation="Vertical">
+
+                <!--  PRESETS DE OPCIONES  -->
+                <TextBlock
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Text="Presets: " />
+
+                <StackPanel
+                    Margin="0,5,0,0"
+                    Orientation="Horizontal">
+                    <ComboBox
+                        x:Name="ComboPresets"
+                        Height="24"
+                        MinWidth="250"
+                        VerticalAlignment="Center"
+                        FontSize="14"
+                        SelectionChanged="ComboPresets_SelectionChanged">
+                        <ComboBoxItem
+                            Content="Variables Vacaciones"
+                            Tag="VariablesVacaciones" />
+                        <ComboBoxItem
+                            Content="Días"
+                            Tag="Dias" />
+                    </ComboBox>
+
+                    <Button
+                        Height="24"
+                        Margin="10,0,0,0"
+                        Padding="10,4"
+                        VerticalContentAlignment="Center"
+                        Click="BtVaciar_Click"
+                        Content="Vaciar" />
+                </StackPanel>
+
+                <!--  DESTINO DEL RESUMEN  -->
+                <TextBlock
+                    Margin="0,20,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Text="Destino del resumen: " />
+
+                <ComboBox
+                    x:Name="ComboDestino"
+                    Height="24"
+                    MinWidth="250"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    SelectedIndex="0"
+                    SelectionChanged="ComboDestino_SelectionChanged">
+                    <ComboBoxItem Content="Todos los trabajadores" />
+                    <ComboBoxItem Content="Trabajadores indefinidos" />
+                    <ComboBoxItem Content="Trabajadores eventuales" />
+                    <ComboBoxItem Content="Un sólo trabajador" />
+                </ComboBox>
+
+                <CheckBox
+                    x:Name="cbIncluirTaquilla"
+                    Margin="25,10,0,0"
+                    VerticalContentAlignment="Center"
+                    Content="Incluir a trabajadores de taquilla."
+                    FontSize="14" />
+
+                <!--  CONDUCTOR SELECCIONADO  -->
+                <TextBlock
+                    Margin="25,10,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    Text="Trabajador: " />
+
+                <ComboBox
+                    x:Name="ComboTrabajadores"
+                    Height="24"
+                    MinWidth="250"
+                    Margin="25,5,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    DisplayMemberPath="MatriculaApellidos"
+                    FontSize="14"
+                    IsEnabled="False"
+                    ItemsSource="{Binding ConductoresVM.ListaConductores}" />
+
+                <!--  FILTRADO DE FECHAS  -->
+                <TextBlock
+                    Margin="0,20,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Text="Filtrado de Fechas: " />
+
+                <ComboBox
+                    x:Name="ComboFiltradoFechas"
+                    Height="24"
+                    MinWidth="250"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    SelectedIndex="0">
+                    <ComboBoxItem Content="Mes actual" />
+                    <ComboBoxItem Content="Todo el año" />
+                    <ComboBoxItem Content="Todo el año, mes a mes" />
+                </ComboBox>
+
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+
+        <!--  BOTONES  -->
+        <StackPanel
+            Margin="20"
+            Grid.Row="2"
+            Grid.Column="3"
+            Orientation="Horizontal">
+            <controls:VerticalButton
+                Title="Generar PDF"
+                Height="80"
+                Command="{Binding CmdGenerarPdf}"
+                Image="/Views/Imagenes/PdfFile.png" />
+
+            <controls:VerticalButton
+                Title="Generar Excel"
+                Height="80"
+                Command="{Binding CmdGenerarExcel}"
+                Image="/Views/Imagenes/ExcelFile.png" />
+
+        </StackPanel>
+
 
     </Grid>
 

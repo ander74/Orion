@@ -43,6 +43,7 @@ namespace Orion.Models {
                 this.PlusLimpieza = pluses.PlusLimpieza;
                 this.PlusPaqueteria = pluses.PlusPaqueteria;
                 this.PlusNavidad = pluses.PlusNavidad;
+                this.QuebrantoMoneda = pluses.QuebrantoMoneda;
             }
             Nuevo = true;
         }
@@ -165,6 +166,14 @@ namespace Orion.Models {
 
 
 
+        private decimal quebrantoMoneda;
+        public decimal QuebrantoMoneda {
+            get => quebrantoMoneda;
+            set => SetValue(ref quebrantoMoneda, value);
+        }
+
+
+
 
 
 
@@ -189,6 +198,7 @@ namespace Orion.Models {
             _pluslimpieza = lector.ToDecimal("PlusLimpieza");
             _pluspaqueteria = lector.ToDecimal("PlusPaqueteria");
             _plusnavidad = lector.ToDecimal("PlusNavidad");
+            quebrantoMoneda = lector.ToDecimal("QuebrantoMoneda");
             Nuevo = false;
             Modificado = false;
         }
@@ -207,6 +217,7 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("PlusNavidad", PlusNavidad.ToString("0.0000").Replace(",", ".")));
+                lista.Add(new SQLiteParameter("QuebrantoMoneda", QuebrantoMoneda.ToString("0.0000").Replace(",", ".")));
                 return lista;
             }
         }

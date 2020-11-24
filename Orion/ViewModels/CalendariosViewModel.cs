@@ -171,6 +171,45 @@ namespace Orion.ViewModels {
 
 
         // ====================================================================================================
+        #region MÉTODOS PRIVADOS
+        // ====================================================================================================
+
+        private void RegenerarDiaCalendario(DiaCalendarioBase dia) {
+            if (dia.Grafico > 0) {
+                var maxValidez = listaGraficosAsociados.Where(g => g.Validez <= dia.DiaFecha).Max(gg => gg.Validez);
+                var grafico = listaGraficosAsociados.FirstOrDefault(g => g.Numero == dia.Grafico && g.Validez == maxValidez);
+                if (grafico != null) {
+                    dia.CategoriaGrafico = grafico.Categoria;
+                    dia.Turno = grafico.Turno;
+                    dia.Inicio = grafico.Inicio;
+                    dia.Final = grafico.Final;
+                    dia.InicioPartido = grafico.InicioPartido;
+                    dia.FinalPartido = grafico.FinalPartido;
+                    dia.TrabajadasPartido = grafico.TrabajadasPartido;
+                    dia.TiempoPartido = grafico.TiempoPartido;
+                    dia.Valoracion = grafico.Valoracion;
+                    dia.Trabajadas = grafico.Trabajadas;
+                    dia.TrabajadasConvenio = grafico.TrabajadasConvenio;
+                    dia.TrabajadasReales = grafico.TrabajadasReales;
+                    dia.TiempoVacio = grafico.TiempoVacio;
+                    dia.Acumuladas = grafico.Acumuladas;
+                    dia.Nocturnas = grafico.Nocturnas;
+                    dia.Desayuno = grafico.Desayuno;
+                    dia.Comida = grafico.Comida;
+                    dia.Cena = grafico.Cena;
+                    dia.PlusCena = grafico.PlusCena;
+                    dia.PlusLimpieza = grafico.PlusLimpieza;
+                    dia.PlusPaqueteria = grafico.PlusPaqueteria;
+                }
+            }
+
+        }
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
         #region EVENTOS
         // ====================================================================================================
         private void ListaCalendarios_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
@@ -185,15 +224,22 @@ namespace Orion.ViewModels {
                                 Nuevo = true,
                             }).ToList());
                     }
+                    calendario.DiaCalendarioChanged += Calendario_DiaCalendarioChanged;
                     calendario.Nuevo = true;
                     calendario.Modificado = false;
                     HayCambios = true;
                 }
             }
             if (e.OldItems != null) {
-                // No hacer nada.
+                foreach (Calendario c in e.OldItems) {
+                    c.DiaCalendarioChanged -= Calendario_DiaCalendarioChanged;
+                }
             }
             PropiedadCambiada(nameof(ListaCalendarios));
+        }
+
+        private void Calendario_DiaCalendarioChanged(object sender, EventArgs e) {
+            if (sender is DiaCalendarioBase dia) RegenerarDiaCalendario(dia);
         }
 
         private void ListaCalendarios_ItemPropertyChanged(object sender, ItemChangedEventArgs<Calendario> e) {
@@ -221,6 +267,7 @@ namespace Orion.ViewModels {
                     _listacalendarios.CollectionChanged += ListaCalendarios_CollectionChanged;
                     _listacalendarios.ItemPropertyChanged += ListaCalendarios_ItemPropertyChanged;
                     VistaCalendarios = new ListCollectionView(ListaCalendarios);
+                    foreach (var c in _listacalendarios) c.DiaCalendarioChanged += Calendario_DiaCalendarioChanged;
                     FiltroAplicado = "Ninguno";
                     PropiedadCambiada();
                     PropiedadCambiada(nameof(ExcesoJornada));
@@ -383,10 +430,6 @@ namespace Orion.ViewModels {
                 int taquEventuales = ListaCalendarios.Count(c => c.CategoriaConductor == "T" && !c.ConductorIndefinido);
                 texto += $"  |  Conducción: {condFijos + condEventuales} => Fijos: {condFijos} - Eventuales: {condEventuales}  /  " +
                     $"Taquilla: {taquFijos + taquEventuales} => Fijos: {taquFijos} - Eventuales: {taquEventuales}";
-                //if (CalendarioSeleccionado != null) {
-                //    texto += $"  |  Matricula: {CalendarioSeleccionado.MatriculaConductor}" +
-                //             $"  |  Exceso: {ExcesoJornada.ToTexto()}";
-                //}
                 return texto;
             }
         }

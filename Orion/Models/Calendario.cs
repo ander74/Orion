@@ -150,6 +150,12 @@ namespace Orion.Models {
         // ====================================================================================================
         #region EVENTOS
         // ====================================================================================================
+
+        /// <summary>
+        /// Se dispara cuando en un día del calendario se cambia la propiedad Gráfico.
+        /// </summary>
+        public event EventHandler<EventArgs> DiaCalendarioChanged;
+
         private void ListaDias_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
 
             if (e.NewItems != null) {
@@ -167,6 +173,11 @@ namespace Orion.Models {
         }
 
         private void Listadias_ItemPropertyChanged(object sender, ItemChangedEventArgs<DiaCalendario> e) {
+
+            if (e.PropertyName == nameof(DiaCalendario.Grafico)) {
+                DiaCalendarioChanged?.Invoke(e.ChangedItem, new EventArgs());
+            }
+
             Modificado = true;
             PropiedadCambiada(nameof(GrafDif));
         }

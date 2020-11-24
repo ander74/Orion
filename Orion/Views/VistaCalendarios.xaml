@@ -25,6 +25,17 @@
     <!--  ====================================================================================================  -->
     <UserControl.Resources>
 
+        <MenuItem
+            x:Key="menuRegenerarCalendario"
+            Command="{Binding CalendariosVM.CmdRegenerarCalendario}"
+            Header="Regenerar Calendario"
+            ToolTip="Regenera todos los gráficos de este calendario." />
+        <MenuItem
+            x:Key="menuRegenerarTodos"
+            Command="{Binding CalendariosVM.CmdRegenerarTodos}"
+            Header="Regenerar Todos"
+            ToolTip="Regenera todos los gráficos de la tabla." />
+
         <cnv:ConvertidorPrueba x:Key="cnvPrueba" />
         <cnv:ConvertidorTextoNegrita x:Key="cnvTextoNegrita" />
         <cnv:ConvertidorMinutosToHoraMixta x:Key="cnvMinutosToHoraMixta" />
@@ -206,6 +217,146 @@
                 Margin="3,5"
                 Background="LightGray" />
 
+            <!--  DESPLEGABLE OTROS CALENDARIOS  -->
+            <xceed:DropDownButton
+                x:Name="BtDropOtrosCalendarios"
+                Width="60"
+                Style="{StaticResource EstiloBotonDesplegable}">
+                <xceed:DropDownButton.Content>
+                    <StackPanel Orientation="Vertical">
+                        <Image
+                            Source="Imagenes/Calendarios.png"
+                            Style="{StaticResource EstiloImagen}" />
+                        <TextBlock
+                            Name="TxtOtrosCalendarios"
+                            FontFamily="Comic Sans MS"
+                            FontSize="10"
+                            Text="Otros Calendarios"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </xceed:DropDownButton.Content>
+                <xceed:DropDownButton.DropDownContent>
+                    <Border
+                        Background="AliceBlue"
+                        BorderBrush="DarkBlue"
+                        BorderThickness="2"
+                        CornerRadius="5"
+                        DataContext="{Binding Source={x:Reference TxtOtrosCalendarios}, Path=DataContext.CalendariosVM}">
+                        <Border
+                            Margin="3"
+                            BorderBrush="DarkGray"
+                            BorderThickness="1"
+                            CornerRadius="5">
+                            <StackPanel Orientation="Vertical">
+
+                                <!--  BOTON ANUALES  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtOtrosCalendarios_Click"
+                                    Command="{Binding CmdAbrirAnuales}"
+                                    Content="Calendarios Anuales"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="11"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Abre el Excel con los calendarios Anuales. Si no existe el Excel, lo crea." />
+
+                                <!--  BOTON VIRTUALES  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtOtrosCalendarios_Click"
+                                    Command="{Binding CmdAbrirVirtuales}"
+                                    Content="Calendarios Virtuales"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="11"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Abre el Excel con los calendarios Virtuales. Si no existe el Excel, lo crea." />
+
+                                <!--  SEPARADOR  -->
+                                <TextBlock
+                                    Height="2"
+                                    Background="LightGray" />
+
+                                <!--  BOTON COMPARAR CON ANUAL  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtOtrosCalendarios_Click"
+                                    Command="{Binding CmdCompararConAnual}"
+                                    Content="Comparar con Anual"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="11"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Crea un informe comparando el calendario de Orión con el anual guardado en un excel." />
+
+                                <!--  BOTON COMPARAR CON VIRTUAL  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtOtrosCalendarios_Click"
+                                    Command="{Binding CmdCompararConVirtual}"
+                                    Content="Comparar con Virtual"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="11"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Crea un informe comparando el calendario de Orión con el virtual guardado en un excel." />
+
+                                <!--  SEPARADOR  -->
+                                <TextBlock
+                                    Height="2"
+                                    Background="LightGray" />
+
+                                <!--  BOTON COMPARAR TODOS CON ANUAL  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtOtrosCalendarios_Click"
+                                    Command="{Binding CmdCompararTodosConAnual}"
+                                    Content="Comparar Todos con Anual"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="11"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Crea un informe comparando los calendarios de Orión de todo el año con el anual guardado en un excel." />
+
+                                <!--  BOTON COMPARAR TODOS CON VIRTUAL  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtOtrosCalendarios_Click"
+                                    Command="{Binding CmdCompararTodosConVirtual}"
+                                    Content="Comparar Todos con Virtual"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="11"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Crea un informe comparando los calendarios de Orión de todo el año con el virtual guardado en un excel." />
+
+
+                            </StackPanel>
+                        </Border>
+                    </Border>
+                </xceed:DropDownButton.DropDownContent>
+            </xceed:DropDownButton>
+
+            <!--  SEPARADOR  -->
+            <TextBlock
+                Width="2"
+                Margin="3,5"
+                Background="LightGray" />
+
             <!--  BOTON BORRAR CALENDARIO  -->
             <controls:BotonBarra
                 Command="{Binding CalendariosVM.cmdBorrarCalendario}"
@@ -307,14 +458,6 @@
                 Width="2"
                 Margin="3,5"
                 Background="LightGray" />
-
-            <!--  BOTON ALTERNAR SELECCION TABLA CALENDARIOS  -->
-            <!--<controls:BotonAlterno
-                Command="{Binding Source={x:Reference TablaCalendarios}, Path=ComandoAlternarModoSeleccion}"
-                ImagenActivo="Imagenes/SeleccionFila.png"
-                ImagenInactivo="Imagenes/SeleccionCelda.png"
-                TituloActivo="Selección Filas"
-                TituloInactivo="Selección Celdas" />-->
 
             <!--  BOTON COPIAR  -->
             <controls:BotonBarra
@@ -772,13 +915,17 @@
                 </xceed:DropDownButton.DropDownContent>
             </xceed:DropDownButton>
 
-
-
             <!--  BOTON RECLAMAR  -->
             <controls:BotonBarra
                 Command="{Binding CalendariosVM.cmdReclamacion}"
                 Imagen="Imagenes/Reclamar.png"
                 Titulo="Reclamar" />
+
+            <!--  BOTON VER RECLAMACIONES  -->
+            <controls:BotonBarra
+                Command="{Binding CalendariosVM.cmdVerReclamaciones}"
+                Imagen="Imagenes/Reclamar.png"
+                Titulo="Ver Reclamac." />
 
             <!--  SEPARADOR  -->
             <TextBlock
@@ -1364,7 +1511,7 @@
 
         <!--  TABLA CALENDARIOS  -->
         <FrameworkElement
-            x:Name="ColumnaActual"
+            x:Name="dummyElement"
             Visibility="Collapsed" />
         <controls:QDataGrid
             x:Name="TablaCalendarios"
@@ -1405,13 +1552,13 @@
                 </DataGridTextColumn>
 
                 <!--  01  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[0].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1423,45 +1570,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[0].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[0].Codigo" />
-                                        <Binding Path="ListaDias[0].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[0].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[0].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=01}"
-                            Text="01" />
-                    </DataGridTextColumn.Header>
-
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  02  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[1].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1473,44 +1592,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[1].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[1].Codigo" />
-                                        <Binding Path="ListaDias[1].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[1].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[1].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=02}"
-                            Text="02" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  03  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[2].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1522,45 +1614,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[2].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[2].Codigo" />
-                                        <Binding Path="ListaDias[2].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[2].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[2].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=03}"
-                            Text="03" />
-                    </DataGridTextColumn.Header>
-
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  04  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[3].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1572,45 +1636,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[3].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[3].Codigo" />
-                                        <Binding Path="ListaDias[3].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[3].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[3].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=04}"
-                            Text="04" />
-                    </DataGridTextColumn.Header>
-
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  05  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[4].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1622,45 +1658,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[4].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[4].Codigo" />
-                                        <Binding Path="ListaDias[4].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[4].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[4].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=05}"
-                            Text="05" />
-                    </DataGridTextColumn.Header>
-
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  06  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[5].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1672,44 +1680,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[5].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[5].Codigo" />
-                                        <Binding Path="ListaDias[5].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[5].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[5].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=06}"
-                            Text="06" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  07  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[6].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1721,44 +1702,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[6].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[6].Codigo" />
-                                        <Binding Path="ListaDias[6].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[6].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[6].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=07}"
-                            Text="07" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  08  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[7].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1770,44 +1724,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[7].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[7].Codigo" />
-                                        <Binding Path="ListaDias[7].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[7].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[7].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=08}"
-                            Text="08" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  09  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[8].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1819,44 +1746,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[8].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[8].Codigo" />
-                                        <Binding Path="ListaDias[8].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[8].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[8].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=09}"
-                            Text="09" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  10  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[9].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1868,44 +1768,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[9].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[9].Codigo" />
-                                        <Binding Path="ListaDias[9].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[9].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[9].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=10}"
-                            Text="10" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  11  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[10].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1917,44 +1790,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[10].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[10].Codigo" />
-                                        <Binding Path="ListaDias[10].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[10].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[10].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=11}"
-                            Text="11" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  12  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[11].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -1966,44 +1812,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[11].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[11].Codigo" />
-                                        <Binding Path="ListaDias[11].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[11].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[11].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=12}"
-                            Text="12" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  13  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[12].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2015,44 +1834,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[12].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[12].Codigo" />
-                                        <Binding Path="ListaDias[12].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[12].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[12].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=13}"
-                            Text="13" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  14  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[13].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2064,44 +1856,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[13].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[13].Codigo" />
-                                        <Binding Path="ListaDias[13].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[13].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[13].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=14}"
-                            Text="14" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  15  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[14].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2113,45 +1878,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[14].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[14].Codigo" />
-                                        <Binding Path="ListaDias[14].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[14].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[14].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=15}"
-                            Text="15" />
-                    </DataGridTextColumn.Header>
-
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  16  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[15].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2163,45 +1900,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[15].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[15].Codigo" />
-                                        <Binding Path="ListaDias[15].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[15].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[15].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=16}"
-                            Text="16" />
-                    </DataGridTextColumn.Header>
-
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  17  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[16].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2213,44 +1922,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[16].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[16].Codigo" />
-                                        <Binding Path="ListaDias[16].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[16].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[16].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=17}"
-                            Text="17" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  18  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[17].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2262,45 +1944,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[17].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[17].Codigo" />
-                                        <Binding Path="ListaDias[17].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[17].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[17].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=18}"
-                            Text="18" />
-                    </DataGridTextColumn.Header>
-
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  19  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[18].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2312,45 +1966,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[18].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[18].Codigo" />
-                                        <Binding Path="ListaDias[18].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[18].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[18].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=19}"
-                            Text="19" />
-                    </DataGridTextColumn.Header>
-
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  20  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[19].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2362,44 +1988,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[19].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[19].Codigo" />
-                                        <Binding Path="ListaDias[19].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[19].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[19].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=20}"
-                            Text="20" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  21  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[20].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2411,44 +2010,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[20].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[20].Codigo" />
-                                        <Binding Path="ListaDias[20].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[20].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[20].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=21}"
-                            Text="21" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  22  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[21].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2460,44 +2032,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[21].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[21].Codigo" />
-                                        <Binding Path="ListaDias[21].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[21].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[21].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=22}"
-                            Text="22" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  23  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[22].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2509,44 +2054,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[22].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[22].Codigo" />
-                                        <Binding Path="ListaDias[22].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[22].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[22].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=23}"
-                            Text="23" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  24  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[23].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2558,44 +2076,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[23].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[23].Codigo" />
-                                        <Binding Path="ListaDias[23].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[23].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[23].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=24}"
-                            Text="24" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  25  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[24].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2607,44 +2098,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[24].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[24].Codigo" />
-                                        <Binding Path="ListaDias[24].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[24].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[24].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=25}"
-                            Text="25" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  26  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[25].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2656,44 +2120,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[25].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[25].Codigo" />
-                                        <Binding Path="ListaDias[25].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[25].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[25].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=26}"
-                            Text="26" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  27  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[26].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2705,44 +2142,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[26].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[26].Codigo" />
-                                        <Binding Path="ListaDias[26].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[26].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[26].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=27}"
-                            Text="27" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  28  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[27].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
                     CanUserSort="False">
-                    <DataGridTextColumn.CellStyle>
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2754,45 +2164,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[27].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[27].Codigo" />
-                                        <Binding Path="ListaDias[27].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[27].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[27].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=28}"
-                            Text="28" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  29  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[28].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
-                    CanUserSort="False"
-                    Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.ExisteDia29, Converter={StaticResource cnvBoolToVisibility}}">
-                    <DataGridTextColumn.CellStyle>
+                    CanUserSort="False">
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2804,45 +2186,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[28].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[28].Codigo" />
-                                        <Binding Path="ListaDias[28].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[28].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[28].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=29}"
-                            Text="29" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  30  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[29].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
-                    CanUserSort="False"
-                    Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.ExisteDia30, Converter={StaticResource cnvBoolToVisibility}}">
-                    <DataGridTextColumn.CellStyle>
+                    CanUserSort="False">
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2854,45 +2208,17 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[29].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[29].Codigo" />
-                                        <Binding Path="ListaDias[29].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[29].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[29].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=30}"
-                            Text="30" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  31  -->
-                <DataGridTextColumn
+                <controls:QDataGridCalendarColumn
                     Width="*"
                     Binding="{Binding ListaDias[30].ComboGrafico, Converter={StaticResource cnvNumGraficoCalendario}}"
                     CanUserReorder="False"
                     CanUserResize="false"
-                    CanUserSort="False"
-                    Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.CalendariosVM.ExisteDia31, Converter={StaticResource cnvBoolToVisibility}}">
-                    <DataGridTextColumn.CellStyle>
+                    CanUserSort="False">
+                    <controls:QDataGridCalendarColumn.CellStyle>
                         <Style
                             BasedOn="{StaticResource EstiloCeldasCalendarios}"
                             TargetType="DataGridCell">
@@ -2904,35 +2230,8 @@
                                 </DataTrigger>
                             </Style.Triggers>
                         </Style>
-                    </DataGridTextColumn.CellStyle>
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="{Binding ListaDias[30].ComboGrafico, Converter={StaticResource cnvNegritaDia}}" />
-                            <Setter Property="TextDecorations">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvDecoracionDia}">
-                                        <Binding Path="ListaDias[30].Codigo" />
-                                        <Binding Path="ListaDias[30].HayExtras" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter Property="Foreground">
-                                <Setter.Value>
-                                    <MultiBinding Converter="{StaticResource cnvColorDia}">
-                                        <Binding Path="ListaDias[30].ComboGrafico" />
-                                        <Binding Path="Fecha" />
-                                        <Binding Path="ListaDias[30].Dia" />
-                                    </MultiBinding>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                    <DataGridTextColumn.Header>
-                        <TextBlock
-                            Foreground="{Binding Path=DataContext.CalendariosVM.FechaActual, Source={x:Reference Name=ColumnaActual}, Converter={StaticResource cnvColorFecha}, ConverterParameter=31}"
-                            Text="31" />
-                    </DataGridTextColumn.Header>
-                </DataGridTextColumn>
+                    </controls:QDataGridCalendarColumn.CellStyle>
+                </controls:QDataGridCalendarColumn>
 
                 <!--  GRÁFICOS DIFERENTES  -->
                 <DataGridTextColumn
@@ -4248,6 +3547,12 @@
                                         ToolTip="Suma de los pluses de paquetería (fijos y variables)."
                                         Valor="{Binding CalendariosVM.Pijama.PlusPaqueteria, Converter={StaticResource cnvDecimalEuro}}"
                                         Visibility="{Binding CalendariosVM.Pijama.PlusPaqueteria, Converter={StaticResource cnvOcultoSiCero}}" />
+                                    <controls:ItemResumen
+                                        Descripcion="Quebranto de Moneda"
+                                        Style="{StaticResource EstiloItemResumen}"
+                                        ToolTip="Suma del quebranto de moneda del mes."
+                                        Valor="{Binding CalendariosVM.Pijama.QuebrantoMoneda, Converter={StaticResource cnvDecimalEuro}}"
+                                        Visibility="{Binding CalendariosVM.Pijama.QuebrantoMoneda, Converter={StaticResource cnvOcultoSiCero}}" />
                                     <controls:ItemResumen
                                         Descripcion="Otros Pluses"
                                         Style="{StaticResource EstiloItemResumen}"

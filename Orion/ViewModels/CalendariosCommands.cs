@@ -16,6 +16,8 @@ namespace Orion.ViewModels {
     using System.Windows.Input;
     using Convertidores;
     using Models;
+    using Newtonsoft.Json;
+    using OfficeOpenXml;
     using Orion.Config;
     using Orion.PdfExcel;
     using PrintModel;
@@ -169,10 +171,8 @@ namespace Orion.ViewModels {
             }
         }
 
-        private bool PuedeAplicarFiltro() {
-            if (ListaCalendarios.Count == 0) return false;
-            return true;
-        }
+        private bool PuedeAplicarFiltro() => ListaCalendarios.Count > 0;
+
 
         private void AplicarFiltro(object parametro) {
             string filtro = parametro as string;
@@ -461,13 +461,13 @@ namespace Orion.ViewModels {
 
             int numero = 0;
             foreach (object obj in VistaCalendarios) {
-                Calendario cal = obj as Calendario;
-                if (cal == null) continue;
-                for (int i = 1; i < cal.ListaDias.Count - 1; i++) {
-                    if (cal.ListaDias[i].Grafico == -2) {
-                        if (cal.ListaDias[i - 1].Grafico > 0 && cal.ListaDias[i + 1].Grafico > 0) {
-                            cal.ListaDias[i].Grafico = -5;
-                            numero++;
+                if (obj is Calendario cal) {
+                    for (int i = 1; i < cal.ListaDias.Count - 1; i++) {
+                        if (cal.ListaDias[i].Grafico == -2) {
+                            if (cal.ListaDias[i - 1].Grafico > 0 && cal.ListaDias[i + 1].Grafico > 0) {
+                                cal.ListaDias[i].Grafico = -5;
+                                numero++;
+                            }
                         }
                     }
                 }
@@ -624,10 +624,7 @@ namespace Orion.ViewModels {
             }
         }
 
-        private bool PuedeCalendariosEnPdf() {
-            if (VistaCalendarios == null) return false;
-            return VistaCalendarios.Count > 1;
-        }
+        private bool PuedeCalendariosEnPdf() => VistaCalendarios.Count > 1;
 
         private async void CalendariosEnPDF() {
 
@@ -670,10 +667,7 @@ namespace Orion.ViewModels {
             }
         }
 
-        private bool PuedeCalendariosEnPdfConFallos() {
-            if (VistaCalendarios == null) return false;
-            return VistaCalendarios.Count > 1;
-        }
+        private bool PuedeCalendariosEnPdfConFallos() => VistaCalendarios.Count > 1;
 
         private async void CalendariosEnPdfConFallos() {
 
@@ -720,49 +714,48 @@ namespace Orion.ViewModels {
             if (AccionesLotesVM.Grafico == -9999) {
                 if (Mensajes.VerMensaje("Va a realizar una acción que afecta a todos los días de los calendarios.\n\n¿Desea continuar?", "ATENCIÓN", true) == false) return;
             }
-
             foreach (object obj in VistaCalendarios) {
-                Calendario cal = obj as Calendario;
-                if (cal == null) continue;
-                foreach (DiaCalendario dia in cal.ListaDias) {
-                    if (dia.Grafico == 0) continue;
-                    if (dia.Dia >= AccionesLotesVM.DelDia && dia.Dia <= AccionesLotesVM.AlDia) {
-                        if (AccionesLotesVM.Grafico == -9999 || dia.Grafico == AccionesLotesVM.Grafico) {
-                            if (AccionesLotesVM.Codigo == 4 || (AccionesLotesVM.Codigo == dia.Codigo)) {
-                                switch (AccionesLotesVM.CodigoAccion) {
-                                    case 0: // Exceso Jornada
-                                        dia.ExcesoJornada = AccionesLotesVM.SumarValor ? dia.ExcesoJornada + AccionesLotesVM.Horas : AccionesLotesVM.Horas;
-                                        break;
-                                    case 1: // Facturado Paqueteria
-                                        dia.FacturadoPaqueteria = AccionesLotesVM.SumarValor ? dia.FacturadoPaqueteria + AccionesLotesVM.Importe : AccionesLotesVM.Importe;
-                                        break;
-                                    case 2: // Limpieza
-                                        dia.Limpieza = true;
-                                        break;
-                                    case 3: // Media Limpieza
-                                        dia.Limpieza = null;
-                                        break;
-                                    case 4: // Quitar Limpieza
-                                        dia.Limpieza = false;
-                                        break;
-                                    case 5: // Cambiar Número
-                                        if (AccionesLotesVM.NuevoGrafico != 0)
-                                            dia.Grafico = AccionesLotesVM.NuevoGrafico;
-                                        if (AccionesLotesVM.NuevoCodigo != 4)
-                                            dia.Codigo = AccionesLotesVM.NuevoCodigo;
-                                        break;
-                                    case 6: // Borrar Notas
-                                        dia.Notas = "";
-                                        break;
-                                }
-                                if (!String.IsNullOrWhiteSpace(AccionesLotesVM.Notas) && AccionesLotesVM.CodigoAccion != 7) {
-                                    if (String.IsNullOrWhiteSpace(dia.Notas)) {
-                                        dia.Notas = AccionesLotesVM.Notas;
-                                    } else {
-                                        dia.Notas = AccionesLotesVM.SumarValor ? dia.Notas + "\n" + AccionesLotesVM.Notas : AccionesLotesVM.Notas;
+                if (obj is Calendario cal) {
+                    foreach (DiaCalendario dia in cal.ListaDias) {
+                        if (dia.Grafico == 0) continue;
+                        if (dia.Dia >= AccionesLotesVM.DelDia && dia.Dia <= AccionesLotesVM.AlDia) {
+                            if (AccionesLotesVM.Grafico == -9999 || dia.Grafico == AccionesLotesVM.Grafico) {
+                                if (AccionesLotesVM.Codigo == 4 || (AccionesLotesVM.Codigo == dia.Codigo)) {
+                                    switch (AccionesLotesVM.CodigoAccion) {
+                                        case 0: // Exceso Jornada
+                                            dia.ExcesoJornada = AccionesLotesVM.SumarValor ? dia.ExcesoJornada + AccionesLotesVM.Horas : AccionesLotesVM.Horas;
+                                            break;
+                                        case 1: // Facturado Paqueteria
+                                            dia.FacturadoPaqueteria = AccionesLotesVM.SumarValor ? dia.FacturadoPaqueteria + AccionesLotesVM.Importe : AccionesLotesVM.Importe;
+                                            break;
+                                        case 2: // Limpieza
+                                            dia.Limpieza = true;
+                                            break;
+                                        case 3: // Media Limpieza
+                                            dia.Limpieza = null;
+                                            break;
+                                        case 4: // Quitar Limpieza
+                                            dia.Limpieza = false;
+                                            break;
+                                        case 5: // Cambiar Número
+                                            if (AccionesLotesVM.NuevoGrafico != 0)
+                                                dia.Grafico = AccionesLotesVM.NuevoGrafico;
+                                            if (AccionesLotesVM.NuevoCodigo != 4)
+                                                dia.Codigo = AccionesLotesVM.NuevoCodigo;
+                                            break;
+                                        case 6: // Borrar Notas
+                                            dia.Notas = "";
+                                            break;
                                     }
+                                    if (!String.IsNullOrWhiteSpace(AccionesLotesVM.Notas) && AccionesLotesVM.CodigoAccion != 7) {
+                                        if (String.IsNullOrWhiteSpace(dia.Notas)) {
+                                            dia.Notas = AccionesLotesVM.Notas;
+                                        } else {
+                                            dia.Notas = AccionesLotesVM.SumarValor ? dia.Notas + "\n" + AccionesLotesVM.Notas : AccionesLotesVM.Notas;
+                                        }
+                                    }
+                                    HayCambios = true;
                                 }
-                                HayCambios = true;
                             }
                         }
                     }
@@ -784,14 +777,14 @@ namespace Orion.ViewModels {
 
         private void MarcarAccionesLotes() {
             foreach (object obj in VistaCalendarios) {
-                Calendario cal = obj as Calendario;
-                if (cal == null) continue;
-                foreach (DiaCalendario dia in cal.ListaDias) {
-                    if (dia.Grafico == 0) continue;
-                    if (dia.Dia >= AccionesLotesVM.DelDia && dia.Dia <= AccionesLotesVM.AlDia) {
-                        if (AccionesLotesVM.Grafico == 0 || dia.Grafico == AccionesLotesVM.Grafico) {
-                            if (AccionesLotesVM.Codigo == 4 || (AccionesLotesVM.Codigo == dia.Codigo)) {
-                                dia.Resaltar = true;
+                if (obj is Calendario cal) {
+                    foreach (DiaCalendario dia in cal.ListaDias) {
+                        if (dia.Grafico == 0) continue;
+                        if (dia.Dia >= AccionesLotesVM.DelDia && dia.Dia <= AccionesLotesVM.AlDia) {
+                            if (AccionesLotesVM.Grafico == 0 || dia.Grafico == AccionesLotesVM.Grafico) {
+                                if (AccionesLotesVM.Codigo == 4 || (AccionesLotesVM.Codigo == dia.Codigo)) {
+                                    dia.Resaltar = true;
+                                }
                             }
                         }
                     }
@@ -814,10 +807,10 @@ namespace Orion.ViewModels {
         private void BorrarAccionLotes() {
             AccionesLotesVM = new AccionesLotesCalendariosVM();
             foreach (object obj in VistaCalendarios) {
-                Calendario cal = obj as Calendario;
-                if (cal == null) continue;
-                foreach (DiaCalendario dia in cal.ListaDias) {
-                    dia.Resaltar = false;
+                if (obj is Calendario cal) {
+                    foreach (DiaCalendario dia in cal.ListaDias) {
+                        dia.Resaltar = false;
+                    }
                 }
             }
 
@@ -854,6 +847,8 @@ namespace Orion.ViewModels {
                     doc.SetMargins(40, 40, 40, 40);
                     // Extraemos las reclamaciones.
                     List<Reclamacion> listaReclamaciones = new List<Reclamacion>();
+                    var totalTiempo = TimeSpan.Zero;
+                    var totalDietas = 0m;
                     foreach (var dia in Pijama.ListaDias) {
                         // ACUMULADAS
                         if (dia.AcumuladasAlt.HasValue && dia.AcumuladasAlt.Value < dia.GraficoOriginal.Acumuladas) {
@@ -861,8 +856,9 @@ namespace Orion.ViewModels {
                                 Concepto = $"Horas acumuladas del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
                                 EnPijama = dia.AcumuladasAlt.ToTexto(),
                                 Real = dia.GraficoOriginal.Acumuladas.ToTexto(),
-                                Diferencia = (dia.GraficoOriginal.Acumuladas - dia.AcumuladasAlt).ToTexto()
+                                Diferencia = (dia.GraficoOriginal.Acumuladas - dia.AcumuladasAlt.Value).ToTexto()
                             });
+                            totalTiempo += (dia.GraficoOriginal.Acumuladas - dia.AcumuladasAlt.Value);
                         }
                         // DESAYUNO
                         if (dia.DesayunoAlt.HasValue && dia.DesayunoAlt.Value < dia.GraficoOriginal.Desayuno) {
@@ -870,8 +866,10 @@ namespace Orion.ViewModels {
                                 Concepto = $"Dieta de desayuno del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
                                 EnPijama = dia.DesayunoAlt.Value.ToString("0.00"),
                                 Real = dia.GraficoOriginal.Desayuno.ToString("0.00"),
-                                Diferencia = (dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value).ToString("0.00")
+                                Diferencia = (dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value).ToString("0.00") +
+                                $" ({(dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value) * App.Global.Convenio.ImporteDietas:0.00} €)",
                             });
+                            totalDietas += (dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value);
                         }
                         // COMIDA
                         if (dia.ComidaAlt.HasValue && dia.ComidaAlt.Value < dia.GraficoOriginal.Comida) {
@@ -879,8 +877,10 @@ namespace Orion.ViewModels {
                                 Concepto = $"Dieta de comida del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
                                 EnPijama = dia.ComidaAlt.Value.ToString("0.00"),
                                 Real = dia.GraficoOriginal.Comida.ToString("0.00"),
-                                Diferencia = (dia.GraficoOriginal.Comida - dia.ComidaAlt.Value).ToString("0.00")
+                                Diferencia = (dia.GraficoOriginal.Comida - dia.ComidaAlt.Value).ToString("0.00") +
+                                $" ({(dia.GraficoOriginal.Comida - dia.ComidaAlt.Value) * App.Global.Convenio.ImporteDietas:0.00} €)",
                             });
+                            totalDietas += (dia.GraficoOriginal.Comida - dia.ComidaAlt.Value);
                         }
                         // CENA
                         if (dia.CenaAlt.HasValue && dia.CenaAlt.Value < dia.GraficoOriginal.Cena) {
@@ -888,8 +888,10 @@ namespace Orion.ViewModels {
                                 Concepto = $"Dieta de cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
                                 EnPijama = dia.CenaAlt.Value.ToString("0.00"),
                                 Real = dia.GraficoOriginal.Cena.ToString("0.00"),
-                                Diferencia = (dia.GraficoOriginal.Cena - dia.CenaAlt.Value).ToString("0.00")
+                                Diferencia = (dia.GraficoOriginal.Cena - dia.CenaAlt.Value).ToString("0.00") +
+                                $" ({(dia.GraficoOriginal.Cena - dia.CenaAlt.Value) * App.Global.Convenio.ImporteDietas:0.00} €)",
                             });
+                            totalDietas += (dia.GraficoOriginal.Cena - dia.CenaAlt.Value);
                         }
                         // PLUS CENA
                         if (dia.PlusCenaAlt.HasValue && dia.PlusCenaAlt.Value < dia.GraficoOriginal.PlusCena) {
@@ -897,11 +899,17 @@ namespace Orion.ViewModels {
                                 Concepto = $"Plus Cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
                                 EnPijama = dia.PlusCenaAlt.Value.ToString("0.00"),
                                 Real = dia.GraficoOriginal.PlusCena.ToString("0.00"),
-                                Diferencia = (dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value).ToString("0.00")
+                                Diferencia = (dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value).ToString("0.00") +
+                                $" ({(dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value) * App.Global.Convenio.ImporteDietas:0.00} €)",
                             });
+                            totalDietas += (dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value);
                         }
                     }
-                    await PijamaPrintModel.CrearReclamacionEnPdf(doc, Pijama.Fecha, Pijama.Trabajador, listaReclamaciones);
+                    var notas = string.Empty;
+                    if (totalTiempo.Ticks > 0) notas += $"     Horas = {totalTiempo.ToTexto()}\n";
+                    if (totalDietas > 0) notas += $"     Dietas = {totalDietas:0.00} ({totalDietas * App.Global.Convenio.ImporteDietas:0.00} €)\n";
+                    if (notas.Length > 0) notas = "TOTAL A RECLAMAR\n\n" + notas;
+                    await PijamaPrintModel.CrearReclamacionEnPdf(doc, Pijama.Fecha, Pijama.Trabajador, listaReclamaciones, notas);
                     doc.Close();
                     Process.Start(ruta);
 
@@ -928,10 +936,7 @@ namespace Orion.ViewModels {
             }
         }
 
-        private bool PuedePdfEsatdisticas() {
-            if (VistaCalendarios == null) return false;
-            return VistaCalendarios.Count > 1;
-        }
+        private bool PuedePdfEsatdisticas() => VistaCalendarios?.Count > 1;
 
         private async void PdfEsatdisticas() {
             List<EstadisticaCalendario> listaEstadisticas = new List<EstadisticaCalendario>();
@@ -1045,10 +1050,7 @@ namespace Orion.ViewModels {
             }
         }
 
-        private bool PuedePdfEstadisticasMes() {
-            if (VistaCalendarios == null) return false;
-            return VistaCalendarios.Count > 1;
-        }
+        private bool PuedePdfEstadisticasMes() => VistaCalendarios?.Count > 1;
 
         [STAThread]
         private async void PdfEstadisticasMes() {
@@ -1493,6 +1495,322 @@ namespace Orion.ViewModels {
             Process.Start(pdf);
         }
         #endregion
+
+
+        #region COMANDO REGENERAR GRÁFICO
+
+        // Comando
+        private ICommand cmdRegenerarCalendario;
+        public ICommand CmdRegenerarCalendario {
+            get {
+                if (cmdRegenerarCalendario == null) cmdRegenerarCalendario = new RelayCommand(p => RegenerarCalendario(), p => PuedeRegenerarCalendario());
+                return cmdRegenerarCalendario;
+            }
+        }
+        private bool PuedeRegenerarCalendario() => CalendarioSeleccionado != null;
+
+        private void RegenerarCalendario() {
+            foreach (var dia in CalendarioSeleccionado.ListaDias) RegenerarDiaCalendario(dia);
+        }
+        #endregion
+
+
+        #region COMANDO REGENERAR TODOS (CALENDARIOS)
+
+        // Comando
+        private ICommand cmdRegenerarTodos;
+        public ICommand CmdRegenerarTodos {
+            get {
+                if (cmdRegenerarTodos == null) cmdRegenerarTodos = new RelayCommand(p => RegenerarTodos(), p => PuedeRegenerarTodos());
+                return cmdRegenerarTodos;
+            }
+        }
+        private bool PuedeRegenerarTodos() => VistaCalendarios.Count > 1;
+
+        private void RegenerarTodos() {
+            foreach (var objeto in VistaCalendarios) {
+                if (objeto is Calendario calendario) {
+                    foreach (var dia in ((Calendario)calendario).ListaDias) RegenerarDiaCalendario(dia);
+                }
+            }
+        }
+        #endregion
+
+
+        #region COMANDO PRUEBA DE INFORME DE RECLAMACIONES
+
+        // Comando
+        private ICommand verReclamaciones;
+        public ICommand cmdVerReclamaciones {
+            get {
+                if (verReclamaciones == null) verReclamaciones = new RelayCommand(p => VerReclamaciones(), p => PuedeVerReclamaciones());
+                return verReclamaciones;
+            }
+        }
+
+
+        // Se puede ejecutar el comando
+        private bool PuedeVerReclamaciones() {
+            return true;
+        }
+
+        // Ejecución del comando
+        private async void VerReclamaciones() {
+
+            try {
+                // Activamos la barra de progreso.
+                App.Global.IniciarProgreso("Creando PDF...");
+                var lista = new List<Reclamacion>();
+                foreach (var obj in VistaCalendarios) {
+                    if (obj is Calendario calendario) {
+                        // Pedimos el archivo donde guardarlo.
+                        string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}.pdf", calendario.Fecha, calendario.MatriculaConductor);
+                        var conductor = App.Global.ConductoresVM.GetConductor(calendario.MatriculaConductor);
+                        string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, conductor.MatriculaApellidos.Replace(":", " -"));
+                        if (ruta != "" && File.Exists(ruta)) {
+                            iText.Kernel.Pdf.PdfReader reader = new iText.Kernel.Pdf.PdfReader(ruta);
+                            // Se crea el PDF que se guardará usando el writer.
+                            iText.Kernel.Pdf.PdfDocument docPDF = new iText.Kernel.Pdf.PdfDocument(reader);
+                            // Se crea el documento con el que se trabajará.
+                            await PijamaPrintModel.GetReclamaciones(docPDF, lista);
+                            docPDF.Close();
+                        }
+                    }
+                }
+                // Extraemos los totales de las reclamaciones.
+                var totalHoras = TimeSpan.Zero;
+                var totalDesayunos = 0m;
+                var totalImporteDesayunos = 0m;
+                var totalComidas = 0m;
+                var totalImporteComidas = 0m;
+                foreach (var reclamacion in lista) {
+                    if (reclamacion.Concepto.StartsWith("Horas")) {
+                        if (TimeSpan.TryParse(reclamacion.Diferencia, out TimeSpan dato)) totalHoras += dato;
+                    }
+                    if (reclamacion.Concepto.StartsWith("Dieta de desayuno")) {
+                        var datos = reclamacion.Diferencia.Split('/');
+                        if (decimal.TryParse(datos[0], out decimal dato)) totalDesayunos += dato;
+                        if (decimal.TryParse(datos[1], out decimal importeDato)) totalImporteDesayunos += importeDato;
+                        totalImporteDesayunos += decimal.Parse(datos[1]);
+                    }
+                    if (reclamacion.Concepto.StartsWith("Dieta de comida")) {
+                        var datos = reclamacion.Diferencia.Split('/');
+                        if (decimal.TryParse(datos[0], out decimal dato)) totalComidas += dato;
+                        if (decimal.TryParse(datos[1], out decimal importeDato)) totalImporteComidas += importeDato;
+                    }
+                }
+                var texto = JsonConvert.SerializeObject(lista, Formatting.Indented);
+                File.WriteAllText("D:\\Reclamaciones.json", texto);
+            } catch (Exception ex) {
+                Mensajes.VerError("CalendariosCommands.VerReclamaciones", ex);
+            } finally {
+                App.Global.FinalizarProgreso();
+            }
+
+
+        }
+        #endregion
+
+
+        #region ABRIR CALENDARIOS ANUALES 
+
+        // Comando
+        private ICommand cmdAbrirAnuales;
+        public ICommand CmdAbrirAnuales {
+            get {
+                if (cmdAbrirAnuales == null) cmdAbrirAnuales = new RelayCommand(p => AbrirAnuales());
+                return cmdAbrirAnuales;
+            }
+        }
+        private void AbrirAnuales() {
+            if (string.IsNullOrEmpty(App.Global.Configuracion.CarpetaAvanza)) {
+                Mensajes.VerMensaje("Por favor\n\nDefina la ruta de la carpeta AVANZA en las opciones.", "ATENCIÓN");
+                return;
+            }
+            var nombreArchivo = $"{FechaActual.Year}-Calendarios Anuales-{App.Global.CentroActual}.xlsx";
+            var carpeta = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Calendarios/{App.Global.CentroActual}");
+            var ruta = Path.Combine(carpeta, nombreArchivo);
+            if (!Directory.Exists(carpeta)) Directory.CreateDirectory(carpeta);
+            var titulo = $"CALENDARIOS ANUALES {App.Global.CentroActual.ToString().ToUpper()} - {FechaActual.Year}";
+            if (!File.Exists(ruta)) {
+                ExcelService.getInstance().GenerarPlantillaCalendariosExcel(ruta, FechaActual, titulo);
+            } else {
+                using (var excelApp = new ExcelPackage(new FileInfo(ruta))) {
+                    excelApp.Workbook.Worksheets[mesesAbr[FechaActual.Month]].Select();
+                    excelApp.Save();
+                }
+            }
+            Process.Start(ruta);
+        }
+        #endregion
+
+
+        #region ABRIR CALENDARIOS VIRTUALES 
+
+        // Comando
+        private ICommand cmdAbrirVirtuales;
+        public ICommand CmdAbrirVirtuales {
+            get {
+                if (cmdAbrirVirtuales == null) cmdAbrirVirtuales = new RelayCommand(p => AbrirVirtuales());
+                return cmdAbrirVirtuales;
+            }
+        }
+        private void AbrirVirtuales() {
+            if (string.IsNullOrEmpty(App.Global.Configuracion.CarpetaAvanza)) {
+                Mensajes.VerMensaje("Por favor\n\nDefina la ruta de la carpeta AVANZA en las opciones.", "ATENCIÓN");
+                return;
+            }
+            var nombreArchivo = $"{FechaActual.Year}-Calendarios Virtuales-{App.Global.CentroActual}.xlsx";
+            var carpeta = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Calendarios/{App.Global.CentroActual}");
+            var ruta = Path.Combine(carpeta, nombreArchivo);
+            if (!Directory.Exists(carpeta)) Directory.CreateDirectory(carpeta);
+            var titulo = $"CALENDARIOS VIRTUALES {App.Global.CentroActual.ToString().ToUpper()} - {FechaActual.Year}";
+            if (!File.Exists(ruta)) {
+                ExcelService.getInstance().GenerarPlantillaCalendariosExcel(ruta, FechaActual, titulo);
+            } else {
+                using (var excelApp = new ExcelPackage(new FileInfo(ruta))) {
+                    excelApp.Workbook.Worksheets[mesesAbr[FechaActual.Month]].Select();
+                    excelApp.Save();
+                }
+            }
+            Process.Start(ruta);
+        }
+        #endregion
+
+
+        #region COMPARAR CALENDARIO CON ANUAL 
+
+        // Comando
+        private ICommand cmdCompararConAnual;
+        public ICommand CmdCompararConAnual {
+            get {
+                if (cmdCompararConAnual == null) cmdCompararConAnual = new RelayCommand(p => CompararConAnual());
+                return cmdCompararConAnual;
+            }
+        }
+        private void CompararConAnual() {
+            if (string.IsNullOrEmpty(App.Global.Configuracion.CarpetaAvanza)) {
+                Mensajes.VerMensaje("Por favor\n\nDefina la ruta de la carpeta AVANZA en las opciones.", "ATENCIÓN");
+                return;
+            }
+            // Definir el nombre del excel de destino.
+            string nombreArchivo = $"{FechaActual.ToString("yyyy-MM")} - Comparación Con Anual - {App.Global.CentroActual}.xlsx";
+            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
+            string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
+
+            // Establecemos el archivo excel que se va a comparar.
+            var nombreAnual = $"{FechaActual.Year}-Calendarios Anuales-{App.Global.CentroActual}.xlsx";
+            var carpetaAnual = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Calendarios/{App.Global.CentroActual}");
+            var rutaAnual = Path.Combine(carpetaAnual, nombreAnual);
+
+            var titulo = $"COMPARACION CON ANUAL - {App.Global.CentroActual.ToString().ToUpper()} - {FechaActual.Year}";
+            ExcelService.getInstance().GenerarComparacionCalendario(rutaDestino, rutaAnual, ListaCalendarios, FechaActual, titulo, "Anual");
+
+            if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
+        }
+        #endregion
+
+
+        #region COMPARAR CALENDARIO CON VIRTUAL 
+
+        // Comando
+        private ICommand cmdCompararConVirtual;
+        public ICommand CmdCompararConVirtual {
+            get {
+                if (cmdCompararConVirtual == null) cmdCompararConVirtual = new RelayCommand(p => CompararConVirtual());
+                return cmdCompararConVirtual;
+            }
+        }
+        private void CompararConVirtual() {
+            if (string.IsNullOrEmpty(App.Global.Configuracion.CarpetaAvanza)) {
+                Mensajes.VerMensaje("Por favor\n\nDefina la ruta de la carpeta AVANZA en las opciones.", "ATENCIÓN");
+                return;
+            }
+            // Definir el nombre del excel de destino.
+            string nombreArchivo = $"{FechaActual.ToString("yyyy-MM")} - Comparación Con Virtual - {App.Global.CentroActual}.xlsx";
+            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
+            string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
+
+            // Establecemos el archivo excel que se va a comparar.
+            var nombreAnual = $"{FechaActual.Year}-Calendarios Virtuales-{App.Global.CentroActual}.xlsx";
+            var carpetaAnual = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Calendarios/{App.Global.CentroActual}");
+            var rutaAnual = Path.Combine(carpetaAnual, nombreAnual);
+
+            var titulo = $"COMPARACION CON VIRTUAL - {App.Global.CentroActual.ToString().ToUpper()} - {FechaActual.Year}";
+            ExcelService.getInstance().GenerarComparacionCalendario(rutaDestino, rutaAnual, ListaCalendarios, FechaActual, titulo, "Virtual");
+
+            if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
+        }
+        #endregion
+
+
+        #region COMPARAR TODOS LOS CALENDARIOS CON EL ANUAL 
+
+        // Comando
+        private ICommand cmdCompararTodosConAnual;
+        public ICommand CmdCompararTodosConAnual {
+            get {
+                if (cmdCompararTodosConAnual == null) cmdCompararTodosConAnual = new RelayCommand(p => CompararTodosConAnual());
+                return cmdCompararTodosConAnual;
+            }
+        }
+        private void CompararTodosConAnual() {
+            if (string.IsNullOrEmpty(App.Global.Configuracion.CarpetaAvanza)) {
+                Mensajes.VerMensaje("Por favor\n\nDefina la ruta de la carpeta AVANZA en las opciones.", "ATENCIÓN");
+                return;
+            }
+            // Definir el nombre del excel de destino.
+            string nombreArchivo = $"{FechaActual.ToString("yyyy")} - Comparación Todos Con Anual - {App.Global.CentroActual}.xlsx";
+            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
+            string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
+
+            // Establecemos el archivo excel que se va a comparar.
+            var nombreAnual = $"{FechaActual.Year}-Calendarios Anuales-{App.Global.CentroActual}.xlsx";
+            var carpetaAnual = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Calendarios/{App.Global.CentroActual}");
+            var rutaAnual = Path.Combine(carpetaAnual, nombreAnual);
+
+            var titulo = $"COMPARACION CON ANUAL - {App.Global.CentroActual.ToString().ToUpper()} - {FechaActual.Year}";
+            ExcelService.getInstance().GenerarComparacionCalendarioAnual(rutaDestino, rutaAnual, FechaActual, titulo, "Anual");
+            if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
+        }
+        #endregion
+
+
+        #region COMPARAR TODOS LOS CALENDARIOS CON EL VIRTUAL 
+
+        // Comando
+        private ICommand cmdCompararTodosConVirtual;
+        public ICommand CmdCompararTodosConVirtual {
+            get {
+                if (cmdCompararTodosConVirtual == null) cmdCompararTodosConVirtual = new RelayCommand(p => CompararTodosConVirual());
+                return cmdCompararTodosConVirtual;
+            }
+        }
+        private void CompararTodosConVirual() {
+            if (string.IsNullOrEmpty(App.Global.Configuracion.CarpetaAvanza)) {
+                Mensajes.VerMensaje("Por favor\n\nDefina la ruta de la carpeta AVANZA en las opciones.", "ATENCIÓN");
+                return;
+            }
+            // Definir el nombre del excel de destino.
+            string nombreArchivo = $"{FechaActual.ToString("yyyy")} - Comparación Todos Con Virtual - {App.Global.CentroActual}.xlsx";
+            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
+            string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
+
+            // Establecemos el archivo excel que se va a comparar.
+            var nombreAnual = $"{FechaActual.Year}-Calendarios Virtuales-{App.Global.CentroActual}.xlsx";
+            var carpetaAnual = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Calendarios/{App.Global.CentroActual}");
+            var rutaAnual = Path.Combine(carpetaAnual, nombreAnual);
+
+            var titulo = $"COMPARACION CON VIRTUAL - {App.Global.CentroActual.ToString().ToUpper()} - {FechaActual.Year}";
+            ExcelService.getInstance().GenerarComparacionCalendarioAnual(rutaDestino, rutaAnual, FechaActual, titulo, "Virtual");
+            if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
+        }
+        #endregion
+
 
 
 

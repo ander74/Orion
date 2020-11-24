@@ -75,6 +75,8 @@ namespace Orion.Pijama {
                     }
                     // Establecemos el Plus de Nocturnidad
                     if (dia.GraficoTrabajado.Turno == 3) dia.PlusNocturnidad = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusNocturnidad;
+                    // Establecemos el quebranto de moneda.
+                    if (dia.GraficoTrabajado.Numero > 0 || dia.GraficoTrabajado.Numero == -6) dia.QuebrantoMoneda = App.Global.OpcionesVM.GetPluses(Fecha.Year).QuebrantoMoneda;
                     // Establcemos el Plus de Navidad
                     if (dia.GraficoTrabajado.Numero > 0 && dia.DiaFecha.Day == 25 && dia.DiaFecha.Month == 12) {
                         dia.PlusNavidad = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusNavidad;
@@ -1453,9 +1455,13 @@ namespace Orion.Pijama {
             get {
                 if (App.Global.PorCentro.PagarLimpiezas == true) {
                     if (Trabajador.Indefinido) {
-                        return App.Global.PorCentro.NumeroLimpiezas * App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
+                        var dias = App.Global.PorCentro.NumeroLimpiezas;
+                        dias -= (ListaDias.Count(d => d.Grafico == -4) + DescansosNoDisfrutados + LibreDisposicionF6 + Permiso);
+                        return dias * App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
                     } else {
-                        return Trabajo * App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
+                        var dias = (Trabajo + DescansoCompensatorio);
+                        if (dias > 21) dias = 21;
+                        return dias * App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
                     }
                 } else {
                     if (ListaDias == null) return 0m;
@@ -1510,6 +1516,17 @@ namespace Orion.Pijama {
 
 
         /// <summary>
+        /// Suma del quebranto de moneda de todo el mes.
+        /// </summary>
+        public decimal QuebrantoMoneda {
+            get {
+                if (ListaDias == null) return 0m;
+                return ListaDias.Sum(x => x.QuebrantoMoneda);
+            }
+        }
+
+
+        /// <summary>
         /// Suma de los pluses de Nocturnidad, viaje y navidad del mes actual.
         /// </summary>
         public decimal OtrosPluses {
@@ -1524,7 +1541,7 @@ namespace Orion.Pijama {
         /// </summary>
         public decimal ImporteTotalPluses {
             get {
-                return PlusMenorDescanso + PlusPaqueteria + PlusLimpieza + PlusNocturnidad + PlusNavidad + PlusViaje;
+                return PlusMenorDescanso + QuebrantoMoneda + PlusPaqueteria + PlusLimpieza + PlusNocturnidad + PlusNavidad + PlusViaje;
             }
         }
 

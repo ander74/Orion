@@ -681,7 +681,7 @@ namespace Orion.ViewModels {
 
 
 
-        #region COMANDO 
+        #region COMANDO MOSTRAR ARTÍCULO CONVENIO
 
         // Comando
         private ICommand cmdMostrarArticuloConvenio;

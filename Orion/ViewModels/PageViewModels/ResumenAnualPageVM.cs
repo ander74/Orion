@@ -28,6 +28,21 @@ namespace Orion.ViewModels.PageViewModels {
         // ====================================================================================================
 
 
+        // ====================================================================================================
+        #region PROPIEDADES
+        // ====================================================================================================
+
+        // Mapeado a los viewmodels que necesitemos usar.
+        // ----------------------------------------------
+        public ConductoresViewModel ConductoresVM => App.Global.ConductoresVM;
+        public CalendariosViewModel CalendariosVM => App.Global.CalendariosVM;
+
+
+
+        #endregion
+        // ====================================================================================================
+
+
 
     }
 }

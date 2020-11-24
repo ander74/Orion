@@ -180,7 +180,7 @@ namespace Orion.Config {
                     } else if (inicio.Value.TotalMinutes >= (iniciocomidacontinuo.TotalMinutes + 5) &&
                                inicio.Value.TotalMinutes < (iniciocomidacontinuo.TotalMinutes + 30)) {
 
-                        resultado = (iniciocomidacontinuo.Add(new TimeSpan(0, 30, 0)) - inicio).ToDecimal();
+                        resultado = (iniciocomidacontinuo.Add(new TimeSpan(0, 30, 0)) - inicio).ToDecimal() / 2;
                     }
                 }
                 if (turno == 4) {

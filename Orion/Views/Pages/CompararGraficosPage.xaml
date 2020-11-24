@@ -108,19 +108,19 @@
                     Title="Comparar"
                     Height="80"
                     Command="{Binding CmdComparar}"
-                    Image="/Views/Imagenes/Adelante.png" />
+                    Image="/Views/Imagenes/Check.png" />
 
                 <controls:VerticalButton
                     Title="Generar PDF"
                     Height="80"
                     Command="{Binding CmdGenerarPdf}"
-                    Image="/Views/Imagenes/GuardarPDF.png" />
+                    Image="/Views/Imagenes/PdfFile.png" />
 
                 <controls:VerticalButton
                     Title="Generar Excel"
                     Height="80"
                     Command="{Binding CmdGenerarExcel}"
-                    Image="/Views/Imagenes/GuardarExcel.png" />
+                    Image="/Views/Imagenes/ExcelFile.png" />
 
             </StackPanel>
 

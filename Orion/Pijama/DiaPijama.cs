@@ -144,6 +144,15 @@ namespace Orion.Pijama {
         }
 
 
+
+        private decimal quebrantoMoneda;
+        public decimal QuebrantoMoneda {
+            get => quebrantoMoneda;
+            set => SetValue(ref quebrantoMoneda, value);
+        }
+
+
+
         public decimal OtrosPluses {
             get {
                 return PlusNocturnidad + PlusNavidad;

@@ -209,6 +209,8 @@
     </Compile>
     <Compile Include="Controls\QCalendar.cs" />
     <Compile Include="Controls\QDataGrid.cs" />
+    <Compile Include="Controls\QDataGridCalendarColumn.cs" />
+    <Compile Include="Controls\QTestColumn.cs" />
     <Compile Include="Controls\TextoValorH.xaml.cs">
       <DependentUpon>TextoValorH.xaml</DependentUpon>
     </Compile>
@@ -222,6 +224,7 @@
     <Compile Include="Convertidores\ConvertidorMinutosToHoraMixta.cs" />
     <Compile Include="Convertidores\ConvertidorNegritaColumnaPijama.cs" />
     <Compile Include="Convertidores\ConvertidorNegritaDiaPijama.cs" />
+    <Compile Include="Convertidores\ConvertidorItinerarioNoMenor100.cs" />
     <Compile Include="Convertidores\ConvertidorNumeroArticuloConvenio.cs" />
     <Compile Include="Convertidores\ConvertidorOcultoSiCero.cs" />
     <Compile Include="Convertidores\ConvertidorSelectionUnitToEnabled.cs" />
@@ -942,7 +945,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EPPlus">
-      <Version>5.4.1</Version>
+      <Version>5.4.2</Version>
     </PackageReference>
     <PackageReference Include="Extended.Wpf.Toolkit">
       <Version>4.0.1</Version>
@@ -975,6 +978,12 @@
   <ItemGroup>
     <Resource Include="Views\Imagenes\Iconos\Icono Orion.ico" />
     <Resource Include="Icono Orion.ico" />
+    <Resource Include="Views\Imagenes\Regenerar.png" />
+    <Resource Include="Views\Imagenes\RegenerarUno.png" />
+    <Resource Include="Views\Imagenes\ExcelFile.png" />
+    <Resource Include="Views\Imagenes\PdfFile.png" />
+    <Resource Include="Views\Imagenes\Check.png" />
+    <Resource Include="Views\Imagenes\Calendarios.png" />
     <Content Include="x64\SQLite.Interop.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

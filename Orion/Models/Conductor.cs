@@ -407,8 +407,8 @@ namespace Orion.Models {
 
         public virtual void FromReader(DbDataReader lector) {
             _id = lector.ToInt32("_id");
-            //activo = lector.ToBool("Activo");
-            //categoria = lector.ToString("Categoria");
+            activo = lector.ToBool("Activo");
+            categoria = lector.ToString("Categoria");
             matricula = lector.ToInt32("Matricula");
             _nombre = lector.ToString("Nombre");
             _apellidos = lector.ToString("Apellidos");
@@ -430,8 +430,8 @@ namespace Orion.Models {
         public virtual IEnumerable<SQLiteParameter> Parametros {
             get {
                 var lista = new List<SQLiteParameter>();
-                //lista.Add(new SQLiteParameter("Activo", Activo ? 1 : 0));
-                //lista.Add(new SQLiteParameter("Categoria", Categoria));
+                lista.Add(new SQLiteParameter("Activo", Activo ? 1 : 0));
+                lista.Add(new SQLiteParameter("Categoria", Categoria));
                 lista.Add(new SQLiteParameter("Matricula", Matricula));
                 lista.Add(new SQLiteParameter("Nombre", Nombre));
                 lista.Add(new SQLiteParameter("Apellidos", Apellidos));

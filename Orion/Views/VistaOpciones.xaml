@@ -941,7 +941,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="jornadaMedia"
-                                    Text="Jornada Media: " />
+                                    Text="Jornada media: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding JornadaMedia, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -952,7 +952,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="plusNocturnidad"
-                                    Text="Inicio Nocturnas: " />
+                                    Text="Inicio nocturnas: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding InicioNocturnas, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -963,7 +963,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="plusNocturnidad"
-                                    Text="Final Nocturnas: " />
+                                    Text="Final nocturnas: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding FinalNocturnas, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -974,7 +974,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="dietaDesayuno"
-                                    Text="Hora Desayuno: " />
+                                    Text="Hora desayuno: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding HoraDesayuno, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -985,7 +985,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="dietaDesayuno"
-                                    Text="Porcentaje Desayuno: " />
+                                    Text="Porcentaje desayuno: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding PorcentajeDesayuno, Mode=TwoWay}" />
@@ -996,7 +996,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="dietaComida"
-                                    Text="Inicio Comida (Continuo): " />
+                                    Text="Inicio comida (continuo): " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding InicioComidaContinuo, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -1007,7 +1007,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="dietaComida"
-                                    Text="Final Comida (Continuo): " />
+                                    Text="Final comida (continuo): " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding FinalComidaContinuo, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -1018,7 +1018,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="dietaComida"
-                                    Text="Inicio Comida (Partido): " />
+                                    Text="Inicio comida (partido): " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding InicioComidaPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -1029,7 +1029,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="dietaComida"
-                                    Text="Final Comida (Partido): " />
+                                    Text="Final comida (partido): " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding FinalComidaPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -1040,7 +1040,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="dietaCena"
-                                    Text="Inicio Cena: " />
+                                    Text="Inicio cena: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding InicioCena, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -1051,7 +1051,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="dietaCena"
-                                    Text="Final Cena: " />
+                                    Text="Final cena: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding FinalCena, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -1062,7 +1062,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="dietaCena"
-                                    Text="Inicio Plus Cena: " />
+                                    Text="Inicio plus cena: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding InicioPlusCena, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -1073,7 +1073,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="dietaCena"
-                                    Text="Porcentaje Plus Cena: " />
+                                    Text="Porcentaje plus cena: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding PorcentajePlusCena, Mode=TwoWay}" />
@@ -1091,7 +1091,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="jornadaMedia"
-                                    Text="Maximo Horas Cobradas: " />
+                                    Text="Maximo horas cobradas: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding MaxHorasCobradas, Mode=TwoWay}" />
@@ -1113,7 +1113,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="jornadaMedia"
-                                    Text="Días Trabajo anuales: " />
+                                    Text="Días trabajo anuales: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding TrabajoAnuales, Mode=TwoWay}" />
@@ -1124,7 +1124,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="descansos"
-                                    Text="Días Descanso anuales: " />
+                                    Text="Días descanso anuales: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding DescansosAnuales, Mode=TwoWay}" />
@@ -1134,8 +1134,19 @@
                                 <TextBlock
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
+                                    Tag="descansos"
+                                    Text="Máximo descansos sueltos: " />
+                                <controls:QTextBox
+                                    Style="{StaticResource EstiloTextBoxConvenio}"
+                                    Text="{Binding DescansosSueltosAnuales, Mode=TwoWay}" />
+                            </StackPanel>
+
+                            <StackPanel Style="{StaticResource EstiloPanelOpciones}">
+                                <TextBlock
+                                    PreviewMouseUp="TextBlock_PreviewMouseUp"
+                                    Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="vacaciones"
-                                    Text="Días Vacaciones anuales: " />
+                                    Text="Días vacaciones anuales: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding VacacionesAnuales, Mode=TwoWay}" />
@@ -1146,7 +1157,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="jornadaMedia"
-                                    Text="Fines de Semana Completos: " />
+                                    Text="Fines de semana completos: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding FindesCompletosAnuales, Mode=TwoWay}" />
@@ -1157,7 +1168,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="jornadaMedia"
-                                    Text="Máximo Trabajo Laborables: " />
+                                    Text="Máximo trabajo laborables: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding MaxHorasLaborables, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -1168,7 +1179,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="jornadaMedia"
-                                    Text="Máximo Trabajo Sáb y Fest.: " />
+                                    Text="Máximo trabajo sáb y fest.: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding MaxHorasFinesSemana, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -1179,7 +1190,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="jornadaMedia"
-                                    Text="Máx Horas Grafico Partido: " />
+                                    Text="Máx horas grafico partido: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding MaxHorasTotalGraficoPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -1190,7 +1201,7 @@
                                     PreviewMouseUp="TextBlock_PreviewMouseUp"
                                     Style="{StaticResource EstiloTextoConvenioLink}"
                                     Tag="jornadaMedia"
-                                    Text="Máx Particion Graf. Partido: " />
+                                    Text="Máx particion graf. partido: " />
                                 <controls:QTextBox
                                     Style="{StaticResource EstiloTextBoxConvenio}"
                                     Text="{Binding MaxHorasParticionGraficoPartido, Mode=TwoWay, Converter={StaticResource cnvHora}}" />
@@ -1679,6 +1690,19 @@
                                     <controls:QTextBox
                                         Style="{StaticResource EstiloTextBoxConvenio}"
                                         Text="{Binding PlusNavidad, Mode=TwoWay, Converter={StaticResource cnvDecimal}}" />
+                                </StackPanel>
+
+                                <StackPanel
+                                    HorizontalAlignment="Center"
+                                    Style="{StaticResource EstiloPanelOpciones}">
+                                    <TextBlock
+                                        PreviewMouseUp="TextBlock_PreviewMouseUp"
+                                        Style="{StaticResource EstiloTextoPlusesLink}"
+                                        Tag="quebrantoMoneda"
+                                        Text="Quebranto de Moneda: " />
+                                    <controls:QTextBox
+                                        Style="{StaticResource EstiloTextBoxConvenio}"
+                                        Text="{Binding QuebrantoMoneda, Mode=TwoWay, Converter={StaticResource cnvDecimal}}" />
                                 </StackPanel>
 
                             </StackPanel>

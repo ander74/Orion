@@ -294,6 +294,7 @@ namespace Orion.ViewModels {
                         new FuncionRelacionada(17, "plusMenorDescanso", "Plus de menor descanso"),
                         new FuncionRelacionada(18, "plusPaqueteria", "Plus Paqueteria"),
                         new FuncionRelacionada(19, "plusNavidad", "Plus de Navidad"),
+                        new FuncionRelacionada(20, "quebrantoMoneda", "Quebranto de moneda"),
                     };
                 }
                 return funcionesRelacionadas;

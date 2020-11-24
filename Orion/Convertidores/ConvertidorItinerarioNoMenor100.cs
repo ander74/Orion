@@ -12,8 +12,7 @@ using System.Windows.Data;
 namespace Orion.Convertidores {
 
     [ValueConversion(typeof(decimal), typeof(string))]
-    class ConvertidorItinerario : IValueConverter {
-
+    public class ConvertidorItinerarioNoMenor100 : IValueConverter {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
             if (value is decimal valor) {
                 string textoLinea = valor.ToString().Replace(",", ".");
@@ -24,7 +23,7 @@ namespace Orion.Convertidores {
                 } else {
                     numeroItinerario = int.Parse(textoLinea);
                 }
-                return numeroItinerario.ToString();
+                return numeroItinerario < 100 ? string.Empty : numeroItinerario.ToString();
             }
             return string.Empty;
         }
@@ -34,5 +33,5 @@ namespace Orion.Convertidores {
             return 0m;
         }
 
-    } // Final de clase.
+    }
 }

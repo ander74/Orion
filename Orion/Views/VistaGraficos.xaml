@@ -28,6 +28,7 @@
         <cnv:ConvertidorDecimal x:Key="cnvDecimal" />
         <cnv:ConvertidorNumeroGrafico x:Key="cnvNumGrafico" />
         <cnv:ConvertidorItinerario x:Key="cnvItinerario" />
+        <cnv:ConvertidorItinerarioNoMenor100 x:Key="cnvItinerarioNoMenor100" />
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
         <cnv:ConvertidorDiaSemanaGrafico x:Key="cnvDiaSemanaGrafico" />
         <cnv:ConvertidorTurno4Visibility x:Key="cnvTurno4Visibility" />
@@ -1411,7 +1412,7 @@
                                 Header="Inicio" />
                             <DataGridTextColumn
                                 Width="1.5*"
-                                Binding="{Binding Linea, Converter={StaticResource cnvItinerario}, ConverterParameter={x:Static cnv:VerValores.NoCeros}, UpdateSourceTrigger=LostFocus}"
+                                Binding="{Binding Linea, Converter={StaticResource cnvItinerarioNoMenor100}, UpdateSourceTrigger=LostFocus}"
                                 Header="Línea" />
                             <DataGridTextColumn
                                 Width="8*"

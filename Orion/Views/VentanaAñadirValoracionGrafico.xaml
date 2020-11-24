@@ -120,13 +120,7 @@
                     FontSize="32"
                     GotFocus="Tb_GotFocus"
                     KeyDown="Tb_KeyDown"
-                    Text="{Binding Path=Linea, Converter={StaticResource ConvertidorDecimal}, ConverterParameter={x:Static convertidores:VerValores.NoCeros}}">
-                    <TextBox.ToolTip>
-                        <TextBlock>
-                            Para añadir un descanso utilice el código -1000 añadiéndole el tiempo de descanso.<LineBreak />
-                            Ejemplo: -1015 (Descanso 15 minutos).</TextBlock>
-                    </TextBox.ToolTip>
-                </TextBox>
+                    Text="{Binding Path=Linea, Converter={StaticResource ConvertidorDecimal}, ConverterParameter={x:Static convertidores:VerValores.NoCeros}}" />
 
             </StackPanel>
 

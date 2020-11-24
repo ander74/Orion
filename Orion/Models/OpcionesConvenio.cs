@@ -102,6 +102,13 @@ namespace Orion.Models {
         }
 
 
+        private int descansosSueltosAnuales = 15;
+        public int DescansosSueltosAnuales {
+            get => descansosSueltosAnuales;
+            set => SetValue(ref descansosSueltosAnuales, value);
+        }
+
+
         private int _vacacionesanuales = 31;
         public int VacacionesAnuales {
             get { return _vacacionesanuales; }
@@ -448,16 +455,6 @@ namespace Orion.Models {
                 PropiedadCambiada("");
             }
         }
-
-        #endregion
-        // ====================================================================================================
-
-
-        // ====================================================================================================
-        #region EVENTOS
-        // ====================================================================================================
-
-
 
         #endregion
         // ====================================================================================================

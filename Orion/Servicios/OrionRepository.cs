@@ -1742,17 +1742,35 @@ namespace Orion.Servicios {
 
         public IEnumerable<DiaPijama> GetDiasPijama(DateTime fecha, int matriculaConductor) {
             var consulta = new SQLiteExpression("" +
+                //"SELECT " +
+                //"DiasCalendario.*, " +
+                //"Graficos.* " +
+                //"FROM DiasCalendario LEFT JOIN Graficos " +
+                //"ON DiasCalendario.Grafico = Graficos.Numero " + //Si falla aquí probar a añadir DiasCalendario.Grafico > 0 AND ...
+                //"AND strftime('%Y-%m-%d', Graficos.Validez) = strftime('%Y-%m-%d', (SELECT Max(Graficos.Validez) FROM Graficos WHERE strftime('%Y-%m-%d', Graficos.Validez) <= strftime('%Y-%m-%d', DiasCalendario.DiaFecha))) " +
+                //"" +
+                //"WHERE IdCalendario = (SELECT _id " +
+                //"                      FROM Calendarios " +
+                //"                      WHERE Calendarios.MatriculaConductor = @matricula AND strftime('%Y-%m', Calendarios.Fecha) = strftime('%Y-%m', @fecha)) " +
+                //"ORDER BY DiasCalendario.Dia");
                 "SELECT " +
-                "DiasCalendario.*, " +
-                "Graficos.* " +
-                "FROM DiasCalendario LEFT JOIN Graficos " +
-                "ON DiasCalendario.Grafico = Graficos.Numero " + //Si falla aquí probar a añadir DiasCalendario.Grafico > 0 AND ...
-                "AND strftime('%Y-%m-%d', Graficos.Validez) = strftime('%Y-%m-%d', (SELECT Max(Graficos.Validez) FROM Graficos WHERE strftime('%Y-%m-%d', Graficos.Validez) <= strftime('%Y-%m-%d', DiasCalendario.DiaFecha))) " +
-                "" +
+                "DC._id, DC.IdCalendario, DC.Dia, DC.DiaFecha, DC.Grafico, DC.Codigo, " +
+                "DC.ExcesoJornada, DC.FacturadoPaqueteria, DC.Limpieza, DC.GraficoVinculado, DC.Notas, " +
+                "DC.TurnoAlt, DC.InicioAlt, DC.FinalAlt, DC.InicioPartidoAlt, DC.FinalPartidoAlt, DC.TiempoPartido, DC.TrabajadasPartido, " +
+                "DC.TrabajadasAlt, DC.TrabajadasConvenio, DC.TrabajadasReales, " +
+                "DC.AcumuladasAlt, DC.NocturnasAlt, DC.DesayunoAlt, DC.ComidaAlt, DC.CenaAlt, DC.PlusCenaAlt," +
+                "DC.PlusLimpiezaAlt, DC.PlusPaqueteriaAlt, " +
+                "G.IdGrupo, G.Categoria, G.Validez, G.NoCalcular, G.Numero, G.DiaSemana, G.Categoria AS CategoriaGrafico, " +
+                "G.Turno, G.Inicio, G.Final, G.InicioPartido, G.FinalPartido, " +
+                "G.Valoracion, G.Trabajadas, G.TiempoVacio, G.Acumuladas, G.Nocturnas, G.Desayuno, G.Comida, G.Cena, G.PlusCena, " +
+                "G.PlusLimpieza, G.PlusPaqueteria " +
+                "FROM DiasCalendario AS DC LEFT JOIN Graficos AS G " +
+                "ON DC.Grafico = G.Numero " +
+                "AND strftime('%Y-%m-%d', G.Validez) = strftime('%Y-%m-%d', (SELECT Max(Graficos.Validez) FROM Graficos WHERE strftime('%Y-%m-%d', Graficos.Validez) <= strftime('%Y-%m-%d', DC.DiaFecha))) " +
                 "WHERE IdCalendario = (SELECT _id " +
-                "                      FROM Calendarios " +
-                "                      WHERE Calendarios.MatriculaConductor = @matricula AND strftime('%Y-%m', Calendarios.Fecha) = strftime('%Y-%m', @fecha)) " +
-                "ORDER BY DiasCalendario.Dia");
+                "                     FROM Calendarios" +
+                "                     WHERE Calendarios.MatriculaConductor = @matricula AND strftime('%Y-%m', Calendarios.Fecha) = strftime('%Y-%m', @fecha)) " +
+                "ORDER BY DC.Dia;");
             consulta.AddParameter("@matricula", matriculaConductor);
             consulta.AddParameter("@fecha", fecha);
             try {

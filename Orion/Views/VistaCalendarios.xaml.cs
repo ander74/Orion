@@ -6,7 +6,6 @@
 // ===============================================
 #endregion
 namespace Orion.Views {
-
     using System.Windows;
     using System.Windows.Controls;
     using System.Windows.Data;
@@ -14,8 +13,20 @@ namespace Orion.Views {
 
     public partial class VistaCalendarios : UserControl {
         public VistaCalendarios() {
-
             InitializeComponent();
+
+            // Añadir opciones al menú contextual del Grid Calendarios
+            //var assemblyName = Assembly.GetEntryAssembly().GetName().Name;
+            //TablaCalendarios.ContextMenu.Items.Add(new Separator());
+            //TablaCalendarios.ContextMenu.Items.Add(new MenuItem {
+            //    Header = "Regenerar gráfico",
+            //    Icon = new Image { Source = new BitmapImage(new Uri($"/{assemblyName};component/Views/Imagenes/Copiar.png", UriKind.Relative)) },
+            //});
+            TablaCalendarios.ContextMenu.Items.Add(new Separator());
+            TablaCalendarios.ContextMenu.Items.Add(this.FindResource("menuRegenerarCalendario") as MenuItem);
+            TablaCalendarios.ContextMenu.Items.Add(this.FindResource("menuRegenerarTodos") as MenuItem);
+
+
         }
 
 
@@ -61,6 +72,9 @@ namespace Orion.Views {
             BtDropCorregir.IsOpen = false;
         }
 
+        private void BtOtrosCalendarios_Click(object sender, RoutedEventArgs e) {
+            BtDropOtrosCalendarios.IsOpen = false;
+        }
 
 
         #endregion

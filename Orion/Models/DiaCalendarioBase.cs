@@ -359,7 +359,7 @@ namespace Orion.Models {
         }
 
 
-        private TimeSpan trabajadasPartido;
+        private TimeSpan trabajadasPartido; //TODO: La llamaremos JornadaTotal
         public TimeSpan TrabajadasPartido {
             get => trabajadasPartido;
             set {
