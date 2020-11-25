@@ -348,19 +348,19 @@ namespace Orion.PdfExcel {
             // Insertamos lá tabla de título
             tabla.AddHeaderCell(new Cell(1, table.ColumnWidths.Count()).Add(tablaTitulo).AddStyle(styTitle));
             // Insertamos los encabezados, si existen.
-            int columna = 1;
+            int columna = 0;
             if (table.Headers != null && table.Headers.Any()) {
                 foreach (var header in table.Headers) {
                     if (!header.IsMerged) {
+                        columna += header.MergedCells.cols;
                         var celda = new Cell(header.MergedCells.rows, header.MergedCells.cols);
-                        celda.Add(new Paragraph(header.Value.ToString()))
+                        celda.Add(new Paragraph(header.Value?.ToString() ?? string.Empty))
                             .AddStyle(styHeader)
                             .AddStyle(GetPdfStyle(header));
                         if (columna == 1) celda.AddStyle(styHeaderFirst);
                         if (columna == table.Headers.Count()) celda.AddStyle(styHeaderLast);
                         tabla.AddHeaderCell(celda);
                     }
-                    columna++;
                 }
             }
             // Inertamos las celdas, si existen.
@@ -369,11 +369,12 @@ namespace Orion.PdfExcel {
             int fila = 1;
             if (table.Data != null && table.Data.Any()) {
                 foreach (var row in table.Data) {
-                    columna = 1;
+                    columna = 0;
                     foreach (var cell in row) {
                         if (!cell.IsMerged) {
+                            columna += cell.MergedCells.cols;
                             var celda = new Cell(cell.MergedCells.rows, cell.MergedCells.cols);
-                            celda.Add(new Paragraph(cell.Value.ToString()))
+                            celda.Add(new Paragraph(cell.Value?.ToString() ?? string.Empty))
                                 .AddStyle(styCell)
                                 .AddStyle(GetPdfStyle(cell));
                             if (columna == 1) celda.AddStyle(styCellFirst);
@@ -381,7 +382,6 @@ namespace Orion.PdfExcel {
                             if (isFondoAlterno) celda.AddStyle(styCellAlternate);
                             tabla.AddCell(celda);
                         }
-                        columna++;
                     }
                     if (filaAlterna == table.AlternateRowsCount) {
                         isFondoAlterno = !isFondoAlterno;
@@ -393,18 +393,18 @@ namespace Orion.PdfExcel {
             }
             // Insertamos los totales, si existen
             if (table.Totals != null && table.Totals.Any()) {
-                columna = 1;
+                columna = 0;
                 foreach (var total in table.Totals) {
                     if (!total.IsMerged) {
+                        columna += total.MergedCells.cols;
                         var celda = new Cell(total.MergedCells.rows, total.MergedCells.cols);
-                        celda.Add(new Paragraph(total.Value.ToString()))
+                        celda.Add(new Paragraph(total.Value?.ToString() ?? string.Empty))
                             .AddStyle(styTotal)
                             .AddStyle(GetPdfStyle(total));
                         if (columna == 1) celda.AddStyle(styTotalFirst);
                         if (columna == table.Totals.Count()) celda.AddStyle(styTotalLast);
                         tabla.AddCell(celda);
                     }
-                    columna++;
                 }
             }
 
@@ -481,21 +481,21 @@ namespace Orion.PdfExcel {
                 // Encabezados si los hay.
                 int fila = 2;
                 if (table.Headers != null && table.Headers.Any()) {
-                    col = 1;
+                    col = 0;
                     foreach (var header in table.Headers) {
                         if (!header.IsMerged) {
+                            col++;
                             var celda = hoja.Cells[fila, col];
                             if (header.MergedCells.cols > 1) {
                                 hoja.Cells[fila, col, fila, col + header.MergedCells.cols - 1].Merge = true;
-                                col += header.MergedCells.cols - 1;
                             }
+                            col += header.MergedCells.cols - 1;
                             celda.Value = decimal.TryParse(header.Value, out decimal d) ? (object)d : header.Value;
                             celda.Style.Font.Bold = true;
                             celda.Style.Fill.PatternType = ExcelFillStyle.Solid;
                             celda.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(table.HeadersBackground.R, table.HeadersBackground.G, table.HeadersBackground.B));
                             applyExcelStyleToCell(ref celda, header);
                         }
-                        col++;
                     }
                     hoja.Row(fila).Height = 20;
                     fila++;
@@ -505,13 +505,15 @@ namespace Orion.PdfExcel {
                 int filaAlterna = 1;
                 if (table.Data != null && table.Data.Any()) {
                     foreach (var row in table.Data) {
-                        col = 1;
+                        col = 0;
                         foreach (var cell in row) {
                             if (!cell.IsMerged) {
+                                col++;
                                 var celda = hoja.Cells[fila, col];
                                 if (cell.MergedCells.cols > 1 || cell.MergedCells.rows > 1) {
                                     hoja.Cells[fila, col, fila + cell.MergedCells.rows - 1, col + cell.MergedCells.cols - 1].Merge = true;
                                 }
+                                col += cell.MergedCells.cols - 1;
                                 applyExcelStyleToCell(ref celda, cell);
                                 if (isFondoAlterno) {
                                     celda.Style.Fill.PatternType = ExcelFillStyle.Solid;
@@ -519,7 +521,6 @@ namespace Orion.PdfExcel {
                                 }
                                 celda.Value = decimal.TryParse(cell.Value, out decimal d) ? (object)d : cell.Value;
                             }
-                            col++;
                         }
                         hoja.Row(fila).Height = 20;
                         if (filaAlterna == table.AlternateRowsCount) {
@@ -532,20 +533,20 @@ namespace Orion.PdfExcel {
                 }
                 // Totales si los hay.
                 if (table.Totals != null && table.Totals.Any()) {
-                    col = 1;
+                    col = 0;
                     foreach (var total in table.Totals) {
                         if (!total.IsMerged) {
+                            col++;
                             var celda = hoja.Cells[fila, col];
                             if (total.MergedCells.cols > 1) {
                                 hoja.Cells[fila, col, fila, col + total.MergedCells.cols - 1].Merge = true;
-                                col += total.MergedCells.cols - 1;
                             }
+                            col += total.MergedCells.cols - 1;
                             celda.Value = decimal.TryParse(total.Value, out decimal d) ? (object)d : total.Value;
                             celda.Style.Fill.PatternType = ExcelFillStyle.Solid;
                             celda.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(table.HeadersBackground.R, table.HeadersBackground.G, table.HeadersBackground.B));
                             applyExcelStyleToCell(ref celda, total);
                         }
-                        col++;
                     }
                     hoja.Row(fila).Height = 20;
                     fila++;

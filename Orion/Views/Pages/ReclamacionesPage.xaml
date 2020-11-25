@@ -1,0 +1,101 @@
+﻿<!--  ===============================================  -->
+<!--  Copyright 2017 - Orion 1.0 - A. Herrero  -->
+<!--    -->
+<!--  Vea el archivo Licencia.txt para mas detalles  -->
+<!--  ===============================================  -->
+<UserControl
+    x:Class="Orion.Views.Pages.ReclamacionesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="clr-namespace:Orion.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="clr-namespace:Orion.Views.Pages"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DesignHeight="450"
+    d:DesignWidth="800"
+    mc:Ignorable="d">
+
+    <!--  CONTENIDO  -->
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+
+        <!--  TÍTULO  -->
+        <TextBlock
+            Grid.Row="0"
+            Grid.ColumnSpan="4"
+            Margin="10"
+            FontSize="24"
+            FontWeight="Bold"
+            Text="Reclamaciones de conductores" />
+
+        <!--  PANEL DE GESTIÓN  -->
+        <ScrollViewer
+            Grid.Row="1"
+            Grid.Column="0"
+            Margin="20"
+            VerticalAlignment="Top"
+            VerticalScrollBarVisibility="Auto">
+
+            <StackPanel Orientation="Vertical">
+
+                <!--  FILTRADO DE FECHAS  -->
+                <TextBlock
+                    Margin="0,20,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Text="Filtrado de Fechas: " />
+
+                <ComboBox
+                    x:Name="ComboFiltradoFechas"
+                    Height="24"
+                    MinWidth="250"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    SelectedIndex="{Binding TipoInformeSeleccionado}">
+                    <ComboBoxItem Content="Por meses" />
+                    <ComboBoxItem Content="Por conductores mes actual" />
+                    <ComboBoxItem Content="Por conductores anual" />
+                </ComboBox>
+
+
+            </StackPanel>
+
+        </ScrollViewer>
+
+        <!--  BOTONES  -->
+        <StackPanel
+            Grid.Row="2"
+            Grid.Column="0"
+            Margin="20"
+            VerticalAlignment="Top"
+            Orientation="Horizontal">
+            <controls:VerticalButton
+                Title="Generar PDF"
+                Height="80"
+                Command="{Binding CmdGenerarPdf}"
+                Image="/Views/Imagenes/PdfFile.png" />
+
+            <controls:VerticalButton
+                Title="Generar Excel"
+                Height="80"
+                Command="{Binding CmdGenerarExcel}"
+                Image="/Views/Imagenes/ExcelFile.png" />
+
+        </StackPanel>
+
+    </Grid>
+
+</UserControl>

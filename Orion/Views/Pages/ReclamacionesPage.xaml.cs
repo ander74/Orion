@@ -11,9 +11,17 @@ namespace Orion.Views.Pages {
     /// <summary>
     /// Lógica de interacción para ConductoresPage.xaml
     /// </summary>
-    public partial class ConductoresPage : UserControl {
-        public ConductoresPage() {
+    public partial class ReclamacionesPage : UserControl {
+
+        // ====================================================================================================
+        #region CONSTRUCTOR
+        // ====================================================================================================
+
+        public ReclamacionesPage() {
             InitializeComponent();
         }
+
+        #endregion
+        // ====================================================================================================
     }
 }

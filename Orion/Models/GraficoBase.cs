@@ -548,6 +548,7 @@ namespace Orion.Models {
             _finalpartido = lector.ToTimeSpanNulable("FinalPartido");
             _valoracion = lector.ToTimeSpan("Valoracion");
             _trabajadas = lector.ToTimeSpan("Trabajadas");
+            _trabajadasConvenio = lector.ToTimeSpan("TrabajadasConvenio");
             tiempoVacio = lector.ToTimeSpan("TiempoVacio");
             _acumuladas = lector.ToTimeSpan("Acumuladas");
             _nocturnas = lector.ToTimeSpan("Nocturnas");
@@ -579,6 +580,7 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("FinalPartido", FinalPartido.HasValue ? FinalPartido.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("Valoracion", Valoracion.Ticks));
                 lista.Add(new SQLiteParameter("Trabajadas", Trabajadas.Ticks));
+                lista.Add(new SQLiteParameter("TrabajadasConvenio", TrabajadasConvenio.Ticks));
                 lista.Add(new SQLiteParameter("TiempoVacio", TiempoVacio.Ticks));
                 lista.Add(new SQLiteParameter("Acumuladas", Acumuladas.Ticks));
                 lista.Add(new SQLiteParameter("Nocturnas", Nocturnas.Ticks));

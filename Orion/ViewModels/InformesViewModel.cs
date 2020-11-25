@@ -76,6 +76,9 @@ namespace Orion.ViewModels {
                     case "ResumenAnual":
                         CurrentPageViewModel = ResumenAnualPageVM.GetInstance();
                         break;
+                    case "Reclamaciones":
+                        CurrentPageViewModel = ReclamacionesPageVM.GetInstance();
+                        break;
                     default:
                         CurrentPageViewModel = null;
                         break;

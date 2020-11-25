@@ -325,13 +325,26 @@ namespace Orion.Servicios {
         // ====================================================================================================
 
 
-        public IEnumerable<Calendario> GetCalendarios(int año, int mes) {
+        public IEnumerable<Calendario> GetCalendarios(int año, int mes, bool sinDias = false) {
 
             try {
                 DateTime fecha = new DateTime(año, mes, 1);
                 var consulta = new SQLiteExpression("SELECT * FROM Calendarios WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) ORDER BY MatriculaConductor;");
                 consulta.AddParameter("@fecha", fecha);
-                var lista = GetItems<Calendario>(consulta);
+                var lista = GetItems<Calendario>(consulta, sinDias);
+                return lista;
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetCalendarios), ex);
+            }
+            return new List<Calendario>();
+        }
+
+        public IEnumerable<Calendario> GetCalendarios(int año, bool sinDias = false) {
+            try {
+                DateTime fecha = new DateTime(año, 1, 1);
+                var consulta = new SQLiteExpression("SELECT * FROM Calendarios WHERE strftime('%Y', Fecha) = strftime('%Y', @fecha) ORDER BY MatriculaConductor;");
+                consulta.AddParameter("@fecha", fecha);
+                var lista = GetItems<Calendario>(consulta, sinDias);
                 return lista;
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetCalendarios), ex);
@@ -340,7 +353,7 @@ namespace Orion.Servicios {
         }
 
 
-        public IEnumerable<Calendario> GetCalendariosConductor(int año, int matricula) {
+        public IEnumerable<Calendario> GetCalendariosConductor(int año, int matricula, bool sinDias = false) {
 
             try {
                 DateTime fecha = new DateTime(año, 1, 1);
@@ -348,7 +361,7 @@ namespace Orion.Servicios {
                     "WHERE strftime('%Y', Calendarios.Fecha) = strftime('%Y', @fecha) AND Calendarios.MatriculaConductor = @matricula " +
                     "ORDER BY Calendarios.Fecha;";
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
-                var lista = GetItems<Calendario>(consulta);
+                var lista = GetItems<Calendario>(consulta, sinDias);
                 return lista;
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetCalendariosConductor), ex);
@@ -357,14 +370,14 @@ namespace Orion.Servicios {
         }
 
 
-        public List<Calendario> GetCalendariosConductor(int año, int mes, int matricula) {
+        public List<Calendario> GetCalendariosConductor(int año, int mes, int matricula, bool sinDias = false) {
 
             try {
                 DateTime fecha = new DateTime(año, mes, 1);
                 string comandoSQL = "SELECT Calendarios.* FROM Calendarios " +
                                     "WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Calendarios.MatriculaConductor = @matricula ;";
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
-                var lista = GetItems<Calendario>(consulta);
+                var lista = GetItems<Calendario>(consulta, sinDias);
                 return lista.ToList();
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetCalendariosConductor), ex);

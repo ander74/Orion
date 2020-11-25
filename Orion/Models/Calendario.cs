@@ -121,6 +121,14 @@ namespace Orion.Models {
             }
         }
 
+        public void Recalcular() {
+            diasDC = ListaDias?.Count(d => d.Grafico == -6) ?? 0;
+            diasDND = ListaDias?.Count(d => d.Grafico == -8) ?? 0;
+            diasF6 = ListaDias?.Count(d => d.Grafico == -7) ?? 0;
+            TrabajadasConvenio = new TimeSpan(ListaDias.Sum(d => d.TrabajadasConvenio.Ticks));
+            Acumuladas = new TimeSpan(ListaDias.Sum(d => d.Acumuladas.Ticks));
+        }
+
         #endregion
 
 
@@ -176,6 +184,7 @@ namespace Orion.Models {
 
             if (e.PropertyName == nameof(DiaCalendario.Grafico)) {
                 DiaCalendarioChanged?.Invoke(e.ChangedItem, new EventArgs());
+                Recalcular();
             }
 
             Modificado = true;
@@ -239,6 +248,41 @@ namespace Orion.Models {
             }
         }
 
+
+        private int diasDC;
+        public int DiasDC {
+            get => diasDC;
+            set => SetValue(ref diasDC, value);
+        }
+
+
+        private int diasDND;
+        public int DiasDND {
+            get => diasDND;
+            set => SetValue(ref diasDND, value);
+        }
+
+
+        private int diasF6;
+        public int DiasF6 {
+            get => diasF6;
+            set => SetValue(ref diasF6, value);
+        }
+
+
+
+        private TimeSpan trabajadasConvenio;
+        public TimeSpan TrabajadasConvenio {
+            get => trabajadasConvenio;
+            set => SetValue(ref trabajadasConvenio, value);
+        }
+
+
+        private TimeSpan acumuladas;
+        public TimeSpan Acumuladas {
+            get => acumuladas;
+            set => SetValue(ref acumuladas, value);
+        }
 
 
         private string _notas = "";
@@ -315,6 +359,11 @@ namespace Orion.Models {
             _id = lector.ToInt32("_id");
             matriculaConductor = lector.ToInt32("MatriculaConductor");
             _fecha = lector.ToDateTime("Fecha");
+            diasDC = lector.ToInt32("DiasDC");
+            diasDND = lector.ToInt32("DiasDND");
+            diasF6 = lector.ToInt32("DiasF6");
+            trabajadasConvenio = lector.ToTimeSpan("TrabajadasConvenio");
+            acumuladas = lector.ToTimeSpan("Acumuladas");
             _notas = lector.ToString("Notas");
             Nuevo = false;
             Modificado = false;
@@ -327,6 +376,11 @@ namespace Orion.Models {
                 var lista = new List<SQLiteParameter>();
                 lista.Add(new SQLiteParameter("MatriculaConductor", MatriculaConductor));
                 lista.Add(new SQLiteParameter("Fecha", Fecha.ToString("yyyy-MM-dd")));
+                lista.Add(new SQLiteParameter("DiasDC", DiasDC));
+                lista.Add(new SQLiteParameter("DiasDND", DiasDND));
+                lista.Add(new SQLiteParameter("DiasF6", DiasF6));
+                lista.Add(new SQLiteParameter("TrabajadasConvenio", TrabajadasConvenio.Ticks));
+                lista.Add(new SQLiteParameter("Acumuladas", Acumuladas.Ticks));
                 lista.Add(new SQLiteParameter("Notas", Notas));
                 //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;

@@ -1511,6 +1511,7 @@ namespace Orion.ViewModels {
 
         private void RegenerarCalendario() {
             foreach (var dia in CalendarioSeleccionado.ListaDias) RegenerarDiaCalendario(dia);
+            CalendarioSeleccionado.Recalcular();
         }
         #endregion
 
@@ -1531,6 +1532,7 @@ namespace Orion.ViewModels {
             foreach (var objeto in VistaCalendarios) {
                 if (objeto is Calendario calendario) {
                     foreach (var dia in ((Calendario)calendario).ListaDias) RegenerarDiaCalendario(dia);
+                    calendario.Recalcular();
                 }
             }
         }

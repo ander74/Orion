@@ -102,17 +102,18 @@ namespace Orion.Pijama {
                         }
                     }
                     // Si es un día de permiso, se establecen las horas trabajadas en la jornada media.
-                    if (dia.Grafico == -9) dia.GraficoTrabajado.Trabajadas = App.Global.Convenio.JornadaMedia;
+                    if (dia.Grafico == Incidencia.PER) dia.GraficoTrabajado.Trabajadas = App.Global.Convenio.JornadaMedia;
                     // Si es un día de formación, se establecen las horas trabajadas en la jornada media.
-                    if (dia.Grafico == -15) dia.GraficoTrabajado.Trabajadas = App.Global.Convenio.JornadaMedia;
+                    if (dia.Grafico == Incidencia.FOR) dia.GraficoTrabajado.Trabajadas = App.Global.Convenio.JornadaMedia;
                     // Establecemos el final anterior, si existe.
                     if (dia.GraficoTrabajado != null && dia.GraficoTrabajado.Final.HasValue) {
                         finalAnterior = dia.GraficoTrabajado.Final.Value;
                     } else {
-                        if (dia.Grafico != -5) finalAnterior = null;
+                        //Si es un DS cuentan 24h más (o sea, 36h) para el plus de menor descanso.
+                        if (dia.Grafico != Incidencia.DS || (dia.Grafico == Incidencia.DS && dia.EsFestivo)) finalAnterior = null;
                     }
                     // Si es un día de comite, se añade una dieta de comida.
-                    if ((dia.Codigo == 1) || (dia.Codigo == 2)) {
+                    if ((dia.Codigo == Codigo.CO) || (dia.Codigo == Codigo.CE)) {
                         if (dia.GraficoTrabajado.Comida < 1) dia.GraficoTrabajado.Comida = 1m;
                     }
                 }

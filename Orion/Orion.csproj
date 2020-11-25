@@ -281,6 +281,7 @@
     <Compile Include="Models\EstadisticaPorTurnos.cs" />
     <Compile Include="Models\GraficoFecha.cs" />
     <Compile Include="Models\GraficosPorDia.cs" />
+    <Compile Include="Models\Incidencia.cs" />
     <Compile Include="Models\ItemResumenAnual.cs" />
     <Compile Include="Models\OneDrive\TokenResponse.cs" />
     <Compile Include="Models\OpcionesConfiguracion.cs" />
@@ -303,6 +304,7 @@
     <Compile Include="Models\Pluses.cs" />
     <Compile Include="Models\Reclamacion.cs" />
     <Compile Include="Models\RegulacionConductor.cs" />
+    <Compile Include="Models\ResumenReclamacion.cs" />
     <Compile Include="Models\SQLiteExpression.cs" />
     <Compile Include="Models\ValoracionGrafico.cs" />
     <Compile Include="Mvvm\CommandAsync.cs" />
@@ -360,7 +362,7 @@
     <Compile Include="ViewModels\LineasViewModel.cs" />
     <Compile Include="ViewModels\OpcionesCommands.cs" />
     <Compile Include="ViewModels\OpcionesViewModel.cs" />
-    <Compile Include="ViewModels\PageViewModels\ConductoresPageViewModel.cs" />
+    <Compile Include="ViewModels\PageViewModels\ReclamacionesPageVM.cs" />
     <Compile Include="ViewModels\PageViewModels\CompararGraficosPageVM.cs" />
     <Compile Include="ViewModels\PageViewModels\PageViewModelBase.cs" />
     <Compile Include="ViewModels\PageViewModels\ResumenAnualPageVM.cs" />
@@ -377,8 +379,8 @@
     <Compile Include="ViewModels\VentanaRegularAñoVM.cs" />
     <Compile Include="Servicios\MensajesServicio.cs" />
     <Compile Include="Controls\QTextBox.cs" />
-    <Compile Include="Views\Pages\ConductoresPage.xaml.cs">
-      <DependentUpon>ConductoresPage.xaml</DependentUpon>
+    <Compile Include="Views\Pages\ReclamacionesPage.xaml.cs">
+      <DependentUpon>ReclamacionesPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\Pages\CompararGraficosPage.xaml.cs">
       <DependentUpon>CompararGraficosPage.xaml</DependentUpon>
@@ -547,7 +549,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\Pages\ConductoresPage.xaml">
+    <Page Include="Views\Pages\ReclamacionesPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

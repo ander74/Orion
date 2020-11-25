@@ -76,8 +76,8 @@
             <views:ResumenAnualPage />
         </DataTemplate>
 
-        <DataTemplate DataType="{x:Type viewmodels:ConductoresPageViewModel}">
-            <views:ConductoresPage />
+        <DataTemplate DataType="{x:Type viewmodels:ReclamacionesPageVM}">
+            <views:ReclamacionesPage />
         </DataTemplate>
 
     </UserControl.Resources>
@@ -132,14 +132,6 @@
                     Content="Comparar Grupos"
                     Style="{StaticResource EstiloBotonPanel}" />
 
-                <!--    -->
-                <Button
-                    Grid.Row="1"
-                    Command="{Binding CmdCambiarViewModel}"
-                    CommandParameter="Otro"
-                    Content="Otro"
-                    Style="{StaticResource EstiloBotonPanel}" />
-
 
             </Grid>
 
@@ -155,6 +147,7 @@
                 Visibility="{Binding ElementName=BtGrupoConductores, Path=IsChecked, Converter={StaticResource cnvBoolToVisibility}}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Border
                     Grid.RowSpan="{Binding RowDefinitions.Count, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Grid}}}"
@@ -163,7 +156,14 @@
                     BorderThickness="1,0,1,1"
                     CornerRadius="0,0,0,0" />
 
-                <TextBlock Text="PRUEBA" />
+                <!--    -->
+                <Button
+                    Grid.Row="0"
+                    Command="{Binding CmdCambiarViewModel}"
+                    CommandParameter="Reclamaciones"
+                    Content="Reclamaciones"
+                    Style="{StaticResource EstiloBotonPanel}" />
+
             </Grid>
 
 
