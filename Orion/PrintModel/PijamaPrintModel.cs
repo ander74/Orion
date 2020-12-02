@@ -235,13 +235,13 @@ namespace Orion.PrintModel {
                                         .AddStyle(estiloCeldas)
                                         .AddStyle(estiloColumnaPijama));
                 // COLUMNA PLUS LIMPIEZA
-                if (dia.PlusLimpiezaAlt.HasValue) {
-                    c3 = ((SolidColorBrush)cnvColorColumnaPijama.Convert(true, null, null, null)).Color;
-                    estiloColumnaPijama = new iText.Layout.Style().SetBold();
-                } else {
+                //if (dia.PlusLimpiezaAlt.HasValue) {
+                //    c3 = ((SolidColorBrush)cnvColorColumnaPijama.Convert(true, null, null, null)).Color;
+                //    estiloColumnaPijama = new iText.Layout.Style().SetBold();
+                //} else {
                     c3 = Colors.Black;
                     estiloColumnaPijama = new iText.Layout.Style();
-                }
+                //}
                 tabla.AddCell(new Cell().Add(new Paragraph((string)cnvDecimalEuro.Convert(dia.PlusLimpieza, null, VerValores.NoCeros, null))
                                         .SetFontColor(new DeviceRgb(c3.R, c3.G, c3.B)))
                                         .AddStyle(estiloCeldas)

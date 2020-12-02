@@ -116,6 +116,7 @@ namespace Orion.ViewModels.PageViewModels {
             var resumen = new ResumenReclamacion();
             resumen.RowHeader = rowHeader;
             foreach (var reclamacion in listaReclamaciones) {
+                resumen.Cantidad++;
                 if (reclamacion.Concepto.StartsWith("Horas")) {
                     if (TimeSpan.TryParse(reclamacion.Diferencia, out TimeSpan dato)) resumen.TotalAcumuladas += dato;
                 }
@@ -147,7 +148,7 @@ namespace Orion.ViewModels.PageViewModels {
             // Creamos y configuramos la tabla
             PdfTableData tabla = new PdfTableData(titulo);
             //tabla.SetUniformWidths(12);
-            tabla.ColumnWidths = new List<float> { 12, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8 };
+            tabla.ColumnWidths = new List<float> { 12f, 5.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f };
             tabla.AlternateRowsCount = 1;
             tabla.TableTheme = PdfTableTheme.MARRON_CLARO;
             tabla.LogoPath = App.Global.Configuracion.RutaLogoSindicato;
@@ -156,6 +157,7 @@ namespace Orion.ViewModels.PageViewModels {
             // Encabezados
             tabla.Headers = new List<PdfCellInfo>() {
                 new PdfCellInfo(firstHeader),
+                new PdfCellInfo("Cant."),
                 new PdfCellInfo("Horas"),
                 new PdfCellInfo("Desayuno"){ MergedCells = (0, 2) },
                 new PdfCellInfo(""){ IsMerged = true },
@@ -173,6 +175,7 @@ namespace Orion.ViewModels.PageViewModels {
             foreach (var resumen in lista) {
                 datos.Add(new List<PdfCellInfo> {
                     new PdfCellInfo(resumen.RowHeader),
+                    new PdfCellInfo(resumen.Cantidad.ToString()),
                     new PdfCellInfo(resumen.TotalAcumuladas.ToTexto()),
                     new PdfCellInfo(resumen.TotalDesayunos.ToString("0.00")){ Borders = (PdfBorder.DEFAULT, PdfBorder.DEFAULT,PdfBorder.NO_BORDER,PdfBorder.DEFAULT) },
                     new PdfCellInfo(resumen.ImporteDesayunos.ToString("0.00 €")){ Borders = (PdfBorder.NO_BORDER, PdfBorder.DEFAULT,PdfBorder.DEFAULT,PdfBorder.DEFAULT) },
@@ -190,6 +193,7 @@ namespace Orion.ViewModels.PageViewModels {
             // TOTALES
             tabla.Totals = new List<PdfCellInfo>() {
                 new PdfCellInfo("TOTALES"),
+                new PdfCellInfo(lista.Sum(r => r.Cantidad).ToString()),
                 new PdfCellInfo(new TimeSpan(lista.Sum(r => r.TotalAcumuladas.Ticks)).ToTexto()),
                 new PdfCellInfo(lista.Sum(r => r.TotalDesayunos).ToString("0.00")){ Borders = (PdfBorder.DEFAULT, PdfBorder.DEFAULT,PdfBorder.NO_BORDER,PdfBorder.DEFAULT) },
                 new PdfCellInfo(lista.Sum(r => r.ImporteDesayunos).ToString("0.00 €")){ Borders = (PdfBorder.NO_BORDER, PdfBorder.DEFAULT,PdfBorder.DEFAULT,PdfBorder.DEFAULT) },

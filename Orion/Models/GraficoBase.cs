@@ -51,7 +51,7 @@ namespace Orion.Models {
             this.Comida = otro.Comida;
             this.Cena = otro.Cena;
             this.PlusCena = otro.PlusCena;
-            this.PlusLimpieza = otro.PlusLimpieza;
+            //this.PlusLimpieza = otro.PlusLimpieza;
             this.PlusPaqueteria = otro.PlusPaqueteria;
             Modificado = false;
             Nuevo = true;
@@ -87,7 +87,7 @@ namespace Orion.Models {
             if (NoCalcular) return;
             TimeSpan trabajadas = Calculos.Horas.Trabajadas(_inicio.Value, _final.Value, _iniciopartido, _finalpartido);
             TimeSpan trabajadasConvenio = Calculos.Horas.TrabajadasConvenio(trabajadas);
-            TimeSpan trabajadasPartido = Calculos.Horas.Trabajadas(_inicio.Value, _final.Value, null, null);
+            TimeSpan tiempoTotalGrafico = Calculos.Horas.Trabajadas(_inicio.Value, _final.Value, null, null);
             TimeSpan partido = Calculos.Horas.TiempoPartido(_iniciopartido, _finalpartido);
             TimeSpan acumuladas = Calculos.Horas.Acumuladas(trabajadas);
             TimeSpan nocturnas = Calculos.Horas.Nocturnas(_inicio.Value, _final.Value, _turno);
@@ -96,9 +96,9 @@ namespace Orion.Models {
             decimal cena = Calculos.Dietas.Cena(_inicio.Value, _final.Value, _turno);
             decimal pluscena = Calculos.Dietas.PlusCena(_inicio.Value, _final.Value, _turno);
             bool notificar = false;
-            if (_trabajadas != trabajadas) { _trabajadas = trabajadas; _trabajadasreales = trabajadas; notificar = true; }
+            if (_trabajadas != trabajadas) { _trabajadas = trabajadas; notificar = true; }
             if (_trabajadasConvenio != trabajadasConvenio) { _trabajadasConvenio = trabajadasConvenio; notificar = true; }
-            if (_trabajadasPartido != trabajadasPartido) { _trabajadasPartido = trabajadasPartido; notificar = true; }
+            if (tiempoTotal != tiempoTotalGrafico) { tiempoTotal = tiempoTotalGrafico; notificar = true; }
             if (_tiempopartido != partido) { _tiempopartido = partido; notificar = true; }
             if (_acumuladas != acumuladas) { _acumuladas = acumuladas; notificar = true; }
             if (_nocturnas != nocturnas) { _nocturnas = nocturnas; notificar = true; }
@@ -108,7 +108,7 @@ namespace Orion.Models {
             if (_pluscena != pluscena) { _pluscena = pluscena; notificar = true; }
             if (notificar) { Modificado = true; PropiedadCambiada(""); }
         }
-
+         
 
         #endregion
 
@@ -154,7 +154,7 @@ namespace Orion.Models {
             grafico.Comida = lector.ToDecimal("Comida");
             grafico.Cena = lector.ToDecimal("Cena");
             grafico.PlusCena = lector.ToDecimal("PlusCena");
-            grafico.PlusLimpieza = lector.ToBool("PlusLimpieza");
+            //grafico.PlusLimpieza = lector.ToBool("PlusLimpieza");
             grafico.PlusPaqueteria = lector.ToBool("PlusPaqueteria");
         }
 
@@ -177,7 +177,7 @@ namespace Orion.Models {
             Comando.Parameters.AddWithValue("comida", grafico.Comida.ToString("0.0000"));
             Comando.Parameters.AddWithValue("cena", grafico.Cena.ToString("0.0000"));
             Comando.Parameters.AddWithValue("pluscena", grafico.PlusCena.ToString("0.0000"));
-            Comando.Parameters.AddWithValue("pluslimpieza", grafico.PlusLimpieza);
+            //Comando.Parameters.AddWithValue("pluslimpieza", grafico.PlusLimpieza);
             Comando.Parameters.AddWithValue("pluspaqueteria", grafico.PlusPaqueteria);
             Comando.Parameters.AddWithValue("id", grafico.Id);
         }
@@ -339,12 +339,12 @@ namespace Orion.Models {
 
 
 
-        private TimeSpan _trabajadasPartido;
-        public TimeSpan TrabajadasPartido {
-            get => _trabajadasPartido;
+        private TimeSpan tiempoTotal;
+        public TimeSpan TiempoTotal {
+            get => tiempoTotal;
             set {
-                if (_trabajadasPartido != value) {
-                    _trabajadasPartido = value;
+                if (tiempoTotal != value) {
+                    tiempoTotal = value;
                     PropiedadCambiada();
                 }
             }
@@ -403,18 +403,6 @@ namespace Orion.Models {
                 if (!value.Equals(_trabajadasConvenio)) {
                     _trabajadasConvenio = value;
                     Modificado = true;
-                    PropiedadCambiada();
-                }
-            }
-        }
-
-
-        private TimeSpan _trabajadasreales;
-        public TimeSpan TrabajadasReales {
-            get { return _trabajadasreales; }
-            set {
-                if (_trabajadasreales != value) {
-                    _trabajadasreales = value;
                     PropiedadCambiada();
                 }
             }
@@ -499,17 +487,18 @@ namespace Orion.Models {
         }
 
 
-        private bool _pluslimpieza;
-        public bool PlusLimpieza {
-            get { return _pluslimpieza; }
-            set {
-                if (_pluslimpieza != value) {
-                    _pluslimpieza = value;
-                    Modificado = true;
-                    PropiedadCambiada();
-                }
-            }
-        }
+        //TODO: Confirmar la eliminación de este campo.
+        //private bool _pluslimpieza;
+        //public bool PlusLimpieza {
+        //    get { return _pluslimpieza; }
+        //    set {
+        //        if (_pluslimpieza != value) {
+        //            _pluslimpieza = value;
+        //            Modificado = true;
+        //            PropiedadCambiada();
+        //        }
+        //    }
+        //}
 
 
         private bool _pluspaqueteria;
@@ -546,6 +535,8 @@ namespace Orion.Models {
             _final = lector.ToTimeSpanNulable("Final");
             _iniciopartido = lector.ToTimeSpanNulable("InicioPartido");
             _finalpartido = lector.ToTimeSpanNulable("FinalPartido");
+            _tiempopartido = lector.ToTimeSpan("TiempoPartido");
+            tiempoTotal = lector.ToTimeSpan("TiempoTotal");
             _valoracion = lector.ToTimeSpan("Valoracion");
             _trabajadas = lector.ToTimeSpan("Trabajadas");
             _trabajadasConvenio = lector.ToTimeSpan("TrabajadasConvenio");
@@ -556,7 +547,7 @@ namespace Orion.Models {
             _comida = lector.ToDecimal("Comida");
             _cena = lector.ToDecimal("Cena");
             _pluscena = lector.ToDecimal("PlusCena");
-            _pluslimpieza = lector.ToBool("PlusLimpieza");
+            //_pluslimpieza = lector.ToBool("PlusLimpieza");
             _pluspaqueteria = lector.ToBool("PlusPaqueteria");
             Nuevo = false;
             Modificado = false;
@@ -578,6 +569,8 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("Final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("InicioPartido", InicioPartido.HasValue ? InicioPartido.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("FinalPartido", FinalPartido.HasValue ? FinalPartido.Value.Ticks : (object)DBNull.Value));
+                lista.Add(new SQLiteParameter("TiempoPartido", TiempoPartido.Ticks));
+                lista.Add(new SQLiteParameter("TiempoTotal", TiempoTotal.Ticks));
                 lista.Add(new SQLiteParameter("Valoracion", Valoracion.Ticks));
                 lista.Add(new SQLiteParameter("Trabajadas", Trabajadas.Ticks));
                 lista.Add(new SQLiteParameter("TrabajadasConvenio", TrabajadasConvenio.Ticks));
@@ -588,7 +581,7 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("Comida", Comida.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("Cena", Cena.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("PlusCena", PlusCena.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza));
+                //lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza));
                 lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria));
                 //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;

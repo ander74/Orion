@@ -301,7 +301,7 @@
                 <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
 
-            <!--  GRÁFICOS  -->
+            <!--  GRÁFICOS SEMICÍRCULOS  -->
             <Border
                 Grid.Column="0"
                 Height="Auto"

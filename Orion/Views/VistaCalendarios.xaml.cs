@@ -127,6 +127,7 @@ namespace Orion.Views {
             PanelAccionesPorLotes.Visibility = Visibility.Collapsed;
             TablaCalendarios.Visibility = Visibility.Collapsed;
             PanelFiltroAplicado.Visibility = Visibility.Collapsed;
+            PanelIndicadores.Visibility = Visibility.Collapsed;
             // MOSTRAR
             BotonesPijama.Visibility = Visibility.Visible;
             PanelConductorPijama.Visibility = Visibility.Visible;
@@ -142,6 +143,7 @@ namespace Orion.Views {
             PanelAccionesPorLotes.Visibility = Visibility.Collapsed;
             TablaCalendarios.Visibility = Visibility.Collapsed;
             PanelFiltroAplicado.Visibility = Visibility.Collapsed;
+            PanelIndicadores.Visibility = Visibility.Collapsed;
             // MOSTRAR
             BotonesPijama.Visibility = Visibility.Visible;
             PanelConductorPijama.Visibility = Visibility.Visible;
@@ -165,6 +167,7 @@ namespace Orion.Views {
             PanelAccionesPorLotes.Visibility = Visibility.Visible;
             TablaCalendarios.Visibility = Visibility.Visible;
             PanelFiltroAplicado.Visibility = Visibility.Visible;
+            PanelIndicadores.Visibility = Visibility.Visible;
         }
 
         #endregion

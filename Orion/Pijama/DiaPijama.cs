@@ -365,14 +365,14 @@ namespace Orion.Pijama {
         }
 
 
-        public Reclama ReclamaPlusLimpieza {
-            get {
-                if (PlusLimpiezaAlt.HasValue && PlusLimpiezaAlt.Value != GraficoOriginal.PlusLimpieza) {
-                    return PlusLimpiezaAlt.Value == true ? Reclama.AFavor : Reclama.EnContra;
-                }
-                return Reclama.Nada;
-            }
-        }
+        //public Reclama ReclamaPlusLimpieza {
+        //    get {
+        //        if (PlusLimpiezaAlt.HasValue && PlusLimpiezaAlt.Value != GraficoOriginal.PlusLimpieza) {
+        //            return PlusLimpiezaAlt.Value == true ? Reclama.AFavor : Reclama.EnContra;
+        //        }
+        //        return Reclama.Nada;
+        //    }
+        //}
 
 
 
@@ -406,7 +406,7 @@ namespace Orion.Pijama {
             if (ComidaAlt.HasValue) GraficoTrabajado.Comida = ComidaAlt.Value;
             if (CenaAlt.HasValue) GraficoTrabajado.Cena = CenaAlt.Value;
             if (PlusCenaAlt.HasValue) GraficoTrabajado.PlusCena = PlusCenaAlt.Value;
-            if (PlusLimpiezaAlt.HasValue) GraficoTrabajado.PlusLimpieza = PlusLimpiezaAlt.Value;
+            //if (PlusLimpiezaAlt.HasValue) GraficoTrabajado.PlusLimpieza = PlusLimpiezaAlt.Value;
             if (PlusPaqueteriaAlt.HasValue) GraficoTrabajado.PlusPaqueteria = PlusPaqueteriaAlt.Value;
             Nuevo = false;
             Modificado = false;

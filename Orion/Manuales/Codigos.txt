@@ -22,6 +22,7 @@ PROYECTO ORION
 		-16 :      OVA - Vacaciones atrasadas.
 		-17 :  OVA(JD) - Vacaciones atrasadas en JD.
 		-18 :  OVA(FN) - Vacaciones atrasadas en FN.
+		-19 :      LAC - Lactancia. (Pendiente de implementar).
 
 
 	Códigos de modificación de gráfico (se ponen como decimal):

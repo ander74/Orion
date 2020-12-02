@@ -370,14 +370,14 @@
                                                         IsChecked="{Binding Configuracion.MostrarGrafDietas, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
 
                                                     <!--  PLUS LIMPIEZA  -->
-                                                    <CheckBox
+                                                    <!--<CheckBox
                                                         Margin="5"
                                                         HorizontalContentAlignment="Left"
                                                         VerticalContentAlignment="Center"
                                                         Content="Plus Limpieza"
                                                         FontFamily="Comic Sans MS"
                                                         FontSize="10"
-                                                        IsChecked="{Binding Configuracion.MostrarGrafPlusLimpieza, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                                        IsChecked="{Binding Configuracion.MostrarGrafPlusLimpieza, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />-->
 
                                                     <!--  PLUS PAQUETERIA  -->
                                                     <CheckBox
@@ -413,14 +413,6 @@
                 Width="2"
                 Margin="3,5"
                 Background="LightGray" />
-
-            <!--  BOTON ALTERNAR SELECCION TABLA GRAFICOS  -->
-            <!--<controls:BotonAlterno
-                Command="{Binding Source={x:Reference TablaGraficos}, Path=ComandoAlternarModoSeleccion}"
-                ImagenActivo="Imagenes/SeleccionFila.png"
-                ImagenInactivo="Imagenes/SeleccionCelda.png"
-                TituloActivo="Selección Filas"
-                TituloInactivo="Selección Celdas" />-->
 
             <!--  BOTON COPIAR  -->
             <controls:BotonBarra
@@ -1054,13 +1046,13 @@
                         Binding="{Binding PlusCena, Converter={StaticResource cnvDecimal}, ConverterParameter={x:Static cnv:VerValores.NoCeros}}"
                         Header="Plus Cena"
                         Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafDietas, Converter={StaticResource cnvBoolToVisibility}}" />
-                    <DataGridCheckBoxColumn
+                    <!--<DataGridCheckBoxColumn
                         Width="1*"
                         MinWidth="60"
                         Binding="{Binding PlusLimpieza, UpdateSourceTrigger=PropertyChanged}"
                         Header="Limpieza"
                         IsThreeState="False"
-                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafPlusLimpieza, Converter={StaticResource cnvBoolToVisibility}}" />
+                        Visibility="{Binding Source={x:Reference ColumnaActual}, Path=DataContext.Configuracion.MostrarGrafPlusLimpieza, Converter={StaticResource cnvBoolToVisibility}}" />-->
                     <DataGridCheckBoxColumn
                         Width="1*"
                         MinWidth="60"

@@ -81,7 +81,7 @@ namespace Orion.PrintModel {
             Style estiloDer = new Style();
             estiloDer.SetBorderRight(new SolidBorder(1));
             // Creamos la tabla
-            float[] ancho = new float[] { 3, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3, 3 };
+            float[] ancho = new float[] { 3, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3 };
             Table tabla = new Table(UnitValue.CreatePercentArray(ancho));
             // Asignamos el estilo a la tabla.
             tabla.AddStyle(estiloTabla);
@@ -107,7 +107,7 @@ namespace Orion.PrintModel {
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Comida")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Plus Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Limpieza")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+            //tabla.AddHeaderCell(new Cell().Add(new Paragraph("Limpieza")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Paquetería")).AddStyle(estiloEncabezados).AddStyle(estiloDer).AddStyle(estiloMed));
             // Añadimos las celdas con los calendarios.
             int indice = 1;
@@ -152,8 +152,8 @@ namespace Orion.PrintModel {
                                         .AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.PlusCena, null, VerValores.NoCeros, null)}"))
                                         .AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{(g.PlusLimpieza ? "X" : "")}"))
-                                        .AddStyle(estiloFondo));
+                //tabla.AddCell(new Cell().Add(new Paragraph($"{(g.PlusLimpieza ? "X" : "")}"))
+                //                        .AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{(g.PlusPaqueteria ? "X" : "")}"))
                                         .AddStyle(estiloDer).AddStyle(estiloFondo));
             }
@@ -259,7 +259,7 @@ namespace Orion.PrintModel {
             // Estilo Fondo SubCabecera
             Style estiloFondoSub = new Style().SetBackgroundColor(new DeviceRgb(196, 215, 155));
             // Creamos la tabla
-            float[] ancho = new float[] { 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
+            float[] ancho = new float[] { 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
             Table tabla = new Table(UnitValue.CreatePercentArray(ancho));
             // Asignamos el estilo a la tabla.
             tabla.AddStyle(estiloTabla);
@@ -275,7 +275,7 @@ namespace Orion.PrintModel {
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Plus Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Total Dietas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Limpieza")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+            //tabla.AddHeaderCell(new Cell().Add(new Paragraph("Limpieza")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Paquetería")).AddStyle(estiloEncabezados).AddStyle(estiloDer).AddStyle(estiloMed));
             // Definimos el total de gráficos.
             var totalGraficos = lista.Sum(e => e.NumeroGraficos);
@@ -300,7 +300,7 @@ namespace Orion.PrintModel {
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Cena.ToString("0.00")}")).AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.PlusCena.ToString("0.00")}")).AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.TotalDietas.ToString("0.00")}")).AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Limpieza.ToString("00")}")).AddStyle(estiloFondo));
+                //tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Limpieza.ToString("00")}")).AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Paqueteria.ToString("00")}")).AddStyle(estiloDer).AddStyle(estiloFondo));
             }
             // Añadimos los totales.
@@ -315,7 +315,7 @@ namespace Orion.PrintModel {
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Cena).ToString("0.00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.PlusCena).ToString("0.00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.TotalDietas).ToString("0.00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
-            tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Limpieza).ToString("00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
+            //tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Limpieza).ToString("00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Paqueteria).ToString("00")}")).AddStyle(estiloEncabezados).AddStyle(estiloDer).AddStyle(estiloMed).AddStyle(estiloFondoSub));
 
             // Devolvemos la tabla.
@@ -373,7 +373,7 @@ namespace Orion.PrintModel {
             estiloEncabezadoVertical.SetVerticalAlignment(VerticalAlignment.MIDDLE);
             //estiloEncabezadoVertical.SetHorizontalAlignment(HorizontalAlignment.RIGHT);
             // Creamos la tabla
-            float[] ancho = new float[] { 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
+            float[] ancho = new float[] { 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2 };
             Table tabla = new Table(UnitValue.CreatePercentArray(ancho));
             // Asignamos el estilo a la tabla.
             tabla.AddStyle(estiloTabla);
@@ -389,7 +389,7 @@ namespace Orion.PrintModel {
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Plus Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Total Dietas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Limpieza")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+            //tabla.AddHeaderCell(new Cell().Add(new Paragraph("Limpieza")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Paquetería")).AddStyle(estiloEncabezados).AddStyle(estiloDer).AddStyle(estiloMed));
 
             // LLenamos los centros
@@ -435,7 +435,7 @@ namespace Orion.PrintModel {
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Cena.ToString("0.00")}")).AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.PlusCena.ToString("0.00")}")).AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.TotalDietas.ToString("0.00")}")).AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Limpieza.ToString("00")}")).AddStyle(estiloFondo));
+                //tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Limpieza.ToString("00")}")).AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Paqueteria.ToString("00")}")).AddStyle(estiloDer).AddStyle(estiloFondo));
             }
             // Añadimos los totales.
@@ -450,7 +450,7 @@ namespace Orion.PrintModel {
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Cena).ToString("0.00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.PlusCena).ToString("0.00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.TotalDietas).ToString("0.00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
-            tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Limpieza).ToString("00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
+            //tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Limpieza).ToString("00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Paqueteria).ToString("00")}")).AddStyle(estiloEncabezados).AddStyle(estiloDer).AddStyle(estiloMed).AddStyle(estiloFondoSub));
 
             // Devolvemos la tabla
@@ -540,7 +540,7 @@ namespace Orion.PrintModel {
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Cena.ToString("0.00")}")).AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.PlusCena.ToString("0.00")}")).AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.TotalDietas.ToString("0.00")}")).AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Limpieza.ToString("00")}")).AddStyle(estiloFondo));
+                //tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Limpieza.ToString("00")}")).AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{estadistica.Paqueteria.ToString("00")}")).AddStyle(estiloDer).AddStyle(estiloFondo));
             }
             // Añadimos los totales.
@@ -555,7 +555,7 @@ namespace Orion.PrintModel {
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Cena).ToString("0.00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.PlusCena).ToString("0.00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.TotalDietas).ToString("0.00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
-            tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Limpieza).ToString("00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
+            //tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Limpieza).ToString("00")}")).AddStyle(estiloEncabezados).AddStyle(estiloMed).AddStyle(estiloFondoSub));
             tabla.AddCell(new Cell().Add(new Paragraph($"{lista.Sum(e => e.Paqueteria).ToString("00")}")).AddStyle(estiloEncabezados).AddStyle(estiloDer).AddStyle(estiloMed).AddStyle(estiloFondoSub));
         }
 
@@ -612,7 +612,7 @@ namespace Orion.PrintModel {
                     if (g.Comida > 0) textoValores += String.Format("Comida: {0:0.00}  ", g.Comida);
                     if (g.Cena > 0) textoValores += String.Format("Cena: {0:0.00}  ", g.Cena);
                     if (g.PlusCena > 0) textoValores += String.Format("Plus Cena: {0:0.00}  ", g.PlusCena);
-                    if (g.PlusLimpieza) textoValores += "Limp.  ";
+                    //if (g.PlusLimpieza) textoValores += "Limp.  ";
                     if (g.PlusPaqueteria) textoValores += "Paqu.  ";
                     string textoHoras = $"Trab: {(string)cnvHora.Convert(g.Trabajadas, null, null, null)}  " +
                                         $"Acum: {(string)cnvHora.Convert(g.Acumuladas, null, null, null)}  " +

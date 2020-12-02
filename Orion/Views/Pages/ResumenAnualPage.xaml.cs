@@ -132,13 +132,6 @@ namespace Orion.Views.Pages {
                     checkFindesState();
                     checkPlusesState();
                     break;
-                case "Dias":
-                    DesSelectAll();
-                    cbDiasActivos.IsChecked = true;
-                    cbDiasInactivos.IsChecked = true;
-                    cbDiasTrabajados.IsChecked = true;
-                    checkDiasState();
-                    break;
             }
         }
 
@@ -311,12 +304,14 @@ namespace Orion.Views.Pages {
 
         private void ComboDestino_SelectionChanged(object sender, SelectionChangedEventArgs e) {
             if (sender is ComboBox combo) {
-                if (combo.SelectedIndex == 3) {
+                if (combo.SelectedIndex == 0) {
                     if (cbIncluirTaquilla != null) cbIncluirTaquilla.IsEnabled = false;
                     if (ComboTrabajadores != null) ComboTrabajadores.IsEnabled = true;
+                    if (ComboFiltrado != null) ComboFiltrado.IsEnabled = false;
                 } else {
                     if (cbIncluirTaquilla != null) cbIncluirTaquilla.IsEnabled = true;
                     if (ComboTrabajadores != null) ComboTrabajadores.IsEnabled = false;
+                    if (ComboFiltrado != null) ComboFiltrado.IsEnabled = true;
                 }
             }
         }

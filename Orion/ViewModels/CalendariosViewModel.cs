@@ -20,6 +20,7 @@ namespace Orion.ViewModels {
     public partial class CalendariosViewModel : NotifyBase {
 
 
+
         // ====================================================================================================
         #region CAMPOS PRIVADOS
         // ====================================================================================================
@@ -34,6 +35,10 @@ namespace Orion.ViewModels {
         private InformesServicio Informes;
         private IFileService FileService;
 
+        // DÍACALENDARIO ANTERIOR Y POSTERIOR AL MES ACTUAL
+        private List<DiaCalendarioConductor> diasAnterior;
+        private List<DiaCalendarioConductor> diasPosterior;
+
         #endregion
         // ====================================================================================================
 
@@ -47,6 +52,7 @@ namespace Orion.ViewModels {
             Informes = servicioInformes;
             FileService = fileService;
             _listacalendarios = new NotifyCollection<Calendario>();
+            listaResumen = new List<ResumenCalendarios>();
             _listacalendarios.CollectionChanged += ListaCalendarios_CollectionChanged;
             VistaCalendarios = new ListCollectionView(ListaCalendarios);
             FechaActual = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
@@ -67,13 +73,6 @@ namespace Orion.ViewModels {
             }
             ListaCalendarios = new NotifyCollection<Calendario>(App.Global.Repository.GetCalendarios(FechaActual.Year, FechaActual.Month));
 
-            foreach (Calendario calendario in ListaCalendarios) {
-                // Añadimos el campo indefinido y la categoria
-                var conductor = App.Global.ConductoresVM.ListaConductores.FirstOrDefault(c => c.Matricula == calendario.MatriculaConductor);
-                calendario.ConductorIndefinido = conductor.Indefinido;
-                calendario.CategoriaConductor = conductor.Categoria;
-            }
-
             // Cargamos los gráficos asociados, si no están cargados ya.
             var grupos = App.Global.GraficosVM.ListaGrupos;
             var maxValidez = grupos.Where(g => g.Validez <= FechaActual).Max(gg => gg.Validez);
@@ -84,9 +83,19 @@ namespace Orion.ViewModels {
                 claveGraficosAsociados = clave;
                 listaGraficosAsociados = App.Global.Repository.GetGraficosVariasFechas(gruposGraficos).ToList();
             }
+            // Cargamos el resumen anual hasta el mes anterior a este.
+            if (FechaActual.Month > 1) {
+                ListaResumen = App.Global.Repository.GetResumenCalendariosAnualHastaMes(FechaActual.AddMonths(-1)).ToList();
+            } else {
+                ListaResumen = new List<ResumenCalendarios>();
+            }
+            // Cargamos los días anterior y posterior de todos los calendarios.
+            diasAnterior = App.Global.Repository.GetDiasCalendarioConductor(FechaActual.AddDays(-1)).ToList();
+            diasPosterior = App.Global.Repository.GetDiasCalendarioConductor(FechaActual.AddMonths(1)).ToList();
 
             HayCambios = false; // Hay que ponerlo en false, ya que el foreach anterior modifica propiedades.
             CalendarioSeleccionado = null;
+            ResumenSeleccionado = null;
             PropiedadCambiada(nameof(Detalle));
             PropiedadCambiada(nameof(GruposGraficos));
         }
@@ -123,7 +132,6 @@ namespace Orion.ViewModels {
                     App.Global.ConductoresVM.CrearConductorDesconocido(calendario.MatriculaConductor);
                     hayDesconocidos = true;
                 }
-
             }
             return hayDesconocidos;
         }
@@ -180,30 +188,110 @@ namespace Orion.ViewModels {
                 var grafico = listaGraficosAsociados.FirstOrDefault(g => g.Numero == dia.Grafico && g.Validez == maxValidez);
                 if (grafico != null) {
                     dia.CategoriaGrafico = grafico.Categoria;
-                    dia.Turno = grafico.Turno;
-                    dia.Inicio = grafico.Inicio;
-                    dia.Final = grafico.Final;
-                    dia.InicioPartido = grafico.InicioPartido;
-                    dia.FinalPartido = grafico.FinalPartido;
-                    dia.TrabajadasPartido = grafico.TrabajadasPartido;
+                    dia.Turno = dia.TurnoAlt.HasValue ? dia.TurnoAlt.Value : grafico.Turno;
+                    dia.Inicio = dia.InicioAlt.HasValue ? dia.Inicio.Value : grafico.Inicio;
+                    dia.Final = dia.FinalAlt.HasValue ? dia.FinalAlt.Value : grafico.Final;
+                    dia.InicioPartido = dia.InicioPartidoAlt.HasValue ? dia.InicioPartidoAlt.Value : grafico.InicioPartido;
+                    dia.FinalPartido = dia.FinalPartidoAlt.HasValue ? dia.FinalPartidoAlt.Value : grafico.FinalPartido;
                     dia.TiempoPartido = grafico.TiempoPartido;
+                    dia.TiempoTotal = grafico.TiempoTotal;
                     dia.Valoracion = grafico.Valoracion;
-                    dia.Trabajadas = grafico.Trabajadas;
-                    dia.TrabajadasConvenio = grafico.TrabajadasConvenio;
-                    dia.TrabajadasReales = grafico.TrabajadasReales;
+                    dia.Trabajadas = dia.TrabajadasAlt.HasValue ? dia.TrabajadasAlt.Value : grafico.Trabajadas;
+                    dia.TrabajadasConvenio = dia.TrabajadasAlt.HasValue ? dia.TrabajadasAlt.Value : grafico.TrabajadasConvenio;
                     dia.TiempoVacio = grafico.TiempoVacio;
-                    dia.Acumuladas = grafico.Acumuladas;
-                    dia.Nocturnas = grafico.Nocturnas;
-                    dia.Desayuno = grafico.Desayuno;
-                    dia.Comida = grafico.Comida;
-                    dia.Cena = grafico.Cena;
-                    dia.PlusCena = grafico.PlusCena;
-                    dia.PlusLimpieza = grafico.PlusLimpieza;
-                    dia.PlusPaqueteria = grafico.PlusPaqueteria;
+                    dia.Acumuladas = dia.AcumuladasAlt.HasValue ? dia.AcumuladasAlt.Value : grafico.Acumuladas;
+                    dia.Nocturnas = dia.NocturnasAlt.HasValue ? dia.NocturnasAlt.Value : grafico.Nocturnas;
+                    dia.Desayuno = dia.DesayunoAlt.HasValue ? dia.DesayunoAlt.Value : grafico.Desayuno;
+                    dia.Comida = dia.ComidaAlt.HasValue ? dia.ComidaAlt.Value : grafico.Comida;
+                    dia.Cena = dia.CenaAlt.HasValue ? dia.CenaAlt.Value : grafico.Cena;
+                    dia.PlusCena = dia.PlusCenaAlt.HasValue ? dia.PlusCenaAlt.Value : grafico.PlusCena;
+                    //dia.PlusLimpieza = dia.PlusLimpiezaAlt.HasValue ? dia.PlusLimpiezaAlt.Value : grafico.PlusLimpieza;
+                    dia.PlusPaqueteria = dia.PlusPaqueteriaAlt.HasValue ? dia.PlusPaqueteriaAlt.Value : grafico.PlusPaqueteria;
+                } else {
+                    //TODO: Evaluar poner inicio y final...
+                    dia.Trabajadas = dia.TrabajadasAlt.HasValue ? dia.TrabajadasAlt.Value : App.Global.Convenio.JornadaMedia;
+                    dia.TrabajadasConvenio = dia.TrabajadasAlt.HasValue ? dia.TrabajadasAlt.Value : App.Global.Convenio.JornadaMedia;
+                    dia.Desayuno = dia.DesayunoAlt.HasValue ? dia.DesayunoAlt.Value : 0m;
+                    dia.Comida = dia.ComidaAlt.HasValue ? dia.ComidaAlt.Value : 0m;
+                    dia.Cena = dia.CenaAlt.HasValue ? dia.CenaAlt.Value : 0m;
+                    dia.PlusCena = dia.PlusCenaAlt.HasValue ? dia.PlusCenaAlt.Value : 0m;
+                    //dia.PlusLimpieza = dia.PlusLimpiezaAlt.HasValue ? dia.PlusLimpiezaAlt.Value :false;
+                    dia.PlusPaqueteria = dia.PlusPaqueteriaAlt.HasValue ? dia.PlusPaqueteriaAlt.Value : false;
                 }
             }
 
         }
+
+
+        private void RecalcularCalendario(Calendario calendario) {
+            calendario.Recalcular();
+            decimal resultado =
+                    calendario.ListaDias?.Select((dia, index) => new {
+                        sab = dia,
+                        dom = index + 1 < calendario.ListaDias.Count ? calendario.ListaDias[index + 1] : new DiaCalendario()
+                    }).Count(finde => finde.sab.DiaFecha.DayOfWeek == DayOfWeek.Saturday && finde.sab.EsDiaDeDescanso &&
+                                      finde.dom.DiaFecha.DayOfWeek == DayOfWeek.Sunday && finde.dom.EsDiaDeDescanso) ?? 0;
+            // Si el primer día es domingo de descanso y el día anterior es de descanso, sumamos medio fin de semana
+            if (diasAnterior != null) {
+                var diaAnterior = diasAnterior.FirstOrDefault(d => d.MatriculaConductor == calendario.MatriculaConductor);
+                if (diaAnterior != null && diaAnterior.DiaFecha.DayOfWeek == DayOfWeek.Saturday &&
+                    diaAnterior.EsDiaDeDescanso &&
+                    calendario.ListaDias.First().EsDiaDeDescanso) resultado += 0.5m;
+            }
+            // Si el día posterior es domingo y descanso, y el ultimo día del mes es descanso, sumamos medio finde completo.
+            if (diasPosterior != null) {
+                var diaPosterior = diasPosterior.FirstOrDefault(d => d.MatriculaConductor == calendario.MatriculaConductor);
+                if (diaPosterior != null && diaPosterior.DiaFecha.DayOfWeek == DayOfWeek.Sunday &&
+                    diaPosterior.EsDiaDeDescanso &&
+                    calendario.ListaDias.Last().EsDiaDeDescanso) resultado += 0.5m;
+                // Establecemos los findes completos.
+                calendario.FindesCompletos = resultado;
+            }
+        }
+
+
+        private void RegenerarDiaCalendarioAislado(DiaCalendarioBase dia) {
+            if (dia.Grafico > 0) {
+                var maxValidez = App.Global.GraficosVM.ListaGrupos.Where(g => g.Validez <= dia.DiaFecha).Max(gg => gg.Validez);
+                var grafico = App.Global.Repository.GetGrafico(dia.Grafico, maxValidez);
+                if (grafico != null) {
+                    dia.CategoriaGrafico = grafico.Categoria;
+                    dia.Turno = dia.TurnoAlt.HasValue ? dia.TurnoAlt.Value : grafico.Turno;
+                    dia.Inicio = dia.InicioAlt.HasValue ? dia.Inicio.Value : grafico.Inicio;
+                    dia.Final = dia.FinalAlt.HasValue ? dia.FinalAlt.Value : grafico.Final;
+                    dia.InicioPartido = dia.InicioPartidoAlt.HasValue ? dia.InicioPartidoAlt.Value : grafico.InicioPartido;
+                    dia.FinalPartido = dia.FinalPartidoAlt.HasValue ? dia.FinalPartidoAlt.Value : grafico.FinalPartido;
+                    dia.TiempoPartido = grafico.TiempoPartido;
+                    dia.TiempoTotal = grafico.TiempoTotal;
+                    dia.Valoracion = grafico.Valoracion;
+                    dia.Trabajadas = dia.TrabajadasAlt.HasValue ? dia.TrabajadasAlt.Value : grafico.Trabajadas;
+                    dia.TrabajadasConvenio = dia.TrabajadasAlt.HasValue ? dia.TrabajadasAlt.Value : grafico.TrabajadasConvenio;
+                    dia.TiempoVacio = grafico.TiempoVacio;
+                    dia.Acumuladas = dia.AcumuladasAlt.HasValue ? dia.AcumuladasAlt.Value : grafico.Acumuladas;
+                    dia.Nocturnas = dia.NocturnasAlt.HasValue ? dia.NocturnasAlt.Value : grafico.Nocturnas;
+                    dia.Desayuno = dia.DesayunoAlt.HasValue ? dia.DesayunoAlt.Value : grafico.Desayuno;
+                    dia.Comida = dia.ComidaAlt.HasValue ? dia.ComidaAlt.Value : grafico.Comida;
+                    dia.Cena = dia.CenaAlt.HasValue ? dia.CenaAlt.Value : grafico.Cena;
+                    dia.PlusCena = dia.PlusCenaAlt.HasValue ? dia.PlusCenaAlt.Value : grafico.PlusCena;
+                    //dia.PlusLimpieza = dia.PlusLimpiezaAlt.HasValue ? dia.PlusLimpiezaAlt.Value : grafico.PlusLimpieza;
+                    dia.PlusPaqueteria = dia.PlusPaqueteriaAlt.HasValue ? dia.PlusPaqueteriaAlt.Value : grafico.PlusPaqueteria;
+                } else {
+                    //TODO: Evaluar poner inicio y final...
+                    dia.Trabajadas = dia.TrabajadasAlt.HasValue ? dia.TrabajadasAlt.Value : App.Global.Convenio.JornadaMedia;
+                    dia.TrabajadasConvenio = dia.TrabajadasAlt.HasValue ? dia.TrabajadasAlt.Value : App.Global.Convenio.JornadaMedia;
+                    dia.Desayuno = dia.DesayunoAlt.HasValue ? dia.DesayunoAlt.Value : 0m;
+                    dia.Comida = dia.ComidaAlt.HasValue ? dia.ComidaAlt.Value : 0m;
+                    dia.Cena = dia.CenaAlt.HasValue ? dia.CenaAlt.Value : 0m;
+                    dia.PlusCena = dia.PlusCenaAlt.HasValue ? dia.PlusCenaAlt.Value : 0m;
+                    //dia.PlusLimpieza = dia.PlusLimpiezaAlt.HasValue ? dia.PlusLimpiezaAlt.Value :false;
+                    dia.PlusPaqueteria = dia.PlusPaqueteriaAlt.HasValue ? dia.PlusPaqueteriaAlt.Value : false;
+                }
+            }
+
+        }
+
+
+
 
         #endregion
         // ====================================================================================================
@@ -288,13 +376,29 @@ namespace Orion.ViewModels {
         }
 
 
+        private List<ResumenCalendarios> listaResumen;
+        public List<ResumenCalendarios> ListaResumen {
+            get => listaResumen;
+            set => SetValue(ref listaResumen, value);
+        }
+
+
         private Calendario _calendarioseleccionado;
         public Calendario CalendarioSeleccionado {
             get { return _calendarioseleccionado; }
             set {
                 if (_calendarioseleccionado != value) {
                     _calendarioseleccionado = value;
+                    ResumenSeleccionado = ListaResumen?.FirstOrDefault(r => r.MatriculaConductor == CalendarioSeleccionado?.MatriculaConductor);
                     PropiedadCambiada();
+                    PropiedadCambiada(nameof(HorasTrabajadas));
+                    PropiedadCambiada(nameof(JornadaAnual));
+                    PropiedadCambiada(nameof(DiasTrabajo));
+                    PropiedadCambiada(nameof(DiasDescanso));
+                    PropiedadCambiada(nameof(DiasDescansosSueltos));
+                    PropiedadCambiada(nameof(FindesCompletos));
+                    PropiedadCambiada(nameof(DiasVacaciones));
+                    PropiedadCambiada(nameof(DiasEnfermo));
                     PropiedadCambiada(nameof(Detalle));
                 }
             }
@@ -311,6 +415,14 @@ namespace Orion.ViewModels {
                     PropiedadCambiada();
                 }
             }
+        }
+
+
+
+        private ResumenCalendarios resumenSeleccionado;
+        public ResumenCalendarios ResumenSeleccionado {
+            get => resumenSeleccionado;
+            set => SetValue(ref resumenSeleccionado, value);
         }
 
 
@@ -470,6 +582,110 @@ namespace Orion.ViewModels {
             get { return _graficooriginal; }
             set { SetValue(ref _graficooriginal, value); }
         }
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
+        #region PROPIEDADES PARA INDICADORES CON SUS FORMATEADORES
+        // ====================================================================================================
+
+        public decimal HorasTrabajadas {
+            get => ((ResumenSeleccionado?.TrabajadasConvenio ?? TimeSpan.Zero) + (CalendarioSeleccionado?.TrabajadasConvenio ?? TimeSpan.Zero)).ToDecimal();
+        }
+
+
+        public decimal JornadaAnual {
+            //TODO: Va redondeado a 2 decimales, comprobar que no se hace a 4 decimales.
+            get => ((ResumenSeleccionado?.DiasTrabajoConvenio ?? 0) + (CalendarioSeleccionado?.DiasTrabajoConvenio ?? 0)) * Math.Round(App.Global.Convenio.JornadaMedia.ToDecimal(), 2);
+        }
+        public Func<double, string> FormatoJornadaAnual {
+            get => valor => {
+                decimal total = App.Global.Convenio.HorasAnuales;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                return $"{valor:0.00}\n {porcentaje:0.00} %".Replace(".", ",");
+            };
+        }
+
+
+        public int DiasTrabajo {
+            get => (ResumenSeleccionado?.DiasTrabajoConvenio ?? 0) + (CalendarioSeleccionado?.DiasTrabajoConvenio ?? 0);
+        }
+        public Func<double, string> FormatoDiasTrabajo {
+            get => valor => {
+                decimal total = App.Global.Convenio.TrabajoAnuales;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
+            };
+        }
+
+
+        public int DiasDescanso {
+            get => (ResumenSeleccionado?.DiasDescansoConvenio ?? 0) + (CalendarioSeleccionado?.DiasDescansoConvenio ?? 0);
+        }
+        public Func<double, string> FormatoDiasDescanso {
+            get => valor => {
+                decimal total = App.Global.Convenio.DescansosAnuales;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
+            };
+        }
+
+
+        public int DiasDescansosSueltos {
+            get => (ResumenSeleccionado?.DiasDS ?? 0) + (CalendarioSeleccionado?.DiasDS ?? 0);
+        }
+        public Func<double, string> FormatoDiasDescansosSueltos {
+            get => valor => {
+                decimal total = App.Global.Convenio.DescansosSueltosAnuales;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
+            };
+        }
+
+
+        //TODO: Añadir esto al calendario y al resumen.
+        public decimal FindesCompletos {
+            get => (ResumenSeleccionado?.FindesCompletos ?? 0) + (CalendarioSeleccionado?.FindesCompletos ?? 0m);
+        }
+        public Func<double, string> FormatoFindesCompletos {
+            get => valor => {
+                decimal total = App.Global.Convenio.FindesCompletosAnuales;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                return $"{valor:0.0}\n {porcentaje:0.00} %".Replace(".", ",");
+            };
+        }
+
+
+        public int DiasVacaciones {
+            get => (ResumenSeleccionado?.DiasVacacionesConvenio ?? 0) + (CalendarioSeleccionado?.DiasVacacionesConvenio ?? 0);
+        }
+        public Func<double, string> FormatoDiasVacaciones {
+            get => valor => {
+                decimal total = App.Global.Convenio.VacacionesAnuales;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
+            };
+        }
+
+
+        // No lleva Formatador.
+        public int DiasEnfermo {
+            get => (ResumenSeleccionado?.DiasEnfermoConvenio ?? 0) + (CalendarioSeleccionado?.DiasEnfermoConvenio ?? 0);
+        }
+
+
+
+
+
+
+
+
+
+
+
+
 
         #endregion
         // ====================================================================================================

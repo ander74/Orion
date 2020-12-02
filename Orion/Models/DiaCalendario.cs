@@ -49,7 +49,7 @@ namespace Orion.Models {
                 case nameof(ComidaAlt):
                 case nameof(CenaAlt):
                 case nameof(PlusCenaAlt):
-                case nameof(PlusLimpiezaAlt):
+                //case nameof(PlusLimpiezaAlt):
                 case nameof(PlusPaqueteriaAlt):
                     PropiedadCambiada(nameof(HayExtras));
                     break;
@@ -87,7 +87,7 @@ namespace Orion.Models {
                 if (PlusCenaAlt != null || FinalAlt != null || FinalPartidoAlt != null) return true;
                 if (TrabajadasAlt != null || AcumuladasAlt != null || NocturnasAlt != null) return true;
                 if (DesayunoAlt != null || ComidaAlt != null || CenaAlt != null) return true;
-                if (PlusLimpiezaAlt != null || PlusPaqueteriaAlt != null) return true;
+                if (PlusPaqueteriaAlt != null) return true;
                 return false;
             }
         }

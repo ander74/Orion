@@ -12,8 +12,8 @@
     xmlns:local="clr-namespace:Orion.Views.Pages"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Name="Ventana"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    d:DesignHeight="768"
+    d:DesignWidth="1024"
     Background="Transparent"
     mc:Ignorable="d">
 
@@ -88,17 +88,20 @@
                     VerticalContentAlignment="Center"
                     Click="UnaHora_Click"
                     Content="Horas trabajadas"
+                    IsChecked="{Binding IncluirHorasTrabajadas}"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbHorasAcumuladas"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirHorasAcumuladas}"
                     Click="UnaHora_Click"
                     Content="Horas acumuladas"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbHorasNocturnas"
                     Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirHorasNocturnas}"
                     VerticalContentAlignment="Center"
                     Click="UnaHora_Click"
                     Content="Horas nocturnas"
@@ -106,6 +109,7 @@
                 <CheckBox
                     x:Name="cbHorasCobradas"
                     Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirHorasCobradas}"
                     VerticalContentAlignment="Center"
                     Click="UnaHora_Click"
                     Content="Horas cobradas"
@@ -114,6 +118,7 @@
                     x:Name="cbOtrasHoras"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirOtrasHoras}"
                     Click="UnaHora_Click"
                     Content="Otras horas"
                     FontSize="12" />
@@ -122,6 +127,7 @@
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     Click="UnaHora_Click"
+                    IsChecked="{Binding IncluirExcesosJornada}"
                     Content="Excesos de jornada"
                     FontSize="12" />
 
@@ -149,10 +155,12 @@
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     Click="UnFinde_Click"
+                    IsChecked="{Binding IncluirSabadosTrabajados}"
                     Content="Sábados trabajados"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbSabadosDescansados"
+                    IsChecked="{Binding IncluirSabadosDescansados}"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     Click="UnFinde_Click"
@@ -161,6 +169,7 @@
                 <CheckBox
                     x:Name="cbDomingosTrabajados"
                     Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirDomingosTrabajados}"
                     VerticalContentAlignment="Center"
                     Click="UnFinde_Click"
                     Content="Domingos trabajados"
@@ -169,6 +178,7 @@
                     x:Name="cbDomingosDescansados"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirDomingosDescansados}"
                     Click="UnFinde_Click"
                     Content="Domingos descansados"
                     FontSize="12" />
@@ -177,18 +187,21 @@
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     Click="UnFinde_Click"
+                    IsChecked="{Binding IncluirFestivosTrabajados}"
                     Content="Festivos trabajados"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbFestivosDescansados"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirFestivosDescansados}"
                     Click="UnFinde_Click"
                     Content="Festivos descansados"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbFindesCompletos"
                     Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirFindesCompletos}"
                     VerticalContentAlignment="Center"
                     Click="UnFinde_Click"
                     Content="Fines de semana completos"
@@ -216,12 +229,14 @@
                     x:Name="cbPlusesSabado"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirPlusSabado}"
                     Click="cbUnPlus_Click"
                     Content="Pluses de sábado"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbPlusesFestivo"
                     Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirPlusFestivo}"
                     VerticalContentAlignment="Center"
                     Click="cbUnPlus_Click"
                     Content="Pluses de festivo"
@@ -230,6 +245,7 @@
                     x:Name="cbPlusesNocturnidad"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirPlusNocturnidad}"
                     Click="cbUnPlus_Click"
                     Content="Pluses de nocturnidad"
                     FontSize="12" />
@@ -238,6 +254,7 @@
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     Click="cbUnPlus_Click"
+                    IsChecked="{Binding IncluirPlusLimpieza}"
                     Content="Pluses de limpieza"
                     FontSize="12" />
                 <CheckBox
@@ -245,6 +262,7 @@
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     Click="cbUnPlus_Click"
+                    IsChecked="{Binding IncluirVariablesVacaciones}"
                     Content="Variables de vacaciones"
                     FontSize="12" />
 
@@ -282,6 +300,7 @@
                 <CheckBox
                     x:Name="cbDiasActivos"
                     Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirDiasActivos}"
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
                     Content="Días activos"
@@ -290,12 +309,14 @@
                     x:Name="cbDiasInactivos"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirDiasInactivos}"
                     Click="cbUnDia_Click"
                     Content="Días inactivos"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasTrabajados"
                     Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirDiasTrabajados}"
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
                     Content="Días trabajados"
@@ -303,6 +324,7 @@
                 <CheckBox
                     x:Name="cbDiasJD"
                     Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirDiasJD}"
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
                     Content="Días de descanso (J-D)"
@@ -310,6 +332,7 @@
                 <CheckBox
                     x:Name="cbDiasFN"
                     Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirDiasFN}"
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
                     Content="Días de descanso en fin de semana (FN)"
@@ -318,6 +341,7 @@
                     x:Name="cbDiasDS"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirDiasDS}"
                     Click="cbUnDia_Click"
                     Content="Días de descanso sueltos (DS)"
                     FontSize="12" />
@@ -326,6 +350,7 @@
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
+                    IsChecked="{Binding IncluirDiasTrabajoJD}"
                     Content="Días trabajados en J-D"
                     FontSize="12" />
                 <CheckBox
@@ -333,6 +358,7 @@
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
+                    IsChecked="{Binding IncluirDiasOV}"
                     Content="Días de vacaciones (O-V)"
                     FontSize="12" />
                 <CheckBox
@@ -340,12 +366,14 @@
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
+                    IsChecked="{Binding IncluirDiasDC}"
                     Content="Descansos compensatorios (DC)"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasDND"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirDiasDND}"
                     Click="cbUnDia_Click"
                     Content="Descansos no disfrutados (DND o DF)"
                     FontSize="12" />
@@ -353,6 +381,7 @@
                     x:Name="cbDiasE"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirDiasE}"
                     Click="cbUnDia_Click"
                     Content="Días de enfermedad"
                     FontSize="12" />
@@ -360,6 +389,7 @@
                     x:Name="cbDiasPER"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirDiasPER}"
                     Click="cbUnDia_Click"
                     Content="Días de permiso"
                     FontSize="12" />
@@ -367,6 +397,7 @@
                     x:Name="cbDiasF6"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirDiasF6}"
                     Click="cbUnDia_Click"
                     Content="Días libre dispośición (F6)"
                     FontSize="12" />
@@ -374,6 +405,7 @@
                     x:Name="cbDiasComite"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirDiasComite}"
                     Click="cbUnDia_Click"
                     Content="Días de comité"
                     FontSize="12" />
@@ -381,12 +413,14 @@
                     x:Name="cbDiasComiteJD"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirDiasComiteJD}"
                     Click="cbUnDia_Click"
                     Content="Días de comité en J-D"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasComiteDC"
                     Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirDiasComiteDC}"
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
                     Content="Días de comité en DC"
@@ -436,9 +470,6 @@
                         <ComboBoxItem
                             Content="Variables Vacaciones"
                             Tag="VariablesVacaciones" />
-                        <ComboBoxItem
-                            Content="Días"
-                            Tag="Dias" />
                     </ComboBox>
 
                     <Button
@@ -466,18 +497,19 @@
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     FontSize="14"
-                    SelectedIndex="0"
+                    SelectedIndex="{Binding DestinoResumen}"
                     SelectionChanged="ComboDestino_SelectionChanged">
+                    <ComboBoxItem Content="Un sólo trabajador" />
                     <ComboBoxItem Content="Todos los trabajadores" />
                     <ComboBoxItem Content="Trabajadores indefinidos" />
                     <ComboBoxItem Content="Trabajadores eventuales" />
-                    <ComboBoxItem Content="Un sólo trabajador" />
                 </ComboBox>
 
                 <CheckBox
                     x:Name="cbIncluirTaquilla"
                     Margin="25,10,0,0"
                     VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirTaquillas}"
                     Content="Incluir a trabajadores de taquilla."
                     FontSize="14" />
 
@@ -498,6 +530,7 @@
                     DisplayMemberPath="MatriculaApellidos"
                     FontSize="14"
                     IsEnabled="False"
+                    SelectedItem="{Binding ConductorSeleccionado}"
                     ItemsSource="{Binding ConductoresVM.ListaConductores}" />
 
                 <!--  FILTRADO DE FECHAS  -->
@@ -506,20 +539,19 @@
                     VerticalAlignment="Center"
                     FontSize="14"
                     FontWeight="Bold"
-                    Text="Filtrado de Fechas: " />
+                    Text="Filtrado: " />
 
                 <ComboBox
-                    x:Name="ComboFiltradoFechas"
+                    x:Name="ComboFiltrado"
                     Height="24"
                     MinWidth="250"
                     Margin="0,10,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Center"
                     FontSize="14"
-                    SelectedIndex="0">
-                    <ComboBoxItem Content="Mes actual" />
+                    SelectedIndex="{Binding Filtrado}">
                     <ComboBoxItem Content="Todo el año" />
-                    <ComboBoxItem Content="Todo el año, mes a mes" />
+                    <ComboBoxItem Content="Todo el año, por conductores" />
                 </ComboBox>
 
 
@@ -537,7 +569,7 @@
             <controls:VerticalButton
                 Title="Generar PDF"
                 Height="80"
-                Command="{Binding CmdGenerarPdf}"
+                Command="{Binding CmdCrearPDF}"
                 Image="/Views/Imagenes/PdfFile.png" />
 
             <controls:VerticalButton

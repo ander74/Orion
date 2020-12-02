@@ -83,9 +83,7 @@
                             ContentTemplate="{TemplateBinding ContentTemplate}">
                             <ContentPresenter.Content>
                                 <StackPanel Orientation="Vertical">
-                                    <Image
-                                        Source="{Binding RelativeSource={RelativeSource AncestorType=q:VerticalButton}, Path=Image}"
-                                        Visibility="{Binding RelativeSource={RelativeSource AncestorType=q:VerticalButton}, Path=ImageVisibility}">
+                                    <Image Source="{Binding RelativeSource={RelativeSource AncestorType=q:VerticalButton}, Path=Image}" Visibility="{Binding RelativeSource={RelativeSource AncestorType=q:VerticalButton}, Path=ImageVisibility}">
                                         <Image.Style>
                                             <Style TargetType="Image">
                                                 <Setter Property="Height" Value="28" />

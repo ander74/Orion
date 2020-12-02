@@ -65,14 +65,14 @@ namespace Orion.Pijama {
                         dia.PlusPaqueteria = dia.FacturadoPaqueteria * 0.10m;
                     }
                     // Establecemos el Plus de Limpieza
-                    if (dia.GraficoTrabajado.PlusLimpieza) {
-                        dia.PlusLimpieza = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
-                    } else {
+                    //if (dia.GraficoTrabajado.PlusLimpieza) {
+                    //    dia.PlusLimpieza = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
+                    //} else {
                         if (dia.Limpieza == null)
                             dia.PlusLimpieza = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza / 2m;
                         if (dia.Limpieza == true)
                             dia.PlusLimpieza = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusLimpieza;
-                    }
+                    //}
                     // Establecemos el Plus de Nocturnidad
                     if (dia.GraficoTrabajado.Turno == 3) dia.PlusNocturnidad = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusNocturnidad;
                     // Establecemos el quebranto de moneda.

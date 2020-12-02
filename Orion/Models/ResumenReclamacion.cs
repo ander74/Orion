@@ -13,6 +13,8 @@ namespace Orion.Models {
 
         public string RowHeader { get; set; }
 
+        public int Cantidad { get; set; }
+
         public TimeSpan TotalAcumuladas { get; set; }
 
         public decimal TotalDesayunos { get; set; }

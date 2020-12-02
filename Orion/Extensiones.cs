@@ -50,6 +50,12 @@ namespace Orion {
         }
 
 
+        public static string ToHorasMinutos(this TimeSpan hora) {
+            if (hora.Ticks < 0) return string.Empty;
+            return $"{(hora.Days * 24) + hora.Hours:00}:{hora.Minutes:00}";
+        }
+
+
         /// <summary>
         /// Devuelve una hora en formato texto (hh:mm) admitiendo valores negativos.
         /// </summary>

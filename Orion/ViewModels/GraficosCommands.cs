@@ -1041,5 +1041,33 @@ namespace Orion.ViewModels {
         #endregion
 
 
+
+        #region COMANDO TEMPORARL RECALCULAR TODOS
+
+        // Comando
+        private ICommand cmdRecalcularTodos;
+        public ICommand CmdRecalcularTodos {
+            get {
+                if (cmdRecalcularTodos == null) cmdRecalcularTodos = new RelayCommand(p => RecalcularTodos());
+                return cmdRecalcularTodos;
+            }
+        }
+        private void RecalcularTodos() {
+
+            foreach (var grupo in ListaGrupos) {
+                var lista = App.Global.Repository.GetGraficos(grupo.Validez);
+                foreach(var grafico in lista) {
+                    grafico.Recalcular();
+                }
+                App.Global.Repository.GuardarGraficos(lista);
+            }
+
+
+        }
+        #endregion
+
+
+
+
     } //Fin de la clase.
 }

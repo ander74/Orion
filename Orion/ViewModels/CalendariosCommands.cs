@@ -1381,7 +1381,7 @@ namespace Orion.ViewModels {
             DiaCalendarioSeleccionado.ComidaAlt = null;
             DiaCalendarioSeleccionado.CenaAlt = null;
             DiaCalendarioSeleccionado.PlusCenaAlt = null;
-            DiaCalendarioSeleccionado.PlusLimpiezaAlt = null;
+            //DiaCalendarioSeleccionado.PlusLimpiezaAlt = null;
             DiaCalendarioSeleccionado.PlusPaqueteriaAlt = null;
         }
         #endregion
@@ -1532,84 +1532,9 @@ namespace Orion.ViewModels {
             foreach (var objeto in VistaCalendarios) {
                 if (objeto is Calendario calendario) {
                     foreach (var dia in ((Calendario)calendario).ListaDias) RegenerarDiaCalendario(dia);
-                    calendario.Recalcular();
+                    RecalcularCalendario(calendario);
                 }
             }
-        }
-        #endregion
-
-
-        #region COMANDO PRUEBA DE INFORME DE RECLAMACIONES
-
-        // Comando
-        private ICommand verReclamaciones;
-        public ICommand cmdVerReclamaciones {
-            get {
-                if (verReclamaciones == null) verReclamaciones = new RelayCommand(p => VerReclamaciones(), p => PuedeVerReclamaciones());
-                return verReclamaciones;
-            }
-        }
-
-
-        // Se puede ejecutar el comando
-        private bool PuedeVerReclamaciones() {
-            return true;
-        }
-
-        // Ejecución del comando
-        private async void VerReclamaciones() {
-
-            try {
-                // Activamos la barra de progreso.
-                App.Global.IniciarProgreso("Creando PDF...");
-                var lista = new List<Reclamacion>();
-                foreach (var obj in VistaCalendarios) {
-                    if (obj is Calendario calendario) {
-                        // Pedimos el archivo donde guardarlo.
-                        string nombreArchivo = String.Format("Reclamación {0:yyyy}-{0:MM} - {1:000}.pdf", calendario.Fecha, calendario.MatriculaConductor);
-                        var conductor = App.Global.ConductoresVM.GetConductor(calendario.MatriculaConductor);
-                        string ruta = Informes.GetRutaArchivo(TiposInforme.Reclamacion, nombreArchivo, App.Global.Configuracion.CrearInformesDirectamente, conductor.MatriculaApellidos.Replace(":", " -"));
-                        if (ruta != "" && File.Exists(ruta)) {
-                            iText.Kernel.Pdf.PdfReader reader = new iText.Kernel.Pdf.PdfReader(ruta);
-                            // Se crea el PDF que se guardará usando el writer.
-                            iText.Kernel.Pdf.PdfDocument docPDF = new iText.Kernel.Pdf.PdfDocument(reader);
-                            // Se crea el documento con el que se trabajará.
-                            await PijamaPrintModel.GetReclamaciones(docPDF, lista);
-                            docPDF.Close();
-                        }
-                    }
-                }
-                // Extraemos los totales de las reclamaciones.
-                var totalHoras = TimeSpan.Zero;
-                var totalDesayunos = 0m;
-                var totalImporteDesayunos = 0m;
-                var totalComidas = 0m;
-                var totalImporteComidas = 0m;
-                foreach (var reclamacion in lista) {
-                    if (reclamacion.Concepto.StartsWith("Horas")) {
-                        if (TimeSpan.TryParse(reclamacion.Diferencia, out TimeSpan dato)) totalHoras += dato;
-                    }
-                    if (reclamacion.Concepto.StartsWith("Dieta de desayuno")) {
-                        var datos = reclamacion.Diferencia.Split('/');
-                        if (decimal.TryParse(datos[0], out decimal dato)) totalDesayunos += dato;
-                        if (decimal.TryParse(datos[1], out decimal importeDato)) totalImporteDesayunos += importeDato;
-                        totalImporteDesayunos += decimal.Parse(datos[1]);
-                    }
-                    if (reclamacion.Concepto.StartsWith("Dieta de comida")) {
-                        var datos = reclamacion.Diferencia.Split('/');
-                        if (decimal.TryParse(datos[0], out decimal dato)) totalComidas += dato;
-                        if (decimal.TryParse(datos[1], out decimal importeDato)) totalImporteComidas += importeDato;
-                    }
-                }
-                var texto = JsonConvert.SerializeObject(lista, Formatting.Indented);
-                File.WriteAllText("D:\\Reclamaciones.json", texto);
-            } catch (Exception ex) {
-                Mensajes.VerError("CalendariosCommands.VerReclamaciones", ex);
-            } finally {
-                App.Global.FinalizarProgreso();
-            }
-
-
         }
         #endregion
 
@@ -1813,6 +1738,33 @@ namespace Orion.ViewModels {
         }
         #endregion
 
+
+
+        #region COMANDO TEMPORAL REGENERAR TODO
+
+        // Comando
+        private ICommand cmdRegenerarTodo;
+        public ICommand CmdRegenerarTodo {
+            get {
+                if (cmdRegenerarTodo == null) cmdRegenerarTodo = new RelayCommand(p => RegenerarTodo());
+                return cmdRegenerarTodo;
+            }
+        }
+        private void RegenerarTodo() {
+
+            for (int año = 2017; año <= 2021; año++) {
+                var lista = App.Global.Repository.GetCalendarios(año);
+                foreach (var calendario in lista) {
+                    foreach (var dia in calendario.ListaDias) RegenerarDiaCalendarioAislado(dia);
+                    RecalcularCalendario(calendario);
+                }
+                App.Global.Repository.GuardarCalendarios(lista);
+            }
+
+
+
+        }
+        #endregion
 
 
 

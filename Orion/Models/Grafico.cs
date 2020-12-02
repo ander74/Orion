@@ -59,7 +59,7 @@ namespace Orion.Models {
                 case "Comida": Comida = 0; break;
                 case "Cena": Cena = 0; break;
                 case "Plus Cena": PlusCena = 0; break;
-                case "Limpieza": PlusLimpieza = false; break;
+                //case "Limpieza": PlusLimpieza = false; break;
                 case "Paquetería": PlusPaqueteria = false; break;
             }
         }
@@ -117,7 +117,7 @@ namespace Orion.Models {
                     PropiedadCambiada(nameof(DiferenciaValoracion));
                     break;
                 case nameof(TiempoPartido):
-                case nameof(TrabajadasPartido):
+                case nameof(TiempoTotal):
                     PropiedadCambiada(nameof(ErrorGraficoPartido));
                     break;
             }
@@ -170,7 +170,7 @@ namespace Orion.Models {
             get {
                 if (Turno == 4) {
                     if (TiempoPartido > App.Global.Convenio.MaxHorasParticionGraficoPartido) return true;
-                    if (TrabajadasPartido > App.Global.Convenio.MaxHorasTotalGraficoPartido) return true;
+                    if (TiempoTotal > App.Global.Convenio.MaxHorasTotalGraficoPartido) return true;
                 }
                 return false;
             }

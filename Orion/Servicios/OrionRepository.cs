@@ -53,8 +53,35 @@ namespace Orion.Servicios {
             "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
             "MatriculaConductor INTEGER DEFAULT 0, " +
             "Fecha TEXT, " +
-            "Descuadre INTEGER DEFAULT 0, " +
-            "ExcesoJornadaCobrada REAL DEFAULT 0, " +
+            "DiasOV INTEGER DEFAULT(0), " +
+            "DiasJD INTEGER DEFAULT(0), " +
+            "DiasFN INTEGER DEFAULT(0), " +
+            "DiasE INTEGER DEFAULT(0), " +
+            "DiasDS INTEGER DEFAULT(0), " +
+            "DiasDC INTEGER DEFAULT(0), " +
+            "DiasF6 INTEGER DEFAULT(0), " +
+            "DiasDND INTEGER DEFAULT(0), " +
+            "DiasPER INTEGER DEFAULT(0), " +
+            "DiasEJD INTEGER DEFAULT(0), " +
+            "DiasEFN INTEGER DEFAULT(0), " +
+            "DiasOVJD INTEGER DEFAULT(0), " +
+            "DiasOVFN INTEGER DEFAULT(0), " +
+            "DiasF6DC INTEGER DEFAULT(0), " +
+            "DiasFOR INTEGER DEFAULT(0), " +
+            "DiasOVA INTEGER DEFAULT(0), " +
+            "DiasOVAJD INTEGER DEFAULT(0), " +
+            "DiasOVAFN INTEGER DEFAULT(0), " +
+            "DiasLAC INTEGER DEFAULT(0), " +
+            "DiasCO INTEGER DEFAULT(0), " +
+            "DiasCE INTEGER DEFAULT(0), " +
+            "DiasTrabajo INTEGER DEFAULT(0), " +
+            "DiasTrabajoJD INTEGER DEFAULT(0), " +
+            "DiasActivo INTEGER DEFAULT(0), " +
+            "DiasInactivo INTEGER DEFAULT(0), " +
+            "TrabajadasConvenio INTEGER DEFAULT(0), " +
+            "Acumuladas INTEGER DEFAULT(0), " +
+            "Nocturnas INTEGER DEFAULT(0), " +
+            "FindesCompletos REAL    DEFAULT(0), " +
             "Notas TEXT DEFAULT ''" +
             ");";
 
@@ -86,9 +113,7 @@ namespace Orion.Servicios {
             "Grafico INTEGER DEFAULT 0, " +
             "Codigo INTEGER DEFAULT 0, " +
             "ExcesoJornada REAL DEFAULT 0, " +
-            "BloquearExcesoJornada INTEGER DEFAULT 0, " +
             "Descuadre INTEGER DEFAULT 0, " +
-            "BloquearDescuadre INTEGER DEFAULT 0, " +
             "FacturadoPaqueteria REAL DEFAULT 0, " +
             "Limpieza INTEGER DEFAULT NULL, " +
             "GraficoVinculado INTEGER DEFAULT 0, " +
@@ -104,7 +129,6 @@ namespace Orion.Servicios {
             "ComidaAlt REAL DEFAULT NULL, " +
             "CenaAlt REAL DEFAULT NULL, " +
             "PlusCenaAlt REAL DEFAULT NULL, " +
-            "PlusLimpiezaAlt INTEGER DEFAULT NULL, " +
             "PlusPaqueteriaAlt INTEGER DEFAULT NULL, " +
             "Notas TEXT DEFAULT '', " +
             //NUEVAS
@@ -114,12 +138,11 @@ namespace Orion.Servicios {
             "Final INTEGER DEFAULT NULL, " +
             "InicioPartido INTEGER DEFAULT NULL, " +
             "FinalPartido INTEGER DEFAULT NULL, " +
-            "TrabajadasPartido INTEGER DEFAULT 0, " +
             "TiempoPartido INTEGER DEFAULT 0, " +
+            "TiempoTotal INTEGER DEFAULT 0, " +
             "Valoracion INTEGER DEFAULT 0, " +
             "Trabajadas INTEGER DEFAULT 0, " +
             "TrabajadasConvenio INTEGER DEFAULT 0, " +
-            "TrabajadasReales INTEGER DEFAULT 0, " +
             "TiempoVacio INTEGER DEFAULT 0, " +
             "Acumuladas INTEGER DEFAULT 0, " +
             "Nocturnas INTEGER DEFAULT 0, " +
@@ -127,9 +150,7 @@ namespace Orion.Servicios {
             "Comida REAL DEFAULT 0, " +
             "Cena REAL DEFAULT 0, " +
             "PlusCena REAL DEFAULT 0, " +
-            "PlusLimpieza INTEGER DEFAULT 0, " +
             "PlusPaqueteria INTEGER DEFAULT 0 " +
-
             ");";
 
 
@@ -153,8 +174,11 @@ namespace Orion.Servicios {
             "Final INTEGER DEFAULT NULL, " +
             "InicioPartido INTEGER DEFAULT NULL, " +
             "FinalPartido INTEGER DEFAULT NULL, " +
+            "TiempoPartido INTEGER DEFAULT 0, " +
+            "TiempoTotal INTEGER DEFAULT 0, " +
             "Valoracion INTEGER DEFAULT 0, " +
             "Trabajadas INTEGER DEFAULT 0, " +
+            "TrabajadasConvenio INTEGER DEFAULT 0, " +
             "TiempoVacio INTEGER DEFAULT 0, " +
             "Acumuladas INTEGER DEFAULT 0, " +
             "Nocturnas INTEGER DEFAULT 0, " +
@@ -162,7 +186,6 @@ namespace Orion.Servicios {
             "Comida REAL DEFAULT 0, " +
             "Cena REAL DEFAULT 0, " +
             "PlusCena REAL DEFAULT 0, " +
-            "PlusLimpieza INTEGER DEFAULT 0, " +
             "PlusPaqueteria INTEGER DEFAULT 0 " +
             ");";
 
@@ -184,7 +207,8 @@ namespace Orion.Servicios {
             "DietaMenorDescanso REAL DEFAULT 0, " +
             "PlusLimpieza REAL DEFAULT 0, " +
             "PlusPaqueteria REAL DEFAULT 0, " +
-            "PlusNavidad REAL DEFAULT 0 " +
+            "PlusNavidad REAL DEFAULT 0, " +
+            "QuebrantoMoneda REAL DEFAULT 0 " +
             ");";
 
 
@@ -211,31 +235,37 @@ namespace Orion.Servicios {
             ");";
 
 
-        public const string CrearTablaItinerarios = "CREATE TABLE IF NOT EXISTS Itinerarios (" +
-            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "IdLinea INTEGER DEFAULT 0, " +
-            "Nombre REAL DEFAULT 0, " +
-            "Descripcion TEXT DEFAULT '', " +
-            "TiempoReal INTEGER DEFAULT 0, " +
-            "TiempoPago INTEGER DEFAULT 0 " +
-            ");";
+        //public const string CrearTablaItinerarios = "CREATE TABLE IF NOT EXISTS Itinerarios (" +
+        //    "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        //    "IdLinea INTEGER DEFAULT 0, " +
+        //    "Nombre REAL DEFAULT 0, " +
+        //    "Descripcion TEXT DEFAULT '', " +
+        //    "TiempoReal INTEGER DEFAULT 0, " +
+        //    "TiempoPago INTEGER DEFAULT 0 " +
+        //    ");";
 
 
-        public const string CrearTablaLineas = "CREATE TABLE IF NOT EXISTS Lineas (" +
-            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "Nombre TEXT DEFAULT '', " +
-            "Descripcion TEXT DEFAULT '' " +
-            ");";
+        //public const string CrearTablaLineas = "CREATE TABLE IF NOT EXISTS Lineas (" +
+        //    "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        //    "Nombre TEXT DEFAULT '', " +
+        //    "Descripcion TEXT DEFAULT '' " +
+        //    ");";
 
 
-        public const string CrearTablaParadas = "CREATE TABLE IF NOT EXISTS Paradas (" +
-            "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
-            "IdItinerario INTEGER DEFAULT 0, " +
-            "Orden INTEGER DEFAULT 0, " +
-            "Descripcion TEXT DEFAULT '', " +
-            "Tiempo INTEGER DEFAULT 0 " +
-            ");";
+        //public const string CrearTablaParadas = "CREATE TABLE IF NOT EXISTS Paradas (" +
+        //    "_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+        //    "IdItinerario INTEGER DEFAULT 0, " +
+        //    "Orden INTEGER DEFAULT 0, " +
+        //    "Descripcion TEXT DEFAULT '', " +
+        //    "Tiempo INTEGER DEFAULT 0 " +
+        //    ");";
 
+        //public const string CrearTablaArticulosConvenio = "CREATE TABLE ArticulosConvenio (" +
+        //    "Numero REAL DEFAULT(0), " +
+        //    "Titulo TEXT DEFAULT(''), " +
+        //    "Texto TEXT DEFAULT(''), " +
+        //    "CodigoFuncionRelacionada INTEGER DEFAULT(0) " +
+        //    ");";
 
         #endregion
         // ====================================================================================================
@@ -329,7 +359,12 @@ namespace Orion.Servicios {
 
             try {
                 DateTime fecha = new DateTime(año, mes, 1);
-                var consulta = new SQLiteExpression("SELECT * FROM Calendarios WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) ORDER BY MatriculaConductor;");
+                var consulta = new SQLiteExpression("" +
+                    "SELECT CA.*, CO.Indefinido AS ConductorIndefinido, CO.Categoria AS CategoriaConductor " +
+                    "FROM Calendarios AS CA " +
+                    "JOIN Conductores AS CO ON CO.Matricula == CA.MatriculaConductor " +
+                    "WHERE strftime('%Y-%m', CA.Fecha) = strftime('%Y-%m', @fecha) " +
+                    "ORDER BY MatriculaConductor;");
                 consulta.AddParameter("@fecha", fecha);
                 var lista = GetItems<Calendario>(consulta, sinDias);
                 return lista;
@@ -342,7 +377,12 @@ namespace Orion.Servicios {
         public IEnumerable<Calendario> GetCalendarios(int año, bool sinDias = false) {
             try {
                 DateTime fecha = new DateTime(año, 1, 1);
-                var consulta = new SQLiteExpression("SELECT * FROM Calendarios WHERE strftime('%Y', Fecha) = strftime('%Y', @fecha) ORDER BY MatriculaConductor;");
+                var consulta = new SQLiteExpression("" +
+                    "SELECT CA.*, CO.Indefinido AS ConductorIndefinido, CO.Categoria AS CategoriaConductor " +
+                    "FROM Calendarios AS CA " +
+                    "JOIN Conductores AS CO ON CO.Matricula == CA.MatriculaConductor " +
+                    "WHERE strftime('%Y', CA.Fecha) = strftime('%Y', @fecha) " +
+                    "ORDER BY MatriculaConductor;");
                 consulta.AddParameter("@fecha", fecha);
                 var lista = GetItems<Calendario>(consulta, sinDias);
                 return lista;
@@ -357,9 +397,12 @@ namespace Orion.Servicios {
 
             try {
                 DateTime fecha = new DateTime(año, 1, 1);
-                string comandoSQL = "SELECT * FROM Calendarios " +
-                    "WHERE strftime('%Y', Calendarios.Fecha) = strftime('%Y', @fecha) AND Calendarios.MatriculaConductor = @matricula " +
-                    "ORDER BY Calendarios.Fecha;";
+                string comandoSQL = "" +
+                    "SELECT CA.*, CO.Indefinido AS ConductorIndefinido, CO.Categoria AS CategoriaConductor " +
+                    "FROM Calendarios AS CA " +
+                    "JOIN Conductores AS CO ON CO.Matricula == CA.MatriculaConductor " +
+                    "WHERE strftime('%Y', CA.Fecha) = strftime('%Y', @fecha) AND CA.MatriculaConductor = @matricula " +
+                    "ORDER BY CA.Fecha;";
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                 var lista = GetItems<Calendario>(consulta, sinDias);
                 return lista;
@@ -374,8 +417,12 @@ namespace Orion.Servicios {
 
             try {
                 DateTime fecha = new DateTime(año, mes, 1);
-                string comandoSQL = "SELECT Calendarios.* FROM Calendarios " +
-                                    "WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Calendarios.MatriculaConductor = @matricula ;";
+                string comandoSQL = "" +
+                    "SELECT CA.*, CO.Indefinido AS ConductorIndefinido, CO.Categoria AS CategoriaConductor " +
+                    "FROM Calendarios AS CA " +
+                    "JOIN Conductores AS CO ON CO.Matricula == CA.MatriculaConductor " +
+                    "WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Calendarios.MatriculaConductor = @matricula " +
+                    "ORDER BY CA.Fecha;";
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                 var lista = GetItems<Calendario>(consulta, sinDias);
                 return lista.ToList();
@@ -732,6 +779,58 @@ namespace Orion.Servicios {
         }
 
 
+        public IEnumerable<ResumenCalendarios> GetResumenCalendariosAnualHastaMes(DateTime hastaMes) {
+            string comandoSQL = "" +
+                "SELECT " +
+                "C.MatriculaConductor, " +
+                "Sum(C.DiasOV) AS DiasOV, " +
+                "Sum(C.DiasJD) AS DiasJD, " +
+                "Sum(C.DiasFN) AS DiasFN, " +
+                "Sum(C.DiasE) AS DiasE, " +
+                "Sum(DiasDS) AS DiasDS, " +
+                "Sum(C.DiasDC) AS DiasDC, " +
+                "Sum(C.DiasF6) AS DiasF6, " +
+                "Sum(C.DiasDND) AS DiasDND, " +
+                "Sum(C.DiasPER) AS DiasPER, " +
+                "Sum(C.DiasEJD) AS DiasEJD, " +
+                "Sum(C.DiasEFN) AS DiasEFN, " +
+                "Sum(C.DiasOVJD) AS DiasOVJD, " +
+                "Sum(C.DiasOVFN) AS DiasOVFN, " +
+                "Sum(C.DiasF6DC) AS DiasF6DC, " +
+                "Sum(C.DiasFOR) AS DiasFOR, " +
+                "Sum(C.DiasOVA) AS DiasOVA, " +
+                "Sum(C.DiasOVAJD) AS DiasOVAJD, " +
+                "Sum(C.DiasOVAFN) AS DiasOVAFN, " +
+                "Sum(C.DiasLAC) AS DiasLAC, " +
+                "Sum(C.DiasCO) AS DiasCO, " +
+                "Sum(C.DiasCE) AS DiasCE, " +
+                "Sum(C.DiasTrabajo) AS DiasTrabajo, " +
+                "Sum(C.DiasTrabajoJD) AS DiasTrabajoJD, " +
+                "Sum(DiasActivo) AS DiasActivo, " +
+                "Sum(DiasInactivo) AS DiasInactivo, " +
+                "Sum(C.TrabajadasConvenio) AS TrabajadasConvenio, " +
+                "Sum(C.Acumuladas) AS Acumuladas, " +
+                "Sum(C.Nocturnas) AS Nocturnas, " +
+                "Sum(C.FindesCompletos) AS FindesCompletos " +
+                "" +
+                "FROM Calendarios AS C " +
+                "WHERE Date(C.Fecha) > Date(@fechaDesde) AND Date(C.Fecha) < Date(@fechaHasta) " +
+                "GROUP BY C.MatriculaConductor " +
+                "ORDER BY C.MatriculaConductor ASC;";
+            try {
+                DateTime fechaDesde = new DateTime(hastaMes.Year - 1, 12, 31);
+                DateTime fechaHasta = new DateTime(hastaMes.Year, hastaMes.Month, 1).AddMonths(1);
+                var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fechaDesde", fechaDesde).AddParameter("@fechaHasta", fechaHasta);
+                var lista = GetItems<ResumenCalendarios>(consulta);
+                return lista;
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GetResumenCalendariosAnualHastaMes), ex);
+            }
+            return new List<ResumenCalendarios>();
+        }
+
+
+
         #endregion
         // ====================================================================================================
 
@@ -827,6 +926,22 @@ namespace Orion.Servicios {
                 Utils.VerError(nameof(this.GuardarCalendarios), ex);
             }
             return null;
+        }
+
+
+        public IEnumerable<DiaCalendarioConductor> GetDiasCalendarioConductor(DateTime fecha) {
+            string comandoSQL = "" +
+                "SELECT C.MatriculaConductor, DC.* FROM " +
+                "DiasCalendario AS DC " +
+                "JOIN Calendarios AS C ON DC.IdCalendario = C._id " +
+                "WHERE strftime('%Y-%m-%d', DC.DiaFecha) = strftime('%Y-%m-%d', @fecha); ";
+            var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha);
+            try {
+                return GetItems<DiaCalendarioConductor>(consulta);
+            } catch (Exception ex) {
+                Utils.VerError(nameof(this.GuardarCalendarios), ex);
+            }
+            return new List<DiaCalendarioConductor>();
         }
 
 
@@ -1140,7 +1255,7 @@ namespace Orion.Servicios {
 
         public IEnumerable<GrupoGraficos> GetGrupos() {
             try {
-                var consulta = new SQLiteExpression("SELECT DISTINCT Validez FROM Graficos ORDER BY Validez DESC");
+                var consulta = new SQLiteExpression("SELECT DISTINCT Date(Validez) AS Validez FROM Graficos ORDER BY Validez DESC");
                 return GetItems<GrupoGraficos>(consulta);
             } catch (Exception ex) {
                 Utils.VerError(nameof(this.GetGrupos), ex);
@@ -1739,7 +1854,7 @@ namespace Orion.Servicios {
                         if (dia.ComidaAlt.HasValue) diaPijama.GraficoTrabajado.Comida = dia.ComidaAlt.Value;
                         if (dia.CenaAlt.HasValue) diaPijama.GraficoTrabajado.Cena = dia.CenaAlt.Value;
                         if (dia.PlusCenaAlt.HasValue) diaPijama.GraficoTrabajado.PlusCena = dia.PlusCenaAlt.Value;
-                        if (dia.PlusLimpiezaAlt.HasValue) diaPijama.GraficoTrabajado.PlusLimpieza = dia.PlusLimpiezaAlt.Value;
+                        //if (dia.PlusLimpiezaAlt.HasValue) diaPijama.GraficoTrabajado.PlusLimpieza = dia.PlusLimpiezaAlt.Value;
                         if (dia.PlusPaqueteriaAlt.HasValue) diaPijama.GraficoTrabajado.PlusPaqueteria = dia.PlusPaqueteriaAlt.Value;
                         // Añadimos el día pijama a la lista.
                         lista.Add(diaPijama);
@@ -1769,14 +1884,14 @@ namespace Orion.Servicios {
                 "SELECT " +
                 "DC._id, DC.IdCalendario, DC.Dia, DC.DiaFecha, DC.Grafico, DC.Codigo, " +
                 "DC.ExcesoJornada, DC.FacturadoPaqueteria, DC.Limpieza, DC.GraficoVinculado, DC.Notas, " +
-                "DC.TurnoAlt, DC.InicioAlt, DC.FinalAlt, DC.InicioPartidoAlt, DC.FinalPartidoAlt, DC.TiempoPartido, DC.TrabajadasPartido, " +
-                "DC.TrabajadasAlt, DC.TrabajadasConvenio, DC.TrabajadasReales, " +
+                "DC.TurnoAlt, DC.InicioAlt, DC.FinalAlt, DC.InicioPartidoAlt, DC.FinalPartidoAlt, DC.TiempoPartido, DC.TiempoTotal, " +
+                "DC.TrabajadasAlt, DC.TrabajadasConvenio, " +
                 "DC.AcumuladasAlt, DC.NocturnasAlt, DC.DesayunoAlt, DC.ComidaAlt, DC.CenaAlt, DC.PlusCenaAlt," +
-                "DC.PlusLimpiezaAlt, DC.PlusPaqueteriaAlt, " +
+                "DC.PlusPaqueteriaAlt, " +
                 "G.IdGrupo, G.Categoria, G.Validez, G.NoCalcular, G.Numero, G.DiaSemana, G.Categoria AS CategoriaGrafico, " +
                 "G.Turno, G.Inicio, G.Final, G.InicioPartido, G.FinalPartido, " +
                 "G.Valoracion, G.Trabajadas, G.TiempoVacio, G.Acumuladas, G.Nocturnas, G.Desayuno, G.Comida, G.Cena, G.PlusCena, " +
-                "G.PlusLimpieza, G.PlusPaqueteria " +
+                "G.PlusPaqueteria " +
                 "FROM DiasCalendario AS DC LEFT JOIN Graficos AS G " +
                 "ON DC.Grafico = G.Numero " +
                 "AND strftime('%Y-%m-%d', G.Validez) = strftime('%Y-%m-%d', (SELECT Max(Graficos.Validez) FROM Graficos WHERE strftime('%Y-%m-%d', Graficos.Validez) <= strftime('%Y-%m-%d', DC.DiaFecha))) " +

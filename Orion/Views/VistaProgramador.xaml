@@ -124,13 +124,24 @@
                 </Button.Content>
             </Button>
 
-
-
             <!--  SEPARADOR  -->
             <TextBlock
                 Width="2"
                 Margin="3,5"
                 Background="LightGray" />
+
+            <!--  BOTON RECALCULAR TODO  -->
+            <controls:BotonBarra
+                Command="{Binding GraficosVM.CmdRecalcularTodos}"
+                Imagen="Imagenes/Engranajes.png"
+                Titulo="Recalcular Graficos" />
+
+            <!--  BOTON REGENERAR TODO  -->
+            <controls:BotonBarra
+                Command="{Binding CalendariosVM.CmdRegenerarTodo}"
+                Imagen="Imagenes/Engranajes.png"
+                Titulo="Regenerar Calendarios" />
+
 
         </StackPanel>
 

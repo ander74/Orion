@@ -12,23 +12,33 @@ namespace Orion.Models {
     using System.Data.Common;
     using System.Data.OleDb;
     using System.Data.SQLite;
+    using System.Linq;
     using Newtonsoft.Json;
     using Orion.Interfaces;
 
     public class DiaCalendarioBase : NotifyBase, ISQLiteItem {
+
+        // ====================================================================================================
+        #region CAMPOS PRIVADOS
+        // ====================================================================================================
+
+        public static List<int> IncidenciasDescanso = new List<int> { -2, -3, -10, -11, -17, -18 };
+
+        #endregion
+        // ====================================================================================================
 
 
         // ====================================================================================================
         #region  CONSTRUCTORES
         // ====================================================================================================
         public DiaCalendarioBase() {
-            PlusLimpiezaAlt = null;
+            //PlusLimpiezaAlt = null;
             PlusPaqueteriaAlt = null;
         }
 
 
         public DiaCalendarioBase(OleDbDataReader lector) {
-            PlusLimpiezaAlt = null;
+            //PlusLimpiezaAlt = null;
             PlusPaqueteriaAlt = null;
             ParseFromReader(lector, this);
         }
@@ -57,7 +67,7 @@ namespace Orion.Models {
             comidaalt = dia.ComidaAlt;
             cenaalt = dia.CenaAlt;
             pluscenaalt = dia.PlusCenaAlt;
-            pluslimpiezaalt = dia.PlusLimpiezaAlt;
+            //pluslimpiezaalt = dia.PlusLimpiezaAlt;
             pluspaqueteriaalt = dia.PlusPaqueteriaAlt;
         }
 
@@ -94,7 +104,7 @@ namespace Orion.Models {
             diacalendario.ComidaAlt = lector.ToDecimalNulable("ComidaAlt");
             diacalendario.CenaAlt = lector.ToDecimalNulable("CenaAlt");
             diacalendario.PlusCenaAlt = lector.ToDecimalNulable("PlusCenaAlt");
-            diacalendario.PlusLimpiezaAlt = lector.ToBoolNulable("PlusLimpiezaAlt");
+            //diacalendario.PlusLimpiezaAlt = lector.ToBoolNulable("PlusLimpiezaAlt");
             diacalendario.PlusPaqueteriaAlt = lector.ToBoolNulable("PlusPaqueteriaAlt");
         }
 
@@ -122,7 +132,7 @@ namespace Orion.Models {
             Comando.Parameters.AddWithValue("ComidaAlt", diacalendario.ComidaAlt.HasValue ? diacalendario.ComidaAlt.Value.ToString("0.0000") : (object)DBNull.Value);
             Comando.Parameters.AddWithValue("CenaAlt", diacalendario.CenaAlt.HasValue ? diacalendario.CenaAlt.Value.ToString("0.0000") : (object)DBNull.Value);
             Comando.Parameters.AddWithValue("PluscenaAlt", diacalendario.PlusCenaAlt.HasValue ? diacalendario.PlusCenaAlt.Value.ToString("0.0000") : (object)DBNull.Value);
-            Comando.Parameters.AddWithValue("PluslimpiezaAlt", diacalendario.PlusLimpiezaAlt.HasValue ? diacalendario.PlusLimpiezaAlt.Value : (object)DBNull.Value);
+            //Comando.Parameters.AddWithValue("PluslimpiezaAlt", diacalendario.PlusLimpiezaAlt.HasValue ? diacalendario.PlusLimpiezaAlt.Value : (object)DBNull.Value);
             Comando.Parameters.AddWithValue("PluspaqueteriaAlt", diacalendario.PlusPaqueteriaAlt.HasValue ? diacalendario.PlusPaqueteriaAlt.Value : (object)DBNull.Value);
             Comando.Parameters.AddWithValue("@Id", diacalendario.Id);
         }
@@ -359,24 +369,24 @@ namespace Orion.Models {
         }
 
 
-        private TimeSpan trabajadasPartido; //TODO: La llamaremos JornadaTotal
-        public TimeSpan TrabajadasPartido {
-            get => trabajadasPartido;
+        private TimeSpan tiempoTotal; 
+        public TimeSpan TiempoTotal {
+            get => tiempoTotal;
             set {
-                if (trabajadasPartido != value) {
-                    trabajadasPartido = value;
+                if (tiempoTotal != value) {
+                    tiempoTotal = value;
                     PropiedadCambiada();
                 }
             }
         }
 
 
-        private TimeSpan tiempopartido;
+        private TimeSpan tiempoPartido;
         public TimeSpan TiempoPartido {
-            get { return tiempopartido; }
+            get { return tiempoPartido; }
             set {
-                if (tiempopartido != value) {
-                    tiempopartido = value;
+                if (tiempoPartido != value) {
+                    tiempoPartido = value;
                     PropiedadCambiada();
                 }
             }
@@ -407,13 +417,6 @@ namespace Orion.Models {
         public TimeSpan TrabajadasConvenio {
             get => trabajadasConvenio;
             set => SetValue(ref trabajadasConvenio, value);
-        }
-
-
-        private TimeSpan trabajadasReales;
-        public TimeSpan TrabajadasReales {
-            get => trabajadasReales;
-            set => SetValue(ref trabajadasReales, value);
         }
 
 
@@ -466,11 +469,11 @@ namespace Orion.Models {
         }
 
 
-        private bool plusLimpieza;
-        public bool PlusLimpieza {
-            get => plusLimpieza;
-            set => SetValue(ref plusLimpieza, value);
-        }
+        //private bool plusLimpieza;
+        //public bool PlusLimpieza {
+        //    get => plusLimpieza;
+        //    set => SetValue(ref plusLimpieza, value);
+        //}
 
 
         private bool plusPaqueteria;
@@ -479,6 +482,10 @@ namespace Orion.Models {
             set => SetValue(ref plusPaqueteria, value);
         }
 
+
+        public bool EsDiaDeDescanso {
+            get => IncidenciasDescanso.Any(i => i == Grafico);
+        }
 
 
         #endregion
@@ -496,6 +503,7 @@ namespace Orion.Models {
                 if (value != turnoalt) {
                     turnoalt = (value < 1 || value > 4) ? null : value;
                     Modificado = true;
+                    if (turnoalt.HasValue) Turno = turnoalt; //Quitar en caso necesario
                     PropiedadCambiada();
                 }
             }
@@ -509,6 +517,7 @@ namespace Orion.Models {
                 if (!value.Equals(inicioalt)) {
                     inicioalt = value;
                     Modificado = true;
+                    if (inicioalt.HasValue) Inicio = inicioalt; //Quitar en caso necesario
                     PropiedadCambiada();
                 }
             }
@@ -522,6 +531,7 @@ namespace Orion.Models {
                 if (!value.Equals(finalalt)) {
                     finalalt = value;
                     Modificado = true;
+                    if (finalalt.HasValue) Final = finalalt; //Quitar en caso necesario
                     PropiedadCambiada();
                 }
             }
@@ -535,6 +545,7 @@ namespace Orion.Models {
                 if (!value.Equals(iniciopartidoalt)) {
                     iniciopartidoalt = value;
                     Modificado = true;
+                    if (iniciopartidoalt.HasValue) InicioPartido = iniciopartidoalt; //Quitar en caso necesario
                     PropiedadCambiada();
                 }
             }
@@ -548,6 +559,7 @@ namespace Orion.Models {
                 if (!value.Equals(finalpartidoalt)) {
                     finalpartidoalt = value;
                     Modificado = true;
+                    if (finalpartidoalt.HasValue) FinalPartido = finalpartidoalt; //Quitar en caso necesario
                     PropiedadCambiada();
                 }
             }
@@ -561,6 +573,7 @@ namespace Orion.Models {
                 if (!value.Equals(trabajadasalt)) {
                     trabajadasalt = value;
                     Modificado = true;
+                    if (trabajadasalt.HasValue) TrabajadasConvenio = trabajadasalt.Value; //Quitar en caso necesario
                     PropiedadCambiada();
                 }
             }
@@ -574,6 +587,7 @@ namespace Orion.Models {
                 if (!value.Equals(acumuladasalt)) {
                     acumuladasalt = value;
                     Modificado = true;
+                    if (acumuladasalt.HasValue) Acumuladas = acumuladasalt.Value; //Quitar en caso necesario
                     PropiedadCambiada();
                 }
             }
@@ -587,6 +601,7 @@ namespace Orion.Models {
                 if (!value.Equals(nocturnasalt)) {
                     nocturnasalt = value;
                     Modificado = true;
+                    if (nocturnasalt.HasValue) Nocturnas = nocturnasalt.Value; //Quitar en caso necesario
                     PropiedadCambiada();
                 }
             }
@@ -600,6 +615,7 @@ namespace Orion.Models {
                 if (value != desayunoalt) {
                     desayunoalt = value;
                     Modificado = true;
+                    if (desayunoalt.HasValue) Desayuno = desayunoalt.Value;
                     PropiedadCambiada();
                 }
             }
@@ -613,6 +629,7 @@ namespace Orion.Models {
                 if (value != comidaalt) {
                     comidaalt = value;
                     Modificado = true;
+                    if (comidaalt.HasValue) Comida = comidaalt.Value;
                     PropiedadCambiada();
                 }
             }
@@ -626,6 +643,7 @@ namespace Orion.Models {
                 if (value != cenaalt) {
                     cenaalt = value;
                     Modificado = true;
+                    if (cenaalt.HasValue) Cena = cenaalt.Value;
                     PropiedadCambiada();
                 }
             }
@@ -639,23 +657,25 @@ namespace Orion.Models {
                 if (value != pluscenaalt) {
                     pluscenaalt = value;
                     Modificado = true;
+                    if (pluscenaalt.HasValue) PlusCena = pluscenaalt.Value;
                     PropiedadCambiada();
                 }
             }
         }
 
 
-        private bool? pluslimpiezaalt = null;
-        public bool? PlusLimpiezaAlt {
-            get { return pluslimpiezaalt; }
-            set {
-                if (pluslimpiezaalt != value) {
-                    pluslimpiezaalt = value;
-                    Modificado = true;
-                    PropiedadCambiada();
-                }
-            }
-        }
+        //private bool? pluslimpiezaalt = null;
+        //public bool? PlusLimpiezaAlt {
+        //    get { return pluslimpiezaalt; }
+        //    set {
+        //        if (pluslimpiezaalt != value) {
+        //            pluslimpiezaalt = value;
+        //            Modificado = true;
+        //            if (pluslimpiezaalt.HasValue) PlusLimpieza = pluslimpiezaalt.Value;
+        //            PropiedadCambiada();
+        //        }
+        //    }
+        //}
 
 
         private bool? pluspaqueteriaalt = null;
@@ -665,6 +685,7 @@ namespace Orion.Models {
                 if (pluspaqueteriaalt != value) {
                     pluspaqueteriaalt = value;
                     Modificado = true;
+                    if (pluspaqueteriaalt.HasValue) PlusPaqueteria = pluspaqueteriaalt.Value;
                     PropiedadCambiada();
                 }
             }
@@ -703,7 +724,7 @@ namespace Orion.Models {
             comidaalt = lector.ToDecimalNulable("ComidaAlt");
             cenaalt = lector.ToDecimalNulable("CenaAlt");
             pluscenaalt = lector.ToDecimalNulable("PlusCenaAlt");
-            pluslimpiezaalt = lector.ToBoolNulable("PlusLimpiezaAlt");
+            //pluslimpiezaalt = lector.ToBoolNulable("PlusLimpiezaAlt");
             pluspaqueteriaalt = lector.ToBoolNulable("PlusPaqueteriaAlt");
             //NUEVAS
             categoriaGrafico = lector.ToString("CategoriaGrafico");
@@ -712,12 +733,11 @@ namespace Orion.Models {
             final = lector.ToTimeSpanNulable("Final");
             inicioPartido = lector.ToTimeSpanNulable("InicioPartido");
             finalPartido = lector.ToTimeSpanNulable("FinalPartido");
-            trabajadasPartido = lector.ToTimeSpan("TrabajadasPartido");
-            tiempopartido = lector.ToTimeSpan("TiempoPartido");
+            tiempoPartido = lector.ToTimeSpan("TiempoPartido");
+            tiempoTotal = lector.ToTimeSpan("TiempoTotal");
             valoracion = lector.ToTimeSpan("Valoracion");
             trabajadas = lector.ToTimeSpan("Trabajadas");
             trabajadasConvenio = lector.ToTimeSpan("TrabajadasConvenio");
-            trabajadasReales = lector.ToTimeSpan("TrabajadasReales");
             tiempoVacio = lector.ToTimeSpan("TiempoVacio");
             acumuladas = lector.ToTimeSpan("Acumuladas");
             nocturnas = lector.ToTimeSpan("Nocturnas");
@@ -725,7 +745,7 @@ namespace Orion.Models {
             comida = lector.ToDecimal("Comida");
             cena = lector.ToDecimal("Cena");
             plusCena = lector.ToDecimal("PlusCena");
-            plusLimpieza = lector.ToBool("PlusLimpieza");
+            //plusLimpieza = lector.ToBool("PlusLimpieza");
             plusPaqueteria = lector.ToBool("PlusPaqueteria");
 
             Nuevo = false;
@@ -759,7 +779,7 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("ComidaAlt", ComidaAlt.HasValue ? ComidaAlt.Value.ToString("0.0000").Replace(",", ".") : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("CenaAlt", CenaAlt.HasValue ? CenaAlt.Value.ToString("0.0000").Replace(",", ".") : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("PlusCenaAlt", PlusCenaAlt.HasValue ? PlusCenaAlt.Value.ToString("0.0000").Replace(",", ".") : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("PlusLimpiezaAlt", PlusLimpiezaAlt.HasValue ? PlusLimpiezaAlt.Value : (object)DBNull.Value));
+                //lista.Add(new SQLiteParameter("PlusLimpiezaAlt", PlusLimpiezaAlt.HasValue ? PlusLimpiezaAlt.Value : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("PlusPaqueteriaAlt", PlusPaqueteriaAlt.HasValue ? PlusPaqueteriaAlt.Value : (object)DBNull.Value));
                 //NUEVAS
                 lista.Add(new SQLiteParameter("CategoriaGrafico", CategoriaGrafico));
@@ -768,12 +788,11 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("Final", Final.HasValue ? Final.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("InicioPartido", InicioPartido.HasValue ? InicioPartido.Value.Ticks : (object)DBNull.Value));
                 lista.Add(new SQLiteParameter("FinalPartido", FinalPartido.HasValue ? FinalPartido.Value.Ticks : (object)DBNull.Value));
-                lista.Add(new SQLiteParameter("TrabajadasPartido", TrabajadasPartido.Ticks));
                 lista.Add(new SQLiteParameter("TiempoPartido", TiempoPartido.Ticks));
+                lista.Add(new SQLiteParameter("TiempoTotal", TiempoTotal.Ticks));
                 lista.Add(new SQLiteParameter("Valoracion", Valoracion.Ticks));
                 lista.Add(new SQLiteParameter("Trabajadas", Trabajadas.Ticks));
                 lista.Add(new SQLiteParameter("TrabajadasConvenio", TrabajadasConvenio.Ticks));
-                lista.Add(new SQLiteParameter("TrabajadasReales", TrabajadasReales.Ticks));
                 lista.Add(new SQLiteParameter("TiempoVacio", TiempoVacio.Ticks));
                 lista.Add(new SQLiteParameter("Acumuladas", Acumuladas.Ticks));
                 lista.Add(new SQLiteParameter("Nocturnas", Nocturnas.Ticks));
@@ -781,10 +800,8 @@ namespace Orion.Models {
                 lista.Add(new SQLiteParameter("Comida", Comida.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("Cena", Cena.ToString("0.0000").Replace(",", ".")));
                 lista.Add(new SQLiteParameter("PlusCena", PlusCena.ToString("0.0000").Replace(",", ".")));
-                lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza));
+                //lista.Add(new SQLiteParameter("PlusLimpieza", PlusLimpieza));
                 lista.Add(new SQLiteParameter("PlusPaqueteria", PlusPaqueteria));
-
-                //lista.Add(new SQLiteParameter("Id", Id));
                 return lista;
             }
         }

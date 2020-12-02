@@ -13,9 +13,7 @@
     <!--#region CELL TEMPLATES-->
     <!--  ====================================================================================================  -->
 
-    <ControlTemplate
-        x:Key="CellTemplateNormal"
-        TargetType="DataGridCell">
+    <ControlTemplate x:Key="CellTemplateNormal" TargetType="DataGridCell">
         <Border
             Padding="3"
             Background="{TemplateBinding Background}"
@@ -28,9 +26,7 @@
     </ControlTemplate>
 
 
-    <ControlTemplate
-        x:Key="CellTemplateEdicion"
-        TargetType="DataGridCell">
+    <ControlTemplate x:Key="CellTemplateEdicion" TargetType="DataGridCell">
         <Border
             Padding="3"
             Background="White"
@@ -43,9 +39,7 @@
     </ControlTemplate>
 
 
-    <ControlTemplate
-        x:Key="CellTemplateLeft"
-        TargetType="DataGridCell">
+    <ControlTemplate x:Key="CellTemplateLeft" TargetType="DataGridCell">
         <Border
             Padding="3"
             Background="{TemplateBinding Background}"
@@ -58,9 +52,7 @@
     </ControlTemplate>
 
 
-    <ControlTemplate
-        x:Key="CellTemplateLeftEdicion"
-        TargetType="DataGridCell">
+    <ControlTemplate x:Key="CellTemplateLeftEdicion" TargetType="DataGridCell">
         <Border
             Padding="3"
             Background="White"
@@ -73,9 +65,7 @@
     </ControlTemplate>
 
 
-    <ControlTemplate
-        x:Key="CellTemplateSinBorde"
-        TargetType="DataGridCell">
+    <ControlTemplate x:Key="CellTemplateSinBorde" TargetType="DataGridCell">
         <Border
             Padding="3"
             Background="{TemplateBinding Background}"
@@ -89,9 +79,7 @@
     </ControlTemplate>
 
 
-    <ControlTemplate
-        x:Key="CellTemplateSinBordeEdicion"
-        TargetType="DataGridCell">
+    <ControlTemplate x:Key="CellTemplateSinBordeEdicion" TargetType="DataGridCell">
         <Border
             Padding="3"
             Background="White"
@@ -111,9 +99,7 @@
     <!--  ====================================================================================================  -->
     <!--  ESTILO CELDAS NORMAL  -->
     <!--  ====================================================================================================  -->
-    <Style
-        x:Key="EstiloCeldasNormal"
-        TargetType="DataGridCell">
+    <Style x:Key="EstiloCeldasNormal" TargetType="DataGridCell">
         <!--  ESTILO DE CELDA NORMAL  -->
         <Setter Property="Template" Value="{StaticResource CellTemplateNormal}" />
         <Setter Property="FocusVisualStyle" Value="{x:Null}" />
@@ -180,9 +166,7 @@
         <Style.Triggers>
 
             <!--  ESTILO SI EL GRAFICO ES DIFERENTE AL ANTERIOR  -->
-            <DataTrigger
-                Binding="{Binding Diferente}"
-                Value="True">
+            <DataTrigger Binding="{Binding Diferente}" Value="True">
                 <Setter Property="Foreground" Value="Blue" />
                 <Setter Property="FontWeight" Value="DemiBold" />
             </DataTrigger>
@@ -212,15 +196,11 @@
 
         <Style.Triggers>
             <!--  ESTILO SI LAS HORAS SON NEGATIVAS  -->
-            <DataTrigger
-                Binding="{Binding HorasNegativas}"
-                Value="True">
+            <DataTrigger Binding="{Binding HorasNegativas}" Value="True">
                 <Setter Property="Foreground" Value="Red" />
             </DataTrigger>
             <!--  ESTILO SI EL GRAFICO ES DIFERENTE AL ANTERIOR  -->
-            <DataTrigger
-                Binding="{Binding Diferente}"
-                Value="True">
+            <DataTrigger Binding="{Binding Diferente}" Value="True">
                 <Setter Property="Foreground" Value="Blue" />
                 <Setter Property="FontWeight" Value="DemiBold" />
             </DataTrigger>

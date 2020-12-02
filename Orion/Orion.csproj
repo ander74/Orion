@@ -275,6 +275,7 @@
     <Compile Include="Interfaces\ISQLiteItem.cs" />
     <Compile Include="Models\ArticuloConvenio.cs" />
     <Compile Include="Models\DescansosPorDia.cs" />
+    <Compile Include="Models\DiaCalendarioConductor.cs" />
     <Compile Include="Models\DiaCalendarioEstadistica.cs" />
     <Compile Include="Models\EstadisticaCalendario.cs" />
     <Compile Include="Models\EstadisticaGrupoGraficos.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="Models\Pluses.cs" />
     <Compile Include="Models\Reclamacion.cs" />
     <Compile Include="Models\RegulacionConductor.cs" />
+    <Compile Include="Models\ResumenCalendarios.cs" />
     <Compile Include="Models\ResumenReclamacion.cs" />
     <Compile Include="Models\SQLiteExpression.cs" />
     <Compile Include="Models\ValoracionGrafico.cs" />
