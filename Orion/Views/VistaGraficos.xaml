@@ -862,6 +862,7 @@
                 FontSize="11"
                 Foreground="Black"
                 GotFocus="TablaGraficos_GotFocus"
+                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvBoolToVisibility}}"
                 IsReadOnly="False"
                 ItemsSource="{Binding GraficosVM.VistaGraficos}"
                 Style="{StaticResource EstiloGridGraficos}">

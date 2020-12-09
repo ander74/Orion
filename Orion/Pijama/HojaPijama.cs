@@ -76,7 +76,9 @@ namespace Orion.Pijama {
                     // Establecemos el Plus de Nocturnidad
                     if (dia.GraficoTrabajado.Turno == 3) dia.PlusNocturnidad = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusNocturnidad;
                     // Establecemos el quebranto de moneda.
-                    if (dia.GraficoTrabajado.Numero > 0 || dia.GraficoTrabajado.Numero == -6) dia.QuebrantoMoneda = App.Global.OpcionesVM.GetPluses(Fecha.Year).QuebrantoMoneda;
+                    if (dia.GraficoTrabajado.Numero > 0 || dia.GraficoTrabajado.Numero == -6) {
+                        dia.QuebrantoMoneda = App.Global.OpcionesVM.GetPluses(Fecha.Year).QuebrantoMoneda;
+                    }
                     // Establcemos el Plus de Navidad
                     if (dia.GraficoTrabajado.Numero > 0 && dia.DiaFecha.Day == 25 && dia.DiaFecha.Month == 12) {
                         dia.PlusNavidad = App.Global.OpcionesVM.GetPluses(Fecha.Year).PlusNavidad;

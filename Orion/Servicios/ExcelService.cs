@@ -260,7 +260,6 @@ namespace Orion.Servicios {
             if (!File.Exists(excelFile)) return null;
             var diasMes = DateTime.DaysInMonth(año, mes);
             var lista = new List<HorasConductor>();
-            ConvertidorNumeroGraficoCalendario converter = new ConvertidorNumeroGraficoCalendario();
 
             using (var excel = new ExcelPackage(new FileInfo(excelFile))) {
                 if (excel.Workbook.Worksheets.Any(h => h.Name == mesesAbr[mes])) {
@@ -268,9 +267,10 @@ namespace Orion.Servicios {
                     for (int dia = 1; dia <= diasMes; dia++) {
                         HorasConductor horas = new HorasConductor();
                         horas.Dia = new DateTime(año, mes, dia);
-                        var valor = hoja.Cells[dia + 1, 2].Text;// GetValue<string>() ?? "";
-                        var comboGrafico = (Tuple<int, int>)converter.ConvertBack(valor, null, null, null);
-                        horas.Grafico = comboGrafico.Item1;
+                        var valor = hoja.Cells[dia + 1, 2].Text;
+                        var comboGrafico = parseGraficoCodigo(valor);
+                        horas.Grafico = comboGrafico.Grafico;
+                        horas.Codigo = comboGrafico.Codigo;
                         valor = hoja.Cells[dia + 1, 3].Text.Replace('.', ':');
                         if (TimeSpan.TryParse(valor, out TimeSpan trabajadas)) horas.Trabajadas = trabajadas; else horas.Trabajadas = TimeSpan.Zero;
                         valor = hoja.Cells[dia + 1, 4].Text.Replace('.', ':');
@@ -291,6 +291,46 @@ namespace Orion.Servicios {
         }
 
 
+        private (int Grafico, int Codigo) parseGraficoCodigo(string texto) {
+            (int Grafico, int Codigo) resultado = (0, 0);
+            texto = texto.ToLower();
+            if (texto.StartsWith("co-")) {
+                resultado.Codigo = 1;
+                texto = texto.Substring(3);
+            } else if (texto.StartsWith("ce-")) {
+                resultado.Codigo = 2;
+                texto = texto.Substring(3);
+            } else if (texto.StartsWith("jd-")) {
+                resultado.Codigo = 3;
+                texto = texto.Substring(3);
+            }
+            texto = texto.Replace("-", "");
+            switch (texto) {
+                case "ov": resultado.Grafico = -1; break;
+                case "jd": resultado.Grafico = -2; break;
+                case "fn": resultado.Grafico = -3; break;
+                case "e": case "ge": resultado.Grafico = -4; break;
+                case "ds": resultado.Grafico = -5; break;
+                case "dc": case "oh": case "dh": resultado.Grafico = -6; break;
+                case "f6": case "f4": resultado.Grafico = -7; break;
+                case "dnd": case "df": resultado.Grafico = -8; break;
+                case "per": resultado.Grafico = -9; break;
+                case "ejd": case "e(jd)": resultado.Grafico = -10; break;
+                case "efn": case "e(fn)": resultado.Grafico = -11; break;
+                case "ovjd": case "ov(jd)": resultado.Grafico = -12; break;
+                case "ovfn": case "ov(fn)": resultado.Grafico = -13; break;
+                case "f6dc": case "dcf6": resultado.Grafico = -14; break;
+                case "for": case "cap": resultado.Grafico = -15; break;
+                case "ova": resultado.Grafico = -16; break;
+                case "ovajd": case "ova(jd)": resultado.Grafico = -17; break;
+                case "ovafn": case "ova(fn)": resultado.Grafico = -18; break;
+                case "lac": resultado.Grafico = -19; break;
+                default: Int32.TryParse(texto, out resultado.Grafico); break;
+            }
+
+
+            return resultado;
+        }
 
 
         public class HorasConductor {
@@ -298,6 +338,8 @@ namespace Orion.Servicios {
             public DateTime Dia { get; set; }
 
             public int Grafico { get; set; }
+
+            public int Codigo { get; set; }
 
             public TimeSpan Trabajadas { get; set; }
 
@@ -1126,6 +1168,52 @@ namespace Orion.Servicios {
                         hoja.Cells[2, dia + 1].Style.Numberformat.Format = "00";
                         hoja.Cells[2, dia + 1].Value = dia;
                     }
+                }
+                excelApp.Workbook.Worksheets[mesesAbr[fecha.Month]].Select();
+                excelApp.SaveAs(new FileInfo(ruta));
+            }
+        }
+
+
+        /// <summary>
+        /// Genera un Excel con 12 meses que se usará como plantilla para corregir el calendario de los conductores.
+        /// </summary>
+        public void GenerarPlantillaHorasConductores(string ruta, DateTime fecha) {
+            using (var excelApp = new ExcelPackage()) {
+                // Una hoja por mes
+                for (int mes = 1; mes <= 12; mes++) {
+                    var hoja = excelApp.Workbook.Worksheets.Add(mesesAbr[mes]);
+                    var diasMes = DateTime.DaysInMonth(fecha.Year, mes);
+                    hoja.View.ZoomScale = 100;
+                    hoja.DefaultRowHeight = 20;
+                    hoja.DefaultColWidth = 15;
+                    hoja.Cells.Style.HorizontalAlignment = ExcelHorizontalAlignment.Center;
+                    hoja.Cells.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+                    hoja.Cells.Style.Font.Size = 12;
+                    // Encabezados
+                    hoja.Cells[1, 1].Value = "DÍAS";
+                    hoja.Cells[1, 2].Value = "GRÁFICO";
+                    hoja.Cells[1, 3].Value = "TRABAJADAS";
+                    hoja.Cells[1, 4].Value = "ACUMULADAS";
+                    hoja.Cells[1, 5].Value = "DESAYUNO";
+                    hoja.Cells[1, 6].Value = "COMIDA";
+                    hoja.Cells[1, 7].Value = "CENA";
+                    hoja.Cells[1, 8].Value = "PLUS CENA";
+                    // Días
+                    for (int dia = 1; dia <= diasMes; dia++) {
+                        hoja.Cells[1 + dia, 1].Style.Numberformat.Format = "00";
+                        hoja.Cells[1 + dia, 1].Value = dia;
+                        hoja.Cells[1 + dia, 3].Style.Numberformat.Format = "hh:mm";
+                        hoja.Cells[1 + dia, 4].Style.Numberformat.Format = "hh:mm";
+                        hoja.Cells[1 + dia, 5].Style.Numberformat.Format = "0.00";
+                        hoja.Cells[1 + dia, 6].Style.Numberformat.Format = "0.00";
+                        hoja.Cells[1 + dia, 7].Style.Numberformat.Format = "0.00";
+                        hoja.Cells[1 + dia, 8].Style.Numberformat.Format = "0.00";
+                    }
+                    // Añadimos la tabla
+                    var tabla = hoja.Tables.Add(hoja.Cells[1, 1, 1 + diasMes, 8], $"Tabla{meses[mes]}");
+                    tabla.TableStyle = OfficeOpenXml.Table.TableStyles.Medium2;
+                    tabla.ShowFilter = false;
                 }
                 excelApp.Workbook.Worksheets[mesesAbr[fecha.Month]].Select();
                 excelApp.SaveAs(new FileInfo(ruta));

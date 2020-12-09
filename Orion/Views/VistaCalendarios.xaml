@@ -847,6 +847,19 @@
                             CornerRadius="5">
                             <StackPanel Orientation="Vertical">
 
+                                <!--  BOTON ABRIR CORRECCIONES  -->
+                                <Button
+                                    Margin="6,6,6,3"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BtDropCorregir_Click"
+                                    Command="{Binding Source={x:Reference TxtCorregir}, Path=DataContext.CalendariosVM.CmdAbrirHorasConductor}"
+                                    Content="Abrir Horas Conductor"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="11"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center" />
+
                                 <!--  BOTON COMPARAR CORRECCIONES  -->
                                 <Button
                                     Margin="6,6,6,3"
@@ -854,7 +867,7 @@
                                     HorizontalAlignment="Stretch"
                                     Click="BtDropCorregir_Click"
                                     Command="{Binding Source={x:Reference TxtCorregir}, Path=DataContext.CalendariosVM.cmdCompararCorrecciones}"
-                                    Content="Comparar Calendarios"
+                                    Content="Comparar Correcciones"
                                     FontFamily="Comic Sans MS"
                                     FontSize="11"
                                     Style="{StaticResource EstiloBotonBarraPequeña}"
@@ -1455,6 +1468,7 @@
             EnableRowVirtualization="True"
             FontFamily="Comic Sans MS"
             FontSize="11"
+            VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvBoolToVisibility}}"
             IsReadOnly="False"
             ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
             MouseDoubleClick="TablaCalendarios_MouseDoubleClick"

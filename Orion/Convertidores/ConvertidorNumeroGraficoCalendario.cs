@@ -76,8 +76,12 @@ namespace Orion.Convertidores {
                     case "ovajd": case "ova(jd)": grafico = -17; break;
                     case "ovafn": case "ova(fn)": grafico = -18; break;
                     // Códigos
-                    case "co": codigo = 1; break;
-                    case "ce": codigo = 2; break;
+                    case "co": 
+                        codigo = 1;
+                        break;
+                    case "ce": 
+                        codigo = 2; 
+                        break;
                     default: Int32.TryParse(texto[0], out grafico); break;
                 }
 

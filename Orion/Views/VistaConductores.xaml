@@ -256,6 +256,7 @@
                 FontSize="11"
                 Foreground="Black"
                 GotFocus="TablaConductores_GotFocus"
+                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidad}}"
                 IsReadOnly="False"
                 ItemsSource="{Binding ConductoresVM.VistaConductores}"
                 Style="{StaticResource EstiloGridConductores}">

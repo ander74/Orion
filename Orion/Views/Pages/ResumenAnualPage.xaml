@@ -322,6 +322,14 @@
                     Content="Días trabajados"
                     FontSize="12" />
                 <CheckBox
+                    x:Name="cbDiasDescansados"
+                    Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirDiasDescansados}"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días descansados (J-D+FN+DS)"
+                    FontSize="12" />
+                <CheckBox
                     x:Name="cbDiasJD"
                     Margin="15,5,5,5"
                     IsChecked="{Binding IncluirDiasJD}"

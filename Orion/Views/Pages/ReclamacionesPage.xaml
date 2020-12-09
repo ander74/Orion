@@ -71,6 +71,37 @@
                 </ComboBox>
 
 
+                <!--  FILTRADO DE CONDUCTORES  -->
+                <TextBlock
+                    Margin="0,20,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    FontWeight="Bold"
+                    Text="Filtrado de Conductores: " />
+
+                <ComboBox
+                    x:Name="ComboFiltradoConductores"
+                    Height="24"
+                    MinWidth="250"
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontSize="14"
+                    SelectedIndex="{Binding FiltroConductores}">
+                    <ComboBoxItem Content="Todos" />
+                    <ComboBoxItem Content="Indefinidos" />
+                    <ComboBoxItem Content="Eventuales" />
+                </ComboBox>
+
+                <CheckBox
+                    x:Name="cbIncluirTaquilla"
+                    Margin="15,10,0,0"
+                    VerticalContentAlignment="Center"
+                    IsChecked="{Binding IncluirTaquillas}"
+                    Content="Incluir a trabajadores de taquilla."
+                    FontSize="14" />
+
+
             </StackPanel>
 
         </ScrollViewer>

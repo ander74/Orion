@@ -556,6 +556,7 @@
                 CanUserReorderColumns="False"
                 FontFamily="Comic Sans MS"
                 FontSize="11"
+                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvBoolToVisibility}}"
                 HeadersVisibility="Column"
                 HorizontalGridLinesBrush="Transparent"
                 IsReadOnly="True"

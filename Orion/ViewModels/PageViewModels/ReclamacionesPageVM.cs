@@ -31,6 +31,10 @@ namespace Orion.ViewModels.PageViewModels {
             TODO_EL_AÑO_MES_A_MES,
         }
 
+        private const int CONDUCTORES_TODOS = 0;
+        private const int CONDUCTORES_INDEFINIDOS = 1;
+        private const int CONDUCTORES_EVENTUALES = 2;
+
         #endregion
         // ====================================================================================================
 
@@ -58,6 +62,9 @@ namespace Orion.ViewModels.PageViewModels {
 
         private IEnumerable<Reclamacion> GetReclamacionesMes(DateTime fecha) {
             var calendarios = App.Global.Repository.GetCalendarios(fecha.Year, fecha.Month, true);
+            if (!incluirTaquillas) calendarios = calendarios.Where(c => c.CategoriaConductor.ToUpper() == "C");
+            if (FiltroConductores == CONDUCTORES_INDEFINIDOS) calendarios = calendarios.Where(c => c.ConductorIndefinido);
+            if (FiltroConductores == CONDUCTORES_EVENTUALES) calendarios = calendarios.Where(c => !c.ConductorIndefinido);
             return ExtraerReclamaciones(calendarios);
         }
 
@@ -68,6 +75,9 @@ namespace Orion.ViewModels.PageViewModels {
 
         private IEnumerable<Reclamacion> GetReclamacionesAño(DateTime fecha) {
             var calendarios = App.Global.Repository.GetCalendarios(fecha.Year, true);
+            if (!incluirTaquillas) calendarios = calendarios.Where(c => c.CategoriaConductor.ToUpper() == "C");
+            if (FiltroConductores == CONDUCTORES_INDEFINIDOS) calendarios = calendarios.Where(c => c.ConductorIndefinido);
+            if (FiltroConductores == CONDUCTORES_EVENTUALES) calendarios = calendarios.Where(c => !c.ConductorIndefinido);
             return ExtraerReclamaciones(calendarios);
         }
 
@@ -231,11 +241,25 @@ namespace Orion.ViewModels.PageViewModels {
         public CalendariosViewModel CalendariosVM => App.Global.CalendariosVM;
 
 
-
         private int tipoInformeSeleccionado;
         public int TipoInformeSeleccionado {
             get => tipoInformeSeleccionado;
             set => SetValue(ref tipoInformeSeleccionado, value);
+        }
+
+
+
+        private int filtroConductores;
+        public int FiltroConductores {
+            get => filtroConductores;
+            set => SetValue(ref filtroConductores, value);
+        }
+
+
+        private bool incluirTaquillas;
+        public bool IncluirTaquillas {
+            get => incluirTaquillas;
+            set => SetValue(ref incluirTaquillas, value);
         }
 
 
@@ -268,20 +292,42 @@ namespace Orion.ViewModels.PageViewModels {
             var nombreArchivo = string.Empty;
             var titulo = string.Empty;
             var lista = new List<ResumenReclamacion>();
+            var conductores = App.Global.ConductoresVM.ListaConductores.AsEnumerable();
             switch (TipoInformeSeleccionado) {
                 case 0: // Por meses
                     nombreArchivo = $"{CalendariosVM.FechaActual.Year} - Reclamaciones Por Mes - {App.Global.CentroActual}";
                     for (int mes = 1; mes <= 12; mes++) {
                         var fecha = new DateTime(CalendariosVM.FechaActual.Year, mes, 1);
-                        titulo = $"RECLAMACIONES POR MES\n{App.Global.CentroActual} - {fecha:yyyy}".ToUpper();
+                        titulo = "RECLAMACIONES POR MES";
+                        switch (FiltroConductores) {
+                            case CONDUCTORES_INDEFINIDOS:
+                                titulo += " (Indefinidos)";
+                                break;
+                            case CONDUCTORES_EVENTUALES:
+                                titulo += " (Eventuales)";
+                                break;
+                        }
+                        titulo += $"\n{App.Global.CentroActual} - {fecha:yyyy}".ToUpper();
                         lista.Add(GetResumenReclamaciones(GetReclamacionesMes(fecha), $"{fecha:MMM}".Replace(".", "").ToUpper()));
                     }
                     tableData = GetTablaReclamaciones(lista, titulo, $"Mes");
                     break;
                 case 1: // Por conductores Mes Actual
                     nombreArchivo = $"{CalendariosVM.FechaActual:yyyy-MM} - Reclamaciones Por Conductor - {App.Global.CentroActual}";
-                    foreach (var conductor in App.Global.ConductoresVM.ListaConductores) {
-                        titulo = $"RECLAMACIONES POR CONDUCTOR \n{App.Global.CentroActual} - {CalendariosVM.FechaActual:MMMM-yyyy}".ToUpper();
+                    if (!incluirTaquillas) conductores = conductores.Where(c => c.Categoria.ToUpper() == "C");
+                    if (FiltroConductores == CONDUCTORES_INDEFINIDOS) conductores = conductores.Where(c => c.Indefinido);
+                    if (FiltroConductores == CONDUCTORES_EVENTUALES) conductores = conductores.Where(c => !c.Indefinido);
+                    foreach (var conductor in conductores) {
+                        titulo = "RECLAMACIONES POR CONDUCTOR";
+                        switch (FiltroConductores) {
+                            case CONDUCTORES_INDEFINIDOS:
+                                titulo += " (Indefinidos)";
+                                break;
+                            case CONDUCTORES_EVENTUALES:
+                                titulo += " (Eventuales)";
+                                break;
+                        }
+                        titulo += $"\n{App.Global.CentroActual} - {CalendariosVM.FechaActual:MMMM-yyyy}".ToUpper();
                         var resumen = GetResumenReclamaciones(GetReclamacionesMesConductor(CalendariosVM.FechaActual, conductor.Matricula), $"{conductor.Matricula:000}");
                         if (!resumen.IsEmpty) lista.Add(resumen);
                     }
@@ -289,8 +335,21 @@ namespace Orion.ViewModels.PageViewModels {
                     break;
                 case 2: // Por conductores Anual
                     nombreArchivo = $"{CalendariosVM.FechaActual.Year} - Reclamaciones Por Conductor - {App.Global.CentroActual}";
-                    foreach (var conductor in App.Global.ConductoresVM.ListaConductores) {
-                        titulo = $"RECLAMACIONES POR CONDUCTOR \n{App.Global.CentroActual} - {CalendariosVM.FechaActual.Year}".ToUpper();
+                    conductores = App.Global.ConductoresVM.ListaConductores.AsEnumerable();
+                    if (!incluirTaquillas) conductores = conductores.Where(c => c.Categoria.ToUpper() == "C");
+                    if (FiltroConductores == CONDUCTORES_INDEFINIDOS) conductores = conductores.Where(c => c.Indefinido);
+                    if (FiltroConductores == CONDUCTORES_EVENTUALES) conductores = conductores.Where(c => !c.Indefinido);
+                    foreach (var conductor in conductores) {
+                        titulo = "RECLAMACIONES POR CONDUCTOR";
+                        switch (FiltroConductores) {
+                            case CONDUCTORES_INDEFINIDOS:
+                                titulo += " (Indefinidos)";
+                                break;
+                            case CONDUCTORES_EVENTUALES:
+                                titulo += " (Eventuales)";
+                                break;
+                        }
+                        titulo += $"\n{App.Global.CentroActual} - {CalendariosVM.FechaActual.Year}".ToUpper();
                         var resumen = GetResumenReclamaciones(GetReclamacionesAñoConductor(CalendariosVM.FechaActual.Year, conductor.Matricula), $"{conductor.Matricula:000}");
                         if (!resumen.IsEmpty) lista.Add(resumen);
                     }

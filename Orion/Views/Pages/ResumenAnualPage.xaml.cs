@@ -49,6 +49,7 @@ namespace Orion.Views.Pages {
                 cbDiasActivos,
                 cbDiasInactivos,
                 cbDiasTrabajados,
+                cbDiasDescansados,
                 cbDiasJD,
                 cbDiasFN,
                 cbDiasDS,

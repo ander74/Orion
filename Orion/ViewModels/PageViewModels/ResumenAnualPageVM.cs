@@ -267,6 +267,13 @@ namespace Orion.ViewModels.PageViewModels {
         }
 
 
+        private bool incluirDiasDescansados;
+        public bool IncluirDiasDescansados {
+            get => incluirDiasDescansados;
+            set => SetValue(ref incluirDiasDescansados, value);
+        }
+
+
         private bool incluirDiasJD;
         public bool IncluirDiasJD {
             get => incluirDiasJD;
@@ -557,7 +564,7 @@ namespace Orion.ViewModels.PageViewModels {
 
 
         private string[,] GetDatos(IEnumerable<ResumenCalendarios> listaResumen) {
-            var datos = new string[37, 12];
+            var datos = new string[38, 12];
             foreach (var resumen in listaResumen) {
                 datos[00, resumen.Fecha.Month - 1] = resumen.DiasActivo.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasActivo);
                 datos[01, resumen.Fecha.Month - 1] = resumen.DiasInactivo.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasInactivo);
@@ -597,6 +604,8 @@ namespace Orion.ViewModels.PageViewModels {
                 datos[34, resumen.Fecha.Month - 1] = resumen.DiasDeberiaTrabajo.ToString("0.00") + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasDeberiaTrabajo).ToString("0.00");
                 datos[35, resumen.Fecha.Month - 1] = resumen.DiasDeberiaDescanso.ToString("0.00") + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasDeberiaDescanso).ToString("0.00");
                 datos[36, resumen.Fecha.Month - 1] = resumen.DiasDeberiaVacaciones.ToString("0.00") + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasDeberiaVacaciones).ToString("0.00");
+                // Descansos Convenio
+                datos[37, resumen.Fecha.Month - 1] = resumen.DiasDescansoConvenio.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasDescansoConvenio).ToString();
             }
             return datos;
         }
@@ -636,10 +645,11 @@ namespace Orion.ViewModels.PageViewModels {
                 filas.Add(AddDatosToPdfCellList(datos, 02, "Días trabajo"));
                 if (esEventual) filas.Add(AddDatosToPdfCellList(datos, 34, "Debería Trabajar"));
             }
-            if (IncluirDiasJD) {
-                filas.Add(AddDatosToPdfCellList(datos, 03, "Descansos (JD)"));
+            if (IncluirDiasDescansados) {
+                filas.Add(AddDatosToPdfCellList(datos, 37, "Días Descansados (JD+FN+DS)"));
                 if (esEventual) filas.Add(AddDatosToPdfCellList(datos, 35, "Debería Descansar"));
             }
+            if (IncluirDiasJD) filas.Add(AddDatosToPdfCellList(datos, 03, "Descansos (JD)"));
             if (IncluirDiasDS) filas.Add(AddDatosToPdfCellList(datos, 04, "Descansos sueltos (DS) "));
             if (IncluirDiasFN) filas.Add(AddDatosToPdfCellList(datos, 05, "Descansos fin semana (FN"));
             if (IncluirFindesCompletos) filas.Add(AddDatosToPdfCellList(datos, 06, "Findes completos"));

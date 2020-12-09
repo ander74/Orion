@@ -884,6 +884,38 @@
 
                 </StackPanel>
 
+                <!--  COLUMNA 3 FILA 1  -->
+                <StackPanel
+                    Grid.Row="1"
+                    Grid.Column="3">
+
+                    <!--  OPCIONES VISUALES  -->
+                    <controls:HeadingGroup
+                        Margin="6"
+                        FondoTitulo="{StaticResource orDegradadoCian}"
+                        FontSizeTitulo="12"
+                        Titulo="OPCIONES VISUALES">
+
+                        <StackPanel
+                            HorizontalAlignment="Left"
+                            Margin="5"
+                            Orientation="Vertical">
+
+                            <CheckBox
+                                    Width="Auto"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Center"
+                                    Content="Mostrar Barras Desplazamiento."
+                                    FontSize="14"
+                                    IsChecked="{Binding Configuracion.MostrarBarrasDesplazamiento, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+
+
+                        </StackPanel>
+
+                    </controls:HeadingGroup>
+
+                </StackPanel>
 
 
 

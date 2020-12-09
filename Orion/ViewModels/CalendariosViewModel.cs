@@ -597,13 +597,13 @@ namespace Orion.ViewModels {
 
 
         public decimal JornadaAnual {
-            //TODO: Va redondeado a 2 decimales, comprobar que no se hace a 4 decimales.
-            get => ((ResumenSeleccionado?.DiasTrabajoConvenio ?? 0) + (CalendarioSeleccionado?.DiasTrabajoConvenio ?? 0)) * Math.Round(App.Global.Convenio.JornadaMedia.ToDecimal(), 2);
+            get => ((ResumenSeleccionado?.DiasTrabajoConvenio ?? 0) + (CalendarioSeleccionado?.DiasTrabajoConvenio ?? 0)) * Math.Round(App.Global.Convenio.JornadaMedia.ToDecimal(), 4);
         }
+
         public Func<double, string> FormatoJornadaAnual {
             get => valor => {
                 decimal total = App.Global.Convenio.HorasAnuales;
-                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 4) : 0;
                 return $"{valor:0.00}\n {porcentaje:0.00} %".Replace(".", ",");
             };
         }
@@ -615,7 +615,7 @@ namespace Orion.ViewModels {
         public Func<double, string> FormatoDiasTrabajo {
             get => valor => {
                 decimal total = App.Global.Convenio.TrabajoAnuales;
-                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 4) : 0;
                 return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
             };
         }
@@ -627,7 +627,7 @@ namespace Orion.ViewModels {
         public Func<double, string> FormatoDiasDescanso {
             get => valor => {
                 decimal total = App.Global.Convenio.DescansosAnuales;
-                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 4) : 0;
                 return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
             };
         }
@@ -639,7 +639,7 @@ namespace Orion.ViewModels {
         public Func<double, string> FormatoDiasDescansosSueltos {
             get => valor => {
                 decimal total = App.Global.Convenio.DescansosSueltosAnuales;
-                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 4) : 0;
                 return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
             };
         }
@@ -652,7 +652,7 @@ namespace Orion.ViewModels {
         public Func<double, string> FormatoFindesCompletos {
             get => valor => {
                 decimal total = App.Global.Convenio.FindesCompletosAnuales;
-                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 4) : 0;
                 return $"{valor:0.0}\n {porcentaje:0.00} %".Replace(".", ",");
             };
         }
@@ -664,7 +664,7 @@ namespace Orion.ViewModels {
         public Func<double, string> FormatoDiasVacaciones {
             get => valor => {
                 decimal total = App.Global.Convenio.VacacionesAnuales;
-                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 2) : 0;
+                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 4) : 0;
                 return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
             };
         }

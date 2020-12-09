@@ -189,6 +189,15 @@ namespace Orion.Models {
         }
 
 
+
+        private bool mostrarBarrasDesplazamiento;
+        public bool MostrarBarrasDesplazamiento {
+            get => mostrarBarrasDesplazamiento;
+            set => SetValue(ref mostrarBarrasDesplazamiento, value);
+        }
+
+
+
         #endregion
         // ====================================================================================================
 

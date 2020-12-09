@@ -1423,6 +1423,7 @@ namespace Orion.ViewModels {
             foreach (var hora in horas) {
                 var dia = CalendarioSeleccionado.ListaDias.FirstOrDefault(d => d.DiaFecha.Day == hora.Dia.Day);
                 if (dia.Grafico != hora.Grafico) dia.Grafico = hora.Grafico;
+                if (dia.Codigo != hora.Codigo) dia.Codigo = hora.Codigo;
                 if (dia.Grafico > 0) {
                     var grafico = App.Global.Repository.GetGrafico(dia.Grafico, dia.DiaFecha);
                     if (grafico != null) {
@@ -1435,6 +1436,38 @@ namespace Orion.ViewModels {
                     }
                 }
             }
+        }
+        #endregion
+
+
+        #region COMANDO ABRIR HORAS CONDUCTOR
+
+        // Comando
+        private ICommand cmdAbrirHorasConductor;
+        public ICommand CmdAbrirHorasConductor {
+            get {
+                if (cmdAbrirHorasConductor == null) cmdAbrirHorasConductor = new RelayCommand(p => AbrirHorasConductor());
+                return cmdAbrirHorasConductor;
+            }
+        }
+        private void AbrirHorasConductor() {
+            if (string.IsNullOrEmpty(App.Global.Configuracion.CarpetaAvanza)) {
+                Mensajes.VerMensaje("Por favor\n\nDefina la ruta de la carpeta AVANZA en las opciones.", "ATENCIÓN");
+                return;
+            }
+            var matricula = CalendarioSeleccionado.MatriculaConductor;
+            var archivo = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Horas Conductores\\{matricula:000}\\{matricula:000} - {FechaActual.Year}.xlsx");
+            if (!File.Exists(archivo)) {
+                // Generamos el archivo
+                ExcelService.getInstance().GenerarPlantillaHorasConductores(archivo, FechaActual);
+            } else {
+                using (var excelApp = new ExcelPackage(new FileInfo(archivo))) {
+                    excelApp.Workbook.Worksheets[mesesAbr[FechaActual.Month]].Select();
+                    excelApp.Save();
+                }
+            }
+            // Abrimos el archivo
+            Process.Start(archivo);
         }
         #endregion
 
@@ -1737,7 +1770,6 @@ namespace Orion.ViewModels {
             if (App.Global.Configuracion.AbrirPDFs) Process.Start(rutaDestino);
         }
         #endregion
-
 
 
         #region COMANDO TEMPORAL REGENERAR TODO
