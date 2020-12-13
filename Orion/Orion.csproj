@@ -249,6 +249,7 @@
     <Compile Include="Convertidores\ConvertidorSuperHora.cs" />
     <Compile Include="Convertidores\ConvertidorSuperHoraMixta.cs" />
     <Compile Include="Convertidores\ConvertidorDecoracionDia.cs" />
+    <Compile Include="Convertidores\ConvertidorVisibilityScrollBar.cs" />
     <Compile Include="DataModels\BdCalendarios.cs" />
     <Compile Include="DataModels\BdConductores.cs" />
     <Compile Include="DataModels\BdDiasCalendario.cs" />

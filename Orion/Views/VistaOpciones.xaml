@@ -31,6 +31,7 @@
         <cnv:ConvertidorNumeroGrafico x:Key="cnvNumGrafico" />
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
         <cnv:ConvertidorNumeroArticuloConvenio x:Key="cnvNumeroArticuloConvenio" />
+        <cnv:ConvertidorVisibilityScrollBar x:Key="cnvVisibilidadScrollBar"/>
 
         <Style
             x:Key="EstiloPanelOpciones"
@@ -1848,6 +1849,7 @@
                         IsReadOnly="False"
                         ItemsSource="{Binding FestivosVM.VistaFestivos}"
                         SelectionMode="Extended"
+                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}"
                         SelectionUnit="Cell"
                         Style="{StaticResource EstiloGridFestivos}"
                         VerticalGridLinesBrush="Lavender">

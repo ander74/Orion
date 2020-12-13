@@ -30,6 +30,7 @@
         <cnv:ConvertidorItinerario x:Key="cnvItinerario" />
         <cnv:ConvertidorItinerarioNoMenor100 x:Key="cnvItinerarioNoMenor100" />
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
+        <cnv:ConvertidorVisibilityScrollBar x:Key="cnvVisibilidadScrollBar"/>
         <cnv:ConvertidorDiaSemanaGrafico x:Key="cnvDiaSemanaGrafico" />
         <cnv:ConvertidorTurno4Visibility x:Key="cnvTurno4Visibility" />
 
@@ -862,7 +863,7 @@
                 FontSize="11"
                 Foreground="Black"
                 GotFocus="TablaGraficos_GotFocus"
-                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvBoolToVisibility}}"
+                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}"
                 IsReadOnly="False"
                 ItemsSource="{Binding GraficosVM.VistaGraficos}"
                 Style="{StaticResource EstiloGridGraficos}">

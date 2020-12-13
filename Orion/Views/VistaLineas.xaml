@@ -31,6 +31,7 @@
         <convertidores:ConvertidorDecimal x:Key="cnvDecimal" />
         <convertidores:ConvertidorItinerario x:Key="cnvItinerario" />
         <BooleanToVisibilityConverter x:Key="cnvBoolToVisibility" />
+        <convertidores:ConvertidorVisibilityScrollBar x:Key="cnvVisibilidadScrollBar"/>
 
         <Style
             x:Key="EstiloGridLineas"
@@ -277,7 +278,7 @@
                 FontFamily="Comic Sans MS"
                 FontSize="11"
                 Foreground="Black"
-                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvBoolToVisibility}}"
+                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}"
                 GotFocus="Tabla_GotFocus"
                 IsReadOnly="False"
                 ItemsSource="{Binding LineasVM.ListaLineas}"
@@ -334,7 +335,7 @@
                 FontFamily="Comic Sans MS"
                 FontSize="11"
                 Foreground="Black"
-                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvBoolToVisibility}}"
+                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}"
                 GotFocus="Tabla_GotFocus"
                 IsReadOnly="False"
                 ItemsSource="{Binding LineasVM.LineaSeleccionada.ListaItinerarios}"
@@ -396,7 +397,7 @@
                 Margin="3,0,3,0"
                 CanUserAddRows="True"
                 CanUserReorderColumns="False"
-                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvBoolToVisibility}}"
+                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}"
                 CanUserSortColumns="False"
                 ElementoSeleccionado="{Binding LineasVM.ParadaSeleccionada}"
                 FontFamily="Comic Sans MS"

@@ -29,6 +29,7 @@
         <cnv:ConvertidorDecimal x:Key="cnvDecimal" />
         <cnv:ConvertidorDecimal6 x:Key="cnvDecimal6" />
         <BooleanToVisibilityConverter x:Key="cnvVisibilidad" />
+        <cnv:ConvertidorVisibilityScrollBar x:Key="cnvVisibilidadScrollBar"/>
 
         <Style
             x:Key="EstiloGridConductores"
@@ -256,7 +257,7 @@
                 FontSize="11"
                 Foreground="Black"
                 GotFocus="TablaConductores_GotFocus"
-                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidad}}"
+                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}"
                 IsReadOnly="False"
                 ItemsSource="{Binding ConductoresVM.VistaConductores}"
                 Style="{StaticResource EstiloGridConductores}">
