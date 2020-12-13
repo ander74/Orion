@@ -85,7 +85,7 @@ namespace Orion.ViewModels {
             // Si las carpetas de configuracion están en blanco, crearlas y rellenarlas.
             if (Configuracion.CarpetaDatos == "") Configuracion.CarpetaDatos = CreateAndGetCarpetaEnOrion("Datos");
             //if (Configuracion.CarpetaDropbox == "") Configuracion.CarpetaDropbox = CreateAndGetCarpetaEnOrion("Dropbox");
-            if (Configuracion.CarpetaInformes == "") Configuracion.CarpetaInformes = CreateAndGetCarpetaEnOrion("Informes");
+            //if (Configuracion.CarpetaInformes == "") Configuracion.CarpetaInformes = CreateAndGetCarpetaEnOrion("Informes");
             //if (Configuracion.CarpetaAvanza == "") Configuracion.CarpetaAvanza = CreateAndGetCarpetaEnOrion("Avanza");
             if (Configuracion.CarpetaCopiasSeguridad == "") Configuracion.CarpetaCopiasSeguridad = CreateAndGetCarpetaEnOrion("CopiasSeguridad");
             if (Configuracion.CarpetaOrigenActualizar == "") Configuracion.CarpetaOrigenActualizar = App.RutaInicial;
@@ -221,7 +221,6 @@ namespace Orion.ViewModels {
 
         #endregion
         // ====================================================================================================
-
 
 
         // ====================================================================================================

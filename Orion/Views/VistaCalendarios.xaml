@@ -854,7 +854,7 @@
                                     HorizontalAlignment="Stretch"
                                     Click="BtDropCorregir_Click"
                                     Command="{Binding Source={x:Reference TxtCorregir}, Path=DataContext.CalendariosVM.CmdAbrirHorasConductor}"
-                                    Content="Abrir Horas Conductor"
+                                    Content="Abrir Correcciones"
                                     FontFamily="Comic Sans MS"
                                     FontSize="11"
                                     Style="{StaticResource EstiloBotonBarraPequeña}"

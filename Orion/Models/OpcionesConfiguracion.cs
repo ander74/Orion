@@ -263,16 +263,16 @@ namespace Orion.Models {
         }
 
 
-        private string _carpetainformes = "";
-        public string CarpetaInformes {
-            get { return _carpetainformes; }
-            set {
-                if (_carpetainformes != value) {
-                    _carpetainformes = value;
-                    PropiedadCambiada();
-                }
-            }
-        }
+        //private string _carpetainformes = "";
+        //public string CarpetaInformes {
+        //    get { return _carpetainformes; }
+        //    set {
+        //        if (_carpetainformes != value) {
+        //            _carpetainformes = value;
+        //            PropiedadCambiada();
+        //        }
+        //    }
+        //}
 
 
         private string _carpetaorigenactualizar = "";

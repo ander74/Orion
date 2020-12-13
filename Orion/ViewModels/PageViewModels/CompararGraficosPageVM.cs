@@ -355,7 +355,8 @@ namespace Orion.ViewModels.PageViewModels {
             // Si no se ha generado la tabla antes, se genera.
             if (TableData == null) TableData = GenerarPdfTableData();
             // Generamos un PDF
-            var ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, $"Graficos\\Comparaciones");
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
+            var ruta = Path.Combine(carpetaInformes, $"Graficos\\Comparaciones");
             if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
             var archivo = Path.Combine(ruta, $"{App.Global.CentroActual}-{GrupoSeleccionado1.Validez:dd-MM-yyyy} - {GrupoSeleccionado2.Validez:dd-MM-yyyy}.pdf");
             var docPdf = App.Global.Informes.GetNuevoPdf(archivo, true);
@@ -389,7 +390,8 @@ namespace Orion.ViewModels.PageViewModels {
             // Si no se ha generado la tabla antes, se genera.
             if (TableData == null) TableData = GenerarPdfTableData();
             // Generamos el Excel
-            var ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, $"Graficos\\Comparaciones");
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
+            var ruta = Path.Combine(carpetaInformes, $"Graficos\\Comparaciones");
             if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
             var archivo = Path.Combine(ruta, $"{App.Global.CentroActual}-{GrupoSeleccionado1.Validez:dd-MM-yyyy} - {GrupoSeleccionado2.Validez:dd-MM-yyyy}.xlsx");
             PdfExcelHelper.GetInstance().SaveAsExcel(TableData, archivo, "Comparación");

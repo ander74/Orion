@@ -242,8 +242,9 @@ namespace Orion.ViewModels {
         private void GenerarExcelEstadisticas() {
             IsBusy = true;
             try {
+                var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
                 string nombreArchivo = $"Estadisticas Calendarios {App.Global.CentroActual} - {TextoCabecera.Replace(" ", "")}.xlsx";
-                string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios\\Estadisticas");
+                string rutaInformes = Path.Combine(carpetaInformes, "Calendarios\\Estadisticas");
                 if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
                 string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
                 var lista = new List<EstadisticaPorTurnos>();

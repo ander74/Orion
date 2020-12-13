@@ -287,7 +287,8 @@ namespace Orion.ViewModels.PageViewModels {
             // Generamos la tabla.
             PdfTableData tableData = null;
             // Generamos un PDF
-            var ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, $"Conductores\\Reclamaciones");
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
+            var ruta = Path.Combine(carpetaInformes, $"Conductores\\Reclamaciones");
             if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
             var nombreArchivo = string.Empty;
             var titulo = string.Empty;
@@ -383,7 +384,8 @@ namespace Orion.ViewModels.PageViewModels {
             // Generamos la tabla.
             PdfTableData tableData = null;
             // Generamos un EXCEL
-            var ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, $"Conductores\\Reclamaciones");
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
+            var ruta = Path.Combine(carpetaInformes, $"Conductores\\Reclamaciones");
             if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
             var nombreArchivo = string.Empty;
             var titulo = string.Empty;

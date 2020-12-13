@@ -284,6 +284,13 @@ namespace Orion.Models {
         }
 
 
+        private int sabadosTrabajadosConvenio;
+        public int SabadosTrabajadosConvenio {
+            get => sabadosTrabajadosConvenio;
+            set => SetValue(ref sabadosTrabajadosConvenio, value);
+        }
+
+
         private int sabadosDescansados;
         public int SabadosDescansados {
             get => sabadosDescansados;
@@ -298,6 +305,13 @@ namespace Orion.Models {
         }
 
 
+        private int domingosTrabajadosConvenio;
+        public int DomingosTrabajadosConvenio {
+            get => domingosTrabajadosConvenio;
+            set => SetValue(ref domingosTrabajadosConvenio, value);
+        }
+
+
         private int domingosDescansados;
         public int DomingosDescansados {
             get => domingosDescansados;
@@ -309,6 +323,13 @@ namespace Orion.Models {
         public int FestivosTrabajados {
             get => festivosTrabajados;
             set => SetValue(ref festivosTrabajados, value);
+        }
+
+
+        private int festivosTrabajadosConvenio;
+        public int FestivosTrabajadosConvenio {
+            get => festivosTrabajadosConvenio;
+            set => SetValue(ref festivosTrabajadosConvenio, value);
         }
 
 
@@ -386,6 +407,13 @@ namespace Orion.Models {
         public decimal PlusLimpieza {
             get => plusLimpieza;
             set => SetValue(ref plusLimpieza, value);
+        }
+
+
+        private decimal quebrantoMoneda;
+        public decimal QuebrantoMoneda {
+            get => quebrantoMoneda;
+            set => SetValue(ref quebrantoMoneda, value);
         }
 
 

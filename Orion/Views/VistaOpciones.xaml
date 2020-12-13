@@ -542,7 +542,7 @@
                             </StackPanel>
 
                             <!--  CARPETA DE INFORMES  -->
-                            <StackPanel
+                            <!--<StackPanel
                                 Height="30"
                                 Style="{StaticResource EstiloPanelOpciones}">
                                 <TextBlock
@@ -559,7 +559,7 @@
                                     CommandParameter="Informes"
                                     Content="..."
                                     Style="{StaticResource EstiloBoton}" />
-                            </StackPanel>
+                            </StackPanel>-->
 
                             <!--  CREAR INFORMES DIRECTAMENTE  -->
                             <StackPanel Style="{StaticResource EstiloPanelOpciones}">
@@ -884,6 +884,7 @@
 
                 </StackPanel>
 
+                
                 <!--  COLUMNA 3 FILA 1  -->
                 <StackPanel
                     Grid.Row="1"

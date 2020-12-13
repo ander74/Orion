@@ -26,5 +26,8 @@ namespace Orion {
         public static readonly string OneDriveTenantId = "";
         public static readonly string OneDriveScope = "";
 
+        /* SYNCFUSION */
+        public static readonly string SyncFusionKey = "";
+
     }
 }

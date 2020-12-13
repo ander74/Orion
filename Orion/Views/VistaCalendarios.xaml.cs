@@ -26,7 +26,6 @@ namespace Orion.Views {
             TablaCalendarios.ContextMenu.Items.Add(this.FindResource("menuRegenerarCalendario") as MenuItem);
             TablaCalendarios.ContextMenu.Items.Add(this.FindResource("menuRegenerarTodos") as MenuItem);
 
-
         }
 
 

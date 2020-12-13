@@ -48,6 +48,7 @@ namespace Orion.Views.Pages {
             ListaCbDias = new List<CheckBox> {
                 cbDiasActivos,
                 cbDiasInactivos,
+                cbDiasTrabajadosConvenio,
                 cbDiasTrabajados,
                 cbDiasDescansados,
                 cbDiasJD,
@@ -67,10 +68,13 @@ namespace Orion.Views.Pages {
             // Lista Findes
             ListaCbFindes = new List<CheckBox> {
                 cbSabadosTrabajados,
+                cbSabadosTrabajadosConvenio,
                 cbSabadosDescansados,
                 cbDomingosTrabajados,
+                cbDomingosTrabajadosConvenio,
                 cbDomingosDescansados,
                 cbFestivosTrabajados,
+                cbFestivosTrabajadosConvenio,
                 cbFestivosDescansados,
                 cbFindesCompletos,
             };
@@ -79,6 +83,7 @@ namespace Orion.Views.Pages {
                 cbPlusesSabado,
                 cbPlusesFestivo,
                 cbPlusesLimpieza,
+                cbQuebrantoMoneda,
                 cbPlusesNocturnidad,
                 cbVariablesVacaciones,
             };
@@ -128,10 +133,21 @@ namespace Orion.Views.Pages {
                     cbFestivosTrabajados.IsChecked = true;
                     cbPlusesFestivo.IsChecked = true;
                     cbPlusesLimpieza.IsChecked = true;
+                    cbQuebrantoMoneda.IsChecked = true;
                     cbPlusesNocturnidad.IsChecked = true;
                     cbVariablesVacaciones.IsChecked = true;
                     checkFindesState();
                     checkPlusesState();
+                    break;
+                case "ParametrosConvenio":
+                    DesSelectAll();
+                    cbDiasTrabajadosConvenio.IsChecked = true;
+                    cbDiasDescansados.IsChecked = true;
+                    cbFindesCompletos.IsChecked = true;
+                    cbDiasDS.IsChecked = true;
+                    cbDiasOV.IsChecked = true;
+                    checkDiasState();
+                    checkFindesState();
                     break;
             }
         }

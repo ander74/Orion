@@ -982,8 +982,9 @@ namespace Orion.ViewModels {
         private void CompararDietasExcel() {
 
             // Definir el nombre del excel de destino.
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
             string nombreArchivo = $"Comparación Dietas {GrupoSeleccionado.Validez.ToString("yyyy-MM-dd")} - {App.Global.CentroActual}.xlsx";
-            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Dietas");
+            string rutaInformes = Path.Combine(carpetaInformes, "Comparación Dietas");
             if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
             string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
 

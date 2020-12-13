@@ -46,35 +46,36 @@ namespace Orion.Servicios {
             string resultado = "";
             string rutaparcial = "";
             string ruta = "";
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
             switch (tipo) {
                 case TiposInforme.Graficos:
-                    ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos\\Tablas");
+                    ruta = Path.Combine(carpetaInformes, "Graficos\\Tablas");
                     break;
                 case TiposInforme.GraficoIndividual:
-                    ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos\\Individuales");
+                    ruta = Path.Combine(carpetaInformes, "Graficos\\Individuales");
                     break;
                 case TiposInforme.Calendarios:
-                    ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios\\Tablas");
+                    ruta = Path.Combine(carpetaInformes, "Calendarios\\Tablas");
                     break;
                 case TiposInforme.FallosCalendarios:
-                    ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios\\Fallos");
+                    ruta = Path.Combine(carpetaInformes, "Calendarios\\Fallos");
                     break;
                 case TiposInforme.EstadisticasGraficos:
                 case TiposInforme.EstadisticasGraficosPorCentros:
-                    ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Graficos\\Estadisticas");
+                    ruta = Path.Combine(carpetaInformes, "Graficos\\Estadisticas");
                     break;
                 case TiposInforme.Pijama:
                     rutaparcial = "Calendarios\\Pijamas";
                     if (rutaConductor.Trim() != "") rutaparcial = "Conductores\\" + rutaConductor.Trim() + "\\Pijamas";
-                    ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, rutaparcial);
+                    ruta = Path.Combine(carpetaInformes, rutaparcial);
                     break;
                 case TiposInforme.Reclamacion:
                     rutaparcial = "Reclamaciones";
                     if (rutaConductor.Trim() != "") rutaparcial = "Conductores\\" + rutaConductor.Trim() + "\\Reclamaciones";
-                    ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, rutaparcial);
+                    ruta = Path.Combine(carpetaInformes, rutaparcial);
                     break;
                 case TiposInforme.EstadisticasCalendarios:
-                    ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Calendarios\\Estadisticas");
+                    ruta = Path.Combine(carpetaInformes, "Calendarios\\Estadisticas");
                     break;
             }
             if (ruta != "") {

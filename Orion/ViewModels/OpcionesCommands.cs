@@ -60,11 +60,11 @@ namespace Orion.ViewModels {
                     dialogo.SelectedPath = App.Global.Configuracion.CarpetaAvanza;
                     if (dialogo.ShowDialog() == DialogResult.OK) App.Global.Configuracion.CarpetaAvanza = dialogo.SelectedPath;
                     return;
-                case "Informes":
-                    dialogo.Description = "Ubicación Hojas Pijama";
-                    dialogo.SelectedPath = App.Global.Configuracion.CarpetaInformes;
-                    if (dialogo.ShowDialog() == DialogResult.OK) App.Global.Configuracion.CarpetaInformes = dialogo.SelectedPath;
-                    return;
+                //case "Informes":
+                //    dialogo.Description = "Ubicación Hojas Pijama";
+                //    dialogo.SelectedPath = App.Global.Configuracion.CarpetaInformes;
+                //    if (dialogo.ShowDialog() == DialogResult.OK) App.Global.Configuracion.CarpetaInformes = dialogo.SelectedPath;
+                //    return;
                 case "CopiasSeguridad":
                     dialogo.Description = "Ubicación Copias de Seguridad";
                     dialogo.SelectedPath = App.Global.Configuracion.CarpetaCopiasSeguridad;

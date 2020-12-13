@@ -24,6 +24,8 @@ namespace Orion.Models {
 
         public static List<int> IncidenciasDescanso = new List<int> { -2, -3, -10, -11, -17, -18 };
 
+        public static List<int> IncidenciasTrabajoConvenio = new List<int> { -4, -5, -6, -7, -8, -9, -14, -15, -16, -19 };
+
         #endregion
         // ====================================================================================================
 
@@ -485,6 +487,11 @@ namespace Orion.Models {
 
         public bool EsDiaDeDescanso {
             get => IncidenciasDescanso.Any(i => i == Grafico);
+        }
+
+
+        public bool EsDiaTrabajoConvenio {
+            get => Grafico > 0 || IncidenciasTrabajoConvenio.Any(i => i == Grafico);
         }
 
 

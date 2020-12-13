@@ -38,5 +38,10 @@ namespace Orion {
 
         public static bool ActualizacionDisponible = false;
 
+        public App() {
+            //Registrar la licencia de Syncfusion.
+            //Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense(ApiKeys.SyncFusionKey);
+        }
+
     }
 }

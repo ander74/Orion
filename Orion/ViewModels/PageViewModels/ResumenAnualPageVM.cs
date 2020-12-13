@@ -165,6 +165,13 @@ namespace Orion.ViewModels.PageViewModels {
         }
 
 
+        private bool incluirSabadosTrabajadosConvenio;
+        public bool IncluirSabadosTrabajadosConvenio {
+            get => incluirSabadosTrabajadosConvenio;
+            set => SetValue(ref incluirSabadosTrabajadosConvenio, value);
+        }
+
+
         private bool incluirSabadosDescansados;
         public bool IncluirSabadosDescansados {
             get => incluirSabadosDescansados;
@@ -179,6 +186,13 @@ namespace Orion.ViewModels.PageViewModels {
         }
 
 
+        private bool incluirDomingosTrabajadosConvenio;
+        public bool IncluirDomingosTrabajadosConvenio {
+            get => incluirDomingosTrabajadosConvenio;
+            set => SetValue(ref incluirDomingosTrabajadosConvenio, value);
+        }
+
+
         private bool incluirDomingosDescansados;
         public bool IncluirDomingosDescansados {
             get => incluirDomingosDescansados;
@@ -190,6 +204,13 @@ namespace Orion.ViewModels.PageViewModels {
         public bool IncluirFestivosTrabajados {
             get => incluirFestivosTrabajados;
             set => SetValue(ref incluirFestivosTrabajados, value);
+        }
+
+
+        private bool incluirFestivosTrabajadosConvenio;
+        public bool IncluirFestivosTrabajadosConvenio {
+            get => incluirFestivosTrabajadosConvenio;
+            set => SetValue(ref incluirFestivosTrabajadosConvenio, value);
         }
 
 
@@ -237,6 +258,13 @@ namespace Orion.ViewModels.PageViewModels {
         }
 
 
+        private bool incluirQuebrantoMoneda;
+        public bool IncluirQuebrantoMoneda {
+            get => incluirQuebrantoMoneda;
+            set => SetValue(ref incluirQuebrantoMoneda, value);
+        }
+
+
         private bool incluirVariablesVacaciones;
         public bool IncluirVariablesVacaciones {
             get => incluirVariablesVacaciones;
@@ -257,6 +285,13 @@ namespace Orion.ViewModels.PageViewModels {
         public bool IncluirDiasInactivos {
             get => incluirDiasInactivos;
             set => SetValue(ref incluirDiasInactivos, value);
+        }
+
+
+        private bool incluirDiasTrabajadosConvenio;
+        public bool IncluirDiasTrabajadosConvenio {
+            get => incluirDiasTrabajadosConvenio;
+            set => SetValue(ref incluirDiasTrabajadosConvenio, value);
         }
 
 
@@ -404,11 +439,15 @@ namespace Orion.ViewModels.PageViewModels {
                     calendario.ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday && d.EsDiaDeDescanso);
                 var plusSabado = resumen.SabadosTrabajados * App.Global.Convenio.ImporteSabados;
                 resumen.PlusSabado += plusSabado;
+                // Sábados trabajados por convenio
+                resumen.SabadosTrabajadosConvenio = calendario.ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday && d.EsDiaTrabajoConvenio);
                 // Domingos
                 resumen.DomingosTrabajados +=
                     calendario.ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Sunday && d.Grafico > 0);
                 resumen.DomingosDescansados +=
                     calendario.ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Sunday && d.EsDiaDeDescanso);
+                // Domingos trabajados por convenio
+                resumen.DomingosTrabajadosConvenio = calendario.ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Sunday && d.EsDiaTrabajoConvenio);
                 // Festivos + Plus Festivos
                 resumen.FestivosTrabajados +=
                     calendario.ListaDias.Count(d => CalendariosVM.EsFestivo(d.DiaFecha) && d.Grafico > 0);
@@ -416,6 +455,8 @@ namespace Orion.ViewModels.PageViewModels {
                     calendario.ListaDias.Count(d => CalendariosVM.EsFestivo(d.DiaFecha) && d.EsDiaDeDescanso);
                 var plusFestivo = (resumen.DomingosTrabajados + resumen.FestivosTrabajados) * App.Global.Convenio.ImporteFestivos;
                 resumen.PlusFestivo += plusFestivo;
+                // Festivos trabajados por convenio
+                resumen.FestivosTrabajadosConvenio = calendario.ListaDias.Count(d => App.Global.FestivosVM.ListaFestivos.Any(f => f.Fecha == d.DiaFecha) && d.EsDiaTrabajoConvenio);
                 // Días DC
                 resumen.DiasDC += calendario.DiasDC;
                 // Días DND
@@ -483,20 +524,36 @@ namespace Orion.ViewModels.PageViewModels {
                         calendario.ListaDias.Count(d => d.Limpieza == true) * App.Global.OpcionesVM.GetPluses(calendario.Fecha.Year).PlusLimpieza;
                 }
                 resumen.PlusLimpieza += plusLimpieza;
-                // Días Deberia Trabajo
+
+                // Cálculos Deberia (REALES, COGIDOS DEL EXCEL ANUAL
                 var diasMes = DateTime.DaysInMonth(calendario.Fecha.Year, calendario.Fecha.Month);
-                var diasAño = (DateTime.IsLeapYear(calendario.Fecha.Year) ? 366 : 365);
-                decimal diasFindeFestivos = calendario.ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
-                diasFindeFestivos += calendario.ListaDias.Count(d => CalendariosVM.EsFestivo(d.DiaFecha) && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
-                decimal VacacionesPorMes = App.Global.Convenio.VacacionesAnuales * diasMes / diasAño;
-                decimal ATrabajarMes = diasMes - diasFindeFestivos - VacacionesPorMes;
-                resumen.DiasDeberiaTrabajo += Math.Round(calendario.DiasActivo * ATrabajarMes / diasMes, 4);
+                var descansosMes = calendario.ListaDias.Count(c => c.DiaFecha.DayOfWeek == DayOfWeek.Saturday || c.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
+                descansosMes += App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha.Month == calendario.Fecha.Month);
+                decimal vacacionesPertenecen = App.Global.Convenio.VacacionesAnuales / 12m;
+                decimal descansosPertenecen = (diasMes - vacacionesPertenecen) * descansosMes / diasMes;
+                //var diasAño = (DateTime.IsLeapYear(calendario.Fecha.Year) ? 366 : 365);
+                //decimal diasFindeFestivos = calendario.ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
+                //diasFindeFestivos += calendario.ListaDias.Count(d => CalendariosVM.EsFestivo(d.DiaFecha) && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
+                //decimal VacacionesPorMes = App.Global.Convenio.VacacionesAnuales * diasMes / diasAño;
+                //decimal ATrabajarMes = diasMes - diasFindeFestivos - VacacionesPorMes;
+
                 // Días Deberia Descanso
-                resumen.DiasDeberiaDescanso += calendario.DiasActivo * diasFindeFestivos / diasMes;
+                //resumen.DiasDeberiaDescanso += calendario.DiasActivo * diasFindeFestivos / diasMes;
+                decimal deberiaDescanso = Math.Round(calendario.DiasActivo * descansosPertenecen / diasMes, 4);
+                resumen.DiasDeberiaDescanso += deberiaDescanso;
                 // Días Deberia Vacaciones
-                resumen.DiasDeberiaVacaciones += calendario.DiasActivo * VacacionesPorMes / diasMes;
+                //resumen.DiasDeberiaVacaciones += calendario.DiasActivo * vacacionesPorMes / diasMes;
+                decimal deberiaVacaciones = Math.Round(calendario.DiasActivo * vacacionesPertenecen / diasMes, 4);
+                resumen.DiasDeberiaVacaciones += deberiaVacaciones;
+                // Días Debería Trabajo
+                //resumen.DiasDeberiaTrabajo += Math.Round(calendario.DiasActivo * ATrabajarMes / diasMes, 4);
+                decimal deberiaTrabajo = Math.Round(calendario.DiasActivo - deberiaDescanso - deberiaVacaciones, 4);
+                resumen.DiasDeberiaTrabajo += deberiaTrabajo;
+                // Quebranto de Moneda
+                var importeQuebranto = (calendario.DiasTrabajo + calendario.DiasDC) * App.Global.OpcionesVM.GetPluses(calendario.Fecha.Year).QuebrantoMoneda;
+                resumen.QuebrantoMoneda += importeQuebranto;
                 // Variables Vacaciones.
-                var importeValorar = plusSabado + plusFestivo + plusNocturnidad + plusLimpieza;
+                var importeValorar = plusSabado + plusFestivo + plusNocturnidad + plusLimpieza + importeQuebranto;
                 if (conductor.Indefinido) {
                     resumen.VariablesVacaciones += Math.Round(importeValorar / 11, 4); //TODO: Comprobar que es a cuatro decimales y no a dos.
                 } else {
@@ -564,7 +621,7 @@ namespace Orion.ViewModels.PageViewModels {
 
 
         private string[,] GetDatos(IEnumerable<ResumenCalendarios> listaResumen) {
-            var datos = new string[38, 12];
+            var datos = new string[43, 12];
             foreach (var resumen in listaResumen) {
                 datos[00, resumen.Fecha.Month - 1] = resumen.DiasActivo.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasActivo);
                 datos[01, resumen.Fecha.Month - 1] = resumen.DiasInactivo.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasInactivo);
@@ -606,6 +663,14 @@ namespace Orion.ViewModels.PageViewModels {
                 datos[36, resumen.Fecha.Month - 1] = resumen.DiasDeberiaVacaciones.ToString("0.00") + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasDeberiaVacaciones).ToString("0.00");
                 // Descansos Convenio
                 datos[37, resumen.Fecha.Month - 1] = resumen.DiasDescansoConvenio.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasDescansoConvenio).ToString();
+                // Días Trabajo Convenio
+                datos[38, resumen.Fecha.Month - 1] = resumen.DiasTrabajoConvenio.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasTrabajoConvenio).ToString();
+                // Quebranto Moneda
+                datos[39, resumen.Fecha.Month - 1] = resumen.QuebrantoMoneda.ToString("0.00") + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.QuebrantoMoneda).ToString("0.00");
+                // Sábados, domingos y festivos trabajados por convenio
+                datos[40, resumen.Fecha.Month - 1] = resumen.SabadosTrabajadosConvenio.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.SabadosTrabajadosConvenio).ToString();
+                datos[41, resumen.Fecha.Month - 1] = resumen.DomingosTrabajadosConvenio.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DomingosTrabajadosConvenio).ToString();
+                datos[42, resumen.Fecha.Month - 1] = resumen.FestivosTrabajadosConvenio.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.FestivosTrabajadosConvenio).ToString();
             }
             return datos;
         }
@@ -641,12 +706,13 @@ namespace Orion.ViewModels.PageViewModels {
             var filas = new List<List<PdfCellInfo>>();
             if (IncluirDiasActivos) filas.Add(AddDatosToPdfCellList(datos, 00, "Días activo"));
             if (IncluirDiasInactivos) filas.Add(AddDatosToPdfCellList(datos, 01, "Días inactivo"));
-            if (IncluirDiasTrabajados) {
-                filas.Add(AddDatosToPdfCellList(datos, 02, "Días trabajo"));
+            if (IncluirDiasTrabajadosConvenio) {
+                filas.Add(AddDatosToPdfCellList(datos, 38, "Días trabajo convenio\n(Trab+E+DC+F6+DND+PER+FOR+LAC)"));
                 if (esEventual) filas.Add(AddDatosToPdfCellList(datos, 34, "Debería Trabajar"));
             }
+            if (IncluirDiasTrabajados) filas.Add(AddDatosToPdfCellList(datos, 02, "Días trabajo"));
             if (IncluirDiasDescansados) {
-                filas.Add(AddDatosToPdfCellList(datos, 37, "Días Descansados (JD+FN+DS)"));
+                filas.Add(AddDatosToPdfCellList(datos, 37, "Días Descanso Convenio\n(JD+FN+DS)"));
                 if (esEventual) filas.Add(AddDatosToPdfCellList(datos, 35, "Debería Descansar"));
             }
             if (IncluirDiasJD) filas.Add(AddDatosToPdfCellList(datos, 03, "Descansos (JD)"));
@@ -654,10 +720,13 @@ namespace Orion.ViewModels.PageViewModels {
             if (IncluirDiasFN) filas.Add(AddDatosToPdfCellList(datos, 05, "Descansos fin semana (FN"));
             if (IncluirFindesCompletos) filas.Add(AddDatosToPdfCellList(datos, 06, "Findes completos"));
             if (IncluirSabadosTrabajados) filas.Add(AddDatosToPdfCellList(datos, 07, "Sáb. trabajados"));
+            if (incluirSabadosTrabajadosConvenio) filas.Add(AddDatosToPdfCellList(datos, 40, "Sáb. Trab. Convenio"));
             if (IncluirSabadosDescansados) filas.Add(AddDatosToPdfCellList(datos, 08, "Sáb. descansados"));
             if (IncluirDomingosTrabajados) filas.Add(AddDatosToPdfCellList(datos, 09, "Dom. trabajados"));
+            if (IncluirDomingosTrabajadosConvenio) filas.Add(AddDatosToPdfCellList(datos, 41, "Dom. Trab. Convenio"));
             if (IncluirDomingosDescansados) filas.Add(AddDatosToPdfCellList(datos, 10, "Dom. descansados"));
             if (IncluirFestivosTrabajados) filas.Add(AddDatosToPdfCellList(datos, 11, "Fest. trabajados"));
+            if (incluirFestivosTrabajadosConvenio) filas.Add(AddDatosToPdfCellList(datos, 42, "Fest. Trab. Convenio"));
             if (IncluirFestivosDescansados) filas.Add(AddDatosToPdfCellList(datos, 12, "Fest. descansados"));
             if (IncluirDiasDC) filas.Add(AddDatosToPdfCellList(datos, 13, "Desc. compensatorios"));
             if (IncluirDiasDND) filas.Add(AddDatosToPdfCellList(datos, 14, "Desc. no disfrutados"));
@@ -682,6 +751,7 @@ namespace Orion.ViewModels.PageViewModels {
             if (IncluirPlusFestivo) filas.Add(AddDatosToPdfCellList(datos, 30, "Plus festivo"));
             if (IncluirPlusNocturnidad) filas.Add(AddDatosToPdfCellList(datos, 31, "Plus nocturnidad"));
             if (IncluirPlusLimpieza) filas.Add(AddDatosToPdfCellList(datos, 32, "Plus limpieza"));
+            if (IncluirQuebrantoMoneda) filas.Add(AddDatosToPdfCellList(datos, 39, "Quebranto de moneda"));
             if (IncluirVariablesVacaciones) filas.Add(AddDatosToPdfCellList(datos, 33, "Variables vacaciones"));
             tabla.Data = filas;
             return tabla;
@@ -710,7 +780,8 @@ namespace Orion.ViewModels.PageViewModels {
         private void CrearPDF() {
 
             // Definimos el PDF
-            var ruta = Path.Combine(App.Global.Configuracion.CarpetaInformes, $"Calendarios\\Resumenes");
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
+            var ruta = Path.Combine(carpetaInformes, $"Calendarios\\Resumenes");
             if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
             var nombreArchivo = string.Empty;
             var archivo = string.Empty;
@@ -745,7 +816,7 @@ namespace Orion.ViewModels.PageViewModels {
                             nombreArchivo += "-Eventuales";
                             break;
                     }
-                    var tabla = CrearTablaResumen(resumen, titulo);
+                    var tabla = CrearTablaResumen(resumen, titulo, DestinoResumen == DESTINO_EVENTUALES);
                     archivo = Path.Combine(ruta, $"{nombreArchivo}.pdf");
                     var docPdf = App.Global.Informes.GetNuevoPdf(archivo, true);
                     docPdf.GetPdfDocument().GetDocumentInfo().SetTitle("Resumen Anual");

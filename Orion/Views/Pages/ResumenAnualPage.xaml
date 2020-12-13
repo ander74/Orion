@@ -40,27 +40,6 @@
             FontWeight="Bold"
             Text="Resumen Anual de Calendarios" />
 
-        <!--<StackPanel
-            Grid.ColumnSpan="4"
-            Margin="10"
-            HorizontalAlignment="Right"
-            Orientation="Horizontal">
-            <TextBlock
-                FontSize="24"
-                FontWeight="Bold"
-                Text="{Binding CalendariosVM.MesActual}" />
-
-            <TextBlock
-                FontSize="24"
-                FontWeight="Bold"
-                Text=" - " />
-
-            <TextBlock
-                FontSize="24"
-                FontWeight="Bold"
-                Text="{Binding CalendariosVM.AñoActual}" />
-        </StackPanel>-->
-
         <!--  OPCIONES  -->
         <ScrollViewer
             Grid.Row="1"
@@ -88,6 +67,7 @@
                     VerticalContentAlignment="Center"
                     Click="UnaHora_Click"
                     Content="Horas trabajadas"
+                    ToolTip="Horas que se trabajan a efectos de convenio, o sea, reguladas a la jornada media."
                     IsChecked="{Binding IncluirHorasTrabajadas}"
                     FontSize="12" />
                 <CheckBox
@@ -121,6 +101,7 @@
                     IsChecked="{Binding IncluirOtrasHoras}"
                     Click="UnaHora_Click"
                     Content="Otras horas"
+                    ToolTip="Horas que se regulan en los conductores por diferentes causas, a excepción de las horas cobradas."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbExcesosJornada"
@@ -159,12 +140,22 @@
                     Content="Sábados trabajados"
                     FontSize="12" />
                 <CheckBox
+                    x:Name="cbSabadosTrabajadosConvenio"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnFinde_Click"
+                    IsChecked="{Binding IncluirSabadosTrabajadosConvenio}"
+                    Content="Sábados trabajados convenio"
+                    ToolTip="Incluye todos los sábados que se trabaja o que hubiera tocado trabajar."
+                    FontSize="12" />
+                <CheckBox
                     x:Name="cbSabadosDescansados"
                     IsChecked="{Binding IncluirSabadosDescansados}"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     Click="UnFinde_Click"
                     Content="Sábados descansados"
+                    ToolTip="Sábados marcados con J-D, FN o DS."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDomingosTrabajados"
@@ -175,12 +166,22 @@
                     Content="Domingos trabajados"
                     FontSize="12" />
                 <CheckBox
+                    x:Name="cbDomingosTrabajadosConvenio"
+                    Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirDomingosTrabajadosConvenio}"
+                    VerticalContentAlignment="Center"
+                    Click="UnFinde_Click"
+                    Content="Domingos trabajados convenio"
+                    ToolTip="Incluye todos los domingos que se trabaja o que hubiera tocado trabajar."
+                    FontSize="12" />
+                <CheckBox
                     x:Name="cbDomingosDescansados"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     IsChecked="{Binding IncluirDomingosDescansados}"
                     Click="UnFinde_Click"
                     Content="Domingos descansados"
+                    ToolTip="Domingos marcados con J-D, FN o DS."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbFestivosTrabajados"
@@ -191,12 +192,22 @@
                     Content="Festivos trabajados"
                     FontSize="12" />
                 <CheckBox
+                    x:Name="cbFestivosTrabajadosConvenio"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="UnFinde_Click"
+                    IsChecked="{Binding IncluirFestivosTrabajadosConvenio}"
+                    Content="Festivos trabajados convenio"
+                    ToolTip="Incluye todos los festivos que se trabaja o que hubiera tocado trabajar."
+                    FontSize="12" />
+                <CheckBox
                     x:Name="cbFestivosDescansados"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     IsChecked="{Binding IncluirFestivosDescansados}"
                     Click="UnFinde_Click"
                     Content="Festivos descansados"
+                    ToolTip="Festivos marcados con J-D, FN o DS."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbFindesCompletos"
@@ -258,12 +269,21 @@
                     Content="Pluses de limpieza"
                     FontSize="12" />
                 <CheckBox
+                    x:Name="cbQuebrantoMoneda"
+                    Margin="15,5,5,5"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnPlus_Click"
+                    IsChecked="{Binding IncluirQuebrantoMoneda}"
+                    Content="Quebranto de moneda"
+                    FontSize="12" />
+                <CheckBox
                     x:Name="cbVariablesVacaciones"
                     Margin="15,5,5,5"
                     VerticalContentAlignment="Center"
                     Click="cbUnPlus_Click"
                     IsChecked="{Binding IncluirVariablesVacaciones}"
                     Content="Variables de vacaciones"
+                    ToolTip="Importe proporcional de Plus sábados y festivos, limpiezas, nocturnidad y quebranto de moneda que le corresponde al mes de vacaciones."
                     FontSize="12" />
 
                 <!--  SEPARADOR  -->
@@ -304,6 +324,7 @@
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
                     Content="Días activos"
+                    ToolTip="Todos los días con alguna incidencia (trabajo, descanso, etc)."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasInactivos"
@@ -312,6 +333,16 @@
                     IsChecked="{Binding IncluirDiasInactivos}"
                     Click="cbUnDia_Click"
                     Content="Días inactivos"
+                    ToolTip="Días sin ninguna incidencia."
+                    FontSize="12" />
+                <CheckBox
+                    x:Name="cbDiasTrabajadosConvenio"
+                    Margin="15,5,5,5"
+                    IsChecked="{Binding IncluirDiasTrabajadosConvenio}"
+                    VerticalContentAlignment="Center"
+                    Click="cbUnDia_Click"
+                    Content="Días trabajados convenio"
+                    ToolTip="Trab + E + DC + F6 + DND + PER + FOR + LAC"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasTrabajados"
@@ -320,6 +351,7 @@
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
                     Content="Días trabajados"
+                    ToolTip="Días que se hace un gráfico."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasDescansados"
@@ -327,7 +359,8 @@
                     IsChecked="{Binding IncluirDiasDescansados}"
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
-                    Content="Días descansados (J-D+FN+DS)"
+                    Content="Días descansados convenio"
+                    ToolTip="JD + FN + DS"
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasJD"
@@ -336,6 +369,7 @@
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
                     Content="Días de descanso (J-D)"
+                    ToolTip="Todos los días que se tenga J-D directamente o secundariamente (E-JD, etc)."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasFN"
@@ -344,6 +378,7 @@
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
                     Content="Días de descanso en fin de semana (FN)"
+                    ToolTip="Todos los días que se tenga FN directamente o secundariamente (E-FN, etc)."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasDS"
@@ -367,7 +402,8 @@
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
                     IsChecked="{Binding IncluirDiasOV}"
-                    Content="Días de vacaciones (O-V)"
+                    Content="Días de vacaciones (O-V)"                    
+                    ToolTip="Todos los días que se tenga O-V directamente o secundariamente (OV-JD, etc)."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasDC"
@@ -392,6 +428,7 @@
                     IsChecked="{Binding IncluirDiasE}"
                     Click="cbUnDia_Click"
                     Content="Días de enfermedad"
+                    ToolTip="Todos los días que se tenga E directamente o secundariamente (E-JD, etc)."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasPER"
@@ -416,6 +453,7 @@
                     IsChecked="{Binding IncluirDiasComite}"
                     Click="cbUnDia_Click"
                     Content="Días de comité"
+                    ToolTip="Días de comité de tipo CO o CE."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasComiteJD"
@@ -424,6 +462,7 @@
                     IsChecked="{Binding IncluirDiasComiteJD}"
                     Click="cbUnDia_Click"
                     Content="Días de comité en J-D"
+                    ToolTip="Días de comité de tipo CO o CE cuando estén en un día que sea descanso (J-D, FN o DS)."
                     FontSize="12" />
                 <CheckBox
                     x:Name="cbDiasComiteDC"
@@ -432,6 +471,7 @@
                     VerticalContentAlignment="Center"
                     Click="cbUnDia_Click"
                     Content="Días de comité en DC"
+                    ToolTip="Días de comité de tipo CO o CE cuando esten en un DC."
                     FontSize="12" />
 
                 <!--  SEPARADOR  -->
@@ -476,8 +516,11 @@
                         FontSize="14"
                         SelectionChanged="ComboPresets_SelectionChanged">
                         <ComboBoxItem
-                            Content="Variables Vacaciones"
+                            Content="Variables vacaciones"
                             Tag="VariablesVacaciones" />
+                        <ComboBoxItem
+                            Content="Parámetros convenio"
+                            Tag="ParametrosConvenio" />
                     </ComboBox>
 
                     <Button

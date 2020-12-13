@@ -1191,8 +1191,9 @@ namespace Orion.ViewModels {
         private void CompararCalendarioExcel() {
 
             // Definir el nombre del excel de destino.
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
             string nombreArchivo = $"Comparación Calendarios {FechaActual.ToString("MM - yyyy")} - {App.Global.CentroActual}.xlsx";
-            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            string rutaInformes = Path.Combine(carpetaInformes, "Comparación Calendarios");
             if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
             string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
 
@@ -1228,8 +1229,9 @@ namespace Orion.ViewModels {
         // Ejecución del comando
         private void CompararCalendariosExcelAnual() {
             // Definir el nombre del excel de destino.
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
             string nombreArchivo = $"Comparación Calendarios {FechaActual.ToString("yyyy")} - {App.Global.CentroActual}.xlsx";
-            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            string rutaInformes = Path.Combine(carpetaInformes, "Comparación Calendarios");
             if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
             string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
 
@@ -1410,14 +1412,14 @@ namespace Orion.ViewModels {
             var matricula = CalendarioSeleccionado.MatriculaConductor;
             var response = Mensajes.VerMensaje($"Va a ajustar el calendario de {matricula:000} según el excel compartido.\n\n¿Desea Continuar?", "ATENCIÓN", true);
             if (response != true) return;
-            var archivo = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Horas Conductores\\{matricula:000}\\{matricula:000} - {FechaActual.Year}.xlsx");
+            var archivo = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Correcciones Conductores\\{App.Global.CentroActual}\\{matricula:000}\\{matricula:000} - {FechaActual.Year}.xlsx");
             if (!File.Exists(archivo)) {
-                Mensajes.VerMensaje("No hay comparaciones del conductor.", "ATENCIÓN");
+                Mensajes.VerMensaje("No hay correcciones del conductor.", "ATENCIÓN");
                 return;
             }
             var horas = ExcelService.getInstance().GetHorasConductor(archivo, FechaActual.Year, FechaActual.Month);
             if (horas == null) {
-                Mensajes.VerMensaje("No hay comparaciones del conductor.", "ATENCIÓN");
+                Mensajes.VerMensaje("No hay correcciones del conductor.", "ATENCIÓN");
                 return;
             }
             foreach (var hora in horas) {
@@ -1440,7 +1442,7 @@ namespace Orion.ViewModels {
         #endregion
 
 
-        #region COMANDO ABRIR HORAS CONDUCTOR
+        #region COMANDO ABRIR CORRECCIONES CONDUCTOR
 
         // Comando
         private ICommand cmdAbrirHorasConductor;
@@ -1456,7 +1458,9 @@ namespace Orion.ViewModels {
                 return;
             }
             var matricula = CalendarioSeleccionado.MatriculaConductor;
-            var archivo = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Horas Conductores\\{matricula:000}\\{matricula:000} - {FechaActual.Year}.xlsx");
+            var carpeta = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Correcciones Conductores\\{App.Global.CentroActual}\\{matricula:000}");
+            var archivo = Path.Combine(carpeta, $"{matricula:000} - {FechaActual.Year}.xlsx");
+            if (!Directory.Exists(carpeta)) Directory.CreateDirectory(carpeta);
             if (!File.Exists(archivo)) {
                 // Generamos el archivo
                 ExcelService.getInstance().GenerarPlantillaHorasConductores(archivo, FechaActual);
@@ -1496,14 +1500,14 @@ namespace Orion.ViewModels {
                 return;
             }
             var matricula = CalendarioSeleccionado.MatriculaConductor;
-            var archivo = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Horas Conductores\\{matricula:000}\\{matricula:000} - {FechaActual.Year}.xlsx");
+            var archivo = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Correcciones Conductores\\{App.Global.CentroActual}\\{matricula:000}\\{matricula:000} - {FechaActual.Year}.xlsx");
             if (!File.Exists(archivo)) {
-                Mensajes.VerMensaje("No hay comparaciones del conductor.", "ATENCIÓN");
+                Mensajes.VerMensaje("No hay correcciones del conductor.", "ATENCIÓN");
                 return;
             }
             var horas = ExcelService.getInstance().GetHorasConductor(archivo, FechaActual.Year, FechaActual.Month);
             if (horas == null) {
-                Mensajes.VerMensaje("No hay comparaciones del conductor.", "ATENCIÓN");
+                Mensajes.VerMensaje("No hay correcciones del conductor.", "ATENCIÓN");
                 return;
             }
             var pijama = new List<HorasConductor>();
@@ -1654,8 +1658,9 @@ namespace Orion.ViewModels {
                 return;
             }
             // Definir el nombre del excel de destino.
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
             string nombreArchivo = $"{FechaActual.ToString("yyyy-MM")} - Comparación Con Anual - {App.Global.CentroActual}.xlsx";
-            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            string rutaInformes = Path.Combine(carpetaInformes, "Comparación Calendarios");
             if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
             string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
 
@@ -1688,8 +1693,9 @@ namespace Orion.ViewModels {
                 return;
             }
             // Definir el nombre del excel de destino.
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
             string nombreArchivo = $"{FechaActual.ToString("yyyy-MM")} - Comparación Con Virtual - {App.Global.CentroActual}.xlsx";
-            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            string rutaInformes = Path.Combine(carpetaInformes, "Comparación Calendarios");
             if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
             string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
 
@@ -1722,8 +1728,9 @@ namespace Orion.ViewModels {
                 return;
             }
             // Definir el nombre del excel de destino.
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
             string nombreArchivo = $"{FechaActual.ToString("yyyy")} - Comparación Todos Con Anual - {App.Global.CentroActual}.xlsx";
-            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            string rutaInformes = Path.Combine(carpetaInformes, "Comparación Calendarios");
             if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
             string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
 
@@ -1755,8 +1762,9 @@ namespace Orion.ViewModels {
                 return;
             }
             // Definir el nombre del excel de destino.
+            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
             string nombreArchivo = $"{FechaActual.ToString("yyyy")} - Comparación Todos Con Virtual - {App.Global.CentroActual}.xlsx";
-            string rutaInformes = Path.Combine(App.Global.Configuracion.CarpetaInformes, "Comparación Calendarios");
+            string rutaInformes = Path.Combine(carpetaInformes, "Comparación Calendarios");
             if (!Directory.Exists(rutaInformes)) Directory.CreateDirectory(rutaInformes);
             string rutaDestino = Path.Combine(rutaInformes, nombreArchivo);
 
