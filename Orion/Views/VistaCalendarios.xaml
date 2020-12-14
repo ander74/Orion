@@ -2122,7 +2122,7 @@
                     TextBlock.TextAlignment="Center"
                     Value="{Binding CalendariosVM.HorasTrabajadas}"
                     From="0"
-                    To="{Binding Convenio.HorasAnuales}" />
+                    To="{Binding CalendariosVM.JornadaAnualDeberia}" />
 
                 <!--  JORNADA ANUAL  -->
                 <TextBlock
@@ -2146,7 +2146,7 @@
                     TextBlock.TextAlignment="Center"
                     Value="{Binding CalendariosVM.JornadaAnual}"
                     From="0"
-                    To="{Binding Convenio.HorasAnuales}" />
+                    To="{Binding CalendariosVM.JornadaAnualDeberia}" />
 
                 <!--  DÍAS TRABAJO  -->
                 <TextBlock
@@ -2170,7 +2170,7 @@
                     TextBlock.TextAlignment="Center"
                     Value="{Binding CalendariosVM.DiasTrabajo}"
                     From="0"
-                    To="{Binding Convenio.TrabajoAnuales}" />
+                    To="{Binding CalendariosVM.DiasDeberiaTrabajo}" />
 
                 <!--  DÍAS DESCANSO  -->
                 <TextBlock
@@ -2194,7 +2194,7 @@
                     TextBlock.TextAlignment="Center"
                     Value="{Binding CalendariosVM.DiasDescanso}"
                     From="0"
-                    To="{Binding Convenio.DescansosAnuales}" />
+                    To="{Binding CalendariosVM.DiasDeberiaDescanso}" />
 
                 <!--  DESCANSOS SUELTOS  -->
                 <TextBlock
@@ -2266,7 +2266,7 @@
                     TextBlock.TextAlignment="Center"
                     Value="{Binding CalendariosVM.DiasVacaciones}"
                     From="0"
-                    To="{Binding Convenio.VacacionesAnuales}" />
+                    To="{Binding CalendariosVM.DiasDeberiaVacaciones}" />
 
                 <!--  ENFERMO  -->
                 <TextBlock

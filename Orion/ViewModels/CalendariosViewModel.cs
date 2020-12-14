@@ -291,6 +291,31 @@ namespace Orion.ViewModels {
         }
 
 
+        private void CalcularParametrosDeberia() {
+            if (CalendarioSeleccionado == null) return;
+            var sDate = new DateTime(FechaActual.Year, 1, 1);
+            var fDate = FechaActual.AddMonths(1).AddDays(-1);
+            int diasPeriodo = (int)(fDate - sDate).TotalDays;
+            int diasActivo = ListaResumen.Where(r => r.MatriculaConductor == CalendarioSeleccionado.MatriculaConductor).Sum(r => r.DiasActivo) + CalendarioSeleccionado.DiasActivo;
+            int sabados = (1 + fDate.Subtract(sDate).Days + (0 + (int)sDate.DayOfWeek) % 7) / 7;
+            int domingos = (1 + fDate.Subtract(sDate).Days + (6 + (int)sDate.DayOfWeek) % 7) / 7;
+            int festivos = App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha >= sDate && f.Fecha <= fDate);
+            int descansosPeriodo = sabados + domingos + festivos;
+            decimal vacacionesPeriodo = App.Global.Convenio.VacacionesAnuales / 12m * FechaActual.Month;
+            decimal descansosPertenecen = (diasPeriodo - vacacionesPeriodo) * descansosPeriodo / diasPeriodo;
+            if ((CalendarioSeleccionado?.ConductorIndefinido ?? false)) {
+                DiasDeberiaDescanso = App.Global.Convenio.DescansosAnuales;
+                DiasDeberiaVacaciones = App.Global.Convenio.VacacionesAnuales;
+                DiasDeberiaTrabajo = App.Global.Convenio.TrabajoAnuales;
+                JornadaAnualDeberia = App.Global.Convenio.HorasAnuales;
+            } else {
+                DiasDeberiaDescanso = Math.Round(diasActivo * descansosPertenecen / diasPeriodo, 4);
+                DiasDeberiaVacaciones = Math.Round(diasActivo * vacacionesPeriodo / diasPeriodo, 4);
+                DiasDeberiaTrabajo = Math.Round(diasActivo - DiasDeberiaDescanso - DiasDeberiaVacaciones, 4);
+                JornadaAnualDeberia = DiasDeberiaTrabajo * (App.Global.Convenio.JornadaMedia.ToDecimal());
+            }
+        }
+
 
 
         #endregion
@@ -390,6 +415,7 @@ namespace Orion.ViewModels {
                 if (_calendarioseleccionado != value) {
                     _calendarioseleccionado = value;
                     ResumenSeleccionado = ListaResumen?.FirstOrDefault(r => r.MatriculaConductor == CalendarioSeleccionado?.MatriculaConductor);
+                    CalcularParametrosDeberia();
                     PropiedadCambiada();
                     PropiedadCambiada(nameof(HorasTrabajadas));
                     PropiedadCambiada(nameof(JornadaAnual));
@@ -599,13 +625,20 @@ namespace Orion.ViewModels {
         public decimal JornadaAnual {
             get => ((ResumenSeleccionado?.DiasTrabajoConvenio ?? 0) + (CalendarioSeleccionado?.DiasTrabajoConvenio ?? 0)) * Math.Round(App.Global.Convenio.JornadaMedia.ToDecimal(), 4);
         }
-
         public Func<double, string> FormatoJornadaAnual {
             get => valor => {
-                decimal total = App.Global.Convenio.HorasAnuales;
-                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 4) : 0;
+                decimal porcentaje = JornadaAnualDeberia > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / JornadaAnualDeberia, 4) : 0;
                 return $"{valor:0.00}\n {porcentaje:0.00} %".Replace(".", ",");
             };
+        }
+        private decimal jornadaAnualDeberia;
+        public decimal JornadaAnualDeberia {
+            get => jornadaAnualDeberia;
+            set {
+                if (SetValue(ref jornadaAnualDeberia, value)) {
+                    PropiedadCambiada(nameof(FormatoJornadaAnual));
+                }
+            }
         }
 
 
@@ -614,10 +647,18 @@ namespace Orion.ViewModels {
         }
         public Func<double, string> FormatoDiasTrabajo {
             get => valor => {
-                decimal total = App.Global.Convenio.TrabajoAnuales;
-                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 4) : 0;
+                decimal porcentaje = DiasDeberiaTrabajo > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / DiasDeberiaTrabajo, 4) : 0;
                 return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
             };
+        }
+        private decimal diasDeberiaTrabajo;
+        public decimal DiasDeberiaTrabajo {
+            get => diasDeberiaTrabajo;
+            set {
+                if (SetValue(ref diasDeberiaTrabajo, value)) {
+                    PropiedadCambiada(nameof(FormatoDiasTrabajo));
+                }
+            }
         }
 
 
@@ -626,10 +667,18 @@ namespace Orion.ViewModels {
         }
         public Func<double, string> FormatoDiasDescanso {
             get => valor => {
-                decimal total = App.Global.Convenio.DescansosAnuales;
-                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 4) : 0;
+                decimal porcentaje = DiasDeberiaDescanso > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / DiasDeberiaDescanso, 4) : 0;
                 return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
             };
+        }
+        private decimal diasDeberiaDescanso;
+        public decimal DiasDeberiaDescanso {
+            get => diasDeberiaDescanso;
+            set {
+                if (SetValue(ref diasDeberiaDescanso, value)) {
+                    PropiedadCambiada(nameof(FormatoDiasDescanso));
+                }
+            }
         }
 
 
@@ -663,11 +712,20 @@ namespace Orion.ViewModels {
         }
         public Func<double, string> FormatoDiasVacaciones {
             get => valor => {
-                decimal total = App.Global.Convenio.VacacionesAnuales;
-                decimal porcentaje = total > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / total, 4) : 0;
+                decimal porcentaje = DiasDeberiaVacaciones > 0 ? Math.Round(Convert.ToDecimal(valor) * 100m / DiasDeberiaVacaciones, 4) : 0;
                 return $"{valor:00}\n {porcentaje:0.00} %".Replace(".", ",");
             };
         }
+        private decimal diasDeberiaVacaciones;
+        public decimal DiasDeberiaVacaciones {
+            get => diasDeberiaVacaciones;
+            set {
+                if (SetValue(ref diasDeberiaVacaciones, value)) {
+                    PropiedadCambiada(nameof(FormatoDiasVacaciones));
+                }
+            }
+        }
+
 
 
         // No lleva Formatador.

@@ -153,6 +153,8 @@ namespace Orion.Models {
             Nocturnas = new TimeSpan(ListaDias.Sum(d => d.Nocturnas.Ticks));
             // FindesCompletos = Se recalcula en el CalendarioViewModel, por tener los días anterior y posterior.
             // En Orion 2, los días anterior y posterior se incluirán en el propio calendario.
+
+            // Días debería también se calcularán en el CalendarioViewModel, por no tener aquí los festivos.
         
             //TODO: Consultar si los fines de semana que tocarían en vacaciones cuentan para los findes completos.
         }
@@ -579,6 +581,7 @@ namespace Orion.Models {
             get => findesCompletos;
             set => SetValue(ref findesCompletos, value);
         }
+
 
 
         private string _notas = "";
