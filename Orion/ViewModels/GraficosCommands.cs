@@ -261,6 +261,10 @@ namespace Orion.ViewModels {
                     VistaGraficos.Filter = (g) => { return (g as Grafico).Diferente == true; };
                     FiltroAplicado = "Gráficos Modificados";
                     break;
+                case "MalValorados":
+                    VistaGraficos.Filter = (g) => { return (g as Grafico).ValoracionDiferente == true; };
+                    FiltroAplicado = "Gráficos Modificados";
+                    break;
                 default:
                     if (VistaGraficos != null) VistaGraficos.Filter = null;
                     FiltroAplicado = "Ninguno";

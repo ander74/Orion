@@ -570,6 +570,21 @@
                                     TextBlock.TextAlignment="Center"
                                     ToolTip="Muestra sólo los gráficos que son diferentes a los del grupo con los que se han comparado." />
 
+                                <!--  BOTÓN FILTRAR MAL VALORADOS  -->
+                                <Button
+                                    Margin="6,3,6,6"
+                                    Padding="20,10"
+                                    HorizontalAlignment="Stretch"
+                                    Click="BotonFiltrado_Click"
+                                    Command="{Binding cmdAplicarFiltro}"
+                                    CommandParameter="MalValorados"
+                                    Content="Gráficos Mal Valorados"
+                                    FontFamily="Comic Sans MS"
+                                    FontSize="10"
+                                    Style="{StaticResource EstiloBotonBarraPequeña}"
+                                    TextBlock.TextAlignment="Center"
+                                    ToolTip="Muestra sólo los gráficos que no tienen la valoración de la empresa correcta." />
+
                             </StackPanel>
                         </Border>
                     </Border>

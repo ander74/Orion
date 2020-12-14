@@ -81,7 +81,13 @@ namespace Orion.PrintModel {
             Style estiloDer = new Style();
             estiloDer.SetBorderRight(new SolidBorder(1));
             // Creamos la tabla
-            float[] ancho = new float[] { 3, 3, 3, 3, 3, 3, 3, 3, 2, 3, 3, 3, 3, 3, 3, 3 };
+            var columnas = 16;
+            if (!App.Global.Configuracion.MostrarGrafTiempoPartido) columnas -= 2;
+            if (!App.Global.Configuracion.MostrarGrafHoras) columnas -= 2;
+            if (!App.Global.Configuracion.MostrarGrafDietas) columnas -= 4;
+            if (!App.Global.Configuracion.MostrarGrafPlusPaqueteria) columnas -= 1;
+            float[] ancho = new float[columnas];
+            for (int i = 0; i < columnas; i++) ancho[i] = 3;
             Table tabla = new Table(UnitValue.CreatePercentArray(ancho));
             // Asignamos el estilo a la tabla.
             tabla.AddStyle(estiloTabla);
@@ -96,19 +102,27 @@ namespace Orion.PrintModel {
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Turno")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Inicio")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Final")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Ini. Partido")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Fin. Partido")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+            if (App.Global.Configuracion.MostrarGrafTiempoPartido) {
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph("Ini. Partido")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph("Fin. Partido")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+            }
             tabla.AddHeaderCell(new Cell().Add(new Paragraph("Valoracion")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Trabajadas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Dif.")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Acumuladas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Nocturnas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Desayuno")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Comida")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Plus Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph("Trabajadas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph("Dif.")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+            if (App.Global.Configuracion.MostrarGrafHoras) {
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph("Acumuladas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph("Nocturnas")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+            }
+            if (App.Global.Configuracion.MostrarGrafDietas) {
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph("Desayuno")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph("Comida")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph("Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph("Plus Cena")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
+            }
             //tabla.AddHeaderCell(new Cell().Add(new Paragraph("Limpieza")).AddStyle(estiloEncabezados).AddStyle(estiloMed));
-            tabla.AddHeaderCell(new Cell().Add(new Paragraph("Paquetería")).AddStyle(estiloEncabezados).AddStyle(estiloDer).AddStyle(estiloMed));
+            if (App.Global.Configuracion.MostrarGrafPlusPaqueteria) {
+                tabla.AddHeaderCell(new Cell().Add(new Paragraph("Paquetería")).AddStyle(estiloEncabezados).AddStyle(estiloDer).AddStyle(estiloMed));
+            }
             // Añadimos las celdas con los calendarios.
             int indice = 1;
             foreach (Object obj in listaGraficos) {
@@ -130,32 +144,40 @@ namespace Orion.PrintModel {
                                         .AddStyle(estiloFondo));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Final, null, VerValores.NoCeros, null)}"))
                                         .AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.InicioPartido, null, VerValores.NoCeros, null)}"))
+                if (App.Global.Configuracion.MostrarGrafTiempoPartido) {
+                    tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.InicioPartido, null, VerValores.NoCeros, null)}"))
                                         .AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.FinalPartido, null, VerValores.NoCeros, null)}"))
-                                        .AddStyle(estiloFondo));
+                    tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.FinalPartido, null, VerValores.NoCeros, null)}"))
+                                            .AddStyle(estiloFondo));
+                }
                 tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Valoracion, null, VerValores.NoCeros, null)}"))
                                         .AddStyle(estiloFondo).AddStyle(estiloValDif));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Trabajadas, null, VerValores.NoCeros, null)}"))
                                         .AddStyle(estiloFondo).AddStyle(estiloValDif));
                 tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.DiferenciaValoracion, null, VerValores.NoCeros, null)}"))
                                         .AddStyle(estiloFondo).AddStyle(estiloValDif));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Acumuladas, null, VerValores.NoCeros, null)}"))
+                if (App.Global.Configuracion.MostrarGrafHoras) {
+                    tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Acumuladas, null, VerValores.NoCeros, null)}"))
                                         .AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Nocturnas, null, VerValores.NoCeros, null)}"))
+                    tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvHora.Convert(g.Nocturnas, null, VerValores.NoCeros, null)}"))
+                                            .AddStyle(estiloFondo));
+                }
+                if (App.Global.Configuracion.MostrarGrafDietas) {
+                    tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.Desayuno, null, VerValores.NoCeros, null)}"))
                                         .AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.Desayuno, null, VerValores.NoCeros, null)}"))
-                                        .AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.Comida, null, VerValores.NoCeros, null)}"))
-                                        .AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.Cena, null, VerValores.NoCeros, null)}"))
-                                        .AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.PlusCena, null, VerValores.NoCeros, null)}"))
-                                        .AddStyle(estiloFondo));
+                    tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.Comida, null, VerValores.NoCeros, null)}"))
+                                            .AddStyle(estiloFondo));
+                    tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.Cena, null, VerValores.NoCeros, null)}"))
+                                            .AddStyle(estiloFondo));
+                    tabla.AddCell(new Cell().Add(new Paragraph($"{(string)cnvDecimal.Convert(g.PlusCena, null, VerValores.NoCeros, null)}"))
+                                            .AddStyle(estiloFondo));
+                }
                 //tabla.AddCell(new Cell().Add(new Paragraph($"{(g.PlusLimpieza ? "X" : "")}"))
                 //                        .AddStyle(estiloFondo));
-                tabla.AddCell(new Cell().Add(new Paragraph($"{(g.PlusPaqueteria ? "X" : "")}"))
+                if (App.Global.Configuracion.MostrarGrafPlusPaqueteria) {
+                    tabla.AddCell(new Cell().Add(new Paragraph($"{(g.PlusPaqueteria ? "X" : "")}"))
                                         .AddStyle(estiloDer).AddStyle(estiloFondo));
+                }
             }
             // Ponemos los bordes de la tabla.
             tabla.SetBorderBottom(new SolidBorder(1));
