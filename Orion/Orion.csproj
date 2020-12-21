@@ -22,7 +22,7 @@
     <SccProvider>SAK</SccProvider>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
-    <PublishUrl>D:\Orion Publicado\</PublishUrl>
+    <PublishUrl>C:\Users\Ander74\Documents\Orion Publicado\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -35,7 +35,7 @@
     <ProductName>Orion</ProductName>
     <PublisherName>AnderSoft</PublisherName>
     <SuiteName>Orion</SuiteName>
-    <ApplicationRevision>3</ApplicationRevision>
+    <ApplicationRevision>6</ApplicationRevision>
     <ApplicationVersion>1.3.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <PublishWizardCompleted>true</PublishWizardCompleted>

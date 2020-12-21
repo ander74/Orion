@@ -51,7 +51,7 @@ namespace Orion.ViewModels {
                 ListaConductores.Clear();
                 return;
             }
-            ListaConductores = new NotifyCollection<Conductor>(App.Global.Repository.GetConductores());
+            ListaConductores = new NotifyCollection<Conductor>(App.Global.Repository.GetConductores().OrderBy(c => c.Categoria).ThenBy(c => c.Matricula));
             PropiedadCambiada(nameof(Detalle));
         }
 

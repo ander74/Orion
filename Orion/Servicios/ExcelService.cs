@@ -267,22 +267,26 @@ namespace Orion.Servicios {
                     for (int dia = 1; dia <= diasMes; dia++) {
                         HorasConductor horas = new HorasConductor();
                         horas.Dia = new DateTime(año, mes, dia);
-                        var valor = hoja.Cells[dia + 1, 2].Text;
-                        var comboGrafico = parseGraficoCodigo(valor);
-                        horas.Grafico = comboGrafico.Grafico;
-                        horas.Codigo = comboGrafico.Codigo;
-                        valor = hoja.Cells[dia + 1, 3].Text.Replace('.', ':');
-                        if (TimeSpan.TryParse(valor, out TimeSpan trabajadas)) horas.Trabajadas = trabajadas; else horas.Trabajadas = TimeSpan.Zero;
-                        valor = hoja.Cells[dia + 1, 4].Text.Replace('.', ':');
-                        if (TimeSpan.TryParse(valor, out TimeSpan acumuladas)) horas.Acumuladas = acumuladas; else horas.Acumuladas = TimeSpan.Zero;
-                        valor = hoja.Cells[dia + 1, 5].Text.Replace('.', ',');
-                        if (decimal.TryParse(valor, out decimal desayuno)) horas.Desayuno = desayuno; else horas.Desayuno = 0;
-                        valor = hoja.Cells[dia + 1, 6].Text.Replace('.', ',');
-                        if (decimal.TryParse(valor, out decimal comida)) horas.Comida = comida; else horas.Comida = 0;
-                        valor = hoja.Cells[dia + 1, 7].Text.Replace('.', ',');
-                        if (decimal.TryParse(valor, out decimal cena)) horas.Cena = cena; else horas.Cena = 0;
-                        valor = hoja.Cells[dia + 1, 8].Text.Replace('.', ',');
-                        if (decimal.TryParse(valor, out decimal pluscena)) horas.PlusCena = pluscena; else horas.PlusCena = 0;
+                        var valor = hoja.Cells[dia + 1, 2].Text.Trim();
+                        if (string.IsNullOrEmpty(valor)) {
+                            horas.Ignorar = true;
+                        } else {
+                            var comboGrafico = parseGraficoCodigo(valor);
+                            horas.Grafico = comboGrafico.Grafico;
+                            horas.Codigo = comboGrafico.Codigo;
+                            valor = hoja.Cells[dia + 1, 3].Text.Replace('.', ':');
+                            if (TimeSpan.TryParse(valor, out TimeSpan trabajadas)) horas.Trabajadas = trabajadas; else horas.Trabajadas = TimeSpan.Zero;
+                            valor = hoja.Cells[dia + 1, 4].Text.Replace('.', ':');
+                            if (TimeSpan.TryParse(valor, out TimeSpan acumuladas)) horas.Acumuladas = acumuladas; else horas.Acumuladas = TimeSpan.Zero;
+                            valor = hoja.Cells[dia + 1, 5].Text.Replace('.', ',');
+                            if (decimal.TryParse(valor, out decimal desayuno)) horas.Desayuno = desayuno; else horas.Desayuno = 0;
+                            valor = hoja.Cells[dia + 1, 6].Text.Replace('.', ',');
+                            if (decimal.TryParse(valor, out decimal comida)) horas.Comida = comida; else horas.Comida = 0;
+                            valor = hoja.Cells[dia + 1, 7].Text.Replace('.', ',');
+                            if (decimal.TryParse(valor, out decimal cena)) horas.Cena = cena; else horas.Cena = 0;
+                            valor = hoja.Cells[dia + 1, 8].Text.Replace('.', ',');
+                            if (decimal.TryParse(valor, out decimal pluscena)) horas.PlusCena = pluscena; else horas.PlusCena = 0;
+                        }
                         lista.Add(horas);
                     }
                 }
@@ -334,6 +338,8 @@ namespace Orion.Servicios {
 
 
         public class HorasConductor {
+
+            public bool Ignorar { get; set; }
 
             public DateTime Dia { get; set; }
 

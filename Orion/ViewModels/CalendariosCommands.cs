@@ -1423,6 +1423,7 @@ namespace Orion.ViewModels {
                 return;
             }
             foreach (var hora in horas) {
+                if (hora.Ignorar) continue;
                 var dia = CalendarioSeleccionado.ListaDias.FirstOrDefault(d => d.DiaFecha.Day == hora.Dia.Day);
                 if (dia.Grafico != hora.Grafico) dia.Grafico = hora.Grafico;
                 if (dia.Codigo != hora.Codigo) dia.Codigo = hora.Codigo;

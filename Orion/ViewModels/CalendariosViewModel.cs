@@ -71,17 +71,19 @@ namespace Orion.ViewModels {
                 _listacalendarios.Clear();
                 return;
             }
-            ListaCalendarios = new NotifyCollection<Calendario>(App.Global.Repository.GetCalendarios(FechaActual.Year, FechaActual.Month));
+            ListaCalendarios = new NotifyCollection<Calendario>(App.Global.Repository.GetCalendarios(FechaActual.Year, FechaActual.Month).OrderBy(c => c.CategoriaConductor).ThenBy(c => c.MatriculaConductor));
 
             // Cargamos los gráficos asociados, si no están cargados ya.
             var grupos = App.Global.GraficosVM.ListaGrupos;
-            var maxValidez = grupos.Where(g => g.Validez <= FechaActual).Max(gg => gg.Validez);
-            gruposGraficos = grupos.Where(g => g.Validez >= maxValidez && g.Validez < FechaActual.AddMonths(1));
-            var clave = string.Empty;
-            foreach (var grupo in gruposGraficos) clave += $"{grupo.Validez:ddMMyyyy} ";
-            if (!clave.Equals(claveGraficosAsociados)) {
-                claveGraficosAsociados = clave;
-                listaGraficosAsociados = App.Global.Repository.GetGraficosVariasFechas(gruposGraficos).ToList();
+            if (grupos != null && grupos.Count > 0) {
+                var maxValidez = grupos.Where(g => g.Validez <= FechaActual).Max(gg => gg.Validez);
+                gruposGraficos = grupos.Where(g => g.Validez >= maxValidez && g.Validez < FechaActual.AddMonths(1));
+                var clave = string.Empty;
+                foreach (var grupo in gruposGraficos) clave += $"{grupo.Validez:ddMMyyyy} ";
+                if (!clave.Equals(claveGraficosAsociados)) {
+                    claveGraficosAsociados = clave;
+                    listaGraficosAsociados = App.Global.Repository.GetGraficosVariasFechas(gruposGraficos).ToList();
+                }
             }
             // Cargamos el resumen anual hasta el mes anterior a este.
             if (FechaActual.Month > 1) {
@@ -538,7 +540,7 @@ namespace Orion.ViewModels {
 
         public string GruposGraficos {
             get {
-                if (gruposGraficos == null && !gruposGraficos.Any()) return "Ninguno";
+                if (gruposGraficos == null || !gruposGraficos.Any()) return "Ninguno";
                 var texto = string.Empty;
                 foreach (var grupo in gruposGraficos.OrderBy(g => g.Validez)) {
                     texto += $"{grupo.Validez:dd-MM-yy} | ";

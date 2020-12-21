@@ -315,8 +315,8 @@ namespace Orion.PrintModel {
             tabla = new Table(UnitValue.CreatePercentArray(new float[] { 16.6666f, 16.6666f, 16.6666f, 16.6666f, 16.6666f, 16.6666f }));
             tabla.AddStyle(estiloTabla);
             tabla.AddCell(new Cell().Add(new Paragraph("Trabajo")).AddStyle(estiloEncabezado));
-            tabla.AddCell(new Cell().Add(new Paragraph("J-D")).AddStyle(estiloEncabezado));
-            tabla.AddCell(new Cell().Add(new Paragraph("O-V")).AddStyle(estiloEncabezado));
+            tabla.AddCell(new Cell().Add(new Paragraph("JD")).AddStyle(estiloEncabezado));
+            tabla.AddCell(new Cell().Add(new Paragraph("OV")).AddStyle(estiloEncabezado));
             tabla.AddCell(new Cell().Add(new Paragraph("DND")).AddStyle(estiloEncabezado));
             tabla.AddCell(new Cell(1, 2).Add(new Paragraph("Trabajo (JD)")).AddStyle(estiloEncabezado));
             tabla.AddCell(pijama.Trabajo.ToString("00"));

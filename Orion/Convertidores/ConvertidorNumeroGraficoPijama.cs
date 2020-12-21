@@ -31,8 +31,8 @@ namespace Orion.Convertidores {
                     return resultado + comboGrafico.Item1.ToString("0000");
                 } else {
                     switch (comboGrafico.Item1) {
-                        case -1: return resultado + "O-V";
-                        case -2: return resultado + "J-D";
+                        case -1: return resultado + "OV";
+                        case -2: return resultado + "JD";
                         case -3: return resultado + "FN";
                         case -4: return resultado + "E";
                         case -5: return resultado + "DS";

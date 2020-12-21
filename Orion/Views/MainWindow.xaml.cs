@@ -64,12 +64,15 @@ namespace Orion.Views {
                 if (File.Exists(exeFile)) {
                     DateTime lastWrite = File.GetLastWriteTime(exeFile);
                     if (lastWrite > App.Global.Configuracion.LastWriteSetupFile) {
-                        string mensaje = "Hay una nueva versión de Orión.\n\n¿Desea actualizar ahora?";
-                        if (MessageBox.Show(mensaje, "Actualización", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes) {
-                            App.ActualizarAlSalir = true;
-                            App.Global.Configuracion.LastWriteSetupFile = lastWrite;
-                            this.Close();
-                        }
+                        //string mensaje = "Hay una nueva versión de Orión.\n\n¿Desea actualizar ahora?";
+                        //if (MessageBox.Show(mensaje, "Actualización", MessageBoxButton.YesNo, MessageBoxImage.Information) == MessageBoxResult.Yes) {
+                        //    App.ActualizarAlSalir = true;
+                        //    App.Global.Configuracion.LastWriteSetupFile = lastWrite;
+                        //    this.Close();
+                        //}
+                        string mensaje = "Hay una nueva versión de Orión.\n\nLa actualización automática esta temporalmente desactivada.\n\nCierra Orión y actualiza manualmente.";
+                        MessageBox.Show(mensaje, "Actualización", MessageBoxButton.OK, MessageBoxImage.Information);
+                        App.Global.Configuracion.LastWriteSetupFile = lastWrite;
                     }
                 }
             }

@@ -21,8 +21,8 @@ namespace Orion.Convertidores {
                 if (Grafico == 0) return "";
                 if (Grafico > 0) return Grafico.ToString("0000");
                 switch (Grafico) {
-                    case -1: return "O-V";
-                    case -2: return "J-D";
+                    case -1: return "OV";
+                    case -2: return "JD";
                     case -3: return "FN";
                     case -4: return "E";
                     case -5: return "DS";
