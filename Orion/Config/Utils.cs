@@ -156,6 +156,52 @@ namespace Orion.Config {
         //====================================================================================================
 
 
+        // ====================================================================================================
+        #region INCIDENCIAS
+        // ====================================================================================================
+
+        public static (int Grafico, int Codigo) GetCodigoIncidencia(string texto) {
+            (int Grafico, int Codigo) resultado = (0, 0);
+            texto = texto.ToLower();
+            if (texto.StartsWith("co-")) {
+                resultado.Codigo = 1;
+                texto = texto.Substring(3);
+            } else if (texto.StartsWith("ce-")) {
+                resultado.Codigo = 2;
+                texto = texto.Substring(3);
+            } else if (texto.StartsWith("jd-")) {
+                resultado.Codigo = 3;
+                texto = texto.Substring(3);
+            }
+            texto = texto.Replace("-", "");
+            switch (texto) {
+                case "ov": resultado.Grafico = -1; break;
+                case "jd": resultado.Grafico = -2; break;
+                case "fn": resultado.Grafico = -3; break;
+                case "e": case "ge": resultado.Grafico = -4; break;
+                case "ds": resultado.Grafico = -5; break;
+                case "dc": case "oh": case "dh": resultado.Grafico = -6; break;
+                case "f6": case "f4": resultado.Grafico = -7; break;
+                case "dnd": case "df": resultado.Grafico = -8; break;
+                case "per": resultado.Grafico = -9; break;
+                case "ejd": case "e(jd)": resultado.Grafico = -10; break;
+                case "efn": case "e(fn)": resultado.Grafico = -11; break;
+                case "ovjd": case "ov(jd)": resultado.Grafico = -12; break;
+                case "ovfn": case "ov(fn)": resultado.Grafico = -13; break;
+                case "f6dc": case "dcf6": resultado.Grafico = -14; break;
+                case "for": case "cap": resultado.Grafico = -15; break;
+                case "ova": resultado.Grafico = -16; break;
+                case "ovajd": case "ova(jd)": resultado.Grafico = -17; break;
+                case "ovafn": case "ova(fn)": resultado.Grafico = -18; break;
+                case "lac": resultado.Grafico = -19; break;
+                default: Int32.TryParse(texto, out resultado.Grafico); break;
+            }
+            return resultado;
+        }
+
+        #endregion
+        // ====================================================================================================
+
 
 
     } //Final de clase.

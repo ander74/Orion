@@ -9,6 +9,7 @@ using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Orion.Config;
 using Orion.Models;
 
 namespace Orion.Controls {
@@ -42,6 +43,11 @@ namespace Orion.Controls {
                 if (cell.Column.DisplayIndex <= cal.ListaDias.Count) {
                     // Extraemos el Dia del calendario
                     var dia = cal.ListaDias[cell.Column.DisplayIndex - 1];
+                    // Establecemos el gráfico y el código si la celda está en edición.
+                    (int Grafico, int Codigo) combo = (dia.Grafico, dia.Codigo);
+                    if (cell.Content is TextBox nuevoTexto) {
+                        combo = Utils.GetCodigoIncidencia(nuevoTexto.Text);
+                    }
                     // Definimos el header
                     if (dia.DiaFecha.DayOfWeek == DayOfWeek.Sunday || App.Global.CalendariosVM.EsFestivo(dia.DiaFecha)) {
                         header.Foreground = Brushes.Red;
@@ -52,15 +58,15 @@ namespace Orion.Controls {
                     }
                     header.Text = $"{dia.DiaFecha.Day:00}";
                     // FontWeigh
-                    txt.FontWeight = dia.Grafico < 0 || dia.Codigo == 3 ? FontWeights.Bold : FontWeights.Normal;
+                    txt.FontWeight = combo.Grafico < 0 || combo.Codigo == 3 ? FontWeights.Bold : FontWeights.Normal;
                     // TextDecorations
                     var decoraciones = new TextDecorationCollection();
-                    if (dia.Codigo == 2) decoraciones.Add(TextDecorations.Strikethrough); //Tachado
+                    if (combo.Codigo == 2) decoraciones.Add(TextDecorations.Strikethrough); //Tachado
                     if (dia.HayExtras) decoraciones.Add(TextDecorations.Underline); // Subrayado
                     txt.TextDecorations = decoraciones;
                     // ForeGround
                     var color = Brushes.DimGray;
-                    switch (dia.Grafico) {
+                    switch (combo.Grafico) {
                         case -1:
                         case -12:
                         case -13:

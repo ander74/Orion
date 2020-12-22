@@ -421,7 +421,7 @@ namespace Orion.Servicios {
                     "SELECT CA.*, CO.Indefinido AS ConductorIndefinido, CO.Categoria AS CategoriaConductor " +
                     "FROM Calendarios AS CA " +
                     "JOIN Conductores AS CO ON CO.Matricula == CA.MatriculaConductor " +
-                    "WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND Calendarios.MatriculaConductor = @matricula " +
+                    "WHERE strftime('%Y-%m', Fecha) = strftime('%Y-%m', @fecha) AND CA.MatriculaConductor = @matricula " +
                     "ORDER BY CA.Fecha;";
                 var consulta = new SQLiteExpression(comandoSQL).AddParameter("@fecha", fecha).AddParameter("@matricula", matricula);
                 var lista = GetItems<Calendario>(consulta, sinDias);
