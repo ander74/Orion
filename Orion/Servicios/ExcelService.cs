@@ -286,6 +286,9 @@ namespace Orion.Servicios {
                             if (decimal.TryParse(valor, out decimal cena)) horas.Cena = cena; else horas.Cena = 0;
                             valor = hoja.Cells[dia + 1, 8].Text.Replace('.', ',');
                             if (decimal.TryParse(valor, out decimal pluscena)) horas.PlusCena = pluscena; else horas.PlusCena = 0;
+                            valor = hoja.Cells[dia + 1, 9].Text.Replace('.', ':');
+                            if (TimeSpan.TryParse(valor, out TimeSpan excesoJornada)) horas.ExcesoJornada = excesoJornada; else horas.ExcesoJornada = TimeSpan.Zero;
+                            horas.Motivo = hoja.Cells[dia + 1, 10].Text;
                         }
                         lista.Add(horas);
                     }
@@ -359,6 +362,9 @@ namespace Orion.Servicios {
 
             public decimal PlusCena { get; set; }
 
+            public TimeSpan ExcesoJornada { get; set; }
+
+            public string Motivo { get; set; }
 
 
         }
@@ -1205,6 +1211,8 @@ namespace Orion.Servicios {
                     hoja.Cells[1, 6].Value = "COMIDA";
                     hoja.Cells[1, 7].Value = "CENA";
                     hoja.Cells[1, 8].Value = "PLUS CENA";
+                    hoja.Cells[1, 9].Value = "EXC. JORNADA";
+                    hoja.Cells[1, 10].Value = "MOTIVO";
                     // Días
                     for (int dia = 1; dia <= diasMes; dia++) {
                         hoja.Cells[1 + dia, 1].Style.Numberformat.Format = "00";
@@ -1215,9 +1223,13 @@ namespace Orion.Servicios {
                         hoja.Cells[1 + dia, 6].Style.Numberformat.Format = "0.00";
                         hoja.Cells[1 + dia, 7].Style.Numberformat.Format = "0.00";
                         hoja.Cells[1 + dia, 8].Style.Numberformat.Format = "0.00";
+                        hoja.Cells[1 + dia, 9].Style.Numberformat.Format = "hh:mm";
+                        //hoja.Cells[1 + dia, 10].Style.Numberformat.Format = "0.00"; // No es necesario.
                     }
+                    // Ajustamos el ancho de la columna MOTIVO
+                    hoja.Column(10).Width = 45;
                     // Añadimos la tabla
-                    var tabla = hoja.Tables.Add(hoja.Cells[1, 1, 1 + diasMes, 8], $"Tabla{meses[mes]}");
+                    var tabla = hoja.Tables.Add(hoja.Cells[1, 1, 1 + diasMes, 10], $"Tabla{meses[mes]}");
                     tabla.TableStyle = OfficeOpenXml.Table.TableStyles.Medium2;
                     tabla.ShowFilter = false;
                 }

@@ -467,6 +467,7 @@ namespace Orion.ViewModels.PageViewModels {
                 resumen.DiasPER += calendario.DiasPER;
                 // Días F6
                 resumen.DiasF6 += calendario.DiasF6;
+                resumen.DiasF6DC += calendario.DiasF6DC;
                 // Dias Comite
                 resumen.DiasComite += calendario.DiasCO + calendario.DiasCE;
                 // Comité en JD
@@ -477,8 +478,16 @@ namespace Orion.ViewModels.PageViewModels {
                     calendario.ListaDias.Count(d => (d.Codigo == 1 || d.Codigo == 2) && d.Grafico == Incidencia.DC);
                 // Días OV
                 resumen.DiasOV += calendario.DiasOV;
+                resumen.DiasOVFN += calendario.DiasOVFN;
+                resumen.DiasOVJD += calendario.DiasOVJD;
                 // Días E
                 resumen.DiasE += calendario.DiasE;
+                resumen.DiasEJD += calendario.DiasEJD;
+                resumen.DiasEFN += calendario.DiasEFN;
+                // Días OVA
+                resumen.DiasOVA += calendario.DiasOVA;
+                resumen.DiasOVAJD += calendario.DiasOVAJD;
+                resumen.DiasOVAFN += calendario.DiasOVAFN;
                 // Trabajadas
                 resumen.TrabajadasConvenio += calendario.TrabajadasConvenio;
                 // Acumuladas
@@ -678,7 +687,7 @@ namespace Orion.ViewModels.PageViewModels {
 
         private PdfTableData CrearTablaResumen(IEnumerable<ResumenCalendarios> listaResumen, string titulo, bool esEventual = false) {
             // Extraemos los datos
-            var datos = GetDatos(listaResumen); //TODO: Definir si es o no de un indefinido.
+            var datos = GetDatos(listaResumen);
             // Crear la tabla.
             var tabla = new PdfTableData(titulo);
             tabla.ColumnWidths = new List<float> { 16, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f, 7.5f };
@@ -767,7 +776,7 @@ namespace Orion.ViewModels.PageViewModels {
         // ====================================================================================================
 
 
-        #region COMANDO 
+        #region COMANDO CREAR PDF
 
         // Comando
         private ICommand cmdCrearPDF;

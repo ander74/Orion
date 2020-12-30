@@ -851,14 +851,22 @@ namespace Orion.ViewModels {
                     var totalDietas = 0m;
                     foreach (var dia in Pijama.ListaDias) {
                         // ACUMULADAS
-                        if (dia.AcumuladasAlt.HasValue && dia.AcumuladasAlt.Value < dia.GraficoOriginal.Acumuladas) {
-                            listaReclamaciones.Add(new Reclamacion {
-                                Concepto = $"Horas acumuladas del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
-                                EnPijama = dia.AcumuladasAlt.ToTexto(),
-                                Real = dia.GraficoOriginal.Acumuladas.ToTexto(),
-                                Diferencia = (dia.GraficoOriginal.Acumuladas - dia.AcumuladasAlt.Value).ToTexto()
-                            });
-                            totalTiempo += (dia.GraficoOriginal.Acumuladas - dia.AcumuladasAlt.Value);
+                        //if (dia.AcumuladasAlt.HasValue && dia.AcumuladasAlt.Value < dia.GraficoOriginal.Acumuladas) {
+                        if (dia.AcumuladasAlt.HasValue) {
+                            var grafico = new GraficoBase(dia.GraficoOriginal);
+                            if (grafico.Final.HasValue) {
+                                grafico.Final += dia.ExcesoJornada;
+                                grafico.Recalcular();
+                            }
+                            if (dia.AcumuladasAlt.Value < grafico.Acumuladas) {
+                                listaReclamaciones.Add(new Reclamacion {
+                                    Concepto = $"Horas acumuladas del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                    EnPijama = dia.AcumuladasAlt.ToTexto(),
+                                    Real = grafico.Acumuladas.ToTexto(),
+                                    Diferencia = (grafico.Acumuladas - dia.AcumuladasAlt.Value).ToTexto()
+                                });
+                                totalTiempo += (grafico.Acumuladas - dia.AcumuladasAlt.Value);
+                            }
                         }
                         // DESAYUNO
                         if (dia.DesayunoAlt.HasValue && dia.DesayunoAlt.Value < dia.GraficoOriginal.Desayuno) {
@@ -867,7 +875,7 @@ namespace Orion.ViewModels {
                                 EnPijama = dia.DesayunoAlt.Value.ToString("0.00"),
                                 Real = dia.GraficoOriginal.Desayuno.ToString("0.00"),
                                 Diferencia = (dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value).ToString("0.00") +
-                                $" ({(dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value) * App.Global.Convenio.ImporteDietas:0.00} €)",
+                                $" ({(dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value) * App.Global.OpcionesVM.GetPluses(dia.DiaFecha.Year).ImporteDietas:0.00} €)",
                             });
                             totalDietas += (dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value);
                         }
@@ -878,36 +886,55 @@ namespace Orion.ViewModels {
                                 EnPijama = dia.ComidaAlt.Value.ToString("0.00"),
                                 Real = dia.GraficoOriginal.Comida.ToString("0.00"),
                                 Diferencia = (dia.GraficoOriginal.Comida - dia.ComidaAlt.Value).ToString("0.00") +
-                                $" ({(dia.GraficoOriginal.Comida - dia.ComidaAlt.Value) * App.Global.Convenio.ImporteDietas:0.00} €)",
+                                $" ({(dia.GraficoOriginal.Comida - dia.ComidaAlt.Value) * App.Global.OpcionesVM.GetPluses(dia.DiaFecha.Year).ImporteDietas:0.00} €)",
                             });
                             totalDietas += (dia.GraficoOriginal.Comida - dia.ComidaAlt.Value);
                         }
-                        // CENA
-                        if (dia.CenaAlt.HasValue && dia.CenaAlt.Value < dia.GraficoOriginal.Cena) {
+
+                        // El Plus Cena se añade a la dieta de cena, con lo que se ignoran los bloques siguientes y 
+                        // se añaden los valores para producir la reclamación.
+
+                        //// CENA
+                        //if (dia.CenaAlt.HasValue && dia.CenaAlt.Value < dia.GraficoOriginal.Cena) {
+                        //    listaReclamaciones.Add(new Reclamacion {
+                        //        Concepto = $"Dieta de cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                        //        EnPijama = dia.CenaAlt.Value.ToString("0.00"),
+                        //        Real = dia.GraficoOriginal.Cena.ToString("0.00"),
+                        //        Diferencia = (dia.GraficoOriginal.Cena - dia.CenaAlt.Value).ToString("0.00") +
+                        //        $" ({(dia.GraficoOriginal.Cena - dia.CenaAlt.Value) * App.Global.Convenio.ImporteDietas:0.00} €)",
+                        //    });
+                        //    totalDietas += (dia.GraficoOriginal.Cena - dia.CenaAlt.Value);
+                        //}
+                        //// PLUS CENA
+                        //if (dia.PlusCenaAlt.HasValue && dia.PlusCenaAlt.Value < dia.GraficoOriginal.PlusCena) {
+                        //    listaReclamaciones.Add(new Reclamacion {
+                        //        Concepto = $"Plus Cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                        //        EnPijama = dia.PlusCenaAlt.Value.ToString("0.00"),
+                        //        Real = dia.GraficoOriginal.PlusCena.ToString("0.00"),
+                        //        Diferencia = (dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value).ToString("0.00") +
+                        //        $" ({(dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value) * App.Global.Convenio.ImporteDietas:0.00} €)",
+                        //    });
+                        //    totalDietas += (dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value);
+                        //}
+
+                        // CENA + PLUS CENA
+                        var totalCenaAlt = (dia.CenaAlt ?? 0m) + (dia.PlusCenaAlt ?? 0m);
+                        var totalCena = dia.GraficoOriginal.Cena + dia.GraficoOriginal.PlusCena;
+                        if ((dia.CenaAlt.HasValue || dia.PlusCenaAlt.HasValue) && totalCenaAlt < totalCena) {
                             listaReclamaciones.Add(new Reclamacion {
                                 Concepto = $"Dieta de cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
-                                EnPijama = dia.CenaAlt.Value.ToString("0.00"),
-                                Real = dia.GraficoOriginal.Cena.ToString("0.00"),
-                                Diferencia = (dia.GraficoOriginal.Cena - dia.CenaAlt.Value).ToString("0.00") +
-                                $" ({(dia.GraficoOriginal.Cena - dia.CenaAlt.Value) * App.Global.Convenio.ImporteDietas:0.00} €)",
+                                EnPijama = totalCenaAlt.ToString("0.00"),
+                                Real = totalCena.ToString("0.00"),
+                                Diferencia = (totalCena - totalCenaAlt).ToString("0.00") +
+                                $" ({(totalCena - totalCenaAlt) * App.Global.OpcionesVM.GetPluses(dia.DiaFecha.Year).ImporteDietas:0.00} €)",
                             });
-                            totalDietas += (dia.GraficoOriginal.Cena - dia.CenaAlt.Value);
+                            totalDietas += (totalCena - totalCenaAlt);
                         }
-                        // PLUS CENA
-                        if (dia.PlusCenaAlt.HasValue && dia.PlusCenaAlt.Value < dia.GraficoOriginal.PlusCena) {
-                            listaReclamaciones.Add(new Reclamacion {
-                                Concepto = $"Plus Cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
-                                EnPijama = dia.PlusCenaAlt.Value.ToString("0.00"),
-                                Real = dia.GraficoOriginal.PlusCena.ToString("0.00"),
-                                Diferencia = (dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value).ToString("0.00") +
-                                $" ({(dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value) * App.Global.Convenio.ImporteDietas:0.00} €)",
-                            });
-                            totalDietas += (dia.GraficoOriginal.PlusCena - dia.PlusCenaAlt.Value);
-                        }
+
                     }
                     var notas = string.Empty;
                     if (totalTiempo.Ticks > 0) notas += $"     Horas = {totalTiempo.ToTexto()}\n";
-                    if (totalDietas > 0) notas += $"     Dietas = {totalDietas:0.00} ({totalDietas * App.Global.Convenio.ImporteDietas:0.00} €)\n";
+                    if (totalDietas > 0) notas += $"     Dietas = {totalDietas:0.00} ({totalDietas * App.Global.OpcionesVM.GetPluses(FechaActual.Year).ImporteDietas:0.00} €)\n";
                     if (notas.Length > 0) notas = "TOTAL A RECLAMAR\n\n" + notas;
                     await PijamaPrintModel.CrearReclamacionEnPdf(doc, Pijama.Fecha, Pijama.Trabajador, listaReclamaciones, notas);
                     doc.Close();
@@ -1430,12 +1457,14 @@ namespace Orion.ViewModels {
                 if (dia.Grafico > 0) {
                     var grafico = App.Global.Repository.GetGrafico(dia.Grafico, dia.DiaFecha);
                     if (grafico != null) {
-                        if (hora.Trabajadas.Ticks >= 0 && grafico.Trabajadas + dia.ExcesoJornada != hora.Trabajadas) dia.TrabajadasAlt = hora.Trabajadas;
-                        if (hora.Acumuladas.Ticks >= 0 && grafico.Acumuladas != hora.Acumuladas) dia.AcumuladasAlt = hora.Acumuladas;
+                        if (hora.Trabajadas.Ticks >= 0) dia.TrabajadasAlt = hora.Trabajadas;
+                        if (hora.Acumuladas.Ticks >= 0) dia.AcumuladasAlt = hora.Acumuladas;
                         if (hora.Desayuno >= 0 && grafico.Desayuno != hora.Desayuno) dia.DesayunoAlt = hora.Desayuno;
                         if (hora.Comida >= 0 && grafico.Comida != hora.Comida) dia.ComidaAlt = hora.Comida;
-                        if (hora.Cena >= 0 && grafico.Cena != hora.Cena) dia.CenaAlt = hora.Cena;
-                        if (hora.PlusCena >= 0 && grafico.PlusCena != hora.PlusCena) dia.PlusCenaAlt = hora.PlusCena;
+                        if (hora.Cena >= 0) dia.CenaAlt = hora.Cena;
+                        if (hora.PlusCena >= 0) dia.PlusCenaAlt = hora.PlusCena;
+                        if (hora.ExcesoJornada.Ticks >= 0) dia.ExcesoJornada = hora.ExcesoJornada;
+                        if (!string.IsNullOrEmpty(hora.Motivo)) dia.Notas += hora.Motivo;
                     }
                 }
             }
