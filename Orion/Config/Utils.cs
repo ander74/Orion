@@ -203,6 +203,37 @@ namespace Orion.Config {
         // ====================================================================================================
 
 
+        // ====================================================================================================
+        #region DÍAS SEMANA
+        // ====================================================================================================
+
+        public static string GetDiaSemanaGrafico(DateTime fecha) {
+            string diasemana;
+            switch (fecha.DayOfWeek) {
+                case DayOfWeek.Sunday:
+                    diasemana = "F";
+                    break;
+                case DayOfWeek.Saturday:
+                    diasemana = "S";
+                    break;
+                case DayOfWeek.Friday:
+                    diasemana = "V";
+                    break;
+                default:
+                    diasemana = "L";
+                    if (App.Global.CalendariosVM.EsFestivo(fecha.AddDays(1))) diasemana = "V";
+                    break;
+            }
+            if (App.Global.CalendariosVM.EsFestivo(fecha)) {
+                diasemana = "F";
+            }
+            return diasemana;
+        }
+
+        #endregion
+        // ====================================================================================================
+
+
 
     } //Final de clase.
 }

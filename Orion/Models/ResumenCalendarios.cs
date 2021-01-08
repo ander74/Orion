@@ -432,10 +432,19 @@ namespace Orion.Models {
         }
 
 
+        public decimal DiferenciaDeberiaTrabajo {
+            get => DiasTrabajoConvenio - DiasDeberiaTrabajo;
+        }
+
+
         private decimal diasDeberiaDescanso;
         public decimal DiasDeberiaDescanso {
             get => diasDeberiaDescanso;
             set => SetValue(ref diasDeberiaDescanso, value);
+        }
+
+        public decimal DiferenciaDeberiaDescanso {
+            get => DiasDescansoConvenio - DiasDeberiaDescanso;
         }
 
 
@@ -443,6 +452,11 @@ namespace Orion.Models {
         public decimal DiasDeberiaVacaciones {
             get => diasDeberiaVacaciones;
             set => SetValue(ref diasDeberiaVacaciones, value);
+        }
+
+
+        public decimal DiferenciaDeberiaVacaciones {
+            get => DiasVacacionesConvenio - DiasDeberiaVacaciones;
         }
 
 

@@ -540,12 +540,6 @@ namespace Orion.ViewModels.PageViewModels {
                 descansosMes += App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha.Month == calendario.Fecha.Month);
                 decimal vacacionesPertenecen = App.Global.Convenio.VacacionesAnuales / 12m;
                 decimal descansosPertenecen = (diasMes - vacacionesPertenecen) * descansosMes / diasMes;
-                //var diasAño = (DateTime.IsLeapYear(calendario.Fecha.Year) ? 366 : 365);
-                //decimal diasFindeFestivos = calendario.ListaDias.Count(d => d.DiaFecha.DayOfWeek == DayOfWeek.Saturday || d.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
-                //diasFindeFestivos += calendario.ListaDias.Count(d => CalendariosVM.EsFestivo(d.DiaFecha) && d.DiaFecha.DayOfWeek != DayOfWeek.Saturday);
-                //decimal VacacionesPorMes = App.Global.Convenio.VacacionesAnuales * diasMes / diasAño;
-                //decimal ATrabajarMes = diasMes - diasFindeFestivos - VacacionesPorMes;
-
                 // Días Deberia Descanso
                 //resumen.DiasDeberiaDescanso += calendario.DiasActivo * diasFindeFestivos / diasMes;
                 decimal deberiaDescanso = Math.Round(calendario.DiasActivo * descansosPertenecen / diasMes, 4);
@@ -558,6 +552,7 @@ namespace Orion.ViewModels.PageViewModels {
                 //resumen.DiasDeberiaTrabajo += Math.Round(calendario.DiasActivo * ATrabajarMes / diasMes, 4);
                 decimal deberiaTrabajo = Math.Round(calendario.DiasActivo - deberiaDescanso - deberiaVacaciones, 4);
                 resumen.DiasDeberiaTrabajo += deberiaTrabajo;
+
                 // Quebranto de Moneda
                 var importeQuebranto = (calendario.DiasTrabajo + calendario.DiasDC) * App.Global.OpcionesVM.GetPluses(calendario.Fecha.Year).QuebrantoMoneda;
                 resumen.QuebrantoMoneda += importeQuebranto;
@@ -630,7 +625,7 @@ namespace Orion.ViewModels.PageViewModels {
 
 
         private string[,] GetDatos(IEnumerable<ResumenCalendarios> listaResumen) {
-            var datos = new string[43, 12];
+            var datos = new string[46, 12];
             foreach (var resumen in listaResumen) {
                 datos[00, resumen.Fecha.Month - 1] = resumen.DiasActivo.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasActivo);
                 datos[01, resumen.Fecha.Month - 1] = resumen.DiasInactivo.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasInactivo);
@@ -680,6 +675,10 @@ namespace Orion.ViewModels.PageViewModels {
                 datos[40, resumen.Fecha.Month - 1] = resumen.SabadosTrabajadosConvenio.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.SabadosTrabajadosConvenio).ToString();
                 datos[41, resumen.Fecha.Month - 1] = resumen.DomingosTrabajadosConvenio.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DomingosTrabajadosConvenio).ToString();
                 datos[42, resumen.Fecha.Month - 1] = resumen.FestivosTrabajadosConvenio.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.FestivosTrabajadosConvenio).ToString();
+                // Diferencia Debería para eventuales
+                datos[43, resumen.Fecha.Month - 1] = resumen.DiferenciaDeberiaTrabajo.ToString("0.00") + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiferenciaDeberiaTrabajo).ToString("0.00");
+                datos[44, resumen.Fecha.Month - 1] = resumen.DiferenciaDeberiaDescanso.ToString("0.00") + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiferenciaDeberiaDescanso).ToString("0.00");
+                datos[45, resumen.Fecha.Month - 1] = resumen.DiferenciaDeberiaVacaciones.ToString("0.00") + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiferenciaDeberiaVacaciones).ToString("0.00");
             }
             return datos;
         }
@@ -717,12 +716,18 @@ namespace Orion.ViewModels.PageViewModels {
             if (IncluirDiasInactivos) filas.Add(AddDatosToPdfCellList(datos, 01, "Días inactivo"));
             if (IncluirDiasTrabajadosConvenio) {
                 filas.Add(AddDatosToPdfCellList(datos, 38, "Días trabajo convenio\n(Trab+E+DC+F6+DND+PER+FOR+LAC)"));
-                if (esEventual) filas.Add(AddDatosToPdfCellList(datos, 34, "Debería Trabajar"));
+                if (esEventual) {
+                    filas.Add(AddDatosToPdfCellList(datos, 34, "Debería Trabajar"));
+                    filas.Add(AddDatosToPdfCellList(datos, 43, "Diferencia Debería Trabajar"));
+                }
             }
             if (IncluirDiasTrabajados) filas.Add(AddDatosToPdfCellList(datos, 02, "Días trabajo"));
             if (IncluirDiasDescansados) {
                 filas.Add(AddDatosToPdfCellList(datos, 37, "Días Descanso Convenio\n(JD+FN+DS)"));
-                if (esEventual) filas.Add(AddDatosToPdfCellList(datos, 35, "Debería Descansar"));
+                if (esEventual) {
+                    filas.Add(AddDatosToPdfCellList(datos, 35, "Debería Descansar"));
+                    filas.Add(AddDatosToPdfCellList(datos, 44, "Diferencia Debería Descansar"));
+                }
             }
             if (IncluirDiasJD) filas.Add(AddDatosToPdfCellList(datos, 03, "Descansos (JD)"));
             if (IncluirDiasDS) filas.Add(AddDatosToPdfCellList(datos, 04, "Descansos sueltos (DS) "));
@@ -747,7 +752,10 @@ namespace Orion.ViewModels.PageViewModels {
             if (IncluirDiasComiteDC) filas.Add(AddDatosToPdfCellList(datos, 20, "Días comité en DC"));
             if (IncluirDiasOV) {
                 filas.Add(AddDatosToPdfCellList(datos, 21, "Días vacaciones (OV)"));
-                if (esEventual) filas.Add(AddDatosToPdfCellList(datos, 36, "Debería Vacaciones"));
+                if (esEventual) {
+                    filas.Add(AddDatosToPdfCellList(datos, 36, "Debería Vacaciones"));
+                    filas.Add(AddDatosToPdfCellList(datos, 45, "Diferencia Debería Vacaciones"));
+                }
             }
             if (IncluirDiasE) filas.Add(AddDatosToPdfCellList(datos, 22, "Días enfermo (E)"));
             if (IncluirHorasTrabajadas) filas.Add(AddDatosToPdfCellList(datos, 23, "Horas trabajadas"));

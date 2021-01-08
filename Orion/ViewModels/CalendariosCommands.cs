@@ -860,7 +860,7 @@ namespace Orion.ViewModels {
                             }
                             if (dia.AcumuladasAlt.Value < grafico.Acumuladas) {
                                 listaReclamaciones.Add(new Reclamacion {
-                                    Concepto = $"Horas acumuladas del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                    Concepto = $"Horas acumuladas del día {dia.DiaFecha.ToString("dd-MM-yyyy")} (Gráf. {grafico.Numero})",
                                     EnPijama = dia.AcumuladasAlt.ToTexto(),
                                     Real = grafico.Acumuladas.ToTexto(),
                                     Diferencia = (grafico.Acumuladas - dia.AcumuladasAlt.Value).ToTexto()
@@ -869,26 +869,26 @@ namespace Orion.ViewModels {
                             }
                         }
                         // DESAYUNO
-                        if (dia.DesayunoAlt.HasValue && dia.DesayunoAlt.Value < dia.GraficoOriginal.Desayuno) {
+                        if (dia.DesayunoAlt.HasValue && Math.Round(dia.DesayunoAlt.Value) < Math.Round(dia.GraficoOriginal.Desayuno)) {
                             listaReclamaciones.Add(new Reclamacion {
-                                Concepto = $"Dieta de desayuno del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
-                                EnPijama = dia.DesayunoAlt.Value.ToString("0.00"),
-                                Real = dia.GraficoOriginal.Desayuno.ToString("0.00"),
-                                Diferencia = (dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value).ToString("0.00") +
-                                $" ({(dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value) * App.Global.OpcionesVM.GetPluses(dia.DiaFecha.Year).ImporteDietas:0.00} €)",
+                                Concepto = $"Dieta de desayuno del día {dia.DiaFecha.ToString("dd-MM-yyyy")} (Gráf. {dia.GraficoOriginal.Numero})",
+                                EnPijama = Math.Round(dia.DesayunoAlt.Value).ToString("0.00"),
+                                Real = Math.Round(dia.GraficoOriginal.Desayuno).ToString("0.00"),
+                                Diferencia = (Math.Round(dia.GraficoOriginal.Desayuno) - Math.Round(dia.DesayunoAlt.Value)).ToString("0.00") +
+                                $" ({(Math.Round(dia.GraficoOriginal.Desayuno) - Math.Round(dia.DesayunoAlt.Value)) * App.Global.OpcionesVM.GetPluses(dia.DiaFecha.Year).ImporteDietas:0.00} €)",
                             });
-                            totalDietas += (dia.GraficoOriginal.Desayuno - dia.DesayunoAlt.Value);
+                            totalDietas += (Math.Round(dia.GraficoOriginal.Desayuno) - Math.Round(dia.DesayunoAlt.Value));
                         }
                         // COMIDA
-                        if (dia.ComidaAlt.HasValue && dia.ComidaAlt.Value < dia.GraficoOriginal.Comida) {
+                        if (dia.ComidaAlt.HasValue && Math.Round(dia.ComidaAlt.Value) < Math.Round(dia.GraficoOriginal.Comida)) {
                             listaReclamaciones.Add(new Reclamacion {
-                                Concepto = $"Dieta de comida del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
-                                EnPijama = dia.ComidaAlt.Value.ToString("0.00"),
-                                Real = dia.GraficoOriginal.Comida.ToString("0.00"),
-                                Diferencia = (dia.GraficoOriginal.Comida - dia.ComidaAlt.Value).ToString("0.00") +
-                                $" ({(dia.GraficoOriginal.Comida - dia.ComidaAlt.Value) * App.Global.OpcionesVM.GetPluses(dia.DiaFecha.Year).ImporteDietas:0.00} €)",
+                                Concepto = $"Dieta de comida del día {dia.DiaFecha.ToString("dd-MM-yyyy")} (Gráf. {dia.GraficoOriginal.Numero})",
+                                EnPijama = Math.Round(dia.ComidaAlt.Value).ToString("0.00"),
+                                Real = Math.Round(dia.GraficoOriginal.Comida).ToString("0.00"),
+                                Diferencia = (Math.Round(dia.GraficoOriginal.Comida) - Math.Round(dia.ComidaAlt.Value)).ToString("0.00") +
+                                $" ({(Math.Round(dia.GraficoOriginal.Comida) - Math.Round(dia.ComidaAlt.Value)) * App.Global.OpcionesVM.GetPluses(dia.DiaFecha.Year).ImporteDietas:0.00} €)",
                             });
-                            totalDietas += (dia.GraficoOriginal.Comida - dia.ComidaAlt.Value);
+                            totalDietas += (Math.Round(dia.GraficoOriginal.Comida) - Math.Round(dia.ComidaAlt.Value));
                         }
 
                         // El Plus Cena se añade a la dieta de cena, con lo que se ignoran los bloques siguientes y 
@@ -918,11 +918,11 @@ namespace Orion.ViewModels {
                         //}
 
                         // CENA + PLUS CENA
-                        var totalCenaAlt = (dia.CenaAlt ?? 0m) + (dia.PlusCenaAlt ?? 0m);
-                        var totalCena = dia.GraficoOriginal.Cena + dia.GraficoOriginal.PlusCena;
+                        var totalCenaAlt = Math.Round((dia.CenaAlt ?? 0m) + (dia.PlusCenaAlt ?? 0m), 2);
+                        var totalCena = Math.Round(dia.GraficoOriginal.Cena + dia.GraficoOriginal.PlusCena, 2);
                         if ((dia.CenaAlt.HasValue || dia.PlusCenaAlt.HasValue) && totalCenaAlt < totalCena) {
                             listaReclamaciones.Add(new Reclamacion {
-                                Concepto = $"Dieta de cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")}",
+                                Concepto = $"Dieta de cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")} (Gráf. {dia.GraficoOriginal.Numero})",
                                 EnPijama = totalCenaAlt.ToString("0.00"),
                                 Real = totalCena.ToString("0.00"),
                                 Diferencia = (totalCena - totalCenaAlt).ToString("0.00") +
