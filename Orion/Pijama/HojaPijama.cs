@@ -127,10 +127,11 @@ namespace Orion.Pijama {
                         //Si es un DS cuentan 24h más (o sea, 36h) para el plus de menor descanso.
                         if (dia.Grafico != Incidencia.DS || (dia.Grafico == Incidencia.DS && dia.EsFestivo)) finalAnterior = null;
                     }
-                    // Si es un día de comite, se añade una dieta de comida.
-                    if ((dia.Codigo == Codigo.CO) || (dia.Codigo == Codigo.CE)) {
-                        if (dia.GraficoTrabajado.Comida < 1) dia.GraficoTrabajado.Comida = 1m;
-                    }
+                    // LO SIGUIENTE QUEDA ANULADO
+                    //// Si es un día de comite, se añade una dieta de comida.
+                    //if ((dia.Codigo == Codigo.CO) || (dia.Codigo == Codigo.CE)) {
+                    //    if (dia.GraficoTrabajado.Comida < 1) dia.GraficoTrabajado.Comida = 1m;
+                    //}
                 }
                 // Extraemos las horas de las regulaciones.
                 HorasCobradas = App.Global.Repository.GetHorasCobradasMes(Fecha.Year, Fecha.Month, Trabajador.Matricula);

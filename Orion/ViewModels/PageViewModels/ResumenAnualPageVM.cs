@@ -537,7 +537,7 @@ namespace Orion.ViewModels.PageViewModels {
                 // Cálculos Deberia (REALES, COGIDOS DEL EXCEL ANUAL
                 var diasMes = DateTime.DaysInMonth(calendario.Fecha.Year, calendario.Fecha.Month);
                 var descansosMes = calendario.ListaDias.Count(c => c.DiaFecha.DayOfWeek == DayOfWeek.Saturday || c.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
-                descansosMes += App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha.Month == calendario.Fecha.Month);
+                descansosMes += App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha.Month == calendario.Fecha.Month && f.Fecha.Year == calendario.Fecha.Year);
                 decimal vacacionesPertenecen = App.Global.Convenio.VacacionesAnuales / 12m;
                 decimal descansosPertenecen = (diasMes - vacacionesPertenecen) * descansosMes / diasMes;
                 // Días Deberia Descanso
