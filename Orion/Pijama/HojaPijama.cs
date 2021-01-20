@@ -41,9 +41,20 @@ namespace Orion.Pijama {
                 for (int i = 1; i<=DateTime.DaysInMonth(Fecha.Year, Fecha.Month); i++) {
                     if (listaTemporal.Count(d => d.DiaFecha.Day == i) > 1) {
                         var diaC = listaTemporal.FirstOrDefault(d => d.DiaFecha.Day == i && d.GraficoOriginal.DiaSemana == Utils.GetDiaSemanaGrafico(d.DiaFecha));
+                        if (diaC == null) diaC = new DiaPijama {
+                            DiaFecha = new DateTime(Fecha.Year, Fecha.Month, i),
+                            GraficoOriginal = new GraficoBase(),
+                            GraficoTrabajado = new GraficoBase(),
+                        };
                         ListaDias.Add(diaC);
                     } else {
-                        ListaDias.Add(listaTemporal.FirstOrDefault(d => d.DiaFecha.Day == i));
+                        var diaC = listaTemporal.FirstOrDefault(d => d.DiaFecha.Day == i);
+                        if (diaC == null) diaC = new DiaPijama { 
+                            DiaFecha = new DateTime(Fecha.Year, Fecha.Month, i),
+                            GraficoOriginal = new GraficoBase(),
+                            GraficoTrabajado = new GraficoBase(),
+                        };
+                        ListaDias.Add(diaC);
                     }
                 }
 
@@ -635,14 +646,11 @@ namespace Orion.Pijama {
                 var diasF6 = HastaAñoAnterior.DiasLibreDisposicionF6;
                 // Sólo se tienen en cuenta las horas de los F6 si es el mes de noviembre, que es cuando la empresa los descuenta.
                 if (Fecha.Month == 11) {
-                    diasF6 = HastaAñoAnterior.DiasLibreDisposicionF6 + HastaMesActual.DiasLibreDisposicionF6;
+                    diasF6 = HastaMesActual.DiasLibreDisposicionF6;// - HastaAñoAnterior.DiasLibreDisposicionF6;
                 }
-                horas -= new TimeSpan(Convert.ToInt64(diasF6 * App.Global.Convenio.JornadaMedia.Ticks));
+                var horasF6 = new TimeSpan(Convert.ToInt64(diasF6 * App.Global.Convenio.JornadaMedia.Ticks));
+                horas -= horasF6;
                 return horas;
-                //return Trabajador.Acumuladas +
-                //       HastaMesActual.HorasAcumuladas +
-                //       HastaMesActual.HorasReguladas -
-                //       new TimeSpan(Convert.ToInt64(HastaMesActual.DiasLibreDisposicionF6 * App.Global.Convenio.JornadaMedia.Ticks));
             }
         }
 
@@ -748,7 +756,7 @@ namespace Orion.Pijama {
 
         public decimal VacacionesPendientes {
             get {
-                return DiasComputoVacacionesHastaMes - DiasVacacionesHastaMesEnAño;
+                return Math.Round(DiasComputoVacacionesHastaMes, 2) - DiasVacacionesHastaMesEnAño;
             }
         }
 
@@ -1119,7 +1127,7 @@ namespace Orion.Pijama {
             get {
                 var diasMes = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
                 var descansosMes = ListaDias.Count(c => c.DiaFecha.DayOfWeek == DayOfWeek.Saturday || c.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
-                descansosMes += App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha.Month == Fecha.Month);
+                descansosMes += App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha.Month == Fecha.Month && f.Fecha.Year == Fecha.Year);
                 decimal vacacionesPertenecen = App.Global.Convenio.VacacionesAnuales / 12m;
                 decimal descansosPertenecen = (diasMes - vacacionesPertenecen) * descansosMes / diasMes;
                 decimal deberiaTrabajo = Math.Round(DiasActivo - DiasComputoDescanso - DiasComputoVacaciones, 4);
@@ -1175,7 +1183,7 @@ namespace Orion.Pijama {
             get {
                 var diasMes = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
                 var descansosMes = ListaDias.Count(c => c.DiaFecha.DayOfWeek == DayOfWeek.Saturday || c.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
-                descansosMes += App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha.Month == Fecha.Month);
+                descansosMes += App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha.Month == Fecha.Month && f.Fecha.Year == Fecha.Year);
                 decimal vacacionesPertenecen = App.Global.Convenio.VacacionesAnuales / 12m;
                 decimal descansosPertenecen = (diasMes - vacacionesPertenecen) * descansosMes / diasMes;
                 decimal deberiaDescanso = Math.Round(DiasActivo * descansosPertenecen / diasMes, 4);
@@ -1228,17 +1236,17 @@ namespace Orion.Pijama {
         public decimal DiasComputoVacaciones {
             get {
                 var diasMes = DateTime.DaysInMonth(Fecha.Year, Fecha.Month);
-                var descansosMes = ListaDias.Count(c => c.DiaFecha.DayOfWeek == DayOfWeek.Saturday || c.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
-                descansosMes += App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha.Month == Fecha.Month);
+                //var descansosMes = ListaDias.Count(c => c.DiaFecha.DayOfWeek == DayOfWeek.Saturday || c.DiaFecha.DayOfWeek == DayOfWeek.Sunday);
+                //descansosMes += App.Global.FestivosVM.ListaFestivos.Count(f => f.Fecha.Month == Fecha.Month && f.Fecha.Year == Fecha.Year);
                 decimal vacacionesPertenecen = App.Global.Convenio.VacacionesAnuales / 12m;
-                decimal descansosPertenecen = (diasMes - vacacionesPertenecen) * descansosMes / diasMes;
+                //decimal descansosPertenecen = (diasMes - vacacionesPertenecen) * descansosMes / diasMes;
                 decimal deberiaVacaciones = Math.Round(DiasActivo * vacacionesPertenecen / diasMes, 4);
                 return deberiaVacaciones;
             }
         }
 
 
-        public decimal DiasComputoVacacionesHastaMes {
+        public decimal DiasComputoVacacionesHastaMes3 {
             get {
                 int dias = 0;
                 for (int mes = 1; mes <= Fecha.Month; mes++) {
@@ -1247,6 +1255,20 @@ namespace Orion.Pijama {
                 decimal cVac = App.Global.Convenio.VacacionesAnuales * dias / (DateTime.IsLeapYear(Fecha.Year) ? 366m : 365m);
                 decimal resultado = (dias - DiasInactivoHastaMesEnAño) * cVac / dias;
                 return resultado;
+            }
+        }
+
+
+        public decimal DiasComputoVacacionesHastaMes {
+            get {
+                int diasMes = 0;
+                var vacacionesPertenecen = (App.Global.Convenio.VacacionesAnuales / 12m) * Fecha.Month;
+                decimal deberiaVacaciones = 0m;
+                for (int mes = 1; mes <= Fecha.Month; mes++) {
+                    diasMes += DateTime.DaysInMonth(Fecha.Year, mes);
+                }
+                deberiaVacaciones = Math.Round((diasMes - DiasInactivoHastaMesEnAño) * vacacionesPertenecen / diasMes, 4);
+                return deberiaVacaciones;
             }
         }
 

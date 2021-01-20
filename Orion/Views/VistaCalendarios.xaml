@@ -65,7 +65,7 @@
         <cnv:ConvertidorNegritaColumnaPijama x:Key="cnvNegritaColumnaPijama" />
         <cnv:ConvertidorNegritaDiaPijama x:Key="cnvNegritaDiaPijama" />
         <cnv:ConvertidorOcultoSiCero x:Key="cnvOcultoSiCero" />
-        <cnv:ConvertidorVisibilityScrollBar x:Key="cnvVisibilidadScrollBar"/>
+        <cnv:ConvertidorVisibilityScrollBar x:Key="cnvVisibilidadScrollBar" />
 
         <Style x:Key="EstiloGridCalendarios" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}" />
@@ -1469,11 +1469,11 @@
             EnableRowVirtualization="True"
             FontFamily="Comic Sans MS"
             FontSize="11"
-                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}"
             IsReadOnly="False"
             ItemsSource="{Binding CalendariosVM.VistaCalendarios}"
             MouseDoubleClick="TablaCalendarios_MouseDoubleClick"
             Style="{StaticResource EstiloGridCalendarios}"
+            VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}"
             Visibility="Visible">
 
             <!--  COLUMNAS  -->
@@ -2981,8 +2981,8 @@
             FontSize="11"
             IsReadOnly="True"
             ItemsSource="{Binding CalendariosVM.Pijama.ListaDias}"
-                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}"
             Style="{StaticResource EstiloGridPijama}"
+            VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}"
             Visibility="Collapsed">
 
             <DataGrid.Columns>

@@ -338,6 +338,7 @@ namespace Orion.ViewModels {
                                 DiaFecha = new DateTime(FechaActual.Year, FechaActual.Month, d),
                                 Nuevo = true,
                             }).ToList());
+                        calendario.DiasInactivo = calendario.ListaDias.Count;
                     }
                     calendario.DiaCalendarioChanged += Calendario_DiaCalendarioChanged;
                     calendario.Nuevo = true;

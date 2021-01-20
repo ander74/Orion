@@ -693,6 +693,12 @@ namespace Orion.ViewModels {
                     doc.Close();
                     if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
                 }
+            } catch (IOException ioEx) {
+                if (ioEx.Message.StartsWith("El proceso no puede obtener acceso al archivo")) {
+                    Mensajes.VerMensaje("El archivo está abierto.\n\nDebes cerrarlo para poder generar otro.", "ATENCIÓN");
+                } else {
+                    Mensajes.VerError("CalendariosCommands.Reclamacion", ioEx);
+                }
             } catch (Exception ex) {
                 Mensajes.VerError("GraficosCommands.GraficosEnPDF", ex);
             } finally {
@@ -738,6 +744,12 @@ namespace Orion.ViewModels {
                     await GraficosPrintModel.CrearGraficosIndividualesEnPdf(doc, VistaGraficos, GrupoSeleccionado.Validez);
                     doc.Close();
                     if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+                }
+            } catch (IOException ioEx) {
+                if (ioEx.Message.StartsWith("El proceso no puede obtener acceso al archivo")) {
+                    Mensajes.VerMensaje("El archivo está abierto.\n\nDebes cerrarlo para poder generar otro.", "ATENCIÓN");
+                } else {
+                    Mensajes.VerError("CalendariosCommands.Reclamacion", ioEx);
                 }
             } catch (Exception ex) {
                 Mensajes.VerError("GraficosCommands.GraficosEnPDF", ex);
@@ -801,6 +813,12 @@ namespace Orion.ViewModels {
                     doc.Close();
                     if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
                 }
+            } catch (IOException ioEx) {
+                if (ioEx.Message.StartsWith("El proceso no puede obtener acceso al archivo")) {
+                    Mensajes.VerMensaje("El archivo está abierto.\n\nDebes cerrarlo para poder generar otro.", "ATENCIÓN");
+                } else {
+                    Mensajes.VerError("CalendariosCommands.Reclamacion", ioEx);
+                }
             } catch (Exception ex) {
                 Mensajes.VerError("GraficosCommands.EstadisticasGraficos", ex);
             } finally {
@@ -840,6 +858,12 @@ namespace Orion.ViewModels {
                     await GraficosPrintModel.CrearEstadisticasGruposGraficosEnPdf(doc, FechaEstadisticas);
                     doc.Close();
                     if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+                }
+            } catch (IOException ioEx) {
+                if (ioEx.Message.StartsWith("El proceso no puede obtener acceso al archivo")) {
+                    Mensajes.VerMensaje("El archivo está abierto.\n\nDebes cerrarlo para poder generar otro.", "ATENCIÓN");
+                } else {
+                    Mensajes.VerError("CalendariosCommands.Reclamacion", ioEx);
                 }
             } catch (Exception ex) {
                 Mensajes.VerError("GraficosCommands.EstadisticasGruposGraficos", ex);
@@ -925,6 +949,12 @@ namespace Orion.ViewModels {
 
                     doc.Close();
                     if (App.Global.Configuracion.AbrirPDFs) Process.Start(ruta);
+                }
+            } catch (IOException ioEx) {
+                if (ioEx.Message.StartsWith("El proceso no puede obtener acceso al archivo")) {
+                    Mensajes.VerMensaje("El archivo está abierto.\n\nDebes cerrarlo para poder generar otro.", "ATENCIÓN");
+                } else {
+                    Mensajes.VerError("CalendariosCommands.Reclamacion", ioEx);
                 }
             } catch (Exception ex) {
                 Mensajes.VerError("GraficosCommands.EstadisticasGruposGraficos", ex);

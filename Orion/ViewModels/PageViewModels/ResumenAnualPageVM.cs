@@ -796,6 +796,7 @@ namespace Orion.ViewModels.PageViewModels {
         }
         private void CrearPDF() {
 
+
             // Definimos el PDF
             var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
             var ruta = Path.Combine(carpetaInformes, $"Calendarios\\Resumenes");
