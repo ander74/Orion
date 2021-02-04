@@ -957,15 +957,17 @@ namespace Orion.ViewModels {
                         // CENA + PLUS CENA
                         var totalCenaAlt = Math.Round((dia.CenaAlt ?? 0m) + (dia.PlusCenaAlt ?? 0m), 2);
                         var totalCena = Math.Round(dia.GraficoOriginal.Cena + dia.GraficoOriginal.PlusCena, 2);
-                        if ((dia.CenaAlt.HasValue || dia.PlusCenaAlt.HasValue) && totalCenaAlt < totalCena && (totalCena - totalCenaAlt) > 0.02m) {
+                        var plusCena = App.Global.OpcionesVM.GetPluses(dia.DiaFecha.Year).ImporteDietas;
+                        var diferencia = totalCena - totalCenaAlt;
+                        if ((dia.CenaAlt.HasValue || dia.PlusCenaAlt.HasValue) && totalCenaAlt < totalCena && diferencia > 0.02m) {
                             listaReclamaciones.Add(new Reclamacion {
                                 Concepto = $"Dieta de cena del día {dia.DiaFecha.ToString("dd-MM-yyyy")} (Gráf. {dia.GraficoOriginal.Numero})",
                                 EnPijama = totalCenaAlt.ToString("0.00"),
                                 Real = totalCena.ToString("0.00"),
-                                Diferencia = (totalCena - totalCenaAlt).ToString("0.00") +
-                                $" ({(totalCena - totalCenaAlt) * App.Global.OpcionesVM.GetPluses(dia.DiaFecha.Year).ImporteDietas:0.00} €)",
+                                Diferencia = diferencia.ToString("0.00") +
+                                $" ({diferencia * plusCena:0.00} €)",
                             });
-                            totalDietas += (totalCena - totalCenaAlt);
+                            totalDietas += diferencia;
                         }
 
                     }
@@ -1513,6 +1515,14 @@ namespace Orion.ViewModels {
             foreach (var hora in horas) {
                 if (hora.Ignorar) continue;
                 var dia = CalendarioSeleccionado.ListaDias.FirstOrDefault(d => d.DiaFecha.Day == hora.Dia.Day);
+                // Poner a cero los valores.
+                dia.TrabajadasAlt = null;
+                dia.AcumuladasAlt = null;
+                dia.DesayunoAlt = null;
+                dia.ComidaAlt = null;
+                dia.CenaAlt = null;
+                dia.PlusCenaAlt = null;
+                dia.ExcesoJornada = TimeSpan.Zero;
                 if (dia.Grafico != hora.Grafico) dia.Grafico = hora.Grafico;
                 if (dia.Codigo != hora.Codigo) dia.Codigo = hora.Codigo;
                 if (dia.Grafico > 0) {
