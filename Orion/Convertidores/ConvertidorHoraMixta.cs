@@ -6,22 +6,17 @@
 // ===============================================
 #endregion
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows;
 using Orion.Config;
 
 namespace Orion.Convertidores {
 
-	/// <summary>
-	/// Convierte la hora pasada a texto y viceversa.\n
-	///	Se aplican los valores NoCeros, HoraPlus y Negativo de la enumeración VerValores.
-	/// </summary>
-	[ValueConversion(typeof(TimeSpan), typeof(string))]
+    /// <summary>
+    /// Convierte la hora pasada a texto y viceversa.\n
+    ///	Se aplican los valores NoCeros, HoraPlus y Negativo de la enumeración VerValores.
+    /// </summary>
+    [ValueConversion(typeof(TimeSpan), typeof(string))]
 	class ConvertidorHoraMixta :IValueConverter {
 
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture) {
@@ -45,11 +40,8 @@ namespace Orion.Convertidores {
 					return hora.ToTexto(true) + " (" + horadecimal.ToString("0.00") + ")";
 				}
 			} else {
-				// Si la hora es negativa y queremos horas negativas, devolvemos la hora en negativo.
-				if (ver.HasFlag(VerValores.Negativo)) {
-					hora = new TimeSpan(hora.Ticks * -1);
-					return "-" + hora.ToTexto() + " (" + horadecimal.ToString("0.00") + ")";
-				}
+				hora = new TimeSpan(hora.Ticks * -1);
+				return "-" + hora.ToTexto() + " (" + horadecimal.ToString("0.00") + ")";
 			}
 			// Devolvemos la hora en el formato tradicional.
 			return hora.ToTexto() + " (" + horadecimal.ToString("0.00") + ")";

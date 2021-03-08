@@ -18,7 +18,7 @@ namespace Orion.ViewModels {
         #region CAMPOS PRIVADOS
         // ====================================================================================================
 
-        private readonly IMensajes mensajes;
+        public readonly IMensajes Mensajes;
 
         #endregion
         // ====================================================================================================
@@ -29,7 +29,7 @@ namespace Orion.ViewModels {
         // ====================================================================================================
 
         public InformesViewModel(IMensajes mensajes) {
-            this.mensajes = mensajes;
+            this.Mensajes = mensajes;
         }
 
         #endregion

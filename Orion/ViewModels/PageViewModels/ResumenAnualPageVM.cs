@@ -557,7 +557,7 @@ namespace Orion.ViewModels.PageViewModels {
                 var importeQuebranto = (calendario.DiasTrabajo + calendario.DiasDC) * App.Global.OpcionesVM.GetPluses(calendario.Fecha.Year).QuebrantoMoneda;
                 resumen.QuebrantoMoneda += importeQuebranto;
                 // Variables Vacaciones.
-                var importeValorar = plusSabado + plusFestivo + plusNocturnidad + plusLimpieza + importeQuebranto;
+                var importeValorar = plusSabado + plusFestivo + plusNocturnidad + plusLimpieza;// El Quebranto sale de la ecuación.
                 if (conductor.Indefinido) {
                     resumen.VariablesVacaciones += Math.Round(importeValorar / 11, 4); //TODO: Comprobar que es a cuatro decimales y no a dos.
                 } else {
@@ -648,7 +648,7 @@ namespace Orion.ViewModels.PageViewModels {
                 datos[18, resumen.Fecha.Month - 1] = resumen.DiasComite.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasComite);
                 datos[19, resumen.Fecha.Month - 1] = resumen.DiasComiteJD.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasComiteJD);
                 datos[20, resumen.Fecha.Month - 1] = resumen.DiasComiteDC.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasComiteDC);
-                datos[21, resumen.Fecha.Month - 1] = resumen.DiasOV.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasOV);
+                datos[21, resumen.Fecha.Month - 1] = (resumen.DiasOV + resumen.DiasOVFN + resumen.DiasOVJD).ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasOV + r.DiasOVFN + r.DiasOVJD);
                 datos[22, resumen.Fecha.Month - 1] = resumen.DiasE.ToString() + "\n" + listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.DiasE);
                 datos[23, resumen.Fecha.Month - 1] = resumen.TrabajadasConvenio.ToHorasMinutos() + "\n" + new TimeSpan(listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.TrabajadasConvenio.Ticks)).ToHorasMinutos();
                 datos[24, resumen.Fecha.Month - 1] = resumen.Acumuladas.ToHorasMinutos() + "\n" + new TimeSpan(listaResumen.Where(r => r.Fecha.Month <= resumen.Fecha.Month).Sum(r => r.Acumuladas.Ticks)).ToHorasMinutos();
@@ -796,45 +796,20 @@ namespace Orion.ViewModels.PageViewModels {
         }
         private void CrearPDF() {
 
+            try {
+                // Definimos el PDF
+                var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
+                var ruta = Path.Combine(carpetaInformes, $"Calendarios\\Resumenes");
+                if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
+                var nombreArchivo = string.Empty;
+                var archivo = string.Empty;
 
-            // Definimos el PDF
-            var carpetaInformes = Path.Combine(App.Global.Configuracion.CarpetaAvanza, $"Informes\\{App.Global.CentroActual}");
-            var ruta = Path.Combine(carpetaInformes, $"Calendarios\\Resumenes");
-            if (!Directory.Exists(ruta)) Directory.CreateDirectory(ruta);
-            var nombreArchivo = string.Empty;
-            var archivo = string.Empty;
-
-            if (DestinoResumen == DESTINO_UNO_SOLO) {
-                if (ConductorSeleccionado == null) return;
-                var resumen = CrearTablaConductor(ConductorSeleccionado.Matricula);
-                var titulo = $"RESUMEN ANUAL {CalendariosVM.FechaActual.Year}\n{ConductorSeleccionado.MatriculaApellidos}";
-                var tabla = CrearTablaResumen(resumen, titulo, !ConductorSeleccionado.Indefinido);
-                nombreArchivo = $"{CalendariosVM.FechaActual.Year}-Resumen Anual - {ConductorSeleccionado.Matricula}";
-                archivo = Path.Combine(ruta, $"{nombreArchivo}.pdf");
-                var docPdf = App.Global.Informes.GetNuevoPdf(archivo, true);
-                docPdf.GetPdfDocument().GetDocumentInfo().SetTitle("Resumen Anual");
-                docPdf.GetPdfDocument().GetDocumentInfo().SetSubject($"{nombreArchivo}");
-                docPdf.SetMargins(25, 25, 25, 25);
-                docPdf.Add(PdfExcelHelper.GetInstance().GetPdfTable(tabla));
-                docPdf.Close();
-            } else {
-                if (Filtrado == FILTRO_AÑO) {
-                    var resumen = CrearTablaAnual();
-                    var titulo = $"RESUMEN ANUAL {CalendariosVM.FechaActual.Year}\n";
-                    nombreArchivo = $"{CalendariosVM.FechaActual.Year}-Resumen Anual";
-                    titulo += IncluirTaquillas ? " CONDUCCIÓN + TAQUILLAS" : " CONDUCCIÓN";
-                    nombreArchivo += IncluirTaquillas ? " Con Taquillas" : " Conduccion";
-                    switch (DestinoResumen) {
-                        case DESTINO_INDEFINIDOS:
-                            titulo += " (INDEFINIDOS)";
-                            nombreArchivo += "-Indefinidos";
-                            break;
-                        case DESTINO_EVENTUALES:
-                            titulo += " (EVENTUALES)";
-                            nombreArchivo += "-Eventuales";
-                            break;
-                    }
-                    var tabla = CrearTablaResumen(resumen, titulo, DestinoResumen == DESTINO_EVENTUALES);
+                if (DestinoResumen == DESTINO_UNO_SOLO) {
+                    if (ConductorSeleccionado == null) return;
+                    var resumen = CrearTablaConductor(ConductorSeleccionado.Matricula);
+                    var titulo = $"RESUMEN ANUAL {CalendariosVM.FechaActual.Year}\n{ConductorSeleccionado.MatriculaApellidos}";
+                    var tabla = CrearTablaResumen(resumen, titulo, !ConductorSeleccionado.Indefinido);
+                    nombreArchivo = $"{CalendariosVM.FechaActual.Year}-Resumen Anual - {ConductorSeleccionado.Matricula}";
                     archivo = Path.Combine(ruta, $"{nombreArchivo}.pdf");
                     var docPdf = App.Global.Informes.GetNuevoPdf(archivo, true);
                     docPdf.GetPdfDocument().GetDocumentInfo().SetTitle("Resumen Anual");
@@ -843,39 +818,72 @@ namespace Orion.ViewModels.PageViewModels {
                     docPdf.Add(PdfExcelHelper.GetInstance().GetPdfTable(tabla));
                     docPdf.Close();
                 } else {
-                    var listaConductores = ConductoresVM.ListaConductores.ToList();
-                    nombreArchivo = $"{CalendariosVM.FechaActual.Year}-Resumen Anual Individual";
-                    nombreArchivo += IncluirTaquillas ? " Con Taquillas" : " Conduccion";
-                    if (!IncluirTaquillas) {
-                        listaConductores = listaConductores.Where(c => c.Categoria.ToUpper() == "C").ToList();
-                    }
-                    switch (DestinoResumen) {
-                        case DESTINO_INDEFINIDOS:
-                            listaConductores = listaConductores.Where(c => c.Indefinido).ToList();
-                            nombreArchivo += "-Indefinidos";
-                            break;
-                        case DESTINO_EVENTUALES:
-                            listaConductores = listaConductores.Where(c => !c.Indefinido).ToList();
-                            nombreArchivo += "-Eventuales";
-                            break;
-                    }
-                    archivo = Path.Combine(ruta, $"{nombreArchivo}.pdf");
-                    var docPdf = App.Global.Informes.GetNuevoPdf(archivo, true);
-                    docPdf.GetPdfDocument().GetDocumentInfo().SetTitle("Resumen Anual");
-                    docPdf.GetPdfDocument().GetDocumentInfo().SetSubject($"{nombreArchivo}");
-                    docPdf.SetMargins(25, 25, 25, 25);
-                    foreach (var conductor in listaConductores) {
-                        var resumen = CrearTablaConductor(conductor.Matricula);
-                        var titulo = $"RESUMEN ANUAL {CalendariosVM.FechaActual.Year}\n{conductor.MatriculaApellidos}";
-                        var tabla = CrearTablaResumen(resumen, titulo, !conductor.Indefinido);
+                    if (Filtrado == FILTRO_AÑO) {
+                        var resumen = CrearTablaAnual();
+                        var titulo = $"RESUMEN ANUAL {CalendariosVM.FechaActual.Year}\n";
+                        nombreArchivo = $"{CalendariosVM.FechaActual.Year}-Resumen Anual";
+                        titulo += IncluirTaquillas ? " CONDUCCIÓN + TAQUILLAS" : " CONDUCCIÓN";
+                        nombreArchivo += IncluirTaquillas ? " Con Taquillas" : " Conduccion";
+                        switch (DestinoResumen) {
+                            case DESTINO_INDEFINIDOS:
+                                titulo += " (INDEFINIDOS)";
+                                nombreArchivo += "-Indefinidos";
+                                break;
+                            case DESTINO_EVENTUALES:
+                                titulo += " (EVENTUALES)";
+                                nombreArchivo += "-Eventuales";
+                                break;
+                        }
+                        var tabla = CrearTablaResumen(resumen, titulo, DestinoResumen == DESTINO_EVENTUALES);
+                        archivo = Path.Combine(ruta, $"{nombreArchivo}.pdf");
+                        var docPdf = App.Global.Informes.GetNuevoPdf(archivo, true);
+                        docPdf.GetPdfDocument().GetDocumentInfo().SetTitle("Resumen Anual");
+                        docPdf.GetPdfDocument().GetDocumentInfo().SetSubject($"{nombreArchivo}");
+                        docPdf.SetMargins(25, 25, 25, 25);
                         docPdf.Add(PdfExcelHelper.GetInstance().GetPdfTable(tabla));
-                        docPdf.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                        docPdf.Close();
+                    } else {
+                        var listaConductores = ConductoresVM.ListaConductores.ToList();
+                        nombreArchivo = $"{CalendariosVM.FechaActual.Year}-Resumen Anual Individual";
+                        nombreArchivo += IncluirTaquillas ? " Con Taquillas" : " Conduccion";
+                        if (!IncluirTaquillas) {
+                            listaConductores = listaConductores.Where(c => c.Categoria.ToUpper() == "C").ToList();
+                        }
+                        switch (DestinoResumen) {
+                            case DESTINO_INDEFINIDOS:
+                                listaConductores = listaConductores.Where(c => c.Indefinido).ToList();
+                                nombreArchivo += "-Indefinidos";
+                                break;
+                            case DESTINO_EVENTUALES:
+                                listaConductores = listaConductores.Where(c => !c.Indefinido).ToList();
+                                nombreArchivo += "-Eventuales";
+                                break;
+                        }
+                        archivo = Path.Combine(ruta, $"{nombreArchivo}.pdf");
+                        var docPdf = App.Global.Informes.GetNuevoPdf(archivo, true);
+                        docPdf.GetPdfDocument().GetDocumentInfo().SetTitle("Resumen Anual");
+                        docPdf.GetPdfDocument().GetDocumentInfo().SetSubject($"{nombreArchivo}");
+                        docPdf.SetMargins(25, 25, 25, 25);
+                        foreach (var conductor in listaConductores) {
+                            var resumen = CrearTablaConductor(conductor.Matricula);
+                            var titulo = $"RESUMEN ANUAL {CalendariosVM.FechaActual.Year}\n{conductor.MatriculaApellidos}";
+                            var tabla = CrearTablaResumen(resumen, titulo, !conductor.Indefinido);
+                            docPdf.Add(PdfExcelHelper.GetInstance().GetPdfTable(tabla));
+                            docPdf.Add(new AreaBreak(AreaBreakType.NEXT_PAGE));
+                        }
+                        docPdf.Close();
                     }
-                    docPdf.Close();
                 }
+                if (App.Global.Configuracion.AbrirPDFs) Process.Start(archivo);
+            } catch (IOException ioEx) {
+                if (ioEx.Message.StartsWith("El proceso no puede obtener acceso al archivo")) {
+                    App.Global.InformesVM.Mensajes.VerMensaje("El archivo está abierto.\n\nDebes cerrarlo para poder generar otro.", "ATENCIÓN");
+                } else {
+                    App.Global.InformesVM.Mensajes.VerError("CalendariosCommands.Reclamacion", ioEx);
+                }
+            } catch (Exception ex) {
+                App.Global.InformesVM.Mensajes.VerError("ResumenAnualPage.CrearPDF", ex);
             }
-            if (App.Global.Configuracion.AbrirPDFs) Process.Start(archivo);
-
         }
         #endregion
 

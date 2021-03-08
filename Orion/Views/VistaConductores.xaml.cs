@@ -23,29 +23,29 @@ namespace Orion.Views {
 
         // TABLA CONDUCTORES - GOT FOCUS
         private void TablaConductores_GotFocus(object sender, RoutedEventArgs e) {
-            if (!ChPanelRegulaciones.IsChecked ?? false) PanelRegulaciones.Visibility = Visibility.Collapsed;
+            //if (!ChPanelRegulaciones.IsChecked ?? false) PanelRegulaciones.Visibility = Visibility.Collapsed;
         }
 
 
         // CHECK REGULACIONES - CLICK
         private void ChPanelRegulaciones_Click(object sender, RoutedEventArgs e) {
-            if (ChPanelRegulaciones.IsChecked == true) {
-                Grid.SetColumn(PanelRegulaciones, 2);
-            } else {
-                Grid.SetColumn(PanelRegulaciones, 1);
-            }
+            //if (ChPanelRegulaciones.IsChecked == true) {
+            //    Grid.SetColumn(PanelRegulaciones, 2);
+            //} else {
+            //    Grid.SetColumn(PanelRegulaciones, 1);
+            //}
         }
 
 
         // BOTÓN REGULACIONES - CLICK
         private void BtRegulaciones_Click(object sender, RoutedEventArgs e) {
-            if (PanelRegulaciones.IsVisible) {
-                PanelRegulaciones.Visibility = Visibility.Collapsed;
-                ChPanelRegulaciones.IsChecked = false;
-                Grid.SetColumn(PanelRegulaciones, 1);
-            } else {
-                PanelRegulaciones.Visibility = Visibility.Visible;
-            }
+            //if (PanelRegulaciones.IsVisible) {
+            //    PanelRegulaciones.Visibility = Visibility.Collapsed;
+            //    ChPanelRegulaciones.IsChecked = false;
+            //    Grid.SetColumn(PanelRegulaciones, 1);
+            //} else {
+            //    PanelRegulaciones.Visibility = Visibility.Visible;
+            //}
         }
 
         #endregion

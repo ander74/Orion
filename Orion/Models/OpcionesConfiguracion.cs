@@ -420,6 +420,30 @@ namespace Orion.Models {
 
 
         // ====================================================================================================
+        #region COLUMNAS CONDUCTORES
+        // ====================================================================================================
+
+
+        private bool mostrarCondTelefono;
+        public bool MostrarCondTelefono {
+            get => mostrarCondTelefono;
+            set => SetValue(ref mostrarCondTelefono, value);
+        }
+
+
+
+        private bool mostrarCondEmail;
+        public bool MostrarCondEmail {
+            get => mostrarCondEmail;
+            set => SetValue(ref mostrarCondEmail, value);
+        }
+
+
+        #endregion
+        // ====================================================================================================
+
+
+        // ====================================================================================================
         #region COLORES
         // ====================================================================================================
 

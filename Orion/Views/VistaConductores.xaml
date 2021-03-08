@@ -29,18 +29,14 @@
         <cnv:ConvertidorDecimal x:Key="cnvDecimal" />
         <cnv:ConvertidorDecimal6 x:Key="cnvDecimal6" />
         <BooleanToVisibilityConverter x:Key="cnvVisibilidad" />
-        <cnv:ConvertidorVisibilityScrollBar x:Key="cnvVisibilidadScrollBar"/>
+        <cnv:ConvertidorVisibilityScrollBar x:Key="cnvVisibilidadScrollBar" />
 
-        <Style
-            x:Key="EstiloGridConductores"
-            TargetType="DataGrid">
+        <Style x:Key="EstiloGridConductores" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersAzul}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasAzul}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasNormal}" />
         </Style>
-        <Style
-            x:Key="EstiloGridRegulaciones"
-            TargetType="DataGrid">
+        <Style x:Key="EstiloGridRegulaciones" TargetType="DataGrid">
             <Setter Property="ColumnHeaderStyle" Value="{StaticResource EstiloHeadersVerde}" />
             <Setter Property="RowStyle" Value="{StaticResource EstiloFilasRegulacionesConductor}" />
             <Setter Property="CellStyle" Value="{StaticResource EstiloCeldasGraficos}" />
@@ -114,14 +110,10 @@
                 Background="LightGray" />
 
             <!--  DESPLEGABLE ACCIONES  -->
-            <xceed:DropDownButton
-                x:Name="BtDropAcciones"
-                Style="{StaticResource EstiloBotonDesplegable}">
+            <xceed:DropDownButton x:Name="BtDropAcciones" Style="{StaticResource EstiloBotonDesplegable}">
                 <xceed:DropDownButton.Content>
                     <StackPanel Orientation="Vertical">
-                        <Image
-                            Source="Imagenes/Engranajes.png"
-                            Style="{StaticResource EstiloImagen}" />
+                        <Image Source="Imagenes/Engranajes.png" Style="{StaticResource EstiloImagen}" />
                         <TextBlock
                             Name="TxtAcciones"
                             FontFamily="Comic Sans MS"
@@ -160,6 +152,63 @@
                                     Margin="5,3"
                                     Background="LightGray" />
 
+                                <!--  DESPLEGABLE COLUMNAS  -->
+                                <xceed:DropDownButton
+                                    Width="64"
+                                    Height="80"
+                                    Style="{StaticResource EstiloBotonDesplegable}">
+                                    <xceed:DropDownButton.Content>
+                                        <StackPanel Orientation="Vertical">
+                                            <Image Source="Imagenes/SeleccionarColumna.png" Style="{StaticResource EstiloImagen}" />
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontFamily="Comic Sans MS"
+                                                FontSize="10"
+                                                Text="Mostrar Columnas"
+                                                TextAlignment="Center"
+                                                TextWrapping="Wrap" />
+                                        </StackPanel>
+                                    </xceed:DropDownButton.Content>
+                                    <xceed:DropDownButton.DropDownContent>
+                                        <Border
+                                            Background="AliceBlue"
+                                            BorderBrush="DarkBlue"
+                                            BorderThickness="2"
+                                            CornerRadius="5"
+                                            DataContext="{Binding Source={x:Reference TxtAcciones}, Path=DataContext}">
+                                            <Border
+                                                Margin="3"
+                                                BorderBrush="DarkGray"
+                                                BorderThickness="1"
+                                                CornerRadius="5">
+                                                <StackPanel Orientation="Vertical">
+
+                                                    <!--  TELÉFONO  -->
+                                                    <CheckBox
+                                                        Margin="5"
+                                                        HorizontalContentAlignment="Left"
+                                                        VerticalContentAlignment="Center"
+                                                        Content="Teléfono"
+                                                        FontFamily="Comic Sans MS"
+                                                        FontSize="10"
+                                                        IsChecked="{Binding Configuracion.MostrarCondTelefono, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                                    <!--  EMAIL  -->
+                                                    <CheckBox
+                                                        Margin="5"
+                                                        HorizontalContentAlignment="Left"
+                                                        VerticalContentAlignment="Center"
+                                                        Content="Email"
+                                                        FontFamily="Comic Sans MS"
+                                                        FontSize="10"
+                                                        IsChecked="{Binding Configuracion.MostrarCondEmail, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                                                </StackPanel>
+                                            </Border>
+                                        </Border>
+                                    </xceed:DropDownButton.DropDownContent>
+                                </xceed:DropDownButton>
+
                             </StackPanel>
                         </Border>
                     </Border>
@@ -171,15 +220,6 @@
                 Width="2"
                 Margin="3,5"
                 Background="LightGray" />
-
-            <!--  BOTON ALTERNAR SELECCION TABLA CONDUCTORES  -->
-            <!--<controls:BotonAlterno
-                Command="{Binding Source={x:Reference TablaConductores}, Path=ComandoAlternarModoSeleccion}"
-                ImagenActivo="Imagenes/SeleccionFila.png"
-                ImagenInactivo="Imagenes/SeleccionCelda.png"
-                TituloActivo="Selección Filas"
-                TituloInactivo="Selección Celdas"
-                ToolTip="Sólo funciona si está en modo Selección Celdas." />-->
 
             <!--  BOTON COPIAR  -->
             <controls:BotonBarra
@@ -213,18 +253,6 @@
                 Margin="3,5"
                 Background="LightGray" />
 
-            <!--  BOTON VER REGULACIONES  -->
-            <controls:BotonBarra
-                Click="BtRegulaciones_Click"
-                Imagen="Imagenes/AbrirPanelDerecho.png"
-                Titulo="Regulac." />
-
-            <!--  SEPARADOR  -->
-            <TextBlock
-                Width="2"
-                Margin="3,5"
-                Background="LightGray" />
-
 
         </StackPanel>
 
@@ -247,6 +275,7 @@
             <!--  ====================================================================================================  -->
             <!--  TABLA CONDUCTORES  -->
             <!--  ====================================================================================================  -->
+            <FrameworkElement x:Name="DummyElement" Visibility="Collapsed" />
             <controls:QDataGrid
                 x:Name="TablaConductores"
                 Grid.Column="1"
@@ -257,10 +286,10 @@
                 FontSize="11"
                 Foreground="Black"
                 GotFocus="TablaConductores_GotFocus"
-                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}"
                 IsReadOnly="False"
                 ItemsSource="{Binding ConductoresVM.VistaConductores}"
-                Style="{StaticResource EstiloGridConductores}">
+                Style="{StaticResource EstiloGridConductores}"
+                VerticalScrollBarVisibility="{Binding Configuracion.MostrarBarrasDesplazamiento, Converter={StaticResource cnvVisibilidadScrollBar}}">
 
                 <controls:QDataGrid.Columns>
                     <DataGridCheckBoxColumn
@@ -269,9 +298,7 @@
                         Binding="{Binding Activo, UpdateSourceTrigger=PropertyChanged}"
                         IsThreeState="False">
                         <DataGridCheckBoxColumn.Header>
-                            <TextBlock
-                                Text="Activo"
-                                ToolTip="Indica si el conductor está activo en la empresa o no." />
+                            <TextBlock Text="Activo" ToolTip="Indica si el conductor está activo en la empresa o no." />
                         </DataGridCheckBoxColumn.Header>
                     </DataGridCheckBoxColumn>
                     <DataGridTextColumn
@@ -279,9 +306,7 @@
                         MinWidth="20"
                         Binding="{Binding Categoria}">
                         <DataGridTextColumn.Header>
-                            <TextBlock
-                                Text="Cat"
-                                ToolTip="Categoría.&#x0a;    C=Conducción&#x0a;    T=Taquilla" />
+                            <TextBlock Text="Cat" ToolTip="Categoría.&#x0a;    C=Conducción&#x0a;    T=Taquilla" />
                         </DataGridTextColumn.Header>
                     </DataGridTextColumn>
                     <DataGridTextColumn
@@ -303,12 +328,14 @@
                         Width="4*"
                         MinWidth="60"
                         Binding="{Binding Telefono}"
-                        Header="Teléfono" />
+                        Header="Teléfono"
+                        Visibility="{Binding Source={x:Reference DummyElement}, Path=DataContext.Configuracion.MostrarCondTelefono, Converter={StaticResource cnvVisibilidad}}" />
                     <DataGridTextColumn
                         Width="6*"
                         MinWidth="60"
                         Binding="{Binding Email}"
-                        Header="Email" />
+                        Header="Email"
+                        Visibility="{Binding Source={x:Reference DummyElement}, Path=DataContext.Configuracion.MostrarCondEmail, Converter={StaticResource cnvVisibilidad}}" />
                     <DataGridCheckBoxColumn
                         Width="1*"
                         MinWidth="60"
@@ -334,7 +361,7 @@
                         Width="2*"
                         MinWidth="60"
                         Binding="{Binding PlusDistancia, Converter={StaticResource cnvDecimal}}"
-                        Header="Plus Distancia" />
+                        Header="Plus Dist." />
                     <DataGridCheckBoxColumn
                         Width="1*"
                         MinWidth="60"
@@ -350,12 +377,12 @@
             <!--  ====================================================================================================  -->
             <Grid
                 x:Name="PanelRegulaciones"
-                Grid.Column="1"
+                Grid.Column="2"
                 Width="450"
                 Margin="5,0,0,0"
                 HorizontalAlignment="Right"
                 Background="{StaticResource DegradadoCeleste0}"
-                Visibility="Collapsed">
+                Visibility="Visible">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="*" />
@@ -377,12 +404,12 @@
                     Content="REGULACIONES DE CONDUCTOR"
                     FontWeight="Black" />
 
-                <CheckBox
+                <!--<CheckBox
                     x:Name="ChPanelRegulaciones"
                     Grid.Row="0"
                     Margin="5"
                     HorizontalAlignment="Right"
-                    Click="ChPanelRegulaciones_Click" />
+                    Click="ChPanelRegulaciones_Click" />-->
 
                 <!--  CONTENIDO DEL PANEL  -->
                 <Grid Grid.Row="1">
@@ -393,9 +420,7 @@
                     </Grid.RowDefinitions>
 
                     <!--  BARRA DE HERRAMIENTAS  -->
-                    <StackPanel
-                        Grid.Row="0"
-                        Orientation="Horizontal">
+                    <StackPanel Grid.Row="0" Orientation="Horizontal">
 
                         <!--  BOTON BORRAR REGULACION  -->
                         <Button
@@ -404,9 +429,7 @@
                             Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Source="Imagenes/BorrarFila.png"
-                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image Source="Imagenes/BorrarFila.png" Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Borrar"
@@ -417,14 +440,10 @@
                         </Button>
 
                         <!--  BOTON DESHACER BORRAR REGULACIONES  -->
-                        <Button
-                            Command="{Binding ConductoresVM.cmdDeshacerBorrarRegulaciones}"
-                            Style="{StaticResource EstiloBotonBarraPequeña}">
+                        <Button Command="{Binding ConductoresVM.cmdDeshacerBorrarRegulaciones}" Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Source="Imagenes/ActualizarTabla.png"
-                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image Source="Imagenes/ActualizarTabla.png" Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Deshacer"
@@ -435,14 +454,10 @@
                         </Button>
 
                         <!--  BOTON AÑADIR A TODOS  -->
-                        <Button
-                            Command="{Binding ConductoresVM.cmdAñadirRegulacionATodos}"
-                            Style="{StaticResource EstiloBotonBarraPequeña}">
+                        <Button Command="{Binding ConductoresVM.cmdAñadirRegulacionATodos}" Style="{StaticResource EstiloBotonBarraPequeña}">
                             <Button.Content>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image
-                                        Source="Imagenes/VariasTablas.png"
-                                        Style="{StaticResource EstiloImagenPequeña}" />
+                                    <Image Source="Imagenes/VariasTablas.png" Style="{StaticResource EstiloImagenPequeña}" />
                                     <TextBlock
                                         VerticalAlignment="Center"
                                         Text="Añadir A Todos"

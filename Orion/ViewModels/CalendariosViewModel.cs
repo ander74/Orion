@@ -76,13 +76,16 @@ namespace Orion.ViewModels {
             // Cargamos los gráficos asociados, si no están cargados ya.
             var grupos = App.Global.GraficosVM.ListaGrupos;
             if (grupos != null && grupos.Count > 0) {
-                var maxValidez = grupos.Where(g => g.Validez <= FechaActual).Max(gg => gg.Validez);
-                gruposGraficos = grupos.Where(g => g.Validez >= maxValidez && g.Validez < FechaActual.AddMonths(1));
-                var clave = string.Empty;
-                foreach (var grupo in gruposGraficos) clave += $"{grupo.Validez:ddMMyyyy} ";
-                if (!clave.Equals(claveGraficosAsociados)) {
-                    claveGraficosAsociados = clave;
-                    listaGraficosAsociados = App.Global.Repository.GetGraficosVariasFechas(gruposGraficos).ToList();
+                var gruposFiltrados = grupos.Where(g => g.Validez <= FechaActual);
+                if (gruposFiltrados.Count() > 0) {
+                    var maxValidez = gruposFiltrados.Max(g => g.Validez);
+                    gruposGraficos = grupos.Where(g => g.Validez >= maxValidez && g.Validez < FechaActual.AddMonths(1));
+                    var clave = string.Empty;
+                    foreach (var grupo in gruposGraficos) clave += $"{grupo.Validez:ddMMyyyy} ";
+                    if (!clave.Equals(claveGraficosAsociados)) {
+                        claveGraficosAsociados = clave;
+                        listaGraficosAsociados = App.Global.Repository.GetGraficosVariasFechas(gruposGraficos).ToList();
+                    }
                 }
             }
             // Cargamos el resumen anual hasta el mes anterior a este.
